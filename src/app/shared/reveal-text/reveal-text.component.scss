@@ -34,7 +34,14 @@
 }
 
 .reveal__title {
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.reveal__word {
+  word-break: normal;
+  white-space: nowrap;
 }
 
 /* ==========================================================================

@@ -1,0 +1,261 @@
+/* src/app/pages/imprint-page/imprint-page.component.scss */
+
+/* =================================================================================================
+   INHALTSVERZEICHNIS
+
+   01   Seitenlayout
+   02   Hero und Dialog
+   03   Karten
+   04   Responsive
+   ================================================================================================= */
+
+/* =================================================================================================
+   01   Seitenlayout
+   ================================================================================================= */
+
+.imprint {
+  position: relative;
+  min-height: 100svh;
+  padding-top: calc(var(--bp-header-height) + var(--bp-space-5));
+  overflow: hidden;
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--bp-color-accent) 10%, transparent) 0 18%, transparent 18% 100%),
+    linear-gradient(142deg, var(--bp-color-bg), color-mix(in srgb, var(--bp-color-surface-solid) 88%, var(--bp-color-accent) 5%));
+}
+
+.imprint::before,
+.imprint::after {
+  position: absolute;
+  pointer-events: none;
+  content: '';
+}
+
+.imprint::before {
+  right: -8vw;
+  top: calc(var(--bp-header-height) + 3rem);
+  width: min(34vw, 460px);
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent) 38%, transparent);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bp-color-accent) 12%, transparent), transparent 68%);
+  transform: rotate(-9deg);
+}
+
+.imprint::after {
+  left: -7vw;
+  bottom: 8vh;
+  width: min(38vw, 520px);
+  height: min(20vw, 250px);
+  border: 1px solid color-mix(in srgb, var(--bp-color-border-strong) 70%, transparent);
+  background: repeating-linear-gradient(-12deg, transparent 0 18px, color-mix(in srgb, var(--bp-color-accent) 9%, transparent) 18px 21px);
+  transform: rotate(7deg);
+}
+
+.imprint__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(320px, 500px) minmax(280px, 400px);
+  justify-content: center;
+  gap: clamp(2rem, 5vw, 5.5rem);
+  align-items: start;
+}
+
+/* =================================================================================================
+   02   Hero und Dialog
+   ================================================================================================= */
+
+.imprint__hero {
+  position: sticky;
+  top: calc(var(--bp-header-height) + var(--bp-space-4));
+  display: grid;
+  gap: var(--bp-space-3);
+  min-width: 0;
+}
+
+.imprint__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: fit-content;
+  border: 1px solid var(--bp-color-border-strong);
+  padding: 0.64rem 0.85rem;
+  background: color-mix(in srgb, var(--bp-color-bg) 84%, transparent);
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-mono);
+  font-size: 0.74rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms var(--bp-ease-out);
+}
+
+.imprint__back:hover,
+.imprint__back:focus-visible {
+  border-color: var(--bp-color-accent);
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 78%, var(--bp-color-accent) 10%);
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--bp-color-accent) 32%, transparent);
+  transform: translate3d(-2px, -2px, 0);
+}
+
+.imprint__back .material-symbols-outlined {
+  color: var(--bp-color-accent);
+  font-size: 1.2rem;
+}
+
+.imprint__hero h1 {
+  max-width: 100%;
+  margin: 0;
+  font-family: var(--bp-font-display);
+  font-size: clamp(2.45rem, 4.2vw, 4.35rem);
+  line-height: 0.86;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+}
+
+.imprint__hero .bp-subtitle {
+  max-width: 32rem;
+  font-size: clamp(0.94rem, 1.15vw, 1.08rem);
+}
+
+.imprint__dialog {
+  width: min(320px, 100%);
+  margin-top: var(--bp-space-2);
+  transform: rotate(-1.2deg);
+}
+
+.imprint__dialog .bp-dos-window__bar button {
+  display: grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  cursor: pointer;
+  background: #3b3b3b;
+  color: #f6f0e8;
+  font: inherit;
+  line-height: 1;
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
+}
+
+.imprint__dialog .bp-dos-window__bar button:hover,
+.imprint__dialog .bp-dos-window__bar button:focus-visible {
+  background: #ff2b2b;
+  color: #ffffff;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.36);
+  transform: translate(-1px, -1px);
+}
+
+.imprint__dialog .bp-dos-window__body {
+  min-height: auto;
+}
+
+.imprint__dialog .bp-dos-window__body p {
+  white-space: pre-line;
+}
+
+/* =================================================================================================
+   03   Karten
+   ================================================================================================= */
+
+.imprint__cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(0.8rem, 1.2vw, 1rem);
+  align-items: start;
+  width: min(100%, 400px);
+  max-width: 400px;
+  justify-self: start;
+  padding-top: clamp(1.2rem, 3.2vw, 3rem);
+}
+
+.imprint__card {
+  display: grid;
+  gap: 0.72rem;
+  min-height: 0;
+  padding: clamp(0.82rem, 1.35vw, 1.12rem);
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.imprint__card::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  opacity: 0.18;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bp-color-accent) 14%, transparent), transparent 62%);
+}
+
+.imprint__card h2,
+.imprint__card ul {
+  position: relative;
+  z-index: 1;
+}
+
+.imprint__card h2 {
+  margin: 0;
+  font-family: var(--bp-font-display);
+  font-size: clamp(0.98rem, 1.2vw, 1.32rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.imprint__card ul {
+  display: grid;
+  gap: 0.42rem;
+  margin: 0;
+  padding: 0;
+  color: var(--bp-color-text-muted);
+  list-style: none;
+}
+
+.imprint__card li {
+  font-family: var(--bp-font-mono);
+  font-size: 0.72rem;
+  line-height: 1.42;
+}
+
+.imprint__card li::before {
+  content: '> ';
+  color: var(--bp-color-accent);
+  font-weight: 950;
+}
+
+/* =================================================================================================
+   04   Responsive
+   ================================================================================================= */
+
+@media (max-width: 1180px) {
+  .imprint__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .imprint__hero {
+    position: relative;
+    top: auto;
+  }
+
+  .imprint__cards {
+    width: min(100%, 400px);
+    max-width: 400px;
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .imprint__cards {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .imprint {
+    padding-top: calc(var(--bp-header-height) + var(--bp-space-5));
+  }
+
+  .imprint__hero h1 {
+    font-size: clamp(2.8rem, 15vw, 4.8rem);
+  }
+}

@@ -24,6 +24,11 @@ export class SeoService {
     this.applySeo(content.title, content.description);
   }
 
+  /** Setzt allgemeine Meta-Daten für statische Inhaltsseiten. */
+  setPageSeo(title: string, description: string): void {
+    this.applySeo(title, description);
+  }
+
   /** Setzt die Meta-Daten für eine Projekt-Detailseite. */
   setProjectSeo(project: PortfolioProject): void {
     const title = `${project.name} | Benjamin Bennewitz Portfolio`;

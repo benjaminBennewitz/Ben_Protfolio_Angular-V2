@@ -69,7 +69,7 @@ export class ContactFormComponent {
 
     this.hasError.set(false);
     this.status.set(this.content().successMessage);
-    window.location.href = `mailto:kontakt@example.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:kontakt@bennewitz.de?subject=${subject}&body=${body}`;
   }
 
   /** Prüft Mindestfelder und einfache E-Mail-Syntax. */

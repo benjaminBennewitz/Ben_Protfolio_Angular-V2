@@ -5,7 +5,7 @@
  * @description Kombiniert Hero, Über-mich, Techstack, Fullscreen-Projekte, Process-Lock, Chaos-CTA, FAQ und Kontakt.
  */
 
-import { Component, HostListener, computed, effect, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -31,7 +31,7 @@ type AboutCoffeeKey = 'default' | 'error';
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })
-export class HomePageComponent {
+export class HomePageComponent implements AfterViewInit, OnDestroy {
   /** Sprachservice für alle sichtbaren Inhalte. */
   private readonly languageService = inject(LanguageService);
 
@@ -47,6 +47,13 @@ export class HomePageComponent {
   /** Scroll-Versatz für den Hero-Hintergrund. */
   private readonly heroScrollOffset = signal(0);
 
+  /** IntersectionObserver für das verzögerte Laden der Skill-Balken. */
+  private skillLevelsObserver?: IntersectionObserver;
+
+  /** Panel-Referenz für die Skill-Level-Balken. */
+  @ViewChild('skillLevelPanel')
+  private readonly skillLevelPanel?: ElementRef<HTMLElement>;
+
   /** Aktuell ausgewählter Hero-Kopf. */
   readonly activeHeroHead = signal<HeroHeadKey>('default');
 
@@ -58,6 +65,12 @@ export class HomePageComponent {
 
   /** Sichtbarkeit des interaktiven About-Dialogfensters. */
   readonly isAboutDialogVisible = signal<boolean>(true);
+
+  /** Sichtbarkeit des Skill-Level-Dialogfensters. */
+  readonly isSkillsDialogVisible = signal<boolean>(true);
+
+  /** Aktiviert die Wachstumsanimation der Skill-Level-Balken. */
+  readonly areSkillLevelsLoaded = signal<boolean>(false);
 
   /** Asset-Zuordnung für die Hero-Köpfe. */
   private readonly heroHeadAssetMap: Record<HeroHeadKey, string> = {
@@ -95,6 +108,16 @@ export class HomePageComponent {
   constructor() {
     effect(() => this.seoService.setHomeSeo(this.content().meta));
     this.updateHeroScrollOffset();
+  }
+
+  /** Initialisiert viewportabhängige Animationen nach dem Rendern der View. */
+  ngAfterViewInit(): void {
+    this.observeSkillLevels();
+  }
+
+  /** Räumt Scroll-Observer beim Entfernen der Seite auf. */
+  ngOnDestroy(): void {
+    this.skillLevelsObserver?.disconnect();
   }
 
   /**
@@ -155,10 +178,41 @@ export class HomePageComponent {
     this.isAboutDialogVisible.set(false);
   }
 
+  /** Entfernt das Skill-Level-Dialogfenster aus dem Techstack-Bereich. */
+  closeSkillsDialog(): void {
+    this.isSkillsDialogVisible.set(false);
+  }
+
   /** Aktualisiert den scrollabhängigen Offset für den Hero-Hintergrund. */
   @HostListener('window:scroll')
   updateHeroScrollOffset(): void {
     const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
     this.heroScrollOffset.set(Math.min(scrollY * 0.18, 140));
+  }
+
+  /** Beobachtet das Skill-Level-Panel und startet Balken erst bei nahezu voller Sichtbarkeit. */
+  private observeSkillLevels(): void {
+    const panel = this.skillLevelPanel?.nativeElement;
+
+    if (!panel || typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      this.areSkillLevelsLoaded.set(true);
+      return;
+    }
+
+    const threshold = panel.offsetHeight > window.innerHeight ? 0.58 : 0.92;
+
+    this.skillLevelsObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry || entry.intersectionRatio < threshold) {
+          return;
+        }
+
+        this.areSkillLevelsLoaded.set(true);
+        this.skillLevelsObserver?.disconnect();
+      },
+      { threshold: [threshold] },
+    );
+
+    this.skillLevelsObserver.observe(panel);
   }
 }

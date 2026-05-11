@@ -1,0 +1,40 @@
+<!-- src/app/pages/imprint-page/imprint-page.component.html -->
+<main class="imprint bp-section">
+  <div class="imprint__grid bp-container">
+    <section class="imprint__hero" aria-labelledby="imprint-title">
+      <a class="imprint__back" routerLink="/" fragment="hero">
+        <span class="material-symbols-outlined" aria-hidden="true">keyboard_backspace</span>
+        <span>{{ imprint().backLabel }}</span>
+      </a>
+
+      <p class="bp-eyebrow">{{ imprint().eyebrow }}</p>
+      <h1 id="imprint-title">{{ imprint().title }}</h1>
+      <p class="bp-subtitle">{{ imprint().intro }}</p>
+
+      @if (isLegalDialogVisible()) {
+      <aside class="bp-dos-window imprint__dialog" aria-label="Legal Check">
+        <div class="bp-dos-window__bar">
+          <span>{{ imprint().dialogTitle }}</span>
+          <button type="button" aria-label="Legal-Check schließen" (click)="closeLegalDialog()">×</button>
+        </div>
+        <div class="bp-dos-window__body">
+          <p>{{ imprint().dialogText }}</p>
+        </div>
+      </aside>
+      }
+    </section>
+
+    <section class="imprint__cards" aria-label="Impressumsangaben">
+      @for (section of imprint().sections; track section.title) {
+      <article class="imprint__card bp-card">
+        <h2>{{ section.title }}</h2>
+        <ul>
+          @for (line of section.lines; track line) {
+          <li>{{ line }}</li>
+          }
+        </ul>
+      </article>
+      }
+    </section>
+  </div>
+</main>

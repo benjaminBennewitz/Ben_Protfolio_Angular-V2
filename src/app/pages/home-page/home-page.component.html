@@ -148,6 +148,26 @@
     </div>
   </section>
 
+  <section class="experience bp-section" id="experience">
+    <div class="experience__layout bp-container">
+      <div class="experience__copy" bpReveal>
+        <p class="bp-eyebrow">{{ content().experience.eyebrow }}</p>
+        <h2 class="experience__title">{{ content().experience.title }}</h2>
+        <p class="bp-subtitle">{{ content().experience.subtitle }}</p>
+      </div>
+
+      <div class="experience__cards" bpReveal>
+        @for (item of content().experience.items; track item.label) {
+        <article class="experience__card bp-card">
+          <strong><span>{{ item.value }}<em>+</em></span><small>{{ item.suffix }}</small></strong>
+          <h3>{{ item.label }}</h3>
+          <p>{{ item.text }}</p>
+        </article>
+        }
+      </div>
+    </div>
+  </section>
+
   <section class="skills bp-section" id="skills">
     <div class="bp-container" bpReveal>
       <bp-reveal-text [eyebrow]="content().skills.eyebrow" [text]="content().skills.title" />
@@ -165,6 +185,42 @@
         </article>
         }
       </div>
+
+      <div #skillLevelPanel class="skills__level-panel bp-card" [class.is-loaded]="areSkillLevelsLoaded()" bpReveal>
+        <div class="skills__level-head">
+          <h3>{{ content().skills.levelsTitle }}</h3>
+          <p>{{ content().skills.levelsSubtitle }}</p>
+        </div>
+
+        @if (isSkillsDialogVisible()) {
+        <div class="bp-dos-window skills__dos" role="dialog" [attr.aria-label]="content().skills.levelsDialogTitle">
+          <div class="bp-dos-window__bar">
+            <span>{{ content().skills.levelsDialogTitle }}</span>
+            <button type="button" [attr.aria-label]="content().skills.levelsDialogCloseLabel" (click)="closeSkillsDialog()">×</button>
+          </div>
+          <div class="bp-dos-window__body">
+            <p>{{ content().skills.levelsDialogText }}</p>
+          </div>
+        </div>
+        }
+
+        <div class="skills__levels">
+          @for (level of content().skills.levels; track level.label) {
+          <article class="skills__level" [style.--skill-value]="level.value + '%'">
+            <div class="skills__level-meta">
+              <div>
+                <strong>{{ level.label }}</strong>
+                <span>{{ level.group }}</span>
+              </div>
+              <b>{{ level.value }}%</b>
+            </div>
+            <div class="skills__level-track" aria-hidden="true">
+              <span></span>
+            </div>
+          </article>
+          }
+        </div>
+      </div>
     </div>
 
     <bp-tech-marquee [items]="content().skills.marquee" />
@@ -177,6 +233,42 @@
   <bp-process-lock [eyebrow]="content().process.eyebrow" [title]="content().process.title"
     [subtitle]="content().process.subtitle" [hint]="content().process.hint" [steps]="content().process.steps" />
 
+  <section class="clients bp-section" id="clients">
+    <div class="clients__layout bp-container">
+      <div class="clients__copy" bpReveal>
+        <p class="bp-eyebrow">{{ content().clients.eyebrow }}</p>
+        <h2 class="clients__title">{{ content().clients.title }}</h2>
+        @if (content().clients.subtitle) {
+        <p class="bp-subtitle">{{ content().clients.subtitle }}</p>
+        }
+      </div>
+
+      <div class="clients__grid" bpReveal>
+        @for (client of content().clients.items; track client.name) {
+        <a class="clients__card bp-card" [href]="client.url" target="_blank" rel="noopener noreferrer">
+          <span>{{ client.label }}</span>
+          <strong>{{ client.name }}</strong>
+          <div class="bp-dos-window clients__stack" aria-hidden="true">
+            <div class="bp-dos-window__bar">
+              <span>stack_info.exe</span>
+              <span class="clients__fake-close" aria-hidden="true">×</span>
+            </div>
+            <div class="bp-dos-window__body">
+              <p>Techstack:</p>
+              <ul>
+                @for (tech of client.stack; track tech) {
+                <li>{{ tech }}</li>
+                }
+              </ul>
+            </div>
+          </div>
+          <i class="material-symbols-outlined" aria-hidden="true">arrow_outward</i>
+        </a>
+        }
+      </div>
+    </div>
+  </section>
+
   <bp-chaos-cta [eyebrow]="content().cta.eyebrow" [title]="content().cta.title" [hint]="content().cta.hint"
     [words]="content().cta.words" />
 
@@ -185,7 +277,6 @@
       <div bpReveal>
         <p class="bp-eyebrow">FAQ</p>
         <h2 class="faq__title">{{ content().faqTitle }}</h2>
-        <p class="bp-subtitle">{{ content().faqSubtitle }}</p>
       </div>
 
       <div class="faq__list" bpReveal>
@@ -204,7 +295,9 @@
       <div class="contact__copy" bpReveal>
         <p class="bp-eyebrow">{{ content().contact.eyebrow }}</p>
         <h2 class="contact__title">{{ content().contact.title }}</h2>
+        @if (content().contact.subtitle) {
         <p class="bp-subtitle">{{ content().contact.subtitle }}</p>
+        }
       </div>
 
       <bp-contact-form />

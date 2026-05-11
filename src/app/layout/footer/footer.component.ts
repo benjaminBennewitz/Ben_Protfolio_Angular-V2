@@ -5,7 +5,7 @@
  * @description Rendert Kontakt, interne Links und Projektlinks aus übersetzten Inhalten.
  */
 
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 
@@ -24,8 +24,16 @@ export class FooterComponent {
   /** Aktueller Footer-Inhalt. */
   readonly footer = computed(() => this.languageService.content().footer);
 
+  /** Sichtbarkeit des kleinen Footer-Dialogfensters. */
+  readonly isFooterDialogVisible = signal<boolean>(true);
+
   /** Aktuelles Jahr für Copyright-Ausgabe. */
   readonly year = new Date().getFullYear();
+
+  /** Entfernt das Footer-Dialogfenster aus dem Footer. */
+  closeFooterDialog(): void {
+    this.isFooterDialogVisible.set(false);
+  }
 
   /** Prüft, ob ein Link als interne Angular-Route gerendert werden soll. */
   isRouteLink(href: string): boolean {

@@ -7,6 +7,7 @@
 
 import { Routes } from '@angular/router';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import { ImprintPageComponent } from './pages/imprint-page/imprint-page.component';
 import { ProjectDetailPageComponent } from './pages/project-detail-page/project-detail-page.component';
 
 /** Routen der Portfolio-Anwendung. */
@@ -20,6 +21,11 @@ export const routes: Routes = [
     path: 'projects/:slug',
     component: ProjectDetailPageComponent,
     title: 'Projekt | Benjamin Bennewitz Portfolio',
+  },
+  {
+    path: 'impressum',
+    component: ImprintPageComponent,
+    title: 'Impressum | Benjamin Bennewitz',
   },
   {
     path: '**',

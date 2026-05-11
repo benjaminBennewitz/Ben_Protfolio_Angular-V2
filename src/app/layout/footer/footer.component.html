@@ -3,26 +3,59 @@
   <div class="footer__grid bp-container">
     <section class="footer__brand" aria-labelledby="footer-title">
       <p class="bp-eyebrow">{{ footer().eyebrow }}</p>
-      <h2 id="footer-title">{{ footer().title }}</h2>
+      <div class="footer__title-wrap">
+        <h2 id="footer-title">{{ footer().title }}</h2>
+
+        <button class="footer__pet-trigger" type="button" [attr.aria-label]="footer().petDialogLabel">
+          <img src="assets/images/fuelli.webp" alt="" aria-hidden="true">
+          <span class="bp-dos-window footer__pet-dialog" aria-hidden="true">
+            <span class="bp-dos-window__bar">
+              <span>{{ footer().petDialogTitle }}</span>
+              <span>×</span>
+            </span>
+            <span class="bp-dos-window__body">{{ footer().petDialogText }}</span>
+          </span>
+        </button>
+      </div>
+
       <p>{{ footer().text }}</p>
     </section>
 
-    <nav class="footer__columns" aria-label="Footer Navigation">
-      @for (column of footer().columns; track column.title) {
-      <div class="footer__column">
-        <h3>{{ column.title }}</h3>
-        <ul>
-          @for (link of column.links; track link.href + link.label) {
-          <li>
-            @if (isRouteLink(link.href)) {
-            <a [routerLink]="link.href">{{ link.label }}</a>
-            } @else {
-            <a [href]="link.href">{{ link.label }}</a>
-            }
-          </li>
-          }
-        </ul>
+    <nav class="footer__links" aria-label="Footer Navigation">
+      <div class="footer__terminal-head" aria-hidden="true">
+        <span>navigation.sys</span>
+        <span>3 directories</span>
       </div>
+
+      <div class="footer__columns">
+        @for (column of footer().columns; track column.title) {
+        <div class="footer__column">
+          <h3>{{ column.title }}</h3>
+          <ul>
+            @for (link of column.links; track link.href + link.label) {
+            <li>
+              @if (isRouteLink(link.href)) {
+              <a [routerLink]="link.href"><span>{{ link.label }}</span></a>
+              } @else {
+              <a [href]="link.href"><span>{{ link.label }}</span></a>
+              }
+            </li>
+            }
+          </ul>
+        </div>
+        }
+      </div>
+
+      @if (isFooterDialogVisible()) {
+      <aside class="bp-dos-window footer__dos" aria-label="Footer Status">
+        <div class="bp-dos-window__bar">
+          <span>{{ footer().dialogTitle }}</span>
+          <button type="button" [attr.aria-label]="footer().dialogCloseLabel" (click)="closeFooterDialog()">×</button>
+        </div>
+        <div class="bp-dos-window__body">
+          <p>{{ footer().dialogText }}</p>
+        </div>
+      </aside>
       }
     </nav>
   </div>

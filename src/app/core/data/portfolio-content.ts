@@ -12,7 +12,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
   de: {
     meta: {
       title: 'Benjamin Bennewitz | Full Stack Webentwicklung & Grafikdesign',
-      description: 'Interaktives Portfolio von Benjamin Bennewitz mit Angular, Django, Intranet-Systemen, UI/UX, Datenanalyse, Games und Grafikdesign.',
+      description: 'Interaktives Portfolio von Benjamin Bennewitz mit Full-Stack-Webentwicklung, UI/UX, Grafikdesign, Web-Apps, Shopsystemen und visuellen Designsystemen.',
       hiddenTitle: 'psst... komm zurück 👀',
     },
     nav: {
@@ -31,7 +31,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     hero: {
       eyebrow: 'B² webdeveloper · full stack · Designer',
       title: 'Design. Code. Break the Grid.',
-      subtitle: 'Ich baue digitale Produkte zwischen sauberer Webentwicklung, UI/UX, Grafikdesign und kontrolliertem Chaos: performant, wartbar, zugänglich und visuell mit eigener Handschrift.',
+      subtitle: 'Ich baue digitale Produkte mit klarer Struktur, sauberer Dokumentation, performanter Webentwicklung, UI/UX und grafischer Handschrift: wartbar, zugänglich und visuell eigenständig.',
       primaryCta: 'Projekte starten',
       secondaryCta: 'Systemstatus prüfen',
       consoleLines: [
@@ -48,11 +48,11 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     },
     about: {
       eyebrow: 'about_b2.exe',
-      title: 'Keine Schablone. Kein Zufall. Bewusst gebaut.',
+      title: 'Sympathisch. Fokussiert. Mit Humor.',
       text: [
-        'Ich arbeite an Webanwendungen, die im Alltag wirklich benutzt werden: Intranet-Tools, Dashboards, Workflows, Boards, Formulare und Interfaces, die schnell verständlich bleiben müssen.',
-        'Ich verstehe mich als ganzheitlicher Entwickler: Planung, Architektur, Design und Produktion kommen bei mir aus einer Hand – vom ersten Konzept bis zur nutzbaren Oberfläche.',
-        'Meine Stärke liegt in der Mischung aus Full-Stack-Denken und grafischem Blick. Ich achte auf Struktur, Lesbarkeit, Performance und gleichzeitig darauf, dass ein Produkt eigenständig aussieht.',
+        'Ich arbeite an Webanwendungen, Interfaces und visuellen Systemen, die im Alltag verständlich bleiben müssen: Websites, Web-Apps, Dashboards, Shops, Workflows und interaktive Präsentationen.',
+        'Ich verbinde Full-Stack-Entwicklung mit Grafikdesign: Konzept, Struktur, UI, Umsetzung und Dokumentation greifen sauber ineinander.',
+        'Wichtig ist mir ein Ergebnis, das fachlich funktioniert, technisch wartbar bleibt und trotzdem eine eigene visuelle Sprache besitzt.',
       ],
       highlights: [
         { icon: 'architecture', title: 'Struktur', text: 'Saubere Komponenten, klare Datenflüsse, wartbare Projektlogik und Dokumentation mit JSDoc und PEP 8.' },
@@ -62,20 +62,50 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       imageLabel: 'Halftone-Portrait mit Kaffee',
       imageAlt: 'Ben trinkt Kaffee im Halftone-Stil',
       dialogLabel: 'Über-mich Dialogfenster',
-      dialogText: 'keine Vorlage. nur Leidenschaft, Code und Kaffee.',
+      dialogText: 'struktur, code, gestaltung und kaffee.',
       dialogAction: 'Nicht klicken :-D',
       dialogCloseLabel: 'Dialog schließen',
+    },
+    experience: {
+      eyebrow: 'Erfahrung',
+      title: 'Langfristig gewachsen. Praktisch eingesetzt.',
+      subtitle: 'Erfahrung ist nur die Basis: Entscheidend bleibt, neugierig zu bleiben, weiterzulernen und neue Technologien praktisch auszuprobieren.',
+      items: [
+        { value: '10', suffix: 'Jahre', label: 'Grafikdesign', text: 'Illustrator, Photoshop, InDesign, Branding, Kataloge, Layouts und visuelle Systeme.' },
+        { value: '12', suffix: 'Jahre', label: 'Webentwicklung', text: 'HTML, CSS/SCSS, JavaScript, TypeScript, Angular, Python, Django und produktionsnahe Tools.' },
+        { value: '6', suffix: 'Jahre', label: 'Office/VBA', text: 'Excel, Word, PowerPoint, Automatisierung, Makros, Datenaufbereitung und interne Workflows.' },
+      ],
     },
     skills: {
       eyebrow: 'Techstack',
       title: 'Werkzeuge für robuste Produkte und starke Interfaces.',
-      subtitle: 'Der Stack ist bewusst praxisnah gehalten: moderne Frontends, solide Backends, saubere APIs und ein Designsystem, das nicht nur gut aussieht, sondern Arbeit spart.',
+      subtitle: 'Der Stack ist bewusst praxisnah gehalten: moderne Frontends, solide Backends, Shopsysteme, Office-Automatisierung und Design-Tools, die im Projektalltag wirklich tragen.',
       groups: [
         { title: 'Frontend', items: ['Angular', 'TypeScript', 'JavaScript', 'HTML', 'SCSS', 'Signals', 'Responsive UI', 'WordPress'] },
-        { title: 'Backend', items: ['Django', 'Python', 'REST APIs', 'Auth', 'Rollen/Rechte', 'PostgreSQL', 'Automatisierung'] },
-        { title: 'Design', items: ['UI/UX', 'Designsysteme', 'Grafikdesign', 'Branding', 'Motion', 'Accessibility', 'SEO'] },
+        { title: 'Backend & Daten', items: ['Django', 'Python', 'REST APIs', 'Auth', 'Rollen/Rechte', 'PostgreSQL', 'Automatisierung'] },
+        { title: 'Design & Content', items: ['Illustrator', 'Photoshop', 'InDesign', 'UI/UX', 'Designsysteme', 'Branding', 'Motion', 'SEO'] },
+        { title: 'Shops & Office', items: ['Gambio', 'JTL Wawi', 'WooCommerce', 'Shopify', 'Excel', 'Word', 'PowerPoint', 'VBA'] },
       ],
-      marquee: ['WordPress', 'Angular', 'TypeScript', 'Django', 'Python', 'SCSS', 'REST', 'WebSockets', 'UI/UX', 'SEO', 'A11y', 'Design Tokens', 'Motion', 'VBA'],
+      levelsTitle: 'Skill-Level aus echten Projekten.',
+      levelsSubtitle: 'Dieses Skillset ist darauf ausgelegt, Projekte ganzheitlich und unkompliziert von der ersten Idee bis zum fertigen Produkt zu entwickeln: Konzept, Design, Frontend, Backend, Shop, Automatisierung und saubere Übergabe greifen ineinander.',
+      levelsDialogTitle: 'skill_check.exe',
+      levelsDialogText: 'SYS: Prozentwerte sind Erfahrungsmarker, keine Angeberei.\n100% heißt: alltagstauglich, sicher und schnell.\nWeniger Prozent heißt nicht unfertig: Shops und Systeme sind voll einsatzfähig.\nDer fehlende Rest steht für Spezialfeatures, die bisher einfach noch nicht gebraucht wurden.',
+      levelsDialogCloseLabel: 'Skill-Dialog schließen',
+      levels: [
+        { label: 'Angular', value: 100, group: 'Frontend' },
+        { label: 'HTML / CSS / SCSS', value: 95, group: 'Frontend' },
+        { label: 'Illustrator', value: 90, group: 'Adobe Cloud' },
+        { label: 'JavaScript', value: 85, group: 'Frontend' },
+        { label: 'Photoshop', value: 85, group: 'Adobe Cloud' },
+        { label: 'Excel / VBA', value: 82, group: 'Office' },
+        { label: 'TypeScript', value: 80, group: 'Frontend' },
+        { label: 'Django / Python', value: 78, group: 'Backend' },
+        { label: 'InDesign', value: 78, group: 'Adobe Cloud' },
+        { label: 'SEO / Accessibility', value: 75, group: 'Webqualität' },
+        { label: 'WooCommerce / Shopify', value: 70, group: 'Shopsysteme' },
+        { label: 'Gambio / JTL Wawi', value: 68, group: 'Shopsysteme' },
+      ],
+      marquee: ['WordPress', 'Angular', 'TypeScript', 'Django', 'Python', 'SCSS', 'REST', 'WebSockets', 'UI/UX', 'SEO', 'A11y', 'Design Tokens', 'Motion', 'VBA', 'Gambio', 'JTL Wawi', 'WooCommerce', 'Shopify', 'Illustrator'],
     },
     projectsIntro: {
       eyebrow: 'Ausgewählte Arbeiten',
@@ -98,7 +128,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         slug: 'intranet',
         name: 'Intranet',
         kicker: 'Angular / Django Intranet',
-        summary: 'Ein internes Produktivsystem mit sieben Apps, modularen Bereichen, Rechten, Kommunikation, Automatisierung und produktionsnahen Workflows.',
+        summary: 'Ein modulares Intranet-Projekt mit produktiven Apps, klaren Rollen, Kommunikation, Automatisierung und produktionsnahen Workflows.',
         description: 'Das Intranet bündelt aktuell sieben produktive Apps in einer zentralen Plattform. Statt isolierter Einzeltools entsteht ein System, das Rollen, Prozesse, Daten und Kommunikation modular zusammenführt und weiter wachsen kann.',
         goal: 'Ziel war ein wartbares Intranet, das interne Abläufe beschleunigt, Daten zentral verfügbar macht und unterschiedliche Fachmodule sauber miteinander verbindet – ohne den modularen Ausbau zu blockieren.',
         role: 'Planung, Architektur, Design und Full-Stack-Entwicklung aus einer Hand: UI-Konzeption, Komponentenstruktur, API-Anbindung, Rechte- und Rollenlogik, Designsystem und laufende Optimierung.',
@@ -185,21 +215,33 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     cta: {
       eyebrow: 'cta_physics.exe',
       title: 'Bauen wir etwas Eigenes.',
-      hint: 'Mit Haltung, Bewegung und sauberem Code.',
+      hint: 'Kurzer Austausch. Klarer Plan.',
       words: ['get', 'in', 'touch', 'icon:arrow_forward'],
     },
     faqTitle: 'Fragen, die vor einem Projekt fast immer auftauchen.',
-    faqSubtitle: 'Kurz beantwortet, damit Erwartungen, Ablauf und technische Richtung schnell klar sind.',
+    faqSubtitle: '',
     faqs: [
-      { question: 'Arbeitest du eher im Frontend oder Backend?', answer: 'Beides ist möglich. Der Schwerpunkt liegt auf Angular-Frontends, UI/UX und sauberer API-Anbindung. Backend-Logik mit Django/Python gehört ebenfalls zum Workflow.' },
-      { question: 'Kann ein bestehendes Projekt modernisiert werden?', answer: 'Ja. Besonders sinnvoll ist ein gezieltes Vorgehen: erst Ist-Stand prüfen, dann kleine, sichere Schritte für Struktur, Design, Performance und Wartbarkeit.' },
-      { question: 'Sind Animationen immer sinnvoll?', answer: 'Nein. Animationen müssen Orientierung, Feedback oder Markenwirkung verbessern. Reine Effekte ohne Nutzen werden vermieden oder reduziert.' },
-      { question: 'Ist das Portfolio barrierearm vorbereitet?', answer: 'Ja. Semantik, Fokuszustände, Kontraste, Tastaturbedienung, reduzierte Bewegung und ARIA-Labels sind berücksichtigt.' },
+      { question: 'Welche Projekte passen gut zu dir?', answer: 'Grundsätzlich alle Projekte, bei denen etwas entstehen soll. Das darf verrückt, bunt und interaktiv sein – oder komplett sachlich: Daten, Dashboards, Behördenlogik, Shops, Formulare, Automatisierung und interne Tools sind genauso willkommen.' },
+      { question: 'Kannst du mit bestehenden Designs oder Vorlagen arbeiten?', answer: 'Ja, natürlich. Das gehört zum Job: Nicht jedes Projekt muss bei null starten. Wichtig sind ein strukturiertes Briefing, klare Ziele, saubere Assets und die Entscheidung, was übernommen, angepasst oder neu gebaut werden soll.' },
+      { question: 'Wie wichtig sind Struktur und Dokumentation?', answer: 'Sehr wichtig. Komponenten, Styles, Datenflüsse und zentrale Logik sollen nachvollziehbar bleiben, damit Projekte später erweitert, geprüft und gepflegt werden können.' },
+      { question: 'Kann ein bestehendes Projekt modernisiert werden?', answer: 'Ja. Sinnvoll ist ein gezieltes Vorgehen: erst Ist-Stand prüfen, dann kleine, sichere Schritte für Struktur, Design, Performance und Wartbarkeit.' },
+      { question: 'Wie gehst du mit Animationen um?', answer: 'Animationen sollen Orientierung, Feedback oder Markenwirkung verbessern. Effekte werden bewusst eingesetzt, gekapselt und so umgesetzt, dass Performance und Bedienbarkeit erhalten bleiben.' },
+      { question: 'Werden SEO, A11y und WCAG berücksichtigt?', answer: 'Ja. Semantik, Meta-Daten, Fokuszustände, Kontraste, Tastaturbedienung und ARIA-Labels werden von Anfang an mitgedacht. Bei stark animierten Projekten kann zusätzlich ein reduzierter Motion-Modus oder ein ruhigerer Accessibility-Modus vorgesehen werden.' },
     ],
+    clients: {
+      eyebrow: 'Realisiert',
+      title: 'Projekte mit Mehrwert.',
+      subtitle: 'Fertige Webprojekte, die sichtbar machen, erklären, Vertrauen schaffen und im Alltag wirklich helfen.',
+      items: [
+        { name: 'glashelden24.de', url: 'https://glashelden24.de', label: 'Website / Direkt, schlank, schnell', stack: ['HTML', 'JavaScript', 'CSS'] },
+        { name: 'Sk-uvgele.de', url: 'https://sk-uvgele.de', label: 'Verein / Klarer Auftritt', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
+        { name: 'beautynailresort.de', url: 'https://beautynailresort.de', label: 'Service / Buchbar und präsent', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
+      ],
+    },
     contact: {
       eyebrow: 'Kontakt',
-      title: 'Projektidee, Intranet-Tool oder visuelles System?',
-      subtitle: 'Schreib kurz, worum es geht. Das Formular ist frontendseitig vorbereitet und kann später an ein Backend oder Mail-Service angebunden werden.',
+      title: 'Projektidee, Website, Web-App oder einfach nur Schnacken?',
+      subtitle: '',
       nameLabel: 'Name',
       emailLabel: 'E-Mail',
       messageLabel: 'Nachricht',
@@ -208,10 +250,33 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       errorMessage: 'Bitte fülle alle Felder korrekt aus.',
       privacy: 'Die Eingaben werden in dieser Demo nicht gespeichert und nur für die lokale Mailto-Vorbereitung genutzt.',
     },
+    imprint: {
+      metaTitle: 'Impressum | Benjamin Bennewitz',
+      metaDescription: 'Impressum und Anbieterkennzeichnung von Benjamin Bennewitz für bennewitz.de.',
+      eyebrow: 'legal_notice.exe',
+      title: 'Impressum',
+      intro: 'Direkt erreichbar, sauber sortiert und ohne Versteckspiel: Anbieterkennzeichnung, Kontakt und Verantwortlichkeit.',
+      backLabel: 'Zurück zur Startseite',
+      dialogTitle: 'legal_check.exe',
+      dialogText: 'STATUS: Platzhalter prüfen.\nAdresse, Telefon und steuerliche Angaben vor dem Livegang final ergänzen.',
+      sections: [
+        { title: 'Angaben gemäß § 5 DDG', lines: ['Benjamin Bennewitz', '[Vollständige ladungsfähige Anschrift ergänzen]', 'Deutschland'] },
+        { title: 'Kontakt', lines: ['E-Mail: kontakt@bennewitz.de', 'Weitere schnelle Kontaktaufnahme: Kontaktformular im Bereich Kontakt', 'Telefon: [Telefonnummer ergänzen]'] },
+        { title: 'Umsatzsteuer', lines: ['Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: [falls vorhanden ergänzen]'] },
+        { title: 'Verantwortlich für den Inhalt', lines: ['Verantwortlich i.S.d. § 18 Abs. 2 MStV: Benjamin Bennewitz', '[Anschrift wie oben ergänzen]'] },
+        { title: 'Haftung für Inhalte und Links', lines: ['Die Inhalte dieser Website werden mit Sorgfalt erstellt. Für externe Links wird keine Haftung übernommen; für deren Inhalte sind ausschließlich die jeweiligen Betreiber verantwortlich.'] },
+      ],
+    },
     footer: {
       eyebrow: 'SEO · Links · Kontakt',
       title: 'Benjamin Bennewitz',
-      text: 'Full Stack Webentwicklung, Angular, Django, UI/UX und Grafikdesign mit Fokus auf interne Tools, Designsysteme und performante Weboberflächen.',
+      text: 'Full Stack Webentwicklung, UI/UX, Grafikdesign, Shopsysteme und performante Weboberflächen mit klarer Struktur und eigener visueller Sprache.',
+      dialogTitle: 'footer_status.exe',
+      dialogText: 'Sitemap geladen. Robots freundlich. Footer stabil.',
+      dialogCloseLabel: 'Footer-Dialog schließen',
+      petDialogTitle: 'good_mood.exe',
+      petDialogText: '„Das ist meine Good-Mood-Supporterin: Fülli. Füles ist Ungarisch für Ohr.“',
+      petDialogLabel: 'Fülli-Info anzeigen',
       columns: [
         {
           title: 'Bereiche', links: [
@@ -219,6 +284,8 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
             { label: 'Über mich', href: '#about' },
             { label: 'Techstack', href: '#skills' },
             { label: 'Projekte', href: '#projects' },
+            { label: 'Realisiert', href: '#clients' },
+            { label: 'FAQ', href: '#faq' },
           ]
         },
         {
@@ -231,9 +298,10 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         },
         {
           title: 'Kontakt', links: [
-            { label: 'E-Mail vorbereiten', href: 'mailto:kontakt@example.com' },
+            { label: 'E-Mail vorbereiten', href: 'mailto:kontakt@bennewitz.de' },
             { label: 'FAQ', href: '#faq' },
             { label: 'Kontaktformular', href: '#contact' },
+            { label: 'Impressum', href: '/impressum' },
           ]
         },
       ],
@@ -244,7 +312,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
   en: {
     meta: {
       title: 'Benjamin Bennewitz | Full Stack Web Development & Graphic Design',
-      description: 'Interactive portfolio by Benjamin Bennewitz with Angular, Django, intranet systems, UI/UX, data interfaces, games and graphic design.',
+      description: 'Interactive portfolio by Benjamin Bennewitz with full-stack web development, UI/UX, graphic design, web apps, shop systems and visual design systems.',
       hiddenTitle: 'psst... come back 👀',
     },
     nav: {
@@ -263,7 +331,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     hero: {
       eyebrow: 'B² takeover · MS-DOS · Interface Art',
       title: 'Design. Code. Break the Grid.',
-      subtitle: 'I build digital products between clean web development, UI/UX, graphic design and controlled chaos: performant, maintainable, accessible and visually distinct.',
+      subtitle: 'I build digital products with clear structure, clean documentation, performant web development, UI/UX and a strong graphic signature: maintainable, accessible and visually distinct.',
       primaryCta: 'Launch projects',
       secondaryCta: 'Check system status',
       consoleLines: [
@@ -280,11 +348,11 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     },
     about: {
       eyebrow: 'about_b2.exe',
-      title: 'No template. No accident. Intentionally built.',
+      title: 'Friendly. Focused. With humor.',
       text: [
-        'I work on web applications that are actually used in daily operations: intranet tools, dashboards, workflows, boards, forms and interfaces that need to stay understandable.',
-        'I see myself as a holistic developer: planning, architecture, design and production come from one hand – from the first concept to a usable interface.',
-        'My strength is the combination of full-stack thinking and a graphic design eye. I care about structure, readability, performance and a product identity that feels distinct.',
+        'I work on web applications, interfaces and visual systems that need to stay understandable in daily use: websites, web apps, dashboards, shops, workflows and interactive presentations.',
+        'I combine full-stack development with graphic design: concept, structure, UI, implementation and documentation are designed to work together cleanly.',
+        'What matters to me is a result that works technically, stays maintainable and still has its own visual language.',
       ],
       highlights: [
         { icon: 'architecture', title: 'Structure', text: 'Clean components, clear data flows, maintainable product logic and documentation with JSDoc and PEP 8.' },
@@ -294,20 +362,50 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       imageLabel: 'Halftone portrait with coffee',
       imageAlt: 'Ben drinking coffee in a halftone style',
       dialogLabel: 'About me dialog window',
-      dialogText: 'not a template. just passion, code and coffee.',
+      dialogText: 'structure, code, design and coffee.',
       dialogAction: 'Do not click :-D',
       dialogCloseLabel: 'Close dialog',
+    },
+    experience: {
+      eyebrow: 'Experience',
+      title: 'Grown over time. Used in real projects.',
+      subtitle: 'Experience is only the foundation: what matters is staying curious, learning continuously and testing new technologies in practice.',
+      items: [
+        { value: '10', suffix: 'years', label: 'Graphic design', text: 'Illustrator, Photoshop, InDesign, branding, catalogues, layouts and visual systems.' },
+        { value: '12', suffix: 'years', label: 'Web development', text: 'HTML, CSS/SCSS, JavaScript, TypeScript, Angular, Python, Django and production-oriented tools.' },
+        { value: '6', suffix: 'years', label: 'Office/VBA', text: 'Excel, Word, PowerPoint, automation, macros, data preparation and internal workflows.' },
+      ],
     },
     skills: {
       eyebrow: 'Tech stack',
       title: 'Tools for robust products and strong interfaces.',
-      subtitle: 'The stack is intentionally practical: modern frontends, solid backends, clean APIs and a design system that saves work.',
+      subtitle: 'The stack is intentionally practical: modern frontends, solid backends, shop systems, office automation and design tools that carry real project work.',
       groups: [
         { title: 'Frontend', items: ['Angular', 'TypeScript', 'JavaScript', 'HTML', 'SCSS', 'Signals', 'Responsive UI', 'WordPress'] },
-        { title: 'Backend', items: ['Django', 'Python', 'REST APIs', 'Auth', 'Roles/permissions', 'PostgreSQL', 'Automation'] },
-        { title: 'Design', items: ['UI/UX', 'Design systems', 'Graphic design', 'Branding', 'Motion', 'Accessibility', 'SEO'] },
+        { title: 'Backend & Data', items: ['Django', 'Python', 'REST APIs', 'Auth', 'Roles/permissions', 'PostgreSQL', 'Automation'] },
+        { title: 'Design & Content', items: ['Illustrator', 'Photoshop', 'InDesign', 'UI/UX', 'Design systems', 'Branding', 'Motion', 'SEO'] },
+        { title: 'Shops & Office', items: ['Gambio', 'JTL Wawi', 'WooCommerce', 'Shopify', 'Excel', 'Word', 'PowerPoint', 'VBA'] },
       ],
-      marquee: ['WordPress', 'Angular', 'TypeScript', 'Django', 'Python', 'SCSS', 'REST', 'WebSockets', 'UI/UX', 'SEO', 'A11y', 'Design Tokens', 'Motion', 'VBA'],
+      levelsTitle: 'Skill levels from real projects.',
+      levelsSubtitle: 'This skillset is built to develop projects holistically and without friction from the first idea to a finished product: concept, design, frontend, backend, shop systems, automation and clean handoff work together.',
+      levelsDialogTitle: 'skill_check.exe',
+      levelsDialogText: 'SYS: Percentages are experience markers, not bragging rights.\n100% means: practical, reliable and fast.\nLower percentages do not mean unfinished: shops and systems are fully usable.\nThe missing part usually means special features I simply have not needed yet.',
+      levelsDialogCloseLabel: 'Close skill dialog',
+      levels: [
+        { label: 'Angular', value: 100, group: 'Frontend' },
+        { label: 'HTML / CSS / SCSS', value: 95, group: 'Frontend' },
+        { label: 'Illustrator', value: 90, group: 'Adobe Cloud' },
+        { label: 'JavaScript', value: 85, group: 'Frontend' },
+        { label: 'Photoshop', value: 85, group: 'Adobe Cloud' },
+        { label: 'Excel / VBA', value: 82, group: 'Office' },
+        { label: 'TypeScript', value: 80, group: 'Frontend' },
+        { label: 'Django / Python', value: 78, group: 'Backend' },
+        { label: 'InDesign', value: 78, group: 'Adobe Cloud' },
+        { label: 'SEO / Accessibility', value: 75, group: 'Web quality' },
+        { label: 'WooCommerce / Shopify', value: 70, group: 'Shop systems' },
+        { label: 'Gambio / JTL Wawi', value: 68, group: 'Shop systems' },
+      ],
+      marquee: ['WordPress', 'Angular', 'TypeScript', 'Django', 'Python', 'SCSS', 'REST', 'WebSockets', 'UI/UX', 'SEO', 'A11y', 'Design Tokens', 'Motion', 'VBA', 'Gambio', 'JTL Wawi', 'WooCommerce', 'Shopify', 'Illustrator'],
     },
     projectsIntro: {
       eyebrow: 'Selected work',
@@ -330,7 +428,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         slug: 'intranet',
         name: 'Intranet',
         kicker: 'Angular / Django intranet',
-        summary: 'An internal productivity system with seven apps, modular areas, permissions, communication, automation and production-related workflows.',
+        summary: 'A modular intranet project with productive apps, clear roles, communication, automation and production-related workflows.',
         description: 'The intranet currently combines seven live apps in one central platform. Instead of isolated tools, it becomes a modular system that connects roles, processes, data and communication and can continue to grow.',
         goal: 'The goal was a maintainable intranet that speeds up internal processes, keeps data centrally available and cleanly connects different business modules without blocking future expansion.',
         role: 'Planning, architecture, design and full-stack development from one hand: UI concept, component structure, API integration, roles and permissions, design system and ongoing optimization.',
@@ -417,21 +515,33 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     cta: {
       eyebrow: 'cta_physics.exe',
       title: 'Let’s build something distinct.',
-      hint: 'With character, motion and clean code.',
+      hint: 'Quick chat. Clear plan.',
       words: ['get', 'in', 'touch', 'icon:arrow_forward'],
     },
     faqTitle: 'Questions that almost always appear before a project.',
-    faqSubtitle: 'Short answers to clarify expectations, workflow and technical direction.',
+    faqSubtitle: '',
     faqs: [
-      { question: 'Do you focus more on frontend or backend?', answer: 'Both are possible. The main focus is Angular frontends, UI/UX and clean API integration. Backend logic with Django/Python is part of the workflow as well.' },
-      { question: 'Can an existing project be modernized?', answer: 'Yes. The best approach is targeted: check the current state first, then improve structure, design, performance and maintainability in small safe steps.' },
-      { question: 'Are animations always useful?', answer: 'No. Motion should improve orientation, feedback or brand impact. Decorative effects without value are reduced or avoided.' },
-      { question: 'Is this portfolio accessibility-aware?', answer: 'Yes. Semantics, focus states, contrast, keyboard support, reduced motion and ARIA labels are considered.' },
+      { question: 'Which projects are a good fit?', answer: 'Basically any project where something useful should be built. It can be wild, colorful and interactive – or completely practical: data, dashboards, public-sector logic, shops, forms, automation and internal tools are just as welcome.' },
+      { question: 'Can you work with existing designs or templates?', answer: 'Yes, of course. That is part of the job: not every project has to start from scratch. What matters is a structured briefing, clear goals, clean assets and a decision on what should be reused, adapted or rebuilt.' },
+      { question: 'How important are structure and documentation?', answer: 'Very important. Components, styles, data flows and central logic should stay understandable so projects can be extended, reviewed and maintained later.' },
+      { question: 'Can an existing project be modernized?', answer: 'Yes. A targeted approach works best: check the current state first, then improve structure, design, performance and maintainability in small safe steps.' },
+      { question: 'How do you approach animation?', answer: 'Motion should improve orientation, feedback or brand impact. Effects are used intentionally, encapsulated cleanly and implemented without sacrificing performance or usability.' },
+      { question: 'Are SEO, A11y and WCAG considered?', answer: 'Yes. Semantics, metadata, focus states, contrast, keyboard support and ARIA labels are considered from the beginning. For heavily animated projects, a reduced-motion mode or calmer accessibility mode can be planned as well.' },
     ],
+    clients: {
+      eyebrow: 'Delivered',
+      title: 'Projects with real value.',
+      subtitle: 'Delivered web projects that clarify, guide, build trust and help in everyday use.',
+      items: [
+        { name: 'glashelden24.de', url: 'https://glashelden24.de', label: 'Website / Direct, lean, fast', stack: ['HTML', 'JavaScript', 'CSS'] },
+        { name: 'Sk-uvgele.de', url: 'https://sk-uvgele.de', label: 'Association / Clear presence', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
+        { name: 'beautynailresort.de', url: 'https://beautynailresort.de', label: 'Service / Bookable and visible', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
+      ],
+    },
     contact: {
       eyebrow: 'Contact',
-      title: 'Project idea, intranet tool or visual system?',
-      subtitle: 'Briefly describe what you need. The form is frontend-ready and can later be connected to a backend or mail service.',
+      title: 'Project idea, website, web app or just a quick chat?',
+      subtitle: '',
       nameLabel: 'Name',
       emailLabel: 'Email',
       messageLabel: 'Message',
@@ -440,10 +550,33 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       errorMessage: 'Please fill out all fields correctly.',
       privacy: 'Inputs are not stored in this demo and are only used for the local mailto preparation.',
     },
+    imprint: {
+      metaTitle: 'Legal Notice | Benjamin Bennewitz',
+      metaDescription: 'Legal notice and provider information for Benjamin Bennewitz and bennewitz.de.',
+      eyebrow: 'legal_notice.exe',
+      title: 'Legal Notice',
+      intro: 'Direct, tidy and easy to find: provider information, contact details and responsibility.',
+      backLabel: 'Back to homepage',
+      dialogTitle: 'legal_check.exe',
+      dialogText: 'STATUS: Check placeholders.\nAdd address, phone number and tax details before going live.',
+      sections: [
+        { title: 'Information according to § 5 DDG', lines: ['Benjamin Bennewitz', '[Add full summonable address]', 'Germany'] },
+        { title: 'Contact', lines: ['Email: contact@bennewitz.de', 'Additional fast contact option: contact form in the contact section', 'Phone: [add phone number]'] },
+        { title: 'VAT', lines: ['VAT identification number according to § 27a UStG: [add if available]'] },
+        { title: 'Responsible for content', lines: ['Responsible according to § 18 para. 2 MStV: Benjamin Bennewitz', '[Add address as above]'] },
+        { title: 'Liability for content and links', lines: ['The content of this website is created with care. No liability is assumed for external links; their respective operators are solely responsible for their content.'] },
+      ],
+    },
     footer: {
       eyebrow: 'SEO · Links · Contact',
       title: 'Benjamin Bennewitz',
-      text: 'Full stack web development, Angular, Django, UI/UX and graphic design focused on internal tools, design systems and performant web interfaces.',
+      text: 'Full-stack web development, UI/UX, graphic design, shop systems and performant web interfaces with clear structure and a strong visual language.',
+      dialogTitle: 'footer_status.exe',
+      dialogText: 'Sitemap loaded. Robots friendly. Footer stable.',
+      dialogCloseLabel: 'Close footer dialog',
+      petDialogTitle: 'good_mood.exe',
+      petDialogText: '“This is my good-mood supporter: Fülli. Füles means ear in Hungarian.”',
+      petDialogLabel: 'Show Fülli info',
       columns: [
         {
           title: 'Sections', links: [
@@ -451,6 +584,8 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
             { label: 'About', href: '#about' },
             { label: 'Tech stack', href: '#skills' },
             { label: 'Projects', href: '#projects' },
+            { label: 'Delivered', href: '#clients' },
+            { label: 'FAQ', href: '#faq' },
           ]
         },
         {
@@ -463,9 +598,10 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         },
         {
           title: 'Contact', links: [
-            { label: 'Prepare email', href: 'mailto:contact@example.com' },
+            { label: 'Prepare email', href: 'mailto:contact@bennewitz.de' },
             { label: 'FAQ', href: '#faq' },
             { label: 'Contact form', href: '#contact' },
+            { label: 'Legal notice', href: '/impressum' },
           ]
         },
       ],

@@ -80,12 +80,37 @@ export interface HighlightItem {
   readonly text: string;
 }
 
+/** Inhalt des Erfahrungsbereichs. */
+export interface ExperienceContent {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly subtitle: string;
+  readonly items: readonly ExperienceItem[];
+}
+
+/** Einzelner Erfahrungswert mit kurzer Einordnung. */
+export interface ExperienceItem {
+  readonly value: string;
+  readonly suffix: string;
+  readonly label: string;
+  readonly text: string;
+}
+
 /** Inhalt des Skillbereichs. */
 export interface SkillsContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly subtitle: string;
   readonly groups: readonly SkillGroup[];
+  readonly levelsTitle: string;
+  readonly levelsSubtitle: string;
+  /** Titel des kleinen Skill-Dialogfensters. */
+  readonly levelsDialogTitle: string;
+  /** Text des kleinen Skill-Dialogfensters. */
+  readonly levelsDialogText: string;
+  /** Zugängliche Beschriftung zum Schließen des Skill-Dialogfensters. */
+  readonly levelsDialogCloseLabel: string;
+  readonly levels: readonly SkillLevel[];
   readonly marquee: readonly string[];
 }
 
@@ -93,6 +118,13 @@ export interface SkillsContent {
 export interface SkillGroup {
   readonly title: string;
   readonly items: readonly string[];
+}
+
+/** Prozentuale Selbsteinschätzung eines Tech- oder Design-Skills. */
+export interface SkillLevel {
+  readonly label: string;
+  readonly value: number;
+  readonly group: string;
 }
 
 /** Inhalt der Projektübersicht. */
@@ -153,6 +185,23 @@ export interface FaqItem {
   readonly answer: string;
 }
 
+/** Inhalt des Kundenbereichs. */
+export interface ClientsContent {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly subtitle: string;
+  readonly items: readonly ClientItem[];
+}
+
+/** Einzelner Kunde oder Referenzlink. */
+export interface ClientItem {
+  readonly name: string;
+  readonly url: string;
+  readonly label: string;
+  /** Technischer Stack der referenzierten Website. */
+  readonly stack: readonly string[];
+}
+
 /** Inhalt der chaotischen CTA-Section. */
 export interface CtaContent {
   /** Kleine technische Beschriftung über der CTA. */
@@ -179,11 +228,54 @@ export interface ContactContent {
   readonly privacy: string;
 }
 
+
+/** Inhalt der Impressumsseite. */
+export interface ImprintContent {
+  /** Meta-Titel der Impressumsseite. */
+  readonly metaTitle: string;
+  /** Meta-Description der Impressumsseite. */
+  readonly metaDescription: string;
+  /** Kleine technische Beschriftung über dem Seitentitel. */
+  readonly eyebrow: string;
+  /** Hauptüberschrift der Impressumsseite. */
+  readonly title: string;
+  /** Kurze Einordnung oberhalb der Pflichtangaben. */
+  readonly intro: string;
+  /** Beschriftung des Zurück-Links. */
+  readonly backLabel: string;
+  /** Titel des dekorativen Hinweisfensters. */
+  readonly dialogTitle: string;
+  /** Text des dekorativen Hinweisfensters. */
+  readonly dialogText: string;
+  /** Inhaltliche Blöcke der Impressumsseite. */
+  readonly sections: readonly ImprintSection[];
+}
+
+/** Einzelner Informationsblock im Impressum. */
+export interface ImprintSection {
+  /** Überschrift des Informationsblocks. */
+  readonly title: string;
+  /** Zeilen des Informationsblocks. */
+  readonly lines: readonly string[];
+}
+
 /** Footer-Inhalte und Linkgruppen. */
 export interface FooterContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly text: string;
+  /** Titel des dekorativen Footer-Dialogfensters. */
+  readonly dialogTitle: string;
+  /** Text des dekorativen Footer-Dialogfensters. */
+  readonly dialogText: string;
+  /** Zugängliche Beschriftung zum Schließen des Footer-Dialogfensters. */
+  readonly dialogCloseLabel: string;
+  /** Titel des kleinen Fülli-Hover-Dialogfensters. */
+  readonly petDialogTitle: string;
+  /** Text des kleinen Fülli-Hover-Dialogfensters. */
+  readonly petDialogText: string;
+  /** Zugängliche Beschriftung des Fülli-Auslösers. */
+  readonly petDialogLabel: string;
   readonly columns: readonly FooterColumn[];
 }
 
@@ -205,6 +297,7 @@ export interface PortfolioContent {
   readonly nav: NavigationContent;
   readonly hero: HeroContent;
   readonly about: AboutContent;
+  readonly experience: ExperienceContent;
   readonly skills: SkillsContent;
   readonly projectsIntro: ProjectsContent;
   readonly projects: readonly PortfolioProject[];
@@ -213,7 +306,10 @@ export interface PortfolioContent {
   readonly faqTitle: string;
   readonly faqSubtitle: string;
   readonly faqs: readonly FaqItem[];
+  readonly clients: ClientsContent;
   readonly contact: ContactContent;
+  /** Inhalte der Impressumsseite. */
+  readonly imprint: ImprintContent;
   readonly footer: FooterContent;
   readonly notFoundTitle: string;
   readonly notFoundText: string;

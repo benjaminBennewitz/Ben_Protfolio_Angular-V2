@@ -5,6 +5,8 @@
  * @description Lässt CTA-Wortbausteine beim Erreichen der Section fallen und auf Cursor-Nähe reagieren.
  */
 
+import { AchievementService } from '../../core/services/achievement.service';
+import { AccessibilityPreferenceService } from '../../core/services/accessibility-preference.service';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 import { AfterViewInit, Component, ElementRef, HostListener, Input, NgZone, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 
@@ -57,6 +59,12 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   /** Angular-Zone für animation-frame-Updates außerhalb der Change Detection. */
   private readonly zone = inject(NgZone);
 
+  /** Accessibility-Service für reduzierte oder deaktivierte Bewegung. */
+  private readonly accessibility = inject(AccessibilityPreferenceService);
+
+  /** Achievement-Service für die Kontakt-CTA-Trophäe. */
+  private readonly achievementService = inject(AchievementService);
+
   /** Interner Bewegungszustand aller Bausteine. */
   private blocks: CtaBlockState[] = [];
 
@@ -72,6 +80,9 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   /** Markiert, ob die Fallanimation gestartet wurde. */
   private started = false;
 
+  /** Sichtbarkeitsobserver für Stop und Resume der Physics-Schleife. */
+  private visibilityObserver: IntersectionObserver | null = null;
+
   /** Sichtbare Styles für das Template. */
   readonly blockStyles = signal<readonly Record<string, string>[]>([]);
 
@@ -83,7 +94,8 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
 
   /** Stoppt laufende Animationen. */
   ngOnDestroy(): void {
-    cancelAnimationFrame(this.frameId);
+    this.pause();
+    this.visibilityObserver?.disconnect();
   }
 
   /** Reagiert auf Größenänderungen und baut die Bühne neu auf. */
@@ -112,7 +124,8 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
 
   /** Scrollt barrierearm zum Kontaktbereich. */
   goToContact(): void {
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    this.achievementService.unlock('cta-contact');
+    document.getElementById('contact')?.scrollIntoView({ behavior: this.accessibility.reducesMotion() ? 'auto' : 'smooth', block: 'start' });
   }
 
   /** Liefert einen einzelnen CSS-Style-Wert für einen Baustein. */
@@ -169,7 +182,7 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     return word === 'touch' ? 184 : 132;
   }
 
-  /** Startet die Animation erst bei Sichtbarkeit. */
+  /** Startet und pausiert die Animation abhängig von der Sichtbarkeit. */
   private observeStart(): void {
     const stage = this.stageRef?.nativeElement;
 
@@ -178,37 +191,51 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const observer = new IntersectionObserver(
+    this.visibilityObserver = new IntersectionObserver(
       ([entry]) => {
-        if (!entry?.isIntersecting) {
+        if (entry?.isIntersecting) {
+          this.start();
           return;
         }
 
-        observer.disconnect();
-        this.start();
+        this.pause();
       },
-      { threshold: 0.25 },
+      { threshold: 0.16, rootMargin: '8% 0px 8% 0px' },
     );
 
-    observer.observe(stage);
+    this.visibilityObserver.observe(stage);
   }
 
-  /** Startet die requestAnimationFrame-Schleife außerhalb Angulars. */
+  /** Startet oder setzt die requestAnimationFrame-Schleife außerhalb Angulars fort. */
   private start(): void {
-    if (this.started || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (this.accessibility.reducesMotion() || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.pause();
       this.snapToFloor();
       return;
     }
 
     this.started = true;
+
+    if (this.frameId) {
+      return;
+    }
+
     this.zone.runOutsideAngular(() => this.tick());
+  }
+
+  /** Pausiert die aktive Physics-Schleife. */
+  private pause(): void {
+    cancelAnimationFrame(this.frameId);
+    this.frameId = 0;
   }
 
   /** Simuliert Gravitation, Grenzen, Cursor-Abstoßung und einfache Kollisionen. */
   private tick(): void {
     const stage = this.stageRef?.nativeElement;
 
-    if (!stage) {
+    if (!stage || this.accessibility.reducesMotion()) {
+      this.pause();
+      this.snapToFloor();
       return;
     }
 

@@ -1,0 +1,75 @@
+<!-- src/app/layout/accessibility-panel/accessibility-panel.component.html -->
+<aside class="access-panel" [class.access-panel--open]="open()" aria-label="Accessibility Einstellungen">
+  @if (open()) {
+  <button class="access-panel__backdrop" type="button" aria-label="Accessibility-Panel schließen" (click)="close()"></button>
+  }
+
+  <button class="access-panel__toggle" type="button" [attr.aria-label]="texts().toggleLabel" [attr.aria-expanded]="open()"
+    (click)="toggleOpen()">
+    <span class="material-symbols-outlined" aria-hidden="true">accessibility_new</span>
+  </button>
+
+  @if (open()) {
+  <section class="access-panel__window bp-card" role="dialog" aria-modal="true" [attr.aria-label]="texts().title">
+    <header class="access-panel__head">
+      <div>
+        <p>accessibility.exe</p>
+        <h2>{{ texts().title }}</h2>
+      </div>
+      <button type="button" aria-label="Panel schließen" (click)="close()">×</button>
+    </header>
+
+    <p class="access-panel__intro">{{ texts().intro }}</p>
+
+    <div class="access-panel__quick-actions">
+      <button type="button" (click)="accessibility.enableCalmMode()">
+        <span class="material-symbols-outlined" aria-hidden="true">motion_photos_off</span>
+        <span>{{ texts().calmMode }}</span>
+      </button>
+      <button type="button" (click)="accessibility.resetPreferences()">{{ texts().reset }}</button>
+    </div>
+
+    <div class="access-panel__group">
+      <h3>{{ texts().motionTitle }}</h3>
+      <div class="access-panel__chips">
+        @for (mode of motionModes; track mode) {
+        <button type="button" [class.is-active]="accessibility.motionMode() === mode"
+          (click)="accessibility.setMotionMode(mode)">{{ texts().motion[mode] }}</button>
+        }
+      </div>
+    </div>
+
+    <div class="access-panel__group">
+      <h3>{{ texts().comfortTitle }}</h3>
+      <div class="access-panel__chips">
+        @for (mode of comfortModes; track mode) {
+        <button type="button" [class.is-active]="accessibility.comfortMode() === mode"
+          (click)="accessibility.setComfortMode(mode)">{{ texts().comfort[mode] }}</button>
+        }
+      </div>
+    </div>
+
+    <div class="access-panel__group">
+      <h3>{{ texts().contrastTitle }}</h3>
+      <div class="access-panel__chips">
+        @for (mode of contrastModes; track mode) {
+        <button type="button" [class.is-active]="accessibility.contrastMode() === mode"
+          (click)="accessibility.setContrastMode(mode)">{{ texts().contrast[mode] }}</button>
+        }
+      </div>
+    </div>
+
+    <div class="access-panel__group">
+      <h3>{{ texts().colorTitle }}</h3>
+      <div class="access-panel__chips access-panel__chips--grid">
+        @for (mode of colorModes; track mode) {
+        <button type="button" [class.is-active]="accessibility.colorVisionMode() === mode"
+          (click)="accessibility.setColorVisionMode(mode)">{{ texts().color[mode] }}</button>
+        }
+      </div>
+    </div>
+
+    <p class="access-panel__storage">{{ texts().storageHint }}</p>
+  </section>
+  }
+</aside>

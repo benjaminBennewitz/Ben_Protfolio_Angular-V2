@@ -27,6 +27,11 @@
       {{ languageService.language().toUpperCase() }}
     </button>
 
+    <a class="nav__action nav__achievement" routerLink="/achievements" aria-label="Geheime Achievements öffnen"
+      (click)="closeMenu()">
+      <span class="material-symbols-outlined" aria-hidden="true">emoji_events</span>
+    </a>
+
     <a class="nav__contact" routerLink="/" fragment="contact" (click)="closeMenu()">
       <span>// terminal_access</span>
     </a>

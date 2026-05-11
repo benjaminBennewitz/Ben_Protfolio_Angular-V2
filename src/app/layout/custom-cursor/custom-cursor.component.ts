@@ -5,7 +5,8 @@
  * @description Reagiert auf Mausbewegung, Klicks und interaktive Elemente.
  */
 
-import { Component, HostListener, signal } from '@angular/core';
+import { Component, HostListener, computed, inject, signal } from '@angular/core';
+import { AccessibilityPreferenceService } from '../../core/services/accessibility-preference.service';
 
 /** Zeichnet einen eigenen Cursor für Desktop-Geräte. */
 @Component({
@@ -15,6 +16,12 @@ import { Component, HostListener, signal } from '@angular/core';
   styleUrl: './custom-cursor.component.scss',
 })
 export class CustomCursorComponent {
+  /** Accessibility-Service für ruhige oder bewegungsreduzierte Modi. */
+  private readonly accessibility = inject(AccessibilityPreferenceService);
+
+  /** Gibt true zurück, wenn der Custom Cursor deaktiviert werden soll. */
+  readonly disabled = computed<boolean>(() => this.accessibility.usesSimpleMode() || this.accessibility.reducesMotion());
+
   /** Aktuelle X-Position des Cursors. */
   readonly x = signal<number>(-120);
 
@@ -30,6 +37,10 @@ export class CustomCursorComponent {
   /** Aktualisiert Cursorposition und Hover-Zustand. */
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent): void {
+    if (this.disabled()) {
+      return;
+    }
+
     const target = event.target instanceof Element ? event.target : null;
     const isInteractive = Boolean(target?.closest('a, button, input, textarea, select, summary, [data-cursor]'));
 
@@ -41,6 +52,10 @@ export class CustomCursorComponent {
   /** Aktiviert den gedrückten Cursor-Zustand. */
   @HostListener('document:mousedown')
   onMouseDown(): void {
+    if (this.disabled()) {
+      return;
+    }
+
     this.pressed.set(true);
   }
 

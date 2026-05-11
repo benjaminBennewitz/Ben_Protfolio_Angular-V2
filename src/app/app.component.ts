@@ -9,6 +9,8 @@ import { Component, effect, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LanguageService } from './core/services/language.service';
 import { TabTitleService } from './core/services/tab-title.service';
+import { AccessibilityPanelComponent } from './layout/accessibility-panel/accessibility-panel.component';
+import { AchievementToastComponent } from './layout/achievement-toast/achievement-toast.component';
 import { CustomCursorComponent } from './layout/custom-cursor/custom-cursor.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { LoaderComponent } from './layout/loader/loader.component';
@@ -19,7 +21,7 @@ import { ScrollToTopComponent } from './layout/scroll-to-top/scroll-to-top.compo
 @Component({
   selector: 'bp-root',
   standalone: true,
-  imports: [RouterOutlet, NavigationComponent, LoaderComponent, CustomCursorComponent, ScrollToTopComponent, FooterComponent],
+  imports: [RouterOutlet, NavigationComponent, LoaderComponent, CustomCursorComponent, ScrollToTopComponent, FooterComponent, AccessibilityPanelComponent, AchievementToastComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

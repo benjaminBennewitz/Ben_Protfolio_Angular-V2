@@ -24,7 +24,8 @@
    03   Hintergründe
    04   Scrollbars
    05   Interaktion
-   06   Reduced Motion
+   06   Accessibility Modes
+   07   Reduced Motion
    ========================================================================== */
 
 /* ==========================================================================
@@ -143,7 +144,87 @@ button {
 }
 
 /* ==========================================================================
-   06   Reduced Motion
+   06   Accessibility Modes
+   ========================================================================== */
+
+.bp-is-paused,
+.bp-is-paused *,
+.bp-is-paused *::before,
+.bp-is-paused *::after {
+  animation-play-state: paused !important;
+}
+
+:root[data-comfort='simple'] body::before {
+  background: linear-gradient(180deg, var(--bp-color-bg) 0%, var(--bp-color-bg-soft) 100%);
+}
+
+:root[data-comfort='simple'] body::after {
+  opacity: 0.04;
+}
+
+:root[data-comfort='simple'] .bp-card,
+:root[data-comfort='simple'] .bp-dos-window {
+  box-shadow: 0 18px 44px var(--bp-color-shadow) !important;
+}
+
+:root[data-comfort='simple'] .bp-reveal,
+:root[data-motion='reduced'] .bp-reveal,
+:root[data-motion='off'] .bp-reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+:root[data-motion='reduced'] {
+  scroll-behavior: auto;
+}
+
+:root[data-motion='reduced'] *,
+:root[data-motion='reduced'] *::before,
+:root[data-motion='reduced'] *::after {
+  animation-duration: 0.18s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.18s !important;
+}
+
+:root[data-motion='off'] {
+  scroll-behavior: auto;
+}
+
+:root[data-motion='off'] *,
+:root[data-motion='off'] *::before,
+:root[data-motion='off'] *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+:root[data-motion='off'] .achievement-toast,
+:root[data-motion='reduced'] .achievement-toast {
+  animation: none !important;
+}
+
+:root[data-comfort='simple'] .reveal__word::before,
+:root[data-motion='reduced'] .reveal__word::before,
+:root[data-motion='off'] .reveal__word::before,
+:root[data-comfort='simple'] .hero__headline-line::before,
+:root[data-motion='reduced'] .hero__headline-line::before,
+:root[data-motion='off'] .hero__headline-line::before {
+  display: none !important;
+}
+
+:root[data-comfort='simple'] .reveal__word span,
+:root[data-motion='reduced'] .reveal__word span,
+:root[data-motion='off'] .reveal__word span,
+:root[data-comfort='simple'] .hero__headline-line span,
+:root[data-motion='reduced'] .hero__headline-line span,
+:root[data-motion='off'] .hero__headline-line span {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+/* ==========================================================================
+   07   Reduced Motion
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,20 @@
+<!-- src/app/layout/achievement-toast/achievement-toast.component.html -->
+@if (achievementService.activeUnlock(); as achievement) {
+<div class="achievement-toast-layer" aria-live="polite" aria-atomic="true">
+  <section class="achievement-toast bp-card" role="status">
+    <div class="achievement-toast__icon" aria-hidden="true">
+      <span class="material-symbols-outlined">emoji_events</span>
+    </div>
+
+    <div class="achievement-toast__copy">
+      <p>{{ texts().unlocked }}</p>
+      <h2>{{ achievement.title }}</h2>
+      <span>{{ achievement.description }}</span>
+    </div>
+
+    <button type="button" [attr.aria-label]="texts().closeLabel" (click)="achievementService.dismissActiveUnlock()">
+      <span class="material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
+  </section>
+</div>
+}

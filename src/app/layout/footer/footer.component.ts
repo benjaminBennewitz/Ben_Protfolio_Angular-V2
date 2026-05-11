@@ -7,6 +7,7 @@
 
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AchievementService } from '../../core/services/achievement.service';
 import { LanguageService } from '../../core/services/language.service';
 
 /** Footer mit semantischen Linkgruppen. */
@@ -21,6 +22,9 @@ export class FooterComponent {
   /** Sprachservice für Footer-Inhalte. */
   private readonly languageService = inject(LanguageService);
 
+  /** Achievement-Service für die versteckte Fülli-Trophäe. */
+  private readonly achievementService = inject(AchievementService);
+
   /** Aktueller Footer-Inhalt. */
   readonly footer = computed(() => this.languageService.content().footer);
 
@@ -33,6 +37,11 @@ export class FooterComponent {
   /** Entfernt das Footer-Dialogfenster aus dem Footer. */
   closeFooterDialog(): void {
     this.isFooterDialogVisible.set(false);
+  }
+
+  /** Schaltet die versteckte Fülli-Trophäe frei. */
+  unlockPetAchievement(): void {
+    this.achievementService.unlock('loyal-companion');
   }
 
   /** Prüft, ob ein Link als interne Angular-Route gerendert werden soll. */

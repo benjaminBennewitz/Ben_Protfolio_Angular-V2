@@ -1,7 +1,7 @@
 <!-- src/app/layout/loader/loader.component.html -->
 @if (visible()) {
 <section class="loader" [class.loader--leaving]="leaving()" [class.loader--completed]="completed()"
-  aria-label="Portfolio wird geladen" aria-live="polite">
+  [attr.aria-label]="loaderContent().ariaLabel" aria-live="polite">
   <div class="loader__backdrop" aria-hidden="true">
     <span class="loader__skull"></span>
     <span class="loader__grid"></span>
@@ -13,8 +13,21 @@
     <strong>BOOT_SEQUENCE</strong>
   </div>
 
+  @if (useCalmLoader()) {
+  <aside class="loader__simple" role="status" aria-live="assertive">
+    <div class="loader__simple-panel bp-card">
+      <p class="loader__simple-eyebrow">{{ loaderContent().calmEyebrow }}</p>
+      <strong class="loader__simple-number">{{ calmProgress() }}%</strong>
+      <div class="loader__simple-track" aria-hidden="true">
+        <span [style.width.%]="calmProgress()"></span>
+      </div>
+      <h2>{{ loaderContent().calmTitle }}</h2>
+      <p>{{ loaderContent().calmText }}</p>
+    </div>
+  </aside>
+  } @else {
   <div class="loader__dialog-stack">
-    @for (dialog of dialogs; track dialog.percent) {
+    @for (dialog of dialogs(); track dialog.percent) {
     <article class="loader-dialog" [style.--dialog-delay]="dialog.delay" [style.--dialog-left]="dialog.left"
       [style.--dialog-top]="dialog.top" [style.--dialog-rotate]="dialog.rotate" [style.--dialog-z]="dialog.z"
       [attr.aria-label]="dialog.percent + ' Prozent geladen: ' + dialog.message">
@@ -43,9 +56,9 @@
   </div>
 
   <aside class="loader__terminal" aria-hidden="true">
-    <p class="loader__terminal-title">C:\B2\portfolio&gt; run experience.exe</p>
+    <p class="loader__terminal-title">{{ loaderContent().terminalTitle }}</p>
     <ul>
-      @for (line of logLines; track line) {
+      @for (line of logLines(); track line) {
       <li>{{ line }}</li>
       }
     </ul>
@@ -58,14 +71,15 @@
 
   @if (completed()) {
   <div class="loader__ready" [class.loader__ready--launching]="launching()" role="status" aria-live="assertive">
-    <p>100 % erreicht. System wartet auf ein menschliches Wunder.</p>
-    <button type="button" (click)="dismiss()" [disabled]="launching()" aria-label="Portfolio öffnen">
-      <span>was coooooles</span>
+    <p>{{ loaderContent().readyText }}</p>
+    <button type="button" (click)="dismiss()" [disabled]="launching()" [attr.aria-label]="loaderContent().openLabel">
+      <span>{{ loaderContent().buttonLabel }}</span>
       @if (launching()) {
       <img class="loader__button-asset" src="assets/images/nice-head-loader.webp" alt="Halftone Portrait von B²">
       }
     </button>
   </div>
+  }
   }
 </section>
 }

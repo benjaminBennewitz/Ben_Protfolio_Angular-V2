@@ -47,10 +47,21 @@ export class LanguageService {
     this.languageSignal.set(language);
   }
 
-  /** Liest die initiale Sprache aus LocalStorage oder nutzt Deutsch als Default. */
+  /** Liest die initiale Sprache aus LocalStorage, Browserliste oder Deutsch als Fallback. */
   private readInitialLanguage(): PortfolioLanguage {
     const savedLanguage = localStorage.getItem(this.storageKey);
 
-    return savedLanguage === 'en' ? 'en' : 'de';
+    if (savedLanguage === 'de' || savedLanguage === 'en') {
+      return savedLanguage;
+    }
+
+    return this.browserPrefersEnglish() ? 'en' : 'de';
+  }
+
+  /** Prüft, ob die Browser- oder Systemsprache Englisch bevorzugt. */
+  private browserPrefersEnglish(): boolean {
+    const languages = navigator.languages?.length ? navigator.languages : [navigator.language];
+
+    return languages.some((language) => language.toLowerCase().startsWith('en'));
   }
 }

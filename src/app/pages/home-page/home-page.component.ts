@@ -7,6 +7,7 @@
 
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AchievementService } from '../../core/services/achievement.service';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
 import { ChaosCtaComponent } from '../../shared/chaos-cta/chaos-cta.component';
@@ -16,6 +17,7 @@ import { ProjectStackComponent } from '../../shared/project-stack/project-stack.
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { RevealTextComponent } from '../../shared/reveal-text/reveal-text.component';
 import { TechMarqueeComponent } from '../../shared/tech-marquee/tech-marquee.component';
+import { ViewportActivityDirective } from '../../shared/viewport-activity.directive';
 
 /** Zustände für die auswählbaren Hero-Köpfe. */
 type HeroHeadKey = 'default' | 'lol' | 'insane' | 'fck';
@@ -27,7 +29,7 @@ type AboutCoffeeKey = 'default' | 'error';
 @Component({
   selector: 'bp-home-page',
   standalone: true,
-  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProjectStackComponent, ProcessLockComponent, ChaosCtaComponent, ContactFormComponent],
+  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProjectStackComponent, ProcessLockComponent, ChaosCtaComponent, ContactFormComponent, ViewportActivityDirective],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })
@@ -37,6 +39,9 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   /** SEO-Service für Startseiten-Meta-Daten. */
   private readonly seoService = inject(SeoService);
+
+  /** Achievement-Service für versteckte Interaktionen auf der Startseite. */
+  private readonly achievementService = inject(AchievementService);
 
   /** X-Versatz für den Hero-Parallax-Effekt. */
   private readonly heroShiftX = signal(0);
@@ -150,6 +155,7 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
    * @param head Zielzustand des Hero-Kopfes.
    */
   setHeroHead(head: HeroHeadKey): void {
+    this.achievementService.unlock('hero-face-switch');
     this.activeHeroHead.set(head);
   }
 
@@ -160,11 +166,13 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   /** Entfernt das Hero-Dialogfenster aus der Startansicht. */
   closeHeroDialog(): void {
+    this.achievementService.unlock('nostalgia-hater');
     this.isHeroDialogVisible.set(false);
   }
 
   /** Wechselt im About-Bereich auf das vorbereitete Fehlerbild. */
   showAboutCoffeeError(): void {
+    this.achievementService.unlock('coffee-glitch');
     this.activeAboutCoffeeImage.set('error');
   }
 

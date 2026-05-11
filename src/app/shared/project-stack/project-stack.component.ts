@@ -8,6 +8,8 @@
 import { AfterViewInit, Component, ElementRef, HostListener, Input, NgZone, OnDestroy, QueryList, ViewChildren, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PortfolioProject } from '../../core/models/portfolio.models';
+import { AccessibilityPreferenceService } from '../../core/services/accessibility-preference.service';
+import { AchievementService } from '../../core/services/achievement.service';
 import { ProjectVisualComponent } from '../project-visual/project-visual.component';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 
@@ -70,6 +72,12 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Angular-Zone für performante requestAnimationFrame-Updates. */
   private readonly zone = inject(NgZone);
+
+  /** Accessibility-Service für reduzierte oder deaktivierte Bewegung. */
+  private readonly accessibility = inject(AccessibilityPreferenceService);
+
+  /** Achievement-Service für versteckte Projekt-Trophäen. */
+  private readonly achievementService = inject(AchievementService);
 
   /** Eyebrow der Projektsektion. */
   @Input() eyebrow = '';
@@ -142,6 +150,9 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   /** Passive Sichtbarkeitsmessung für Projekt 2. */
   private project2Observer: IntersectionObserver | null = null;
 
+  /** Passive Sichtbarkeitsmessung für den Projekt-5-Typewriter. */
+  private project5Observer: IntersectionObserver | null = null;
+
   /** Verzögerung bis zum Success-Wechsel nach dem Papierwurf. */
   private readonly project3SuccessDelayMs = 1180;
 
@@ -150,6 +161,9 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Wiederkehrende Timer der Projekt-5-Typewriter-Animation. */
   private readonly project5TypewriterTimers: ReturnType<typeof setTimeout>[] = [];
+
+  /** Merkt, ob der Projekt-5-Typewriter aktuell läuft. */
+  private project5TypewriterRunning = false;
 
   /** Vordefinierte Tipp- und Löschschritte für das Projekt-5-Dateinaming. */
   private readonly project5TypewriterScript: readonly { readonly mode: 'type' | 'delete' | 'pause' | 'clear'; readonly value?: string; readonly count?: number; readonly delayMs?: number; }[] = [
@@ -181,18 +195,22 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   /** Startet die passive Projekt-2-Erkennung. */
   ngAfterViewInit(): void {
     this.resetProject2Items();
-    queueMicrotask(() => this.observeProject2Panel());
-    this.startProject5Typewriter();
+    queueMicrotask(() => {
+      this.observeProject2Panel();
+      this.observeProject5Typewriter();
+    });
   }
 
   /** Stoppt Animation und Beobachter. */
   ngOnDestroy(): void {
-    cancelAnimationFrame(this.project2FrameId);
+    this.pauseProject2Physics();
     this.clearProject2OneUpTimers();
     this.clearProject3SuccessTimer();
     this.clearProject5TypewriterTimers();
     this.project2Observer?.disconnect();
     this.project2Observer = null;
+    this.project5Observer?.disconnect();
+    this.project5Observer = null;
   }
 
   /** Baut die Assets bei Größenänderung passend neu auf. */
@@ -252,6 +270,7 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
+    this.achievementService.unlock('trash-dunk');
     this.project3PaperLanded.set(true);
     this.project3SuccessVisible.set(false);
     this.queueProject3SuccessState();
@@ -278,16 +297,27 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Startet die Endlosschleife des Projekt-5-Typewriters. */
   private startProject5Typewriter(): void {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (this.accessibility.reducesMotion() || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.clearProject5TypewriterTimers();
       this.project5TypewriterText.set('i-swear-last-version__only-100-coffees-in-me__final.ai');
       return;
     }
 
+    if (this.project5TypewriterRunning) {
+      return;
+    }
+
+    this.project5TypewriterRunning = true;
+    this.project5TypewriterText.set('');
     this.runProject5TypewriterStep(0, 0, '');
   }
 
   /** Führt genau einen Tipp-, Lösch- oder Warte-Schritt des Typewriters aus. */
   private runProject5TypewriterStep(stepIndex: number, charIndex: number, currentText: string): void {
+    if (!this.project5TypewriterRunning || this.accessibility.reducesMotion()) {
+      return;
+    }
+
     const step = this.project5TypewriterScript[stepIndex];
 
     if (!step) {
@@ -356,6 +386,8 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Stoppt alle laufenden Typewriter-Timer. */
   private clearProject5TypewriterTimers(): void {
+    this.project5TypewriterRunning = false;
+
     while (this.project5TypewriterTimers.length > 0) {
       clearTimeout(this.project5TypewriterTimers.pop()!);
     }
@@ -373,35 +405,70 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     this.project2Observer?.disconnect();
     this.project2Observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry?.isIntersecting || entry.intersectionRatio < 0.72) {
+        if (entry?.isIntersecting && entry.intersectionRatio >= 0.42) {
+          this.startProject2Physics();
           return;
         }
 
-        this.project2Observer?.disconnect();
-        this.project2Observer = null;
-        this.startProject2Physics();
+        this.pauseProject2Physics();
       },
-      { threshold: [0.72], rootMargin: '-8% 0px -8% 0px' },
+      { threshold: [0, 0.42], rootMargin: '-4% 0px -4% 0px' },
     );
 
     this.project2Observer.observe(project2Panel);
   }
 
-  /** Startet die echte Gravity-Simulation. */
+  /** Beobachtet Projekt 5 und startet den Typewriter nur bei Sichtbarkeit. */
+  private observeProject5Typewriter(): void {
+    const project5Panel = this.projectPanelElement('grafikdesign-katalog');
+
+    if (!project5Panel || !('IntersectionObserver' in window)) {
+      this.startProject5Typewriter();
+      return;
+    }
+
+    this.project5Observer?.disconnect();
+    this.project5Observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting && entry.intersectionRatio >= 0.3) {
+          this.startProject5Typewriter();
+          return;
+        }
+
+        this.clearProject5TypewriterTimers();
+      },
+      { threshold: [0, 0.3], rootMargin: '6% 0px 6% 0px' },
+    );
+
+    this.project5Observer.observe(project5Panel);
+  }
+
+  /** Startet oder setzt die echte Gravity-Simulation fort. */
   private startProject2Physics(): void {
-    if (this.project2Started) {
-      return;
-    }
-
-    this.project2Started = true;
-
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (this.accessibility.reducesMotion() || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.pauseProject2Physics();
+      this.project2Started = true;
       this.snapProject2ItemsToFloor();
+      this.triggerProject2OneUpsWhenReady();
       return;
     }
 
-    this.resetProject2Items();
+    if (!this.project2Started) {
+      this.project2Started = true;
+      this.resetProject2Items();
+    }
+
+    if (this.project2FrameId) {
+      return;
+    }
+
     this.zone.runOutsideAngular(() => this.tickProject2Physics());
+  }
+
+  /** Pausiert die Projekt-2-Physics-Schleife. */
+  private pauseProject2Physics(): void {
+    cancelAnimationFrame(this.project2FrameId);
+    this.project2FrameId = 0;
   }
 
   /** Erstellt Startwerte oberhalb der Projektbühne. */
@@ -438,7 +505,8 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   private tickProject2Physics(): void {
     const panel = this.project2PanelElement();
 
-    if (!panel) {
+    if (!panel || this.accessibility.reducesMotion()) {
+      this.pauseProject2Physics();
       return;
     }
 
@@ -657,6 +725,7 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     }
 
     this.project2OneUpStarted = true;
+    this.achievementService.unlock('game-oneup');
     this.scheduleProject2OneUp(0, 0);
     this.scheduleProject2OneUp(1, 760);
     this.scheduleProject2OneUp(2, 1520);
@@ -711,8 +780,13 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Liefert das Projekt-2-Panel. */
   private project2PanelElement(): HTMLElement | null {
+    return this.projectPanelElement('html5-browser-game');
+  }
+
+  /** Liefert ein Projektpanel anhand seines Slugs. */
+  private projectPanelElement(slug: string): HTMLElement | null {
     return this.projectPanels?.toArray()
-      .find((panelRef, index) => this.projects[index]?.slug === 'html5-browser-game')
+      .find((panelRef, index) => this.projects[index]?.slug === slug)
       ?.nativeElement ?? null;
   }
 }

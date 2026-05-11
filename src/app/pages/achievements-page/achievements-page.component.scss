@@ -1,0 +1,264 @@
+/*###############################
+###
+###     achievements-page.component.scss
+###     Portfolio App
+###     BASED ON: Angular 21.02.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Basis
+   02   Intro
+   03   Karten
+   04   Responsive
+   ========================================================================== */
+
+/* ========================================================================== 
+   01   Basis
+   ========================================================================== */
+
+.achievements {
+  align-items: start;
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at 18% 18%, color-mix(in srgb, var(--bp-color-accent) 18%, transparent), transparent 26%),
+    radial-gradient(circle at 88% 12%, color-mix(in srgb, var(--bp-color-accent-2) 16%, transparent), transparent 28%),
+    linear-gradient(135deg, var(--bp-color-bg), var(--bp-color-bg-soft));
+}
+
+.achievements__grid {
+  display: grid;
+  grid-template-columns: minmax(340px, 0.86fr) minmax(0, 1.14fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+}
+
+/* ========================================================================== 
+   02   Intro
+   ========================================================================== */
+
+.achievements__intro {
+  position: sticky;
+  top: calc(var(--bp-header-height) + 2rem);
+  z-index: 2;
+}
+
+.achievements__back {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: var(--bp-space-4);
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-weight: 850;
+}
+
+.achievements__back:hover {
+  color: var(--bp-color-accent);
+}
+
+.achievements__intro .bp-eyebrow {
+  display: flex;
+  margin-bottom: var(--bp-space-4);
+}
+
+.achievements h1 {
+  max-width: 6ch;
+  margin: 0;
+  font-family: var(--bp-font-display);
+  font-size: clamp(3.4rem, 8.4vw, 7.2rem);
+  line-height: 0.86;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+}
+
+.achievements .bp-subtitle {
+  max-width: 33rem;
+}
+
+.achievements__progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: var(--bp-space-5);
+  padding: 1rem;
+}
+
+.achievements__progress span {
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.achievements__progress strong {
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 0.9;
+}
+
+.achievements__reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 1rem;
+  border: 1px solid var(--bp-color-border-strong);
+  padding: 0.72rem 0.95rem;
+  background: var(--bp-color-surface-solid);
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-mono);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.achievements__reset:hover {
+  border-color: var(--bp-color-danger);
+  background: var(--bp-color-danger);
+  color: #ffffff;
+}
+
+/* ========================================================================== 
+   03   Karten
+   ========================================================================== */
+
+.achievements__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding-top: clamp(4rem, 8vw, 6.5rem);
+}
+
+.achievement-card {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 1rem;
+  min-height: 178px;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.achievement-card::before {
+  position: absolute;
+  inset: 0;
+  content: '';
+  opacity: 0.1;
+  background-image: radial-gradient(circle at 1px 1px, var(--bp-color-text) 1px, transparent 0);
+  background-size: 12px 12px;
+}
+
+.achievement-card--unlocked {
+  border-color: color-mix(in srgb, var(--bp-color-accent) 62%, transparent);
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 22%, transparent), 0 24px 70px var(--bp-color-shadow);
+}
+
+.achievement-card__visual,
+.achievement-card__copy {
+  position: relative;
+  z-index: 1;
+}
+
+.achievement-card__visual {
+  display: grid;
+  height: 96px;
+  place-items: center;
+  border: 1px solid var(--bp-color-border-strong);
+  background: color-mix(in srgb, var(--bp-color-bg) 72%, transparent);
+  color: var(--bp-color-accent);
+}
+
+.achievement-card__visual .material-symbols-outlined {
+  font-size: 3rem;
+  font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 48;
+}
+
+.achievement-card__visual strong {
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-display);
+  font-size: 4rem;
+  line-height: 1;
+}
+
+.achievement-card__copy span {
+  display: inline-flex;
+  margin-bottom: 0.45rem;
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.achievement-card__copy h2,
+.achievement-card__copy p {
+  margin: 0;
+}
+
+.achievement-card__copy h2 {
+  font-family: var(--bp-font-display);
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 0.96;
+  text-transform: uppercase;
+}
+
+.achievement-card__copy p {
+  margin-top: 0.72rem;
+  color: var(--bp-color-text-muted);
+  line-height: 1.58;
+}
+
+.achievement-card__copy button {
+  margin-top: 0.72rem;
+  border: 1px solid var(--bp-color-border-strong);
+  padding: 0.55rem 0.72rem;
+  background: var(--bp-color-surface-strong);
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-mono);
+  font-size: 0.76rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.achievement-card__copy button:hover {
+  border-color: var(--bp-color-accent);
+  background: var(--bp-color-accent);
+  color: #111111;
+}
+
+/* ========================================================================== 
+   04   Responsive
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+  .achievements__grid,
+  .achievements__list {
+    grid-template-columns: 1fr;
+  }
+
+  .achievements__list {
+    padding-top: 0.5rem;
+  }
+
+  .achievements__intro {
+    position: relative;
+    top: auto;
+  }
+
+  .achievements h1 {
+    max-width: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .achievement-card {
+    grid-template-columns: 1fr;
+  }
+}

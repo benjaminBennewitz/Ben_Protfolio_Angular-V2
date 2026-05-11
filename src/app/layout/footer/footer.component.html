@@ -6,7 +6,8 @@
       <div class="footer__title-wrap">
         <h2 id="footer-title">{{ footer().title }}</h2>
 
-        <button class="footer__pet-trigger" type="button" [attr.aria-label]="footer().petDialogLabel">
+        <button class="footer__pet-trigger" type="button" [attr.aria-label]="footer().petDialogLabel"
+          (mouseenter)="unlockPetAchievement()" (focus)="unlockPetAchievement()">
           <img src="assets/images/fuelli.webp" alt="" aria-hidden="true">
           <span class="bp-dos-window footer__pet-dialog" aria-hidden="true">
             <span class="bp-dos-window__bar">

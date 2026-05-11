@@ -1,0 +1,54 @@
+<!-- src/app/pages/achievements-page/achievements-page.component.html -->
+<main class="achievements bp-section">
+  <div class="achievements__grid bp-container">
+    <section class="achievements__intro" aria-labelledby="achievements-title">
+      <a class="achievements__back" routerLink="/" fragment="hero">
+        <span class="material-symbols-outlined" aria-hidden="true">keyboard_backspace</span>
+        <span>{{ texts().backLabel }}</span>
+      </a>
+
+      <p class="bp-eyebrow">{{ texts().eyebrow }}</p>
+      <h1 id="achievements-title">{{ texts().title }}</h1>
+      <p class="bp-subtitle">{{ texts().intro }}</p>
+
+      <div class="achievements__progress bp-card" aria-live="polite">
+        <span>{{ texts().progressLabel }}</span>
+        <strong>{{ progressText() }}</strong>
+      </div>
+
+      <button class="achievements__reset" type="button" (click)="achievementsService.resetProgress()">
+        <span class="material-symbols-outlined" aria-hidden="true">restart_alt</span>
+        <span>{{ texts().resetButton }}</span>
+      </button>
+    </section>
+
+    <section class="achievements__list" aria-label="Achievements">
+      @for (achievement of achievementsService.achievements(); track achievement.id) {
+      <article class="achievement-card bp-card" [class.achievement-card--unlocked]="achievement.unlocked">
+        <div class="achievement-card__visual" aria-hidden="true">
+          @if (achievement.unlocked) {
+          <span class="material-symbols-outlined">{{ achievement.icon }}</span>
+          } @else {
+          <strong>?</strong>
+          }
+        </div>
+
+        <div class="achievement-card__copy">
+          <span>{{ achievement.category }}</span>
+          <h2>{{ achievement.unlocked ? achievement.title : texts().lockedTitle }}</h2>
+
+          @if (achievement.unlocked) {
+          <p>{{ achievement.description }}</p>
+          } @else {
+          @if (achievement.hintVisible) {
+          <p>{{ achievement.hint }}</p>
+          } @else {
+          <button type="button" (click)="revealHint(achievement.id)">{{ texts().hintButton }}</button>
+          }
+          }
+        </div>
+      </article>
+      }
+    </section>
+  </div>
+</main>

@@ -1,0 +1,152 @@
+/*###############################
+###
+###     achievement-toast.component.scss
+###     Portfolio App
+###     BASED ON: Angular 21.02.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Layer
+   02   Toast
+   03   Responsive
+   ========================================================================== */
+
+/* ========================================================================== 
+   01   Layer
+   ========================================================================== */
+
+.achievement-toast-layer {
+  position: fixed;
+  z-index: calc(var(--bp-z-loader) - 2);
+  top: calc(var(--bp-header-height) + 0.7rem);
+  right: clamp(0.8rem, 2vw, 1.25rem);
+  width: min(90vw, 390px);
+  pointer-events: none;
+}
+
+/* ========================================================================== 
+   02   Toast
+   ========================================================================== */
+
+.achievement-toast {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.72rem 0.82rem;
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 94%, transparent);
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--bp-color-accent) 54%, var(--bp-color-border));
+  box-shadow: 0 18px 54px var(--bp-color-shadow), 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 16%, transparent);
+  pointer-events: auto;
+  animation: achievement-toast-in 340ms var(--bp-ease-pop);
+}
+
+.achievement-toast__icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid var(--bp-color-border-strong);
+  background: color-mix(in srgb, var(--bp-color-accent) 18%, var(--bp-color-surface-strong));
+  color: var(--bp-color-accent);
+}
+
+.achievement-toast__icon .material-symbols-outlined {
+  font-size: 1.55rem;
+  font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 48;
+}
+
+.achievement-toast__copy {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.achievement-toast__copy p,
+.achievement-toast__copy h2,
+.achievement-toast__copy span {
+  margin: 0;
+}
+
+.achievement-toast__copy p {
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.achievement-toast__copy h2 {
+  font-family: var(--bp-font-display);
+  font-size: clamp(0.98rem, 3vw, 1.35rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.achievement-toast__copy span {
+  color: var(--bp-color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.achievement-toast button {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid var(--bp-color-border);
+  background: var(--bp-color-surface-strong);
+  color: var(--bp-color-text-muted);
+  cursor: pointer;
+  transition: transform 180ms var(--bp-ease-out), background-color 180ms ease, color 180ms ease;
+}
+
+.achievement-toast button:hover {
+  transform: translateY(-1px);
+  background: var(--bp-color-danger);
+  color: #ffffff;
+}
+
+@keyframes achievement-toast-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -18px, 0) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* ========================================================================== 
+   03   Responsive
+   ========================================================================== */
+
+@media (max-width: 560px) {
+  .achievement-toast-layer {
+    right: 0.6rem;
+    width: calc(100vw - 1.2rem);
+  }
+
+  .achievement-toast {
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    gap: 0.65rem;
+  }
+
+  .achievement-toast__icon {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .achievement-toast {
+    animation-duration: 0.001ms;
+  }
+}

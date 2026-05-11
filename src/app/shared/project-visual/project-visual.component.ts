@@ -5,8 +5,9 @@
  * @description Erzeugt dekorative Projekt-Previews mit CSS-Flächen und gezielten Halftone-Assets.
  */
 
-import { AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, ViewChild, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { PortfolioProject } from '../../core/models/portfolio.models';
+import { AchievementService } from '../../core/services/achievement.service';
 
 /** Zustand der interaktiven Bombe. */
 type BombState = 'idle' | 'charging' | 'boom' | 'gone';
@@ -22,6 +23,9 @@ type BloodAnalysisState = 'idle' | 'running' | 'complete';
   styleUrl: './project-visual.component.scss',
 })
 export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
+  /** Achievement-Service für interaktive Projekt-Trophäen. */
+  private readonly achievementService = inject(AchievementService);
+
   /** Projekt, aus dem Name, Typ und Accent gezogen werden. */
   @Input({ required: true }) project!: PortfolioProject;
 
@@ -283,6 +287,7 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
+    this.achievementService.unlock('eye-poke');
     this.clearEyeTimer();
     this.eyeHurt.set(true);
     this.eyeTearVisible.set(true);
@@ -328,7 +333,10 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
     this.scheduleBloodStep(() => this.bloodStatusIndex.set(1), 2100);
     this.scheduleBloodStep(() => this.bloodStatusIndex.set(2), 2850);
     this.scheduleBloodStep(() => this.bloodStatusIndex.set(3), 3600);
-    this.scheduleBloodStep(() => this.bloodState.set('complete'), 4600);
+    this.scheduleBloodStep(() => {
+      this.bloodState.set('complete');
+      this.achievementService.unlock('blood-complete');
+    }, 4600);
   }
 
   /** Gibt an, ob aktuell das Intranet-Projekt gerendert wird. */
@@ -365,6 +373,7 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
 
   /** Wechselt von blinkender Bombe zur Boom-Grafik. */
   private showBoomReaction(): void {
+    this.achievementService.unlock('bomb-defused');
     this.bombState.set('boom');
     this.bombChargeTimer = null;
     this.bombRemoveTimer = setTimeout(() => this.removeBombReaction(), this.boomRemoveDelayMs);

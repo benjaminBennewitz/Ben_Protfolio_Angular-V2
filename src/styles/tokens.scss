@@ -23,7 +23,8 @@
    02   Basis-Tokens
    03   Dark Theme
    04   Light Theme
-   05   Material Icons
+   05   Accessibility Overrides
+   06   Material Icons
    ========================================================================== */
 
 /* ==========================================================================
@@ -121,7 +122,66 @@
 }
 
 /* ==========================================================================
-   05   Material Icons
+   05   Accessibility Overrides
+   ========================================================================== */
+
+:root[data-contrast='high'] {
+   --bp-color-text: #ffffff;
+   --bp-color-text-muted: #f0ede7;
+   --bp-color-border: rgba(255, 255, 255, 0.42);
+   --bp-color-border-strong: rgba(255, 255, 255, 0.72);
+   --bp-color-shadow: rgba(0, 0, 0, 0.7);
+}
+
+:root[data-theme='light'][data-contrast='high'] {
+   --bp-color-text: #050505;
+   --bp-color-text-muted: #171717;
+   --bp-color-border: rgba(0, 0, 0, 0.42);
+   --bp-color-border-strong: rgba(0, 0, 0, 0.76);
+   --bp-color-shadow: rgba(0, 0, 0, 0.22);
+}
+
+:root[data-color-vision='deuteranopia'] {
+   --bp-color-accent: #2dc4ff;
+   --bp-color-accent-2: #ffb000;
+   --bp-color-accent-3: #7a5cff;
+   --bp-color-info: #2dc4ff;
+}
+
+:root[data-color-vision='protanopia'] {
+   --bp-color-accent: #12b8ff;
+   --bp-color-accent-2: #ffd400;
+   --bp-color-accent-3: #7c6bff;
+   --bp-color-info: #12b8ff;
+}
+
+:root[data-color-vision='tritanopia'] {
+   --bp-color-accent: #19df7f;
+   --bp-color-accent-2: #ff6a5b;
+   --bp-color-accent-3: #ef4fb2;
+   --bp-color-info: #19df7f;
+}
+
+:root[data-color-vision='achromatopsia'] {
+   --bp-color-accent: #f0f0f0;
+   --bp-color-accent-2: #cacaca;
+   --bp-color-accent-3: #9a9a9a;
+   --bp-color-warning: #d9d9d9;
+   --bp-color-danger: #7f7f7f;
+   --bp-color-info: #f0f0f0;
+}
+
+:root[data-theme='light'][data-color-vision='achromatopsia'] {
+   --bp-color-accent: #101010;
+   --bp-color-accent-2: #444444;
+   --bp-color-accent-3: #777777;
+   --bp-color-warning: #222222;
+   --bp-color-danger: #3d3d3d;
+   --bp-color-info: #101010;
+}
+
+/* ==========================================================================
+   06   Material Icons
    ========================================================================== */
 
 .material-symbols-outlined {

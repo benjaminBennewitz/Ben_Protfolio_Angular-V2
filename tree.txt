@@ -11,11 +11,21 @@ ben-portfolio-angular-v2/
 │   │   │   ├── models/
 │   │   │   │   └── portfolio.models.ts
 │   │   │   └── services/
+│   │   │       ├── accessibility-preference.service.ts
+│   │   │       ├── achievement.service.ts
 │   │   │       ├── language.service.ts
 │   │   │       ├── seo.service.ts
 │   │   │       ├── tab-title.service.ts
 │   │   │       └── theme.service.ts
 │   │   ├── layout/
+│   │   │   ├── accessibility-panel/
+│   │   │   │   ├── accessibility-panel.component.html
+│   │   │   │   ├── accessibility-panel.component.scss
+│   │   │   │   └── accessibility-panel.component.ts
+│   │   │   ├── achievement-toast/
+│   │   │   │   ├── achievement-toast.component.html
+│   │   │   │   ├── achievement-toast.component.scss
+│   │   │   │   └── achievement-toast.component.ts
 │   │   │   ├── custom-cursor/
 │   │   │   │   ├── custom-cursor.component.html
 │   │   │   │   ├── custom-cursor.component.scss
@@ -37,10 +47,18 @@ ben-portfolio-angular-v2/
 │   │   │       ├── scroll-to-top.component.scss
 │   │   │       └── scroll-to-top.component.ts
 │   │   ├── pages/
+│   │   │   ├── achievements-page/
+│   │   │   │   ├── achievements-page.component.html
+│   │   │   │   ├── achievements-page.component.scss
+│   │   │   │   └── achievements-page.component.ts
 │   │   │   ├── home-page/
 │   │   │   │   ├── home-page.component.html
 │   │   │   │   ├── home-page.component.scss
 │   │   │   │   └── home-page.component.ts
+│   │   │   ├── imprint-page/
+│   │   │   │   ├── imprint-page.component.html
+│   │   │   │   ├── imprint-page.component.scss
+│   │   │   │   └── imprint-page.component.ts
 │   │   │   └── project-detail-page/
 │   │   │       ├── project-detail-page.component.html
 │   │   │       ├── project-detail-page.component.scss
@@ -78,7 +96,8 @@ ben-portfolio-angular-v2/
 │   │   │   │   ├── tech-marquee.component.html
 │   │   │   │   ├── tech-marquee.component.scss
 │   │   │   │   └── tech-marquee.component.ts
-│   │   │   └── reveal-on-scroll.directive.ts
+│   │   │   ├── reveal-on-scroll.directive.ts
+│   │   │   └── viewport-activity.directive.ts
 │   │   ├── app.component.html
 │   │   ├── app.component.scss
 │   │   ├── app.component.ts
@@ -132,6 +151,7 @@ ben-portfolio-angular-v2/
 │   │   │   │   └── trust-not-found.webp
 │   │   │   ├── brain_rotation.gif
 │   │   │   ├── default-hero-head.webp
+│   │   │   ├── fuelli.webp
 │   │   │   ├── hero-brain-halftone.webp
 │   │   │   ├── hero-head-fck.webp
 │   │   │   ├── hero-head-insane.webp
@@ -159,6 +179,7 @@ ben-portfolio-angular-v2/
 ├── package-lock.json
 ├── README.md
 ├── tools.md
+├── tree.txt
 ├── tsconfig.app.json
 ├── tsconfig.json
 └── tsconfig.spec.json

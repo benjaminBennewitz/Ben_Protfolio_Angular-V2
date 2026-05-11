@@ -22,12 +22,13 @@
    01   Loader Basis
    02   Hintergrund
    03   Branding
-   04   DOS Dialoge
-   05   Terminal Status
-   06   Freigabe Button
-   07   Animationen
-   08   Responsive Anpassungen
-   09   Reduced Motion
+   04   Calm Loader
+   05   DOS Dialoge
+   06   Terminal Status
+   07   Freigabe Button
+   08   Animationen
+   09   Responsive Anpassungen
+   10   Reduced Motion
    ========================================================================== */
 
 /* ==========================================================================
@@ -126,8 +127,82 @@
   letter-spacing: 0.16em;
 }
 
+
 /* ==========================================================================
-   04   DOS Dialoge
+   04   Calm Loader
+   ========================================================================== */
+
+.loader__simple {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.loader__simple-panel {
+  display: grid;
+  gap: 0.9rem;
+  width: min(92vw, 29rem);
+  padding: 1.2rem;
+  background: color-mix(in srgb, #0d0d10 92%, transparent);
+  border-color: rgba(167, 255, 25, 0.36);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.4), 10px 10px 0 rgba(167, 255, 25, 0.12);
+}
+
+.loader__simple-eyebrow,
+.loader__simple-panel h2,
+.loader__simple-panel p {
+  margin: 0;
+}
+
+.loader__simple-eyebrow {
+  width: fit-content;
+  border: 1px solid rgba(167, 255, 25, 0.38);
+  padding: 0.32rem 0.55rem;
+  color: #a7ff19;
+  font-family: var(--bp-font-mono);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.loader__simple-number {
+  font-family: var(--bp-font-display);
+  font-size: clamp(3rem, 11vw, 5.8rem);
+  line-height: 0.84;
+  letter-spacing: -0.08em;
+}
+
+.loader__simple-track {
+  height: 12px;
+  border: 1px solid rgba(248, 244, 234, 0.2);
+  padding: 2px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.loader__simple-track span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #a7ff19, #23c7ff);
+}
+
+.loader__simple-panel h2 {
+  font-family: var(--bp-font-display);
+  font-size: clamp(1.7rem, 6vw, 2.8rem);
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+
+.loader__simple-panel p {
+  color: rgba(248, 244, 234, 0.82);
+  line-height: 1.55;
+}
+
+/* ==========================================================================
+   05   DOS Dialoge
    ========================================================================== */
 
 .loader__dialog-stack {
@@ -263,7 +338,7 @@
 }
 
 /* ==========================================================================
-   05   Terminal Status
+   06   Terminal Status
    ========================================================================== */
 
 .loader__terminal {
@@ -348,7 +423,7 @@
 }
 
 /* ==========================================================================
-   06   Freigabe Button
+   07   Freigabe Button
    ========================================================================== */
 
 .loader__ready {
@@ -449,7 +524,7 @@
 }
 
 /* ==========================================================================
-   07   Animationen
+   08   Animationen
    ========================================================================== */
 
 @keyframes loader-dialog-open {
@@ -600,7 +675,7 @@
 }
 
 /* ==========================================================================
-   08   Responsive Anpassungen
+   09   Responsive Anpassungen
    ========================================================================== */
 
 @media (max-width: 900px) {
@@ -641,10 +716,21 @@
     right: -3.65rem;
     height: clamp(3.9rem, 18vw, 5.1rem);
   }
+
+
+  .loader__simple-panel {
+    width: min(100%, 26rem);
+    padding: 1rem;
+  }
+
+  .loader__simple-number {
+    font-size: clamp(2.6rem, 18vw, 4.4rem);
+  }
+
 }
 
 /* ==========================================================================
-   09   Reduced Motion
+   10   Reduced Motion
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {

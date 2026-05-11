@@ -1,0 +1,376 @@
+/*###############################
+###
+###     utilities.component.scss
+###     Produktion App
+###     BASED ON: Angular  21.02.0, SCSS,
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Layout
+   02   Light Theme Overrides
+   03   Typografie
+   04   Buttons
+   05   Karten und Fenster
+   06   Tags
+   07   Reveal
+   08   Responsive
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Layout
+   ========================================================================== */
+
+.bp-page-shell {
+  position: relative;
+  min-height: 100svh;
+}
+
+.bp-scroll-main {
+  scroll-snap-type: y proximity;
+}
+
+.bp-section {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-height: 100svh;
+  padding: calc(var(--bp-header-height) + var(--bp-space-6)) var(--bp-section-px) var(--bp-space-7);
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
+
+.bp-container {
+  width: min(100%, var(--bp-max-width));
+  margin: 0 auto;
+}
+
+.bp-grid-two {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.78fr);
+  gap: var(--bp-space-6);
+  align-items: center;
+}
+
+.bp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: fit-content;
+  margin: 0 0 var(--bp-space-3);
+  border: 1px solid var(--bp-color-accent);
+  padding: 0.42rem 0.7rem;
+  background: color-mix(in srgb, var(--bp-color-bg) 74%, transparent);
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.74rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent);
+}
+
+
+/* ==========================================================================
+   02   Light Theme Overrides
+   ========================================================================== */
+
+:root[data-theme='light'] .bp-eyebrow {
+  background: rgba(255, 253, 248, 0.92);
+  color: #101010;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 22%, transparent);
+}
+
+:root[data-theme='light'] .bp-button {
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 92%, transparent);
+  color: #101010;
+}
+
+:root[data-theme='light'] .bp-button--accent {
+  border-color: #101010;
+  background: var(--bp-color-accent);
+  color: #fffdf8;
+}
+
+:root[data-theme='light'] .bp-button--ghost {
+  border-color: rgba(17, 17, 17, 0.52);
+  background: rgba(255, 253, 248, 0.78);
+}
+
+/* ==========================================================================
+   03   Typografie
+   ========================================================================== */
+
+.bp-title {
+  margin: 0;
+  font-family: var(--bp-font-display);
+  font-size: clamp(2.25rem, 8.5vw, 8rem);
+  line-height: 0.84;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+}
+
+.bp-subtitle {
+  max-width: 760px;
+  margin: var(--bp-space-4) 0 0;
+  color: var(--bp-color-text-muted);
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  line-height: 1.72;
+}
+
+/* ==========================================================================
+   04   Buttons
+   ========================================================================== */
+
+.bp-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  min-height: 48px;
+  border: 1px solid var(--bp-color-border-strong);
+  padding: 0.82rem 1.2rem;
+  overflow: hidden;
+  background: var(--bp-color-surface-solid);
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-mono);
+  font-weight: 950;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.bp-button::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  content: '';
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.35);
+  transition: opacity 180ms ease, transform 220ms var(--bp-ease-out);
+}
+
+.bp-button::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  opacity: 0;
+  background: linear-gradient(110deg, var(--bp-color-accent), var(--bp-color-info));
+  transition: opacity 180ms ease;
+}
+
+.bp-button>* {
+  position: relative;
+  z-index: 1;
+}
+
+.bp-button:hover {
+  transform: translateY(-2px);
+  border-color: var(--bp-color-accent);
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 28%, transparent), 0 18px 45px var(--bp-color-shadow);
+}
+
+.bp-button:hover::before {
+  opacity: 0.84;
+  transform: translate(-50%, -50%) scale(6.4);
+}
+
+.bp-button:hover::after {
+  opacity: 0.86;
+}
+
+.bp-button--ghost {
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 38%, transparent);
+}
+
+.bp-button--accent {
+  border-color: #111111;
+  background: var(--bp-color-accent);
+  color: #111111;
+}
+
+/* ==========================================================================
+   05   Karten und Fenster
+   ========================================================================== */
+
+.bp-card {
+  position: relative;
+  border: 1px solid var(--bp-color-border);
+  background: var(--bp-color-surface);
+  box-shadow: 0 24px 80px var(--bp-color-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.bp-terminal {
+  border: 1px solid var(--bp-color-border);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--bp-color-bg) 78%, black 18%);
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 18%, transparent), 0 24px 80px var(--bp-color-shadow);
+}
+
+.bp-terminal__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--bp-color-border);
+  padding: 0.65rem 0.85rem;
+  background: color-mix(in srgb, var(--bp-color-surface-strong) 86%, transparent);
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-size: 0.78rem;
+}
+
+.bp-terminal__dots {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.bp-terminal__dots i {
+  width: 0.7rem;
+  height: 0.7rem;
+  background: var(--bp-color-accent-2);
+}
+
+.bp-terminal__dots i:nth-child(2) {
+  background: var(--bp-color-warning);
+}
+
+.bp-terminal__dots i:nth-child(3) {
+  background: var(--bp-color-accent);
+}
+
+.bp-terminal__body {
+  padding: var(--bp-space-4);
+}
+
+.bp-dos-window {
+  border: 2px solid #111111;
+  background: #d4d4d4;
+  color: #111111;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.58);
+  font-family: var(--bp-font-mono);
+}
+
+.bp-dos-window__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 2px solid #111111;
+  padding: 0.42rem 0.58rem;
+  background: #545454;
+  color: #f6f0e8;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.bp-dos-window__bar button {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #f6f0e8;
+  padding: 0;
+  background: transparent;
+  color: #f6f0e8;
+}
+
+.bp-dos-window__body {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+  color: #111111;
+  font-size: 0.8rem;
+  font-weight: 900;
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+
+.bp-dos-window__body p {
+  margin: 0;
+}
+
+/* ==========================================================================
+   06   Tags
+   ========================================================================== */
+
+.bp-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bp-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid var(--bp-color-border);
+  padding: 0.5rem 0.72rem;
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 72%, transparent);
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   07   Reveal
+   ========================================================================== */
+
+.bp-reveal {
+  opacity: 0;
+  transform: translate3d(0, 42px, 0) skewY(1.2deg);
+  filter: blur(6px);
+  transition: opacity 620ms var(--bp-ease-out), transform 620ms var(--bp-ease-out), filter 620ms ease;
+}
+
+.bp-reveal--visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) skewY(0deg);
+  filter: blur(0);
+}
+
+/* ==========================================================================
+   08   Responsive
+   ========================================================================== */
+
+@media (max-width: 920px) {
+  .bp-grid-two {
+    grid-template-columns: 1fr;
+  }
+
+  .bp-scroll-main {
+    scroll-snap-type: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .bp-section {
+    min-height: auto;
+    padding-top: calc(var(--bp-header-height) + var(--bp-space-5));
+  }
+}

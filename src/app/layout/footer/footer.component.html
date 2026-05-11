@@ -1,0 +1,34 @@
+<!-- src/app/layout/footer/footer.component.html -->
+<footer class="footer" id="footer">
+  <div class="footer__grid bp-container">
+    <section class="footer__brand" aria-labelledby="footer-title">
+      <p class="bp-eyebrow">{{ footer().eyebrow }}</p>
+      <h2 id="footer-title">{{ footer().title }}</h2>
+      <p>{{ footer().text }}</p>
+    </section>
+
+    <nav class="footer__columns" aria-label="Footer Navigation">
+      @for (column of footer().columns; track column.title) {
+      <div class="footer__column">
+        <h3>{{ column.title }}</h3>
+        <ul>
+          @for (link of column.links; track link.href + link.label) {
+          <li>
+            @if (isRouteLink(link.href)) {
+            <a [routerLink]="link.href">{{ link.label }}</a>
+            } @else {
+            <a [href]="link.href">{{ link.label }}</a>
+            }
+          </li>
+          }
+        </ul>
+      </div>
+      }
+    </nav>
+  </div>
+
+  <div class="footer__bottom bp-container">
+    <span>© {{ year }} B² · Benjamin Bennewitz</span>
+    <span>Design. Code. Break the Grid.</span>
+  </div>
+</footer>

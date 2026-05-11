@@ -1,0 +1,213 @@
+<!-- src/app/pages/home-page/home-page.component.html -->
+<main class="home bp-scroll-main">
+  <section class="hero bp-section" id="hero" [style.--hero-shift-x]="heroShiftXStyle()"
+    [style.--hero-shift-y]="heroShiftYStyle()" [style.--hero-scroll-offset]="heroScrollOffsetStyle()"
+    (pointermove)="onHeroPointerMove($event)" (pointerleave)="resetHeroPointer()">
+    <div class="hero__poster" aria-hidden="true">
+      <div class="hero__head-stage">
+        <img class="hero__head-image hero__head-image--ghost" [src]="currentHeroHeadSrc()" alt="" />
+        <img class="hero__head-image hero__head-image--main" [src]="currentHeroHeadSrc()" alt="" />
+        <span class="hero__head-fade hero__head-fade--lower-right"></span>
+        <span class="hero__head-distortion hero__head-distortion--one"></span>
+        <span class="hero__head-distortion hero__head-distortion--two"></span>
+      </div>
+
+      <span class="hero__glitch hero__glitch--one"></span>
+      <span class="hero__glitch hero__glitch--two"></span>
+      <span class="hero__glitch hero__glitch--three"></span>
+      <span class="hero__trace hero__trace--one"></span>
+      <span class="hero__trace hero__trace--two"></span>
+      <span class="hero__trace hero__trace--three"></span>
+    </div>
+
+    <div class="hero__layout bp-container">
+      <div class="hero__content" bpReveal>
+        <span class="hero__brand" aria-hidden="true">B²</span>
+        <p class="bp-eyebrow hero__eyebrow">{{ content().hero.eyebrow }}</p>
+
+        <h1 class="hero__headline" [attr.aria-label]="content().hero.title">
+          <span class="hero__headline-line"><span>Design. Code.</span></span>
+          <span class="hero__headline-line hero__headline-line--accent"><span>Break the Grid.</span></span>
+        </h1>
+
+        <p class="hero__subtitle">{{ content().hero.subtitle }}</p>
+
+        <div class="hero__actions">
+          <a class="bp-button bp-button--accent" routerLink="/" fragment="projects">
+            <span>{{ content().hero.primaryCta }}</span>
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_downward</span>
+          </a>
+          <a class="bp-button bp-button--ghost" routerLink="/" fragment="about">
+            <span>{{ content().hero.secondaryCta }}</span>
+            <span class="material-symbols-outlined" aria-hidden="true">terminal</span>
+          </a>
+        </div>
+      </div>
+
+      @if (isHeroDialogVisible()) {
+      <aside class="hero__dos bp-dos-window" aria-label="Dialogfenster im Poster-Stil" bpReveal>
+        <div class="bp-dos-window__bar">
+          <span>mixed_reactions.exe</span>
+          <button type="button" (click)="closeHeroDialog()"
+            [attr.aria-label]="content().about.dialogCloseLabel">×</button>
+        </div>
+        <div class="bp-dos-window__body">
+          <div class="hero__dialog-icon">i</div>
+          <p>Are you sure you like<br />what you like?</p>
+          <div class="hero__dialog-actions">
+            <button type="button" [class.is-active]="activeHeroHead() === 'lol'"
+              (click)="setHeroHead('lol')">#LOL</button>
+            <button type="button" [class.is-active]="activeHeroHead() === 'insane'"
+              (click)="setHeroHead('insane')">YES</button>
+            <button type="button" [class.is-active]="activeHeroHead() === 'fck'"
+              (click)="setHeroHead('fck')">F*CK</button>
+          </div>
+        </div>
+      </aside>
+      }
+
+      <aside class="hero__status" aria-label="Systemstatus" bpReveal>
+        <div class="hero__status-bar">
+          <span>// status.exe</span>
+          <span class="hero__status-pill"><span class="hero__status-led"
+              aria-hidden="true"></span><span>live</span></span>
+        </div>
+
+        <div class="hero__status-body">
+          <dl class="hero__status-list">
+            <div>
+              <dt>User</dt>
+              <dd>B²</dd>
+            </div>
+            <div>
+              <dt>Role</dt>
+              <dd>Designer / Developer</dd>
+            </div>
+            <div>
+              <dt>Location</dt>
+              <dd>Remote</dd>
+            </div>
+            <div>
+              <dt>Focus</dt>
+              <dd>UX, Frontend, Systems</dd>
+            </div>
+            <div>
+              <dt>Level</dt>
+              <dd>Over 9000</dd>
+            </div>
+          </dl>
+
+          <figure class="hero__status-visual" aria-hidden="true">
+            <img src="assets/images/brain_rotation.gif" alt="" />
+          </figure>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="about bp-section" id="about">
+    <div class="about__layout bp-container">
+      <div class="about__comic" bpReveal>
+        <figure class="about__visual" [attr.aria-label]="content().about.imageLabel">
+          <img class="about__image" [src]="currentAboutCoffeeSrc()" [attr.alt]="content().about.imageAlt"
+            (error)="resetAboutCoffeeImage()" />
+        </figure>
+
+        @if (isAboutDialogVisible()) {
+        <div class="bp-dos-window about__popup" role="dialog" [attr.aria-label]="content().about.dialogLabel">
+          <div class="bp-dos-window__bar">
+            <span>about_b2.exe</span>
+            <button class="about__popup-close" type="button" [attr.aria-label]="content().about.dialogCloseLabel"
+              (click)="closeAboutDialog()">×</button>
+          </div>
+          <div class="bp-dos-window__body">
+            <p>{{ content().about.dialogText }}</p>
+            <button class="about__popup-action" type="button" (click)="showAboutCoffeeError()">{{
+              content().about.dialogAction }}</button>
+          </div>
+        </div>
+        }
+      </div>
+
+      <div class="about__copy" bpReveal>
+        <bp-reveal-text [eyebrow]="content().about.eyebrow" [text]="content().about.title" />
+        @for (paragraph of content().about.text; track paragraph) {
+        <p class="bp-subtitle">{{ paragraph }}</p>
+        }
+      </div>
+
+      <div class="about__cards" bpReveal>
+        @for (highlight of content().about.highlights; track highlight.title) {
+        <article class="about__card bp-card">
+          <span class="material-symbols-outlined" aria-hidden="true">{{ highlight.icon }}</span>
+          <h3>{{ highlight.title }}</h3>
+          <p>{{ highlight.text }}</p>
+        </article>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="skills bp-section" id="skills">
+    <div class="bp-container" bpReveal>
+      <bp-reveal-text [eyebrow]="content().skills.eyebrow" [text]="content().skills.title" />
+      <p class="bp-subtitle">{{ content().skills.subtitle }}</p>
+
+      <div class="skills__groups">
+        @for (group of content().skills.groups; track group.title) {
+        <article class="skills__group bp-card">
+          <h3>{{ group.title }}</h3>
+          <ul class="bp-tags">
+            @for (item of group.items; track item) {
+            <li class="bp-tag">{{ item }}</li>
+            }
+          </ul>
+        </article>
+        }
+      </div>
+    </div>
+
+    <bp-tech-marquee [items]="content().skills.marquee" />
+  </section>
+
+  <bp-project-stack [eyebrow]="content().projectsIntro.eyebrow" [title]="content().projectsIntro.title"
+    [subtitle]="content().projectsIntro.subtitle" [detailLabel]="content().projectsIntro.detailLabel"
+    [projects]="content().projects" />
+
+  <bp-process-lock [eyebrow]="content().process.eyebrow" [title]="content().process.title"
+    [subtitle]="content().process.subtitle" [hint]="content().process.hint" [steps]="content().process.steps" />
+
+  <bp-chaos-cta [eyebrow]="content().cta.eyebrow" [title]="content().cta.title" [hint]="content().cta.hint"
+    [words]="content().cta.words" />
+
+  <section class="faq bp-section" id="faq">
+    <div class="bp-container bp-grid-two">
+      <div bpReveal>
+        <p class="bp-eyebrow">FAQ</p>
+        <h2 class="faq__title">{{ content().faqTitle }}</h2>
+        <p class="bp-subtitle">{{ content().faqSubtitle }}</p>
+      </div>
+
+      <div class="faq__list" bpReveal>
+        @for (faq of content().faqs; track faq.question) {
+        <details class="faq__item bp-card">
+          <summary>{{ faq.question }}</summary>
+          <p>{{ faq.answer }}</p>
+        </details>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="contact bp-section" id="contact">
+    <div class="bp-container contact__layout">
+      <div class="contact__copy" bpReveal>
+        <p class="bp-eyebrow">{{ content().contact.eyebrow }}</p>
+        <h2 class="contact__title">{{ content().contact.title }}</h2>
+        <p class="bp-subtitle">{{ content().contact.subtitle }}</p>
+      </div>
+
+      <bp-contact-form />
+    </div>
+  </section>
+</main>

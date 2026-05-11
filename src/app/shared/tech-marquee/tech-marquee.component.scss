@@ -1,0 +1,111 @@
+/*###############################
+###
+###     tech-marquee.component.scss
+###     Produktion App
+###     BASED ON: Angular  21.02.0, SCSS,
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Basis
+   02   Verlaufskanten
+   03   Track
+   04   Farbvarianten
+   05   Animationen
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Basis
+   ========================================================================== */
+
+.marquee {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(var(--bp-section-px) * -1);
+  overflow: hidden;
+  border-block: 1px solid var(--bp-color-border);
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 70%, transparent);
+}
+
+/* ==========================================================================
+   02   Verlaufskanten
+   ========================================================================== */
+
+.marquee::before,
+.marquee::after {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  width: min(18vw, 220px);
+  content: '';
+  pointer-events: none;
+}
+
+.marquee::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--bp-color-bg), transparent);
+}
+
+.marquee::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--bp-color-bg), transparent);
+}
+
+/* ==========================================================================
+   03   Track
+   ========================================================================== */
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-run 28s linear infinite;
+}
+
+.marquee__track span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 78px;
+  padding: 0 2.2rem;
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-display);
+  font-size: clamp(1.4rem, 3.4vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   04   Farbvarianten
+   ========================================================================== */
+
+.marquee__track span:nth-child(3n) {
+  color: var(--bp-color-accent);
+}
+
+.marquee__track span:nth-child(4n) {
+  color: var(--bp-color-accent-2);
+}
+
+/* ==========================================================================
+   05   Animationen
+   ========================================================================== */
+
+@keyframes marquee-run {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}

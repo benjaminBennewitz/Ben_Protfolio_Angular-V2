@@ -1,0 +1,760 @@
+/*###############################
+###
+###     project-stack.component.scss
+###     Produktion App
+###     BASED ON: Angular  21.02.0, SCSS,
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Basis
+   02   Panel
+   03   Dekoration
+   04   Inhalt
+   05   Visual
+   06   HTML5 Game Szene
+   07   Game Animationen
+   08   Asana Papierkorb Szene
+   09   Papierkorb Animationen
+   10   Previews
+   11   Typewriter
+   12   Typewriter Animationen
+   13   Intro Variante
+   14   Responsive
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Basis
+   ========================================================================== */
+
+.project-stack {
+  --stack-accent: var(--bp-color-accent);
+  position: relative;
+  min-height: calc(100svh * var(--project-total));
+  scroll-snap-align: start;
+}
+
+/* ==========================================================================
+   02   Panel
+   ========================================================================== */
+
+.project-stack__panel {
+  --stack-accent: var(--bp-color-accent);
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.74fr) minmax(360px, 1fr) minmax(128px, 0.18fr);
+  align-items: center;
+  gap: var(--bp-space-4);
+  width: 100vw;
+  min-height: 100svh;
+  padding: calc(var(--bp-header-height) + var(--bp-space-4)) var(--bp-section-px) var(--bp-space-4);
+  overflow: hidden;
+  align-items: start;
+  border-top: 1px solid var(--bp-color-border);
+  background: color-mix(in srgb, var(--bp-color-bg) 88%, black 12%);
+  isolation: isolate;
+}
+
+.project-stack__panel[data-accent='pink'] {
+  --stack-accent: var(--bp-color-accent-2);
+}
+
+.project-stack__panel[data-accent='violet'] {
+  --stack-accent: var(--bp-color-accent-3);
+}
+
+.project-stack__panel[data-accent='blue'] {
+  --stack-accent: var(--bp-color-info);
+}
+
+.project-stack__panel[data-accent='orange'] {
+  --stack-accent: var(--bp-color-warning);
+}
+
+
+.project-stack__panel[data-project='blutanalyse'] {
+  --stack-accent: #ff4d63;
+  --bp-color-accent: #ff4d63;
+}
+
+
+.project-stack__panel::before,
+.project-stack__panel::after {
+  position: absolute;
+  inset: -8%;
+  z-index: -2;
+  content: '';
+}
+
+.project-stack__panel::before {
+  background: radial-gradient(circle at 76% 28%, color-mix(in srgb, var(--stack-accent) 28%, transparent), transparent 28%), linear-gradient(118deg, transparent 0 58%, color-mix(in srgb, var(--stack-accent) 18%, transparent) 58% 68%, transparent 68%);
+}
+
+.project-stack__panel::after {
+  opacity: 0.22;
+  background-image: radial-gradient(circle at 1px 1px, var(--bp-color-text) 1px, transparent 0), repeating-linear-gradient(90deg, transparent 0 36px, color-mix(in srgb, var(--stack-accent) 42%, transparent) 36px 38px, transparent 38px 72px);
+  background-size: 14px 14px, auto;
+  mix-blend-mode: overlay;
+}
+
+/* ==========================================================================
+   03   Dekoration
+   ========================================================================== */
+
+.project-stack__noise {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.2;
+  background: repeating-linear-gradient(0deg, transparent 0 2px, var(--bp-color-text) 2px 3px, transparent 3px 7px);
+  mask-image: linear-gradient(90deg, transparent, black 18%, black 82%, transparent);
+}
+
+
+.project-stack__decor {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.project-stack__decor-asset {
+  position: absolute;
+  display: block;
+  width: clamp(92px, 11vw, 168px);
+  opacity: 0;
+  filter: drop-shadow(0 20px 32px rgba(0, 0, 0, 0.5));
+}
+
+.project-stack__decor-asset--eyeball {
+  right: clamp(1.2rem, 4vw, 4.5rem);
+  top: clamp(3.8rem, 8vw, 7.5rem);
+  width: clamp(120px, 13vw, 190px);
+  transform: rotate(8deg);
+}
+
+.project-stack__decor-asset--shocked {
+  left: calc(50% - 150px);
+  bottom: 0;
+  z-index: 2;
+  width: clamp(150px, 17vw, 250px);
+  transform: translateX(-50%);
+}
+
+.project-stack__panel--intro .project-stack__decor-asset {
+  opacity: 0.86;
+}
+
+/* ==========================================================================
+   04   Inhalt
+   ========================================================================== */
+
+.project-stack__copy {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  min-width: 0;
+  padding-right: clamp(0rem, 0.8vw, 0.8rem);
+}
+
+.project-stack__section-title {
+  max-width: 760px;
+  margin: 0;
+  font-family: var(--bp-font-display);
+  font-size: clamp(2.35rem, 4.15vw, 4.95rem);
+  line-height: 0.94;
+  letter-spacing: -0.065em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45), 0 0 30px rgba(0, 0, 0, 0.42);
+}
+
+.project-stack__intro {
+  max-width: 640px;
+  margin: var(--bp-space-2) 0 var(--bp-space-3);
+  color: var(--bp-color-text-muted);
+  font-size: clamp(0.98rem, 1.1vw, 1.12rem);
+  line-height: 1.55;
+}
+
+.project-stack__number {
+  display: inline-grid;
+  place-items: center;
+  min-width: 52px;
+  min-height: 38px;
+  margin-bottom: var(--bp-space-2);
+  border: 1px solid var(--stack-accent);
+  background: color-mix(in srgb, var(--stack-accent) 16%, transparent);
+  color: var(--stack-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 1.05rem;
+  font-weight: 950;
+}
+
+.project-stack__copy h3 {
+  max-width: 560px;
+  margin: 0;
+  font-family: var(--bp-font-display);
+  font-size: clamp(2.7rem, 5vw, 6.2rem);
+  line-height: 0.84;
+  letter-spacing: -0.095em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45), 0 0 30px rgba(0, 0, 0, 0.42), 0.03em 0 color-mix(in srgb, var(--stack-accent) 72%, transparent), -0.02em 0 var(--bp-color-accent-2);
+}
+
+.project-stack__kicker {
+  margin: var(--bp-space-2) 0 0;
+  color: var(--stack-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.8rem;
+  font-weight: 950;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.project-stack__summary {
+  max-width: 570px;
+  margin: var(--bp-space-2) 0 0;
+  color: var(--bp-color-text-muted);
+  font-size: clamp(0.96rem, 1.05vw, 1.08rem);
+  line-height: 1.48;
+}
+
+.project-stack__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: var(--bp-space-3) 0 var(--bp-space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.project-stack__tags li {
+  border: 1px solid var(--bp-color-border-strong);
+  padding: 0.36rem 0.56rem;
+  background: var(--bp-color-bg);
+  color: var(--stack-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   05   Visual
+   ========================================================================== */
+
+.project-stack__visual {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin-left: clamp(0.3rem, 1vw, 1rem);
+  transform: rotate(-1.5deg) translateY(0.2rem);
+}
+
+.project-stack__visual bp-project-visual {
+  display: block;
+  width: 100%;
+}
+
+
+.project-stack__panel--intro .project-stack__visual {
+  margin-top: clamp(1.8rem, 3vw, 3.2rem);
+}
+
+
+/* ==========================================================================
+   06   HTML5 Game Szene
+   ========================================================================== */
+
+.project-stack__game-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.project-stack__game-body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: auto;
+  will-change: transform;
+}
+
+.project-stack__game-item {
+  display: block;
+  max-width: 45px;
+  max-height: 45px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.52));
+  transition: filter 160ms ease, scale 160ms var(--bp-ease-out);
+}
+
+.project-stack__game-body:hover .project-stack__game-item {
+  scale: 1.22;
+  filter: drop-shadow(0 16px 20px rgba(0, 0, 0, 0.58)) drop-shadow(0 0 16px color-mix(in srgb, var(--stack-accent) 58%, transparent));
+}
+
+
+.project-stack__oneup-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.project-stack__oneup {
+  position: absolute;
+  left: 50%;
+  bottom: 31%;
+  display: block;
+  width: clamp(54px, 5vw, 76px);
+  image-rendering: pixelated;
+  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.52)) drop-shadow(0 0 18px color-mix(in srgb, var(--stack-accent) 68%, transparent));
+  transform: translate3d(-50%, 0, 0) scale(0.82);
+  animation: project-game-oneup-rise 980ms cubic-bezier(0.12, 0.78, 0.24, 1) forwards;
+}
+
+/* ==========================================================================
+   07   Game Animationen
+   ========================================================================== */
+
+@keyframes project-game-oneup-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(-50%, 20px, 0) scale(0.78);
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  68% {
+    opacity: 1;
+    transform: translate3d(-50%, -44px, 0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(-50%, -74px, 0) scale(1.08);
+  }
+}
+
+
+.project-stack__game-thumb {
+  position: absolute;
+  left: clamp(-4.8rem, -5vw, -2.9rem);
+  bottom: clamp(-1.55rem, -1.6vw, -0.95rem);
+  z-index: 5;
+  display: block;
+  width: clamp(112px, 10.5vw, 162px);
+  pointer-events: none;
+  filter: drop-shadow(0 20px 26px rgba(0, 0, 0, 0.58));
+  animation: project-game-thumb-float 4.8s ease-in-out infinite;
+}
+
+@keyframes project-game-thumb-float {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-6deg);
+  }
+
+  50% {
+    transform: translate3d(0, -8px, 0) rotate(-3deg);
+  }
+}
+
+
+/* ==========================================================================
+   08   Asana Papierkorb Szene
+   ========================================================================== */
+
+.project-stack__trash-scene {
+  --trash-size: clamp(86px, 8.8vw, 134px);
+  --paper-size: clamp(50px, 4.8vw, 74px);
+  --paper-start-left: clamp(392px, 28vw, 520px);
+  --paper-start-bottom: clamp(-62px, -5.2vh, -50px);
+  --paper-land-x: calc(clamp(-468px, -31vw, -386px) - 22px);
+  --paper-land-y: calc(clamp(-102px, -6.4vw, -72px) - 70px);
+  --paper-arc-lift: clamp(118px, 13vw, 162px);
+  position: absolute;
+  left: clamp(1.2rem, 5vw, 5.8rem);
+  bottom: clamp(5rem, 14vh, 8.6rem);
+  z-index: 5;
+  width: clamp(310px, 34vw, 470px);
+  height: clamp(145px, 22vh, 220px);
+  pointer-events: none;
+}
+
+.project-stack__trash-bin {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+  display: block;
+  width: var(--trash-size);
+  pointer-events: none;
+  filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.58)) drop-shadow(0 0 22px color-mix(in srgb, var(--stack-accent) 34%, transparent));
+  transform-origin: 50% 88%;
+  animation: project-trash-bin-float 5.8s ease-in-out infinite;
+}
+
+.project-stack__trash-paper {
+  position: absolute;
+  left: var(--paper-start-left);
+  bottom: var(--paper-start-bottom);
+  z-index: 2;
+  display: block;
+  width: var(--paper-size);
+  border: 0;
+  padding: 0;
+  background: transparent;
+  backface-visibility: hidden;
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0) rotate(8deg);
+  transform-origin: 50% 50%;
+  will-change: transform;
+  animation: project-trash-paper-float 4.9s ease-in-out infinite;
+}
+
+.project-stack__trash-paper img {
+  display: block;
+  width: 100%;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 14px 20px rgba(0, 0, 0, 0.54)) drop-shadow(0 0 18px color-mix(in srgb, var(--stack-accent) 42%, transparent));
+  transition: filter 180ms ease, scale 180ms var(--bp-ease-out);
+}
+
+.project-stack__trash-paper:hover img,
+.project-stack__trash-paper:focus-visible img {
+  scale: 1.1;
+  filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 30px color-mix(in srgb, var(--stack-accent) 62%, transparent));
+}
+
+.project-stack__trash-paper:focus-visible {
+  outline: 3px solid var(--stack-accent);
+  outline-offset: 0.28rem;
+}
+
+.project-stack__trash-scene.is-landed .project-stack__trash-paper {
+  pointer-events: none;
+  animation: project-trash-paper-shot 1180ms linear forwards, project-trash-paper-landed-float 5.4s ease-in-out 1180ms infinite;
+}
+
+.project-stack__trash-scene.is-landed .project-stack__trash-paper img {
+  scale: 1;
+  transition: none;
+}
+
+.project-stack__trash-paper:disabled {
+  cursor: default;
+}
+
+/* ==========================================================================
+   09   Papierkorb Animationen
+   ========================================================================== */
+
+@keyframes project-trash-bin-float {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-4deg);
+  }
+
+  50% {
+    transform: translate3d(0, -9px, 0) rotate(-1deg);
+  }
+}
+
+@keyframes project-trash-paper-float {
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(8deg);
+  }
+
+  50% {
+    transform: translate3d(0, -12px, 0) rotate(13deg);
+  }
+}
+
+@keyframes project-trash-paper-shot {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(8deg) scale(1);
+  }
+
+  8% {
+    transform: translate3d(calc(var(--paper-land-x) * 0.08), calc((var(--paper-land-y) * 0.08) - (var(--paper-arc-lift) * 0.29)), 0) rotate(-18deg) scale(0.995);
+  }
+
+  16% {
+    transform: translate3d(calc(var(--paper-land-x) * 0.16), calc((var(--paper-land-y) * 0.16) - (var(--paper-arc-lift) * 0.54)), 0) rotate(-44deg) scale(0.99);
+  }
+
+  24% {
+    transform: translate3d(calc(var(--paper-land-x) * 0.24), calc((var(--paper-land-y) * 0.24) - (var(--paper-arc-lift) * 0.73)), 0) rotate(-70deg) scale(0.985);
+  }
+
+  32% {
+    transform: translate3d(calc(var(--paper-land-x) * 0.32), calc((var(--paper-land-y) * 0.32) - (var(--paper-arc-lift) * 0.88)), 0) rotate(-96deg) scale(0.98);
+  }
+
+  40% {
+    transform: translate3d(calc(var(--paper-land-x) * 0.4), calc((var(--paper-land-y) * 0.4) - (var(--paper-arc-lift) * 0.96)), 0) rotate(-122deg) scale(0.975);
+  }
+
+  50% {
+    transform: translate3d(calc(var(--paper-land-x) * 0.5), calc((var(--paper-land-y) * 0.5) - var(--paper-arc-lift)), 0) rotate(-154deg) scale(0.97);
+  }
+
+  60% {
+    transform: translate3d(calc(var(--paper-land-x) * 0.6), calc((var(--paper-land-y) * 0.6) - (var(--paper-arc-lift) * 0.96)), 0) rotate(-186deg) scale(0.965);
+  }
+
+  70% {
+    transform: translate3d(calc(var(--paper-land-x) * 0.7), calc((var(--paper-land-y) * 0.7) - (var(--paper-arc-lift) * 0.84)), 0) rotate(-218deg) scale(0.96);
+  }
+
+  80% {
+    transform: translate3d(calc(var(--paper-land-x) * 0.8), calc((var(--paper-land-y) * 0.8) - (var(--paper-arc-lift) * 0.64)), 0) rotate(-250deg) scale(0.955);
+  }
+
+  90% {
+    transform: translate3d(calc(var(--paper-land-x) * 0.9), calc((var(--paper-land-y) * 0.9) - (var(--paper-arc-lift) * 0.36)), 0) rotate(-282deg) scale(0.95);
+  }
+
+  100% {
+    transform: translate3d(var(--paper-land-x), var(--paper-land-y), 0) rotate(-314deg) scale(0.94);
+  }
+}
+
+@keyframes project-trash-paper-landed-float {
+
+  0%,
+  100% {
+    transform: translate3d(var(--paper-land-x), var(--paper-land-y), 0) rotate(-314deg) scale(0.94);
+  }
+
+  50% {
+    transform: translate3d(var(--paper-land-x), calc(var(--paper-land-y) - 5px), 0) rotate(-310deg) scale(0.94);
+  }
+}
+
+
+/* ==========================================================================
+   10   Previews
+   ========================================================================== */
+
+.project-stack__previews {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  justify-self: end;
+  align-self: center;
+  width: clamp(112px, 8.2vw, 138px);
+  gap: 0.58rem;
+  margin-right: calc(var(--bp-section-px) * -0.58);
+}
+
+.project-stack__preview {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.42rem;
+  align-items: center;
+  min-height: 58px;
+  border: 1px solid var(--bp-color-border);
+  padding: 0.45rem;
+  background: color-mix(in srgb, var(--bp-color-bg) 72%, transparent);
+  box-shadow: 0 14px 34px var(--bp-color-shadow);
+  transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, background-color 180ms ease;
+}
+
+.project-stack__preview:hover {
+  transform: translateX(-4px) rotate(-1deg);
+  border-color: var(--stack-accent);
+  background: color-mix(in srgb, var(--stack-accent) 16%, var(--bp-color-bg));
+}
+
+.project-stack__preview span {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--bp-color-border-strong);
+  color: var(--stack-accent);
+  font-family: var(--bp-font-mono);
+  font-weight: 950;
+}
+
+.project-stack__preview strong {
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-mono);
+  font-size: 0.6rem;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   11   Typewriter
+   ========================================================================== */
+
+.project-stack__typewriter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.24rem;
+  min-height: 2.8rem;
+  margin-top: 0.95rem;
+  border: 1px dashed color-mix(in srgb, var(--stack-accent) 46%, var(--bp-color-border));
+  padding: 0.72rem 0.82rem;
+  background: color-mix(in srgb, var(--bp-color-bg) 86%, var(--stack-accent) 8%);
+  box-shadow: 0 10px 24px var(--bp-color-shadow);
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-mono);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  overflow: hidden;
+}
+
+.project-stack__typewriter-prefix {
+  color: var(--stack-accent);
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-stack__typewriter-text {
+  min-width: 0;
+  word-break: break-word;
+}
+
+.project-stack__typewriter-cursor {
+  display: inline-block;
+  width: 0.72ch;
+  height: 1.05em;
+  margin-left: 0.1rem;
+  background: var(--stack-accent);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--stack-accent) 48%, transparent);
+  animation: project-stack-typewriter-cursor 0.92s steps(1, end) infinite;
+}
+
+/* ==========================================================================
+   12   Typewriter Animationen
+   ========================================================================== */
+
+@keyframes project-stack-typewriter-cursor {
+
+  0%,
+  48% {
+    opacity: 1;
+  }
+
+  49%,
+  100% {
+    opacity: 0;
+  }
+}
+
+
+
+/* ==========================================================================
+   13   Intro Variante
+   ========================================================================== */
+
+.project-stack__panel--intro {
+  grid-template-columns: minmax(0, 0.74fr) minmax(360px, 1fr) minmax(170px, 0.25fr);
+}
+
+.project-stack__panel--intro .project-stack__copy {
+  padding-top: clamp(0rem, 0.8vw, 0.4rem);
+}
+
+/* ==========================================================================
+   14   Responsive
+   ========================================================================== */
+
+@media (max-width: 1120px) {
+  .project-stack {
+    min-height: auto;
+  }
+
+  .project-stack__panel {
+    position: relative;
+    grid-template-columns: 1fr;
+    width: auto;
+    min-height: auto;
+  }
+
+  .project-stack__previews {
+    display: none;
+  }
+
+  .project-stack__visual {
+    margin-left: 0;
+    transform: none;
+  }
+
+
+  .project-stack__panel--intro .project-stack__visual {
+    margin-top: 1.25rem;
+  }
+
+  .project-stack__decor-asset {
+    opacity: 0.18;
+  }
+
+  .project-stack__decor-asset--shocked {
+    left: calc(50% - 40px);
+    bottom: 0;
+    width: 120px;
+  }
+
+  .project-stack__trash-scene {
+    left: 1rem;
+    bottom: 1.6rem;
+    width: min(86vw, 360px);
+  }
+}
+
+@media (max-width: 640px) {
+  .project-stack__copy h3 {
+    font-size: clamp(2.6rem, 16vw, 4.4rem);
+  }
+
+  .project-stack__trash-scene {
+    --trash-size: 80px;
+    --paper-size: 46px;
+    --paper-start-left: 292px;
+    --paper-start-bottom: -42px;
+    --paper-land-x: -286px;
+    --paper-land-y: -126px;
+    --paper-arc-lift: 112px;
+    bottom: 1.25rem;
+    height: 126px;
+  }
+}

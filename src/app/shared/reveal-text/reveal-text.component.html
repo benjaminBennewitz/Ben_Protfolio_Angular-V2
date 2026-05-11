@@ -1,0 +1,20 @@
+<!-- src/app/shared/reveal-text/reveal-text.component.html -->
+<div class="reveal" [class.reveal--hero]="size === 'hero'">
+  @if (eyebrow) {
+  <p class="bp-eyebrow">{{ eyebrow }}</p>
+  }
+
+  @if (size === 'hero') {
+  <h1 class="bp-title reveal__title">
+    @for (word of words; track word + $index; let index = $index) {
+    <span class="reveal__word" [style.--delay.ms]="index * 70"><span>{{ word }}</span></span>
+    }
+  </h1>
+  } @else {
+  <h2 class="bp-title reveal__title reveal__title--section">
+    @for (word of words; track word + $index; let index = $index) {
+    <span class="reveal__word" [style.--delay.ms]="index * 70"><span>{{ word }}</span></span>
+    }
+  </h2>
+  }
+</div>

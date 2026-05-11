@@ -1,0 +1,150 @@
+<!-- src/app/shared/project-visual/project-visual.component.html -->
+<div #visualShell class="visual-shell" [class.visual-shell--large]="large" [attr.data-accent]="project.accent"
+  [attr.data-project]="project.slug" [style.--blood-left-offset]="bloodLeftOffsetStyle()">
+  <div class="visual" [class.visual--large]="large" [attr.data-accent]="project.accent"
+    [attr.data-project]="project.slug" [attr.aria-hidden]="hasInteractiveAssets() ? null : true">
+    <div class="visual__grid"></div>
+    <div class="visual__window visual__window--one">
+      <span>{{ project.kicker }}</span>
+      <strong>{{ project.name }}</strong>
+    </div>
+    <div class="visual__window visual__window--two">
+      <span>system.status</span>
+      <strong>online</strong>
+    </div>
+
+    @if (primaryAssetSrc(); as primaryAsset) {
+    @if (isEyeInteractive()) {
+    <button class="visual__asset-button visual__asset-button--eye" type="button" [class.is-hurt]="isEyeHurt()"
+      (click)="triggerEyeReaction($event)" aria-label="Auge anstupsen">
+      <img class="visual__asset visual__asset--primary" [src]="primaryAsset" alt="" />
+      @if (isEyeTearVisible()) {
+      <img class="visual__tear" src="assets/images/project-stack/teardrop.webp" alt="" />
+      }
+    </button>
+    } @else {
+    <img class="visual__asset visual__asset--primary" [src]="primaryAsset" alt="" />
+    }
+    }
+
+    @if (!isBloodAnalysisProject() && secondaryAssetSrc(); as secondaryAsset) {
+    @if (isBombInteractive()) {
+    <button class="visual__asset-button visual__asset-button--bomb" type="button" [class.is-charging]="isBombCharging()"
+      [class.is-boom]="isBombBoom()" [disabled]="!isBombIdle()" (click)="triggerBombReaction($event)"
+      aria-label="Bombe zünden">
+      <img class="visual__asset visual__asset--secondary" [src]="secondaryAsset" alt="" />
+    </button>
+    } @else {
+    <img class="visual__asset visual__asset--secondary" [src]="secondaryAsset" alt="" />
+    }
+    }
+
+    @if (isBloodAnalysisProject()) {
+    @if (!bloodSuccessVisible()) {
+    <button class="visual__blood-trigger" type="button" [disabled]="isBloodButtonDisabled()"
+      (click)="triggerBloodAnalysis($event)" aria-label="Start blood analysis">
+      <img src="assets/images/project-stack/start-blood-analysis.webp" alt="" />
+    </button>
+    } @else {
+    <span class="visual__blood-success" aria-hidden="true">
+      <img src="assets/images/project-stack/analysis-sticker-success.webp" alt="" />
+    </span>
+    }
+    }
+
+    @if (showTaskStatus) {
+    <span class="visual__task-status" [class.is-saved]="taskStatusSaved" aria-hidden="true">
+      <img [src]="taskStatusSrc()" alt="" />
+    </span>
+    }
+
+    <div class="visual__type">{{ project.type }}</div>
+  </div>
+
+  @if (isBloodAnalysisProject()) {
+  <div class="visual__blood-stage" [class.is-active]="isBloodArmVisible()" [class.is-running]="isBloodRunning()"
+    [class.is-complete]="isBloodComplete()" aria-hidden="true">
+    <img class="visual__blood-arm" src="assets/images/project-stack/arm.webp" alt="" />
+
+    <span class="visual__blood-leech visual__blood-leech--one" [class.is-visible]="isBloodLeechesVisible()"
+      [class.is-satisfied]="isBloodLeechesSatisfied()">
+      <img class="visual__blood-leech-img" [src]="bloodLeechOneSrc()" alt="" />
+      <img class="visual__blood-drop visual__blood-drop--one" [class.is-visible]="isBloodLeechesVisible()"
+        [class.is-sucked]="isBloodLeechesSatisfied()" src="assets/images/project-stack/blood-drop-halftone.webp"
+        alt="" />
+      <span class="visual__blood-label visual__blood-label--rbc">RBC</span>
+    </span>
+
+    <span class="visual__blood-leech visual__blood-leech--two" [class.is-visible]="isBloodLeechesVisible()"
+      [class.is-satisfied]="isBloodLeechesSatisfied()">
+      <img class="visual__blood-leech-img" [src]="bloodLeechTwoSrc()" alt="" />
+      <img class="visual__blood-drop visual__blood-drop--two" [class.is-visible]="isBloodLeechesVisible()"
+        [class.is-sucked]="isBloodLeechesSatisfied()" src="assets/images/project-stack/blood-drop-halftone.webp"
+        alt="" />
+      <span class="visual__blood-label visual__blood-label--wbc">WBC</span>
+    </span>
+
+  </div>
+
+  @if (isBloodAnalysisVisible()) {
+  <section class="visual__blood-analysis" aria-live="polite">
+    <div class="visual__blood-analysis-head">
+      <strong>LAB-TERMINAL.EXE</strong>
+      <span>{{ bloodCurrentStatus() }}</span>
+    </div>
+
+    <div class="visual__blood-progress" aria-hidden="true">
+      @for (status of bloodStatusSteps(); track status; let index = $index) {
+      <span [class.is-active]="bloodStatusIsActive(index)"></span>
+      }
+    </div>
+
+    <div class="visual__blood-data-grid">
+      <dl>
+        <div>
+          <dt>SAMPLE ID</dt>
+          <dd>HS-0427-B</dd>
+        </div>
+        <div>
+          <dt>RBC</dt>
+          <dd>4.98 M/µL</dd>
+        </div>
+        <div>
+          <dt>WBC</dt>
+          <dd>7.12 K/µL</dd>
+        </div>
+        <div>
+          <dt>PLT</dt>
+          <dd>243 K/µL</dd>
+        </div>
+      </dl>
+
+      <dl>
+        <div>
+          <dt>HUMANITY</dt>
+          <dd>99.2%</dd>
+        </div>
+        <div>
+          <dt>BUGS</dt>
+          <dd>0 FOUND</dd>
+        </div>
+        <div>
+          <dt>VAMPIRE RISK</dt>
+          <dd>0.03%</dd>
+        </div>
+        <div>
+          <dt>RESULT</dt>
+          <dd>SAMPLE ACCEPTED</dd>
+        </div>
+      </dl>
+    </div>
+
+    <ul class="visual__blood-status-list" aria-label="Analysefortschritt">
+      @for (status of bloodStatusSteps(); track status; let index = $index) {
+      <li [class.is-active]="bloodStatusIsActive(index)">{{ status }}</li>
+      }
+    </ul>
+  </section>
+  }
+  }
+</div>

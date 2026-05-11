@@ -1,0 +1,32 @@
+<!-- src/app/shared/chaos-cta/chaos-cta.component.html -->
+<section #stageRef class="chaos-cta" id="cta" role="link" tabindex="0" data-cursor="chaos"
+  aria-label="Zur Kontaktsection springen" (click)="goToContact()" (keydown)="onKeyDown($event)"
+  (pointermove)="onPointerMove($event)" (pointerleave)="onPointerLeave()">
+  <div class="chaos-cta__copy" bpReveal>
+    <p class="bp-eyebrow">{{ eyebrow }}</p>
+    <h2>{{ title }}</h2>
+    <p>{{ hint }}</p>
+  </div>
+
+  <div class="chaos-cta__floor" aria-hidden="true"></div>
+
+  <div class="chaos-cta__blocks" aria-hidden="true">
+    @for (word of words; track word; let index = $index) {
+    <span class="chaos-cta__block" [class.chaos-cta__block--icon]="isIconBlock(word)"
+      [style.width]="styleAt(index, 'width')" [style.height]="styleAt(index, 'height')"
+      [style.transform]="styleAt(index, 'transform')">
+      @if (isIconBlock(word)) {
+      <span class="material-symbols-outlined" aria-hidden="true">{{ iconName(word) }}</span>
+      } @else {
+      {{ word }}
+      }
+    </span>
+    }
+  </div>
+
+  <aside class="chaos-cta__dialog" aria-hidden="true">
+    <strong>HEY_THERE.DLL</strong>
+    <span>move cursor</span>
+    <button type="button" tabindex="-1">OK</button>
+  </aside>
+</section>

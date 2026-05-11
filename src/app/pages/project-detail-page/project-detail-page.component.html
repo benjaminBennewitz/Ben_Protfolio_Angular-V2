@@ -1,0 +1,90 @@
+<!-- src/app/pages/project-detail-page/project-detail-page.component.html -->
+<main class="project-detail bp-scroll-main" [attr.data-project]="project()?.slug ?? null">
+  @if (project(); as activeProject) {
+  <article>
+    <header class="project-detail__hero bp-section">
+      <div class="project-detail__hero-grid bp-container">
+        <div>
+          <a class="project-detail__back bp-button bp-button--ghost" routerLink="/" fragment="projects">
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+            <span>{{ content().projectsIntro.overviewLabel }}</span>
+          </a>
+          <p class="bp-eyebrow">{{ activeProject.kicker }}</p>
+          <h1 class="bp-title">{{ activeProject.name }}</h1>
+          <p class="bp-subtitle">{{ activeProject.summary }}</p>
+        </div>
+
+        <bp-project-visual [project]="activeProject" [large]="true" />
+      </div>
+    </header>
+
+    <section class="project-detail__info bp-section">
+      <div class="bp-container project-detail__info-grid">
+        <aside class="project-detail__meta bp-card" [attr.aria-label]="content().projectsIntro.metaAriaLabel">
+          <dl>
+            <div>
+              <dt>{{ content().projectsIntro.typeLabel }}</dt>
+              <dd>{{ activeProject.type }}</dd>
+            </div>
+            <div>
+              <dt>{{ content().projectsIntro.yearLabel }}</dt>
+              <dd>{{ activeProject.year }}</dd>
+            </div>
+            <div>
+              <dt>{{ content().projectsIntro.stackLabel }}</dt>
+              <dd>{{ activeProject.techStack.join(' · ') }}</dd>
+            </div>
+          </dl>
+        </aside>
+
+        <div class="project-detail__copy">
+          <section>
+            <h2>{{ content().projectsIntro.descriptionLabel }}</h2>
+            <p>{{ activeProject.description }}</p>
+          </section>
+          <section>
+            <h2>{{ content().projectsIntro.goalLabel }}</h2>
+            <p>{{ activeProject.goal }}</p>
+            <ul>
+              @for (requirement of activeProject.requirements; track requirement) {
+              <li>{{ requirement }}</li>
+              }
+            </ul>
+          </section>
+          <section>
+            <h2>{{ content().projectsIntro.roleLabel }}</h2>
+            <p>{{ activeProject.role }}</p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-detail__highlights bp-section">
+      <div class="bp-container">
+        <p class="bp-eyebrow">{{ content().projectsIntro.highlightsEyebrow }}</p>
+        <h2>{{ content().projectsIntro.highlightsTitle }}</h2>
+        <div class="project-detail__highlight-grid">
+          @for (highlight of activeProject.highlights; track highlight) {
+          <article class="bp-card">
+            <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+            <h3>{{ highlight }}</h3>
+          </article>
+          }
+        </div>
+      </div>
+    </section>
+  </article>
+  } @else {
+  <section class="project-detail__missing bp-section">
+    <div class="bp-container">
+      <p class="bp-eyebrow">404</p>
+      <h1 class="bp-title">{{ content().notFoundTitle }}</h1>
+      <p class="bp-subtitle">{{ content().notFoundText }}</p>
+      <a class="bp-button bp-button--accent" routerLink="/" fragment="projects">
+        <span>{{ content().projectsIntro.overviewLabel }}</span>
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+      </a>
+    </div>
+  </section>
+  }
+</main>

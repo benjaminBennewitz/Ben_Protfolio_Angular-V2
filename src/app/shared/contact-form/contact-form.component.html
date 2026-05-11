@@ -1,0 +1,29 @@
+<!-- src/app/shared/contact-form/contact-form.component.html -->
+<form class="contact-form bp-card" (ngSubmit)="submit()" novalidate>
+  <label>
+    <span>{{ content().nameLabel }}</span>
+    <input type="text" autocomplete="name" [value]="name()" (input)="updateField('name', $event)" required
+      minlength="2">
+  </label>
+
+  <label>
+    <span>{{ content().emailLabel }}</span>
+    <input type="email" autocomplete="email" [value]="email()" (input)="updateField('email', $event)" required>
+  </label>
+
+  <label>
+    <span>{{ content().messageLabel }}</span>
+    <textarea rows="6" [value]="message()" (input)="updateField('message', $event)" required minlength="10"></textarea>
+  </label>
+
+  <p class="contact-form__privacy">{{ content().privacy }}</p>
+
+  <button class="bp-button bp-button--accent" type="submit">
+    <span>{{ content().submitLabel }}</span>
+    <span class="material-symbols-outlined" aria-hidden="true">send</span>
+  </button>
+
+  @if (status()) {
+  <p class="contact-form__status" [class.contact-form__status--error]="hasError()" role="status">{{ status() }}</p>
+  }
+</form>

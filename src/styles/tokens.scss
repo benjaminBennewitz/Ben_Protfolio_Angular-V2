@@ -1,0 +1,142 @@
+/*###############################
+###
+###     tokens.component.scss
+###     Produktion App
+###     BASED ON: Angular  21.02.0, SCSS,
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Font Face
+   02   Basis-Tokens
+   03   Dark Theme
+   04   Light Theme
+   05   Material Icons
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Font Face
+   ========================================================================== */
+
+@font-face {
+   font-family: 'Material Symbols Outlined';
+   font-style: normal;
+   font-weight: 100 700;
+   font-display: block;
+   src: url('/assets/fonts/material-symbols-outlined-latin-fill-normal.woff2') format('woff2');
+}
+
+/* ==========================================================================
+   02   Basis-Tokens
+   ========================================================================== */
+
+:root {
+   color-scheme: dark;
+   --bp-font-display: 'Arial Black', 'Impact', system-ui, sans-serif;
+   --bp-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+   --bp-font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+   --bp-radius-xs: 8px;
+   --bp-radius-sm: 14px;
+   --bp-radius-md: 22px;
+   --bp-radius-lg: 34px;
+   --bp-radius-xl: 48px;
+   --bp-space-1: clamp(0.25rem, 0.19rem + 0.28vw, 0.38rem);
+   --bp-space-2: clamp(0.5rem, 0.39rem + 0.56vw, 0.75rem);
+   --bp-space-3: clamp(0.75rem, 0.58rem + 0.83vw, 1.13rem);
+   --bp-space-4: clamp(1rem, 0.78rem + 1.11vw, 1.5rem);
+   --bp-space-5: clamp(1.5rem, 1.17rem + 1.67vw, 2.25rem);
+   --bp-space-6: clamp(2rem, 1.56rem + 2.22vw, 3rem);
+   --bp-space-7: clamp(3rem, 2.33rem + 3.33vw, 4.5rem);
+   --bp-space-8: clamp(4rem, 3.11rem + 4.44vw, 6rem);
+   --bp-section-px: clamp(1rem, 4vw, 5rem);
+   --bp-header-height: 76px;
+   --bp-max-width: 1440px;
+   --bp-z-cursor: 80;
+   --bp-z-loader: 100;
+   --bp-z-nav: 60;
+   --bp-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+   --bp-ease-pop: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+/* ==========================================================================
+   03   Dark Theme
+   ========================================================================== */
+
+:root,
+:root[data-theme='dark'] {
+   --bp-color-bg: #0b0b0d;
+   --bp-color-bg-soft: #111115;
+   --bp-color-surface: rgba(26, 26, 31, 0.78);
+   --bp-color-surface-solid: #17171c;
+   --bp-color-surface-strong: #22222a;
+   --bp-color-text: #f6f0e8;
+   --bp-color-text-muted: #b8b0a7;
+   --bp-color-border: rgba(246, 240, 232, 0.18);
+   --bp-color-border-strong: rgba(246, 240, 232, 0.34);
+   --bp-color-accent: #a7ff19;
+   --bp-color-accent-2: #ff3ea5;
+   --bp-color-accent-3: #8d5cff;
+   --bp-color-warning: #ff8c1a;
+   --bp-color-danger: #ff2d55;
+   --bp-color-info: #23c7ff;
+   --bp-color-shadow: rgba(0, 0, 0, 0.52);
+   --bp-gradient-hero: radial-gradient(circle at 14% 22%, rgba(167, 255, 25, 0.25), transparent 32%), radial-gradient(circle at 82% 18%, rgba(255, 62, 165, 0.2), transparent 30%), linear-gradient(135deg, #0b0b0d 0%, #16161d 52%, #070708 100%);
+}
+
+/* ==========================================================================
+   04   Light Theme
+   ========================================================================== */
+
+:root[data-theme='light'] {
+   color-scheme: light;
+   --bp-color-bg: #fffaf1;
+   --bp-color-bg-soft: #f4ecdf;
+   --bp-color-surface: rgba(255, 252, 246, 0.88);
+   --bp-color-surface-solid: #fffdf8;
+   --bp-color-surface-strong: #eee2cf;
+   --bp-color-text: #101010;
+   --bp-color-text-muted: #342d26;
+   --bp-color-border: rgba(17, 17, 17, 0.24);
+   --bp-color-border-strong: rgba(17, 17, 17, 0.48);
+   --bp-color-accent: #005cff;
+   --bp-color-accent-2: #b000ff;
+   --bp-color-accent-3: #d0005f;
+   --bp-color-warning: #9b5200;
+   --bp-color-danger: #bd1238;
+   --bp-color-info: #006d7f;
+   --bp-color-shadow: rgba(31, 23, 14, 0.18);
+   --bp-gradient-hero: radial-gradient(circle at 14% 22%, rgba(0, 92, 255, 0.08), transparent 32%), radial-gradient(circle at 82% 18%, rgba(176, 0, 255, 0.07), transparent 30%), linear-gradient(135deg, #fffdf8 0%, #fffaf1 52%, #f3eadc 100%);
+}
+
+/* ==========================================================================
+   05   Material Icons
+   ========================================================================== */
+
+.material-symbols-outlined {
+   direction: ltr;
+   display: inline-flex;
+   flex: 0 0 auto;
+   font-family: 'Material Symbols Outlined';
+   font-feature-settings: 'liga';
+   font-size: 1.35em;
+   font-style: normal;
+   font-weight: 400;
+   letter-spacing: normal;
+   line-height: 1;
+   text-rendering: optimizeLegibility;
+   text-transform: none;
+   white-space: nowrap;
+   word-wrap: normal;
+}

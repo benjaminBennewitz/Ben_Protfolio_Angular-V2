@@ -1,0 +1,71 @@
+<!-- src/app/layout/loader/loader.component.html -->
+@if (visible()) {
+<section class="loader" [class.loader--leaving]="leaving()" [class.loader--completed]="completed()"
+  aria-label="Portfolio wird geladen" aria-live="polite">
+  <div class="loader__backdrop" aria-hidden="true">
+    <span class="loader__skull"></span>
+    <span class="loader__grid"></span>
+    <span class="loader__noise"></span>
+  </div>
+
+  <div class="loader__brand" aria-hidden="true">
+    <span>B²</span>
+    <strong>BOOT_SEQUENCE</strong>
+  </div>
+
+  <div class="loader__dialog-stack">
+    @for (dialog of dialogs; track dialog.percent) {
+    <article class="loader-dialog" [style.--dialog-delay]="dialog.delay" [style.--dialog-left]="dialog.left"
+      [style.--dialog-top]="dialog.top" [style.--dialog-rotate]="dialog.rotate" [style.--dialog-z]="dialog.z"
+      [attr.aria-label]="dialog.percent + ' Prozent geladen: ' + dialog.message">
+      <header class="loader-dialog__head">
+        <span>{{ dialog.title }}</span>
+        <span class="loader-dialog__controls" aria-hidden="true">
+          <i></i>
+          <i></i>
+          <i></i>
+        </span>
+      </header>
+
+      <div class="loader-dialog__body">
+        <span class="loader-dialog__icon" aria-hidden="true">i</span>
+        <div>
+          <strong>{{ dialog.percent }} % geladen</strong>
+          <p>{{ dialog.message }}</p>
+        </div>
+      </div>
+
+      <footer class="loader-dialog__foot" aria-hidden="true">
+        <button type="button" tabindex="-1">{{ dialog.action }}</button>
+      </footer>
+    </article>
+    }
+  </div>
+
+  <aside class="loader__terminal" aria-hidden="true">
+    <p class="loader__terminal-title">C:\B2\portfolio&gt; run experience.exe</p>
+    <ul>
+      @for (line of logLines; track line) {
+      <li>{{ line }}</li>
+      }
+    </ul>
+    <div class="loader__progress" [class.loader__progress--complete]="completed()">
+      @for (cell of progressCells; track cell) {
+      <span></span>
+      }
+    </div>
+  </aside>
+
+  @if (completed()) {
+  <div class="loader__ready" [class.loader__ready--launching]="launching()" role="status" aria-live="assertive">
+    <p>100 % erreicht. System wartet auf ein menschliches Wunder.</p>
+    <button type="button" (click)="dismiss()" [disabled]="launching()" aria-label="Portfolio öffnen">
+      <span>was coooooles</span>
+      @if (launching()) {
+      <img class="loader__button-asset" src="assets/images/nice-head-loader.webp" alt="Halftone Portrait von B²">
+      }
+    </button>
+  </div>
+  }
+</section>
+}

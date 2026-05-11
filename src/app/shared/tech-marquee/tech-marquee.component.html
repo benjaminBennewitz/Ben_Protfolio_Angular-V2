@@ -1,0 +1,8 @@
+<!-- src/app/shared/tech-marquee/tech-marquee.component.html -->
+<div class="marquee" aria-label="Techstack Leiste">
+  <div class="marquee__track">
+    @for (item of loopItems; track item + $index) {
+    <span>{{ item }}</span>
+    }
+  </div>
+</div>

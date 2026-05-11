@@ -1,0 +1,18 @@
+<!-- src/app/shared/project-card/project-card.component.html -->
+<article class="project-card bp-card" [attr.data-accent]="project.accent">
+  <bp-project-visual [project]="project" />
+  <div class="project-card__body">
+    <p class="project-card__kicker">{{ project.kicker }}</p>
+    <h3>{{ project.name }}</h3>
+    <p>{{ project.summary }}</p>
+    <ul class="bp-tags" aria-label="Techstack">
+      @for (tech of project.techStack.slice(0, 5); track tech) {
+      <li class="bp-tag">{{ tech }}</li>
+      }
+    </ul>
+    <a class="project-card__link bp-button" [routerLink]="['/projects', project.slug]">
+      <span>{{ detailLabel }}</span>
+      <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+    </a>
+  </div>
+</article>

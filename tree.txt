@@ -1,0 +1,164 @@
+ben-portfolio-angular-v2/
+├── .angular/
+│   └── ...
+├── node_modules/
+│   └── ...
+├── src/
+│   ├── app/
+│   │   ├── core/
+│   │   │   ├── data/
+│   │   │   │   └── portfolio-content.ts
+│   │   │   ├── models/
+│   │   │   │   └── portfolio.models.ts
+│   │   │   └── services/
+│   │   │       ├── language.service.ts
+│   │   │       ├── seo.service.ts
+│   │   │       ├── tab-title.service.ts
+│   │   │       └── theme.service.ts
+│   │   ├── layout/
+│   │   │   ├── custom-cursor/
+│   │   │   │   ├── custom-cursor.component.html
+│   │   │   │   ├── custom-cursor.component.scss
+│   │   │   │   └── custom-cursor.component.ts
+│   │   │   ├── footer/
+│   │   │   │   ├── footer.component.html
+│   │   │   │   ├── footer.component.scss
+│   │   │   │   └── footer.component.ts
+│   │   │   ├── loader/
+│   │   │   │   ├── loader.component.html
+│   │   │   │   ├── loader.component.scss
+│   │   │   │   └── loader.component.ts
+│   │   │   ├── navigation/
+│   │   │   │   ├── navigation.component.html
+│   │   │   │   ├── navigation.component.scss
+│   │   │   │   └── navigation.component.ts
+│   │   │   └── scroll-to-top/
+│   │   │       ├── scroll-to-top.component.html
+│   │   │       ├── scroll-to-top.component.scss
+│   │   │       └── scroll-to-top.component.ts
+│   │   ├── pages/
+│   │   │   ├── home-page/
+│   │   │   │   ├── home-page.component.html
+│   │   │   │   ├── home-page.component.scss
+│   │   │   │   └── home-page.component.ts
+│   │   │   └── project-detail-page/
+│   │   │       ├── project-detail-page.component.html
+│   │   │       ├── project-detail-page.component.scss
+│   │   │       └── project-detail-page.component.ts
+│   │   ├── shared/
+│   │   │   ├── chaos-cta/
+│   │   │   │   ├── chaos-cta.component.html
+│   │   │   │   ├── chaos-cta.component.scss
+│   │   │   │   └── chaos-cta.component.ts
+│   │   │   ├── contact-form/
+│   │   │   │   ├── contact-form.component.html
+│   │   │   │   ├── contact-form.component.scss
+│   │   │   │   └── contact-form.component.ts
+│   │   │   ├── process-lock/
+│   │   │   │   ├── process-lock.component.html
+│   │   │   │   ├── process-lock.component.scss
+│   │   │   │   └── process-lock.component.ts
+│   │   │   ├── project-card/
+│   │   │   │   ├── project-card.component.html
+│   │   │   │   ├── project-card.component.scss
+│   │   │   │   └── project-card.component.ts
+│   │   │   ├── project-stack/
+│   │   │   │   ├── project-stack.component.html
+│   │   │   │   ├── project-stack.component.scss
+│   │   │   │   └── project-stack.component.ts
+│   │   │   ├── project-visual/
+│   │   │   │   ├── project-visual.component.html
+│   │   │   │   ├── project-visual.component.scss
+│   │   │   │   └── project-visual.component.ts
+│   │   │   ├── reveal-text/
+│   │   │   │   ├── reveal-text.component.html
+│   │   │   │   ├── reveal-text.component.scss
+│   │   │   │   └── reveal-text.component.ts
+│   │   │   ├── tech-marquee/
+│   │   │   │   ├── tech-marquee.component.html
+│   │   │   │   ├── tech-marquee.component.scss
+│   │   │   │   └── tech-marquee.component.ts
+│   │   │   └── reveal-on-scroll.directive.ts
+│   │   ├── app.component.html
+│   │   ├── app.component.scss
+│   │   ├── app.component.ts
+│   │   └── app.routes.ts
+│   ├── assets/
+│   │   ├── fonts/
+│   │   │   └── material-symbols-outlined-latin-fill-normal.woff2
+│   │   ├── images/
+│   │   │   ├── project-stack/
+│   │   │   │   ├── project_2/
+│   │   │   │   │   ├── pj2_1up.webp
+│   │   │   │   │   ├── pj2_chest.webp
+│   │   │   │   │   ├── pj2_coin.webp
+│   │   │   │   │   ├── pj2_door.webp
+│   │   │   │   │   ├── pj2_flag.webp
+│   │   │   │   │   ├── pj2_heart.webp
+│   │   │   │   │   ├── pj2_html5.webp
+│   │   │   │   │   ├── pj2_key.webp
+│   │   │   │   │   ├── pj2_lock.webp
+│   │   │   │   │   ├── pj2_potion.webp
+│   │   │   │   │   ├── pj2_ring.webp
+│   │   │   │   │   ├── pj2_spikes.webp
+│   │   │   │   │   ├── pj2_spring.webp
+│   │   │   │   │   ├── pj2_square.webp
+│   │   │   │   │   ├── pj2_star.webp
+│   │   │   │   │   ├── pj2_triangle.webp
+│   │   │   │   │   └── pj2_x.webp
+│   │   │   │   ├── analysis-sticker-success.webp
+│   │   │   │   ├── arm.webp
+│   │   │   │   ├── blood-drop-halftone.webp
+│   │   │   │   ├── bomb.webp
+│   │   │   │   ├── bomb-pink.webp
+│   │   │   │   ├── boom.webp
+│   │   │   │   ├── dont-click-that.webp
+│   │   │   │   ├── egle1-idle.webp
+│   │   │   │   ├── egle1-satisfied.webp
+│   │   │   │   ├── egle2-idle.webp
+│   │   │   │   ├── egle2-satisfied.webp
+│   │   │   │   ├── eyball-green-hurt.webp
+│   │   │   │   ├── eyeball-green.webp
+│   │   │   │   ├── hide-girl-pink.webp
+│   │   │   │   ├── messy-batch.webp
+│   │   │   │   ├── paper-crumpled-pink.webp
+│   │   │   │   ├── peace-cyan.webp
+│   │   │   │   ├── planet-saved.webp
+│   │   │   │   ├── scream-girl-pink.webp
+│   │   │   │   ├── start-blood-analysis.webp
+│   │   │   │   ├── teardrop.webp
+│   │   │   │   ├── thumb-lime.webp
+│   │   │   │   ├── trash-red.webp
+│   │   │   │   └── trust-not-found.webp
+│   │   │   ├── brain_rotation.gif
+│   │   │   ├── default-hero-head.webp
+│   │   │   ├── hero-brain-halftone.webp
+│   │   │   ├── hero-head-fck.webp
+│   │   │   ├── hero-head-insane.webp
+│   │   │   ├── hero-head-lol.webp
+│   │   │   ├── me-and-coffee.webp
+│   │   │   ├── me-and-coffe-error.webp
+│   │   │   └── nice-head-loader.webp
+│   │   ├── social/
+│   │   │   └── og-portfolio-preview.svg
+│   │   └── favicon.svg
+│   ├── styles/
+│   │   ├── base.scss
+│   │   ├── tokens.scss
+│   │   └── utilities.scss
+│   ├── index.html
+│   ├── main.ts
+│   ├── robots.txt
+│   ├── sitemap.xml
+│   └── styles.scss
+├── .editorconfig
+├── .gitignore
+├── angular.json
+├── make-tree.ps1
+├── package.json
+├── package-lock.json
+├── README.md
+├── tools.md
+├── tsconfig.app.json
+├── tsconfig.json
+└── tsconfig.spec.json

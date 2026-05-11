@@ -1,0 +1,15 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#101010"/>
+  <path d="M0 0h1200v630H0z" fill="url(#g)" opacity=".8"/>
+  <path d="M80 110h1040v410H80z" fill="none" stroke="#a7ff19" stroke-width="6"/>
+  <text x="120" y="250" fill="#f6f0e8" font-family="Arial Black, sans-serif" font-size="84">BEN PORTFOLIO</text>
+  <text x="120" y="340" fill="#ff3ea5" font-family="Arial, sans-serif" font-size="38">Angular · Django · UI/UX · Grafikdesign</text>
+  <text x="120" y="430" fill="#a7ff19" font-family="monospace" font-size="28">interactive fullstack experience</text>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#1a1a1a"/>
+      <stop offset=".55" stop-color="#232323"/>
+      <stop offset="1" stop-color="#0b0b0b"/>
+    </linearGradient>
+  </defs>
+</svg>

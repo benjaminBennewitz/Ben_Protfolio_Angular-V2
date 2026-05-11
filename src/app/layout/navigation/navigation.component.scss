@@ -1,0 +1,289 @@
+/*###############################
+###
+###     navigation.component.scss
+###     Produktion App
+###     BASED ON: Angular  21.02.0, SCSS,
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Header
+   02   Brand
+   03   Links
+   04   Aktionen
+   05   Light Theme
+   06   Responsive
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Header
+   ========================================================================== */
+
+.nav {
+  position: fixed;
+  z-index: var(--bp-z-nav);
+  top: 0;
+  right: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--bp-space-4);
+  min-height: var(--bp-header-height);
+  padding: 0 var(--bp-section-px);
+  border-bottom: 1px solid var(--bp-color-border-strong);
+  background: color-mix(in srgb, var(--bp-color-bg) 86%, transparent);
+  box-shadow: 0 12px 36px var(--bp-color-shadow);
+  backdrop-filter: blur(18px);
+}
+
+.nav::before {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  content: '';
+  background: linear-gradient(90deg, transparent, var(--bp-color-accent), transparent);
+  opacity: 0.72;
+}
+
+/* ==========================================================================
+   02   Brand
+   ========================================================================== */
+
+.nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.78rem;
+  width: fit-content;
+}
+
+.nav__brand-mark {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-display);
+  font-size: 1.8rem;
+  line-height: 0.8;
+  letter-spacing: -0.14em;
+  text-shadow: 0.08em 0 var(--bp-color-accent), -0.04em 0 var(--bp-color-info);
+}
+
+.nav__brand-text {
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   03   Links
+   ========================================================================== */
+
+.nav__links {
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.8rem, 2vw, 2.2rem);
+  font-family: var(--bp-font-mono);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nav__links a {
+  position: relative;
+  color: var(--bp-color-text-muted);
+  transition: color 160ms ease, transform 160ms var(--bp-ease-out);
+}
+
+.nav__links a::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.55rem;
+  left: 0;
+  height: 2px;
+  content: '';
+  background: var(--bp-color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms var(--bp-ease-out);
+}
+
+.nav__links a:hover,
+.nav__links a:focus-visible {
+  color: var(--bp-color-accent);
+  transform: translateY(-1px);
+}
+
+.nav__links a:hover::after,
+.nav__links a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ==========================================================================
+   04   Aktionen
+   ========================================================================== */
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.nav__action,
+.nav__burger,
+.nav__contact {
+  min-width: 42px;
+  min-height: 42px;
+  border: 1px solid var(--bp-color-border-strong);
+  background: color-mix(in srgb, var(--bp-color-bg) 72%, transparent);
+  color: var(--bp-color-text);
+  cursor: pointer;
+}
+
+.nav__action {
+  display: grid;
+  place-items: center;
+}
+
+.nav__language {
+  padding-inline: 0.75rem;
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.76rem;
+  font-weight: 950;
+}
+
+.nav__contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.85rem;
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.nav__burger {
+  display: none;
+  place-items: center;
+  gap: 0.22rem;
+}
+
+.nav__burger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+}
+
+
+/* ==========================================================================
+   05   Light Theme
+   ========================================================================== */
+
+:root[data-theme='light'] .nav {
+  border-bottom-color: rgba(17, 17, 17, 0.62);
+  background: rgba(255, 253, 248, 0.9);
+  box-shadow: 0 14px 38px rgba(31, 23, 14, 0.12);
+}
+
+:root[data-theme='light'] .nav::before {
+  background: linear-gradient(90deg, transparent, rgba(17, 17, 17, 0.58), var(--bp-color-accent), rgba(17, 17, 17, 0.58), transparent);
+  opacity: 0.9;
+}
+
+:root[data-theme='light'] .nav__brand-mark,
+:root[data-theme='light'] .nav__brand-text,
+:root[data-theme='light'] .nav__links a,
+:root[data-theme='light'] .nav__action,
+:root[data-theme='light'] .nav__burger {
+  color: #101010;
+}
+
+:root[data-theme='light'] .nav__links a:hover,
+:root[data-theme='light'] .nav__links a:focus-visible,
+:root[data-theme='light'] .nav__language,
+:root[data-theme='light'] .nav__contact {
+  color: var(--bp-color-accent);
+}
+
+:root[data-theme='light'] .nav__action,
+:root[data-theme='light'] .nav__burger,
+:root[data-theme='light'] .nav__contact {
+  border-color: rgba(17, 17, 17, 0.58);
+  background: rgba(255, 253, 248, 0.84);
+}
+
+:root[data-theme='light'] .nav__contact {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--bp-color-accent) 34%, transparent);
+}
+
+/* ==========================================================================
+   06   Responsive
+   ========================================================================== */
+
+@media (max-width: 980px) {
+  .nav {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+  }
+
+  .nav__links {
+    position: fixed;
+    top: var(--bp-header-height);
+    right: var(--bp-section-px);
+    left: var(--bp-section-px);
+    display: grid;
+    justify-content: stretch;
+    border: 1px solid var(--bp-color-border);
+    padding: var(--bp-space-4);
+    background: var(--bp-color-bg);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-18px);
+    transition: opacity 180ms ease, transform 180ms var(--bp-ease-out);
+  }
+
+  .nav--open .nav__links {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .nav__burger {
+    display: grid;
+  }
+
+  .nav__contact {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .nav__brand-text {
+    display: none;
+  }
+}

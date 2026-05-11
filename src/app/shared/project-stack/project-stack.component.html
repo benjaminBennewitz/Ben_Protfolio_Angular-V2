@@ -1,0 +1,93 @@
+<!-- src/app/shared/project-stack/project-stack.component.html -->
+<section class="project-stack" id="projects" [style.--project-total]="projects.length">
+  @for (project of projects; track project.slug; let index = $index) {
+  <article #projectPanel class="project-stack__panel" [class.project-stack__panel--intro]="index === 0"
+    [class.project-stack__panel--game]="project.slug === 'html5-browser-game'" [attr.data-accent]="project.accent"
+    [attr.data-project]="project.slug" [style.--panel-index]="index"
+    (pointermove)="onProjectPanelPointerMove(index, $event)" (pointerleave)="resetProjectPanelPointer(index)">
+    <div class="project-stack__noise" aria-hidden="true"></div>
+
+    @if (project.slug === 'html5-browser-game') {
+    <div class="project-stack__game-layer" aria-hidden="true">
+      @for (item of project2PhysicsItems; track item.src; let itemIndex = $index) {
+      <span class="project-stack__game-body" [style.width]="project2ItemStyleAt(itemIndex, 'width')"
+        [style.height]="project2ItemStyleAt(itemIndex, 'height')"
+        [style.transform]="project2ItemStyleAt(itemIndex, 'transform')">
+        <img class="project-stack__game-item" [src]="item.src" alt="" />
+      </span>
+      }
+    </div>
+
+    <div class="project-stack__oneup-layer" aria-hidden="true">
+      @for (oneUp of project2OneUps(); track oneUp) {
+      <img class="project-stack__oneup" src="assets/images/project-stack/project_2/pj2_1up.webp" alt="" />
+      }
+    </div>
+    }
+
+    @if (project.slug === 'asana-klon') {
+    <div class="project-stack__trash-scene" [class.is-landed]="project3PaperLanded()">
+      <img class="project-stack__trash-bin" src="assets/images/project-stack/trash-red.webp" alt=""
+        aria-hidden="true" />
+      <button class="project-stack__trash-paper" type="button" [disabled]="project3PaperLanded()"
+        (click)="triggerProject3PaperFlight($event)" aria-label="Papier in den Papierkorb werfen">
+        <img src="assets/images/project-stack/paper-crumpled-pink.webp" alt="" />
+      </button>
+    </div>
+    }
+
+    @if (index === 0) {
+    <div class="project-stack__decor" aria-hidden="true">
+      <img class="project-stack__decor-asset project-stack__decor-asset--shocked"
+        src="assets/images/project-stack/scream-girl-pink.webp" alt="" />
+    </div>
+    }
+
+    <div class="project-stack__copy" bpReveal>
+      @if (index === 0) {
+      <p class="bp-eyebrow">{{ eyebrow }}</p>
+      <h2 class="project-stack__section-title">{{ title }}</h2>
+      <p class="project-stack__intro">{{ subtitle }}</p>
+      }
+
+      <div class="project-stack__number">{{ (index + 1).toString().padStart(2, '0') }}</div>
+      <h3>{{ project.name }}</h3>
+      <p class="project-stack__kicker">{{ project.kicker }}</p>
+      <p class="project-stack__summary">{{ project.summary }}</p>
+
+      <ul class="project-stack__tags" aria-label="Techstack">
+        @for (tech of project.techStack.slice(0, 4); track tech) {
+        <li>{{ tech }}</li>
+        }
+      </ul>
+
+      <a class="bp-button bp-button--accent" [routerLink]="['/projects', project.slug]">
+        <span>{{ detailLabel }}</span>
+        <span class="material-symbols-outlined" aria-hidden="true">target</span>
+      </a>
+
+      @if (isGraphicCatalogProject(project)) {
+      <div class="project-stack__typewriter" aria-label="Simulierter Dateiname">
+        <span class="project-stack__typewriter-prefix">filename&gt;</span>
+        <span class="project-stack__typewriter-text">{{ project5TypewriterText() }}</span>
+        <span class="project-stack__typewriter-cursor" aria-hidden="true"></span>
+      </div>
+      }
+    </div>
+
+    <div class="project-stack__visual" bpReveal>
+      <bp-project-visual [project]="project" [large]="true" [hideAssets]="project.slug === 'asana-klon'"
+        [showTaskStatus]="project.slug === 'asana-klon'" [taskStatusSaved]="project3SuccessVisible()" />
+    </div>
+
+    <aside class="project-stack__previews" aria-label="Weitere Projekte">
+      @for (preview of previewsFor(project); track preview.slug; let previewIndex = $index) {
+      <a class="project-stack__preview" [routerLink]="['/projects', preview.slug]" [attr.data-accent]="preview.accent">
+        <span>{{ (previewIndex + 1).toString().padStart(2, '0') }}</span>
+        <strong>{{ preview.name }}</strong>
+      </a>
+      }
+    </aside>
+  </article>
+  }
+</section>

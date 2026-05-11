@@ -1,0 +1,39 @@
+<!-- src/app/layout/navigation/navigation.component.html -->
+<header class="nav" [class.nav--open]="menuOpen()">
+  <a class="nav__brand" routerLink="/" fragment="hero" data-cursor="brand"
+    aria-label="Benjamin Bennewitz Portfolio Startseite" (click)="closeMenu()">
+    <span class="nav__brand-mark" aria-hidden="true">B²</span>
+    <span class="nav__brand-text">break<br>the grid</span>
+  </a>
+
+  <nav class="nav__links" [attr.aria-label]="content().menu">
+    <a routerLink="/" fragment="hero" (click)="closeMenu()">01_{{ content().home }}</a>
+    <a routerLink="/" fragment="about" (click)="closeMenu()">02_{{ content().about }}</a>
+    <a routerLink="/" fragment="projects" (click)="closeMenu()">03_{{ content().projects }}</a>
+    <a routerLink="/" fragment="process" (click)="closeMenu()">04_{{ content().process }}</a>
+    <a routerLink="/" fragment="contact" (click)="closeMenu()">05_{{ content().contact }}</a>
+  </nav>
+
+  <div class="nav__actions">
+    <button class="nav__action" type="button" [attr.aria-label]="content().theme" (click)="themeService.toggleTheme()">
+      <span class="material-symbols-outlined" aria-hidden="true">{{ themeService.isLight() ? 'dark_mode' : 'light_mode'
+        }}</span>
+    </button>
+
+    <button class="nav__action nav__language" type="button" [attr.aria-label]="content().language"
+      (click)="languageService.toggleLanguage()">
+      {{ languageService.language().toUpperCase() }}
+    </button>
+
+    <a class="nav__contact" routerLink="/" fragment="contact" (click)="closeMenu()">
+      <span>// terminal_access</span>
+    </a>
+
+    <button class="nav__burger" type="button" [attr.aria-label]="menuOpen() ? content().close : content().menu"
+      [attr.aria-expanded]="menuOpen()" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>

@@ -1,0 +1,119 @@
+/*###############################
+###
+###     contact-form.component.scss
+###     Produktion App
+###     BASED ON: Angular  21.02.0, SCSS,
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Formular
+   02   Fensterkopf
+   03   Felder
+   04   Status
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Formular
+   ========================================================================== */
+
+.contact-form {
+  display: grid;
+  gap: var(--bp-space-3);
+  border-radius: 0;
+  padding: var(--bp-space-4);
+}
+
+/* ==========================================================================
+   02   Fensterkopf
+   ========================================================================== */
+
+.contact-form::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 30px;
+  content: 'send_message.exe';
+  border-bottom: 1px solid var(--bp-color-border);
+  padding: 0.45rem 0.75rem;
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   03   Felder
+   ========================================================================== */
+
+.contact-form label:first-child {
+  margin-top: 32px;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.contact-form label span {
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  border: 1px solid var(--bp-color-border);
+  border-radius: 0;
+  padding: 0.9rem 1rem;
+  background: color-mix(in srgb, var(--bp-color-bg) 76%, transparent);
+  color: var(--bp-color-text);
+  resize: vertical;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--bp-color-accent);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent);
+}
+
+/* ==========================================================================
+   04   Status
+   ========================================================================== */
+
+.contact-form__privacy,
+.contact-form__status {
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.contact-form__status {
+  color: var(--bp-color-accent);
+  font-weight: 800;
+}
+
+.contact-form__status--error {
+  color: var(--bp-color-danger);
+}

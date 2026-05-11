@@ -1,0 +1,6 @@
+<!-- src/app/layout/custom-cursor/custom-cursor.component.html -->
+<div class="cursor" [class.cursor--interactive]="interactive()" [class.cursor--pressed]="pressed()"
+  [style.transform]="'translate3d(' + x() + 'px,' + y() + 'px,0)'" aria-hidden="true">
+  <span class="cursor__core"></span>
+  <span class="cursor__ring"></span>
+</div>

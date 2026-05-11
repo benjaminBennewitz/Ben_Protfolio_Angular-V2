@@ -1,0 +1,677 @@
+/*###############################
+###
+###     loader.component.scss
+###     Produktion App
+###     BASED ON: Angular  21.02.0, SCSS,
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Loader Basis
+   02   Hintergrund
+   03   Branding
+   04   DOS Dialoge
+   05   Terminal Status
+   06   Freigabe Button
+   07   Animationen
+   08   Responsive Anpassungen
+   09   Reduced Motion
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Loader Basis
+   ========================================================================== */
+
+.loader {
+  position: fixed;
+  z-index: var(--bp-z-loader);
+  inset: 0;
+  overflow: hidden;
+  min-height: 100dvh;
+  background: #050506;
+  color: #f8f4ea;
+  isolation: isolate;
+}
+
+.loader--leaving {
+  pointer-events: none;
+  animation: loader-exit 560ms var(--bp-ease-out) forwards;
+}
+
+/* ==========================================================================
+   02   Hintergrund
+   ========================================================================== */
+
+.loader__backdrop,
+.loader__skull,
+.loader__grid,
+.loader__noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.loader__backdrop {
+  z-index: -2;
+  background:
+    linear-gradient(105deg, rgba(167, 255, 25, 0.08), transparent 31%),
+    linear-gradient(135deg, #020203 0%, #07080a 44%, #11120f 100%);
+}
+
+.loader__skull {
+  display: none;
+}
+
+.loader__grid {
+  background-image:
+    linear-gradient(rgba(248, 244, 234, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(248, 244, 234, 0.055) 1px, transparent 1px),
+    repeating-linear-gradient(0deg, transparent 0 7px, rgba(248, 244, 234, 0.04) 7px 8px);
+  background-size: 32px 32px, 32px 32px, 100% 8px;
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 1));
+}
+
+.loader__noise {
+  opacity: 0.46;
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 13px, rgba(167, 255, 25, 0.13) 13px 15px),
+    repeating-linear-gradient(135deg, transparent 0 18px, rgba(248, 244, 234, 0.08) 18px 19px);
+  transform: rotate(-4deg) scale(1.14);
+  animation: loader-drift 900ms steps(2, end) infinite;
+}
+
+/* ==========================================================================
+   03   Branding
+   ========================================================================== */
+
+.loader__brand {
+  position: absolute;
+  top: clamp(1.2rem, 3vw, 2.4rem);
+  left: clamp(1rem, 3vw, 2.4rem);
+  display: grid;
+  gap: 0.35rem;
+  color: #f8f4ea;
+  font-family: var(--bp-font-mono);
+  text-transform: uppercase;
+}
+
+.loader__brand span {
+  font-family: var(--bp-font-display);
+  font-size: clamp(3.8rem, 12vw, 9rem);
+  line-height: 0.8;
+  letter-spacing: -0.12em;
+  text-shadow: 7px 0 0 rgba(167, 255, 25, 0.6), -5px 0 0 rgba(255, 62, 165, 0.35);
+  animation: loader-brand-glitch 720ms steps(2, end) infinite;
+}
+
+.loader__brand strong {
+  width: fit-content;
+  border: 1px solid rgba(167, 255, 25, 0.5);
+  padding: 0.26rem 0.5rem;
+  color: #a7ff19;
+  background: rgba(0, 0, 0, 0.7);
+  font-size: 0.61rem;
+  letter-spacing: 0.16em;
+}
+
+/* ==========================================================================
+   04   DOS Dialoge
+   ========================================================================== */
+
+.loader__dialog-stack {
+  position: absolute;
+  inset: 0;
+}
+
+.loader-dialog {
+  position: absolute;
+  top: var(--dialog-top);
+  left: var(--dialog-left);
+  z-index: var(--dialog-z);
+  width: min(33rem, 42vw);
+  min-width: 18rem;
+  border: 2px solid #101010;
+  background: #cfcfcf;
+  color: #070707;
+  box-shadow: 0.7rem 0.8rem 0 rgba(0, 0, 0, 0.82), 0 0 0 1px rgba(248, 244, 234, 0.2);
+  font-family: var(--bp-font-mono);
+  opacity: 0;
+  transform: translate3d(0, 1.6rem, 0) scale(0.92) rotate(var(--dialog-rotate));
+  transform-origin: 50% 24%;
+  animation: loader-dialog-open 360ms steps(4, end) forwards;
+  animation-delay: var(--dialog-delay);
+}
+
+.loader-dialog::after {
+  position: absolute;
+  content: '';
+  inset: 0;
+  opacity: 0.22;
+  background-image: repeating-linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0 1px, transparent 1px 5px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.loader-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2rem;
+  padding: 0.3rem 0.5rem;
+  background: #4f4f4f;
+  color: #f8f4ea;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.loader-dialog__controls {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.loader-dialog__controls i {
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 1px solid currentColor;
+  background: #dadada;
+}
+
+.loader-dialog__body {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  padding: 1rem 1.1rem 0.8rem;
+}
+
+.loader-dialog__icon {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 2px solid #9a9a9a;
+  border-radius: 999px;
+  background: #f6f6f6;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.loader-dialog strong {
+  display: block;
+  margin: 0 0 0.35rem;
+  color: #111;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.loader-dialog p {
+  margin: 0;
+  font-size: 0.74rem;
+  font-weight: 800;
+  line-height: 1.55;
+  text-transform: uppercase;
+}
+
+.loader-dialog__foot {
+  display: flex;
+  justify-content: center;
+  padding: 0 1rem 1rem;
+}
+
+.loader-dialog button {
+  min-width: 5.4rem;
+  border: 2px solid #f7f7f7;
+  box-shadow: inset -2px -2px 0 #777, inset 2px 2px 0 #fff;
+  padding: 0.34rem 0.9rem;
+  background: #dcdcdc;
+  color: #080808;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.loader-dialog:nth-child(3n) button {
+  background: #a7ff19;
+}
+
+.loader-dialog:nth-child(4n) button {
+  background: #ff3ea5;
+}
+
+.loader-dialog:last-child {
+  border-color: #a7ff19;
+  box-shadow: 0.7rem 0.8rem 0 rgba(0, 0, 0, 0.82), 0 0 2.4rem rgba(167, 255, 25, 0.2);
+}
+
+.loader-dialog:last-child button {
+  background: #a7ff19;
+}
+
+/* ==========================================================================
+   05   Terminal Status
+   ========================================================================== */
+
+.loader__terminal {
+  position: absolute;
+  left: clamp(1rem, 3vw, 2.4rem);
+  bottom: clamp(1rem, 3vw, 2.4rem);
+  z-index: 20;
+  width: min(29.75rem, calc(100vw - 2rem));
+  border: 1px solid rgba(167, 255, 25, 0.62);
+  padding: 0.76rem;
+  background: rgba(0, 0, 0, 0.82);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.9), 0 0 2rem rgba(167, 255, 25, 0.16);
+  color: #a7ff19;
+  font-family: var(--bp-font-mono);
+}
+
+.loader__terminal-title {
+  margin: 0 0 0.6rem;
+  color: #f8f4ea;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.loader__terminal ul {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0 0 0.85rem;
+  padding: 0;
+  font-size: 0.72rem;
+  list-style: none;
+  text-transform: uppercase;
+}
+
+.loader__terminal li {
+  opacity: 0;
+  animation: loader-log 360ms steps(2, end) forwards;
+}
+
+.loader__terminal li:nth-child(1) {
+  animation-delay: 700ms;
+}
+
+.loader__terminal li:nth-child(2) {
+  animation-delay: 1900ms;
+}
+
+.loader__terminal li:nth-child(3) {
+  animation-delay: 3300ms;
+}
+
+.loader__terminal li:nth-child(4) {
+  animation-delay: 5200ms;
+}
+
+.loader__progress {
+  display: grid;
+  grid-template-columns: repeat(26, 1fr);
+  gap: 0.17rem;
+}
+
+.loader__progress span {
+  height: 0.61rem;
+  border: 1px solid rgba(248, 244, 234, 0.22);
+  background: rgba(248, 244, 234, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.52);
+  animation: loader-cell 250ms steps(1, end) forwards;
+}
+
+@for $index from 1 through 26 {
+  .loader__progress span:nth-child(#{$index}) {
+    animation-delay: #{($index - 1) * 275ms};
+  }
+}
+
+.loader__progress--complete span {
+  animation: none;
+  border-color: rgba(167, 255, 25, 0.82);
+  background: #a7ff19;
+  box-shadow: 0 0 0.7rem rgba(167, 255, 25, 0.34);
+}
+
+/* ==========================================================================
+   06   Freigabe Button
+   ========================================================================== */
+
+.loader__ready {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.2rem, 7vh, 5rem);
+  z-index: 40;
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  width: min(42rem, calc(100vw - 2rem));
+  padding: 1rem;
+  border: 1px solid rgba(167, 255, 25, 0.72);
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.88), rgba(12, 12, 12, 0.92)),
+    repeating-linear-gradient(135deg, transparent 0 8px, rgba(167, 255, 25, 0.1) 8px 9px);
+  box-shadow: 0.5rem 0.65rem 0 rgba(0, 0, 0, 0.82), 0 0 2.2rem rgba(167, 255, 25, 0.18);
+  color: #f8f4ea;
+  font-family: var(--bp-font-mono);
+  text-align: center;
+  text-transform: uppercase;
+  transform: translate3d(-50%, 1rem, 0);
+  animation: loader-ready-in 320ms steps(4, end) forwards;
+}
+
+.loader__ready p {
+  margin: 0;
+  color: #a7ff19;
+  font-size: clamp(0.72rem, 1.3vw, 0.92rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.loader__ready button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.82rem;
+  box-sizing: border-box;
+  height: 3rem;
+  min-height: 3rem;
+  border: 2px solid #a7ff19;
+  padding: 0.7rem clamp(1.2rem, 3vw, 1.9rem);
+  overflow: visible;
+  background: #a7ff19;
+  color: #070707;
+  box-shadow: inset -3px -3px 0 rgba(0, 0, 0, 0.32), inset 3px 3px 0 rgba(255, 255, 255, 0.38);
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(0.82rem, 1.8vw, 1.05rem);
+  font-weight: 1000;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: box-shadow 160ms ease, filter 160ms ease;
+  animation: loader-nokia-buzz 3.4s steps(1, end) infinite;
+}
+
+.loader__ready button:hover,
+.loader__ready button:focus-visible {
+  filter: brightness(1.04) contrast(1.06);
+  box-shadow: inset -3px -3px 0 rgba(0, 0, 0, 0.34), inset 3px 3px 0 rgba(255, 255, 255, 0.42), 0 0 1.2rem rgba(167, 255, 25, 0.18);
+}
+
+.loader__ready button:disabled {
+  cursor: wait;
+}
+
+.loader__ready--launching button {
+  animation: none;
+}
+
+.loader__ready button span {
+  position: relative;
+  z-index: 2;
+}
+
+
+.loader__ready button:focus-visible {
+  outline: 3px solid #f8f4ea;
+  outline-offset: 4px;
+}
+
+.loader__button-asset {
+  position: absolute;
+  top: 50%;
+  right: -2.15rem;
+  z-index: 3;
+  width: auto;
+  height: clamp(4.35rem, 8.8vw, 5.95rem);
+  max-height: none;
+  margin: 0;
+  filter: drop-shadow(0.35rem 0.35rem 0 rgba(0, 0, 0, 0.58)) contrast(1.1);
+  pointer-events: none;
+  transform: translate3d(140vw, -50%, 0) rotate(16deg) scale(1.26);
+  transform-origin: 50% 70%;
+  animation: loader-asset-fly-in 620ms cubic-bezier(0.16, 0.92, 0.26, 1.24) forwards;
+}
+
+/* ==========================================================================
+   07   Animationen
+   ========================================================================== */
+
+@keyframes loader-dialog-open {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 1.6rem, 0) scale(0.92) rotate(var(--dialog-rotate));
+    filter: contrast(2) brightness(1.8);
+  }
+
+  62% {
+    opacity: 1;
+    transform: translate3d(0, -0.35rem, 0) scale(1.025) rotate(var(--dialog-rotate));
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1) rotate(var(--dialog-rotate));
+    filter: none;
+  }
+}
+
+@keyframes loader-cell {
+  0% {
+    border-color: rgba(248, 244, 234, 0.22);
+    background: rgba(248, 244, 234, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.52);
+  }
+
+  100% {
+    border-color: rgba(167, 255, 25, 0.82);
+    background: #a7ff19;
+    box-shadow: 0 0 0.7rem rgba(167, 255, 25, 0.34);
+  }
+}
+
+@keyframes loader-log {
+  from {
+    opacity: 0;
+    transform: translate3d(-0.6rem, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes loader-drift {
+  from {
+    transform: translate3d(-1.2%, 0, 0) rotate(-4deg) scale(1.14);
+  }
+
+  to {
+    transform: translate3d(1.2%, 0, 0) rotate(-4deg) scale(1.14);
+  }
+}
+
+@keyframes loader-brand-glitch {
+
+  0%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+
+  34% {
+    clip-path: inset(8% 0 64% 0);
+  }
+
+  66% {
+    clip-path: inset(58% 0 12% 0);
+  }
+}
+
+@keyframes loader-ready-in {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes loader-nokia-buzz {
+
+  0%,
+  72%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  73% {
+    transform: translate3d(-1px, 1px, 0) rotate(-0.6deg);
+  }
+
+  74% {
+    transform: translate3d(2px, -1px, 0) rotate(0.7deg);
+  }
+
+  75% {
+    transform: translate3d(-2px, 0, 0) rotate(-0.7deg);
+  }
+
+  76% {
+    transform: translate3d(2px, 1px, 0) rotate(0.5deg);
+  }
+
+  77% {
+    transform: translate3d(-1px, -1px, 0) rotate(-0.4deg);
+  }
+
+  79% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  84% {
+    transform: translate3d(1px, 0, 0) rotate(0.4deg);
+  }
+
+  85% {
+    transform: translate3d(-1px, 1px, 0) rotate(-0.4deg);
+  }
+
+  86% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@keyframes loader-asset-fly-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(140vw, -50%, 0) rotate(18deg) scale(1.26);
+  }
+
+  72% {
+    opacity: 1;
+    transform: translate3d(-0.35rem, -50%, 0) rotate(-5deg) scale(1.21);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(12px, -50%, 0) rotate(-2deg) scale(1.18);
+  }
+}
+
+@keyframes loader-exit {
+  to {
+    opacity: 0;
+    transform: scale(1.035);
+    filter: blur(0.45rem) contrast(1.4);
+  }
+}
+
+/* ==========================================================================
+   08   Responsive Anpassungen
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .loader-dialog {
+    left: clamp(1rem, var(--dialog-left), 34vw);
+    width: min(28rem, 76vw);
+  }
+
+  .loader__skull {
+    width: 82vw;
+    opacity: 0.24;
+  }
+}
+
+@media (max-width: 640px) {
+  .loader__brand span {
+    font-size: clamp(3rem, 20vw, 6rem);
+  }
+
+  .loader-dialog {
+    left: 50%;
+    width: min(26rem, calc(100vw - 2rem));
+    min-width: 0;
+    translate: -50% 0;
+    transform: translate3d(0, 1.6rem, 0) scale(0.92) rotate(var(--dialog-rotate));
+  }
+
+  .loader__terminal {
+    left: 1rem;
+    bottom: 1rem;
+  }
+
+  .loader__ready {
+    bottom: 1rem;
+  }
+
+  .loader__button-asset {
+    right: -3.65rem;
+    height: clamp(3.9rem, 18vw, 5.1rem);
+  }
+}
+
+/* ==========================================================================
+   09   Reduced Motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .loader,
+  .loader__noise,
+  .loader__brand span,
+  .loader-dialog,
+  .loader__terminal li,
+  .loader__progress span,
+  .loader__ready,
+  .loader__ready button,
+  .loader__button-asset {
+    animation: none;
+  }
+
+  .loader-dialog,
+  .loader__terminal li {
+    opacity: 1;
+  }
+
+  .loader__ready {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  .loader__button-asset {
+    opacity: 1;
+    transform: translate3d(12px, -50%, 0) rotate(-2deg) scale(1.18);
+  }
+}

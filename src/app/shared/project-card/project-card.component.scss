@@ -1,0 +1,97 @@
+/*###############################
+###
+###     project-card.component.scss
+###     Produktion App
+###     BASED ON: Angular  21.02.0, SCSS,
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Karte
+   02   Hover
+   03   Body
+   04   Text
+   05   Link
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Karte
+   ========================================================================== */
+
+.project-card {
+  display: grid;
+  gap: var(--bp-space-4);
+  height: 100%;
+  padding: var(--bp-space-3);
+  transition: transform 220ms var(--bp-ease-out), border-color 220ms ease, box-shadow 220ms ease;
+}
+
+/* ==========================================================================
+   02   Hover
+   ========================================================================== */
+
+.project-card:hover {
+  transform: translateY(-8px) rotate(-0.6deg);
+  border-color: var(--bp-color-border-strong);
+  box-shadow: 0 35px 100px var(--bp-color-shadow);
+}
+
+/* ==========================================================================
+   03   Body
+   ========================================================================== */
+
+.project-card__body {
+  display: grid;
+  gap: var(--bp-space-3);
+  padding: 0 var(--bp-space-2) var(--bp-space-2);
+}
+
+/* ==========================================================================
+   04   Text
+   ========================================================================== */
+
+.project-card__kicker {
+  margin: 0;
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.project-card h3 {
+  margin: 0;
+  font-family: var(--bp-font-display);
+  font-size: clamp(2rem, 4.6vw, 4.8rem);
+  line-height: 0.9;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+}
+
+.project-card p:not(.project-card__kicker) {
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  line-height: 1.68;
+}
+
+/* ==========================================================================
+   05   Link
+   ========================================================================== */
+
+.project-card__link {
+  justify-self: start;
+  margin-top: 0.35rem;
+}

@@ -5,7 +5,7 @@
  * @description Rendert Kontakt, interne Links und Projektlinks aus übersetzten Inhalten.
  */
 
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AchievementService } from '../../core/services/achievement.service';
 import { LanguageService } from '../../core/services/language.service';
@@ -27,18 +27,8 @@ export class FooterComponent {
 
   /** Aktueller Footer-Inhalt. */
   readonly footer = computed(() => this.languageService.content().footer);
-
-  /** Sichtbarkeit des kleinen Footer-Dialogfensters. */
-  readonly isFooterDialogVisible = signal<boolean>(true);
-
   /** Aktuelles Jahr für Copyright-Ausgabe. */
   readonly year = new Date().getFullYear();
-
-  /** Entfernt das Footer-Dialogfenster aus dem Footer. */
-  closeFooterDialog(): void {
-    this.isFooterDialogVisible.set(false);
-  }
-
   /** Schaltet die versteckte Fülli-Trophäe frei. */
   unlockPetAchievement(): void {
     this.achievementService.unlock('loyal-companion');

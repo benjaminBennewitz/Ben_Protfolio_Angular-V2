@@ -95,7 +95,7 @@ const PANEL_TEXTS: Record<'de' | 'en', AccessibilityPanelTexts> = {
     motionTitle: 'Animationen',
     comfortTitle: 'Oberfläche',
     contrastTitle: 'Kontrast',
-    colorTitle: 'Farbenhilfe',
+    colorTitle: 'Farbseh-Anpassungen',
     storageHint: 'Die Auswahl wird nur lokal im Browser gespeichert.',
     motion: {
       full: 'Voll animiert',
@@ -112,10 +112,10 @@ const PANEL_TEXTS: Record<'de' | 'en', AccessibilityPanelTexts> = {
     },
     color: {
       default: 'Standard',
-      deuteranopia: 'Grün-Rot robust',
-      protanopia: 'Rot robust',
-      tritanopia: 'Blau-Gelb robust',
-      achromatopsia: 'Ohne Farbcodierung',
+      deuteranopia: 'Deuteranopie / Grünblindheit',
+      protanopia: 'Protanopie / Rotblindheit',
+      tritanopia: 'Tritanopie / Blaublindheit',
+      achromatopsia: 'Achromatopsie / Schwarz-Weiß',
     },
   },
   en: {
@@ -127,7 +127,7 @@ const PANEL_TEXTS: Record<'de' | 'en', AccessibilityPanelTexts> = {
     motionTitle: 'Motion',
     comfortTitle: 'Interface',
     contrastTitle: 'Contrast',
-    colorTitle: 'Color help',
+    colorTitle: 'Color vision modes',
     storageHint: 'The selection is stored locally in this browser only.',
     motion: {
       full: 'Full motion',
@@ -144,10 +144,10 @@ const PANEL_TEXTS: Record<'de' | 'en', AccessibilityPanelTexts> = {
     },
     color: {
       default: 'Default',
-      deuteranopia: 'Green-red robust',
-      protanopia: 'Red robust',
-      tritanopia: 'Blue-yellow robust',
-      achromatopsia: 'No color coding',
+      deuteranopia: 'Deuteranopia / green blindness',
+      protanopia: 'Protanopia / red blindness',
+      tritanopia: 'Tritanopia / blue blindness',
+      achromatopsia: 'Achromatopsia / grayscale',
     },
   },
 };

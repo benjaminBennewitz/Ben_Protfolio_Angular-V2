@@ -142,24 +142,24 @@
 }
 
 :root[data-color-vision='deuteranopia'] {
-   --bp-color-accent: #2dc4ff;
-   --bp-color-accent-2: #ffb000;
-   --bp-color-accent-3: #7a5cff;
-   --bp-color-info: #2dc4ff;
+   --bp-color-accent: #0072b2;
+   --bp-color-accent-2: #e69f00;
+   --bp-color-accent-3: #cc79a7;
+   --bp-color-info: #0072b2;
 }
 
 :root[data-color-vision='protanopia'] {
-   --bp-color-accent: #12b8ff;
-   --bp-color-accent-2: #ffd400;
-   --bp-color-accent-3: #7c6bff;
-   --bp-color-info: #12b8ff;
+   --bp-color-accent: #009e73;
+   --bp-color-accent-2: #f0e442;
+   --bp-color-accent-3: #56b4e9;
+   --bp-color-info: #009e73;
 }
 
 :root[data-color-vision='tritanopia'] {
-   --bp-color-accent: #19df7f;
-   --bp-color-accent-2: #ff6a5b;
-   --bp-color-accent-3: #ef4fb2;
-   --bp-color-info: #19df7f;
+   --bp-color-accent: #d55e00;
+   --bp-color-accent-2: #0072b2;
+   --bp-color-accent-3: #cc79a7;
+   --bp-color-info: #d55e00;
 }
 
 :root[data-color-vision='achromatopsia'] {

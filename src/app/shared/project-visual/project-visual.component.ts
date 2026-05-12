@@ -158,8 +158,8 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
   }
 
   /** Liefert das Status-Asset für die Asana-Preview. */
-  taskStatusSrc(): string {
-    return this.taskStatusSaved ? 'assets/images/project-stack/planet-saved.webp' : 'assets/images/project-stack/messy-batch.webp';
+  taskStatusSrc(): string | null {
+    return this.taskStatusSaved ? 'assets/images/project-stack/planet-saved.webp' : null;
   }
 
   /** Gibt an, ob das Auge geklickt werden darf. */

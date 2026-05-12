@@ -55,6 +55,18 @@ interface Project2Obstacle {
   readonly height: number;
 }
 
+/** Scroll-Messwerte für das kontrollierte Panel-Snapping. */
+interface ProjectSnapMetrics {
+  /** Dokumentposition des Projekt-Stacks. */
+  readonly start: number;
+  /** Dokumentposition des Projekt-Stack-Endes. */
+  readonly end: number;
+  /** Höhe eines Fullscreen-Projektpanels. */
+  readonly panelHeight: number;
+  /** Aktuelle Scrollposition des Fensters. */
+  readonly scrollY: number;
+}
+
 /** Scrollbasierte Fullscreen-Projektbühne mit seitlicher Projektvorschau. */
 @Component({
   selector: 'bp-project-stack',
@@ -78,6 +90,21 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Achievement-Service für versteckte Projekt-Trophäen. */
   private readonly achievementService = inject(AchievementService);
+
+  /** Host-Element für einen passiven-unabhängigen Wheel-Listener. */
+  private readonly hostRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  /** Gebundener Wheel-Handler für kontrolliertes Projekt-Snapping. */
+  private readonly projectWheelHandler = (event: WheelEvent): void => this.onProjectWheel(event);
+
+  /** Zeitpunkt, bis zu dem weitere Wheel-Impulse kurz geblockt werden. */
+  private projectWheelLockedUntil = 0;
+
+  /** Mindeststärke eines Wheel-Impulses, bevor die Panel-Normalisierung greift. */
+  private readonly projectWheelThreshold = 24;
+
+  /** Kurze Sperre gegen mehrfache Panel-Sprünge bei starkem Mausrad. */
+  private readonly projectWheelCooldownMs = 660;
 
   /** Eyebrow der Projektsektion. */
   @Input() eyebrow = '';
@@ -192,17 +219,19 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     { mode: 'pause', delayMs: 1400 },
   ];
 
-  /** Startet die passive Projekt-2-Erkennung. */
+  /** Startet die passive Projekt-2-Erkennung und den Projekt-Wheel-Guard. */
   ngAfterViewInit(): void {
     this.resetProject2Items();
+    this.hostRef.nativeElement.addEventListener('wheel', this.projectWheelHandler, { passive: false });
     queueMicrotask(() => {
       this.observeProject2Panel();
       this.observeProject5Typewriter();
     });
   }
 
-  /** Stoppt Animation und Beobachter. */
+  /** Stoppt Animation, Beobachter und Wheel-Guard. */
   ngOnDestroy(): void {
+    this.hostRef.nativeElement.removeEventListener('wheel', this.projectWheelHandler);
     this.pauseProject2Physics();
     this.clearProject2OneUpTimers();
     this.clearProject3SuccessTimer();
@@ -217,6 +246,97 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   @HostListener('window:resize')
   onResize(): void {
     this.resetProject2Items();
+  }
+
+  /** Normalisiert große Mausrad-Sprünge innerhalb der Fullscreen-Projekte. */
+  private onProjectWheel(event: WheelEvent): void {
+    const deltaY = this.normalizedProjectWheelDelta(event);
+
+    if (!this.shouldHandleProjectWheel(event, deltaY)) {
+      return;
+    }
+
+    const metrics = this.projectSnapMetrics();
+
+    if (!metrics) {
+      return;
+    }
+
+    const now = performance.now();
+
+    if (now < this.projectWheelLockedUntil) {
+      event.preventDefault();
+      return;
+    }
+
+    const currentIndex = this.currentProjectPanelIndex(metrics);
+    const direction = deltaY > 0 ? 1 : -1;
+    const targetIndex = currentIndex + direction;
+
+    if (targetIndex < 0 || targetIndex >= this.projects.length) {
+      return;
+    }
+
+    event.preventDefault();
+    this.projectWheelLockedUntil = now + this.projectWheelCooldownMs;
+    window.scrollTo({
+      top: metrics.start + targetIndex * metrics.panelHeight,
+      behavior: this.accessibility.reducesMotion() ? 'auto' : 'smooth',
+    });
+  }
+
+  /** Prüft, ob ein Wheel-Impuls als Projektpanel-Wechsel behandelt werden soll. */
+  private shouldHandleProjectWheel(event: WheelEvent, deltaY: number): boolean {
+    if (event.defaultPrevented || event.ctrlKey || this.accessibility.reducesMotion() || window.innerWidth <= 1120) {
+      return false;
+    }
+
+    if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
+      return false;
+    }
+
+    return Math.abs(deltaY) >= this.projectWheelThreshold;
+  }
+
+  /** Rechnet Wheel-Delta-Modi in Pixel um. */
+  private normalizedProjectWheelDelta(event: WheelEvent): number {
+    if (event.deltaMode === WheelEvent.DOM_DELTA_LINE) {
+      return event.deltaY * 16;
+    }
+
+    if (event.deltaMode === WheelEvent.DOM_DELTA_PAGE) {
+      return event.deltaY * window.innerHeight;
+    }
+
+    return event.deltaY;
+  }
+
+  /** Liefert die Dokumentpositionen des aktuellen Projekt-Stacks. */
+  private projectSnapMetrics(): ProjectSnapMetrics | null {
+    const stack = this.hostRef.nativeElement.querySelector<HTMLElement>('.project-stack');
+    const firstPanel = this.projectPanels?.first?.nativeElement;
+
+    if (!stack || !firstPanel || this.projects.length <= 0) {
+      return null;
+    }
+
+    const start = stack.getBoundingClientRect().top + window.scrollY;
+    const panelHeight = Math.max(1, firstPanel.offsetHeight || window.innerHeight);
+    const end = start + panelHeight * this.projects.length;
+    const scrollY = window.scrollY;
+
+    if (scrollY < start - 2 || scrollY > end - 2) {
+      return null;
+    }
+
+    return { start, end, panelHeight, scrollY };
+  }
+
+  /** Ermittelt das aktuell dominierende Projektpanel. */
+  private currentProjectPanelIndex(metrics: ProjectSnapMetrics): number {
+    const rawIndex = Math.round((metrics.scrollY - metrics.start) / metrics.panelHeight);
+
+    return Math.min(this.projects.length - 1, Math.max(0, rawIndex));
   }
 
   /** Liefert alle anderen Projekte für die rechte Vorschauleiste. */

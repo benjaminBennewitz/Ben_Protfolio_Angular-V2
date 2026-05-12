@@ -52,9 +52,9 @@
     }
     }
 
-    @if (showTaskStatus) {
+    @if (showTaskStatus && taskStatusSrc(); as statusAsset) {
     <span class="visual__task-status" [class.is-saved]="taskStatusSaved" aria-hidden="true">
-      <img [src]="taskStatusSrc()" alt="" />
+      <img [src]="statusAsset" alt="" />
     </span>
     }
 

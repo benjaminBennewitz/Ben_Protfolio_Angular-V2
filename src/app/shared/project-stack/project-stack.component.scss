@@ -42,8 +42,11 @@
 .project-stack {
   --stack-accent: var(--bp-color-accent);
   position: relative;
-  min-height: calc(100svh * var(--project-total));
+  min-height: calc(100vh * var(--project-total));
+  min-height: calc(100dvh * var(--project-total));
   scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  overscroll-behavior: contain;
 }
 
 /* ==========================================================================
@@ -59,10 +62,15 @@
   align-items: center;
   gap: var(--bp-space-4);
   width: 100vw;
-  min-height: 100svh;
-  padding: calc(var(--bp-header-height) + var(--bp-space-4)) var(--bp-section-px) var(--bp-space-4);
+  height: 100vh;
+  min-height: 100vh;
+  height: 100dvh;
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  scroll-margin-top: 0;
+  padding: calc(var(--bp-header-height) + var(--bp-space-3)) var(--bp-section-px) var(--bp-space-3);
   overflow: hidden;
-  align-items: start;
   border-top: 1px solid var(--bp-color-border);
   background: color-mix(in srgb, var(--bp-color-bg) 88%, black 12%);
   isolation: isolate;
@@ -88,6 +96,22 @@
 .project-stack__panel[data-project='blutanalyse'] {
   --stack-accent: #ff4d63;
   --bp-color-accent: #ff4d63;
+}
+
+:root[data-color-vision='achromatopsia'] .project-stack__panel[data-project='blutanalyse'],
+:host-context(:root[data-color-vision='achromatopsia']) .project-stack__panel[data-project='blutanalyse'],
+:host-context([data-color-vision='achromatopsia']) .project-stack__panel[data-project='blutanalyse'] {
+  --stack-accent: var(--bp-color-accent);
+}
+
+:root[data-color-vision='achromatopsia'] .project-stack__panel[data-project='blutanalyse'],
+:host-context([data-color-vision='achromatopsia']) .project-stack__panel[data-project='blutanalyse'] {
+  --bp-color-accent: #f0f0f0;
+}
+
+:root[data-theme='light'][data-color-vision='achromatopsia'] .project-stack__panel[data-project='blutanalyse'],
+:host-context([data-theme='light'][data-color-vision='achromatopsia']) .project-stack__panel[data-project='blutanalyse'] {
+  --bp-color-accent: #101010;
 }
 
 
@@ -128,7 +152,7 @@
 .project-stack__decor {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 8;
   pointer-events: none;
 }
 
@@ -150,13 +174,13 @@
 .project-stack__decor-asset--shocked {
   left: calc(50% - 150px);
   bottom: 0;
-  z-index: 2;
+  z-index: 9;
   width: clamp(150px, 17vw, 250px);
   transform: translateX(-50%);
 }
 
 .project-stack__panel--intro .project-stack__decor-asset {
-  opacity: 0.86;
+  opacity: 1;
 }
 
 /* ==========================================================================
@@ -175,12 +199,13 @@
 
 .project-stack__section-title {
   max-width: 760px;
-  margin: 0;
+  margin: 0 0 var(--bp-space-3);
   font-family: var(--bp-font-display);
   font-size: clamp(2.35rem, 4.15vw, 4.95rem);
   line-height: 0.94;
   letter-spacing: -0.065em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45), 0 0 30px rgba(0, 0, 0, 0.42);
 }
 
@@ -207,24 +232,40 @@
 }
 
 .project-stack__copy h3 {
-  max-width: 560px;
+  max-width: 620px;
   margin: 0;
   font-family: var(--bp-font-display);
-  font-size: clamp(2.7rem, 5vw, 6.2rem);
-  line-height: 0.84;
-  letter-spacing: -0.095em;
+  font-size: clamp(2.25rem, 4.35vw, 5.55rem);
+  line-height: 0.9;
+  letter-spacing: -0.075em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
+  hyphens: auto;
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45), 0 0 30px rgba(0, 0, 0, 0.42), 0.03em 0 color-mix(in srgb, var(--stack-accent) 72%, transparent), -0.02em 0 var(--bp-color-accent-2);
 }
 
 .project-stack__kicker {
-  margin: var(--bp-space-2) 0 0;
+  max-width: 620px;
+  margin: 0 0 var(--bp-space-2);
   color: var(--stack-accent);
   font-family: var(--bp-font-mono);
   font-size: 0.8rem;
   font-weight: 950;
   letter-spacing: 0.14em;
+  line-height: 1.32;
   text-transform: uppercase;
+}
+
+.project-stack__kicker--headline {
+  max-width: 620px;
+  margin-bottom: var(--bp-space-3);
+  font-family: var(--bp-font-display);
+  font-size: clamp(2.05rem, 3.5vw, 4.6rem);
+  line-height: 0.92;
+  letter-spacing: -0.07em;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45), 0 0 30px rgba(0, 0, 0, 0.42), 0.026em 0 color-mix(in srgb, var(--stack-accent) 70%, transparent);
 }
 
 .project-stack__summary {
@@ -262,11 +303,13 @@
 .project-stack__visual {
   position: relative;
   z-index: 1;
+  align-self: start;
   display: block;
   width: 100%;
   min-width: 0;
+  margin-top: clamp(0.75rem, 2.2vh, 1.6rem);
   margin-left: clamp(0.3rem, 1vw, 1rem);
-  transform: rotate(-1.5deg) translateY(0.2rem);
+  transform: rotate(-1.5deg) translateY(0);
 }
 
 .project-stack__visual bp-project-visual {
@@ -276,7 +319,7 @@
 
 
 .project-stack__panel--intro .project-stack__visual {
-  margin-top: clamp(1.8rem, 3vw, 3.2rem);
+  margin-top: clamp(0.75rem, 2.2vh, 1.6rem);
 }
 
 
@@ -401,7 +444,7 @@
   --paper-land-y: calc(clamp(-102px, -6.4vw, -72px) - 70px);
   --paper-arc-lift: clamp(118px, 13vw, 162px);
   position: absolute;
-  left: clamp(1.2rem, 5vw, 5.8rem);
+  left: calc(clamp(1.2rem, 5vw, 5.8rem) + 350px);
   bottom: clamp(5rem, 14vh, 8.6rem);
   z-index: 5;
   width: clamp(310px, 34vw, 470px);
@@ -715,6 +758,8 @@
   }
 
   .project-stack__visual {
+    align-self: auto;
+    margin-top: 1.25rem;
     margin-left: 0;
     transform: none;
   }

@@ -24,6 +24,7 @@
    03   Track
    04   Farbvarianten
    05   Animationen
+   06   Accessibility-Modus
    ========================================================================== */
 
 /* ==========================================================================
@@ -37,6 +38,7 @@
   overflow: hidden;
   border-block: 1px solid var(--bp-color-border);
   background: color-mix(in srgb, var(--bp-color-surface-solid) 70%, transparent);
+  user-select: none;
 }
 
 /* ==========================================================================
@@ -71,7 +73,7 @@
 .marquee__track {
   display: flex;
   width: max-content;
-  animation: marquee-run 28s linear infinite;
+  animation: marquee-run 46s linear infinite;
 }
 
 .marquee__track span {
@@ -108,4 +110,33 @@
   to {
     transform: translate3d(-50%, 0, 0);
   }
+}
+
+/* ==========================================================================
+   06   Accessibility-Modus
+   ========================================================================== */
+
+:host-context(:root[data-motion='reduced']) .marquee,
+:host-context(:root[data-motion='off']) .marquee {
+  overflow-x: auto;
+  overflow-y: hidden;
+  cursor: grab;
+  scrollbar-width: thin;
+  touch-action: pan-y;
+}
+
+:host-context(:root[data-motion='reduced']) .marquee.is-dragging,
+:host-context(:root[data-motion='off']) .marquee.is-dragging {
+  cursor: grabbing;
+}
+
+:host-context(:root[data-motion='reduced']) .marquee__track,
+:host-context(:root[data-motion='off']) .marquee__track {
+  animation: none;
+  transform: none;
+}
+
+:host-context(:root[data-motion='reduced']) .marquee__track span,
+:host-context(:root[data-motion='off']) .marquee__track span {
+  min-height: 72px;
 }

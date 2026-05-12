@@ -43,6 +43,7 @@
   cursor: pointer;
   isolation: isolate;
   scroll-snap-align: start;
+  scroll-snap-stop: normal;
 }
 
 /* ==========================================================================
@@ -183,10 +184,17 @@
   transform: rotate(1.5deg);
 }
 
-.chaos-cta__dialog strong {
-  display: block;
+.chaos-cta__dialog-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
   border-bottom: 1px solid #111111;
   padding-bottom: 0.4rem;
+}
+
+.chaos-cta__dialog strong {
+  display: block;
   font-size: 0.74rem;
 }
 
@@ -204,6 +212,76 @@
   color: #111111;
   font-family: var(--bp-font-mono);
   font-weight: 900;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
+}
+
+.chaos-cta__dialog-bar button {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+}
+
+.chaos-cta__dialog > button:hover,
+.chaos-cta__dialog > button:focus-visible {
+  background: var(--bp-color-accent);
+  color: #111111;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.36);
+  transform: translate(-1px, -1px);
+}
+
+:root[data-theme='light'] .chaos-cta__dialog > button:hover,
+:root[data-theme='light'] .chaos-cta__dialog > button:focus-visible,
+:host-context(:root[data-theme='light']) .chaos-cta__dialog > button:hover,
+:host-context(:root[data-theme='light']) .chaos-cta__dialog > button:focus-visible {
+  color: #f6f0e8;
+}
+
+.chaos-cta__dialog-bar button:hover,
+.chaos-cta__dialog-bar button:focus-visible {
+  background: #ff2b2b;
+  color: #ffffff;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.36);
+  transform: translate(-1px, -1px);
+}
+
+
+:root[data-color-vision='achromatopsia'] .chaos-cta__block,
+:host-context(:root[data-color-vision='achromatopsia']) .chaos-cta__block {
+  border-color: #111111;
+  background: #f4efe5;
+  color: #111111;
+}
+
+:root[data-color-vision='achromatopsia'] .chaos-cta__block:nth-child(3),
+:host-context(:root[data-color-vision='achromatopsia']) .chaos-cta__block:nth-child(3) {
+  border-color: #f4efe5;
+  background: #111111;
+  color: #f4efe5;
+}
+
+:root[data-color-vision='achromatopsia'] .chaos-cta__block--icon,
+:host-context(:root[data-color-vision='achromatopsia']) .chaos-cta__block--icon {
+  background: #2c2c2c;
+  color: #f4efe5;
+}
+
+:root[data-color-vision='achromatopsia'] .chaos-cta__block:nth-child(2),
+:root[data-color-vision='achromatopsia'] .chaos-cta__block:nth-child(4),
+:host-context([data-color-vision='achromatopsia']) .chaos-cta__block:nth-child(2),
+:host-context([data-color-vision='achromatopsia']) .chaos-cta__block:nth-child(4) {
+  border-color: #111111;
+  background: #f4efe5;
+  color: #111111;
+}
+
+:root[data-color-vision='achromatopsia'] .chaos-cta__block--icon,
+:host-context([data-color-vision='achromatopsia']) .chaos-cta__block--icon {
+  border-color: #f4efe5;
+  background: #111111;
+  color: #f4efe5;
 }
 
 /* ==========================================================================

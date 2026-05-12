@@ -23,15 +23,20 @@
    02   Footer Layout
    03   Branding
    04   Link-Bereich
-   05   MS-DOS Dialog
-   06   Footer Asset
-   07   Footer Bottom
-   08   Responsive
+   05   Footer Asset
+   06   Footer Bottom
+   07   Responsive
    ================================================================================================= */
 
 /* =================================================================================================
    01   Footer Basis
    ================================================================================================= */
+
+:host {
+  display: block;
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
 
 .footer {
   position: relative;
@@ -39,10 +44,7 @@
   padding: var(--bp-space-8) var(--bp-section-px) var(--bp-space-4);
   overflow: hidden;
   border-top: 1px solid var(--bp-color-border);
-  background:
-    radial-gradient(circle at 86% 22%, color-mix(in srgb, var(--bp-color-accent) 15%, transparent), transparent 26%),
-    radial-gradient(circle at 14% 72%, color-mix(in srgb, var(--bp-color-accent-2) 12%, transparent), transparent 24%),
-    linear-gradient(135deg, color-mix(in srgb, var(--bp-color-bg) 92%, black 8%), color-mix(in srgb, var(--bp-color-surface-solid) 82%, black 18%));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bp-color-bg) 92%, black 8%), color-mix(in srgb, var(--bp-color-surface-solid) 82%, black 18%));
 }
 
 .footer::before,
@@ -122,7 +124,7 @@
   max-width: none;
   justify-self: stretch;
   border: 1px solid var(--bp-color-border-strong);
-  padding: var(--bp-space-5) var(--bp-space-5) calc(var(--bp-space-6) + 96px);
+  padding: var(--bp-space-5);
   background: color-mix(in srgb, var(--bp-color-bg) 72%, transparent);
   box-shadow: 12px 12px 0 color-mix(in srgb, var(--bp-color-accent) 18%, transparent), 0 34px 96px var(--bp-color-shadow);
   backdrop-filter: blur(10px);
@@ -191,36 +193,7 @@
 }
 
 /* =================================================================================================
-   05   MS-DOS Dialog
-   ================================================================================================= */
-
-.footer__dos {
-  position: absolute;
-  right: var(--bp-space-4);
-  bottom: var(--bp-space-4);
-  width: min(360px, calc(100% - var(--bp-space-8)));
-  transform: rotate(-1deg);
-}
-
-.footer__dos .bp-dos-window__bar button {
-  cursor: pointer;
-  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
-}
-
-.footer__dos .bp-dos-window__bar button:hover,
-.footer__dos .bp-dos-window__bar button:focus-visible {
-  background: #ff2b2b;
-  color: #ffffff;
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.36);
-  transform: translate(-1px, -1px);
-}
-
-.footer__dos .bp-dos-window__body {
-  min-height: auto;
-}
-
-/* =================================================================================================
-   06   Footer Asset
+   05   Footer Asset
    ================================================================================================= */
 
 .footer__title-wrap {
@@ -302,18 +275,18 @@
 
 :root:not([data-theme='light']) .footer__pet-trigger img,
 :host-context(:root:not([data-theme='light'])) .footer__pet-trigger img {
-  filter: invert(1) contrast(1.08) drop-shadow(0 14px 32px rgba(0, 0, 0, 0.38));
+  filter: none !important;
 }
 
 :root:not([data-theme='light']) .footer__pet-trigger:hover img,
 :root:not([data-theme='light']) .footer__pet-trigger:focus-visible img,
 :host-context(:root:not([data-theme='light'])) .footer__pet-trigger:hover img,
 :host-context(:root:not([data-theme='light'])) .footer__pet-trigger:focus-visible img {
-  filter: invert(1) contrast(1.08) drop-shadow(0 16px 34px color-mix(in srgb, var(--bp-color-accent) 34%, rgba(0, 0, 0, 0.4)));
+  filter: drop-shadow(0 16px 34px color-mix(in srgb, var(--bp-color-accent) 34%, rgba(0, 0, 0, 0.4)));
 }
 
 /* =================================================================================================
-   07   Footer Bottom
+   06   Footer Bottom
    ================================================================================================= */
 
 .footer__bottom {
@@ -330,7 +303,7 @@
 }
 
 /* =================================================================================================
-   08   Responsive
+   07   Responsive
    ================================================================================================= */
 
 @media (max-width: 980px) {
@@ -347,7 +320,7 @@
 
   .footer__links {
     min-height: 0;
-    padding-bottom: calc(var(--bp-space-6) + 110px);
+    padding-bottom: var(--bp-space-5);
   }
 
   .footer__pet-trigger {
@@ -362,7 +335,7 @@
   }
 
   .footer__links {
-    padding: var(--bp-space-4) var(--bp-space-4) calc(var(--bp-space-6) + 130px);
+    padding: var(--bp-space-4);
   }
 
   .footer__terminal-head,
@@ -371,10 +344,6 @@
     align-items: flex-start;
   }
 
-  .footer__dos {
-    right: var(--bp-space-3);
-    width: calc(100% - var(--bp-space-6));
-  }
 
   .footer__pet-trigger {
     left: 82%;

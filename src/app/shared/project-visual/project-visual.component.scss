@@ -89,6 +89,15 @@
   --visual-accent: #ff4d63;
 }
 
+:root[data-color-vision='achromatopsia'] .visual[data-project='blutanalyse'],
+:root[data-color-vision='achromatopsia'] .visual-shell[data-project='blutanalyse'],
+:host-context(:root[data-color-vision='achromatopsia']) .visual[data-project='blutanalyse'],
+:host-context(:root[data-color-vision='achromatopsia']) .visual-shell[data-project='blutanalyse'],
+:host-context([data-color-vision='achromatopsia']) .visual[data-project='blutanalyse'],
+:host-context([data-color-vision='achromatopsia']) .visual-shell[data-project='blutanalyse'] {
+  --visual-accent: var(--bp-color-accent);
+}
+
 .visual--large {
   min-height: clamp(340px, 54vh, 600px);
 }
@@ -718,6 +727,20 @@
 
 .visual__blood-status-list li.is-active {
   opacity: 1;
+  color: var(--visual-accent);
+}
+
+:root[data-color-vision='achromatopsia'] .visual[data-project='blutanalyse'] .visual__blood-progress span.is-active,
+:host-context([data-color-vision='achromatopsia']) .visual[data-project='blutanalyse'] .visual__blood-progress span.is-active {
+  background: linear-gradient(90deg, var(--visual-accent), color-mix(in srgb, var(--visual-accent) 54%, #111111 46%));
+}
+
+:root[data-color-vision='achromatopsia'] .visual[data-project='blutanalyse'] .visual__blood-analysis-head strong,
+:root[data-color-vision='achromatopsia'] .visual[data-project='blutanalyse'] .visual__blood-data-grid dd,
+:root[data-color-vision='achromatopsia'] .visual[data-project='blutanalyse'] .visual__blood-status-list li.is-active,
+:host-context([data-color-vision='achromatopsia']) .visual[data-project='blutanalyse'] .visual__blood-analysis-head strong,
+:host-context([data-color-vision='achromatopsia']) .visual[data-project='blutanalyse'] .visual__blood-data-grid dd,
+:host-context([data-color-vision='achromatopsia']) .visual[data-project='blutanalyse'] .visual__blood-status-list li.is-active {
   color: var(--visual-accent);
 }
 

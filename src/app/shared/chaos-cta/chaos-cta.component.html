@@ -24,9 +24,14 @@
     }
   </div>
 
-  <aside class="chaos-cta__dialog" aria-hidden="true">
-    <strong>HEY_THERE.DLL</strong>
+  @if (isDialogVisible()) {
+  <aside class="chaos-cta__dialog" aria-label="HEY_THERE.DLL Dialog">
+    <div class="chaos-cta__dialog-bar">
+      <strong>HEY_THERE.DLL</strong>
+      <button type="button" aria-label="HEY_THERE.DLL schließen" (click)="closeDialog($event)">×</button>
+    </div>
     <span>move cursor</span>
-    <button type="button" tabindex="-1">OK</button>
+    <button type="button" (click)="closeDialog($event)">OK</button>
   </aside>
+  }
 </section>

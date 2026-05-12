@@ -38,6 +38,17 @@
   --bp-color-accent: #ff4d63;
 }
 
+:root[data-color-vision='achromatopsia'] .project-detail[data-project='blutanalyse'],
+:host-context(:root[data-color-vision='achromatopsia']) .project-detail[data-project='blutanalyse'],
+:host-context([data-color-vision='achromatopsia']) .project-detail[data-project='blutanalyse'] {
+  --bp-color-accent: #f0f0f0;
+}
+
+:root[data-theme='light'][data-color-vision='achromatopsia'] .project-detail[data-project='blutanalyse'],
+:host-context([data-theme='light'][data-color-vision='achromatopsia']) .project-detail[data-project='blutanalyse'] {
+  --bp-color-accent: #101010;
+}
+
 /* ==========================================================================
    02   Hero
    ========================================================================== */
@@ -58,7 +69,20 @@
    ========================================================================== */
 
 .project-detail__back {
-  margin-bottom: var(--bp-space-4);
+  margin-bottom: var(--bp-space-5);
+}
+
+.project-detail__hero .bp-eyebrow {
+  display: flex;
+  margin-top: 0;
+  margin-bottom: var(--bp-space-3);
+}
+
+.project-detail__hero .bp-title {
+  max-width: 12ch;
+  font-size: clamp(2.55rem, 7vw, 7rem);
+  line-height: 0.88;
+  overflow-wrap: anywhere;
 }
 
 /* ==========================================================================
@@ -172,7 +196,7 @@
 
 .project-detail__highlight-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: var(--bp-space-3);
   margin-top: var(--bp-space-5);
 }
@@ -181,8 +205,9 @@
   display: grid;
   align-content: start;
   gap: var(--bp-space-3);
-  min-height: 220px;
+  min-height: 190px;
   padding: var(--bp-space-4);
+  overflow: visible;
 }
 
 .project-detail__highlight-grid .material-symbols-outlined {
@@ -192,16 +217,32 @@
   justify-content: center;
   border-radius: 16px;
   background: var(--bp-color-accent);
-  color: #111111;
+  color: #f6f0e8;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
 }
 
 .project-detail__highlight-grid h3 {
   margin: 0;
   font-family: var(--bp-font-display);
-  font-size: clamp(1.2rem, 2.1vw, 2.2rem);
-  line-height: 0.98;
-  letter-spacing: -0.06em;
+  font-size: clamp(1.05rem, 1.6vw, 1.7rem);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+
+:root[data-color-vision='achromatopsia'] .project-detail__highlight-grid .material-symbols-outlined,
+:host-context(:root[data-color-vision='achromatopsia']) .project-detail__highlight-grid .material-symbols-outlined {
+  background: #111111;
+  color: #f6f0e8;
+}
+
+:root[data-theme='light'][data-color-vision='achromatopsia'] .project-detail__highlight-grid .material-symbols-outlined,
+:host-context(:root[data-theme='light'][data-color-vision='achromatopsia']) .project-detail__highlight-grid .material-symbols-outlined {
+  background: #111111;
+  color: #f6f0e8;
 }
 
 /* ==========================================================================
@@ -215,12 +256,6 @@
 /* ==========================================================================
    09   Responsive
    ========================================================================== */
-
-@media (max-width: 1180px) {
-  .project-detail__highlight-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 
 @media (max-width: 920px) {
 

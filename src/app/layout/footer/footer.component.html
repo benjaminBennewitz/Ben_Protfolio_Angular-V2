@@ -47,17 +47,6 @@
         }
       </div>
 
-      @if (isFooterDialogVisible()) {
-      <aside class="bp-dos-window footer__dos" aria-label="Footer Status">
-        <div class="bp-dos-window__bar">
-          <span>{{ footer().dialogTitle }}</span>
-          <button type="button" [attr.aria-label]="footer().dialogCloseLabel" (click)="closeFooterDialog()">×</button>
-        </div>
-        <div class="bp-dos-window__body">
-          <p>{{ footer().dialogText }}</p>
-        </div>
-      </aside>
-      }
     </nav>
   </div>
 

@@ -221,8 +221,13 @@
 .access-panel__chips button.is-active {
   border-color: var(--bp-color-accent);
   background: var(--bp-color-accent);
-  color: #f8f8f8;
+  color: #111111;
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--bp-color-border-strong) 48%, transparent), 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 26%, transparent);
+}
+
+.access-panel__chips button.is-active:hover,
+.access-panel__chips button.is-active:focus-visible {
+  color: #111111;
 }
 
 .access-panel__storage {
@@ -230,6 +235,18 @@
   color: var(--bp-color-text-muted);
   font-family: var(--bp-font-mono);
   font-size: 0.7rem;
+}
+
+
+:root[data-color-vision='achromatopsia'] .access-panel__chips button.is-active,
+:root[data-color-vision='achromatopsia'] .access-panel__toggle:hover,
+:root[data-color-vision='achromatopsia'] .access-panel__quick-actions button:hover,
+:host-context(:root[data-color-vision='achromatopsia']) .access-panel__chips button.is-active,
+:host-context(:root[data-color-vision='achromatopsia']) .access-panel__toggle:hover,
+:host-context(:root[data-color-vision='achromatopsia']) .access-panel__quick-actions button:hover {
+  border-color: #f8f8f8;
+  background: #111111;
+  color: #f8f8f8;
 }
 
 /* ===========================================================================

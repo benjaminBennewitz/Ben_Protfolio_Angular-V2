@@ -44,7 +44,8 @@ html {
   min-height: 100%;
   background: var(--bp-color-bg);
   scroll-behavior: smooth;
-  scroll-padding-top: var(--bp-header-height);
+  scroll-padding-top: 0;
+  scroll-snap-type: y proximity;
   scrollbar-color: var(--bp-color-accent) color-mix(in srgb, var(--bp-color-bg) 82%, black 18%);
   scrollbar-width: thin;
 }
@@ -177,6 +178,7 @@ button {
 
 :root[data-motion='reduced'] {
   scroll-behavior: auto;
+  scroll-snap-type: none;
 }
 
 :root[data-motion='reduced'] *,
@@ -189,6 +191,7 @@ button {
 
 :root[data-motion='off'] {
   scroll-behavior: auto;
+  scroll-snap-type: none;
 }
 
 :root[data-motion='off'] *,
@@ -221,6 +224,14 @@ button {
   opacity: 1 !important;
   transform: none !important;
   animation: none !important;
+}
+
+
+:root[data-color-vision='achromatopsia'] img,
+:root[data-color-vision='achromatopsia'] picture,
+:root[data-color-vision='achromatopsia'] video,
+:root[data-color-vision='achromatopsia'] canvas {
+  filter: grayscale(1) contrast(1.08) !important;
 }
 
 /* ==========================================================================

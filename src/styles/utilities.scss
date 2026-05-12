@@ -109,17 +109,26 @@
   background: rgba(255, 253, 248, 0.78);
 }
 
+:root[data-theme='light'] .bp-button:hover,
+:root[data-theme='light'] .bp-button:focus-visible,
+:root[data-theme='light'] .bp-button:hover > *,
+:root[data-theme='light'] .bp-button:focus-visible > * {
+  color: #f6f0e8;
+}
+
 /* ==========================================================================
    03   Typografie
    ========================================================================== */
 
 .bp-title {
   margin: 0;
+  padding-right: 0.18em;
   font-family: var(--bp-font-display);
   font-size: clamp(2.25rem, 8.5vw, 8rem);
   line-height: 0.84;
   letter-spacing: -0.08em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .bp-subtitle {
@@ -185,6 +194,7 @@
 .bp-button:hover {
   transform: translateY(-2px);
   border-color: var(--bp-color-accent);
+  color: #111111;
   box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 28%, transparent), 0 18px 45px var(--bp-color-shadow);
 }
 
@@ -197,6 +207,20 @@
   opacity: 0.86;
 }
 
+:root[data-theme='dark'] .bp-button:hover,
+:root[data-theme='dark'] .bp-button:focus-visible,
+:root[data-theme='dark'] .bp-button:hover > *,
+:root[data-theme='dark'] .bp-button:focus-visible > * {
+  color: #111111;
+}
+
+:root[data-theme='light'] .bp-button:hover,
+:root[data-theme='light'] .bp-button:focus-visible,
+:root[data-theme='light'] .bp-button:hover > *,
+:root[data-theme='light'] .bp-button:focus-visible > * {
+  color: #f6f0e8;
+}
+
 .bp-button--ghost {
   background: color-mix(in srgb, var(--bp-color-surface-solid) 38%, transparent);
 }
@@ -205,6 +229,14 @@
   border-color: #111111;
   background: var(--bp-color-accent);
   color: #111111;
+}
+
+
+:root[data-color-vision='achromatopsia'] .bp-button--accent,
+:root[data-color-vision='achromatopsia'] .bp-button:hover {
+  border-color: #f6f0e8;
+  background: #111111;
+  color: #f6f0e8;
 }
 
 /* ==========================================================================
@@ -309,6 +341,16 @@
 
 .bp-dos-window__body p {
   margin: 0;
+}
+
+.bp-dos-window__body button:hover,
+.bp-dos-window__body button:focus-visible {
+  color: #111111;
+}
+
+:root[data-theme='light'] .bp-dos-window__body button:hover,
+:root[data-theme='light'] .bp-dos-window__body button:focus-visible {
+  color: #f6f0e8;
 }
 
 /* ==========================================================================

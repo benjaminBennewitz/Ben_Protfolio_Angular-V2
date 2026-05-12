@@ -30,6 +30,10 @@ interface CtaBlockState {
   width: number;
   /** Höhe des Bausteins. */
   height: number;
+  /** Merkt, ob der Baustein mindestens einmal Bodenkontakt hatte. */
+  hasTouchedFloor: boolean;
+  /** Zeitstempel seit dem ein bereits gelandeter Baustein in der Luft bleibt. */
+  airborneSince: number | null;
 }
 
 /** Klickbare CTA mit fallenden und reagierenden Wortblöcken. */
@@ -83,6 +87,12 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   /** Sichtbarkeitsobserver für Stop und Resume der Physics-Schleife. */
   private visibilityObserver: IntersectionObserver | null = null;
 
+  /** Markiert, ob die CTA-Schwerkraft-Trophäe bereits ausgelöst wurde. */
+  private gravityAchievementUnlocked = false;
+
+  /** Sichtbarkeit des kleinen CTA-Dialogfensters. */
+  readonly isDialogVisible = signal<boolean>(true);
+
   /** Sichtbare Styles für das Template. */
   readonly blockStyles = signal<readonly Record<string, string>[]>([]);
 
@@ -122,9 +132,16 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     this.pointerY = -10000;
   }
 
+  /** Entfernt das kleine CTA-Dialogfenster ohne die Section-Navigation auszulösen. */
+  closeDialog(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.achievementService.unlock('nostalgia-hater');
+    this.isDialogVisible.set(false);
+  }
+
   /** Scrollt barrierearm zum Kontaktbereich. */
   goToContact(): void {
-    this.achievementService.unlock('cta-contact');
     document.getElementById('contact')?.scrollIntoView({ behavior: this.accessibility.reducesMotion() ? 'auto' : 'smooth', block: 'start' });
   }
 
@@ -168,7 +185,11 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
       angularVelocity: [-0.15, 0.11, -0.1, 0.18][index] ?? 0.08,
       width: this.blockWidth(word),
       height: this.isIconBlock(word) ? 80 : 86,
+      hasTouchedFloor: false,
+      airborneSince: null,
     }));
+
+    this.gravityAchievementUnlocked = false;
 
     this.publishStyles();
   }
@@ -268,7 +289,11 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
         block.vy *= -0.45;
         block.vx *= 0.88;
         block.angularVelocity *= 0.78;
+        block.hasTouchedFloor = true;
+        block.airborneSince = null;
       }
+
+      this.checkGravityAchievement(block, floor);
     }
 
     this.resolveCollisions();
@@ -292,6 +317,29 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     block.vx += (dx / distance) * force * 7.2;
     block.vy += (dy / distance) * force * 6.4;
     block.angularVelocity += force * (dx > 0 ? 1 : -1) * 1.1;
+  }
+
+  /** Prüft, ob der Touch-Baustein lange genug ohne Bodenkontakt jongliert wurde. */
+  private checkGravityAchievement(block: CtaBlockState, floor: number): void {
+    if (this.gravityAchievementUnlocked || block.label !== 'touch' || !block.hasTouchedFloor) {
+      return;
+    }
+
+    const isAirborne = block.y + block.height < floor - 8;
+
+    if (!isAirborne) {
+      block.airborneSince = null;
+      return;
+    }
+
+    block.airborneSince ??= performance.now();
+
+    if (performance.now() - block.airborneSince < 5000) {
+      return;
+    }
+
+    this.gravityAchievementUnlocked = true;
+    this.zone.run(() => this.achievementService.unlock('cta-contact'));
   }
 
   /** Trennt überlappende Bausteine mit einfacher AABB-Kollision. */
@@ -338,6 +386,8 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     this.blocks.forEach((block, index) => {
       block.x = Math.min(width - block.width - 16, 72 + index * 190);
       block.y = floor - block.height;
+      block.hasTouchedFloor = true;
+      block.airborneSince = null;
     });
 
     this.publishStyles();

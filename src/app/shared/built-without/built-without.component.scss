@@ -96,7 +96,7 @@
 .built-strip__group {
   border: 1px solid var(--bp-color-border);
   padding: clamp(0.9rem, 1.6vw, 1.2rem);
-  background: color-mix(in srgb, var(--bp-color-bg) 58%, transparent);
+  background: var(--bp-color-surface-solid);
 }
 
 .built-strip__group h3 {
@@ -124,7 +124,7 @@
   min-height: 2.1rem;
   border: 1px solid color-mix(in srgb, var(--bp-color-border) 74%, transparent);
   padding: 0.38rem 0.48rem;
-  background: color-mix(in srgb, var(--bp-color-surface-strong) 58%, transparent);
+  background: var(--bp-color-surface-strong);
   color: var(--bp-color-text-muted);
   font-family: var(--bp-font-mono);
   font-size: 0.72rem;

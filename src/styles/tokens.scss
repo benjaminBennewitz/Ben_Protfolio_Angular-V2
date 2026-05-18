@@ -87,6 +87,7 @@
    --bp-color-border: rgba(246, 240, 232, 0.18);
    --bp-color-border-strong: rgba(246, 240, 232, 0.34);
    --bp-color-accent: #a7ff19;
+   --bp-color-on-accent: #101010;
    --bp-color-accent-2: #ff3ea5;
    --bp-color-accent-3: #8d5cff;
    --bp-color-warning: #ff8c1a;
@@ -112,6 +113,7 @@
    --bp-color-border: rgba(17, 17, 17, 0.24);
    --bp-color-border-strong: rgba(17, 17, 17, 0.48);
    --bp-color-accent: #005cff;
+   --bp-color-on-accent: #ffffff;
    --bp-color-accent-2: #b000ff;
    --bp-color-accent-3: #d0005f;
    --bp-color-warning: #9b5200;
@@ -143,6 +145,7 @@
 
 :root[data-color-vision='deuteranopia'] {
    --bp-color-accent: #0072b2;
+   --bp-color-on-accent: #ffffff;
    --bp-color-accent-2: #e69f00;
    --bp-color-accent-3: #cc79a7;
    --bp-color-info: #0072b2;
@@ -150,6 +153,7 @@
 
 :root[data-color-vision='protanopia'] {
    --bp-color-accent: #009e73;
+   --bp-color-on-accent: #101010;
    --bp-color-accent-2: #f0e442;
    --bp-color-accent-3: #56b4e9;
    --bp-color-info: #009e73;
@@ -157,6 +161,7 @@
 
 :root[data-color-vision='tritanopia'] {
    --bp-color-accent: #d55e00;
+   --bp-color-on-accent: #101010;
    --bp-color-accent-2: #0072b2;
    --bp-color-accent-3: #cc79a7;
    --bp-color-info: #d55e00;
@@ -164,6 +169,7 @@
 
 :root[data-color-vision='achromatopsia'] {
    --bp-color-accent: #f0f0f0;
+   --bp-color-on-accent: #101010;
    --bp-color-accent-2: #cacaca;
    --bp-color-accent-3: #9a9a9a;
    --bp-color-warning: #d9d9d9;
@@ -173,6 +179,7 @@
 
 :root[data-theme='light'][data-color-vision='achromatopsia'] {
    --bp-color-accent: #101010;
+   --bp-color-on-accent: #ffffff;
    --bp-color-accent-2: #444444;
    --bp-color-accent-3: #777777;
    --bp-color-warning: #222222;

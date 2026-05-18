@@ -69,7 +69,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     experience: {
       eyebrow: 'Erfahrung',
       title: 'Langfristig gewachsen. Praktisch eingesetzt.',
-      subtitle: 'Erfahrung ist nur die Basis: Entscheidend bleibt, neugierig zu bleiben, weiterzulernen und neue Technologien praktisch auszuprobieren.',
+      subtitle: 'Erfahrung ist nur die Basis: Entscheidend ist, neugierig zu bleiben, weiterzulernen und neue Technologien auszuprobieren.',
       items: [
         { value: '10', suffix: 'Jahre', label: 'Grafikdesign', text: 'Illustrator, Photoshop, InDesign, Lightroom, Flyer, VKs, klassische POS-Produkte, Kataloge, Layouts und visuelle Systeme.' },
         { value: '12', suffix: 'Jahre', label: 'Webentwicklung', text: 'HTML, CSS/SCSS, JavaScript, TypeScript, Angular, Python, Django, Celery, Redis, PostgreSQL und Processing/P3.' },
@@ -240,8 +240,8 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     },
     builtWithout: {
       eyebrow: 'quality_check.exe',
-      title: 'Ohne Baukasten. Mit System.',
-      text: 'Ein Portfolio darf laut, verspielt und technisch sauber sein. Entscheidend ist nicht der Effekt, sondern die kontrollierte Umsetzung dahinter.',
+      title: 'Mehr Kontrolle ohne Libraries.',
+      text: 'Zusätzliche Libraries und Frameworks können helfen, schaffen aber auch Abhängigkeiten. Ein vollwertiger Entwickler erkennt, wann eine Abhängigkeit wirklich Zeit spart – und wann drei Buttons, ein Grid und klare States besser selbst gebaut werden.',
       withoutLabel: 'Bewusst ohne',
       capabilityLabel: 'Zusätzlich gefragt',
       withoutItems: ['Template-Baukasten', 'Angular Material', 'externe Cookie-Services', 'generischer Portfolio-Look'],
@@ -395,7 +395,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     experience: {
       eyebrow: 'Experience',
       title: 'Grown over time. Used in real projects.',
-      subtitle: 'Experience is only the foundation: what matters is staying curious, learning continuously and testing new technologies in practice.',
+      subtitle: 'Experience is only the foundation: what matters is staying curious, learning continuously and trying new technologies.',
       items: [
         { value: '10', suffix: 'years', label: 'Graphic design', text: 'Illustrator, Photoshop, InDesign, Lightroom, flyers, business cards, classic POS products, catalogues, layouts and visual systems.' },
         { value: '12', suffix: 'years', label: 'Web development', text: 'HTML, CSS/SCSS, JavaScript, TypeScript, Angular, Python, Django, Celery, Redis, PostgreSQL and Processing/P3.' },
@@ -566,8 +566,8 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     },
     builtWithout: {
       eyebrow: 'quality_check.exe',
-      title: 'No builder. Real system.',
-      text: 'A portfolio can be loud, playful and technically clean. The important part is not the effect itself, but the controlled implementation behind it.',
+      title: 'More control without libraries.',
+      text: 'Additional libraries and frameworks can help, but they also create dependencies. A complete developer knows when a dependency really saves time – and when three buttons, a grid and clear states are better built directly.',
       withoutLabel: 'Built without',
       capabilityLabel: 'Also requested',
       withoutItems: ['template builders', 'Angular Material', 'external cookie services', 'generic portfolio look'],

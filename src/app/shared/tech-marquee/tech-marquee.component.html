@@ -3,8 +3,16 @@
   (pointermove)="drag($event)" (pointerup)="finishDrag($event)" (pointercancel)="finishDrag($event)"
   (pointerleave)="finishDrag($event)">
   <div class="marquee__track">
-    @for (item of loopItems; track item + $index) {
-    <span>{{ item }}</span>
-    }
+    <div class="marquee__set">
+      @for (item of items; track item + '-primary-' + $index) {
+      <span>{{ item }}</span>
+      }
+    </div>
+
+    <div class="marquee__set" aria-hidden="true">
+      @for (item of items; track item + '-mirror-' + $index) {
+      <span>{{ item }}</span>
+      }
+    </div>
   </div>
 </div>

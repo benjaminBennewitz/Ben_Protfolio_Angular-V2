@@ -27,11 +27,6 @@ export class TechMarqueeComponent {
   /** ScrollLeft-Wert beim Start der aktuellen Drag-Geste. */
   private dragStartScrollLeft = 0;
 
-  /** Doppelt die Liste, damit die Schleife optisch nahtlos wirkt. */
-  get loopItems(): readonly string[] {
-    return [...this.items, ...this.items];
-  }
-
   /**
    * Startet manuelles horizontales Scrollen per Pointer-Drag.
    * @param event Pointer-Ereignis auf der Marquee-Fläche.

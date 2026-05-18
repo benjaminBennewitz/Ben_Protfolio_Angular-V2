@@ -76,7 +76,12 @@
   animation: marquee-run 46s linear infinite;
 }
 
-.marquee__track span {
+.marquee__set {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+.marquee__set span {
   display: inline-flex;
   align-items: center;
   min-height: 78px;
@@ -94,11 +99,11 @@
    04   Farbvarianten
    ========================================================================== */
 
-.marquee__track span:nth-child(3n) {
+.marquee__set span:nth-child(3n) {
   color: var(--bp-color-accent);
 }
 
-.marquee__track span:nth-child(4n) {
+.marquee__set span:nth-child(4n) {
   color: var(--bp-color-accent-2);
 }
 
@@ -136,7 +141,7 @@
   transform: none;
 }
 
-:host-context(:root[data-motion='reduced']) .marquee__track span,
-:host-context(:root[data-motion='off']) .marquee__track span {
+:host-context(:root[data-motion='reduced']) .marquee__set span,
+:host-context(:root[data-motion='off']) .marquee__set span {
   min-height: 72px;
 }

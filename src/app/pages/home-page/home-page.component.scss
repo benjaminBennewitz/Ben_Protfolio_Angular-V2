@@ -1484,7 +1484,7 @@
 
 .skills__group:hover::before,
 .skills__group:focus-within::before {
-  opacity: 0.72;
+  opacity: 1;
   transform: translate3d(0, 0, 0) scale(1);
 }
 

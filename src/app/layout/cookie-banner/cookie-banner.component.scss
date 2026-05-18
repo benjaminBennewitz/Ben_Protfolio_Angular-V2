@@ -1,0 +1,397 @@
+/*###############################
+###
+###     cookie-banner.component.scss
+###     Portfolio App
+###     BASED ON: Angular 21.02.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+#################################*/
+
+/* ========================================================================== 
+   INHALTSVERZEICHNIS
+
+   01   Globaler Button
+   02   Banner Basis
+   03   Kopfbereich
+   04   Status-Chips
+   05   Privacy Controls
+   06   Aktionen
+   07   Animationen
+   08   Responsive
+   ========================================================================== */
+
+/* ===========================================================================
+   01   Globaler Button
+   ========================================================================== */
+
+:host {
+  display: contents;
+}
+
+.cookie-consent-toggle {
+  position: fixed;
+  right: clamp(1rem, 2vw, 1.5rem);
+  bottom: calc(clamp(1rem, 2vw, 1.5rem) + 136px);
+  z-index: calc(var(--bp-z-nav) + 2);
+  display: inline-grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: 1px solid var(--bp-color-border-strong);
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 92%, transparent);
+  color: var(--bp-color-text);
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent), 0 18px 48px var(--bp-color-shadow);
+  cursor: pointer;
+  transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.cookie-consent-toggle:hover,
+.cookie-consent-toggle:focus-visible,
+.cookie-consent-toggle.is-active {
+  border-color: var(--bp-color-accent);
+  background: var(--bp-color-accent);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.cookie-consent-toggle .material-symbols-outlined {
+  font-size: 1.45rem;
+}
+
+/* ===========================================================================
+   02   Banner Basis
+   ========================================================================== */
+
+.cookie-banner {
+  position: fixed;
+  left: clamp(1rem, 2.4vw, 1.8rem);
+  bottom: clamp(1rem, 2.4vw, 1.8rem);
+  z-index: calc(var(--bp-z-nav) + 3);
+  width: min(31rem, calc(100vw - 2rem));
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent) 44%, var(--bp-color-border-strong));
+  padding: 1rem;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 88%, transparent);
+  color: var(--bp-color-text);
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 18%, transparent), 0 26px 72px var(--bp-color-shadow);
+  backdrop-filter: blur(16px) saturate(1.14);
+  animation: cookie-banner-in 420ms var(--bp-ease-out) both;
+  transition: width 260ms var(--bp-ease-out), background-color 180ms ease;
+}
+
+.cookie-banner--details {
+  width: min(38rem, calc(100vw - 2rem));
+}
+
+.cookie-banner::before {
+  position: absolute;
+  inset: 0;
+  opacity: 0.15;
+  background-image: radial-gradient(circle at 1px 1px, var(--bp-color-text) 1px, transparent 0);
+  background-size: 10px 10px;
+  pointer-events: none;
+  content: '';
+}
+
+/* ===========================================================================
+   03   Kopfbereich
+   ========================================================================== */
+
+.cookie-banner__head,
+.cookie-banner__text,
+.cookie-banner__chips,
+.cookie-banner__controls,
+.cookie-banner__actions {
+  position: relative;
+  z-index: 1;
+}
+
+.cookie-banner__text,
+.cookie-banner__chips,
+.cookie-banner__controls {
+  animation: cookie-content-switch 260ms var(--bp-ease-out) both;
+}
+
+.cookie-banner__head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.cookie-banner__head > .material-symbols-outlined {
+  display: grid;
+  width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent) 68%, var(--bp-color-border));
+  background: color-mix(in srgb, var(--bp-color-accent) 18%, transparent);
+  color: var(--bp-color-accent);
+}
+
+.cookie-banner__head p,
+.cookie-banner__head h2,
+.cookie-banner__text,
+.cookie-banner__chips {
+  margin: 0;
+}
+
+.cookie-banner__head p {
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cookie-banner__head h2 {
+  margin-top: 0.16rem;
+  font-family: var(--bp-font-display);
+  font-size: clamp(1.45rem, 4vw, 2.05rem);
+  line-height: 0.9;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.cookie-banner__text {
+  margin-top: 0.82rem;
+  color: var(--bp-color-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+/* ===========================================================================
+   04   Status-Chips
+   ========================================================================== */
+
+.cookie-banner__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.46rem;
+  margin-top: 0.9rem;
+  padding: 0;
+  list-style: none;
+}
+
+.cookie-banner__chips li {
+  border: 1px solid var(--bp-color-border);
+  padding: 0.38rem 0.5rem;
+  background: color-mix(in srgb, var(--bp-color-bg) 72%, transparent);
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ===========================================================================
+   05   Privacy Controls
+   ========================================================================== */
+
+.cookie-banner__controls {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.95rem;
+}
+
+.cookie-banner__control {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.68rem;
+  border: 1px solid var(--bp-color-border);
+  padding: 0.72rem;
+  background: var(--bp-color-surface-solid);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--bp-color-border-strong) 22%, transparent);
+}
+
+.cookie-banner__control > .material-symbols-outlined {
+  display: grid;
+  width: 2.15rem;
+  height: 2.15rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent) 48%, var(--bp-color-border));
+  color: var(--bp-color-accent);
+  font-size: 1.15rem;
+}
+
+.cookie-banner__control h3,
+.cookie-banner__control p {
+  margin: 0;
+}
+
+.cookie-banner__control h3 {
+  font-family: var(--bp-font-mono);
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cookie-banner__control b {
+  display: inline-flex;
+  margin-top: 0.22rem;
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.cookie-banner__control p {
+  margin-top: 0.28rem;
+  color: var(--bp-color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.cookie-banner__control--off {
+  background: var(--bp-color-surface-solid);
+}
+
+.cookie-banner__control--off > .material-symbols-outlined {
+  border-color: var(--bp-color-border);
+  color: var(--bp-color-text-muted);
+}
+
+.cookie-banner__control--off b {
+  color: var(--bp-color-text-muted);
+}
+
+/* ===========================================================================
+   06   Aktionen
+   ========================================================================== */
+
+.cookie-banner__actions {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.6rem;
+  margin-top: 0.95rem;
+}
+
+.cookie-banner__details,
+.cookie-banner__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.65rem;
+  border: 1px solid var(--bp-color-accent);
+  padding: 0.62rem 0.9rem;
+  font-family: var(--bp-font-mono);
+  font-size: 0.76rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 180ms var(--bp-ease-out), box-shadow 180ms ease, filter 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.cookie-banner__details {
+  background: color-mix(in srgb, var(--bp-color-bg) 74%, transparent);
+  color: var(--bp-color-accent);
+}
+
+.cookie-banner__submit {
+  gap: 0.42rem;
+  background: var(--bp-color-accent);
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.cookie-banner__details:hover,
+.cookie-banner__details:focus-visible,
+.cookie-banner__submit:hover,
+.cookie-banner__submit:focus-visible {
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 28%, transparent);
+  transform: translate3d(-2px, -2px, 0);
+}
+
+.cookie-banner__details:hover,
+.cookie-banner__details:focus-visible {
+  background: var(--bp-color-accent);
+  color: #ffffff;
+}
+
+.cookie-banner__submit:hover,
+.cookie-banner__submit:focus-visible {
+  color: #ffffff;
+}
+
+.cookie-banner__submit:hover .material-symbols-outlined,
+.cookie-banner__submit:focus-visible .material-symbols-outlined {
+  color: #ffffff;
+}
+
+/* ===========================================================================
+   07   Animationen
+   ========================================================================== */
+
+@keyframes cookie-banner-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(-1rem, 1rem, 0) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes cookie-content-switch {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0.45rem, 0) scale(0.985);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+:root[data-motion='reduced'] .cookie-banner,
+:root[data-motion='reduced'] .cookie-banner__text,
+:root[data-motion='reduced'] .cookie-banner__chips,
+:root[data-motion='reduced'] .cookie-banner__controls,
+:root[data-motion='off'] .cookie-banner,
+:root[data-motion='off'] .cookie-banner__text,
+:root[data-motion='off'] .cookie-banner__chips,
+:root[data-motion='off'] .cookie-banner__controls,
+:host-context(:root[data-motion='reduced']) .cookie-banner,
+:host-context(:root[data-motion='reduced']) .cookie-banner__text,
+:host-context(:root[data-motion='reduced']) .cookie-banner__chips,
+:host-context(:root[data-motion='reduced']) .cookie-banner__controls,
+:host-context(:root[data-motion='off']) .cookie-banner,
+:host-context(:root[data-motion='off']) .cookie-banner__text,
+:host-context(:root[data-motion='off']) .cookie-banner__chips,
+:host-context(:root[data-motion='off']) .cookie-banner__controls {
+  animation: none;
+}
+
+/* ===========================================================================
+   08   Responsive
+   ========================================================================== */
+
+@media (max-width: 560px) {
+  .cookie-consent-toggle {
+    right: 0.8rem;
+    bottom: calc(0.8rem + 136px);
+  }
+
+  .cookie-banner,
+  .cookie-banner--details {
+    left: 0.8rem;
+    bottom: 0.8rem;
+    width: calc(100vw - 1.6rem);
+    padding: 0.9rem;
+  }
+
+  .cookie-banner__chips,
+  .cookie-banner__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

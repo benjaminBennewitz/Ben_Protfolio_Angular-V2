@@ -17,13 +17,13 @@
   </nav>
 
   <div class="nav__actions">
-    <button class="nav__action" type="button" [attr.aria-label]="content().theme" (click)="themeService.toggleTheme()">
+    <button class="nav__action" type="button" [attr.aria-label]="content().theme" (click)="toggleTheme()">
       <span class="material-symbols-outlined" aria-hidden="true">{{ themeService.isLight() ? 'dark_mode' : 'light_mode'
         }}</span>
     </button>
 
     <button class="nav__action nav__language" type="button" [attr.aria-label]="content().language"
-      (click)="languageService.toggleLanguage()">
+      (click)="toggleLanguage()">
       {{ languageService.language().toUpperCase() }}
     </button>
 

@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 import { AchievementService } from '../../core/services/achievement.service';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
+import { BuiltWithoutComponent } from '../../shared/built-without/built-without.component';
 import { ChaosCtaComponent } from '../../shared/chaos-cta/chaos-cta.component';
 import { ContactFormComponent } from '../../shared/contact-form/contact-form.component';
 import { ProcessLockComponent } from '../../shared/process-lock/process-lock.component';
@@ -29,7 +30,7 @@ type AboutCoffeeKey = 'default' | 'error';
 @Component({
   selector: 'bp-home-page',
   standalone: true,
-  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProjectStackComponent, ProcessLockComponent, ChaosCtaComponent, ContactFormComponent, ViewportActivityDirective],
+  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProjectStackComponent, ProcessLockComponent, BuiltWithoutComponent, ChaosCtaComponent, ContactFormComponent, ViewportActivityDirective],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })

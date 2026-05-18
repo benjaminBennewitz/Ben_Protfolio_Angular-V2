@@ -1,0 +1,55 @@
+<!-- src/app/layout/cookie-banner/cookie-banner.component.html -->
+<button class="cookie-consent-toggle" type="button" [class.is-active]="visible()" [attr.aria-label]="texts().toggleLabel"
+  [title]="texts().toggleLabel" (click)="reopenBanner()">
+  <span class="material-symbols-outlined" aria-hidden="true">cookie</span>
+</button>
+
+@if (visible()) {
+<section class="cookie-banner" [class.cookie-banner--details]="detailsOpen()" role="dialog" aria-live="polite"
+  [attr.aria-label]="texts().ariaLabel">
+  <div class="cookie-banner__head">
+    <span class="material-symbols-outlined" aria-hidden="true">verified_user</span>
+    <div>
+      <p>{{ texts().eyebrow }}</p>
+      <h2>{{ texts().title }}</h2>
+    </div>
+  </div>
+
+  @if (!detailsOpen()) {
+  <p class="cookie-banner__text">{{ texts().text }}</p>
+
+  <ul class="cookie-banner__chips" aria-label="Technologie-Status">
+    <li>{{ texts().necessaryLabel }}</li>
+    <li>{{ texts().trackingLabel }}</li>
+    <li>{{ texts().externalLabel }}</li>
+  </ul>
+  }
+
+  @if (detailsOpen()) {
+  <div class="cookie-banner__controls">
+    @for (control of texts().controls; track control.title) {
+    <article class="cookie-banner__control" [class.cookie-banner__control--locked]="control.state === 'locked'"
+      [class.cookie-banner__control--local]="control.state === 'local'" [class.cookie-banner__control--off]="control.state === 'off'">
+      <span class="material-symbols-outlined" aria-hidden="true">{{ control.icon }}</span>
+      <div>
+        <h3>{{ control.title }}</h3>
+        <b>{{ control.status }}</b>
+        <p>{{ control.text }}</p>
+      </div>
+    </article>
+    }
+  </div>
+  }
+
+  <div class="cookie-banner__actions">
+    <button class="cookie-banner__details" type="button" (click)="toggleDetails()">
+      <span>{{ detailsOpen() ? texts().overviewLabel : texts().detailsLabel }}</span>
+    </button>
+
+    <button class="cookie-banner__submit" type="button" (click)="acceptNecessary()">
+      <span>{{ texts().acceptLabel }}</span>
+      <span class="material-symbols-outlined" aria-hidden="true">check</span>
+    </button>
+  </div>
+</section>
+}

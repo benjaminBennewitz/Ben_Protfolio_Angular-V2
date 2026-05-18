@@ -238,10 +238,31 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         { name: 'beautynailresort.de', url: 'https://beautynailresort.de', label: 'Service / Buchbar und präsent', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
       ],
     },
+    builtWithout: {
+      eyebrow: 'quality_check.exe',
+      title: 'Ohne Baukasten. Mit System.',
+      text: 'Ein Portfolio darf laut, verspielt und technisch sauber sein. Entscheidend ist nicht der Effekt, sondern die kontrollierte Umsetzung dahinter.',
+      withoutLabel: 'Bewusst ohne',
+      capabilityLabel: 'Zusätzlich gefragt',
+      withoutItems: ['Template-Baukasten', 'Angular Material', 'externe Cookie-Services', 'generischer Portfolio-Look'],
+      capabilityItems: ['Fundiertes Wissen', 'Prompting', 'Vibe Coding mit Code-Verständnis', 'SEO', 'Accessibility', 'Performance', 'Custom Design'],
+    },
     contact: {
       eyebrow: 'Kontakt',
       title: 'Projektidee, Website, Web-App oder einfach nur Schnacken?',
       subtitle: '',
+      topicLabel: 'Worum geht es?',
+      topicHint: 'Mehrfachauswahl möglich. Alles bleibt eine lokale Mailto-Vorbereitung ohne Speicherung.',
+      topics: [
+        { value: 'website', label: 'Website', icon: 'language' },
+        { value: 'wordpress', label: 'WordPress-Seite', icon: 'web' },
+        { value: 'web-app', label: 'Web-App', icon: 'dashboard_customize' },
+        { value: 'ui-ux', label: 'UI/UX', icon: 'gesture' },
+        { value: 'seo', label: 'SEO', icon: 'query_stats' },
+        { value: 'automation', label: 'Automatisierung', icon: 'settings_suggest' },
+        { value: 'graphic-design', label: 'Grafikdesign', icon: 'palette' },
+        { value: 'weird', label: 'Etwas Seltsames', icon: 'auto_awesome' },
+      ],
       nameLabel: 'Name',
       emailLabel: 'E-Mail',
       messageLabel: 'Nachricht',
@@ -277,6 +298,11 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       petDialogTitle: 'good_mood.exe',
       petDialogText: '„Das ist meine Good-Mood-Supporterin: Fülli. Füles ist Ungarisch für Ohr.“',
       petDialogLabel: 'Fülli-Info anzeigen',
+      socialLinks: [
+        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/benjamin-bennewitz/' },
+        { label: 'Xing', href: 'https://www.xing.com/profile/Benjamin_Bennewitz' },
+        { label: 'GitHub', href: 'https://github.com/benjaminBennewitz' },
+      ],
       columns: [
         {
           title: 'Bereiche', links: [
@@ -538,10 +564,31 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         { name: 'beautynailresort.de', url: 'https://beautynailresort.de', label: 'Service / Bookable and visible', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
       ],
     },
+    builtWithout: {
+      eyebrow: 'quality_check.exe',
+      title: 'No builder. Real system.',
+      text: 'A portfolio can be loud, playful and technically clean. The important part is not the effect itself, but the controlled implementation behind it.',
+      withoutLabel: 'Built without',
+      capabilityLabel: 'Also requested',
+      withoutItems: ['template builders', 'Angular Material', 'external cookie services', 'generic portfolio look'],
+      capabilityItems: ['solid knowledge', 'prompting', 'vibe coding with code understanding', 'SEO', 'accessibility', 'performance', 'custom design'],
+    },
     contact: {
       eyebrow: 'Contact',
       title: 'Project idea, website, web app or just a quick chat?',
       subtitle: '',
+      topicLabel: 'What is it about?',
+      topicHint: 'Multiple choices are possible. Everything stays a local mailto preparation without storage.',
+      topics: [
+        { value: 'website', label: 'Website', icon: 'language' },
+        { value: 'wordpress', label: 'WordPress site', icon: 'web' },
+        { value: 'web-app', label: 'Web app', icon: 'dashboard_customize' },
+        { value: 'ui-ux', label: 'UI/UX', icon: 'gesture' },
+        { value: 'seo', label: 'SEO', icon: 'query_stats' },
+        { value: 'automation', label: 'Automation', icon: 'settings_suggest' },
+        { value: 'graphic-design', label: 'Graphic design', icon: 'palette' },
+        { value: 'weird', label: 'Something weird', icon: 'auto_awesome' },
+      ],
       nameLabel: 'Name',
       emailLabel: 'Email',
       messageLabel: 'Message',
@@ -577,6 +624,11 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       petDialogTitle: 'good_mood.exe',
       petDialogText: '“This is my good-mood supporter: Fülli. Füles means ear in Hungarian.”',
       petDialogLabel: 'Show Fülli info',
+      socialLinks: [
+        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/benjamin-bennewitz/' },
+        { label: 'Xing', href: 'https://www.xing.com/profile/Benjamin_Bennewitz' },
+        { label: 'GitHub', href: 'https://github.com/benjaminBennewitz' },
+      ],
       columns: [
         {
           title: 'Sections', links: [

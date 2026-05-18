@@ -1,0 +1,15 @@
+<!-- src/app/layout/system-toast/system-toast.component.html -->
+@if (toastService.activeToast(); as toast) {
+<aside class="system-toast" [class.system-toast--success]="toast.tone === 'success'"
+  [class.system-toast--privacy]="toast.tone === 'privacy'" [class.system-toast--accessibility]="toast.tone === 'accessibility'"
+  role="status" aria-live="polite">
+  <span class="system-toast__icon material-symbols-outlined" aria-hidden="true">{{ toast.icon }}</span>
+  <div class="system-toast__copy">
+    <p>{{ toast.title }}</p>
+    <span>{{ toast.message }}</span>
+  </div>
+  <button type="button" aria-label="Systemhinweis schließen" (click)="toastService.dismissActiveToast()">
+    <span class="material-symbols-outlined" aria-hidden="true">close</span>
+  </button>
+</aside>
+}

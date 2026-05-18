@@ -1,0 +1,100 @@
+/*###############################
+###
+###     accessibility-status.component.scss
+###     Portfolio App
+###     BASED ON: Angular 21.02.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+#################################*/
+
+/* ========================================================================== 
+   INHALTSVERZEICHNIS
+
+   01   Status
+   02   Responsive
+   ========================================================================== */
+
+/* ========================================================================== 
+   01   Status
+   ========================================================================== */
+
+:host {
+  display: contents;
+}
+
+.access-status {
+  position: fixed;
+  left: clamp(1rem, 2vw, 1.5rem);
+  bottom: clamp(1rem, 2vw, 1.5rem);
+  z-index: calc(var(--bp-z-nav) + 1);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.58rem;
+  align-items: center;
+  max-width: min(34rem, calc(100vw - 2rem));
+  border: 1px solid color-mix(in srgb, var(--bp-color-border-strong) 80%, transparent);
+  padding: 0.55rem 0.68rem;
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 76%, transparent);
+  color: var(--bp-color-text);
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--bp-color-accent) 14%, transparent), 0 16px 42px var(--bp-color-shadow);
+  backdrop-filter: blur(12px) saturate(1.08);
+  pointer-events: none;
+}
+
+.access-status__icon {
+  display: grid;
+  width: 1.95rem;
+  height: 1.95rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent) 56%, var(--bp-color-border));
+  color: var(--bp-color-accent);
+  font-size: 1.12rem;
+}
+
+.access-status__copy {
+  display: grid;
+  gap: 0.05rem;
+  min-width: 0;
+}
+
+.access-status__copy p,
+.access-status__copy span {
+  margin: 0;
+}
+
+.access-status__copy p {
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.62rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.access-status__copy span {
+  overflow: hidden;
+  color: var(--bp-color-text-muted);
+  font-size: 0.78rem;
+  line-height: 1.28;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ========================================================================== 
+   02   Responsive
+   ========================================================================== */
+
+@media (max-width: 720px) {
+  .access-status {
+    left: 0.8rem;
+    right: 0.8rem;
+    bottom: 0.8rem;
+    max-width: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .access-status__copy span {
+    max-width: 68vw;
+  }
+}

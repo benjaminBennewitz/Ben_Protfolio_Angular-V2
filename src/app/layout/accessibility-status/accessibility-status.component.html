@@ -1,0 +1,8 @@
+<!-- src/app/layout/accessibility-status/accessibility-status.component.html -->
+<aside class="access-status" [attr.aria-label]="texts().ariaLabel">
+  <span class="access-status__icon material-symbols-outlined" aria-hidden="true">accessibility_new</span>
+  <div class="access-status__copy">
+    <p>{{ texts().title }}</p>
+    <span>{{ statusText() }}</span>
+  </div>
+</aside>

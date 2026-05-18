@@ -1,0 +1,170 @@
+/*###############################
+###
+###     system-toast.component.scss
+###     Portfolio App
+###     BASED ON: Angular 21.02.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+#################################*/
+
+/* ===========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Toast
+   02   Varianten
+   03   Animationen
+   04   Responsive
+   ========================================================================== */
+
+/* ===========================================================================
+   01   Toast
+   ========================================================================== */
+
+:host {
+  display: contents;
+}
+
+.system-toast {
+  position: fixed;
+  right: clamp(1rem, 2vw, 1.5rem);
+  top: calc(var(--bp-header-height) + 1rem);
+  z-index: calc(var(--bp-z-nav) + 7);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.72rem;
+  align-items: center;
+  width: min(25rem, calc(100vw - 2rem));
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent) 48%, var(--bp-color-border-strong));
+  padding: 0.78rem 0.82rem;
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 91%, transparent);
+  color: var(--bp-color-text);
+  box-shadow: 7px 7px 0 color-mix(in srgb, var(--bp-color-accent) 20%, transparent), 0 22px 64px var(--bp-color-shadow);
+  backdrop-filter: blur(14px) saturate(1.12);
+  animation: system-toast-in 340ms var(--bp-ease-out) both;
+}
+
+.system-toast::before {
+  position: absolute;
+  inset: 0;
+  opacity: 0.11;
+  background-image: radial-gradient(circle at 1px 1px, var(--bp-color-text) 1px, transparent 0);
+  background-size: 9px 9px;
+  pointer-events: none;
+  content: '';
+}
+
+.system-toast__icon,
+.system-toast__copy,
+.system-toast button {
+  position: relative;
+  z-index: 1;
+}
+
+.system-toast__icon {
+  display: grid;
+  width: 2.35rem;
+  height: 2.35rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent) 66%, var(--bp-color-border));
+  background: color-mix(in srgb, var(--bp-color-accent) 18%, transparent);
+  color: var(--bp-color-accent);
+  font-size: 1.3rem;
+}
+
+.system-toast__copy {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.system-toast__copy p,
+.system-toast__copy span {
+  margin: 0;
+}
+
+.system-toast__copy p {
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.66rem;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.system-toast__copy span {
+  color: var(--bp-color-text-muted);
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.system-toast button {
+  display: inline-grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  line-height: 1;
+  border: 1px solid var(--bp-color-border);
+  background: color-mix(in srgb, var(--bp-color-bg) 72%, transparent);
+  color: var(--bp-color-text);
+  cursor: pointer;
+}
+
+.system-toast button span {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.system-toast button:hover,
+.system-toast button:focus-visible {
+  border-color: var(--bp-color-danger);
+  background: var(--bp-color-danger);
+  color: #ffffff;
+}
+
+/* ===========================================================================
+   02   Varianten
+   ========================================================================== */
+
+.system-toast--success {
+  border-color: color-mix(in srgb, var(--bp-color-accent) 70%, var(--bp-color-border-strong));
+}
+
+.system-toast--privacy .system-toast__icon,
+.system-toast--accessibility .system-toast__icon {
+  background: color-mix(in srgb, var(--bp-color-info) 18%, transparent);
+}
+
+/* ===========================================================================
+   03   Animationen
+   ========================================================================== */
+
+@keyframes system-toast-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(1rem, -0.6rem, 0) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+:root[data-motion='reduced'] .system-toast,
+:root[data-motion='off'] .system-toast,
+:host-context(:root[data-motion='reduced']) .system-toast,
+:host-context(:root[data-motion='off']) .system-toast {
+  animation: none;
+}
+
+/* ===========================================================================
+   04   Responsive
+   ========================================================================== */
+
+@media (max-width: 620px) {
+  .system-toast {
+    right: 0.8rem;
+    top: calc(var(--bp-header-height) + 0.8rem);
+    width: calc(100vw - 1.6rem);
+  }
+}

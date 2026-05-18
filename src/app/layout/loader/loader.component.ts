@@ -121,8 +121,8 @@ export class LoaderComponent implements OnInit, OnDestroy {
   /** Laufende Konsolenmeldungen für den unteren Statusbereich. */
   readonly logLines = computed<readonly string[]>(() => this.loaderContent().logLines);
 
-  /** Schaltet für Neuro-/Calm-Mode auf einen ruhigeren Loader um. */
-  readonly useCalmLoader = computed<boolean>(() => this.accessibility.usesSimpleMode() || this.accessibility.motionMode() === 'off');
+  /** Schaltet bei reduzierter Bewegung oder Simple-Mode auf einen ruhigeren Loader um. */
+  readonly useCalmLoader = computed<boolean>(() => this.accessibility.usesSimpleMode() || this.accessibility.motionMode() !== 'full');
 
   /** Segmentanzahl der simulierten Ladeleiste. */
   readonly progressCells = Array.from({ length: 26 }, (_, index) => index);
@@ -180,6 +180,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
     }, this.launchDelayMs);
   }
 
+
   /** Entfernt den Loader und gibt die Hero-Animationen frei. */
   private finishExit(): void {
     this.document.documentElement.classList.remove(this.loaderActiveClass);
@@ -188,6 +189,9 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
   /** Startet einen ruhigen Loader mit Zahlen-Progress und automatischem Exit. */
   private startCalmLoader(): void {
+    window.clearTimeout(this.completionTimer);
+    window.clearInterval(this.calmProgressTimer);
+
     const startedAt = performance.now();
     const stepMs = 48;
 

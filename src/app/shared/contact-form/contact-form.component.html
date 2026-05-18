@@ -1,29 +1,50 @@
 <!-- src/app/shared/contact-form/contact-form.component.html -->
 <form class="contact-form bp-card" (ngSubmit)="submit()" novalidate>
-  <label>
-    <span>{{ content().nameLabel }}</span>
-    <input type="text" autocomplete="name" [value]="name()" (input)="updateField('name', $event)" required
-      minlength="2">
-  </label>
+  <div class="contact-form__layout">
+    <div class="contact-form__fields">
+      <div class="contact-form__field-row">
+        <label>
+          <span>{{ content().nameLabel }}</span>
+          <input type="text" autocomplete="name" [value]="name()" (input)="updateField('name', $event)" required
+            minlength="2">
+        </label>
 
-  <label>
-    <span>{{ content().emailLabel }}</span>
-    <input type="email" autocomplete="email" [value]="email()" (input)="updateField('email', $event)" required>
-  </label>
+        <label>
+          <span>{{ content().emailLabel }}</span>
+          <input type="email" autocomplete="email" [value]="email()" (input)="updateField('email', $event)" required>
+        </label>
+      </div>
 
-  <label>
-    <span>{{ content().messageLabel }}</span>
-    <textarea rows="6" [value]="message()" (input)="updateField('message', $event)" required minlength="10"></textarea>
-  </label>
+      <label>
+        <span>{{ content().messageLabel }}</span>
+        <textarea rows="5" [value]="message()" (input)="updateField('message', $event)" required minlength="10"></textarea>
+      </label>
 
-  <p class="contact-form__privacy">{{ content().privacy }}</p>
+      <p class="contact-form__privacy">{{ content().privacy }}</p>
 
-  <button class="bp-button bp-button--accent" type="submit">
-    <span>{{ content().submitLabel }}</span>
-    <span class="material-symbols-outlined" aria-hidden="true">send</span>
-  </button>
+      <button class="bp-button bp-button--accent" type="submit">
+        <span>{{ content().submitLabel }}</span>
+        <span class="material-symbols-outlined" aria-hidden="true">send</span>
+      </button>
 
-  @if (status()) {
-  <p class="contact-form__status" [class.contact-form__status--error]="hasError()" role="status">{{ status() }}</p>
-  }
+      @if (status()) {
+      <p class="contact-form__status" [class.contact-form__status--error]="hasError()" role="status">{{ status() }}</p>
+      }
+    </div>
+
+    <fieldset class="contact-form__topics">
+      <legend>{{ content().topicLabel }}</legend>
+      <p>{{ content().topicHint }}</p>
+
+      <div class="contact-form__topic-grid" role="group" [attr.aria-label]="content().topicLabel">
+        @for (topic of content().topics; track topic.value) {
+        <button class="contact-form__topic" type="button" [class.is-active]="topicIsSelected(topic)"
+          [attr.aria-pressed]="topicIsSelected(topic)" (click)="toggleTopic(topic)">
+          <span class="material-symbols-outlined" aria-hidden="true">{{ topic.icon }}</span>
+          <span>{{ topic.label }}</span>
+        </button>
+        }
+      </div>
+    </fieldset>
+  </div>
 </form>

@@ -1,0 +1,167 @@
+/*###############################
+###
+###     built-without.component.scss
+###     Portfolio App
+###     BASED ON: Angular 21.02.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+#################################*/
+
+/* ========================================================================== 
+   INHALTSVERZEICHNIS
+
+   01   Section
+   02   Copy
+   03   Gruppen
+   04   Responsive
+   ========================================================================== */
+
+/* ========================================================================== 
+   01   Section
+   ========================================================================== */
+
+.built-strip {
+  position: relative;
+  min-height: auto;
+  padding: clamp(2.5rem, 5vw, 4.5rem) var(--bp-section-px);
+  overflow: hidden;
+  border-top: 1px solid var(--bp-color-border);
+  border-bottom: 1px solid var(--bp-color-border);
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 72%, var(--bp-color-bg) 28%);
+  scroll-snap-align: none;
+}
+
+.built-strip::before {
+  position: absolute;
+  inset: 0;
+  opacity: 0.13;
+  background-image: linear-gradient(90deg, transparent 0 49%, var(--bp-color-accent) 49% 50%, transparent 50% 100%), radial-gradient(circle at 1px 1px, var(--bp-color-text) 1px, transparent 0);
+  background-size: 140px 100%, 9px 9px;
+  pointer-events: none;
+  content: '';
+}
+
+.built-strip__layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.62fr) minmax(420px, 1fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: center;
+}
+
+.built-strip__groups {
+  align-self: center;
+}
+
+/* ========================================================================== 
+   02   Copy
+   ========================================================================== */
+
+.built-strip__copy h2,
+.built-strip__copy p {
+  margin: 0;
+}
+
+.built-strip__copy .bp-eyebrow {
+  margin-bottom: clamp(0.65rem, 1.4vw, 1rem);
+  transform: translateY(-1.65rem);
+}
+
+.built-strip__copy h2 {
+  max-width: 12ch;
+  font-family: var(--bp-font-display);
+  font-size: clamp(1.9rem, 4vw, 4rem);
+  line-height: 0.9;
+  letter-spacing: -0.07em;
+  text-transform: uppercase;
+}
+
+.built-strip__copy p:not(.bp-eyebrow) {
+  margin-top: 0.85rem;
+  color: var(--bp-color-text-muted);
+  line-height: 1.6;
+}
+
+/* ========================================================================== 
+   03   Gruppen
+   ========================================================================== */
+
+.built-strip__groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.built-strip__group {
+  border: 1px solid var(--bp-color-border);
+  padding: clamp(0.9rem, 1.6vw, 1.2rem);
+  background: color-mix(in srgb, var(--bp-color-bg) 58%, transparent);
+}
+
+.built-strip__group h3 {
+  margin: 0 0 0.8rem;
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.76rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.built-strip__group ul {
+  display: grid;
+  gap: 0.46rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.built-strip__group li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.46rem;
+  min-height: 2.1rem;
+  border: 1px solid color-mix(in srgb, var(--bp-color-border) 74%, transparent);
+  padding: 0.38rem 0.48rem;
+  background: color-mix(in srgb, var(--bp-color-surface-strong) 58%, transparent);
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-size: 0.72rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.built-strip__group li .material-symbols-outlined {
+  color: var(--bp-color-accent);
+  font-size: 1rem;
+}
+
+.built-strip__group--without li .material-symbols-outlined {
+  color: var(--bp-color-danger);
+}
+
+:root[data-theme='light'] .built-strip,
+:host-context(:root[data-theme='light']) .built-strip {
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 82%, var(--bp-color-accent) 6%);
+}
+
+/* ========================================================================== 
+   04   Responsive
+   ========================================================================== */
+
+@media (max-width: 1180px) {
+  .built-strip__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .built-strip__groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .built-strip__groups {
+    grid-template-columns: 1fr;
+  }
+}

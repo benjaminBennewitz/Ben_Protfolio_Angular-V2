@@ -7,6 +7,7 @@
 
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ContactTopic } from '../../core/models/portfolio.models';
 import { LanguageService } from '../../core/services/language.service';
 
 /** Einfaches Kontaktformular ohne Backend-Abhängigkeit. */
@@ -33,6 +34,9 @@ export class ContactFormComponent {
   /** Nachricht aus dem Formular. */
   readonly message = signal<string>('');
 
+  /** Gewählte Themen aus der Custom-Mehrfachauswahl. */
+  readonly selectedTopics = signal<readonly string[]>([]);
+
   /** Statusmeldung nach Submit. */
   readonly status = signal<string>('');
 
@@ -56,6 +60,18 @@ export class ContactFormComponent {
     }
   }
 
+  /** Schaltet ein Kontakt-Thema in der Custom-Mehrfachauswahl um. */
+  toggleTopic(topic: ContactTopic): void {
+    this.selectedTopics.update((topics) => topics.includes(topic.value)
+      ? topics.filter((value) => value !== topic.value)
+      : [...topics, topic.value]);
+  }
+
+  /** Prüft, ob ein Kontakt-Thema aktuell ausgewählt ist. */
+  topicIsSelected(topic: ContactTopic): boolean {
+    return this.selectedTopics().includes(topic.value);
+  }
+
   /** Validiert das Formular und öffnet bei Erfolg eine vorbereitete Mail. */
   submit(): void {
     if (!this.isValid()) {
@@ -65,11 +81,33 @@ export class ContactFormComponent {
     }
 
     const subject = encodeURIComponent(`Portfolio Kontakt von ${this.name()}`);
-    const body = encodeURIComponent(`${this.message()}\n\nName: ${this.name()}\nE-Mail: ${this.email()}`);
+    const body = encodeURIComponent(this.createMailBody());
 
     this.hasError.set(false);
     this.status.set(this.content().successMessage);
     window.location.href = `mailto:kontakt@bennewitz.de?subject=${subject}&body=${body}`;
+  }
+
+  /** Erzeugt den Mailtext inklusive optionaler Themenauswahl. */
+  private createMailBody(): string {
+    const selectedLabels = this.selectedTopicLabels();
+    const topicLine = selectedLabels.length ? `${this.content().topicLabel}: ${selectedLabels.join(', ')}
+
+` : '';
+
+    return `${topicLine}${this.message()}
+
+Name: ${this.name()}
+E-Mail: ${this.email()}`;
+  }
+
+  /** Gibt die sichtbaren Labels der gewählten Themen zurück. */
+  private selectedTopicLabels(): readonly string[] {
+    const selectedValues = new Set(this.selectedTopics());
+
+    return this.content().topics
+      .filter((topic) => selectedValues.has(topic.value))
+      .map((topic) => topic.label);
   }
 
   /** Prüft Mindestfelder und einfache E-Mail-Syntax. */

@@ -214,11 +214,42 @@ export interface CtaContent {
   readonly words: readonly string[];
 }
 
+/** Schmale Qualitäts- und Arbeitsweise-Section. */
+export interface BuiltWithoutContent {
+  /** Kleine technische Beschriftung über der Section. */
+  readonly eyebrow: string;
+  /** Kurzer Titel der Section. */
+  readonly title: string;
+  /** Kurzer erklärender Text. */
+  readonly text: string;
+  /** Label für bewusst ausgeschlossene Lösungen. */
+  readonly withoutLabel: string;
+  /** Label für ergänzende gefragte Fähigkeiten. */
+  readonly capabilityLabel: string;
+  /** Bewusst nicht verwendete generische Hilfsmittel. */
+  readonly withoutItems: readonly string[];
+  /** Ergänzende, nachgefragte Arbeitsweisen und Qualitätsmerkmale. */
+  readonly capabilityItems: readonly string[];
+}
+
+/** Thema im Kontaktformular. */
+export interface ContactTopic {
+  /** Stabiler technischer Wert für Mailto und Tracking-freie Formularlogik. */
+  readonly value: string;
+  /** Sichtbares Label des Themas. */
+  readonly label: string;
+  /** Material-Symbol für die visuelle Chip-Darstellung. */
+  readonly icon: string;
+}
+
 /** Inhalt des Kontaktformulars. */
 export interface ContactContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly subtitle: string;
+  readonly topicLabel: string;
+  readonly topicHint: string;
+  readonly topics: readonly ContactTopic[];
   readonly nameLabel: string;
   readonly emailLabel: string;
   readonly messageLabel: string;
@@ -276,6 +307,8 @@ export interface FooterContent {
   readonly petDialogText: string;
   /** Zugängliche Beschriftung des Fülli-Auslösers. */
   readonly petDialogLabel: string;
+  /** Social-Media-Links als kompakte Icon-Gruppe im Footer. */
+  readonly socialLinks: readonly FooterLink[];
   readonly columns: readonly FooterColumn[];
 }
 
@@ -307,6 +340,8 @@ export interface PortfolioContent {
   readonly faqSubtitle: string;
   readonly faqs: readonly FaqItem[];
   readonly clients: ClientsContent;
+  /** Schmale Qualitäts-Section mit bewussten technischen Entscheidungen. */
+  readonly builtWithout: BuiltWithoutContent;
   readonly contact: ContactContent;
   /** Inhalte der Impressumsseite. */
   readonly imprint: ImprintContent;

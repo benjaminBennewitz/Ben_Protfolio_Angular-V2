@@ -15,6 +15,7 @@ ben-portfolio-angular-v2/
 │   │   │       ├── achievement.service.ts
 │   │   │       ├── language.service.ts
 │   │   │       ├── seo.service.ts
+│   │   │       ├── system-toast.service.ts
 │   │   │       ├── tab-title.service.ts
 │   │   │       └── theme.service.ts
 │   │   ├── layout/
@@ -22,10 +23,18 @@ ben-portfolio-angular-v2/
 │   │   │   │   ├── accessibility-panel.component.html
 │   │   │   │   ├── accessibility-panel.component.scss
 │   │   │   │   └── accessibility-panel.component.ts
+│   │   │   ├── accessibility-status/
+│   │   │   │   ├── accessibility-status.component.html
+│   │   │   │   ├── accessibility-status.component.scss
+│   │   │   │   └── accessibility-status.component.ts
 │   │   │   ├── achievement-toast/
 │   │   │   │   ├── achievement-toast.component.html
 │   │   │   │   ├── achievement-toast.component.scss
 │   │   │   │   └── achievement-toast.component.ts
+│   │   │   ├── cookie-banner/
+│   │   │   │   ├── cookie-banner.component.html
+│   │   │   │   ├── cookie-banner.component.scss
+│   │   │   │   └── cookie-banner.component.ts
 │   │   │   ├── custom-cursor/
 │   │   │   │   ├── custom-cursor.component.html
 │   │   │   │   ├── custom-cursor.component.scss
@@ -42,10 +51,14 @@ ben-portfolio-angular-v2/
 │   │   │   │   ├── navigation.component.html
 │   │   │   │   ├── navigation.component.scss
 │   │   │   │   └── navigation.component.ts
-│   │   │   └── scroll-to-top/
-│   │   │       ├── scroll-to-top.component.html
-│   │   │       ├── scroll-to-top.component.scss
-│   │   │       └── scroll-to-top.component.ts
+│   │   │   ├── scroll-to-top/
+│   │   │   │   ├── scroll-to-top.component.html
+│   │   │   │   ├── scroll-to-top.component.scss
+│   │   │   │   └── scroll-to-top.component.ts
+│   │   │   └── system-toast/
+│   │   │       ├── system-toast.component.html
+│   │   │       ├── system-toast.component.scss
+│   │   │       └── system-toast.component.ts
 │   │   ├── pages/
 │   │   │   ├── achievements-page/
 │   │   │   │   ├── achievements-page.component.html
@@ -64,6 +77,10 @@ ben-portfolio-angular-v2/
 │   │   │       ├── project-detail-page.component.scss
 │   │   │       └── project-detail-page.component.ts
 │   │   ├── shared/
+│   │   │   ├── built-without/
+│   │   │   │   ├── built-without.component.html
+│   │   │   │   ├── built-without.component.scss
+│   │   │   │   └── built-without.component.ts
 │   │   │   ├── chaos-cta/
 │   │   │   │   ├── chaos-cta.component.html
 │   │   │   │   ├── chaos-cta.component.scss

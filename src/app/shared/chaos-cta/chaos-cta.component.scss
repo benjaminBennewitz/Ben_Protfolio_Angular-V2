@@ -31,6 +31,12 @@
    01   Bühne
    ========================================================================== */
 
+:host {
+  display: block;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
 .chaos-cta {
   position: relative;
   display: grid;
@@ -43,7 +49,7 @@
   cursor: pointer;
   isolation: isolate;
   scroll-snap-align: start;
-  scroll-snap-stop: normal;
+  scroll-snap-stop: always;
 }
 
 /* ==========================================================================

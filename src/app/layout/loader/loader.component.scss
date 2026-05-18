@@ -101,6 +101,7 @@
   position: absolute;
   top: clamp(1.2rem, 3vw, 2.4rem);
   left: clamp(1rem, 3vw, 2.4rem);
+  z-index: 30;
   display: grid;
   gap: 0.35rem;
   color: #f8f4ea;
@@ -108,7 +109,7 @@
   text-transform: uppercase;
 }
 
-.loader__brand span {
+.loader__brand > span {
   font-family: var(--bp-font-display);
   font-size: clamp(3.8rem, 12vw, 9rem);
   line-height: 0.8;
@@ -126,6 +127,7 @@
   font-size: 0.61rem;
   letter-spacing: 0.16em;
 }
+
 
 
 /* ==========================================================================
@@ -691,7 +693,7 @@
 }
 
 @media (max-width: 640px) {
-  .loader__brand span {
+  .loader__brand > span {
     font-size: clamp(3rem, 20vw, 6rem);
   }
 
@@ -737,7 +739,7 @@
 
   .loader,
   .loader__noise,
-  .loader__brand span,
+  .loader__brand > span,
   .loader-dialog,
   .loader__terminal li,
   .loader__progress span,

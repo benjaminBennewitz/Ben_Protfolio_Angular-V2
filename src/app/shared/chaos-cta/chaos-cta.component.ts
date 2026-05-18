@@ -81,8 +81,11 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   /** Letzte bekannte Pointer-Y-Position relativ zur Section. */
   private pointerY = -10000;
 
-  /** Markiert, ob die Fallanimation gestartet wurde. */
-  private started = false;
+  /** Markiert, ob die Section ausreichend sichtbar ist. */
+  private sectionIsVisible = false;
+
+  /** Geplanter Start nach dem Scroll-Snap-Einrasten. */
+  private snapStartTimer = 0;
 
   /** Sichtbarkeitsobserver für Stop und Resume der Physics-Schleife. */
   private visibilityObserver: IntersectionObserver | null = null;
@@ -105,6 +108,7 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   /** Stoppt laufende Animationen. */
   ngOnDestroy(): void {
     this.pause();
+    window.clearTimeout(this.snapStartTimer);
     this.visibilityObserver?.disconnect();
   }
 
@@ -112,6 +116,13 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   @HostListener('window:resize')
   onResize(): void {
     this.resetBlocks();
+    this.startWhenSnapped();
+  }
+
+  /** Prüft beim Scrollen, ob die Section bereits sauber eingerastet ist. */
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.startWhenSnapped();
   }
 
   /** Merkt sich die Pointerposition für die Abstoßungslogik. */
@@ -208,23 +219,52 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     const stage = this.stageRef?.nativeElement;
 
     if (!stage || !('IntersectionObserver' in window)) {
-      this.start();
+      this.sectionIsVisible = true;
+      this.startWhenSnapped();
       return;
     }
 
     this.visibilityObserver = new IntersectionObserver(
       ([entry]) => {
-        if (entry?.isIntersecting) {
-          this.start();
+        this.sectionIsVisible = Boolean(entry?.isIntersecting);
+
+        if (this.sectionIsVisible) {
+          this.startWhenSnapped();
           return;
         }
 
         this.pause();
+        window.clearTimeout(this.snapStartTimer);
       },
-      { threshold: 0.16, rootMargin: '8% 0px 8% 0px' },
+      { threshold: 0.78, rootMargin: '0px' },
     );
 
     this.visibilityObserver.observe(stage);
+  }
+
+  /** Startet die Bausteine erst, wenn die Section durch Scroll-Snap eingerastet ist. */
+  private startWhenSnapped(): void {
+    if (this.frameId || !this.sectionIsVisible || !this.sectionIsSnapped()) {
+      return;
+    }
+
+    window.clearTimeout(this.snapStartTimer);
+    this.snapStartTimer = window.setTimeout(() => {
+      if (this.sectionIsVisible && this.sectionIsSnapped()) {
+        this.start();
+      }
+    }, 90);
+  }
+
+  /** Erkennt die eingerastete Position der Fullscreen-Section. */
+  private sectionIsSnapped(): boolean {
+    const rect = this.stageRef?.nativeElement.getBoundingClientRect();
+
+    if (!rect) {
+      return false;
+    }
+
+    return Math.abs(rect.top) <= 72;
   }
 
   /** Startet oder setzt die requestAnimationFrame-Schleife außerhalb Angulars fort. */
@@ -234,8 +274,6 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
       this.snapToFloor();
       return;
     }
-
-    this.started = true;
 
     if (this.frameId) {
       return;

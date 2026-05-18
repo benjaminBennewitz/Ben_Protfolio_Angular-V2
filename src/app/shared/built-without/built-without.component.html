@@ -1,0 +1,30 @@
+<!-- src/app/shared/built-without/built-without.component.html -->
+<section class="built-strip" id="quality" bpViewportActivity>
+  <div class="built-strip__layout bp-container" bpReveal>
+    <div class="built-strip__copy">
+      <p class="bp-eyebrow">{{ content().eyebrow }}</p>
+      <h2>{{ content().title }}</h2>
+      <p>{{ content().text }}</p>
+    </div>
+
+    <div class="built-strip__groups">
+      <article class="built-strip__group built-strip__group--without">
+        <h3>{{ content().withoutLabel }}</h3>
+        <ul>
+          @for (item of content().withoutItems; track item) {
+          <li><span class="material-symbols-outlined" aria-hidden="true">close</span>{{ item }}</li>
+          }
+        </ul>
+      </article>
+
+      <article class="built-strip__group built-strip__group--capabilities">
+        <h3>{{ content().capabilityLabel }}</h3>
+        <ul>
+          @for (item of content().capabilityItems; track item) {
+          <li><span class="material-symbols-outlined" aria-hidden="true">check</span>{{ item }}</li>
+          }
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>

@@ -43,4 +43,24 @@ export class FooterComponent {
   isAnchorLink(href: string): boolean {
     return href.startsWith('#');
   }
+
+  /** Prüft, ob ein Link in einem neuen Browser-Tab geöffnet werden soll. */
+  isExternalLink(href: string): boolean {
+    return href.startsWith('http://') || href.startsWith('https://');
+  }
+
+  /** Liefert den kompakten Social-Typ für die Icon-Ausgabe. */
+  socialIconName(label: string): 'linkedin' | 'xing' | 'github' {
+    const normalizedLabel = label.toLowerCase();
+
+    if (normalizedLabel.includes('linkedin')) {
+      return 'linkedin';
+    }
+
+    if (normalizedLabel.includes('xing')) {
+      return 'xing';
+    }
+
+    return 'github';
+  }
 }

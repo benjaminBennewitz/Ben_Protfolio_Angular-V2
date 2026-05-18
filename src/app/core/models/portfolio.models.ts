@@ -27,6 +27,7 @@ export interface NavigationContent {
   readonly about: string;
   readonly skills: string;
   readonly projects: string;
+  readonly blog: string;
   readonly process: string;
   readonly faq: string;
   readonly contact: string;

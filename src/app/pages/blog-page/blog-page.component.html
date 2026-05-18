@@ -1,0 +1,111 @@
+<!-- src/app/pages/blog-page/blog-page.component.html -->
+<main class="blog-page bp-section">
+  <div class="blog-page__shell bp-container">
+    <aside class="blog-page__sidebar bp-card" aria-labelledby="blog-list-title">
+      <a class="blog-page__back" routerLink="/" fragment="hero">
+        <span class="material-symbols-outlined" aria-hidden="true">keyboard_backspace</span>
+        <span>{{ texts().backLabel }}</span>
+      </a>
+
+      <p class="bp-eyebrow">{{ texts().eyebrow }}</p>
+      <h1>{{ texts().title }}</h1>
+      <p>{{ texts().intro }}</p>
+
+      <div class="blog-page__actions">
+        <button type="button" (click)="openAllEntries()">
+          <span class="material-symbols-outlined" aria-hidden="true">select_all</span>
+          <span>{{ texts().openAllLabel }}</span>
+        </button>
+        <button type="button" (click)="closeAllEntries()">
+          <span class="material-symbols-outlined" aria-hidden="true">disabled_by_default</span>
+          <span>{{ texts().closeAllLabel }}</span>
+        </button>
+      </div>
+
+      <nav class="blog-page__nav" [attr.aria-labelledby]="'blog-list-title'">
+        <h2 id="blog-list-title">{{ texts().listTitle }}</h2>
+        @for (entry of texts().entries; track entry.slug) {
+        <button type="button" [class.is-open]="isEntryOpen(entry.slug)" (click)="openEntry(entry.slug)">
+          <span>{{ entry.index }}</span>
+          <strong>{{ entry.title }}</strong>
+          <small>{{ entry.category }}</small>
+        </button>
+        }
+      </nav>
+    </aside>
+
+    <section class="blog-page__desktop" aria-label="Blog Fensterbereich">
+      <div class="blog-page__desktop-head" aria-hidden="true">
+        <span>desktop://snippet_stack</span>
+        <span>{{ visibleWindows().length }} windows open</span>
+      </div>
+
+      @if (!visibleWindows().length) {
+      <article class="blog-window blog-window--empty">
+        <div class="blog-window__bar">
+          <span>empty_state.exe</span>
+          <span aria-hidden="true">×</span>
+        </div>
+        <div class="blog-window__body">
+          <h2>{{ texts().emptyTitle }}</h2>
+          <p>{{ texts().emptyText }}</p>
+        </div>
+      </article>
+      }
+
+      @for (item of visibleWindows(); track trackWindow(item)) {
+      <article class="blog-window" [class.blog-window--stable]="item.entry.supportTone === 'stable'"
+        [class.blog-window--experimental]="item.entry.supportTone === 'experimental'"
+        [class.blog-window--workflow]="item.entry.supportTone === 'workflow'"
+        [style.--blog-window-x]="item.window.x + 'px'" [style.--blog-window-y]="item.window.y + 'px'"
+        [style.z-index]="item.window.zIndex" (pointerdown)="focusWindow(item.entry.slug)">
+        <div class="blog-window__bar">
+          <span>{{ item.entry.slug }}.exe</span>
+          <button type="button" [attr.aria-label]="item.entry.title + ' schließen'"
+            (click)="closeEntry(item.entry.slug, $event)">×</button>
+        </div>
+
+        <div class="blog-window__body">
+          <header class="blog-window__header">
+            <span>{{ item.entry.index }} / {{ item.entry.category }}</span>
+            <h2>{{ item.entry.title }}</h2>
+            <p>{{ item.entry.subtitle }}</p>
+          </header>
+
+          <p class="blog-window__summary">{{ item.entry.summary }}</p>
+
+          <div class="blog-window__meta">
+            <span class="blog-window__support">
+              <b>{{ texts().supportLabel }}</b>
+              {{ item.entry.support }}
+            </span>
+            @for (tag of item.entry.tags; track tag) {
+            <span>{{ tag }}</span>
+            }
+          </div>
+
+          <section class="blog-window__code" [attr.aria-label]="item.entry.title + ' Code-Beispiel'">
+            <div class="blog-window__code-head">
+              <span>{{ item.entry.codeLanguage }}</span>
+              <button type="button" (click)="copyCode(item.entry, $event)">
+                <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
+                <span>{{ texts().copyLabel }}</span>
+              </button>
+            </div>
+            <pre><code>{{ item.entry.code }}</code></pre>
+          </section>
+
+          <section class="blog-window__notes" [attr.aria-label]="texts().notesLabel">
+            <h3>{{ texts().notesLabel }}</h3>
+            <ul>
+              @for (note of item.entry.notes; track note) {
+              <li>{{ note }}</li>
+              }
+            </ul>
+          </section>
+        </div>
+      </article>
+      }
+    </section>
+  </div>
+</main>

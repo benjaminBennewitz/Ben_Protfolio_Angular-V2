@@ -64,6 +64,10 @@ ben-portfolio-angular-v2/
 │   │   │   │   ├── achievements-page.component.html
 │   │   │   │   ├── achievements-page.component.scss
 │   │   │   │   └── achievements-page.component.ts
+│   │   │   ├── blog-page/
+│   │   │   │   ├── blog-page.component.html
+│   │   │   │   ├── blog-page.component.scss
+│   │   │   │   └── blog-page.component.ts
 │   │   │   ├── home-page/
 │   │   │   │   ├── home-page.component.html
 │   │   │   │   ├── home-page.component.scss

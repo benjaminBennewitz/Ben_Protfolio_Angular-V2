@@ -29,6 +29,11 @@ export const routes: Routes = [
     title: 'Achievements | Benjamin Bennewitz Portfolio',
   },
   {
+    path: 'blog',
+    loadComponent: () => import('./pages/blog-page/blog-page.component').then((component) => component.BlogPageComponent),
+    title: 'Blog | Benjamin Bennewitz Portfolio',
+  },
+  {
     path: 'impressum',
     component: ImprintPageComponent,
     title: 'Impressum | Benjamin Bennewitz',

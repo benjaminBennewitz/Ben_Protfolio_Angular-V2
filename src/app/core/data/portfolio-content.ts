@@ -20,6 +20,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       about: 'Über mich',
       skills: 'Stack',
       projects: 'Projekte',
+      blog: 'Blog',
       process: 'Prozess',
       faq: 'FAQ',
       contact: 'Kontakt',
@@ -310,6 +311,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
             { label: 'Über mich', href: '#about' },
             { label: 'Techstack', href: '#skills' },
             { label: 'Projekte', href: '#projects' },
+            { label: 'Blog', href: '/blog' },
             { label: 'Realisiert', href: '#clients' },
             { label: 'FAQ', href: '#faq' },
           ]
@@ -346,6 +348,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       about: 'About',
       skills: 'Stack',
       projects: 'Projects',
+      blog: 'Blog',
       process: 'Process',
       faq: 'FAQ',
       contact: 'Contact',
@@ -636,6 +639,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
             { label: 'About', href: '#about' },
             { label: 'Tech stack', href: '#skills' },
             { label: 'Projects', href: '#projects' },
+            { label: 'Blog', href: '/blog' },
             { label: 'Delivered', href: '#clients' },
             { label: 'FAQ', href: '#faq' },
           ]

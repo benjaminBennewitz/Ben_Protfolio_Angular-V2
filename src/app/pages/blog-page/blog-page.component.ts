@@ -216,7 +216,7 @@ export class BlogPageComponent {
 
   /** Synchronisiert Meta-Daten mit der aktuellen Sprache. */
   constructor() {
-    effect(() => this.seoService.setPageSeo(this.texts().metaTitle, this.texts().metaDescription));
+    effect(() => this.seoService.setPageSeo(this.texts().metaTitle, this.texts().metaDescription, '/blog'));
   }
 
   /** Öffnet ein Blog-Fenster oder bringt es nach vorne. */

@@ -2,15 +2,31 @@
 
 /**
  * @file Kontaktformular-Komponente.
- * @description Validiert Eingaben clientseitig und bereitet eine Mailto-Nachricht vor.
+ * @description Validiert Eingaben clientseitig und sendet vorbereitete Kontaktdaten an den späteren Server-Endpunkt.
  */
 
 import { Component, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ContactTopic } from '../../core/models/portfolio.models';
 import { LanguageService } from '../../core/services/language.service';
 
-/** Einfaches Kontaktformular ohne Backend-Abhängigkeit. */
+/** Formularfelder mit eigener Validierung und Fehlerausgabe. */
+type ContactField = 'name' | 'email' | 'message';
+
+/** Payload für den zukünftigen serverseitigen Kontakt-Endpunkt. */
+interface ContactPayload {
+  /** Name des Absenders. */
+  readonly name: string;
+  /** E-Mail-Adresse des Absenders. */
+  readonly email: string;
+  /** Freitextnachricht des Absenders. */
+  readonly message: string;
+  /** Gewählte Themen als stabile technische Werte. */
+  readonly topics: readonly string[];
+}
+
+/** Einfaches Kontaktformular mit Server-Workflow-Vorbereitung. */
 @Component({
   selector: 'bp-contact-form',
   standalone: true,
@@ -21,6 +37,9 @@ import { LanguageService } from '../../core/services/language.service';
 export class ContactFormComponent {
   /** Sprachservice für Labels und Meldungen. */
   private readonly languageService = inject(LanguageService);
+
+  /** Router für die Danke-Seite nach erfolgreichem Versand. */
+  private readonly router = inject(Router);
 
   /** Übersetzter Kontaktinhalt. */
   readonly content = computed(() => this.languageService.content().contact);
@@ -34,17 +53,23 @@ export class ContactFormComponent {
   /** Nachricht aus dem Formular. */
   readonly message = signal<string>('');
 
+  /** Unsichtbares Honeypot-Feld gegen einfache Bot-Submits. */
+  readonly website = signal<string>('');
+
   /** Gewählte Themen aus der Custom-Mehrfachauswahl. */
   readonly selectedTopics = signal<readonly string[]>([]);
 
   /** Statusmeldung nach Submit. */
   readonly status = signal<string>('');
 
-  /** Markiert einen Fehlerzustand. */
-  readonly hasError = signal<boolean>(false);
+  /** Markiert, dass der erste Submit-Versuch erfolgt ist. */
+  readonly hasSubmitted = signal<boolean>(false);
+
+  /** Markiert, dass gerade ein Server-Request läuft. */
+  readonly isSubmitting = signal<boolean>(false);
 
   /** Aktualisiert ein Feld anhand des Eingabe-Events. */
-  updateField(field: 'name' | 'email' | 'message', event: Event): void {
+  updateField(field: ContactField | 'website', event: Event): void {
     const value = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement ? event.target.value : '';
 
     if (field === 'name') {
@@ -58,62 +83,151 @@ export class ContactFormComponent {
     if (field === 'message') {
       this.message.set(value);
     }
+
+    if (field === 'website') {
+      this.website.set(value);
+    }
   }
 
   /** Schaltet ein Kontakt-Thema in der Custom-Mehrfachauswahl um. */
   toggleTopic(topic: ContactTopic): void {
-    this.selectedTopics.update((topics) => topics.includes(topic.value)
-      ? topics.filter((value) => value !== topic.value)
-      : [...topics, topic.value]);
+    const selected = new Set(this.selectedTopics());
+
+    if (selected.has(topic.value)) {
+      selected.delete(topic.value);
+    } else {
+      selected.add(topic.value);
+    }
+
+    this.selectedTopics.set(Array.from(selected));
   }
 
-  /** Prüft, ob ein Kontakt-Thema aktuell ausgewählt ist. */
+  /** Prüft, ob ein Kontakt-Thema aktuell gewählt ist. */
   topicIsSelected(topic: ContactTopic): boolean {
     return this.selectedTopics().includes(topic.value);
   }
 
-  /** Validiert das Formular und öffnet bei Erfolg eine vorbereitete Mail. */
-  submit(): void {
+  /** Gibt zurück, ob ein Feld nach dem Submit markiert werden muss. */
+  fieldHasError(field: ContactField): boolean {
+    return this.fieldError(field).length > 0;
+  }
+
+  /** Gibt die aktuelle Fehlermeldung für ein Feld zurück. */
+  fieldError(field: ContactField): string {
+    if (!this.hasSubmitted()) {
+      return '';
+    }
+
+    if (field === 'name') {
+      return this.nameError();
+    }
+
+    if (field === 'email') {
+      return this.emailError();
+    }
+
+    return this.messageError();
+  }
+
+  /** Sendet valide Formulardaten an den vorbereiteten Backend-Endpunkt. */
+  async submit(): Promise<void> {
+    this.hasSubmitted.set(true);
+    this.status.set('');
+
+    if (this.website().trim()) {
+      await this.router.navigate(['/danke']);
+      return;
+    }
+
     if (!this.isValid()) {
-      this.hasError.set(true);
       this.status.set(this.content().errorMessage);
       return;
     }
 
-    const subject = encodeURIComponent(`Portfolio Kontakt von ${this.name()}`);
-    const body = encodeURIComponent(this.createMailBody());
-
-    this.hasError.set(false);
-    this.status.set(this.content().successMessage);
-    window.location.href = `mailto:kontakt@bennewitz.de?subject=${subject}&body=${body}`;
+    await this.sendToServer();
   }
 
-  /** Erzeugt den Mailtext inklusive optionaler Themenauswahl. */
-  private createMailBody(): string {
-    const selectedLabels = this.selectedTopicLabels();
-    const topicLine = selectedLabels.length ? `${this.content().topicLabel}: ${selectedLabels.join(', ')}
+  /** Sendet die Nachricht an den zukünftigen Server-Endpunkt. */
+  private async sendToServer(): Promise<void> {
+    this.isSubmitting.set(true);
 
-` : '';
+    try {
+      const response = await fetch(this.content().endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify(this.createPayload()),
+      });
 
-    return `${topicLine}${this.message()}
+      if (!response.ok) {
+        throw new Error(`Contact endpoint failed with status ${response.status}`);
+      }
 
-Name: ${this.name()}
-E-Mail: ${this.email()}`;
+      await this.router.navigate(['/danke']);
+    } catch {
+      this.status.set(this.content().serverErrorMessage);
+    } finally {
+      this.isSubmitting.set(false);
+    }
   }
 
-  /** Gibt die sichtbaren Labels der gewählten Themen zurück. */
-  private selectedTopicLabels(): readonly string[] {
-    const selectedValues = new Set(this.selectedTopics());
-
-    return this.content().topics
-      .filter((topic) => selectedValues.has(topic.value))
-      .map((topic) => topic.label);
+  /** Erzeugt den typisierten Request-Body für das Backend. */
+  private createPayload(): ContactPayload {
+    return {
+      name: this.name().trim(),
+      email: this.email().trim(),
+      message: this.message().trim(),
+      topics: this.selectedTopics(),
+    };
   }
 
   /** Prüft Mindestfelder und einfache E-Mail-Syntax. */
   private isValid(): boolean {
-    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email().trim());
+    return !this.nameError() && !this.emailError() && !this.messageError();
+  }
 
-    return this.name().trim().length >= 2 && emailValid && this.message().trim().length >= 10;
+  /** Ermittelt den Fehlertext für den Namen. */
+  private nameError(): string {
+    const value = this.name().trim();
+
+    if (!value) {
+      return this.content().nameRequiredError;
+    }
+
+    if (value.length < 2) {
+      return this.content().nameLengthError;
+    }
+
+    return '';
+  }
+
+  /** Ermittelt den Fehlertext für die E-Mail-Adresse. */
+  private emailError(): string {
+    const value = this.email().trim();
+
+    if (!value) {
+      return this.content().emailRequiredError;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      return this.content().emailFormatError;
+    }
+
+    return '';
+  }
+
+  /** Ermittelt den Fehlertext für die Nachricht. */
+  private messageError(): string {
+    const value = this.message().trim();
+
+    if (!value) {
+      return this.content().messageRequiredError;
+    }
+
+    if (value.length < 10) {
+      return this.content().messageLengthError;
+    }
+
+    return '';
   }
 }

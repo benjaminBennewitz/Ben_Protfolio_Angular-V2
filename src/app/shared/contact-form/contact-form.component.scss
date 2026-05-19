@@ -38,6 +38,7 @@
 }
 
 .contact-form {
+  position: relative;
   display: grid;
   width: 100%;
   border-radius: 0;
@@ -55,6 +56,27 @@
 .contact-form__fields {
   display: grid;
   gap: 0.58rem;
+}
+
+.contact-form__required-hint {
+  position: absolute;
+  top: 0.44rem;
+  right: 0.75rem;
+  margin: 0;
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contact-form__honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 .contact-form__field-row {
@@ -179,6 +201,11 @@
   text-transform: uppercase;
 }
 
+.contact-form label b {
+  color: var(--bp-color-danger);
+  font-weight: 950;
+}
+
 .contact-form input,
 .contact-form textarea {
   width: 100%;
@@ -202,6 +229,21 @@
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent);
 }
 
+.contact-form label.has-error input,
+.contact-form label.has-error textarea {
+  border-color: var(--bp-color-danger);
+  background: color-mix(in srgb, var(--bp-color-danger) 8%, var(--bp-color-bg) 92%);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-danger) 24%, transparent);
+}
+
+.contact-form__error {
+  color: var(--bp-color-danger);
+  font-family: var(--bp-font-mono);
+  font-size: 0.68rem;
+  font-weight: 820;
+  line-height: 1.35;
+}
+
 /* ===========================================================================
    05   Status
    ========================================================================== */
@@ -220,13 +262,15 @@
   padding-block: 0.58rem;
 }
 
-.contact-form__status {
-  color: var(--bp-color-accent);
-  font-weight: 800;
+.contact-form .bp-button:disabled {
+  opacity: 0.62;
+  cursor: progress;
+  transform: none;
 }
 
-.contact-form__status--error {
+.contact-form__status {
   color: var(--bp-color-danger);
+  font-weight: 800;
 }
 
 /* ===========================================================================

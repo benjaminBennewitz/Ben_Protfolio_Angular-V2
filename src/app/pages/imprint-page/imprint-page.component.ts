@@ -33,7 +33,7 @@ export class ImprintPageComponent {
 
   /** Synchronisiert Meta-Daten mit der aktiven Sprache. */
   constructor() {
-    effect(() => this.seoService.setPageSeo(this.imprint().metaTitle, this.imprint().metaDescription));
+    effect(() => this.seoService.setPageSeo(this.imprint().metaTitle, this.imprint().metaDescription, '/impressum'));
   }
 
   /** Entfernt das Legal-Check-Dialogfenster aus der Ansicht. */

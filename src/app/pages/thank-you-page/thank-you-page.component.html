@@ -1,0 +1,30 @@
+<!-- src/app/pages/thank-you-page/thank-you-page.component.html -->
+<main class="thank-you bp-section">
+  <div class="thank-you__layout bp-container">
+    <section class="thank-you__copy" aria-labelledby="thank-you-title">
+      <a class="thank-you__back" routerLink="/" fragment="hero">
+        <span class="material-symbols-outlined" aria-hidden="true">keyboard_backspace</span>
+        <span>{{ content().backLabel }}</span>
+      </a>
+
+      <p class="bp-eyebrow">{{ content().eyebrow }}</p>
+      <h1 id="thank-you-title">{{ content().title }}</h1>
+      <p class="bp-subtitle">{{ content().text }}</p>
+    </section>
+
+    @if (isDialogVisible()) {
+    <aside class="thank-you__dialog bp-dos-window" [attr.aria-label]="content().dialogTitle">
+      <div class="bp-dos-window__bar">
+        <span>{{ content().dialogTitle }}</span>
+        <button class="thank-you__dialog-close" type="button" [attr.aria-label]="content().dialogCloseLabel"
+          (click)="closeDialog()">×</button>
+      </div>
+      <div class="bp-dos-window__body">
+        @for (line of content().dialogLines; track line) {
+        <p>{{ line }}</p>
+        }
+      </div>
+    </aside>
+    }
+  </div>
+</main>

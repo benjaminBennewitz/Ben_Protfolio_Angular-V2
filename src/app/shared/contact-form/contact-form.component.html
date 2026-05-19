@@ -1,34 +1,54 @@
 <!-- src/app/shared/contact-form/contact-form.component.html -->
 <form class="contact-form bp-card" (ngSubmit)="submit()" novalidate>
+  <p class="contact-form__required-hint">{{ content().requiredHint }}</p>
+
+  <div class="contact-form__honeypot" aria-hidden="true">
+    <label>
+      <span>{{ content().honeypotLabel }}</span>
+      <input type="text" tabindex="-1" autocomplete="off" [value]="website()" (input)="updateField('website', $event)">
+    </label>
+  </div>
+
   <div class="contact-form__layout">
     <div class="contact-form__fields">
       <div class="contact-form__field-row">
-        <label>
-          <span>{{ content().nameLabel }}</span>
-          <input type="text" autocomplete="name" [value]="name()" (input)="updateField('name', $event)" required
-            minlength="2">
+        <label [class.has-error]="fieldHasError('name')">
+          <span>{{ content().nameLabel }} <b [attr.aria-label]="content().requiredMarkLabel">*</b></span>
+          <input id="contact-name" type="text" autocomplete="name" [value]="name()" (input)="updateField('name', $event)"
+            [attr.aria-invalid]="fieldHasError('name')" aria-describedby="contact-name-error" required minlength="2">
+          @if (fieldHasError('name')) {
+          <small id="contact-name-error" class="contact-form__error">{{ fieldError('name') }}</small>
+          }
         </label>
 
-        <label>
-          <span>{{ content().emailLabel }}</span>
-          <input type="email" autocomplete="email" [value]="email()" (input)="updateField('email', $event)" required>
+        <label [class.has-error]="fieldHasError('email')">
+          <span>{{ content().emailLabel }} <b [attr.aria-label]="content().requiredMarkLabel">*</b></span>
+          <input id="contact-email" type="email" autocomplete="email" [value]="email()" (input)="updateField('email', $event)"
+            [attr.aria-invalid]="fieldHasError('email')" aria-describedby="contact-email-error" required>
+          @if (fieldHasError('email')) {
+          <small id="contact-email-error" class="contact-form__error">{{ fieldError('email') }}</small>
+          }
         </label>
       </div>
 
-      <label>
-        <span>{{ content().messageLabel }}</span>
-        <textarea rows="5" [value]="message()" (input)="updateField('message', $event)" required minlength="10"></textarea>
+      <label [class.has-error]="fieldHasError('message')">
+        <span>{{ content().messageLabel }} <b [attr.aria-label]="content().requiredMarkLabel">*</b></span>
+        <textarea id="contact-message" rows="5" [value]="message()" (input)="updateField('message', $event)"
+          [attr.aria-invalid]="fieldHasError('message')" aria-describedby="contact-message-error" required minlength="10"></textarea>
+        @if (fieldHasError('message')) {
+        <small id="contact-message-error" class="contact-form__error">{{ fieldError('message') }}</small>
+        }
       </label>
 
       <p class="contact-form__privacy">{{ content().privacy }}</p>
 
-      <button class="bp-button bp-button--accent" type="submit">
-        <span>{{ content().submitLabel }}</span>
+      <button class="bp-button bp-button--accent" type="submit" [disabled]="isSubmitting()">
+        <span>{{ isSubmitting() ? content().sendingLabel : content().submitLabel }}</span>
         <span class="material-symbols-outlined" aria-hidden="true">send</span>
       </button>
 
       @if (status()) {
-      <p class="contact-form__status" [class.contact-form__status--error]="hasError()" role="status">{{ status() }}</p>
+      <p class="contact-form__status" role="status">{{ status() }}</p>
       }
     </div>
 

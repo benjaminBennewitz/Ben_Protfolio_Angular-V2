@@ -10,6 +10,7 @@ import { AchievementsPageComponent } from './pages/achievements-page/achievement
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ImprintPageComponent } from './pages/imprint-page/imprint-page.component';
 import { ProjectDetailPageComponent } from './pages/project-detail-page/project-detail-page.component';
+import { ThankYouPageComponent } from './pages/thank-you-page/thank-you-page.component';
 
 /** Routen der Portfolio-Anwendung. */
 export const routes: Routes = [
@@ -32,6 +33,11 @@ export const routes: Routes = [
     path: 'blog',
     loadComponent: () => import('./pages/blog-page/blog-page.component').then((component) => component.BlogPageComponent),
     title: 'Blog | Benjamin Bennewitz Portfolio',
+  },
+  {
+    path: 'danke',
+    component: ThankYouPageComponent,
+    title: 'Danke | Benjamin Bennewitz Portfolio',
   },
   {
     path: 'impressum',

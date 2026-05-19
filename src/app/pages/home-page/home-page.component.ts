@@ -75,6 +75,12 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   /** Sichtbarkeit des Skill-Level-Dialogfensters. */
   readonly isSkillsDialogVisible = signal<boolean>(true);
 
+  /** Sichtbarkeit des Projekt-Einstieg-Dialogfensters. */
+  readonly isProjectsDialogVisible = signal<boolean>(true);
+
+  /** Sichtbarkeit des Kontaktformular-Modals. */
+  readonly isContactModalVisible = signal<boolean>(false);
+
   /** Aktiviert die Wachstumsanimation der Skill-Level-Balken. */
   readonly areSkillLevelsLoaded = signal<boolean>(false);
 
@@ -190,6 +196,27 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   /** Entfernt das Skill-Level-Dialogfenster aus dem Techstack-Bereich. */
   closeSkillsDialog(): void {
     this.isSkillsDialogVisible.set(false);
+  }
+
+  /** Entfernt das Projekt-Einstieg-Dialogfenster aus der Projektübersicht. */
+  closeProjectsDialog(): void {
+    this.isProjectsDialogVisible.set(false);
+  }
+
+  /** Öffnet das Kontaktformular als fokussiertes Modal über der Startseite. */
+  openContactModal(): void {
+    this.isContactModalVisible.set(true);
+  }
+
+  /** Schließt das Kontaktformular-Modal. */
+  closeContactModal(): void {
+    this.isContactModalVisible.set(false);
+  }
+
+  /** Schließt das Kontaktformular-Modal über Escape. */
+  @HostListener('window:keydown.escape')
+  closeContactModalByKeyboard(): void {
+    this.closeContactModal();
   }
 
   /** Aktualisiert den scrollabhängigen Offset für den Hero-Hintergrund. */

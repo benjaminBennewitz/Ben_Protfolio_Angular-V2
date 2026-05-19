@@ -33,10 +33,10 @@
         <p class="hero__subtitle">{{ content().hero.subtitle }}</p>
 
         <div class="hero__actions">
-          <a class="bp-button bp-button--accent" routerLink="/" fragment="projects">
+          <button class="bp-button bp-button--accent" type="button" (click)="openContactModal()">
             <span>{{ content().hero.primaryCta }}</span>
-            <span class="material-symbols-outlined" aria-hidden="true">arrow_downward</span>
-          </a>
+            <span class="material-symbols-outlined" aria-hidden="true">mail</span>
+          </button>
           <a class="bp-button bp-button--ghost" routerLink="/" fragment="about">
             <span>{{ content().hero.secondaryCta }}</span>
             <span class="material-symbols-outlined" aria-hidden="true">terminal</span>
@@ -45,7 +45,7 @@
       </div>
 
       @if (isHeroDialogVisible()) {
-      <aside class="hero__dos bp-dos-window" aria-label="Dialogfenster im Poster-Stil" bpReveal>
+      <aside class="hero__dos bp-dos-window" [attr.aria-label]="content().hero.dialogLabel" bpReveal>
         <div class="bp-dos-window__bar">
           <span>mixed_reactions.exe</span>
           <button type="button" (click)="closeHeroDialog()"
@@ -66,7 +66,7 @@
       </aside>
       }
 
-      <aside class="hero__status" aria-label="Systemstatus" bpReveal>
+      <aside class="hero__status" [attr.aria-label]="content().hero.statusLabel" bpReveal>
         <div class="hero__status-bar">
           <span>// status.exe</span>
           <span class="hero__status-pill"><span class="hero__status-led"
@@ -226,9 +226,41 @@
     <bp-tech-marquee bpViewportActivity [items]="content().skills.marquee" />
   </section>
 
-  <bp-project-stack bpViewportActivity [eyebrow]="content().projectsIntro.eyebrow" [title]="content().projectsIntro.title"
-    [subtitle]="content().projectsIntro.subtitle" [detailLabel]="content().projectsIntro.detailLabel"
-    [projects]="content().projects" />
+  <section class="projects-kickoff bp-section" id="projects" bpViewportActivity>
+    <div class="bp-container projects-kickoff__layout" bpReveal>
+      <div class="projects-kickoff__copy">
+        <p class="bp-eyebrow">{{ content().projectsIntro.eyebrow }}</p>
+        <h2>{{ content().projectsIntro.title }}</h2>
+        @if (content().projectsIntro.subtitle) {
+        <p class="projects-kickoff__lead">{{ content().projectsIntro.subtitle }}</p>
+        }
+
+        <div class="projects-kickoff__text">
+          @for (paragraph of content().projectsIntro.introText; track paragraph) {
+          <p>{{ paragraph }}</p>
+          }
+        </div>
+      </div>
+
+      @if (isProjectsDialogVisible()) {
+      <aside class="projects-kickoff__window bp-dos-window" [attr.aria-label]="content().projectsIntro.dialogTitle">
+        <div class="bp-dos-window__bar">
+          <span>{{ content().projectsIntro.dialogTitle }}</span>
+          <button class="projects-kickoff__window-close" type="button"
+            [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeProjectsDialog()">×</button>
+        </div>
+        <div class="bp-dos-window__body">
+          @for (line of content().projectsIntro.dialogLines; track line) {
+          <p>{{ line }}</p>
+          }
+        </div>
+      </aside>
+      }
+    </div>
+  </section>
+
+  <bp-project-stack bpViewportActivity [detailLabel]="content().projectsIntro.detailLabel"
+    [labels]="content().projectsIntro" [projects]="content().projects" />
 
   <bp-process-lock bpViewportActivity [eyebrow]="content().process.eyebrow" [title]="content().process.title"
     [subtitle]="content().process.subtitle" [hint]="content().process.hint" [steps]="content().process.steps" />
@@ -305,4 +337,21 @@
       <bp-contact-form />
     </div>
   </section>
+
+  @if (isContactModalVisible()) {
+  <div class="contact-modal" role="dialog" aria-modal="true" [attr.aria-label]="content().contact.modalTitle">
+    <button class="contact-modal__backdrop" type="button" [attr.aria-label]="content().contact.modalCloseLabel"
+      (click)="closeContactModal()"></button>
+    <div class="contact-modal__window bp-dos-window">
+      <div class="bp-dos-window__bar">
+        <span>{{ content().contact.modalTitle }}</span>
+        <button type="button" [attr.aria-label]="content().contact.modalCloseLabel"
+          (click)="closeContactModal()">×</button>
+      </div>
+      <div class="contact-modal__body">
+        <bp-contact-form />
+      </div>
+    </div>
+  </div>
+  }
 </main>

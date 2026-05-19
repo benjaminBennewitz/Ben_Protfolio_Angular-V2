@@ -76,10 +76,14 @@ ben-portfolio-angular-v2/
 │   │   │   │   ├── imprint-page.component.html
 │   │   │   │   ├── imprint-page.component.scss
 │   │   │   │   └── imprint-page.component.ts
-│   │   │   └── project-detail-page/
-│   │   │       ├── project-detail-page.component.html
-│   │   │       ├── project-detail-page.component.scss
-│   │   │       └── project-detail-page.component.ts
+│   │   │   ├── project-detail-page/
+│   │   │   │   ├── project-detail-page.component.html
+│   │   │   │   ├── project-detail-page.component.scss
+│   │   │   │   └── project-detail-page.component.ts
+│   │   │   └── thank-you-page/
+│   │   │       ├── thank-you-page.component.html
+│   │   │       ├── thank-you-page.component.scss
+│   │   │       └── thank-you-page.component.ts
 │   │   ├── shared/
 │   │   │   ├── built-without/
 │   │   │   │   ├── built-without.component.html

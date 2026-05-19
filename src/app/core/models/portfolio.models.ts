@@ -45,6 +45,8 @@ export interface HeroContent {
   readonly primaryCta: string;
   readonly secondaryCta: string;
   readonly consoleLines: readonly string[];
+  readonly dialogLabel: string;
+  readonly statusLabel: string;
   readonly stats: readonly StatItem[];
 }
 
@@ -133,6 +135,14 @@ export interface ProjectsContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly subtitle: string;
+  /** Ergänzende Einleitungstexte vor dem Projekt-Stack. */
+  readonly introText: readonly string[];
+  /** Titel des dekorativen Projekt-Terminalfensters. */
+  readonly dialogTitle: string;
+  /** ARIA-Label zum Schließen des Projekt-Terminalfensters. */
+  readonly dialogCloseLabel: string;
+  /** Zeilen im dekorativen Projekt-Terminalfenster. */
+  readonly dialogLines: readonly string[];
   readonly detailLabel: string;
   readonly overviewLabel: string;
   readonly typeLabel: string;
@@ -144,6 +154,10 @@ export interface ProjectsContent {
   readonly highlightsEyebrow: string;
   readonly highlightsTitle: string;
   readonly metaAriaLabel: string;
+  readonly techStackAriaLabel: string;
+  readonly previewAriaLabel: string;
+  readonly trashPaperLabel: string;
+  readonly typewriterLabel: string;
 }
 
 /** Detaildaten eines Portfolio-Projekts. */
@@ -235,7 +249,7 @@ export interface BuiltWithoutContent {
 
 /** Thema im Kontaktformular. */
 export interface ContactTopic {
-  /** Stabiler technischer Wert für Mailto und Tracking-freie Formularlogik. */
+  /** Stabiler technischer Wert für Formularlogik und Backend-Payload. */
   readonly value: string;
   /** Sichtbares Label des Themas. */
   readonly label: string;
@@ -248,18 +262,65 @@ export interface ContactContent {
   readonly eyebrow: string;
   readonly title: string;
   readonly subtitle: string;
+  readonly modalTitle: string;
+  readonly modalCloseLabel: string;
+  /** Ziel-Endpunkt für den späteren serverseitigen Mailversand. */
+  readonly endpoint: string;
   readonly topicLabel: string;
   readonly topicHint: string;
   readonly topics: readonly ContactTopic[];
   readonly nameLabel: string;
   readonly emailLabel: string;
   readonly messageLabel: string;
+  /** Hinweis auf Pflichtfelder im Formular. */
+  readonly requiredHint: string;
+  /** Zugängliches Label für den Pflichtstern. */
+  readonly requiredMarkLabel: string;
   readonly submitLabel: string;
+  /** Beschriftung während des serverseitigen Versands. */
+  readonly sendingLabel: string;
   readonly successMessage: string;
   readonly errorMessage: string;
+  /** Fehlermeldung bei fehlendem oder nicht erreichbarem Backend. */
+  readonly serverErrorMessage: string;
+  /** Fehlermeldung für einen fehlenden Namen. */
+  readonly nameRequiredError: string;
+  /** Fehlermeldung für einen zu kurzen Namen. */
+  readonly nameLengthError: string;
+  /** Fehlermeldung für eine fehlende E-Mail-Adresse. */
+  readonly emailRequiredError: string;
+  /** Fehlermeldung für ein ungültiges E-Mail-Format. */
+  readonly emailFormatError: string;
+  /** Fehlermeldung für eine fehlende Nachricht. */
+  readonly messageRequiredError: string;
+  /** Fehlermeldung für eine zu kurze Nachricht. */
+  readonly messageLengthError: string;
+  /** Beschriftung des unsichtbaren Honeypot-Felds. */
+  readonly honeypotLabel: string;
   readonly privacy: string;
 }
 
+/** Inhalt der Dankeseite nach erfolgreichem Kontaktformular-Versand. */
+export interface ThankYouContent {
+  /** Meta-Titel der Dankeseite. */
+  readonly metaTitle: string;
+  /** Meta-Description der Dankeseite. */
+  readonly metaDescription: string;
+  /** Kleine technische Beschriftung über dem Seitentitel. */
+  readonly eyebrow: string;
+  /** Hauptüberschrift der Dankeseite. */
+  readonly title: string;
+  /** Erklärungstext nach erfolgreichem Versand. */
+  readonly text: string;
+  /** Beschriftung des Zurück-Links. */
+  readonly backLabel: string;
+  /** Titel des dekorativen Statusfensters. */
+  readonly dialogTitle: string;
+  /** Zugängliche Beschriftung zum Schließen des Statusfensters. */
+  readonly dialogCloseLabel: string;
+  /** Zeilen im dekorativen Statusfenster. */
+  readonly dialogLines: readonly string[];
+}
 
 /** Inhalt der Impressumsseite. */
 export interface ImprintContent {
@@ -344,6 +405,8 @@ export interface PortfolioContent {
   /** Schmale Qualitäts-Section mit bewussten technischen Entscheidungen. */
   readonly builtWithout: BuiltWithoutContent;
   readonly contact: ContactContent;
+  /** Inhalte der Dankeseite. */
+  readonly thankYou: ThankYouContent;
   /** Inhalte der Impressumsseite. */
   readonly imprint: ImprintContent;
   readonly footer: FooterContent;

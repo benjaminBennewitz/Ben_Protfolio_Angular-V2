@@ -2,53 +2,241 @@
 
 /**
  * @file SEO-Meta-Verwaltung.
- * @description Aktualisiert Titel, Description und Social-Meta-Tags pro Route.
+ * @description Aktualisiert Titel, Description, Canonical, Social-Meta-Tags und strukturierte Daten pro Route.
  */
 
+import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 import { PortfolioProject, SeoContent } from '../models/portfolio.models';
 import { TabTitleService } from './tab-title.service';
 
+/** Optionen für eine einzelne SEO-Aktualisierung. */
+interface SeoApplyOptions {
+  /** Vollständiger Seitentitel. */
+  readonly title: string;
+  /** Meta-Description der aktuellen Seite. */
+  readonly description: string;
+  /** Relativer Pfad für Canonical und OpenGraph-URL. */
+  readonly path: string;
+  /** OpenGraph-Typ der aktuellen Seite. */
+  readonly type: 'website' | 'article';
+  /** Robots-Anweisung für Suchmaschinen. */
+  readonly robots: 'index, follow' | 'noindex, follow';
+  /** Strukturierte Daten als JSON-LD-Objekt. */
+  readonly structuredData: Record<string, unknown> | readonly Record<string, unknown>[];
+}
+
 /** Zentraler Service für routenabhängige SEO-Daten. */
 @Injectable({ providedIn: 'root' })
 export class SeoService {
+  /** Primäre Domain für Canonical, OpenGraph und JSON-LD. */
+  private readonly siteUrl = 'https://bennewitz.de';
+
+  /** Social-Preview-Bild für OpenGraph und Twitter Cards. */
+  private readonly socialImage = '/assets/social/og-portfolio-preview.svg';
+
+  /** ID des dynamisch verwalteten JSON-LD-Scripts. */
+  private readonly structuredDataId = 'bp-structured-data';
+
   /** Angular Meta-Service. */
   private readonly meta = inject(Meta);
+
+  /** Dokumentreferenz für Canonical-Link und JSON-LD-Script. */
+  private readonly document = inject(DOCUMENT);
 
   /** Service für aktive und inaktive Tab-Titel. */
   private readonly tabTitle = inject(TabTitleService);
 
   /** Setzt die Meta-Daten der Startseite. */
   setHomeSeo(content: SeoContent): void {
-    this.applySeo(content.title, content.description);
+    this.applySeo({
+      title: content.title,
+      description: content.description,
+      path: '/',
+      type: 'website',
+      robots: 'index, follow',
+      structuredData: [this.createPersonSchema(), this.createWebsiteSchema(content)],
+    });
   }
 
   /** Setzt allgemeine Meta-Daten für statische Inhaltsseiten. */
-  setPageSeo(title: string, description: string): void {
-    this.applySeo(title, description);
+  setPageSeo(title: string, description: string, path = '/'): void {
+    this.applySeo({
+      title,
+      description,
+      path,
+      type: 'website',
+      robots: 'index, follow',
+      structuredData: this.createWebPageSchema(title, description, path),
+    });
+  }
+
+  /** Setzt noindex-Meta-Daten für reine Bestätigungs- und Systemseiten. */
+  setNoIndexPageSeo(title: string, description: string, path = '/'): void {
+    this.applySeo({
+      title,
+      description,
+      path,
+      type: 'website',
+      robots: 'noindex, follow',
+      structuredData: this.createWebPageSchema(title, description, path),
+    });
   }
 
   /** Setzt die Meta-Daten für eine Projekt-Detailseite. */
   setProjectSeo(project: PortfolioProject): void {
     const title = `${project.name} | Benjamin Bennewitz Portfolio`;
     const description = project.summary;
+    const path = `/projects/${project.slug}`;
 
-    this.applySeo(title, description);
+    this.applySeo({
+      title,
+      description,
+      path,
+      type: 'article',
+      robots: 'index, follow',
+      structuredData: this.createProjectSchema(project, title, description, path),
+    });
   }
 
   /** Setzt die Meta-Daten für eine Fehlerseite. */
   setNotFoundSeo(title: string, description: string): void {
-    this.applySeo(title, description);
+    this.applySeo({
+      title,
+      description,
+      path: '/',
+      type: 'website',
+      robots: 'noindex, follow',
+      structuredData: this.createWebPageSchema(title, description, '/'),
+    });
   }
 
-  /** Aktualisiert Titel, Description, OpenGraph und Twitter-Meta-Tags. */
-  private applySeo(title: string, description: string): void {
-    this.tabTitle.setActiveTitle(title);
-    this.meta.updateTag({ name: 'description', content: description });
-    this.meta.updateTag({ property: 'og:title', content: title });
-    this.meta.updateTag({ property: 'og:description', content: description });
-    this.meta.updateTag({ name: 'twitter:title', content: title });
-    this.meta.updateTag({ name: 'twitter:description', content: description });
+  /** Aktualisiert Titel, Description, Canonical, OpenGraph, Twitter und JSON-LD. */
+  private applySeo(options: SeoApplyOptions): void {
+    const canonicalUrl = this.absoluteUrl(options.path);
+    const imageUrl = this.absoluteUrl(this.socialImage);
+
+    this.tabTitle.setActiveTitle(options.title);
+    this.meta.updateTag({ name: 'description', content: options.description });
+    this.meta.updateTag({ name: 'robots', content: options.robots });
+    this.meta.updateTag({ name: 'author', content: 'Benjamin Bennewitz' });
+    this.meta.updateTag({ name: 'keywords', content: 'Benjamin Bennewitz, Full Stack Webentwicklung, Angular Portfolio, Django, UI UX Design, Grafikdesign, Web Apps, Intranet, Accessibility, SEO' });
+    this.meta.updateTag({ property: 'og:site_name', content: 'B² Portfolio' });
+    this.meta.updateTag({ property: 'og:type', content: options.type });
+    this.meta.updateTag({ property: 'og:url', content: canonicalUrl });
+    this.meta.updateTag({ property: 'og:title', content: options.title });
+    this.meta.updateTag({ property: 'og:description', content: options.description });
+    this.meta.updateTag({ property: 'og:image', content: imageUrl });
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({ name: 'twitter:title', content: options.title });
+    this.meta.updateTag({ name: 'twitter:description', content: options.description });
+    this.meta.updateTag({ name: 'twitter:image', content: imageUrl });
+    this.setCanonical(canonicalUrl);
+    this.setStructuredData(options.structuredData);
+  }
+
+  /** Erzeugt ein absolutes URL-Format aus einem relativen Pfad. */
+  private absoluteUrl(path: string): string {
+    if (path.startsWith('http')) {
+      return path;
+    }
+
+    const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+
+    return `${this.siteUrl}${normalizedPath}`;
+  }
+
+  /** Aktualisiert oder erzeugt den Canonical-Link im Dokumentkopf. */
+  private setCanonical(url: string): void {
+    let link = this.document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+
+    if (!link) {
+      link = this.document.createElement('link');
+      link.rel = 'canonical';
+      this.document.head.appendChild(link);
+    }
+
+    link.href = url;
+  }
+
+  /** Aktualisiert das JSON-LD-Script im Dokumentkopf. */
+  private setStructuredData(data: Record<string, unknown> | readonly Record<string, unknown>[]): void {
+    let script = this.document.getElementById(this.structuredDataId) as HTMLScriptElement | null;
+
+    if (!script) {
+      script = this.document.createElement('script');
+      script.id = this.structuredDataId;
+      script.type = 'application/ld+json';
+      this.document.head.appendChild(script);
+    }
+
+    script.textContent = JSON.stringify(data);
+  }
+
+  /** Erstellt strukturierte Personendaten für die Startseite. */
+  private createPersonSchema(): Record<string, unknown> {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: 'Benjamin Bennewitz',
+      alternateName: 'B²',
+      url: this.siteUrl,
+      jobTitle: 'Full Stack Web Developer und Grafikdesigner',
+      knowsAbout: ['Angular', 'Django', 'UI/UX Design', 'Grafikdesign', 'SEO', 'Accessibility', 'Web Apps'],
+      sameAs: [
+        'https://www.linkedin.com/in/benjamin-bennewitz/',
+        'https://www.xing.com/profile/Benjamin_Bennewitz',
+        'https://github.com/benjaminBennewitz',
+      ],
+    };
+  }
+
+  /** Erstellt strukturierte WebSite-Daten für die Startseite. */
+  private createWebsiteSchema(content: SeoContent): Record<string, unknown> {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'B² Portfolio',
+      alternateName: content.title,
+      url: this.siteUrl,
+      description: content.description,
+      inLanguage: this.document.documentElement.lang || 'de',
+      publisher: {
+        '@type': 'Person',
+        name: 'Benjamin Bennewitz',
+      },
+    };
+  }
+
+  /** Erstellt strukturierte WebPage-Daten für statische Seiten. */
+  private createWebPageSchema(title: string, description: string, path: string): Record<string, unknown> {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: title,
+      url: this.absoluteUrl(path),
+      description,
+      inLanguage: this.document.documentElement.lang || 'de',
+    };
+  }
+
+  /** Erstellt strukturierte CreativeWork-Daten für Projektseiten. */
+  private createProjectSchema(project: PortfolioProject, title: string, description: string, path: string): Record<string, unknown> {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'CreativeWork',
+      name: title,
+      headline: project.name,
+      url: this.absoluteUrl(path),
+      description,
+      temporalCoverage: project.year,
+      keywords: project.techStack.join(', '),
+      creator: {
+        '@type': 'Person',
+        name: 'Benjamin Bennewitz',
+      },
+      about: project.highlights,
+    };
   }
 }

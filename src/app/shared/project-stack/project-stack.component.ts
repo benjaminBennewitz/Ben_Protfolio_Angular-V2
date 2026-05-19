@@ -7,7 +7,7 @@
 
 import { AfterViewInit, Component, ElementRef, HostListener, Input, NgZone, OnDestroy, QueryList, ViewChildren, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PortfolioProject } from '../../core/models/portfolio.models';
+import { PortfolioProject, ProjectsContent } from '../../core/models/portfolio.models';
 import { AccessibilityPreferenceService } from '../../core/services/accessibility-preference.service';
 import { AchievementService } from '../../core/services/achievement.service';
 import { ProjectVisualComponent } from '../project-visual/project-visual.component';
@@ -106,17 +106,11 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   /** Kurze Sperre gegen mehrfache Panel-Sprünge bei starkem Mausrad. */
   private readonly projectWheelCooldownMs = 660;
 
-  /** Eyebrow der Projektsektion. */
-  @Input() eyebrow = '';
-
-  /** Haupttitel der Projektsektion. */
-  @Input() title = '';
-
-  /** Beschreibung der Projektsektion. */
-  @Input() subtitle = '';
-
   /** Buttonlabel für Detailseiten. */
   @Input() detailLabel = '';
+
+  /** Übersetzte Labels für Projektsteuerung und ARIA-Texte. */
+  @Input({ required: true }) labels!: ProjectsContent;
 
   /** Sichtbare Styles für die Game-Assets. */
   readonly project2ItemStyles = signal<readonly Record<string, string>[]>([]);

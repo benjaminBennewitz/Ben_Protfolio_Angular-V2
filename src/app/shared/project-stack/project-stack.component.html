@@ -1,5 +1,5 @@
 <!-- src/app/shared/project-stack/project-stack.component.html -->
-<section class="project-stack" id="projects" [style.--project-total]="projects.length">
+<section class="project-stack" [style.--project-total]="projects.length">
   @for (project of projects; track project.slug; let index = $index) {
   <article #projectPanel class="project-stack__panel" [class.project-stack__panel--intro]="index === 0"
     [class.project-stack__panel--game]="project.slug === 'html5-browser-game'" [attr.data-accent]="project.accent"
@@ -30,7 +30,7 @@
       <img class="project-stack__trash-bin" src="assets/images/project-stack/trash-red.webp" alt=""
         aria-hidden="true" />
       <button class="project-stack__trash-paper" type="button" [disabled]="project3PaperLanded()"
-        (click)="triggerProject3PaperFlight($event)" aria-label="Papier in den Papierkorb werfen">
+        (click)="triggerProject3PaperFlight($event)" [attr.aria-label]="labels.trashPaperLabel">
         <img src="assets/images/project-stack/paper-crumpled-pink.webp" alt="" />
       </button>
     </div>
@@ -44,20 +44,12 @@
     }
 
     <div class="project-stack__copy" bpReveal>
-      @if (index === 0) {
-      <p class="bp-eyebrow">{{ eyebrow }}</p>
-      <h2 class="project-stack__section-title">{{ title }}</h2>
-      @if (subtitle) {
-      <p class="project-stack__intro">{{ subtitle }}</p>
-      }
-      }
-
-      <p class="project-stack__kicker" [class.project-stack__kicker--headline]="index > 0">{{ project.kicker }}</p>
+      <p class="project-stack__kicker project-stack__kicker--headline">{{ project.kicker }}</p>
       <div class="project-stack__number">{{ (index + 1).toString().padStart(2, '0') }}</div>
       <h3>{{ project.name }}</h3>
       <p class="project-stack__summary">{{ project.summary }}</p>
 
-      <ul class="project-stack__tags" aria-label="Techstack">
+      <ul class="project-stack__tags" [attr.aria-label]="labels.techStackAriaLabel">
         @for (tech of project.techStack.slice(0, 4); track tech) {
         <li>{{ tech }}</li>
         }
@@ -69,7 +61,7 @@
       </a>
 
       @if (isGraphicCatalogProject(project)) {
-      <div class="project-stack__typewriter" aria-label="Simulierter Dateiname">
+      <div class="project-stack__typewriter" [attr.aria-label]="labels.typewriterLabel">
         <span class="project-stack__typewriter-prefix">filename&gt;</span>
         <span class="project-stack__typewriter-text">{{ project5TypewriterText() }}</span>
         <span class="project-stack__typewriter-cursor" aria-hidden="true"></span>
@@ -82,7 +74,7 @@
         [showTaskStatus]="project.slug === 'asana-klon'" [taskStatusSaved]="project3SuccessVisible()" />
     </div>
 
-    <aside class="project-stack__previews" aria-label="Weitere Projekte">
+    <aside class="project-stack__previews" [attr.aria-label]="labels.previewAriaLabel">
       @for (preview of previewsFor(project); track preview.slug; let previewIndex = $index) {
       <a class="project-stack__preview" [routerLink]="['/projects', preview.slug]" [attr.data-accent]="preview.accent">
         <span>{{ (previewIndex + 1).toString().padStart(2, '0') }}</span>

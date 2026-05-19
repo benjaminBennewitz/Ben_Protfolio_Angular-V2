@@ -1,0 +1,190 @@
+/* src/app/pages/thank-you-page/thank-you-page.component.scss */
+
+/* =================================================================================================
+   INHALTSVERZEICHNIS
+
+   01   Seitenlayout
+   02   Inhalt und Backlink
+   03   Statusfenster
+   04   Responsive
+   ================================================================================================= */
+
+/* =================================================================================================
+   01   Seitenlayout
+   ================================================================================================= */
+
+.thank-you {
+  position: relative;
+  min-height: 100svh;
+  padding-top: calc(var(--bp-header-height) + var(--bp-space-5));
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 74% 20%, color-mix(in srgb, var(--bp-color-accent) 16%, transparent), transparent 28%),
+    linear-gradient(135deg, color-mix(in srgb, var(--bp-color-bg) 90%, black 10%), var(--bp-color-bg));
+}
+
+.thank-you::before,
+.thank-you::after {
+  position: absolute;
+  pointer-events: none;
+  content: '';
+}
+
+.thank-you::before {
+  right: -7vw;
+  top: 18vh;
+  width: min(38vw, 520px);
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent) 34%, transparent);
+  background-image: radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--bp-color-text) 22%, transparent) 1px, transparent 0);
+  background-size: 14px 14px;
+  transform: rotate(-11deg);
+}
+
+.thank-you::after {
+  left: -8vw;
+  bottom: 10vh;
+  width: min(42vw, 580px);
+  height: min(18vw, 240px);
+  border: 1px solid color-mix(in srgb, var(--bp-color-border-strong) 72%, transparent);
+  background: repeating-linear-gradient(-14deg, transparent 0 16px, color-mix(in srgb, var(--bp-color-accent) 10%, transparent) 16px 19px);
+  transform: rotate(8deg);
+}
+
+.thank-you__layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 560px) minmax(260px, 360px);
+  justify-content: center;
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: center;
+  min-height: calc(100svh - var(--bp-header-height) - var(--bp-space-8));
+}
+
+/* =================================================================================================
+   02   Inhalt und Backlink
+   ================================================================================================= */
+
+.thank-you__copy {
+  display: grid;
+  gap: var(--bp-space-3);
+}
+
+.thank-you__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: fit-content;
+  border: 1px solid var(--bp-color-border-strong);
+  padding: 0.64rem 0.85rem;
+  background: color-mix(in srgb, var(--bp-color-bg) 84%, transparent);
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-mono);
+  font-size: 0.74rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms var(--bp-ease-out);
+}
+
+.thank-you__back:hover,
+.thank-you__back:focus-visible {
+  border-color: var(--bp-color-accent);
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 78%, var(--bp-color-accent) 10%);
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--bp-color-accent) 32%, transparent);
+  transform: translate3d(-2px, -2px, 0);
+}
+
+.thank-you__back .material-symbols-outlined {
+  color: var(--bp-color-accent);
+  font-size: 1.2rem;
+}
+
+.thank-you h1 {
+  max-width: 11ch;
+  margin: 0;
+  font-family: var(--bp-font-display);
+  font-size: clamp(3rem, 7.6vw, 8rem);
+  line-height: 0.86;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+}
+
+.thank-you .bp-subtitle {
+  max-width: 34rem;
+}
+
+/* =================================================================================================
+   03   Statusfenster
+   ================================================================================================= */
+
+.thank-you__dialog {
+  width: min(100%, 360px);
+  transform: translate3d(0, -100px, 0) rotate(1.4deg);
+}
+
+.thank-you__dialog .bp-dos-window__body {
+  min-height: auto;
+}
+
+.thank-you__dialog-close {
+  display: inline-grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid #111111;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+  background: #ff2b2b;
+  color: #ffffff;
+  font: inherit;
+  line-height: 1;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.34);
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
+}
+
+.thank-you__dialog-close:hover,
+.thank-you__dialog-close:focus-visible {
+  background: #d90026;
+  color: #ffffff;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.42);
+  transform: translate(-1px, -1px);
+}
+
+.thank-you__dialog p {
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-size: 0.74rem;
+  line-height: 1.48;
+  text-transform: uppercase;
+}
+
+.thank-you__dialog p::before {
+  content: '> ';
+  color: var(--bp-color-accent);
+  font-weight: 950;
+}
+
+/* =================================================================================================
+   04   Responsive
+   ================================================================================================= */
+
+@media (max-width: 980px) {
+  .thank-you__layout {
+    grid-template-columns: 1fr;
+    align-content: center;
+  }
+
+  .thank-you__dialog {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 640px) {
+  .thank-you h1 {
+    font-size: clamp(2.8rem, 15vw, 5.2rem);
+  }
+}

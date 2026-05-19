@@ -61,7 +61,7 @@ export class AchievementsPageComponent {
 
   /** Synchronisiert Meta-Daten mit der aktiven Sprache. */
   constructor() {
-    effect(() => this.seoService.setPageSeo(this.texts().metaTitle, this.texts().metaDescription));
+    effect(() => this.seoService.setPageSeo(this.texts().metaTitle, this.texts().metaDescription, '/achievements'));
   }
 
   /** Blendet einen Hinweis für eine gesperrte Trophäe ein. */

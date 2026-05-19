@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSS Spinner Demo</title>
+  <style>
+/*###############################
+###
+###     blog-demo.css
+###     Portfolio Blog Demo
+###     BASED ON: HTML, CSS, Browser APIs
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+    :root {
+      color-scheme: dark;
+      --bg: #101010;
+      --text: #f6f0e8;
+      --accent: #a7ff19;
+      --muted: rgba(246, 240, 232, .72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: clamp(1rem, 4vw, 2rem);
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+    }
+
+    .demo-shell {
+      display: grid;
+      place-items: center;
+      gap: 1rem;
+      min-height: 100svh;
+      max-width: 760px;
+      margin: auto;
+      text-align: center;
+    }
+
+
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+    }
+
+    .demo-brand {
+      display: inline-grid;
+      place-items: center;
+      width: 2.35rem;
+      height: 2.35rem;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #101010;
+      font-size: 1rem;
+      font-weight: 950;
+      letter-spacing: -.08em;
+    }
+
+    .demo-tag {
+      width: fit-content;
+      border: 1px solid var(--accent);
+      padding: .25rem .55rem;
+      color: var(--accent);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .demo-note {
+      border: 2px solid var(--accent);
+      padding: 1rem;
+      background: rgba(167, 255, 25, .06);
+    }
+
+    .demo-note p {
+      margin: .35rem 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .spinner {
+      width: clamp(2.25rem, 12vw, 3.5rem);
+      aspect-ratio: 1;
+      border: 3px solid var(--accent);
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: spin 720ms linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(1turn);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .spinner {
+        animation: none;
+        border-right-color: currentColor;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .demo-shell {
+        min-height: auto;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="demo-shell">
+    <header class="demo-header">
+      <span class="demo-brand" aria-hidden="true">B²</span>
+      <span class="demo-tag">Loader Demo</span>
+    </header>
+    <div class="spinner" aria-label="Lädt"></div>
+    <article class="demo-note">
+      <strong>Merken:</strong>
+      <p>Ein kleiner Spinner braucht oft keine Library. Wichtig ist ein Reduced-Motion-Fallback und ein lesbarer Status für Screenreader.</p>
+    </article>
+  </main>
+</body>
+</html>

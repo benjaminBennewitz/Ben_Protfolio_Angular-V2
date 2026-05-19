@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Native Select Demo</title>
+  <style>
+/*###############################
+###
+###     blog-demo.css
+###     Portfolio Blog Demo
+###     BASED ON: HTML, CSS, Browser APIs
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+    :root {
+      color-scheme: dark;
+      --bg: #101010;
+      --text: #f6f0e8;
+      --accent: #a7ff19;
+      --muted: rgba(246, 240, 232, .72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: clamp(1rem, 4vw, 2rem);
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+    }
+
+    .demo-shell {
+      display: grid;
+      gap: 1rem;
+      max-width: 860px;
+      margin: auto;
+    }
+
+
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+    }
+
+    .demo-brand {
+      display: inline-grid;
+      place-items: center;
+      width: 2.35rem;
+      height: 2.35rem;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #101010;
+      font-size: 1rem;
+      font-weight: 950;
+      letter-spacing: -.08em;
+    }
+
+    .demo-tag {
+      width: fit-content;
+      border: 1px solid var(--accent);
+      padding: .25rem .55rem;
+      color: var(--accent);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .demo-note,
+    .demo-panel {
+      border: 2px solid var(--accent);
+      padding: 1rem;
+      background: rgba(167, 255, 25, .06);
+    }
+
+    .demo-note p {
+      max-width: 68ch;
+      margin: .35rem 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    label {
+      display: grid;
+      gap: .55rem;
+      font-weight: 800;
+    }
+
+    .default-select,
+    .custom-select {
+      width: 100%;
+      min-height: 3rem;
+      font: inherit;
+    }
+
+    .default-select {
+      padding: 0 .85rem;
+    }
+
+    .custom-select,
+    .custom-select::picker(select) {
+      appearance: base-select;
+    }
+
+    .custom-select {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 2px solid var(--accent);
+      border-radius: 999px;
+      padding: 0 1rem;
+      background: #101010;
+      color: var(--accent);
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: inset 0 0 0 1px rgba(167, 255, 25, .35), 0 0 24px rgba(167, 255, 25, .16);
+      transition: background-color .18s ease, color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+
+    .custom-select:hover,
+    .custom-select:focus-visible,
+    .custom-select:open {
+      background: var(--accent);
+      color: #101010;
+      box-shadow: 0 0 0 3px rgba(167, 255, 25, .22), 0 0 34px rgba(167, 255, 25, .28);
+      transform: translateY(-1px);
+    }
+
+    .custom-select button {
+      all: unset;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-width: 0;
+      width: 100%;
+      min-height: 3rem;
+    }
+
+    .custom-select::picker-icon {
+      flex: 0 0 auto;
+      margin-inline-start: auto;
+      color: currentColor;
+      transition: rotate .18s ease;
+    }
+
+    .custom-select:open::picker-icon {
+      rotate: 180deg;
+    }
+
+    .custom-select::picker(select) {
+      border: 2px solid var(--accent);
+      border-radius: 1rem;
+      padding: .4rem;
+      background: #101010;
+      color: var(--accent);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, .45);
+    }
+
+    .custom-select option {
+      border-radius: .7rem;
+      padding: .7rem .85rem;
+      background: #101010;
+      color: var(--accent);
+    }
+
+    .custom-select option:hover,
+    .custom-select option:focus-visible,
+    .custom-select option:checked {
+      background: var(--accent);
+      color: #101010;
+    }
+
+    .custom-select option::checkmark {
+      color: currentColor;
+      font-weight: 900;
+    }
+
+    @media (max-width: 720px) {
+      .compare {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="demo-shell">
+    <header class="demo-header">
+      <span class="demo-brand" aria-hidden="true">B²</span>
+      <span class="demo-tag">Form Demo</span>
+    </header>
+    <article class="demo-note">
+      <strong>Vorher/Nachher:</strong>
+      <p>Das normale Select bleibt robust. Mit base-select kann das native Control in unterstützten Browsern deutlich stärker gestaltet werden.</p>
+    </article>
+
+    <div class="compare">
+      <section class="demo-panel">
+        <h1>Vorher: normales Select</h1>
+        <label>
+          Projektart
+          <select class="default-select">
+            <option>Website</option>
+            <option>Web-App</option>
+            <option>SEO</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="demo-panel">
+        <h1>Nachher: base-select</h1>
+        <label>
+          Projektart
+          <select class="custom-select">
+            <button>
+              <selectedcontent></selectedcontent>
+            </button>
+            <option>Website</option>
+            <option>Web-App</option>
+            <option>SEO</option>
+          </select>
+        </label>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

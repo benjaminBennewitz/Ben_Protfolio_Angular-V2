@@ -22,15 +22,34 @@
         </button>
       </div>
 
+      <label class="blog-page__search" for="blog-search">
+        <span>{{ texts().searchLabel }}</span>
+        <span class="blog-page__search-field">
+          <span class="material-symbols-outlined" aria-hidden="true">manage_search</span>
+          <input id="blog-search" type="search" [value]="searchQuery()" [placeholder]="texts().searchPlaceholder"
+            (input)="setSearchQuery($event)" autocomplete="off">
+          @if (searchQuery()) {
+          <button type="button" aria-label="Suche leeren" (click)="clearSearch()">
+            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+          </button>
+          }
+        </span>
+        <small>{{ filteredEntries().length }} / {{ texts().entries.length }} {{ texts().searchResultLabel }}</small>
+      </label>
+
       <nav class="blog-page__nav" [attr.aria-labelledby]="'blog-list-title'">
         <h2 id="blog-list-title">{{ texts().listTitle }}</h2>
-        @for (entry of texts().entries; track entry.slug) {
-        <button type="button" [class.is-open]="isEntryOpen(entry.slug)" (click)="openEntry(entry.slug)">
-          <span>{{ entry.index }}</span>
-          <strong>{{ entry.title }}</strong>
-          <small>{{ entry.category }}</small>
-        </button>
-        }
+        <div class="blog-page__nav-list">
+          @for (entry of filteredEntries(); track entry.slug) {
+          <button type="button" [class.is-open]="isEntryOpen(entry.slug)" (click)="openEntry(entry.slug)">
+            <span>{{ entry.index }}</span>
+            <strong>{{ entry.title }}</strong>
+            <small>{{ entry.category }}</small>
+          </button>
+          } @empty {
+          <p class="blog-page__empty-search">{{ texts().emptySearchText }}</p>
+          }
+        </div>
       </nav>
     </aside>
 
@@ -84,7 +103,105 @@
             }
           </div>
 
-          <section class="blog-window__code" [attr.aria-label]="item.entry.title + ' Code-Beispiel'">
+          <section class="blog-preview" [class.blog-preview--layout]="item.entry.previewType === 'layout'"
+            [class.blog-preview--count]="item.entry.previewType === 'count'"
+            [class.blog-preview--select]="item.entry.previewType === 'select'"
+            [class.blog-preview--spinner]="item.entry.previewType === 'spinner'"
+            [class.blog-preview--signals]="item.entry.previewType === 'signals'"
+            [class.blog-preview--console]="item.entry.previewType === 'console'"
+            [attr.aria-label]="texts().previewLabel + ': ' + item.entry.title">
+            <div class="blog-preview__head">{{ texts().previewLabel }}</div>
+
+            @switch (item.entry.previewType) {
+            @case ('layout') {
+            <div class="blog-preview__layout-compare">
+              <article>
+                <strong>Flex</strong>
+                <div class="blog-preview__flex-row">
+                  <span>Logo</span>
+                  <span>Nav</span>
+                  <span>CTA</span>
+                </div>
+                <small>{{ texts().previewFlexText }}</small>
+              </article>
+              <article>
+                <strong>Grid</strong>
+                <div class="blog-preview__grid-area">
+                  <span>Hero</span>
+                  <span>Card</span>
+                  <span>Card</span>
+                  <span>Aside</span>
+                </div>
+                <small>{{ texts().previewGridText }}</small>
+              </article>
+            </div>
+            }
+            @case ('count') {
+            <div class="blog-preview__count-compare">
+              <article>
+                <strong>nth-child</strong>
+                <div class="blog-preview__count-row blog-preview__count-row--old">
+                  <span style="--preview-index: 1">1</span>
+                  <span style="--preview-index: 2">2</span>
+                  <span style="--preview-index: 3">3</span>
+                  <span style="--preview-index: 4">4</span>
+                </div>
+                <small>{{ texts().previewNthChildText }}</small>
+              </article>
+              <article>
+                <strong>sibling()</strong>
+                <div class="blog-preview__count-grid">
+                  <span style="--preview-index: 1">01</span>
+                  <span style="--preview-index: 2">02</span>
+                  <span style="--preview-index: 3">03</span>
+                  <span style="--preview-index: 4">04</span>
+                </div>
+                <small>{{ texts().previewSiblingText }}</small>
+              </article>
+            </div>
+            }
+            @case ('select') {
+            <div class="blog-preview__select-compare">
+              <article>
+                <strong>{{ item.entry.oldCodeLabel || texts().oldCodeLabel }}</strong>
+                <select class="blog-preview__default-select" aria-label="Normale Select Vorschau">
+                  <option>Website</option>
+                  <option>Web-App</option>
+                </select>
+                <small>{{ texts().previewDefaultSelectText }}</small>
+              </article>
+              <article>
+                <strong>{{ item.entry.newCodeLabel || texts().newCodeLabel }}</strong>
+                <select class="blog-preview__native-select" aria-label="Base Select Vorschau">
+                  <option>Website</option>
+                  <option>Web-App</option>
+                  <option>SEO</option>
+                </select>
+                <small>{{ texts().previewNativeSelectText }}</small>
+              </article>
+            </div>
+            }
+            @case ('spinner') {
+            <div class="blog-preview__spinner" aria-hidden="true"></div>
+            }
+            @case ('signals') {
+            <div class="blog-preview__signals">
+              <span>signal: 3</span>
+              <span>computed: 6</span>
+              <span>effect: synced</span>
+            </div>
+            }
+            @case ('console') {
+            <div class="blog-preview__console">
+              <span>&gt; %cDEVMODE ACTIVATED</span>
+              <strong>debug styles loaded</strong>
+            </div>
+            }
+            }
+          </section>
+
+          <section class="blog-window__code blog-window__code--compare"
+            [attr.aria-label]="item.entry.title + ' Code-Beispiel'">
             <div class="blog-window__code-head">
               <span>{{ item.entry.codeLanguage }}</span>
               <button type="button" (click)="copyCode(item.entry, $event)">
@@ -92,8 +209,26 @@
                 <span>{{ texts().copyLabel }}</span>
               </button>
             </div>
-            <pre><code>{{ item.entry.code }}</code></pre>
+
+            <div class="blog-window__compare">
+              <article>
+                <h3>{{ item.entry.oldCodeLabel || texts().oldCodeLabel }}</h3>
+                <pre><code>{{ item.entry.oldCode }}</code></pre>
+              </article>
+              <article>
+                <h3>{{ item.entry.newCodeLabel || texts().newCodeLabel }}</h3>
+                <pre><code>{{ item.entry.newCode }}</code></pre>
+              </article>
+            </div>
           </section>
+
+          @if (item.entry.demoHref) {
+          <a class="blog-window__demo-link" [href]="item.entry.demoHref" download target="_blank" rel="noopener noreferrer"
+            (click)="$event.stopPropagation()">
+            <span class="material-symbols-outlined" aria-hidden="true">download</span>
+            <span>{{ texts().demoLabel }}</span>
+          </a>
+          }
 
           <section class="blog-window__notes" [attr.aria-label]="texts().notesLabel">
             <h3>{{ texts().notesLabel }}</h3>

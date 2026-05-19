@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flex vs Grid Demo</title>
+  <style>
+/*###############################
+###
+###     blog-demo.css
+###     Portfolio Blog Demo
+###     BASED ON: HTML, CSS, Browser APIs
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+    :root {
+      color-scheme: dark;
+      --bg: #101010;
+      --text: #f6f0e8;
+      --accent: #a7ff19;
+      --muted: rgba(246, 240, 232, .72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: clamp(1rem, 4vw, 2rem);
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+    }
+
+    .demo-shell {
+      display: grid;
+      gap: 1rem;
+      max-width: 920px;
+      margin: auto;
+    }
+
+
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+    }
+
+    .demo-brand {
+      display: inline-grid;
+      place-items: center;
+      width: 2.35rem;
+      height: 2.35rem;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #101010;
+      font-size: 1rem;
+      font-weight: 950;
+      letter-spacing: -.08em;
+    }
+
+    .demo-tag {
+      width: fit-content;
+      border: 1px solid var(--accent);
+      padding: .25rem .55rem;
+      color: var(--accent);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .demo-note,
+    section {
+      border: 2px solid var(--accent);
+      padding: 1rem;
+      background: rgba(167, 255, 25, .06);
+    }
+
+    .demo-note p {
+      max-width: 68ch;
+      margin: .35rem 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .layout-compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .toolbar__spacer {
+      margin-left: auto;
+    }
+
+    .chip,
+    .card,
+    .aside {
+      border: 1px solid var(--accent);
+      padding: .75rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      grid-template-areas:
+        "hero hero"
+        "card-a aside"
+        "card-b aside";
+      gap: 1rem;
+    }
+
+    .card--hero {
+      grid-area: hero;
+    }
+
+    .card--a {
+      grid-area: card-a;
+    }
+
+    .card--b {
+      grid-area: card-b;
+    }
+
+    .aside {
+      grid-area: aside;
+    }
+
+    @media (max-width: 720px) {
+      .layout-compare,
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .cards {
+        grid-template-areas:
+          "hero"
+          "card-a"
+          "card-b"
+          "aside";
+      }
+
+      .toolbar__spacer {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="demo-shell">
+    <header class="demo-header">
+      <span class="demo-brand" aria-hidden="true">B²</span>
+      <span class="demo-tag">Layout Demo</span>
+    </header>
+    <article class="demo-note">
+      <strong>Merken:</strong>
+      <p>Flex verteilt Inhalte auf einer Achse. Grid plant eine Fläche mit Reihen, Spalten und Bereichen.</p>
+    </article>
+
+    <div class="layout-compare">
+      <section>
+        <h1>Flex: eine Achse</h1>
+        <div class="toolbar">
+          <span class="chip">Logo</span>
+          <span class="chip">Navigation</span>
+          <span class="toolbar__spacer"></span>
+          <span class="chip">Kontakt</span>
+        </div>
+      </section>
+
+      <section>
+        <h1>Grid: Fläche</h1>
+        <div class="cards">
+          <article class="card card--hero">Hero</article>
+          <article class="card card--a">Card A</article>
+          <article class="card card--b">Card B</article>
+          <aside class="aside">Aside</aside>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

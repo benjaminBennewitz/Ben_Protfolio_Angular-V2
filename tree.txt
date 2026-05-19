@@ -124,6 +124,13 @@ ben-portfolio-angular-v2/
 │   │   ├── app.component.ts
 │   │   └── app.routes.ts
 │   ├── assets/
+│   │   ├── blog-demos/
+│   │   │   ├── angular-signals-workflow.ts
+│   │   │   ├── css-can-count-elements.html
+│   │   │   ├── devmode-console-style.html
+│   │   │   ├── flex-vs-grid.html
+│   │   │   ├── native-select.html
+│   │   │   └── simple-css-spinner.html
 │   │   ├── fonts/
 │   │   │   └── material-symbols-outlined-latin-fill-normal.woff2
 │   │   ├── images/

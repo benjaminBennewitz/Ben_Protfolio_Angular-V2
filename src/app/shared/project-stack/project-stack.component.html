@@ -13,25 +13,25 @@
       <span class="project-stack__game-body" [style.width]="project2ItemStyleAt(itemIndex, 'width')"
         [style.height]="project2ItemStyleAt(itemIndex, 'height')"
         [style.transform]="project2ItemStyleAt(itemIndex, 'transform')">
-        <img class="project-stack__game-item" [src]="item.src" alt="" />
+        <img class="project-stack__game-item" [src]="item.src" alt="" width="910" height="1019" loading="lazy" decoding="async" />
       </span>
       }
     </div>
 
     <div class="project-stack__oneup-layer" aria-hidden="true">
       @for (oneUp of project2OneUps(); track oneUp) {
-      <img class="project-stack__oneup" src="assets/images/project-stack/project_2/pj2_1up.webp" alt="" />
+      <img class="project-stack__oneup" src="assets/images/project-stack/project_2/pj2_1up.webp" alt="" width="910" height="466" loading="lazy" decoding="async" />
       }
     </div>
     }
 
     @if (project.slug === 'asana-klon') {
     <div class="project-stack__trash-scene" [class.is-landed]="project3PaperLanded()">
-      <img class="project-stack__trash-bin" src="assets/images/project-stack/trash-red.webp" alt=""
-        aria-hidden="true" />
+      <img class="project-stack__trash-bin" src="assets/images/project-stack/trash-red.webp" alt="" width="360"
+        height="486" loading="lazy" decoding="async" aria-hidden="true" />
       <button class="project-stack__trash-paper" type="button" [disabled]="project3PaperLanded()"
         (click)="triggerProject3PaperFlight($event)" [attr.aria-label]="labels.trashPaperLabel">
-        <img src="assets/images/project-stack/paper-crumpled-pink.webp" alt="" />
+        <img src="assets/images/project-stack/paper-crumpled-pink.webp" alt="" width="240" height="239" loading="lazy" decoding="async" />
       </button>
     </div>
     }
@@ -39,7 +39,7 @@
     @if (index === 0) {
     <div class="project-stack__decor" aria-hidden="true">
       <img class="project-stack__decor-asset project-stack__decor-asset--shocked"
-        src="assets/images/project-stack/scream-girl-pink.webp" alt="" />
+        src="assets/images/project-stack/scream-girl-pink.webp" alt="" width="280" height="317" loading="lazy" decoding="async" />
     </div>
     }
 
@@ -71,7 +71,7 @@
 
     <div class="project-stack__visual" bpReveal>
       <bp-project-visual [project]="project" [large]="true" [hideAssets]="project.slug === 'asana-klon'"
-        [showTaskStatus]="project.slug === 'asana-klon'" [taskStatusSaved]="project3SuccessVisible()" />
+        [showTaskStatus]="project.slug === 'asana-klon'" [taskStatusSaved]="project3SuccessVisible()" [labels]="labels" />
     </div>
 
     <aside class="project-stack__previews" [attr.aria-label]="labels.previewAriaLabel">

@@ -12,31 +12,31 @@
   <div class="contact-form__layout">
     <div class="contact-form__fields">
       <div class="contact-form__field-row">
-        <label [class.has-error]="fieldHasError('name')">
-          <span>{{ content().nameLabel }} <b [attr.aria-label]="content().requiredMarkLabel">*</b></span>
-          <input id="contact-name" type="text" autocomplete="name" [value]="name()" (input)="updateField('name', $event)"
-            [attr.aria-invalid]="fieldHasError('name')" aria-describedby="contact-name-error" required minlength="2">
+        <label [attr.for]="nameId" [class.has-error]="fieldHasError('name')">
+          <span>{{ content().nameLabel }} <b aria-hidden="true">*</b><span class="bp-sr-only">{{ content().requiredMarkLabel }}</span></span>
+          <input [id]="nameId" type="text" autocomplete="name" [value]="name()" (input)="updateField('name', $event)"
+            [attr.aria-invalid]="fieldHasError('name')" [attr.aria-describedby]="fieldDescribedBy('name')" aria-required="true" required minlength="2">
           @if (fieldHasError('name')) {
-          <small id="contact-name-error" class="contact-form__error">{{ fieldError('name') }}</small>
+          <small [id]="nameErrorId" class="contact-form__error">{{ fieldError('name') }}</small>
           }
         </label>
 
-        <label [class.has-error]="fieldHasError('email')">
-          <span>{{ content().emailLabel }} <b [attr.aria-label]="content().requiredMarkLabel">*</b></span>
-          <input id="contact-email" type="email" autocomplete="email" [value]="email()" (input)="updateField('email', $event)"
-            [attr.aria-invalid]="fieldHasError('email')" aria-describedby="contact-email-error" required>
+        <label [attr.for]="emailId" [class.has-error]="fieldHasError('email')">
+          <span>{{ content().emailLabel }} <b aria-hidden="true">*</b><span class="bp-sr-only">{{ content().requiredMarkLabel }}</span></span>
+          <input [id]="emailId" type="email" autocomplete="email" [value]="email()" (input)="updateField('email', $event)"
+            [attr.aria-invalid]="fieldHasError('email')" [attr.aria-describedby]="fieldDescribedBy('email')" aria-required="true" required>
           @if (fieldHasError('email')) {
-          <small id="contact-email-error" class="contact-form__error">{{ fieldError('email') }}</small>
+          <small [id]="emailErrorId" class="contact-form__error">{{ fieldError('email') }}</small>
           }
         </label>
       </div>
 
-      <label [class.has-error]="fieldHasError('message')">
-        <span>{{ content().messageLabel }} <b [attr.aria-label]="content().requiredMarkLabel">*</b></span>
-        <textarea id="contact-message" rows="5" [value]="message()" (input)="updateField('message', $event)"
-          [attr.aria-invalid]="fieldHasError('message')" aria-describedby="contact-message-error" required minlength="10"></textarea>
+      <label [attr.for]="messageId" [class.has-error]="fieldHasError('message')">
+        <span>{{ content().messageLabel }} <b aria-hidden="true">*</b><span class="bp-sr-only">{{ content().requiredMarkLabel }}</span></span>
+        <textarea [id]="messageId" rows="5" [value]="message()" (input)="updateField('message', $event)"
+          [attr.aria-invalid]="fieldHasError('message')" [attr.aria-describedby]="fieldDescribedBy('message')" aria-required="true" required minlength="10"></textarea>
         @if (fieldHasError('message')) {
-        <small id="contact-message-error" class="contact-form__error">{{ fieldError('message') }}</small>
+        <small [id]="messageErrorId" class="contact-form__error">{{ fieldError('message') }}</small>
         }
       </label>
 
@@ -48,7 +48,7 @@
       </button>
 
       @if (status()) {
-      <p class="contact-form__status" role="status">{{ status() }}</p>
+      <p class="contact-form__status" role="status" aria-live="polite" aria-atomic="true">{{ status() }}</p>
       }
     </div>
 

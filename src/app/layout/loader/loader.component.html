@@ -75,7 +75,7 @@
     <button type="button" (click)="dismiss()" [disabled]="launching()" [attr.aria-label]="loaderContent().openLabel">
       <span>{{ loaderContent().buttonLabel }}</span>
       @if (launching()) {
-      <img class="loader__button-asset" src="assets/images/nice-head-loader.webp" alt="Halftone Portrait von B²">
+      <img class="loader__button-asset" src="assets/images/nice-head-loader.webp" alt="Halftone Portrait von B²" width="460" height="720" decoding="async">
       }
     </button>
   </div>

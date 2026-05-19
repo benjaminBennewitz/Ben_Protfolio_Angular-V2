@@ -20,13 +20,15 @@
    INHALTSVERZEICHNIS
 
    01   Layout
-   02   Light Theme Overrides
-   03   Typografie
-   04   Buttons
-   05   Karten und Fenster
-   06   Tags
-   07   Reveal
-   08   Responsive
+   02   Screenreader
+   03   Wechselanimationen
+   04   Light Theme Overrides
+   05   Typografie
+   06   Buttons
+   07   Karten und Fenster
+   08   Tags
+   09   Reveal
+   10   Responsive
    ========================================================================== */
 
 /* ==========================================================================
@@ -84,7 +86,100 @@
 
 
 /* ==========================================================================
-   02   Light Theme Overrides
+   02   Screenreader
+   ========================================================================== */
+
+.bp-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   03   Wechselanimationen
+   ========================================================================== */
+
+html::before {
+  position: fixed;
+  z-index: 130;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  opacity: 0;
+  background:
+    radial-gradient(circle at 82% 18%, color-mix(in srgb, var(--bp-color-accent) 38%, transparent), transparent 36%),
+    linear-gradient(135deg, color-mix(in srgb, var(--bp-color-bg) 90%, transparent), color-mix(in srgb, var(--bp-color-surface-solid) 90%, transparent));
+  transform: scaleX(0);
+  transform-origin: right center;
+}
+
+html.bp-theme-is-switching::before {
+  animation: bp-theme-wipe 720ms var(--bp-ease-out) both;
+}
+
+html.bp-language-is-switching main {
+  animation: bp-language-board 420ms steps(4, end) both;
+}
+
+html.bp-modal-open {
+  overflow: hidden;
+}
+
+@keyframes bp-theme-wipe {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  38% {
+    opacity: 0.46;
+    transform: scaleX(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes bp-language-board {
+  0% {
+    filter: none;
+    transform: translate3d(0, 0, 0);
+  }
+
+  35% {
+    filter: contrast(1.16) brightness(1.12);
+    transform: translate3d(0, -2px, 0);
+  }
+
+  70% {
+    filter: contrast(1.06) brightness(1.05);
+    transform: translate3d(0, 1px, 0);
+  }
+
+  100% {
+    filter: none;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+html[data-motion='off']::before,
+html[data-motion='reduced']::before,
+html[data-motion='off'] main,
+html[data-motion='reduced'] main {
+  animation: none !important;
+}
+
+/* ==========================================================================
+   04   Light Theme Overrides
    ========================================================================== */
 
 :root[data-theme='light'] .bp-eyebrow {
@@ -117,7 +212,7 @@
 }
 
 /* ==========================================================================
-   03   Typografie
+   05   Typografie
    ========================================================================== */
 
 .bp-title {
@@ -140,7 +235,7 @@
 }
 
 /* ==========================================================================
-   04   Buttons
+   06   Buttons
    ========================================================================== */
 
 .bp-button {
@@ -240,7 +335,7 @@
 }
 
 /* ==========================================================================
-   05   Karten und Fenster
+   07   Karten und Fenster
    ========================================================================== */
 
 .bp-card {
@@ -354,7 +449,7 @@
 }
 
 /* ==========================================================================
-   06   Tags
+   08   Tags
    ========================================================================== */
 
 .bp-tags {
@@ -380,7 +475,7 @@
 }
 
 /* ==========================================================================
-   07   Reveal
+   09   Reveal
    ========================================================================== */
 
 .bp-reveal {
@@ -397,7 +492,7 @@
 }
 
 /* ==========================================================================
-   08   Responsive
+   10   Responsive
    ========================================================================== */
 
 @media (max-width: 920px) {

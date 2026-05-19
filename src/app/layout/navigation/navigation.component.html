@@ -1,7 +1,7 @@
 <!-- src/app/layout/navigation/navigation.component.html -->
 <header class="nav" [class.nav--open]="menuOpen()">
-  <a class="nav__brand" routerLink="/" fragment="hero" data-cursor="brand"
-    aria-label="Benjamin Bennewitz Portfolio Startseite" (click)="closeMenu()">
+  <a class="nav__brand" routerLink="/" fragment="hero" data-cursor="brand" [attr.aria-label]="content().brandLabel"
+    (click)="closeMenu()">
     <span class="nav__brand-mark" aria-hidden="true">B²</span>
     <span class="nav__brand-text">break<br>the grid</span>
   </a>
@@ -18,22 +18,28 @@
   </nav>
 
   <div class="nav__actions">
-    <button class="nav__action" type="button" [attr.aria-label]="content().theme" (click)="toggleTheme()">
-      <span class="material-symbols-outlined" aria-hidden="true">{{ themeService.isLight() ? 'dark_mode' : 'light_mode'
-        }}</span>
+    <button class="nav__action nav__theme" type="button" [class.is-flipping]="themeIsSwitching()"
+      [attr.aria-label]="content().theme" (click)="toggleTheme()">
+      <span class="material-symbols-outlined nav__theme-icon" aria-hidden="true">{{ themeService.isLight() ? 'dark_mode' : 'light_mode' }}</span>
     </button>
 
-    <button class="nav__action nav__language" type="button" [attr.aria-label]="content().language"
-      (click)="toggleLanguage()">
-      {{ languageService.language().toUpperCase() }}
+    <button class="nav__action nav__language" type="button" [class.is-flipping]="languageIsSwitching()"
+      [attr.aria-label]="content().language" (click)="toggleLanguage()">
+      <span class="nav__language-board" aria-hidden="true">
+        @for (letter of languageLetters(); track $index) {
+        <span class="nav__language-letter">{{ letter }}</span>
+        }
+      </span>
+      <span class="bp-sr-only">{{ languageService.language().toUpperCase() }}</span>
     </button>
 
-    <a class="nav__action nav__achievement" routerLink="/achievements" aria-label="Geheime Achievements öffnen"
+    <a class="nav__action nav__achievement" routerLink="/achievements" [attr.aria-label]="content().achievementLabel"
       (click)="closeMenu()">
       <span class="material-symbols-outlined" aria-hidden="true">emoji_events</span>
     </a>
 
-    <a class="nav__contact" routerLink="/" fragment="contact" (click)="closeMenu()">
+    <a class="nav__contact" routerLink="/" fragment="contact" [attr.aria-label]="content().contactAccessLabel"
+      (click)="closeMenu()">
       <span>// terminal_access</span>
     </a>
 

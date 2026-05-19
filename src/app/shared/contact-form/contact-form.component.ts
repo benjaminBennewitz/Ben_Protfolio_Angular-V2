@@ -35,11 +35,35 @@ interface ContactPayload {
   styleUrl: './contact-form.component.scss',
 })
 export class ContactFormComponent {
+  /** Laufender Zähler für eindeutige Formular-IDs bei mehreren Formularinstanzen. */
+  private static nextInstanceId = 0;
+
   /** Sprachservice für Labels und Meldungen. */
   private readonly languageService = inject(LanguageService);
 
   /** Router für die Danke-Seite nach erfolgreichem Versand. */
   private readonly router = inject(Router);
+
+  /** Eindeutiger technischer Prefix für Formular- und Fehler-IDs. */
+  readonly formId = `contact-form-${ContactFormComponent.nextInstanceId++}`;
+
+  /** ID des Namenfelds. */
+  readonly nameId = `${this.formId}-name`;
+
+  /** ID des E-Mail-Felds. */
+  readonly emailId = `${this.formId}-email`;
+
+  /** ID des Nachrichtenfelds. */
+  readonly messageId = `${this.formId}-message`;
+
+  /** ID der Namen-Fehlermeldung. */
+  readonly nameErrorId = `${this.nameId}-error`;
+
+  /** ID der E-Mail-Fehlermeldung. */
+  readonly emailErrorId = `${this.emailId}-error`;
+
+  /** ID der Nachrichten-Fehlermeldung. */
+  readonly messageErrorId = `${this.messageId}-error`;
 
   /** Übersetzter Kontaktinhalt. */
   readonly content = computed(() => this.languageService.content().contact);
@@ -110,6 +134,23 @@ export class ContactFormComponent {
   /** Gibt zurück, ob ein Feld nach dem Submit markiert werden muss. */
   fieldHasError(field: ContactField): boolean {
     return this.fieldError(field).length > 0;
+  }
+
+  /** Gibt die passende Error-ID zurück, wenn ein Feld aktuell fehlerhaft ist. */
+  fieldDescribedBy(field: ContactField): string | null {
+    if (!this.fieldHasError(field)) {
+      return null;
+    }
+
+    if (field === 'name') {
+      return this.nameErrorId;
+    }
+
+    if (field === 'email') {
+      return this.emailErrorId;
+    }
+
+    return this.messageErrorId;
   }
 
   /** Gibt die aktuelle Fehlermeldung für ein Feld zurück. */

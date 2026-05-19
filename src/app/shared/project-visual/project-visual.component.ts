@@ -6,7 +6,7 @@
  */
 
 import { AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, ViewChild, inject, signal } from '@angular/core';
-import { PortfolioProject } from '../../core/models/portfolio.models';
+import { PortfolioProject, ProjectsContent } from '../../core/models/portfolio.models';
 import { AchievementService } from '../../core/services/achievement.service';
 
 /** Zustand der interaktiven Bombe. */
@@ -43,6 +43,18 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
 
   /** Wechselt das Status-Asset in den erfolgreichen Saved-State. */
   @Input() taskStatusSaved = false;
+
+  /** Übersetzte ARIA-Labels für interaktive Projektassets. */
+  @Input() labels?: ProjectsContent;
+
+  /** Zugängliche Beschriftung für das interaktive Auge. */
+  readonly eyeButtonLabel = () => this.labels?.eyeButtonLabel ?? 'Auge anstupsen';
+
+  /** Zugängliche Beschriftung für die interaktive Bombe. */
+  readonly bombButtonLabel = () => this.labels?.bombButtonLabel ?? 'Bombe zünden';
+
+  /** Zugängliche Beschriftung für die Blutanalyse-Interaktion. */
+  readonly bloodButtonLabel = () => this.labels?.bloodButtonLabel ?? 'Start blood analysis';
 
   /** Dauer, bis Auge und Träne wieder zurückgesetzt werden. */
   private readonly eyeResetDelayMs = 2800;

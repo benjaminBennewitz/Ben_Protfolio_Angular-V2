@@ -2,10 +2,10 @@
 
 /**
  * @file Hauptnavigation mit Theme- und Sprachschalter.
- * @description Bietet Anker-Navigation, Mobile-Menü, Dark-/Light-Mode und Language-Switcher.
+ * @description Bietet Anker-Navigation, Mobile-Menü, Dark-/Light-Mode, Language-Switcher und leichte Umschaltanimationen.
  */
 
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, WritableSignal, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 import { ThemeService } from '../../core/services/theme.service';
@@ -32,8 +32,17 @@ export class NavigationComponent {
   /** Sichtbarkeit des mobilen Menüs. */
   readonly menuOpen = signal<boolean>(false);
 
+  /** Sichtbarkeit der Theme-Umschaltanimation im Button. */
+  readonly themeIsSwitching = signal<boolean>(false);
+
+  /** Sichtbarkeit der Sprach-Bahnhofstafelanimation im Button. */
+  readonly languageIsSwitching = signal<boolean>(false);
+
   /** Übersetzter Navigationsinhalt. */
   readonly content = computed(() => this.languageService.content().nav);
+
+  /** Buchstaben des aktuellen Sprachcodes für die Split-Flap-Darstellung. */
+  readonly languageLetters = computed(() => this.languageService.language().toUpperCase().split(''));
 
   /** Öffnet oder schließt das mobile Menü. */
   toggleMenu(): void {
@@ -47,6 +56,7 @@ export class NavigationComponent {
 
   /** Wechselt das Theme und zeigt eine kurze Systemmeldung. */
   toggleTheme(): void {
+    this.playButtonAnimation(this.themeIsSwitching);
     this.themeService.toggleTheme();
     this.toastService.show(this.themeService.isLight()
       ? { icon: 'light_mode', title: 'theme switched', message: 'Light Mode aktiv.', tone: 'system' }
@@ -55,9 +65,19 @@ export class NavigationComponent {
 
   /** Wechselt die Sprache und zeigt eine kurze Systemmeldung. */
   toggleLanguage(): void {
+    this.playButtonAnimation(this.languageIsSwitching);
     this.languageService.toggleLanguage();
     this.toastService.show(this.languageService.language() === 'de'
       ? { icon: 'translate', title: 'language switched', message: 'Deutsch ist aktiv.', tone: 'system' }
       : { icon: 'translate', title: 'language switched', message: 'English is active.', tone: 'system' });
+  }
+
+  /** Startet eine kurze Button-Animation erneut, auch wenn schnell mehrfach geklickt wird. */
+  private playButtonAnimation(state: WritableSignal<boolean>): void {
+    state.set(false);
+    window.requestAnimationFrame(() => {
+      state.set(true);
+      window.setTimeout(() => state.set(false), 620);
+    });
   }
 }

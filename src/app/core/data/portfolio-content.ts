@@ -13,6 +13,8 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     meta: {
       title: 'Benjamin Bennewitz | Full Stack Webentwicklung & Grafikdesign',
       description: 'Interaktives Portfolio von Benjamin Bennewitz mit Full-Stack-Webentwicklung, UI/UX, Grafikdesign, Web-Apps, Shopsystemen und visuellen Designsystemen.',
+      keywords: 'Benjamin Bennewitz, B² Portfolio, Full Stack Webentwicklung, Angular, Django, UI UX Design, Grafikdesign, Web Apps, Intranet, Accessibility, SEO, Web Vitals',
+      imageAlt: 'B² Portfolio Preview im Terminal-, Glitch- und Poster-Look',
       hiddenTitle: 'psst... komm zurück 👀',
     },
     nav: {
@@ -28,6 +30,9 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       close: 'Menü schließen',
       theme: 'Theme wechseln',
       language: 'Sprache wechseln',
+      brandLabel: 'Benjamin Bennewitz Portfolio Startseite',
+      achievementLabel: 'Geheime Achievements öffnen',
+      contactAccessLabel: 'Zur Kontaktsection springen',
     },
     hero: {
       eyebrow: 'B² webdeveloper · full stack · Designer',
@@ -135,6 +140,9 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       previewAriaLabel: 'Weitere Projekte',
       trashPaperLabel: 'Papier in den Papierkorb werfen',
       typewriterLabel: 'Simulierter Dateiname',
+      eyeButtonLabel: 'Auge anstupsen',
+      bombButtonLabel: 'Bombe zünden',
+      bloodButtonLabel: 'Blutanalyse starten',
     },
     projects: [
       {
@@ -379,6 +387,8 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     meta: {
       title: 'Benjamin Bennewitz | Full Stack Web Development & Graphic Design',
       description: 'Interactive portfolio by Benjamin Bennewitz with full-stack web development, UI/UX, graphic design, web apps, shop systems and visual design systems.',
+      keywords: 'Benjamin Bennewitz, B² Portfolio, full stack web development, Angular, Django, UI UX design, graphic design, web apps, intranet, accessibility, SEO, Web Vitals',
+      imageAlt: 'B² portfolio preview in a terminal, glitch and poster look',
       hiddenTitle: 'psst... come back 👀',
     },
     nav: {
@@ -394,6 +404,9 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       close: 'Close menu',
       theme: 'Switch theme',
       language: 'Switch language',
+      brandLabel: 'Benjamin Bennewitz portfolio homepage',
+      achievementLabel: 'Open secret achievements',
+      contactAccessLabel: 'Jump to contact section',
     },
     hero: {
       eyebrow: 'B² takeover · MS-DOS · Interface Art',
@@ -501,6 +514,9 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       previewAriaLabel: 'More projects',
       trashPaperLabel: 'Throw paper into the trash bin',
       typewriterLabel: 'Simulated filename',
+      eyeButtonLabel: 'Poke the eye',
+      bombButtonLabel: 'Ignite the bomb',
+      bloodButtonLabel: 'Start blood analysis',
     },
     projects: [
       {

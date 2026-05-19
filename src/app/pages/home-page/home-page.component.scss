@@ -2163,6 +2163,7 @@
   place-items: center;
   padding: clamp(0.8rem, 3vw, 2rem);
   isolation: isolate;
+  animation: contact-modal-in 180ms var(--bp-ease-out) both;
 }
 
 .contact-modal__backdrop {
@@ -2192,6 +2193,7 @@
   border-color: var(--bp-color-accent);
   background: color-mix(in srgb, var(--bp-color-surface-solid) 94%, var(--bp-color-accent) 4%);
   box-shadow: 16px 16px 0 color-mix(in srgb, var(--bp-color-accent) 26%, transparent), 0 34px 90px var(--bp-color-shadow);
+  animation: contact-modal-window-in 240ms var(--bp-ease-pop) both;
 }
 
 .contact-modal__body {
@@ -2206,6 +2208,28 @@
 .contact-modal .contact-form {
   border: 0;
   box-shadow: none;
+}
+
+@keyframes contact-modal-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes contact-modal-window-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
 }
 
 @media (max-width: 780px) {

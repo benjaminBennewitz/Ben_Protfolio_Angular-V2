@@ -5,8 +5,8 @@
     (pointermove)="onHeroPointerMove($event)" (pointerleave)="resetHeroPointer()">
     <div class="hero__poster" aria-hidden="true">
       <div class="hero__head-stage">
-        <img class="hero__head-image hero__head-image--ghost" [src]="currentHeroHeadSrc()" alt="" />
-        <img class="hero__head-image hero__head-image--main" [src]="currentHeroHeadSrc()" alt="" />
+        <img class="hero__head-image hero__head-image--ghost" [src]="currentHeroHeadSrc()" alt="" width="720" height="1140" loading="eager" decoding="async" />
+        <img class="hero__head-image hero__head-image--main" [src]="currentHeroHeadSrc()" alt="" width="720" height="1140" loading="eager" decoding="async" fetchpriority="high" />
         <span class="hero__head-fade hero__head-fade--lower-right"></span>
         <span class="hero__head-distortion hero__head-distortion--one"></span>
         <span class="hero__head-distortion hero__head-distortion--two"></span>
@@ -33,7 +33,7 @@
         <p class="hero__subtitle">{{ content().hero.subtitle }}</p>
 
         <div class="hero__actions">
-          <button class="bp-button bp-button--accent" type="button" (click)="openContactModal()">
+          <button class="bp-button bp-button--accent" type="button" aria-haspopup="dialog" aria-controls="contact-modal" [attr.aria-expanded]="isContactModalVisible()" (click)="openContactModal()">
             <span>{{ content().hero.primaryCta }}</span>
             <span class="material-symbols-outlined" aria-hidden="true">mail</span>
           </button>
@@ -45,7 +45,7 @@
       </div>
 
       @if (isHeroDialogVisible()) {
-      <aside class="hero__dos bp-dos-window" [attr.aria-label]="content().hero.dialogLabel" bpReveal>
+      <aside class="hero__dos bp-dos-window" role="dialog" [attr.aria-label]="content().hero.dialogLabel" bpReveal>
         <div class="bp-dos-window__bar">
           <span>mixed_reactions.exe</span>
           <button type="button" (click)="closeHeroDialog()"
@@ -98,7 +98,7 @@
           </dl>
 
           <figure class="hero__status-visual" aria-hidden="true">
-            <img src="assets/images/brain_rotation.gif" alt="" />
+            <img src="assets/images/brain_rotation.gif" alt="" width="300" height="300" decoding="async" />
           </figure>
         </div>
       </aside>
@@ -109,8 +109,8 @@
     <div class="about__layout bp-container">
       <div class="about__comic" bpReveal>
         <figure class="about__visual" [attr.aria-label]="content().about.imageLabel">
-          <img class="about__image" [src]="currentAboutCoffeeSrc()" [attr.alt]="content().about.imageAlt"
-            (error)="resetAboutCoffeeImage()" />
+          <img class="about__image" [src]="currentAboutCoffeeSrc()" [attr.alt]="content().about.imageAlt" width="1122"
+            height="1402" loading="lazy" decoding="async" (error)="resetAboutCoffeeImage()" />
         </figure>
 
         @if (isAboutDialogVisible()) {
@@ -243,7 +243,7 @@
       </div>
 
       @if (isProjectsDialogVisible()) {
-      <aside class="projects-kickoff__window bp-dos-window" [attr.aria-label]="content().projectsIntro.dialogTitle">
+      <aside class="projects-kickoff__window bp-dos-window" role="dialog" [attr.aria-label]="content().projectsIntro.dialogTitle">
         <div class="bp-dos-window__bar">
           <span>{{ content().projectsIntro.dialogTitle }}</span>
           <button class="projects-kickoff__window-close" type="button"
@@ -339,12 +339,12 @@
   </section>
 
   @if (isContactModalVisible()) {
-  <div class="contact-modal" role="dialog" aria-modal="true" [attr.aria-label]="content().contact.modalTitle">
+  <div id="contact-modal" class="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" (keydown)="onContactModalKeydown($event)">
     <button class="contact-modal__backdrop" type="button" [attr.aria-label]="content().contact.modalCloseLabel"
       (click)="closeContactModal()"></button>
-    <div class="contact-modal__window bp-dos-window">
+    <div #contactModalWindow class="contact-modal__window bp-dos-window" tabindex="-1">
       <div class="bp-dos-window__bar">
-        <span>{{ content().contact.modalTitle }}</span>
+        <span id="contact-modal-title">{{ content().contact.modalTitle }}</span>
         <button type="button" [attr.aria-label]="content().contact.modalCloseLabel"
           (click)="closeContactModal()">×</button>
       </div>

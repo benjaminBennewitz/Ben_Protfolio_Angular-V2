@@ -23,8 +23,9 @@
    02   Brand
    03   Links
    04   Aktionen
-   05   Light Theme
-   06   Responsive
+   05   Umschaltanimationen
+   06   Light Theme
+   07   Responsive
    ========================================================================== */
 
 /* ==========================================================================
@@ -201,7 +202,83 @@
 
 
 /* ==========================================================================
-   05   Light Theme
+   05   Umschaltanimationen
+   ========================================================================== */
+
+.nav__theme {
+  overflow: hidden;
+}
+
+.nav__theme-icon {
+  transform-origin: center;
+}
+
+.nav__theme.is-flipping .nav__theme-icon {
+  animation: nav-theme-flip 560ms var(--bp-ease-pop) both;
+}
+
+.nav__language {
+  overflow: hidden;
+  perspective: 260px;
+}
+
+.nav__language-board {
+  display: inline-flex;
+  gap: 0.12rem;
+}
+
+.nav__language-letter {
+  display: grid;
+  place-items: center;
+  min-width: 0.64rem;
+  transform-origin: 50% 0;
+  backface-visibility: hidden;
+}
+
+.nav__language.is-flipping .nav__language-letter {
+  animation: nav-letter-flip 560ms steps(5, end) both;
+}
+
+.nav__language.is-flipping .nav__language-letter:nth-child(2) {
+  animation-delay: 60ms;
+}
+
+@keyframes nav-theme-flip {
+  0% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  42% {
+    opacity: 0.28;
+    transform: rotate(-90deg) scale(0.72);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(-180deg) scale(1);
+  }
+}
+
+@keyframes nav-letter-flip {
+  0% {
+    filter: brightness(1);
+    transform: rotateX(0deg);
+  }
+
+  50% {
+    filter: brightness(1.8);
+    transform: rotateX(-92deg);
+  }
+
+  100% {
+    filter: brightness(1);
+    transform: rotateX(-360deg);
+  }
+}
+
+/* ==========================================================================
+   06   Light Theme
    ========================================================================== */
 
 :root[data-theme='light'] .nav {
@@ -242,7 +319,7 @@
 }
 
 /* ==========================================================================
-   06   Responsive
+   07   Responsive
    ========================================================================== */
 
 @media (max-width: 980px) {
@@ -279,6 +356,10 @@
 
   .nav__contact {
     display: none;
+  }
+
+  .nav__language-board {
+    gap: 0.08rem;
   }
 }
 

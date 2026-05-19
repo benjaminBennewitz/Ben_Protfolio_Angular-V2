@@ -17,6 +17,10 @@ export interface SeoContent {
   readonly title: string;
   /** Meta-Description der aktuellen Seite. */
   readonly description: string;
+  /** Suchbegriffe für Meta- und JSON-LD-Daten. */
+  readonly keywords: string;
+  /** Alternativtext für das Social-Preview-Bild. */
+  readonly imageAlt: string;
   /** Titel, der bei inaktivem Browser-Tab angezeigt wird. */
   readonly hiddenTitle: string;
 }
@@ -35,6 +39,12 @@ export interface NavigationContent {
   readonly close: string;
   readonly theme: string;
   readonly language: string;
+  /** Zugängliches Label für den Markenlink. */
+  readonly brandLabel: string;
+  /** Zugängliches Label für den Achievement-Link. */
+  readonly achievementLabel: string;
+  /** Zugängliches Label für den schnellen Kontaktlink. */
+  readonly contactAccessLabel: string;
 }
 
 /** Textblock für die Hero-Section. */
@@ -158,6 +168,12 @@ export interface ProjectsContent {
   readonly previewAriaLabel: string;
   readonly trashPaperLabel: string;
   readonly typewriterLabel: string;
+  /** Zugängliche Beschriftung für das interaktive Auge. */
+  readonly eyeButtonLabel: string;
+  /** Zugängliche Beschriftung für die interaktive Bombe. */
+  readonly bombButtonLabel: string;
+  /** Zugängliche Beschriftung für die Blutanalyse-Interaktion. */
+  readonly bloodButtonLabel: string;
 }
 
 /** Detaildaten eines Portfolio-Projekts. */

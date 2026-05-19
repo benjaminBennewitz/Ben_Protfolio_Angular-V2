@@ -5,6 +5,7 @@
  * @description Kombiniert Hero, Über-mich, Techstack, Fullscreen-Projekte, Process-Lock, Chaos-CTA, FAQ und Kontakt.
  */
 
+import { DOCUMENT } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AchievementService } from '../../core/services/achievement.service';
@@ -35,6 +36,9 @@ type AboutCoffeeKey = 'default' | 'error';
   styleUrl: './home-page.component.scss',
 })
 export class HomePageComponent implements AfterViewInit, OnDestroy {
+  /** Dokumentreferenz für Fokus- und Modalsteuerung. */
+  private readonly document = inject(DOCUMENT);
+
   /** Sprachservice für alle sichtbaren Inhalte. */
   private readonly languageService = inject(LanguageService);
 
@@ -59,6 +63,13 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   /** Panel-Referenz für die Skill-Level-Balken. */
   @ViewChild('skillLevelPanel')
   private readonly skillLevelPanel?: ElementRef<HTMLElement>;
+
+  /** Fenster-Referenz des Kontaktmodals für Fokussteuerung. */
+  @ViewChild('contactModalWindow')
+  private readonly contactModalWindow?: ElementRef<HTMLElement>;
+
+  /** Element, das vor dem Öffnen des Modals fokussiert war. */
+  private contactModalTrigger?: HTMLElement;
 
   /** Aktuell ausgewählter Hero-Kopf. */
   readonly activeHeroHead = signal<HeroHeadKey>('default');
@@ -127,9 +138,10 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     this.observeSkillLevels();
   }
 
-  /** Räumt Scroll-Observer beim Entfernen der Seite auf. */
+  /** Räumt Scroll-Observer und globale Modalzustände beim Entfernen der Seite auf. */
   ngOnDestroy(): void {
     this.skillLevelsObserver?.disconnect();
+    this.document.documentElement.classList.remove('bp-modal-open');
   }
 
   /**
@@ -205,12 +217,22 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   /** Öffnet das Kontaktformular als fokussiertes Modal über der Startseite. */
   openContactModal(): void {
+    this.contactModalTrigger = this.document.activeElement instanceof HTMLElement ? this.document.activeElement : undefined;
     this.isContactModalVisible.set(true);
+    this.document.documentElement.classList.add('bp-modal-open');
+    window.requestAnimationFrame(() => this.focusContactModal());
   }
 
-  /** Schließt das Kontaktformular-Modal. */
+  /** Schließt das Kontaktformular-Modal und stellt den Auslösefokus wieder her. */
   closeContactModal(): void {
+    if (!this.isContactModalVisible()) {
+      return;
+    }
+
     this.isContactModalVisible.set(false);
+    this.document.documentElement.classList.remove('bp-modal-open');
+    this.contactModalTrigger?.focus();
+    this.contactModalTrigger = undefined;
   }
 
   /** Schließt das Kontaktformular-Modal über Escape. */
@@ -219,11 +241,64 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     this.closeContactModal();
   }
 
+  /** Hält den Tastaturfokus innerhalb des sichtbaren Kontaktmodals. */
+  onContactModalKeydown(event: KeyboardEvent): void {
+    if (event.key !== 'Tab') {
+      return;
+    }
+
+    const modal = this.contactModalWindow?.nativeElement;
+
+    if (!modal) {
+      return;
+    }
+
+    const focusableElements = this.focusableModalElements(modal);
+
+    if (!focusableElements.length) {
+      event.preventDefault();
+      modal.focus();
+      return;
+    }
+
+    const first = focusableElements[0];
+    const last = focusableElements[focusableElements.length - 1];
+
+    if (event.shiftKey && this.document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    }
+
+    if (!event.shiftKey && this.document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
   /** Aktualisiert den scrollabhängigen Offset für den Hero-Hintergrund. */
   @HostListener('window:scroll')
   updateHeroScrollOffset(): void {
     const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
     this.heroScrollOffset.set(Math.min(scrollY * 0.18, 140));
+  }
+
+  /** Setzt den Initialfokus auf den ersten sinnvollen Fokuspunkt im Kontaktmodal. */
+  private focusContactModal(): void {
+    const modal = this.contactModalWindow?.nativeElement;
+
+    if (!modal) {
+      return;
+    }
+
+    const firstFocusable = this.focusableModalElements(modal)[0];
+    (firstFocusable ?? modal).focus();
+  }
+
+  /** Sammelt sichtbare, bedienbare Fokusziele innerhalb eines Modals. */
+  private focusableModalElements(root: HTMLElement): HTMLElement[] {
+    const selector = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+    return Array.from(root.querySelectorAll<HTMLElement>(selector)).filter((element) => element.offsetParent !== null);
   }
 
   /** Beobachtet das Skill-Level-Panel und startet Balken erst bei nahezu voller Sichtbarkeit. */

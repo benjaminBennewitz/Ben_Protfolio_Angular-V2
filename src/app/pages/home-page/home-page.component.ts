@@ -27,6 +27,9 @@ type HeroHeadKey = 'default' | 'lol' | 'insane' | 'fck';
 /** Zustände für das About-Kaffeebild. */
 type AboutCoffeeKey = 'default' | 'error';
 
+/** Zustände für das Schoko-Bild im Projekt-Einstieg. */
+type ProjectsChocolateKey = 'default' | 'eaten' | 'fallback';
+
 /** Hauptseite der Portfolio-Experience. */
 @Component({
   selector: 'bp-home-page',
@@ -89,6 +92,9 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   /** Sichtbarkeit des Projekt-Einstieg-Dialogfensters. */
   readonly isProjectsDialogVisible = signal<boolean>(true);
 
+  /** Aktuell sichtbarer Zustand des Schoko-Bildes im Projekt-Einstieg. */
+  readonly activeProjectsChocolateImage = signal<ProjectsChocolateKey>('default');
+
   /** Sichtbarkeit des Kontaktformular-Modals. */
   readonly isContactModalVisible = signal<boolean>(false);
 
@@ -106,7 +112,14 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   /** Asset-Zuordnung für das About-Kaffeebild. */
   private readonly aboutCoffeeAssetMap: Record<AboutCoffeeKey, string> = {
     default: 'assets/images/me-and-coffee.webp',
-    error: 'assets/images/me-and-coffe-error.webp',
+    error: 'assets/images/me-and-coffee-error.webp',
+  };
+
+  /** Asset-Zuordnung für das Schoko-Bild im Projekt-Einstieg. */
+  private readonly projectsChocolateAssetMap: Record<ProjectsChocolateKey, string> = {
+    default: 'assets/images/me-with-chocolate.webp',
+    eaten: 'assets/images/me-after-chocolate.webp',
+    fallback: 'assets/images/me-and-coffee.webp',
   };
 
   /** Übersetzter Inhalt der aktuellen Sprache. */
@@ -126,6 +139,15 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   /** Pfad des aktuell sichtbaren About-Kaffeebildes. */
   readonly currentAboutCoffeeSrc = computed(() => this.aboutCoffeeAssetMap[this.activeAboutCoffeeImage()]);
+
+  /** Beschriftung des About-Buttons passend zum aktuellen Bildzustand. */
+  readonly aboutDialogActionLabel = computed(() => this.activeAboutCoffeeImage() === 'error' ? this.content().about.dialogActionAfterClick : this.content().about.dialogAction);
+
+  /** Pfad des aktuell sichtbaren Schoko-Bildes im Projekt-Einstieg. */
+  readonly currentProjectsChocolateSrc = computed(() => this.projectsChocolateAssetMap[this.activeProjectsChocolateImage()]);
+
+  /** Beschriftung des Schoko-Buttons passend zum aktuellen Bildzustand. */
+  readonly projectsChocolateActionLabel = computed(() => this.activeProjectsChocolateImage() === 'eaten' ? this.content().projectsIntro.imageActionActiveLabel : this.content().projectsIntro.imageActionLabel);
 
   /** Initialisiert SEO-Daten reaktiv zur Sprache. */
   constructor() {
@@ -198,6 +220,16 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   /** Setzt das About-Kaffeebild auf das vorhandene Standardbild zurück. */
   resetAboutCoffeeImage(): void {
     this.activeAboutCoffeeImage.set('default');
+  }
+
+  /** Wechselt im Projekt-Einstieg auf das vorbereitete Schoko-Folgeportrait. */
+  showProjectsChocolateEaten(): void {
+    this.activeProjectsChocolateImage.set('eaten');
+  }
+
+  /** Setzt das Schoko-Bild bei fehlendem Asset auf ein vorhandenes Portrait zurück. */
+  resetProjectsChocolateImage(): void {
+    this.activeProjectsChocolateImage.set('fallback');
   }
 
   /** Entfernt das About-Dialogfenster aus der Startansicht. */

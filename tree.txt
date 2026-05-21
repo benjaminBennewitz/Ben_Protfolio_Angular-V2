@@ -209,6 +209,7 @@ ben-portfolio-angular-v2/
 │   │   │   ├── hero-head-insane.webp
 │   │   │   ├── hero-head-lol.webp
 │   │   │   ├── me-and-coffee.webp
+│   │   │   ├── me-and-coffee-error.webp
 │   │   │   ├── me-and-coffe-error.webp
 │   │   │   └── nice-head-loader.webp
 │   │   ├── social/

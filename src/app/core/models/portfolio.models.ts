@@ -82,6 +82,8 @@ export interface AboutContent {
   readonly dialogText: string;
   /** Beschriftung des Dialog-Aktionsbuttons. */
   readonly dialogAction: string;
+  /** Beschriftung des Dialog-Aktionsbuttons nach dem ersten Klick. */
+  readonly dialogActionAfterClick: string;
   /** Zugängliche Beschriftung des Dialog-Schließen-Buttons. */
   readonly dialogCloseLabel: string;
 }
@@ -186,6 +188,14 @@ export interface ProjectsContent {
   readonly liveDemoLabel: string;
   /** Überschrift für Screenshot- und Mockup-Galerien. */
   readonly galleryLabel: string;
+  /** Beschriftung für das zusätzliche Bild unter dem Projekt-Terminal. */
+  readonly imageLabel: string;
+  /** Alternativtext für das zusätzliche Bild unter dem Projekt-Terminal. */
+  readonly imageAlt: string;
+  /** Buttontext zum Wechseln des zusätzlichen Projektbildes. */
+  readonly imageActionLabel: string;
+  /** Buttontext nach dem Wechsel des zusätzlichen Projektbildes. */
+  readonly imageActionActiveLabel: string;
   /** Beschriftung für einen externen Live-Demo-Link. */
   readonly openDemoLabel: string;
   /** Hinweis, wenn eine Live-Demo bewusst noch nicht öffentlich ist. */

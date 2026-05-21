@@ -52,7 +52,7 @@
             [attr.aria-label]="content().about.dialogCloseLabel">×</button>
         </div>
         <div class="bp-dos-window__body">
-          <div class="hero__dialog-icon">i</div>
+          <div class="hero__dialog-icon" aria-hidden="true"><span>!</span></div>
           <p>Are you sure you like<br />what you like?</p>
           <div class="hero__dialog-actions">
             <button type="button" [class.is-active]="activeHeroHead() === 'lol'"
@@ -123,7 +123,7 @@
           <div class="bp-dos-window__body">
             <p>{{ content().about.dialogText }}</p>
             <button class="about__popup-action" type="button" (click)="showAboutCoffeeError()">{{
-              content().about.dialogAction }}</button>
+              aboutDialogActionLabel() }}</button>
           </div>
         </div>
         }
@@ -242,20 +242,31 @@
         </div>
       </div>
 
-      @if (isProjectsDialogVisible()) {
-      <aside class="projects-kickoff__window bp-dos-window" role="dialog" [attr.aria-label]="content().projectsIntro.dialogTitle">
-        <div class="bp-dos-window__bar">
-          <span>{{ content().projectsIntro.dialogTitle }}</span>
-          <button class="projects-kickoff__window-close" type="button"
-            [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeProjectsDialog()">×</button>
-        </div>
-        <div class="bp-dos-window__body">
-          @for (line of content().projectsIntro.dialogLines; track $index) {
-          <p>{{ line }}</p>
-          }
-        </div>
-      </aside>
-      }
+      <div class="projects-kickoff__side" bpReveal>
+        @if (isProjectsDialogVisible()) {
+        <aside class="projects-kickoff__window bp-dos-window" role="dialog" [attr.aria-label]="content().projectsIntro.dialogTitle">
+          <div class="bp-dos-window__bar">
+            <span>{{ content().projectsIntro.dialogTitle }}</span>
+            <button class="projects-kickoff__window-close" type="button"
+              [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeProjectsDialog()">×</button>
+          </div>
+          <div class="bp-dos-window__body">
+            @for (line of content().projectsIntro.dialogLines; track $index) {
+            <p>{{ line }}</p>
+            }
+          </div>
+        </aside>
+        }
+
+        <figure class="projects-kickoff__portrait" [attr.aria-label]="content().projectsIntro.imageLabel">
+          <img class="projects-kickoff__portrait-image" [src]="currentProjectsChocolateSrc()"
+            [attr.alt]="content().projectsIntro.imageAlt" width="1122" height="1402" loading="lazy" decoding="async"
+            (error)="resetProjectsChocolateImage()" />
+          <button class="projects-kickoff__portrait-action" type="button" (click)="showProjectsChocolateEaten()">
+            {{ projectsChocolateActionLabel() }}
+          </button>
+        </figure>
+      </div>
     </div>
   </section>
 

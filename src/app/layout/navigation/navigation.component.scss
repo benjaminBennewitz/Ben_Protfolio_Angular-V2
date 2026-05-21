@@ -77,12 +77,12 @@
   place-items: center;
   width: 48px;
   height: 48px;
-  color: var(--bp-color-text);
+  color: var(--bp-color-accent);
   font-family: var(--bp-font-display);
   font-size: 1.8rem;
   line-height: 0.8;
   letter-spacing: -0.14em;
-  text-shadow: 0.08em 0 var(--bp-color-accent), -0.04em 0 var(--bp-color-info);
+  text-shadow: 0.08em 0 #000000, -0.04em 0 #ffffff;
 }
 
 .nav__brand-text {
@@ -249,12 +249,16 @@
   opacity: 0.9;
 }
 
-:root[data-theme='light'] .nav__brand-mark,
 :root[data-theme='light'] .nav__brand-text,
 :root[data-theme='light'] .nav__links a,
 :root[data-theme='light'] .nav__action,
 :root[data-theme='light'] .nav__burger {
   color: #101010;
+}
+
+:root[data-theme='light'] .nav__brand-mark {
+  color: var(--bp-color-accent);
+  text-shadow: 0.08em 0 #000000, -0.04em 0 #ffffff;
 }
 
 :root[data-theme='light'] .nav__links a:hover,

@@ -114,7 +114,8 @@
   font-size: clamp(3.8rem, 12vw, 9rem);
   line-height: 0.8;
   letter-spacing: -0.12em;
-  text-shadow: 7px 0 0 rgba(167, 255, 25, 0.6), -5px 0 0 rgba(255, 62, 165, 0.35);
+  color: var(--bp-color-accent);
+  text-shadow: 7px 0 0 #000000, -5px 0 0 #ffffff;
   animation: loader-brand-glitch 720ms steps(2, end) infinite;
 }
 

@@ -52,6 +52,15 @@ interface LoaderTranslation {
   /** Statusmeldung nach 100 Prozent. */
   readonly readyText: string;
 
+  /** Kurzer Statuszusatz hinter der Prozentzahl. */
+  readonly loadedLabel: string;
+
+  /** Zugänglicher Statuszusatz für die Dialogfenster. */
+  readonly loadedAriaLabel: string;
+
+  /** Alternativtext des Start-Assets im finalen Button. */
+  readonly launchImageAlt: string;
+
   /** Beschriftung des finalen Freigabe-Buttons. */
   readonly buttonLabel: string;
 
@@ -232,9 +241,12 @@ const LOADER_TRANSLATIONS: Record<'de' | 'en', LoaderTranslation> = {
     ariaLabel: 'Portfolio wird geladen',
     terminalTitle: 'C:\\B2\\portfolio> run experience.exe',
     readyText: '100 % erreicht. System wartet auf ein menschliches Wunder.',
+    loadedLabel: 'geladen',
+    loadedAriaLabel: 'Prozent geladen',
+    launchImageAlt: 'Halftone-Portrait von B²',
     buttonLabel: 'was coooooles',
     openLabel: 'Portfolio öffnen',
-    calmEyebrow: 'accessibility mode',
+    calmEyebrow: 'barrierearmer Modus',
     calmTitle: 'ruhiger start',
     calmText: 'Animationen werden reduziert. Das Portfolio wird gerade in einer ruhigeren Variante vorbereitet.',
     dialogs: [
@@ -259,9 +271,12 @@ const LOADER_TRANSLATIONS: Record<'de' | 'en', LoaderTranslation> = {
     ariaLabel: 'Portfolio is loading',
     terminalTitle: 'C:\\B2\\portfolio> run experience.exe',
     readyText: '100 % reached. System is waiting for a human miracle.',
+    loadedLabel: 'loaded',
+    loadedAriaLabel: 'percent loaded',
+    launchImageAlt: 'Halftone portrait of B²',
     buttonLabel: 'something coooool',
     openLabel: 'Open portfolio',
-    calmEyebrow: 'accessibility mode',
+    calmEyebrow: 'barrierearmer Modus',
     calmTitle: 'calm startup',
     calmText: 'Animations are reduced. The portfolio is being prepared in a quieter mode.',
     dialogs: [

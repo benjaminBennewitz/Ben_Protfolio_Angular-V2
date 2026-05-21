@@ -84,7 +84,6 @@
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent);
 }
 
-
 /* ==========================================================================
    02   Screenreader
    ========================================================================== */
@@ -124,10 +123,6 @@ html.bp-theme-is-switching::before {
   animation: bp-theme-wipe 720ms var(--bp-ease-out) both;
 }
 
-html.bp-language-is-switching main {
-  animation: bp-language-board 420ms steps(4, end) both;
-}
-
 html.bp-modal-open {
   overflow: hidden;
 }
@@ -149,32 +144,8 @@ html.bp-modal-open {
   }
 }
 
-@keyframes bp-language-board {
-  0% {
-    filter: none;
-    transform: translate3d(0, 0, 0);
-  }
-
-  35% {
-    filter: contrast(1.16) brightness(1.12);
-    transform: translate3d(0, -2px, 0);
-  }
-
-  70% {
-    filter: contrast(1.06) brightness(1.05);
-    transform: translate3d(0, 1px, 0);
-  }
-
-  100% {
-    filter: none;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
 html[data-motion='off']::before,
-html[data-motion='reduced']::before,
-html[data-motion='off'] main,
-html[data-motion='reduced'] main {
+html[data-motion='reduced']::before {
   animation: none !important;
 }
 

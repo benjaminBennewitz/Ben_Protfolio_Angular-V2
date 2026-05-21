@@ -11,7 +11,7 @@
       <article class="built-strip__group built-strip__group--without">
         <h3>{{ content().withoutLabel }}</h3>
         <ul>
-          @for (item of content().withoutItems; track item) {
+          @for (item of content().withoutItems; track $index) {
           <li><span class="material-symbols-outlined" aria-hidden="true">close</span>{{ item }}</li>
           }
         </ul>
@@ -20,7 +20,7 @@
       <article class="built-strip__group built-strip__group--capabilities">
         <h3>{{ content().capabilityLabel }}</h3>
         <ul>
-          @for (item of content().capabilityItems; track item) {
+          @for (item of content().capabilityItems; track $index) {
           <li><span class="material-symbols-outlined" aria-hidden="true">check</span>{{ item }}</li>
           }
         </ul>

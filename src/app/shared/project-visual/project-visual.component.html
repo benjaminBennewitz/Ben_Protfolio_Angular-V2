@@ -17,13 +17,15 @@
     @if (isEyeInteractive()) {
     <button class="visual__asset-button visual__asset-button--eye" type="button" [class.is-hurt]="isEyeHurt()"
       (click)="triggerEyeReaction($event)" [attr.aria-label]="eyeButtonLabel()">
-      <img class="visual__asset visual__asset--primary" [src]="primaryAsset" alt="" width="847" height="1250" loading="lazy" decoding="async" />
+      <img class="visual__asset visual__asset--primary" [src]="primaryAsset" alt="" [attr.width]="assetWidth(primaryAsset)"
+        [attr.height]="assetHeight(primaryAsset)" loading="lazy" decoding="async" />
       @if (isEyeTearVisible()) {
       <img class="visual__tear" src="assets/images/project-stack/teardrop.webp" alt="" width="258" height="987" loading="lazy" decoding="async" />
       }
     </button>
     } @else {
-    <img class="visual__asset visual__asset--primary" [src]="primaryAsset" alt="" width="847" height="1250" loading="lazy" decoding="async" />
+    <img class="visual__asset visual__asset--primary" [src]="primaryAsset" alt="" [attr.width]="assetWidth(primaryAsset)"
+      [attr.height]="assetHeight(primaryAsset)" loading="lazy" decoding="async" />
     }
     }
 
@@ -32,10 +34,12 @@
     <button class="visual__asset-button visual__asset-button--bomb" type="button" [class.is-charging]="isBombCharging()"
       [class.is-boom]="isBombBoom()" [disabled]="!isBombIdle()" (click)="triggerBombReaction($event)"
       [attr.aria-label]="bombButtonLabel()">
-      <img class="visual__asset visual__asset--secondary" [src]="secondaryAsset" alt="" width="360" height="374" loading="lazy" decoding="async" />
+      <img class="visual__asset visual__asset--secondary" [src]="secondaryAsset" alt="" [attr.width]="assetWidth(secondaryAsset)"
+        [attr.height]="assetHeight(secondaryAsset)" loading="lazy" decoding="async" />
     </button>
     } @else {
-    <img class="visual__asset visual__asset--secondary" [src]="secondaryAsset" alt="" width="360" height="374" loading="lazy" decoding="async" />
+    <img class="visual__asset visual__asset--secondary" [src]="secondaryAsset" alt="" [attr.width]="assetWidth(secondaryAsset)"
+      [attr.height]="assetHeight(secondaryAsset)" loading="lazy" decoding="async" />
     }
     }
 
@@ -54,7 +58,8 @@
 
     @if (showTaskStatus && taskStatusSrc(); as statusAsset) {
     <span class="visual__task-status" [class.is-saved]="taskStatusSaved" aria-hidden="true">
-      <img [src]="statusAsset" alt="" width="1242" height="860" loading="lazy" decoding="async" />
+      <img [src]="statusAsset" alt="" [attr.width]="assetWidth(statusAsset)" [attr.height]="assetHeight(statusAsset)"
+        loading="lazy" decoding="async" />
     </span>
     }
 
@@ -68,7 +73,8 @@
 
     <span class="visual__blood-leech visual__blood-leech--one" [class.is-visible]="isBloodLeechesVisible()"
       [class.is-satisfied]="isBloodLeechesSatisfied()">
-      <img class="visual__blood-leech-img" [src]="bloodLeechOneSrc()" alt="" width="1195" height="590" loading="lazy" decoding="async" />
+      <img class="visual__blood-leech-img" [src]="bloodLeechOneSrc()" alt="" [attr.width]="assetWidth(bloodLeechOneSrc())"
+        [attr.height]="assetHeight(bloodLeechOneSrc())" loading="lazy" decoding="async" />
       <img class="visual__blood-drop visual__blood-drop--one" [class.is-visible]="isBloodLeechesVisible()"
         [class.is-sucked]="isBloodLeechesSatisfied()" src="assets/images/project-stack/blood-drop-halftone.webp" width="541" height="912" loading="lazy" decoding="async"
         alt="" />
@@ -77,7 +83,8 @@
 
     <span class="visual__blood-leech visual__blood-leech--two" [class.is-visible]="isBloodLeechesVisible()"
       [class.is-satisfied]="isBloodLeechesSatisfied()">
-      <img class="visual__blood-leech-img" [src]="bloodLeechTwoSrc()" alt="" width="1192" height="591" loading="lazy" decoding="async" />
+      <img class="visual__blood-leech-img" [src]="bloodLeechTwoSrc()" alt="" [attr.width]="assetWidth(bloodLeechTwoSrc())"
+        [attr.height]="assetHeight(bloodLeechTwoSrc())" loading="lazy" decoding="async" />
       <img class="visual__blood-drop visual__blood-drop--two" [class.is-visible]="isBloodLeechesVisible()"
         [class.is-sucked]="isBloodLeechesSatisfied()" src="assets/images/project-stack/blood-drop-halftone.webp" width="541" height="912" loading="lazy" decoding="async"
         alt="" />
@@ -94,7 +101,7 @@
     </div>
 
     <div class="visual__blood-progress" aria-hidden="true">
-      @for (status of bloodStatusSteps(); track status; let index = $index) {
+      @for (status of bloodStatusSteps(); track $index; let index = $index) {
       <span [class.is-active]="bloodStatusIsActive(index)"></span>
       }
     </div>
@@ -140,7 +147,7 @@
     </div>
 
     <ul class="visual__blood-status-list" aria-label="Analysefortschritt">
-      @for (status of bloodStatusSteps(); track status; let index = $index) {
+      @for (status of bloodStatusSteps(); track $index; let index = $index) {
       <li [class.is-active]="bloodStatusIsActive(index)">{{ status }}</li>
       }
     </ul>

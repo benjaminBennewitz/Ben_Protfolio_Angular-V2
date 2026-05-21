@@ -29,11 +29,11 @@
       </div>
 
       <div class="footer__columns">
-        @for (column of footer().columns; track column.title) {
+        @for (column of footer().columns; track $index) {
         <div class="footer__column">
           <h3>{{ column.title }}</h3>
           <ul>
-            @for (link of column.links; track link.href + link.label) {
+            @for (link of column.links; track link.href) {
             <li>
               @if (isRouteLink(link.href)) {
               <a [routerLink]="link.href"><span>{{ link.label }}</span></a>
@@ -49,7 +49,7 @@
       </div>
 
       <div class="footer__social" aria-label="Social Media">
-        @for (link of footer().socialLinks; track link.href + link.label) {
+        @for (link of footer().socialLinks; track link.href) {
         <a [href]="link.href" target="_blank" rel="noopener noreferrer" [attr.aria-label]="link.label" [title]="link.label">
           @switch (socialIconName(link.label)) {
           @case ('linkedin') {

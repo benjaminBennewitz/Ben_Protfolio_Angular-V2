@@ -174,6 +174,136 @@ export interface ProjectsContent {
   readonly bombButtonLabel: string;
   /** Zugängliche Beschriftung für die Blutanalyse-Interaktion. */
   readonly bloodButtonLabel: string;
+  /** Zugängliche Beschriftung für kompakte Projektkennzahlen. */
+  readonly metricsLabel: string;
+  /** Überschrift für Case-Study- und Deep-Dive-Bereiche. */
+  readonly caseStudyLabel: string;
+  /** Überschrift für Architekturkarten und Systemübersichten. */
+  readonly architectureLabel: string;
+  /** Kurzer Hinweis zur Architekturkarte und zu technischen Diagrammen. */
+  readonly architectureHint: string;
+  /** Überschrift für Demo- und Prototypbereiche. */
+  readonly liveDemoLabel: string;
+  /** Überschrift für Screenshot- und Mockup-Galerien. */
+  readonly galleryLabel: string;
+  /** Beschriftung für einen externen Live-Demo-Link. */
+  readonly openDemoLabel: string;
+  /** Hinweis, wenn eine Live-Demo bewusst noch nicht öffentlich ist. */
+  readonly demoUnavailableLabel: string;
+  /** Überschrift für Erkenntnisse und technische Learnings. */
+  readonly insightsLabel: string;
+  /** Überschrift für ausgelagerte technische Umsetzungskapitel. */
+  readonly detailLayerLabel: string;
+  /** Kleine Beschriftung für die App-Landschaft auf Detailseiten. */
+  readonly appLandscapeLabel: string;
+  /** Überschrift für die App-Landschaft auf Detailseiten. */
+  readonly appLandscapeTitle: string;
+  /** Beschriftung für eine Demo-Anfrage. */
+  readonly demoRequestLabel: string;
+  /** Zugängliches Label zum Vergrößern oder Prüfen eines Evidence-Screens. */
+  readonly zoomLabel: string;
+}
+
+
+
+/** Layout-Variante für projektspezifische Detailmodule. */
+export type ProjectDetailMode = 'case-study' | 'demo' | 'productivity' | 'data' | 'editorial';
+
+/** Kleine Projektkennzahl für Detailseiten. */
+export interface ProjectMetric {
+  /** Kompakter Wert oder Status der Kennzahl. */
+  readonly value: string;
+  /** Beschriftung der Kennzahl. */
+  readonly label: string;
+  /** Ergänzende Kurzinfo zur Kennzahl. */
+  readonly text: string;
+}
+
+/** Inhaltlicher Abschnitt für Case Study, Workflow oder Projektanalyse. */
+export interface ProjectDetailChapter {
+  /** Kleine Kategorie oder technische Einordnung. */
+  readonly eyebrow: string;
+  /** Überschrift des Abschnitts. */
+  readonly title: string;
+  /** Beschreibungstext des Abschnitts. */
+  readonly text: string;
+  /** Kurze Punkte, die den Abschnitt scannbar machen. */
+  readonly points: readonly string[];
+}
+
+/** Interaktiver Knoten einer Architekturkarte. */
+export interface ProjectArchitectureNode {
+  /** Stabile ID für Auswahlzustand und Tastaturbedienung. */
+  readonly id: string;
+  /** Sichtbarer Name des Architekturbausteins. */
+  readonly label: string;
+  /** Material-Symbol des Knotens. */
+  readonly icon: string;
+  /** Kurze technische Rolle des Knotens. */
+  readonly role: string;
+  /** Beschreibung des Knotens. */
+  readonly text: string;
+  /** Verbundene Knoten als sichtbare Systembeziehungen. */
+  readonly connections: readonly string[];
+}
+
+/** Interaktive App-Karte innerhalb einer Projekt-Detailseite. */
+export interface ProjectAppModule {
+  /** Stabile ID für Hover-, Fokus- und Auswahlzustände. */
+  readonly id: string;
+  /** Sichtbarer App- oder Modulname. */
+  readonly title: string;
+  /** Kurze fachliche Beschreibung des Moduls. */
+  readonly text: string;
+  /** Material-Symbol für die App-Karte. */
+  readonly icon: string;
+  /** Beschriftung der Modulaktion. */
+  readonly actionLabel: string;
+  /** Optionaler Status oder Badge der Karte. */
+  readonly badge?: string;
+  /** Zustand des Moduls im Portfolio-Kontext. */
+  readonly status?: 'live' | 'private' | 'soon';
+}
+
+/** Kleines schließbares Terminal- oder MS-DOS-Fenster auf Detailseiten. */
+export interface ProjectTerminalWidget {
+  /** Stabile ID für Sichtbarkeitszustände. */
+  readonly id: string;
+  /** Fenstertitel im MS-DOS-Stil. */
+  readonly title: string;
+  /** Kurze Terminalzeilen im Fenster. */
+  readonly lines: readonly string[];
+  /** Visuelle Position im Hero. */
+  readonly position: 'status' | 'events' | 'auth' | 'queue';
+}
+
+/** Platzhalter oder echtes Bild für eine Projektgalerie. */
+export interface ProjectGalleryItem {
+  /** Titel des Screenshot-, Mockup- oder Asset-Slots. */
+  readonly title: string;
+  /** Kurze Einordnung des visuellen Inhalts. */
+  readonly text: string;
+  /** Optionaler Bildpfad für echte Screenshots. */
+  readonly image?: string;
+  /** Alternativtext für echte Screenshots. */
+  readonly alt?: string;
+  /** Visuelle Gewichtung im Masonry-Layout. */
+  readonly size: 'sm' | 'md' | 'lg';
+  /** Kurze Callout-Texte für annotierte Screenshot-Karten. */
+  readonly annotations?: readonly string[];
+  /** Material-Symbol für Platzhalter- und Mockup-Previews. */
+  readonly icon?: string;
+}
+
+
+/** Optionaler Live-Demo-Hinweis oder externer Demo-Link. */
+export interface ProjectLiveDemo {
+  /** Aktueller Status der Demo. */
+  readonly status: 'planned' | 'private' | 'available';
+  /** Kurzer erklärender Text zur Demo. */
+  readonly text: string;
+  /** Optionaler externer Link zur Demo. */
+  readonly url?: string;
 }
 
 /** Detaildaten eines Portfolio-Projekts. */
@@ -190,6 +320,28 @@ export interface PortfolioProject {
   readonly accent: 'lime' | 'pink' | 'violet' | 'blue' | 'orange';
   readonly techStack: readonly string[];
   readonly highlights: readonly string[];
+  /** Optionaler Titel des technischen Terminalfensters auf der Detailseite. */
+  readonly terminalTitle?: string;
+  /** Optionale Terminalzeilen für Projektstatus, Architektur und technische Fakten. */
+  readonly terminalLines?: readonly string[];
+  /** Optionale technische Highlight-Karten für den oberen Detailbereich. */
+  readonly technicalHighlights?: readonly HighlightItem[];
+  /** Optionaler Stapel aus Produkt- und App-Karten im Hero. */
+  readonly appModules?: readonly ProjectAppModule[];
+  /** Optionale schließbare Terminalfenster im Hero. */
+  readonly terminalWidgets?: readonly ProjectTerminalWidget[];
+  /** Projektindividuelle Darstellungsvariante der Detailseite. */
+  readonly detailMode: ProjectDetailMode;
+  /** Kompakte Projektkennzahlen für den oberen Detailbereich. */
+  readonly metrics: readonly ProjectMetric[];
+  /** Tiefere Inhaltsabschnitte für Projektstory, Workflow oder Learnings. */
+  readonly chapters: readonly ProjectDetailChapter[];
+  /** Optionale Architekturkarte für komplexe Systemprojekte. */
+  readonly architecture?: readonly ProjectArchitectureNode[];
+  /** Screenshot-, Mockup- oder Platzhalter-Galerie. */
+  readonly gallery: readonly ProjectGalleryItem[];
+  /** Optionaler Live-Demo-Status oder externer Demo-Link. */
+  readonly liveDemo?: ProjectLiveDemo;
   readonly requirements: readonly string[];
 }
 

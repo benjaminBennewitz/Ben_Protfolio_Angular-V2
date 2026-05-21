@@ -30,7 +30,7 @@
     @for (dialog of dialogs(); track dialog.percent) {
     <article class="loader-dialog" [style.--dialog-delay]="dialog.delay" [style.--dialog-left]="dialog.left"
       [style.--dialog-top]="dialog.top" [style.--dialog-rotate]="dialog.rotate" [style.--dialog-z]="dialog.z"
-      [attr.aria-label]="dialog.percent + ' Prozent geladen: ' + dialog.message">
+      [attr.aria-label]="dialog.percent + ' ' + loaderContent().loadedAriaLabel + ': ' + dialog.message">
       <header class="loader-dialog__head">
         <span>{{ dialog.title }}</span>
         <span class="loader-dialog__controls" aria-hidden="true">
@@ -43,7 +43,7 @@
       <div class="loader-dialog__body">
         <span class="loader-dialog__icon" aria-hidden="true">i</span>
         <div>
-          <strong>{{ dialog.percent }} % geladen</strong>
+          <strong>{{ dialog.percent }} % {{ loaderContent().loadedLabel }}</strong>
           <p>{{ dialog.message }}</p>
         </div>
       </div>
@@ -58,7 +58,7 @@
   <aside class="loader__terminal" aria-hidden="true">
     <p class="loader__terminal-title">{{ loaderContent().terminalTitle }}</p>
     <ul>
-      @for (line of logLines(); track line) {
+      @for (line of logLines(); track $index) {
       <li>{{ line }}</li>
       }
     </ul>
@@ -75,7 +75,7 @@
     <button type="button" (click)="dismiss()" [disabled]="launching()" [attr.aria-label]="loaderContent().openLabel">
       <span>{{ loaderContent().buttonLabel }}</span>
       @if (launching()) {
-      <img class="loader__button-asset" src="assets/images/nice-head-loader.webp" alt="Halftone Portrait von B²" width="460" height="720" decoding="async">
+      <img class="loader__button-asset" src="assets/images/nice-head-loader.webp" [attr.alt]="loaderContent().launchImageAlt" width="460" height="720" decoding="async">
       }
     </button>
   </div>

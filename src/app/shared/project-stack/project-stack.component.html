@@ -13,7 +13,8 @@
       <span class="project-stack__game-body" [style.width]="project2ItemStyleAt(itemIndex, 'width')"
         [style.height]="project2ItemStyleAt(itemIndex, 'height')"
         [style.transform]="project2ItemStyleAt(itemIndex, 'transform')">
-        <img class="project-stack__game-item" [src]="item.src" alt="" width="910" height="1019" loading="lazy" decoding="async" />
+        <img class="project-stack__game-item" [src]="item.src" alt="" [attr.width]="item.naturalWidth"
+          [attr.height]="item.naturalHeight" loading="lazy" decoding="async" />
       </span>
       }
     </div>
@@ -50,7 +51,7 @@
       <p class="project-stack__summary">{{ project.summary }}</p>
 
       <ul class="project-stack__tags" [attr.aria-label]="labels.techStackAriaLabel">
-        @for (tech of project.techStack.slice(0, 4); track tech) {
+        @for (tech of project.techStack.slice(0, 4); track $index) {
         <li>{{ tech }}</li>
         }
       </ul>

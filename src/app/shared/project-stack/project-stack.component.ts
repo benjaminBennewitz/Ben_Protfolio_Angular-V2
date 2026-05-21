@@ -13,10 +13,16 @@ import { AchievementService } from '../../core/services/achievement.service';
 import { ProjectVisualComponent } from '../project-visual/project-visual.component';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 
-/** Dekoratives Game-Asset mit Bildquelle. */
+/** Dekoratives Game-Asset mit Bildquelle und nativer Bildgröße. */
 interface Project2PhysicsItem {
   /** Pfad zum 1-Bit-/8-Bit-Asset. */
   readonly src: string;
+
+  /** Native Bildbreite für stabile Seitenverhältnisse. */
+  readonly naturalWidth: number;
+
+  /** Native Bildhöhe für stabile Seitenverhältnisse. */
+  readonly naturalHeight: number;
 }
 
 /** Bewegungszustand eines fallenden Game-Assets. */
@@ -129,22 +135,22 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Fallende Projekt-2-Assets. */
   readonly project2PhysicsItems: readonly Project2PhysicsItem[] = [
-    { src: 'assets/images/project-stack/project_2/pj2_coin.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_ring.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_star.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_key.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_heart.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_html5.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_triangle.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_square.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_x.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_potion.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_spring.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_spikes.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_chest.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_lock.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_door.webp' },
-    { src: 'assets/images/project-stack/project_2/pj2_flag.webp' },
+    { src: 'assets/images/project-stack/project_2/pj2_coin.webp', naturalWidth: 816, naturalHeight: 799 },
+    { src: 'assets/images/project-stack/project_2/pj2_ring.webp', naturalWidth: 638, naturalHeight: 798 },
+    { src: 'assets/images/project-stack/project_2/pj2_star.webp', naturalWidth: 953, naturalHeight: 941 },
+    { src: 'assets/images/project-stack/project_2/pj2_key.webp', naturalWidth: 947, naturalHeight: 555 },
+    { src: 'assets/images/project-stack/project_2/pj2_heart.webp', naturalWidth: 921, naturalHeight: 863 },
+    { src: 'assets/images/project-stack/project_2/pj2_html5.webp', naturalWidth: 811, naturalHeight: 1019 },
+    { src: 'assets/images/project-stack/project_2/pj2_triangle.webp', naturalWidth: 908, naturalHeight: 719 },
+    { src: 'assets/images/project-stack/project_2/pj2_square.webp', naturalWidth: 677, naturalHeight: 694 },
+    { src: 'assets/images/project-stack/project_2/pj2_x.webp', naturalWidth: 882, naturalHeight: 882 },
+    { src: 'assets/images/project-stack/project_2/pj2_potion.webp', naturalWidth: 560, naturalHeight: 866 },
+    { src: 'assets/images/project-stack/project_2/pj2_spring.webp', naturalWidth: 605, naturalHeight: 704 },
+    { src: 'assets/images/project-stack/project_2/pj2_spikes.webp', naturalWidth: 965, naturalHeight: 429 },
+    { src: 'assets/images/project-stack/project_2/pj2_chest.webp', naturalWidth: 996, naturalHeight: 834 },
+    { src: 'assets/images/project-stack/project_2/pj2_lock.webp', naturalWidth: 656, naturalHeight: 878 },
+    { src: 'assets/images/project-stack/project_2/pj2_door.webp', naturalWidth: 692, naturalHeight: 830 },
+    { src: 'assets/images/project-stack/project_2/pj2_flag.webp', naturalWidth: 716, naturalHeight: 1013 },
   ];
 
   /** Simulationszustand der Projekt-2-Assets. */

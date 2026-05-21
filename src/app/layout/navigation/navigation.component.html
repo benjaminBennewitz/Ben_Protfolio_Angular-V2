@@ -25,12 +25,7 @@
 
     <button class="nav__action nav__language" type="button" [class.is-flipping]="languageIsSwitching()"
       [attr.aria-label]="content().language" (click)="toggleLanguage()">
-      <span class="nav__language-board" aria-hidden="true">
-        @for (letter of languageLetters(); track $index) {
-        <span class="nav__language-letter">{{ letter }}</span>
-        }
-      </span>
-      <span class="bp-sr-only">{{ languageService.language().toUpperCase() }}</span>
+      {{ languageService.language().toUpperCase() }}
     </button>
 
     <a class="nav__action nav__achievement" routerLink="/achievements" [attr.aria-label]="content().achievementLabel"

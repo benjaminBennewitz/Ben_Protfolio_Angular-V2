@@ -131,13 +131,13 @@
 
       <div class="about__copy" bpReveal>
         <bp-reveal-text [eyebrow]="content().about.eyebrow" [text]="content().about.title" />
-        @for (paragraph of content().about.text; track paragraph) {
+        @for (paragraph of content().about.text; track $index) {
         <p class="bp-subtitle">{{ paragraph }}</p>
         }
       </div>
 
       <div class="about__cards" bpReveal>
-        @for (highlight of content().about.highlights; track highlight.title) {
+        @for (highlight of content().about.highlights; track $index) {
         <article class="about__card bp-card">
           <span class="material-symbols-outlined" aria-hidden="true">{{ highlight.icon }}</span>
           <h3>{{ highlight.title }}</h3>
@@ -157,7 +157,7 @@
       </div>
 
       <div class="experience__cards" bpReveal>
-        @for (item of content().experience.items; track item.label) {
+        @for (item of content().experience.items; track $index) {
         <article class="experience__card bp-card">
           <strong><span>{{ item.value }}<em>+</em></span><small>{{ item.suffix }}</small></strong>
           <h3>{{ item.label }}</h3>
@@ -174,11 +174,11 @@
       <p class="bp-subtitle">{{ content().skills.subtitle }}</p>
 
       <div class="skills__groups">
-        @for (group of content().skills.groups; track group.title) {
+        @for (group of content().skills.groups; track $index) {
         <article class="skills__group bp-card">
           <h3>{{ group.title }}</h3>
           <ul class="bp-tags">
-            @for (item of group.items; track item) {
+            @for (item of group.items; track $index) {
             <li class="bp-tag">{{ item }}</li>
             }
           </ul>
@@ -205,7 +205,7 @@
         }
 
         <div class="skills__levels">
-          @for (level of content().skills.levels; track level.label) {
+          @for (level of content().skills.levels; track $index) {
           <article class="skills__level" [style.--skill-value]="level.value + '%'">
             <div class="skills__level-meta">
               <div>
@@ -236,7 +236,7 @@
         }
 
         <div class="projects-kickoff__text">
-          @for (paragraph of content().projectsIntro.introText; track paragraph) {
+          @for (paragraph of content().projectsIntro.introText; track $index) {
           <p>{{ paragraph }}</p>
           }
         </div>
@@ -250,7 +250,7 @@
             [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeProjectsDialog()">×</button>
         </div>
         <div class="bp-dos-window__body">
-          @for (line of content().projectsIntro.dialogLines; track line) {
+          @for (line of content().projectsIntro.dialogLines; track $index) {
           <p>{{ line }}</p>
           }
         </div>
@@ -288,7 +288,7 @@
             <div class="bp-dos-window__body">
               <p>Techstack:</p>
               <ul>
-                @for (tech of client.stack; track tech) {
+                @for (tech of client.stack; track $index) {
                 <li>{{ tech }}</li>
                 }
               </ul>
@@ -314,7 +314,7 @@
       </div>
 
       <div class="faq__list" bpReveal>
-        @for (faq of content().faqs; track faq.question) {
+        @for (faq of content().faqs; track $index) {
         <details class="faq__item bp-card">
           <summary>{{ faq.question }}</summary>
           <p>{{ faq.answer }}</p>

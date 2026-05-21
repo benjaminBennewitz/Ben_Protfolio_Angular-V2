@@ -27,7 +27,7 @@
 
   @if (detailsOpen()) {
   <div class="cookie-banner__controls">
-    @for (control of texts().controls; track control.title) {
+    @for (control of texts().controls; track $index) {
     <article class="cookie-banner__control" [class.cookie-banner__control--locked]="control.state === 'locked'"
       [class.cookie-banner__control--local]="control.state === 'local'" [class.cookie-banner__control--off]="control.state === 'off'">
       <span class="material-symbols-outlined" aria-hidden="true">{{ control.icon }}</span>

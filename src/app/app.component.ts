@@ -36,6 +36,10 @@ export class AppComponent {
 
   /** Synchronisiert den Hidden-Tab-Titel mit der aktiven Sprache. */
   constructor() {
-    effect(() => this.tabTitleService.setHiddenTitle(this.languageService.content().meta.hiddenTitle));
+    effect(() => {
+      const content = this.languageService.content();
+
+      this.tabTitleService.setHiddenTitle(content.meta.hiddenTitle);
+    });
   }
 }

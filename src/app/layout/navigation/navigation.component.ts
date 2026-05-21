@@ -35,14 +35,11 @@ export class NavigationComponent {
   /** Sichtbarkeit der Theme-Umschaltanimation im Button. */
   readonly themeIsSwitching = signal<boolean>(false);
 
-  /** Sichtbarkeit der Sprach-Bahnhofstafelanimation im Button. */
+  /** Sichtbarkeit eines kurzen Sprachwechselzustands im Button. */
   readonly languageIsSwitching = signal<boolean>(false);
 
   /** Übersetzter Navigationsinhalt. */
   readonly content = computed(() => this.languageService.content().nav);
-
-  /** Buchstaben des aktuellen Sprachcodes für die Split-Flap-Darstellung. */
-  readonly languageLetters = computed(() => this.languageService.language().toUpperCase().split(''));
 
   /** Öffnet oder schließt das mobile Menü. */
   toggleMenu(): void {
@@ -65,9 +62,11 @@ export class NavigationComponent {
 
   /** Wechselt die Sprache und zeigt eine kurze Systemmeldung. */
   toggleLanguage(): void {
+    const nextLanguage = this.languageService.language() === 'de' ? 'en' : 'de';
+
     this.playButtonAnimation(this.languageIsSwitching);
-    this.languageService.toggleLanguage();
-    this.toastService.show(this.languageService.language() === 'de'
+    this.languageService.setLanguage(nextLanguage);
+    this.toastService.show(nextLanguage === 'de'
       ? { icon: 'translate', title: 'language switched', message: 'Deutsch ist aktiv.', tone: 'system' }
       : { icon: 'translate', title: 'language switched', message: 'English is active.', tone: 'system' });
   }
@@ -77,7 +76,7 @@ export class NavigationComponent {
     state.set(false);
     window.requestAnimationFrame(() => {
       state.set(true);
-      window.setTimeout(() => state.set(false), 620);
+      window.setTimeout(() => state.set(false), 760);
     });
   }
 }

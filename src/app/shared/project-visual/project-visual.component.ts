@@ -15,6 +15,15 @@ type BombState = 'idle' | 'charging' | 'boom' | 'gone';
 /** Zustand der Blutanalyse-Interaktion. */
 type BloodAnalysisState = 'idle' | 'running' | 'complete';
 
+/** Native Assetgröße für stabile Bild-Seitenverhältnisse. */
+interface VisualAssetSize {
+  /** Native Bildbreite. */
+  readonly width: number;
+
+  /** Native Bildhöhe. */
+  readonly height: number;
+}
+
 /** Dekorative Preview-Fläche für Projektkarten und Detailseiten. */
 @Component({
   selector: 'bp-project-visual',
@@ -116,6 +125,22 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
     'html5-browser-game': [],
     'asana-klon': ['assets/images/project-stack/trash-red.webp', 'assets/images/project-stack/paper-crumpled-pink.webp'],
     'grafikdesign-katalog': ['assets/images/project-stack/thumb-lime.webp'],
+  };
+
+  /** Native Assetgrößen für dynamische Bildquellen. */
+  private readonly visualAssetSizeMap: Readonly<Record<string, VisualAssetSize>> = {
+    'assets/images/project-stack/eyeball-green.webp': { width: 240, height: 366 },
+    'assets/images/project-stack/eyball-green-hurt.webp': { width: 847, height: 1250 },
+    'assets/images/project-stack/bomb.webp': { width: 360, height: 374 },
+    'assets/images/project-stack/boom.webp': { width: 1201, height: 1055 },
+    'assets/images/project-stack/trash-red.webp': { width: 360, height: 486 },
+    'assets/images/project-stack/paper-crumpled-pink.webp': { width: 240, height: 239 },
+    'assets/images/project-stack/thumb-lime.webp': { width: 220, height: 275 },
+    'assets/images/project-stack/planet-saved.webp': { width: 1112, height: 1161 },
+    'assets/images/project-stack/egle1-idle.webp': { width: 1195, height: 422 },
+    'assets/images/project-stack/egle1-satisfied.webp': { width: 1197, height: 590 },
+    'assets/images/project-stack/egle2-idle.webp': { width: 1186, height: 517 },
+    'assets/images/project-stack/egle2-satisfied.webp': { width: 1192, height: 591 },
   };
 
   /** Misst nach dem Rendern den linken Viewport-Abstand für die externe Blutanalyse-Bühne. */
@@ -273,6 +298,16 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
   /** Liefert das Asset für den zweiten Blutegel. */
   bloodLeechTwoSrc(): string {
     return this.bloodLeechesSatisfied() ? 'assets/images/project-stack/egle2-satisfied.webp' : 'assets/images/project-stack/egle2-idle.webp';
+  }
+
+  /** Liefert die native Breite einer dynamischen Assetquelle. */
+  assetWidth(src: string): number {
+    return this.visualAssetSizeMap[src]?.width ?? 1;
+  }
+
+  /** Liefert die native Höhe einer dynamischen Assetquelle. */
+  assetHeight(src: string): number {
+    return this.visualAssetSizeMap[src]?.height ?? 1;
   }
 
   /** Gibt die Liste der Fortschrittsschritte zurück. */

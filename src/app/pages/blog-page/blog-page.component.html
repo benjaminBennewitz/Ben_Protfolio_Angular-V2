@@ -98,7 +98,7 @@
               <b>{{ texts().supportLabel }}</b>
               {{ item.entry.support }}
             </span>
-            @for (tag of item.entry.tags; track tag) {
+            @for (tag of item.entry.tags; track $index) {
             <span>{{ tag }}</span>
             }
           </div>
@@ -233,7 +233,7 @@
           <section class="blog-window__notes" [attr.aria-label]="texts().notesLabel">
             <h3>{{ texts().notesLabel }}</h3>
             <ul>
-              @for (note of item.entry.notes; track note) {
+              @for (note of item.entry.notes; track $index) {
               <li>{{ note }}</li>
               }
             </ul>

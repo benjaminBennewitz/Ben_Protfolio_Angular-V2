@@ -6,7 +6,7 @@
     <h3>{{ project.name }}</h3>
     <p>{{ project.summary }}</p>
     <ul class="bp-tags" aria-label="Techstack">
-      @for (tech of project.techStack.slice(0, 5); track tech) {
+      @for (tech of project.techStack.slice(0, 5); track $index) {
       <li class="bp-tag">{{ tech }}</li>
       }
     </ul>

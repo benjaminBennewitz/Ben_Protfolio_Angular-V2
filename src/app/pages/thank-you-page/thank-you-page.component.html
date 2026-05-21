@@ -20,7 +20,7 @@
           (click)="closeDialog()">×</button>
       </div>
       <div class="bp-dos-window__body">
-        @for (line of content().dialogLines; track line) {
+        @for (line of content().dialogLines; track $index) {
         <p>{{ line }}</p>
         }
       </div>

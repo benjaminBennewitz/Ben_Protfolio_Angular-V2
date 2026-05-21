@@ -217,32 +217,6 @@
   animation: nav-theme-flip 560ms var(--bp-ease-pop) both;
 }
 
-.nav__language {
-  overflow: hidden;
-  perspective: 260px;
-}
-
-.nav__language-board {
-  display: inline-flex;
-  gap: 0.12rem;
-}
-
-.nav__language-letter {
-  display: grid;
-  place-items: center;
-  min-width: 0.64rem;
-  transform-origin: 50% 0;
-  backface-visibility: hidden;
-}
-
-.nav__language.is-flipping .nav__language-letter {
-  animation: nav-letter-flip 560ms steps(5, end) both;
-}
-
-.nav__language.is-flipping .nav__language-letter:nth-child(2) {
-  animation-delay: 60ms;
-}
-
 @keyframes nav-theme-flip {
   0% {
     opacity: 1;
@@ -257,23 +231,6 @@
   100% {
     opacity: 1;
     transform: rotate(-180deg) scale(1);
-  }
-}
-
-@keyframes nav-letter-flip {
-  0% {
-    filter: brightness(1);
-    transform: rotateX(0deg);
-  }
-
-  50% {
-    filter: brightness(1.8);
-    transform: rotateX(-92deg);
-  }
-
-  100% {
-    filter: brightness(1);
-    transform: rotateX(-360deg);
   }
 }
 
@@ -356,10 +313,6 @@
 
   .nav__contact {
     display: none;
-  }
-
-  .nav__language-board {
-    gap: 0.08rem;
   }
 }
 

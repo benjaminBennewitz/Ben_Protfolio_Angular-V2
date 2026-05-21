@@ -25,11 +25,11 @@
     </section>
 
     <section class="imprint__cards" aria-label="Impressumsangaben">
-      @for (section of imprint().sections; track section.title) {
+      @for (section of imprint().sections; track $index) {
       <article class="imprint__card bp-card">
         <h2>{{ section.title }}</h2>
         <ul>
-          @for (line of section.lines; track line) {
+          @for (line of section.lines; track $index) {
           <li>{{ line }}</li>
           }
         </ul>

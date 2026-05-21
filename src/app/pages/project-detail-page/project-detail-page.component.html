@@ -4,21 +4,166 @@
   <article>
     <header class="project-detail__hero bp-section">
       <div class="project-detail__hero-grid bp-container">
-        <div>
-          <a class="project-detail__back bp-button bp-button--ghost" routerLink="/" fragment="projects">
-            <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+        <div class="project-detail__hero-copy">
+          <a class="project-detail__back" routerLink="/" fragment="projects">
+            <span class="material-symbols-outlined" aria-hidden="true">keyboard_backspace</span>
             <span>{{ content().projectsIntro.overviewLabel }}</span>
           </a>
-          <p class="bp-eyebrow">{{ activeProject.kicker }}</p>
-          <h1 class="bp-title">{{ activeProject.name }}</h1>
-          <p class="bp-subtitle">{{ activeProject.summary }}</p>
+
+          <p class="bp-eyebrow project-detail__hero-kicker">B² · {{ activeProject.kicker }}</p>
+          <h1 class="bp-title project-detail__hero-title">{{ activeProject.name }}</h1>
+          <p class="bp-subtitle project-detail__hero-summary">{{ activeProject.summary }}</p>
+
+          <ul class="project-detail__hero-tags" [attr.aria-label]="content().projectsIntro.techStackAriaLabel">
+            @for (stack of activeProject.techStack; track stack) {
+            <li>
+              <span>{{ stack }}</span>
+            </li>
+            }
+          </ul>
+
+          <div class="project-detail__hero-actions">
+            <a class="bp-button bp-button--accent" href="#project-deep-dive">
+              <span>{{ content().projectsIntro.caseStudyLabel }}</span>
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+            </a>
+            <a class="bp-button bp-button--ghost project-detail__hero-demo-link" href="#project-live-demo">
+              <span>{{ content().projectsIntro.openDemoLabel }}</span>
+              <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+            </a>
+          </div>
         </div>
 
-        <bp-project-visual [project]="activeProject" [large]="true" [labels]="content().projectsIntro" />
+        <div class="project-detail__hero-stage" [attr.aria-label]="content().projectsIntro.previewAriaLabel">
+          @if ((activeProject.appModules?.length ?? 0) > 0) {
+          <div class="project-detail__app-stack" [style.--stack-active]="activeAppModuleIndex()" aria-label="Interaktive App-Karten">
+            @for (app of activeProject.appModules ?? []; track app.id; let index = $index) {
+            <article class="project-detail__stack-card" [class.is-active]="activeAppModule()?.id === app.id" [style.--stack-index]="index" [style.--stack-offset]="index - activeAppModuleIndex()" aria-hidden="true">
+              <span class="material-symbols-outlined" aria-hidden="true">{{ app.icon }}</span>
+              <strong>{{ app.title }}</strong>
+              <small>{{ app.badge }}</small>
+            </article>
+            }
+
+            @if (activeAppModule(); as selectedApp) {
+            <article class="project-detail__app-focus" aria-live="polite">
+              <div class="project-detail__app-focus-bar">
+                <span>app_focus.exe</span>
+                <span aria-hidden="true">×</span>
+              </div>
+              <div class="project-detail__app-focus-body">
+                <span class="project-detail__app-star material-symbols-outlined" aria-hidden="true">star</span>
+                <span class="material-symbols-outlined project-detail__app-focus-icon" aria-hidden="true">{{ selectedApp.icon }}</span>
+                <div>
+                  <p>{{ selectedApp.badge }}</p>
+                  <h2>{{ selectedApp.title }}</h2>
+                  <span>{{ selectedApp.text }}</span>
+                </div>
+                <button type="button" class="project-detail__app-action">
+                  <span>{{ selectedApp.actionLabel }}</span>
+                  <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+                </button>
+              </div>
+            </article>
+            }
+
+            <div class="project-detail__stack-controls" aria-label="App-Karten durchschalten">
+              <button type="button" class="project-detail__stack-control" aria-label="Vorherige App anzeigen" (click)="selectAdjacentAppModule(-1)">
+                <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+              </button>
+
+              <div class="project-detail__stack-dots">
+                @for (app of activeProject.appModules ?? []; track app.id) {
+                <button type="button" [class.is-active]="activeAppModule()?.id === app.id" [attr.aria-label]="app.title" [attr.aria-pressed]="activeAppModule()?.id === app.id" (click)="selectAppModule(app.id)"></button>
+                }
+              </div>
+
+              <button type="button" class="project-detail__stack-control" aria-label="Nächste App anzeigen" (click)="selectAdjacentAppModule(1)">
+                <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+          } @else if ((activeProject.terminalLines?.length ?? 0) > 0 && isTerminalVisible()) {
+          <aside class="project-detail__terminal bp-dos-window" role="dialog" [attr.aria-label]="activeProject.terminalTitle ?? activeProject.name">
+            <div class="bp-dos-window__bar">
+              <span>{{ activeProject.terminalTitle ?? 'project.inspect.exe' }}</span>
+              <button class="project-detail__window-close" type="button" [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeTerminal()">×</button>
+            </div>
+            <div class="bp-dos-window__body project-detail__terminal-body">
+              @for (line of activeProject.terminalLines ?? []; track $index) {
+              <p>{{ line }}</p>
+              }
+            </div>
+          </aside>
+          }
+
+          @if ((activeProject.terminalWidgets?.length ?? 0) > 0) {
+          <div class="project-detail__floating-windows" aria-label="Technische Statusfenster">
+            @for (widget of activeProject.terminalWidgets ?? []; track widget.id) {
+            @if (isTerminalWidgetVisible(widget.id)) {
+            <aside [class]="'project-detail__floating-window project-detail__floating-window--' + widget.position + ' bp-dos-window'" role="dialog" [attr.aria-label]="widget.title">
+              <div class="bp-dos-window__bar">
+                <span>{{ widget.title }}</span>
+                <button class="project-detail__window-close" type="button" [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeTerminalWidget(widget.id)">×</button>
+              </div>
+              <div class="bp-dos-window__body project-detail__floating-window-body">
+                @for (line of widget.lines; track line) {
+                <p>{{ line }}</p>
+                }
+              </div>
+            </aside>
+            }
+            }
+          </div>
+          }
+        </div>
       </div>
     </header>
 
-    <section class="project-detail__info bp-section">
+    <section class="project-detail__highlights bp-section" aria-labelledby="project-highlights-title" bpReveal>
+      <div class="bp-container project-detail__signals">
+        <p class="bp-eyebrow">{{ content().projectsIntro.highlightsEyebrow }}</p>
+        <h2 id="project-highlights-title">{{ content().projectsIntro.highlightsTitle }}</h2>
+
+        @if ((activeProject.technicalHighlights?.length ?? 0) > 0) {
+        <div class="project-detail__highlight-grid">
+          @for (highlight of activeProject.technicalHighlights ?? []; track highlight.title; let index = $index) {
+          <article class="project-detail__highlight-card project-detail__animated-item bp-card" [style.--reveal-index]="index" bpReveal>
+            <span class="material-symbols-outlined" aria-hidden="true">{{ highlight.icon }}</span>
+            <h3>{{ highlight.title }}</h3>
+            <p>{{ highlight.text }}</p>
+          </article>
+          }
+        </div>
+        } @else {
+        <div class="project-detail__highlight-grid">
+          @for (highlight of activeProject.highlights; track highlight; let index = $index) {
+          <article class="project-detail__highlight-card project-detail__animated-item bp-card" [style.--reveal-index]="index" bpReveal>
+            <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+            <h3>{{ highlight }}</h3>
+          </article>
+          }
+        </div>
+        }
+
+        @if (activeProject.metrics.length) {
+        <div class="project-detail__metric-strip" [attr.aria-label]="content().projectsIntro.metricsLabel" bpReveal>
+          @for (metric of activeProject.metrics; track metric.label; let index = $index) {
+          <article class="project-detail__metric project-detail__animated-item" [style.--reveal-index]="index" bpReveal>
+            <span class="material-symbols-outlined" aria-hidden="true">data_object</span>
+            <strong>{{ metric.value }}</strong>
+            <div>
+              <h3>{{ metric.label }}</h3>
+              <p>{{ metric.text }}</p>
+            </div>
+          </article>
+          }
+        </div>
+        }
+      </div>
+    </section>
+
+    <section class="project-detail__info bp-section" bpReveal>
       <div class="bp-container project-detail__info-grid">
         <aside class="project-detail__meta bp-card" [attr.aria-label]="content().projectsIntro.metaAriaLabel">
           <dl>
@@ -59,20 +204,275 @@
       </div>
     </section>
 
-    <section class="project-detail__highlights bp-section">
+    <section id="project-deep-dive" [class]="'project-detail__mode bp-section project-detail__mode--' + activeProject.detailMode" bpReveal>
       <div class="bp-container">
-        <p class="bp-eyebrow">{{ content().projectsIntro.highlightsEyebrow }}</p>
-        <h2>{{ content().projectsIntro.highlightsTitle }}</h2>
-        <div class="project-detail__highlight-grid">
-          @for (highlight of activeProject.highlights; track highlight) {
-          <article class="bp-card">
-            <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
-            <h3>{{ highlight }}</h3>
+        <div class="project-detail__section-head">
+          <p class="bp-eyebrow">{{ content().projectsIntro.caseStudyLabel }}</p>
+          <h2>{{ content().projectsIntro.insightsLabel }}</h2>
+        </div>
+
+        @if (activeProject.architecture?.length) {
+        <section class="project-detail__architecture" [attr.aria-label]="content().projectsIntro.architectureLabel">
+          <div class="project-detail__architecture-head">
+            <h3>{{ content().projectsIntro.architectureLabel }}</h3>
+            <p>{{ content().projectsIntro.architectureHint }}</p>
+          </div>
+
+          <div class="project-detail__map">
+            <div class="project-detail__blueprint-frame">
+              <div class="project-detail__blueprint-scroll">
+                <div class="project-detail__blueprint" role="list">
+                  <svg class="project-detail__map-svg project-detail__map-svg--normalized" viewBox="0 0 1120 640" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="architecture-map-title architecture-map-desc">
+                    <title id="architecture-map-title">{{ content().projectsIntro.architectureLabel }}</title>
+                    <desc id="architecture-map-desc">Systemkarte mit REST-, WebSocket-, Task-Queue- und Monitoring-Flows.</desc>
+
+                    <g class="project-detail__svg-grid" aria-hidden="true">
+                      <rect x="8" y="10" width="1104" height="620" rx="34"></rect>
+                    </g>
+
+                    <g class="project-detail__svg-lines" aria-hidden="true">
+                      <path class="project-detail__svg-line project-detail__svg-line--rest" d="M 250 120 H 324"></path>
+                      <path class="project-detail__svg-arrow project-detail__svg-arrow--rest" d="M 324 120 l -12 -7 v 14 z"></path>
+                      <text class="project-detail__svg-label" x="268" y="94">HTTPS</text>
+                      <text class="project-detail__svg-label" x="268" y="108">REST</text>
+
+                      <path class="project-detail__svg-line project-detail__svg-line--rest" d="M 520 120 H 594"></path>
+                      <path class="project-detail__svg-arrow project-detail__svg-arrow--rest" d="M 594 120 l -12 -7 v 14 z"></path>
+                      <text class="project-detail__svg-label" x="544" y="108">RBAC</text>
+
+                      <path class="project-detail__svg-line project-detail__svg-line--data" d="M 790 120 H 864"></path>
+                      <path class="project-detail__svg-arrow project-detail__svg-arrow--data" d="M 864 120 l -12 -7 v 14 z"></path>
+                      <text class="project-detail__svg-label" x="806" y="108">ORM</text>
+
+                      <path class="project-detail__svg-line project-detail__svg-line--ws" d="M 136 204 V 378 Q 136 400 158 400 H 324"></path>
+                      <path class="project-detail__svg-arrow project-detail__svg-arrow--ws" d="M 324 400 l -12 -7 v 14 z"></path>
+                      <text class="project-detail__svg-label" x="54" y="298">WEBSOCKET</text>
+
+                      <path class="project-detail__svg-line project-detail__svg-line--ws" d="M 520 400 H 662 Q 682 400 682 378 V 210"></path>
+                      <path class="project-detail__svg-arrow project-detail__svg-arrow--ws" d="M 682 210 l -7 12 h 14 z"></path>
+                      <text class="project-detail__svg-label" x="528" y="380">EVENTS</text>
+
+                      <path class="project-detail__svg-line project-detail__svg-line--task" d="M 682 210 V 316"></path>
+                      <path class="project-detail__svg-arrow project-detail__svg-arrow--task" d="M 682 316 l -7 -12 h 14 z"></path>
+                      <text class="project-detail__svg-label" x="694" y="264">TASK QUEUE</text>
+
+                      <path class="project-detail__svg-line project-detail__svg-line--monitor" d="M 940 430 V 210"></path>
+                      <path class="project-detail__svg-line project-detail__svg-line--monitor" d="M 864 520 H 692 V 484"></path>
+                      <path class="project-detail__svg-line project-detail__svg-line--monitor" d="M 864 548 H 422 V 484"></path>
+                      <text class="project-detail__svg-label project-detail__svg-label--monitor" x="698" y="512">OBSERVABILITY</text>
+                    </g>
+
+                    <g class="project-detail__svg-card project-detail__svg-card--frontends" [class.is-active]="activeArchitectureNode().id === 'frontends'" role="button" tabindex="0" aria-label="Angular Frontends" (click)="selectArchitectureNode('frontends')" (keydown.enter)="selectArchitectureNode('frontends')" (keydown.space)="selectArchitectureNode('frontends')">
+                      <rect class="project-detail__svg-card-bg" x="42" y="36" width="208" height="168" rx="18"></rect>
+                      <rect class="project-detail__svg-icon-bg" x="64" y="82" width="52" height="52" rx="14"></rect>
+                      <text class="project-detail__svg-icon" x="90" y="116" text-anchor="middle">deployed_code</text>
+                      <text class="project-detail__svg-role" x="64" y="66">PRESENTATION LAYER</text>
+                      <text class="project-detail__svg-title" x="64" y="162">ANGULAR</text>
+                      <text class="project-detail__svg-title" x="64" y="186">FRONTENDS</text>
+                    </g>
+
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'auth'" role="button" tabindex="0" aria-label="Auth und Rights" (click)="selectArchitectureNode('auth')" (keydown.enter)="selectArchitectureNode('auth')" (keydown.space)="selectArchitectureNode('auth')">
+                      <rect class="project-detail__svg-card-bg" x="324" y="42" width="196" height="168" rx="18"></rect>
+                      <rect class="project-detail__svg-icon-bg" x="346" y="88" width="52" height="52" rx="14"></rect>
+                      <text class="project-detail__svg-icon" x="372" y="122" text-anchor="middle">admin_panel_settings</text>
+                      <text class="project-detail__svg-role" x="346" y="72">ACCESS CONTROL</text>
+                      <text class="project-detail__svg-title project-detail__svg-title--compact" x="346" y="168">AUTH &</text>
+                      <text class="project-detail__svg-title project-detail__svg-title--compact" x="346" y="192">RIGHTS</text>
+                    </g>
+
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'api'" role="button" tabindex="0" aria-label="Django API" (click)="selectArchitectureNode('api')" (keydown.enter)="selectArchitectureNode('api')" (keydown.space)="selectArchitectureNode('api')">
+                      <rect class="project-detail__svg-card-bg" x="594" y="42" width="196" height="168" rx="18"></rect>
+                      <rect class="project-detail__svg-icon-bg" x="616" y="88" width="52" height="52" rx="14"></rect>
+                      <text class="project-detail__svg-icon" x="642" y="122" text-anchor="middle">hub</text>
+                      <text class="project-detail__svg-role" x="616" y="72">BUSINESS LAYER</text>
+                      <text class="project-detail__svg-title project-detail__svg-title--compact" x="616" y="176">DJANGO API</text>
+                    </g>
+
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'database'" role="button" tabindex="0" aria-label="PostgreSQL Models" (click)="selectArchitectureNode('database')" (keydown.enter)="selectArchitectureNode('database')" (keydown.space)="selectArchitectureNode('database')">
+                      <rect class="project-detail__svg-card-bg" x="864" y="42" width="214" height="168" rx="18"></rect>
+                      <rect class="project-detail__svg-icon-bg" x="886" y="88" width="52" height="52" rx="14"></rect>
+                      <text class="project-detail__svg-icon" x="912" y="122" text-anchor="middle">database</text>
+                      <text class="project-detail__svg-role" x="886" y="72">PERSISTENCE LAYER</text>
+                      <text class="project-detail__svg-title" x="886" y="166">POSTGRESQL</text>
+                      <text class="project-detail__svg-title" x="886" y="190">MODELS</text>
+                    </g>
+
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'realtime'" role="button" tabindex="0" aria-label="Channels Redis" (click)="selectArchitectureNode('realtime')" (keydown.enter)="selectArchitectureNode('realtime')" (keydown.space)="selectArchitectureNode('realtime')">
+                      <rect class="project-detail__svg-card-bg" x="324" y="316" width="196" height="168" rx="18"></rect>
+                      <rect class="project-detail__svg-icon-bg" x="346" y="362" width="52" height="52" rx="14"></rect>
+                      <text class="project-detail__svg-icon" x="372" y="396" text-anchor="middle">stream</text>
+                      <text class="project-detail__svg-role" x="346" y="346">REALTIME LAYER</text>
+                      <text class="project-detail__svg-title project-detail__svg-title--compact" x="346" y="442">CHANNELS /</text>
+                      <text class="project-detail__svg-title project-detail__svg-title--compact" x="346" y="466">REDIS</text>
+                    </g>
+
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'workers'" role="button" tabindex="0" aria-label="Celery Jobs" (click)="selectArchitectureNode('workers')" (keydown.enter)="selectArchitectureNode('workers')" (keydown.space)="selectArchitectureNode('workers')">
+                      <rect class="project-detail__svg-card-bg" x="594" y="316" width="196" height="168" rx="18"></rect>
+                      <rect class="project-detail__svg-icon-bg" x="616" y="362" width="52" height="52" rx="14"></rect>
+                      <text class="project-detail__svg-icon" x="642" y="396" text-anchor="middle">settings_suggest</text>
+                      <text class="project-detail__svg-role" x="616" y="346">ASYNC LAYER</text>
+                      <text class="project-detail__svg-title project-detail__svg-title--compact" x="616" y="442">CELERY</text>
+                      <text class="project-detail__svg-title project-detail__svg-title--compact" x="616" y="466">JOBS</text>
+                    </g>
+
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'ops'" role="button" tabindex="0" aria-label="System Health" (click)="selectArchitectureNode('ops')" (keydown.enter)="selectArchitectureNode('ops')" (keydown.space)="selectArchitectureNode('ops')">
+                      <rect class="project-detail__svg-card-bg" x="864" y="430" width="214" height="184" rx="18"></rect>
+                      <rect class="project-detail__svg-icon-bg" x="886" y="476" width="52" height="52" rx="14"></rect>
+                      <text class="project-detail__svg-icon" x="912" y="510" text-anchor="middle">monitor_heart</text>
+                      <text class="project-detail__svg-role" x="886" y="460">OBSERVABILITY</text>
+                      <text class="project-detail__svg-title" x="886" y="562">SYSTEM</text>
+                      <text class="project-detail__svg-title" x="886" y="586">HEALTH</text>
+                    </g>
+
+                    <g class="project-detail__svg-legend" aria-hidden="true">
+                      <rect x="42" y="316" width="208" height="116" rx="16"></rect>
+                      <text x="64" y="346">HTTPS / REST</text>
+                      <text x="64" y="370">WEBSOCKETS</text>
+                      <text x="64" y="394">TASK QUEUE</text>
+                      <text x="64" y="418">MONITORING</text>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            @if (activeArchitectureNode(); as activeNode) {
+            <article class="project-detail__map-detail bp-dos-window" bpReveal>
+              <div class="bp-dos-window__bar">
+                <span>inspect_system.map</span>
+                <span class="project-detail__window-close" aria-hidden="true">×</span>
+              </div>
+              <div class="bp-dos-window__body project-detail__map-detail-body">
+                <p class="bp-eyebrow">{{ activeNode.role }}</p>
+                <h3>{{ activeNode.label }}</h3>
+                <p>{{ activeNode.text }}</p>
+                <ul>
+                  @for (connection of activeNode.connections; track connection) {
+                  <li>{{ connection }}</li>
+                  }
+                </ul>
+              </div>
+            </article>
+            }
+          </div>
+        </section>
+        }
+
+        @if (isCaseNoteVisible()) {
+        <aside class="project-detail__case-note bp-dos-window" role="dialog" [attr.aria-label]="content().projectsIntro.caseStudyLabel" bpReveal>
+          <div class="bp-dos-window__bar">
+            <span>case_note.sys</span>
+            <button class="project-detail__window-close" type="button" [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeCaseNote()">×</button>
+          </div>
+          <div class="bp-dos-window__body project-detail__case-note-body">
+            <p>mode={{ activeProject.detailMode }}</p>
+            <p>stack={{ activeProject.techStack.join(' / ') }}</p>
+            <p>next=erm_layer + sequence_flow + rights_matrix</p>
+          </div>
+        </aside>
+        }
+
+      </div>
+    </section>
+
+    @if (activeProject.chapters.length) {
+    <section class="project-detail__chapters-section bp-section" bpReveal>
+      <div class="bp-container">
+        <div class="project-detail__section-head" bpReveal>
+          <p class="bp-eyebrow">{{ content().projectsIntro.caseStudyLabel }}</p>
+          <h2>{{ content().projectsIntro.detailLayerLabel }}</h2>
+        </div>
+
+        <div class="project-detail__chapter-grid">
+          @for (chapter of activeProject.chapters; track chapter.title; let index = $index) {
+          <article class="project-detail__chapter project-detail__animated-item bp-card" [style.--reveal-index]="index" bpReveal>
+            <p class="bp-eyebrow">{{ chapter.eyebrow }}</p>
+            <h3>{{ chapter.title }}</h3>
+            <p>{{ chapter.text }}</p>
+            <ul>
+              @for (point of chapter.points; track point) {
+              <li>{{ point }}</li>
+              }
+            </ul>
           </article>
           }
         </div>
       </div>
     </section>
+    }
+
+    @if (activeProject.liveDemo; as demo) {
+    <section id="project-live-demo" class="project-detail__demo bp-section" bpReveal>
+      <div class="bp-container project-detail__demo-panel bp-card">
+        <span class="project-detail__demo-icon material-symbols-outlined" aria-hidden="true">terminal</span>
+        <div>
+          <p class="bp-eyebrow">{{ content().projectsIntro.liveDemoLabel }}</p>
+          <h2>{{ demo.status === 'available' ? content().projectsIntro.openDemoLabel : content().projectsIntro.demoUnavailableLabel }}</h2>
+          <p>{{ demo.text }}</p>
+        </div>
+
+        <div class="project-detail__demo-actions">
+          @if (demo.status === 'available' && demo.url) {
+          <a class="bp-button bp-button--accent" [href]="demo.url" target="_blank" rel="noreferrer">
+            <span>{{ content().projectsIntro.openDemoLabel }}</span>
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          } @else {
+          <span class="project-detail__demo-status">{{ demo.status }}</span>
+          }
+          <a class="bp-button bp-button--ghost" routerLink="/" fragment="contact">
+            <span>{{ content().projectsIntro.demoRequestLabel }}</span>
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </section>
+    }
+
+    @if (activeProject.gallery.length) {
+    <section class="project-detail__gallery bp-section" bpReveal>
+      <div class="bp-container">
+        <div class="project-detail__section-head">
+          <p class="bp-eyebrow">{{ content().projectsIntro.galleryLabel }}</p>
+          <h2>{{ activeProject.name }}</h2>
+        </div>
+
+        <div class="project-detail__evidence-grid">
+          @for (item of activeProject.gallery; track item.title; let index = $index) {
+          <article [class]="'project-detail__evidence-card project-detail__animated-item project-detail__evidence-card--' + item.size" [style.--reveal-index]="index" bpReveal>
+            <div class="project-detail__browser-frame">
+              <div class="project-detail__browser-bar" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              @if (item.image) {
+              <img [src]="item.image" [alt]="item.alt ?? item.title" loading="lazy" decoding="async" />
+              } @else {
+              <div class="project-detail__evidence-screen" aria-hidden="true">
+                <span class="material-symbols-outlined">{{ item.icon ?? 'web_asset' }}</span>
+                <strong>{{ item.title }}</strong>
+                <div>
+                  @for (annotation of item.annotations ?? []; track annotation) {
+                  <em>{{ annotation }}</em>
+                  }
+                </div>
+              </div>
+              }
+              <button type="button" class="project-detail__zoom" [attr.aria-label]="content().projectsIntro.zoomLabel">
+                <span class="material-symbols-outlined" aria-hidden="true">zoom_in</span>
+              </button>
+            </div>
+            <div>
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.text }}</p>
+            </div>
+          </article>
+          }
+        </div>
+      </div>
+    </section>
+    }
   </article>
   } @else {
   <section class="project-detail__missing bp-section">

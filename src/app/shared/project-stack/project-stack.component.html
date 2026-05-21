@@ -45,13 +45,13 @@
     }
 
     <div class="project-stack__copy" bpReveal>
-      <p class="project-stack__kicker project-stack__kicker--headline">{{ project.kicker }}</p>
+      <p class="project-stack__kicker project-stack__kicker--headline">{{ project.overviewKicker ?? project.kicker }}</p>
       <div class="project-stack__number">{{ (index + 1).toString().padStart(2, '0') }}</div>
       <h3>{{ project.name }}</h3>
-      <p class="project-stack__summary">{{ project.summary }}</p>
+      <p class="project-stack__summary">{{ project.overviewSummary ?? project.summary }}</p>
 
       <ul class="project-stack__tags" [attr.aria-label]="labels.techStackAriaLabel">
-        @for (tech of project.techStack.slice(0, 4); track $index) {
+        @for (tech of (project.overviewTechStack ?? project.techStack).slice(0, 4); track $index) {
         <li>{{ tech }}</li>
         }
       </ul>

@@ -2,7 +2,7 @@
 <main class="project-detail bp-scroll-main" [attr.data-project]="project()?.slug ?? null">
   @if (project(); as activeProject) {
   <article>
-    <header class="project-detail__hero bp-section">
+    <header class="project-detail__hero bp-section" [style.--project-detail-game-landscape]="activeProject.gameShowcase?.heroBackdropAsset ? 'url(' + activeProject.gameShowcase?.heroBackdropAsset + ')' : null">
       <div class="project-detail__hero-grid bp-container">
         <div class="project-detail__hero-copy">
           <a class="project-detail__back" routerLink="/" fragment="projects">
@@ -11,7 +11,15 @@
           </a>
 
           <p class="bp-eyebrow project-detail__hero-kicker">B² · {{ activeProject.kicker }}</p>
-          <h1 class="bp-title project-detail__hero-title">{{ activeProject.name }}</h1>
+          <h1 class="bp-title project-detail__hero-title">
+            @if (activeProject.titleLines; as titleLines) {
+            @for (line of titleLines; track line) {
+            <span>{{ line }}</span>
+            }
+            } @else {
+            {{ activeProject.name }}
+            }
+          </h1>
           <p class="bp-subtitle project-detail__hero-summary">{{ activeProject.summary }}</p>
 
           <ul class="project-detail__hero-tags" [attr.aria-label]="content().projectsIntro.techStackAriaLabel">
@@ -23,19 +31,188 @@
           </ul>
 
           <div class="project-detail__hero-actions">
-            <a class="bp-button bp-button--accent" href="#project-deep-dive">
-              <span>{{ content().projectsIntro.caseStudyLabel }}</span>
+            <a class="bp-button bp-button--accent" [attr.href]="activeProject.boardShowcase ? '#project-board-workflow' : activeProject.gameShowcase ? '#project-game-making' : activeProject.bloodShowcase ? '#project-blood-workflow' : activeProject.catalogShowcase ? '#project-catalog-spread' : '#project-deep-dive'">
+              <span>{{ activeProject.boardShowcase?.ctaLabel ?? activeProject.gameShowcase?.ctaLabel ?? activeProject.bloodShowcase?.ctaLabel ?? activeProject.catalogShowcase?.ctaLabel ?? content().projectsIntro.caseStudyLabel }}</span>
               <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
             </a>
+            @if (!activeProject.catalogShowcase) {
             <a class="bp-button bp-button--ghost project-detail__hero-demo-link" href="#project-live-demo">
               <span>{{ content().projectsIntro.openDemoLabel }}</span>
               <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
             </a>
+            }
           </div>
         </div>
 
         <div class="project-detail__hero-stage" [attr.aria-label]="content().projectsIntro.previewAriaLabel">
-          @if ((activeProject.appModules?.length ?? 0) > 0) {
+          @if (activeProject.boardShowcase; as boardShowcase) {
+          <aside class="project-detail__board-showcase" [attr.aria-label]="boardShowcase.boardLabel">
+            <div class="project-detail__board-window">
+              <div class="project-detail__board-window-bar">
+                <span></span>
+                <strong>{{ boardShowcase.eyebrow }}</strong>
+                <small>{{ boardShowcase.status }}</small>
+              </div>
+
+              <div class="project-detail__board-window-head">
+                <div>
+                  <p>{{ boardShowcase.title }}</p>
+                  <span>{{ boardShowcase.lead }}</span>
+                </div>
+                <ul>
+                  @for (chip of boardShowcase.chips; track chip) {
+                  <li>{{ chip }}</li>
+                  }
+                </ul>
+              </div>
+
+              <div class="project-detail__board-preview-grid">
+                @for (column of boardShowcase.columns; track column.title) {
+                <section class="project-detail__board-column">
+                  <header>
+                    <h2>{{ column.title }}</h2>
+                    <span>{{ column.meta }}</span>
+                  </header>
+                  <div>
+                    @for (task of column.tasks; track task.title) {
+                    <article [class]="'project-detail__board-task project-detail__board-task--' + task.tone">
+                      <span>{{ task.label }}</span>
+                      <strong>{{ task.title }}</strong>
+                    </article>
+                    }
+                  </div>
+                </section>
+                }
+              </div>
+
+              <div class="project-detail__board-mascot-note">
+                <div class="project-detail__cat-avatar" aria-hidden="true">
+                  @if (boardShowcase.mascot.asset) {
+                  <img [src]="boardShowcase.mascot.asset" [alt]="boardShowcase.mascot.assetAlt" loading="lazy" decoding="async" />
+                  } @else {
+                  <span></span>
+                  }
+                </div>
+                <div>
+                  <strong>{{ boardShowcase.mascot.name }} · {{ boardShowcase.mascot.role }}</strong>
+                  <p>{{ boardShowcase.lead }}</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+          } @else if (activeProject.gameShowcase; as gameShowcase) {
+          <aside class="project-detail__game-showcase" [attr.aria-label]="gameShowcase.videoLabel">
+            <div class="project-detail__game-video">
+              <div class="project-detail__game-video-bar">
+                <span></span>
+                <strong>{{ gameShowcase.eyebrow }}</strong>
+                <small>{{ gameShowcase.status }}</small>
+              </div>
+
+              <div class="project-detail__game-video-viewport">
+                @if (gameShowcase.videoSrc) {
+                <video controls playsinline preload="metadata" [attr.poster]="gameShowcase.videoPoster ?? null" [attr.aria-label]="gameShowcase.videoLabel">
+                  <source [src]="gameShowcase.videoSrc" type="video/webm" />
+                </video>
+                } @else {
+                <div class="project-detail__game-video-placeholder">
+                  <span class="material-symbols-outlined" aria-hidden="true">movie</span>
+                  <strong>{{ gameShowcase.videoFallbackText }}</strong>
+                  <small>{{ gameShowcase.videoFileHint }}</small>
+                </div>
+                }
+              </div>
+
+              <div class="project-detail__game-video-footer">
+                <p>{{ gameShowcase.title }}</p>
+                <ul class="project-detail__game-chips">
+                  @for (chip of gameShowcase.chips; track chip) {
+                  <li>{{ chip }}</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          </aside>
+          } @else if (activeProject.bloodShowcase; as bloodShowcase) {
+          <aside class="project-detail__blood-showcase" [attr.aria-label]="bloodShowcase.previewLabel">
+            <div class="project-detail__blood-window">
+              <div class="project-detail__blood-bar">
+                <span></span>
+                <strong>{{ bloodShowcase.eyebrow }}</strong>
+                <small>{{ bloodShowcase.status }}</small>
+              </div>
+
+              <div class="project-detail__blood-head">
+                <div>
+                  <p>{{ bloodShowcase.title }}</p>
+                  <span>{{ bloodShowcase.lead }}</span>
+                </div>
+                <ul>
+                  @for (chip of bloodShowcase.chips; track chip) {
+                  <li>{{ chip }}</li>
+                  }
+                </ul>
+              </div>
+
+              <div class="project-detail__blood-preview">
+                <section class="project-detail__blood-document">
+                  <span class="material-symbols-outlined" aria-hidden="true">clinical_notes</span>
+                  <h2>{{ bloodShowcase.documentTitle }}</h2>
+                  <p>{{ bloodShowcase.documentText }}</p>
+                  <div aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </section>
+
+                <section class="project-detail__blood-values">
+                  @for (value of bloodShowcase.values; track value.label) {
+                  <article [class]="'project-detail__blood-value project-detail__blood-value--' + value.tone" [style.--blood-position]="value.position + '%'">
+                    <header>
+                      <strong>{{ value.label }}</strong>
+                      <span>{{ value.value }} {{ value.unit }}</span>
+                    </header>
+                    <div class="project-detail__blood-scale" aria-hidden="true"><span></span></div>
+                    <small>{{ value.range }}</small>
+                    <p>{{ value.hint }}</p>
+                  </article>
+                  }
+                </section>
+              </div>
+            </div>
+          </aside>
+          } @else if (activeProject.catalogShowcase; as catalogShowcase) {
+          <aside class="project-detail__catalog-showcase" [attr.aria-label]="catalogShowcase.readerLabel">
+            <div class="project-detail__catalog-window">
+              <div class="project-detail__catalog-bar">
+                <span></span>
+                <strong>{{ catalogShowcase.eyebrow }}</strong>
+                <small>{{ catalogShowcase.status }}</small>
+              </div>
+
+              <div class="project-detail__catalog-head">
+                <div>
+                  <p>{{ catalogShowcase.title }}</p>
+                  <span>{{ catalogShowcase.lead }}</span>
+                </div>
+                <ul>
+                  @for (chip of catalogShowcase.chips; track chip) {
+                  <li>{{ chip }}</li>
+                  }
+                </ul>
+              </div>
+
+              <div class="project-detail__catalog-hero-preview" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          </aside>
+          } @else if ((activeProject.appModules?.length ?? 0) > 0) {
           <div class="project-detail__app-stack" [style.--stack-active]="activeAppModuleIndex()" aria-label="Interaktive App-Karten">
             @for (app of activeProject.appModules ?? []; track app.id; let index = $index) {
             <article class="project-detail__stack-card" [class.is-active]="activeAppModule()?.id === app.id" [style.--stack-index]="index" [style.--stack-offset]="index - activeAppModuleIndex()" aria-hidden="true">
@@ -204,6 +381,7 @@
       </div>
     </section>
 
+    @if (activeProject.architecture?.length) {
     <section id="project-deep-dive" [class]="'project-detail__mode bp-section project-detail__mode--' + activeProject.detailMode" bpReveal>
       <div class="bp-container">
         <div class="project-detail__section-head">
@@ -374,13 +552,244 @@
 
       </div>
     </section>
+    }
+
+    @if (activeProject.boardShowcase; as boardShowcase) {
+    <section id="project-board-workflow" class="project-detail__board-flow-section bp-section" bpReveal>
+      <div class="bp-container">
+        <div class="project-detail__section-head" bpReveal>
+          <p class="bp-eyebrow">{{ boardShowcase.workflowEyebrow }}</p>
+          <h2>{{ boardShowcase.workflowTitle }}</h2>
+        </div>
+
+        <div class="project-detail__board-flow-grid">
+          @for (card of boardShowcase.workflowCards; track card.title; let index = $index) {
+          <article class="project-detail__board-flow-card project-detail__animated-item bp-card" [style.--reveal-index]="index" bpReveal>
+            <span class="material-symbols-outlined" aria-hidden="true">{{ card.icon }}</span>
+            <h3>{{ card.title }}</h3>
+            <p>{{ card.text }}</p>
+            <ul>
+              @for (point of card.points; track point) {
+              <li>{{ point }}</li>
+              }
+            </ul>
+          </article>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="project-detail__character-section bp-section" bpReveal>
+      <div class="bp-container project-detail__character-card bp-card">
+        <div class="project-detail__character-visual">
+          @if (boardShowcase.mascot.asset) {
+          <img [src]="boardShowcase.mascot.asset" [alt]="boardShowcase.mascot.assetAlt" loading="lazy" decoding="async" />
+          } @else {
+          <div class="project-detail__cat-mascot" aria-hidden="true">
+            <span></span>
+          </div>
+          <small>{{ boardShowcase.mascot.assetHint }}</small>
+          }
+        </div>
+
+        <div class="project-detail__character-copy">
+          <p class="bp-eyebrow">{{ boardShowcase.mascot.eyebrow }}</p>
+          <h2>{{ boardShowcase.mascot.title }}</h2>
+          <strong>{{ boardShowcase.mascot.name }} · {{ boardShowcase.mascot.role }}</strong>
+          <p>{{ boardShowcase.mascot.text }}</p>
+
+          <div class="project-detail__character-facts">
+            @for (fact of boardShowcase.mascot.facts; track fact.label) {
+            <article>
+              <span>{{ fact.value }}</span>
+              <h3>{{ fact.label }}</h3>
+              <p>{{ fact.text }}</p>
+            </article>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+    }
+
+    @if (activeProject.bloodShowcase; as bloodShowcase) {
+    <section id="project-blood-workflow" class="project-detail__blood-pipeline bp-section" bpReveal>
+      <div class="bp-container">
+        <div class="project-detail__section-head" bpReveal>
+          <p class="bp-eyebrow">{{ bloodShowcase.pipelineEyebrow }}</p>
+          <h2>{{ bloodShowcase.pipelineTitle }}</h2>
+        </div>
+
+        <div class="project-detail__blood-pipeline-grid">
+          @for (step of bloodShowcase.pipelineSteps; track step.title; let index = $index) {
+          <article class="project-detail__blood-step project-detail__animated-item bp-card" [style.--reveal-index]="index" bpReveal>
+            <span class="material-symbols-outlined" aria-hidden="true">{{ step.icon }}</span>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.text }}</p>
+            <ul>
+              @for (point of step.points; track point) {
+              <li>{{ point }}</li>
+              }
+            </ul>
+          </article>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="project-detail__blood-guide-section bp-section" bpReveal>
+      <div class="bp-container project-detail__blood-guide bp-card">
+        <div class="project-detail__blood-guide-copy">
+          <p class="bp-eyebrow">{{ bloodShowcase.guideEyebrow }}</p>
+          <h2>{{ bloodShowcase.guideTitle }}</h2>
+          <p>{{ bloodShowcase.disclaimer }}</p>
+        </div>
+
+        <div class="project-detail__blood-guide-grid">
+          @for (value of bloodShowcase.values; track value.label) {
+          <article [class]="'project-detail__blood-guide-card project-detail__blood-guide-card--' + value.tone" [style.--blood-position]="value.position + '%'">
+            <span>{{ value.label }}</span>
+            <strong>{{ value.value }} {{ value.unit }}</strong>
+            <div class="project-detail__blood-scale" aria-hidden="true"><span></span></div>
+            <small>{{ value.range }}</small>
+            <p>{{ value.hint }}</p>
+          </article>
+          }
+        </div>
+      </div>
+    </section>
+    }
+
+    @if (activeProject.gameShowcase; as gameShowcase) {
+    <section id="project-game-making" class="project-detail__runner-section bp-section" bpReveal>
+      <div class="bp-container project-detail__runner-panel">
+        <div>
+          <p class="bp-eyebrow">{{ gameShowcase.runner.eyebrow }}</p>
+          <h2>{{ gameShowcase.runner.title }}</h2>
+          <p>{{ gameShowcase.runner.text }}</p>
+        </div>
+
+        <div class="project-detail__runner-track" [attr.aria-label]="gameShowcase.runner.trackLabel">
+          <span class="project-detail__runner-track-label">{{ gameShowcase.runner.trackLabel }}</span>
+          <div class="project-detail__runner-character">
+            @if (gameShowcase.runner.asset) {
+            <img [src]="gameShowcase.runner.asset" [alt]="gameShowcase.runner.assetAlt" loading="lazy" decoding="async" />
+            } @else {
+            <span class="project-detail__runner-fallback" aria-hidden="true"></span>
+            <small>{{ gameShowcase.runner.assetHint }}</small>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="project-detail__character-section bp-section" bpReveal>
+      <div class="bp-container project-detail__character-card bp-card">
+        <div class="project-detail__character-visual">
+          @if (gameShowcase.character.asset) {
+          <img [src]="gameShowcase.character.asset" [alt]="gameShowcase.character.assetAlt" loading="lazy" decoding="async" />
+          } @else {
+          <span class="project-detail__character-fallback" aria-hidden="true"></span>
+          <small>{{ gameShowcase.character.assetHint }}</small>
+          }
+        </div>
+
+        <div class="project-detail__character-copy">
+          <p class="bp-eyebrow">{{ gameShowcase.character.eyebrow }}</p>
+          <h2>{{ gameShowcase.character.title }}</h2>
+          <strong>{{ gameShowcase.character.name }} · {{ gameShowcase.character.role }}</strong>
+          <p>{{ gameShowcase.character.text }}</p>
+
+          <div class="project-detail__character-facts">
+            @for (fact of gameShowcase.character.facts; track fact.label) {
+            <article>
+              <span>{{ fact.value }}</span>
+              <h3>{{ fact.label }}</h3>
+              <p>{{ fact.text }}</p>
+            </article>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+    }
+
+    @if (activeProject.catalogShowcase; as catalogShowcase) {
+    <section id="project-catalog-spread" class="project-detail__catalog-reader-section bp-section" bpReveal>
+      <div class="project-detail__catalog-reader">
+        <div class="project-detail__catalog-reader-head" bpReveal>
+          <div>
+            <p class="bp-eyebrow">{{ catalogShowcase.readerEyebrow }}</p>
+            <h2>{{ catalogShowcase.readerTitle }}</h2>
+            <span>{{ catalogShowcase.readerHint }}</span>
+          </div>
+
+          <button type="button" class="project-detail__catalog-menu-button" [attr.aria-label]="catalogShowcase.tocOpenLabel" [attr.aria-expanded]="isCatalogMenuOpen()" (click)="toggleCatalogMenu()">
+            <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+            <strong>{{ catalogShowcase.tocTitle }}</strong>
+          </button>
+        </div>
+
+        @if (activeCatalogSpread(); as spread) {
+        <div class="project-detail__catalog-reader-layout">
+          <div class="project-detail__catalog-reader-frame" [attr.aria-label]="catalogShowcase.readerLabel">
+            <div class="project-detail__catalog-reader-controls">
+              <button type="button" [attr.aria-label]="catalogShowcase.previousLabel" (click)="selectAdjacentCatalogSpread(-1)">
+                <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+              </button>
+              <span>{{ spread.title }} · {{ activeCatalogSpreadIndex() + 1 }} / {{ catalogShowcase.spreads.length }}</span>
+              <button type="button" [attr.aria-label]="catalogShowcase.nextLabel" (click)="selectAdjacentCatalogSpread(1)">
+                <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </button>
+            </div>
+
+            <div class="project-detail__catalog-book project-detail__catalog-book--reader">
+              @for (page of spread.pages; track page.number) {
+              <article [class]="'project-detail__catalog-page project-detail__catalog-page--' + page.mood">
+                <div class="project-detail__catalog-page-placeholder">
+                  <span>{{ page.number }}</span>
+                  <em>{{ page.eyebrow }}</em>
+                  <strong>{{ page.title }}</strong>
+                  <p>{{ page.text }}</p>
+                  <small>{{ page.imageHint }}</small>
+                  <i aria-hidden="true"></i>
+                </div>
+              </article>
+              }
+            </div>
+          </div>
+        </div>
+
+        @if (isCatalogMenuOpen()) {
+        <div class="project-detail__catalog-toc-backdrop" aria-hidden="true" (click)="closeCatalogMenu()"></div>
+        <aside class="project-detail__catalog-reader-meta bp-card" role="dialog" aria-modal="true" [attr.aria-label]="catalogShowcase.tocTitle">
+          <button type="button" class="project-detail__catalog-toc-close" [attr.aria-label]="catalogShowcase.tocCloseLabel" (click)="closeCatalogMenu()">
+            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+          </button>
+          <p class="bp-eyebrow">{{ catalogShowcase.eyebrow }}</p>
+          <h3>{{ catalogShowcase.tocTitle }}</h3>
+          <p>{{ spread.text }}</p>
+          <div class="project-detail__catalog-spread-tabs" [attr.aria-label]="catalogShowcase.readerLabel">
+            @for (catalogSpread of catalogShowcase.spreads; track catalogSpread.id; let index = $index) {
+            <button type="button" [class.is-active]="activeCatalogSpreadIndex() === index" (click)="selectCatalogSpread(index); closeCatalogMenu()">
+              <span>{{ index + 1 }}</span>
+              <strong>{{ catalogSpread.title }}</strong>
+            </button>
+            }
+          </div>
+        </aside>
+        }
+        }
+      </div>
+    </section>
+    }
 
     @if (activeProject.chapters.length) {
     <section class="project-detail__chapters-section bp-section" bpReveal>
       <div class="bp-container">
         <div class="project-detail__section-head" bpReveal>
-          <p class="bp-eyebrow">{{ content().projectsIntro.caseStudyLabel }}</p>
-          <h2>{{ content().projectsIntro.detailLayerLabel }}</h2>
+          <p class="bp-eyebrow">{{ activeProject.gameShowcase?.chaptersEyebrow ?? content().projectsIntro.caseStudyLabel }}</p>
+          <h2>{{ activeProject.gameShowcase?.chaptersTitle ?? content().projectsIntro.detailLayerLabel }}</h2>
         </div>
 
         <div class="project-detail__chapter-grid">
@@ -430,11 +839,83 @@
     }
 
     @if (activeProject.gallery.length) {
+    @if (activeProject.catalogShowcase; as catalogShowcase) {
+    <section class="project-detail__catalog-gallery-section bp-section" bpReveal>
+      <div class="bp-container">
+        <div class="project-detail__section-head">
+          <p class="bp-eyebrow">{{ catalogShowcase.galleryEyebrow }}</p>
+          <h2>{{ catalogShowcase.galleryTitle }}</h2>
+        </div>
+
+        <div class="project-detail__masonry-gallery">
+          @for (item of activeProject.gallery; track item.title; let index = $index) {
+          <article [class]="'project-detail__masonry-card project-detail__masonry-card--' + item.size" [style.--reveal-index]="index" bpReveal>
+            <button type="button" [attr.aria-label]="catalogShowcase.lightboxOpenLabel + ': ' + item.title" (click)="openGalleryLightbox(index)">
+              <span class="project-detail__masonry-image">
+                @if (item.image) {
+                <img [src]="item.image" [alt]="item.alt ?? item.title" loading="lazy" decoding="async" />
+                } @else {
+                <span class="project-detail__masonry-placeholder" aria-hidden="true">
+                  <span class="material-symbols-outlined">{{ item.icon ?? 'image' }}</span>
+                  <strong>{{ item.title }}</strong>
+                  <small>{{ item.imageHint }}</small>
+                </span>
+                }
+              </span>
+            </button>
+          </article>
+          }
+        </div>
+      </div>
+
+      @if (activeGalleryLightboxItem(); as lightboxItem) {
+      <div class="project-detail__lightbox" role="dialog" aria-modal="true" [attr.aria-label]="lightboxItem.title" (click)="closeGalleryLightbox()">
+        <div class="project-detail__lightbox-panel" (click)="$event.stopPropagation()">
+          <button type="button" class="project-detail__lightbox-close" [attr.aria-label]="catalogShowcase.lightboxCloseLabel" (click)="closeGalleryLightbox()">
+            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+          </button>
+
+          <div class="project-detail__lightbox-visual">
+            @if (lightboxItem.image) {
+            <img [src]="lightboxItem.image" [alt]="lightboxItem.alt ?? lightboxItem.title" />
+            } @else {
+            <div class="project-detail__lightbox-placeholder">
+              <span class="material-symbols-outlined" aria-hidden="true">{{ lightboxItem.icon ?? 'image' }}</span>
+              <strong>{{ lightboxItem.title }}</strong>
+              <small>{{ lightboxItem.imageHint }}</small>
+            </div>
+            }
+          </div>
+
+          <div class="project-detail__lightbox-copy">
+            <p class="bp-eyebrow">{{ lightboxItem.year }}</p>
+            <h3>{{ lightboxItem.title }}</h3>
+            <p>{{ lightboxItem.detail ?? lightboxItem.text }}</p>
+            <ul>
+              @for (tool of lightboxItem.tools ?? []; track tool) {
+              <li>{{ tool }}</li>
+              }
+            </ul>
+          </div>
+
+          <div class="project-detail__lightbox-actions">
+            <button type="button" [attr.aria-label]="catalogShowcase.lightboxPreviousLabel" (click)="selectAdjacentGalleryItem(-1)">
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+            </button>
+            <button type="button" [attr.aria-label]="catalogShowcase.lightboxNextLabel" (click)="selectAdjacentGalleryItem(1)">
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      }
+    </section>
+    } @else {
     <section class="project-detail__gallery bp-section" bpReveal>
       <div class="bp-container">
         <div class="project-detail__section-head">
-          <p class="bp-eyebrow">{{ content().projectsIntro.galleryLabel }}</p>
-          <h2>{{ activeProject.name }}</h2>
+          <p class="bp-eyebrow">{{ activeProject.boardShowcase?.galleryEyebrow ?? activeProject.gameShowcase?.galleryEyebrow ?? activeProject.bloodShowcase?.galleryEyebrow ?? content().projectsIntro.galleryLabel }}</p>
+          <h2>{{ activeProject.boardShowcase?.galleryTitle ?? activeProject.gameShowcase?.galleryTitle ?? activeProject.bloodShowcase?.galleryTitle ?? activeProject.name }}</h2>
         </div>
 
         <div class="project-detail__evidence-grid">
@@ -472,6 +953,7 @@
         </div>
       </div>
     </section>
+    }
     }
   </article>
   } @else {

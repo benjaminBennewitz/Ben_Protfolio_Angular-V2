@@ -2,11 +2,11 @@
 <article class="project-card bp-card" [attr.data-accent]="project.accent">
   <bp-project-visual [project]="project" />
   <div class="project-card__body">
-    <p class="project-card__kicker">{{ project.kicker }}</p>
+    <p class="project-card__kicker">{{ project.overviewKicker ?? project.kicker }}</p>
     <h3>{{ project.name }}</h3>
-    <p>{{ project.summary }}</p>
+    <p>{{ project.overviewSummary ?? project.summary }}</p>
     <ul class="bp-tags" aria-label="Techstack">
-      @for (tech of project.techStack.slice(0, 5); track $index) {
+      @for (tech of (project.overviewTechStack ?? project.techStack).slice(0, 5); track $index) {
       <li class="bp-tag">{{ tech }}</li>
       }
     </ul>

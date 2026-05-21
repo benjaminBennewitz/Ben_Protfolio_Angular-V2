@@ -138,6 +138,26 @@ ben-portfolio-angular-v2/
 │   │   ├── fonts/
 │   │   │   └── material-symbols-outlined-latin-fill-normal.woff2
 │   │   ├── images/
+│   │   │   ├── projects/
+│   │   │   │   ├── design-catalog/
+│   │   │   │   │   ├── catalog-page-01.webp
+│   │   │   │   │   ├── catalog-page-02.webp
+│   │   │   │   │   ├── catalog-page-03.webp
+│   │   │   │   │   ├── catalog-page-04.webp
+│   │   │   │   │   ├── catalog-page-05.webp
+│   │   │   │   │   ├── catalog-page-06.webp
+│   │   │   │   │   ├── catalog-page-07.webp
+│   │   │   │   │   ├── catalog-page-08.webp
+│   │   │   │   │   ├── gallery-assets.webp
+│   │   │   │   │   ├── gallery-color-look.webp
+│   │   │   │   │   ├── gallery-cover.webp
+│   │   │   │   │   ├── gallery-retouch.webp
+│   │   │   │   │   ├── gallery-spread.webp
+│   │   │   │   │   ├── gallery-texture.webp
+│   │   │   │   │   ├── gallery-typography.webp
+│   │   │   │   │   └── gallery-vector.webp
+│   │   │   │   └── pepes-adventure/
+│   │   │   │       └── desert-hero-bg.webp
 │   │   │   ├── project-stack/
 │   │   │   │   ├── project_2/
 │   │   │   │   │   ├── pj2_1up.webp
@@ -196,6 +216,8 @@ ben-portfolio-angular-v2/
 │   │   └── favicon.svg
 │   ├── styles/
 │   │   ├── base.scss
+│   │   ├── project-detail-blood.scss
+│   │   ├── project-detail-catalog.scss
 │   │   ├── tokens.scss
 │   │   └── utilities.scss
 │   ├── index.html

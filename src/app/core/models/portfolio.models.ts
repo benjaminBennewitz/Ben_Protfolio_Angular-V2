@@ -283,8 +283,10 @@ export interface ProjectGalleryItem {
   readonly title: string;
   /** Kurze Einordnung des visuellen Inhalts. */
   readonly text: string;
-  /** Optionaler Bildpfad für echte Screenshots. */
+  /** Optionaler Bildpfad für echte Screenshots oder Galeriebilder. */
   readonly image?: string;
+  /** Geplanter Dateipfad, wenn ein Galeriebild später ergänzt wird. */
+  readonly imageHint?: string;
   /** Alternativtext für echte Screenshots. */
   readonly alt?: string;
   /** Visuelle Gewichtung im Masonry-Layout. */
@@ -293,8 +295,336 @@ export interface ProjectGalleryItem {
   readonly annotations?: readonly string[];
   /** Material-Symbol für Platzhalter- und Mockup-Previews. */
   readonly icon?: string;
+  /** Optionaler Detailtext für Lightbox- und Galerieansichten. */
+  readonly detail?: string;
+  /** Optionale Werkzeug- oder Kontext-Tags für visuelle Arbeiten. */
+  readonly tools?: readonly string[];
+  /** Optionaler Jahrgang oder Zeitraum der visuellen Arbeit. */
+  readonly year?: string;
 }
 
+/** Einzelne Seite im digitalen Designkatalog. */
+export interface ProjectCatalogPage {
+  /** Sichtbare Seitenzahl oder Seitenkennung. */
+  readonly number: string;
+  /** Kleine Kapitel- oder Bildbeschriftung. */
+  readonly eyebrow: string;
+  /** Titel der Katalogseite. */
+  readonly title: string;
+  /** Kurzer editorialer Seiteninhalt. */
+  readonly text: string;
+  /** Optionaler Bildpfad für ein echtes Katalogseitenmotiv. */
+  readonly image?: string;
+  /** Alternativtext für das Katalogseitenmotiv. */
+  readonly alt: string;
+  /** Geplanter Dateipfad, wenn das Bild später ergänzt wird. */
+  readonly imageHint: string;
+  /** Visuelle Stimmung der Seite für CSS-Varianten. */
+  readonly mood: 'cover' | 'image' | 'type' | 'detail';
+}
+
+/** Doppelseite des digitalen Designkatalogs. */
+export interface ProjectCatalogSpread {
+  /** Stabile ID für Navigation und Tracking. */
+  readonly id: string;
+  /** Titel der Doppelseite. */
+  readonly title: string;
+  /** Kurzer Kontext zur Doppelseite. */
+  readonly text: string;
+  /** Linke und rechte DIN-A4-Seite, zusammen als A3-Spread. */
+  readonly pages: readonly ProjectCatalogPage[];
+}
+
+/** Inhalt für interaktive Editorial- und Designkatalog-Projekte. */
+export interface ProjectCatalogShowcase {
+  /** Kleine Beschriftung im Hero-Showcase. */
+  readonly eyebrow: string;
+  /** Titel des Katalog-Showcases. */
+  readonly title: string;
+  /** Kurzer Status- oder Format-Hinweis. */
+  readonly status: string;
+  /** Editorialer Einführungstext zum Katalog. */
+  readonly lead: string;
+  /** Beschriftung des primären Hero-Links. */
+  readonly ctaLabel: string;
+  /** Kleine Tags zu Werkzeugen, Medien oder Gestaltung. */
+  readonly chips: readonly string[];
+  /** Zugängliche Beschriftung des Katalog-Readers. */
+  readonly readerLabel: string;
+  /** Eyebrow für die große Reader-Section. */
+  readonly readerEyebrow: string;
+  /** Überschrift für die große Reader-Section. */
+  readonly readerTitle: string;
+  /** Hinweis zur Interaktion mit dem Reader. */
+  readonly readerHint: string;
+  /** Beschriftung für den Button zum Öffnen des Inhaltsverzeichnisses. */
+  readonly tocOpenLabel: string;
+  /** Beschriftung für den Button zum Schließen des Inhaltsverzeichnisses. */
+  readonly tocCloseLabel: string;
+  /** Titel des Inhaltsverzeichnis-Overlays. */
+  readonly tocTitle: string;
+  /** Beschriftung für vorherige Doppelseite. */
+  readonly previousLabel: string;
+  /** Beschriftung für nächste Doppelseite. */
+  readonly nextLabel: string;
+  /** Interaktive Doppelseiten des Katalogs. */
+  readonly spreads: readonly ProjectCatalogSpread[];
+  /** Eyebrow für die Masonry-Galerie. */
+  readonly galleryEyebrow: string;
+  /** Überschrift für die Masonry-Galerie. */
+  readonly galleryTitle: string;
+  /** Beschriftung für Lightbox-Buttons. */
+  readonly lightboxOpenLabel: string;
+  /** Beschriftung für Lightbox schließen. */
+  readonly lightboxCloseLabel: string;
+  /** Beschriftung für vorheriges Galeriebild. */
+  readonly lightboxPreviousLabel: string;
+  /** Beschriftung für nächstes Galeriebild. */
+  readonly lightboxNextLabel: string;
+}
+
+
+/** Einzelne Beispielkarte im Kanban-Hero eines Projektmanagement-Projekts. */
+export interface ProjectBoardTaskPreview {
+  /** Kurzes Status- oder Kategorie-Label. */
+  readonly label: string;
+  /** Sichtbarer Aufgabenname im Demo-Board. */
+  readonly title: string;
+  /** Visuelle Aufgabenstimmung für kleine Statusfarben. */
+  readonly tone: 'new' | 'active' | 'review' | 'done';
+}
+
+/** Kanban-Spalte im projektspezifischen Hero-Showcase. */
+export interface ProjectBoardColumnPreview {
+  /** Spaltentitel im Board. */
+  readonly title: string;
+  /** Kleine Spalten-Metaangabe wie Anzahl oder Status. */
+  readonly meta: string;
+  /** Beispielaufgaben der Spalte. */
+  readonly tasks: readonly ProjectBoardTaskPreview[];
+}
+
+/** Kleine Karte für Workflow-, UX- oder Gamification-Schwerpunkte. */
+export interface ProjectBoardWorkflowCard {
+  /** Material-Symbol der Schwerpunktkarte. */
+  readonly icon: string;
+  /** Titel des Schwerpunkts. */
+  readonly title: string;
+  /** Kurzer erklärender Text. */
+  readonly text: string;
+  /** Scannbare Detailpunkte. */
+  readonly points: readonly string[];
+}
+
+/** Profil des Maskottchens einer Projektmanagement-App. */
+export interface ProjectBoardMascotProfile {
+  /** Kleine Beschriftung über dem Profil. */
+  readonly eyebrow: string;
+  /** Überschrift der Profil-Section. */
+  readonly title: string;
+  /** Name des Maskottchens. */
+  readonly name: string;
+  /** Rolle des Maskottchens im Produkt. */
+  readonly role: string;
+  /** Story- und UX-Text zum Maskottchen. */
+  readonly text: string;
+  /** Optionaler Bildpfad für ein echtes Maskottchen-Asset. */
+  readonly asset?: string;
+  /** Alternativtext für das Maskottchen-Asset. */
+  readonly assetAlt: string;
+  /** Geplanter Dateipfad, wenn das Asset später ergänzt wird. */
+  readonly assetHint: string;
+  /** Kompakte Fakten zur Maskottchen-Funktion. */
+  readonly facts: readonly ProjectMetric[];
+}
+
+/** Projektspezifischer Showcase für Kanban-, Board- und Gamification-Projekte. */
+export interface ProjectBoardShowcase {
+  /** Kleine technische Beschriftung im Hero-Showcase. */
+  readonly eyebrow: string;
+  /** Titel des Board-Frames. */
+  readonly title: string;
+  /** Kurzer Status- oder Produkt-Hinweis im Board-Frame. */
+  readonly status: string;
+  /** Erklärender Text zum Board-Showcase. */
+  readonly lead: string;
+  /** Beschriftung des primären Hero-Links. */
+  readonly ctaLabel: string;
+  /** Kleine technische oder fachliche Tags im Showcase. */
+  readonly chips: readonly string[];
+  /** Zugängliche Beschriftung des Board-Containers. */
+  readonly boardLabel: string;
+  /** Beispielspalten im visuellen Kanban-Board. */
+  readonly columns: readonly ProjectBoardColumnPreview[];
+  /** Eyebrow für die Workflow-Section. */
+  readonly workflowEyebrow: string;
+  /** Überschrift für die Workflow-Section. */
+  readonly workflowTitle: string;
+  /** Workflow-, UX- und Gamification-Karten. */
+  readonly workflowCards: readonly ProjectBoardWorkflowCard[];
+  /** Maskottchen-Profil des Projektmanagement-Systems. */
+  readonly mascot: ProjectBoardMascotProfile;
+  /** Eyebrow für die Galerie. */
+  readonly galleryEyebrow: string;
+  /** Überschrift für die Galerie. */
+  readonly galleryTitle: string;
+}
+
+/** Schmaler Lauf-Showcase für ein spielbares Webprojekt. */
+export interface ProjectGameRunner {
+  /** Kleine Beschriftung über dem Laufband. */
+  readonly eyebrow: string;
+  /** Überschrift der Laufband-Section. */
+  readonly title: string;
+  /** Kurzer erklärender Text zum animierten Asset. */
+  readonly text: string;
+  /** Optionaler Bildpfad für ein echtes Character- oder Sprite-Asset. */
+  readonly asset?: string;
+  /** Alternativtext für das Character- oder Sprite-Asset. */
+  readonly assetAlt: string;
+  /** Geplanter Dateipfad, wenn das Asset später ergänzt wird. */
+  readonly assetHint: string;
+  /** Kurzes Label für die dekorative Laufspur. */
+  readonly trackLabel: string;
+}
+
+/** Steckbrief des Hauptcharakters eines Webspiels. */
+export interface ProjectGameCharacterProfile {
+  /** Kleine Beschriftung über dem Charakterprofil. */
+  readonly eyebrow: string;
+  /** Überschrift der Charakterprofil-Section. */
+  readonly title: string;
+  /** Name des Characters. */
+  readonly name: string;
+  /** Kurze Rollenbeschreibung des Characters. */
+  readonly role: string;
+  /** Story- und Profiltext des Characters. */
+  readonly text: string;
+  /** Optionaler Bildpfad für ein echtes Character-Asset. */
+  readonly asset?: string;
+  /** Alternativtext für das Character-Asset. */
+  readonly assetAlt: string;
+  /** Geplanter Dateipfad, wenn das Character-Bild später ergänzt wird. */
+  readonly assetHint: string;
+  /** Kompakte Steckbriefdaten. */
+  readonly facts: readonly ProjectMetric[];
+}
+
+/** Projektspezifischer Hero- und Abschnittsinhalt für spielbare Webprojekte. */
+export interface ProjectGameShowcase {
+  /** Kleine technische Beschriftung im Hero-Showcase. */
+  readonly eyebrow: string;
+  /** Titel des schrägen Video-Frames. */
+  readonly title: string;
+  /** Kurzer Status- oder Build-Hinweis im Video-Frame. */
+  readonly status: string;
+  /** Erklärender Text zum Video-Frame. */
+  readonly lead: string;
+  /** Beschriftung des primären Hero-Links. */
+  readonly ctaLabel: string;
+  /** Kleine technische Tags im Game-Showcase. */
+  readonly chips: readonly string[];
+  /** Optionaler Pfad für ein echtes Gameplay-Video. */
+  readonly videoSrc?: string;
+  /** Optionales Posterbild für das Gameplay-Video. */
+  readonly videoPoster?: string;
+  /** Zugängliche Beschriftung des Video-Containers. */
+  readonly videoLabel: string;
+  /** Fallback-Text, solange kein Gameplay-Video eingebunden ist. */
+  readonly videoFallbackText: string;
+  /** Geplanter Dateipfad für das Gameplay-Video. */
+  readonly videoFileHint: string;
+  /** Optionaler Pfad für das Hero-Wüstenbild. */
+  readonly heroBackdropAsset?: string;
+  /** Geplanter Dateipfad für das Hero-Wüstenbild. */
+  readonly heroBackdropHint: string;
+  /** Kompakte Fakten für Kunden und Recruiter. */
+  readonly facts: readonly ProjectMetric[];
+  /** Eyebrow für die Umsetzungskapitel. */
+  readonly chaptersEyebrow: string;
+  /** Überschrift für die Umsetzungskapitel. */
+  readonly chaptersTitle: string;
+  /** Eyebrow für die Galerie. */
+  readonly galleryEyebrow: string;
+  /** Überschrift für die Galerie. */
+  readonly galleryTitle: string;
+  /** Animiertes Laufband für ein Character-Asset. */
+  readonly runner: ProjectGameRunner;
+  /** Charakterprofil des Webspiels. */
+  readonly character: ProjectGameCharacterProfile;
+}
+
+
+
+/** Beispielwert im Blutanalyse-Hero und im Werte-Guide. */
+export interface ProjectBloodValuePreview {
+  /** Abkürzung oder Laborwert-Name. */
+  readonly label: string;
+  /** Beispielwert oder verdichteter Status. */
+  readonly value: string;
+  /** Einheit oder Kontext des Laborwerts. */
+  readonly unit: string;
+  /** Referenz- oder Orientierungsbereich als UI-Text. */
+  readonly range: string;
+  /** Prozentuale Position auf einer visuellen Referenzskala. */
+  readonly position: number;
+  /** Zustand für visuelle Einordnung und Hilfetext. */
+  readonly tone: 'low' | 'normal' | 'high' | 'watch';
+  /** Benutzernahe Erklärung oder Hinweis zum Wert. */
+  readonly hint: string;
+}
+
+/** Schritt im Dokumenten- und Datenfluss der Blutanalyse. */
+export interface ProjectBloodPipelineStep {
+  /** Material-Symbol des Prozessschritts. */
+  readonly icon: string;
+  /** Kurzer Titel des Prozessschritts. */
+  readonly title: string;
+  /** Benutzernahe Beschreibung des Prozessschritts. */
+  readonly text: string;
+  /** Technische oder fachliche Detailpunkte. */
+  readonly points: readonly string[];
+}
+
+/** Inhalt für Import-, Analyse- und Hilfesystem einer Blutanalyse-Detailseite. */
+export interface ProjectBloodShowcase {
+  /** Kleine technische Beschriftung im Hero-Showcase. */
+  readonly eyebrow: string;
+  /** Titel des Analyse-Frames. */
+  readonly title: string;
+  /** Kurzer Status- oder Modulhinweis. */
+  readonly status: string;
+  /** Erklärender Text zum Analyse-Showcase. */
+  readonly lead: string;
+  /** Beschriftung des primären Hero-Links. */
+  readonly ctaLabel: string;
+  /** Kleine technische oder fachliche Tags im Showcase. */
+  readonly chips: readonly string[];
+  /** Titel des Dokumentenbereichs im Hero. */
+  readonly documentTitle: string;
+  /** Hilfetext des Dokumentenbereichs im Hero. */
+  readonly documentText: string;
+  /** Zugängliche Beschriftung des Analyse-Containers. */
+  readonly previewLabel: string;
+  /** Beispielwerte für Vorschau und Werte-Guide. */
+  readonly values: readonly ProjectBloodValuePreview[];
+  /** Eyebrow für den Datenfluss. */
+  readonly pipelineEyebrow: string;
+  /** Überschrift für den Datenfluss. */
+  readonly pipelineTitle: string;
+  /** Schritte vom Dokument zur Auswertung. */
+  readonly pipelineSteps: readonly ProjectBloodPipelineStep[];
+  /** Eyebrow für den Werte-Guide. */
+  readonly guideEyebrow: string;
+  /** Überschrift für den Werte-Guide. */
+  readonly guideTitle: string;
+  /** Hinweis, dass die Oberfläche Erklärung statt Diagnose liefert. */
+  readonly disclaimer: string;
+  /** Eyebrow für die Galerie. */
+  readonly galleryEyebrow: string;
+  /** Überschrift für die Galerie. */
+  readonly galleryTitle: string;
+}
 
 /** Optionaler Live-Demo-Hinweis oder externer Demo-Link. */
 export interface ProjectLiveDemo {
@@ -310,8 +640,16 @@ export interface ProjectLiveDemo {
 export interface PortfolioProject {
   readonly slug: string;
   readonly name: string;
+  /** Optionale Zeilen für eine bewusst gesetzte Hero-Headline. */
+  readonly titleLines?: readonly string[];
   readonly kicker: string;
   readonly summary: string;
+  /** Optionaler Kurz-Kicker für Projektübersichten, wenn Detailseiten ausführlicher formuliert sind. */
+  readonly overviewKicker?: string;
+  /** Optionaler Kurztext für Projektübersichten, ohne die Detailseite inhaltlich zu verkürzen. */
+  readonly overviewSummary?: string;
+  /** Optionaler kompakter Techstack für Projektübersichten und Projektkarten. */
+  readonly overviewTechStack?: readonly string[];
   readonly description: string;
   readonly goal: string;
   readonly role: string;
@@ -326,6 +664,14 @@ export interface PortfolioProject {
   readonly terminalLines?: readonly string[];
   /** Optionale technische Highlight-Karten für den oberen Detailbereich. */
   readonly technicalHighlights?: readonly HighlightItem[];
+  /** Optionaler Game-Showcase für spielbare Webprojekte. */
+  readonly gameShowcase?: ProjectGameShowcase;
+  /** Optionaler Board-Showcase für Kanban- und Gamification-Projekte. */
+  readonly boardShowcase?: ProjectBoardShowcase;
+  /** Optionaler Blood-Showcase für Dokumentenimport und Laborwert-Auswertung. */
+  readonly bloodShowcase?: ProjectBloodShowcase;
+  /** Optionaler Designkatalog-Showcase für grafische Editorial-Projekte. */
+  readonly catalogShowcase?: ProjectCatalogShowcase;
   /** Optionaler Stapel aus Produkt- und App-Karten im Hero. */
   readonly appModules?: readonly ProjectAppModule[];
   /** Optionale schließbare Terminalfenster im Hero. */

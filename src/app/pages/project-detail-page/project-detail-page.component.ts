@@ -8,7 +8,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ProjectAppModule } from '../../core/models/portfolio.models';
+import { ProjectAppModule, ProjectCatalogSpread, ProjectGalleryItem } from '../../core/models/portfolio.models';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -49,6 +49,15 @@ export class ProjectDetailPageComponent {
   /** Sichtbarkeit des technischen Hinweisfensters im Deep-Dive. */
   readonly isCaseNoteVisible = signal<boolean>(true);
 
+  /** Aktuell ausgewählte Doppelseite im Designkatalog. */
+  readonly activeCatalogSpreadIndex = signal<number>(0);
+
+  /** Aktuell geöffneter Masonry-Galerieeintrag in der Lightbox. */
+  readonly activeGalleryLightboxIndex = signal<number | null>(null);
+
+  /** Sichtbarkeit des Inhaltsverzeichnis-Overlays im Designkatalog. */
+  readonly isCatalogMenuOpen = signal<boolean>(false);
+
   /** Übersetzter Inhalt der aktuellen Sprache. */
   readonly content = computed(() => this.languageService.content());
 
@@ -78,6 +87,25 @@ export class ProjectDetailPageComponent {
     const index      = modules.findIndex((module) => module.id === selectedId);
 
     return Math.max(index, 0);
+  });
+
+  /** Aktive Doppelseite des digitalen Designkatalogs. */
+  readonly activeCatalogSpread = computed<ProjectCatalogSpread | undefined>(() => {
+    const spreads = this.project()?.catalogShowcase?.spreads ?? [];
+    const index   = this.getNormalizedCatalogSpreadIndex();
+
+    return spreads[index] ?? spreads[0];
+  });
+
+  /** Aktiver Galerieeintrag für die Lightbox des Designkatalogs. */
+  readonly activeGalleryLightboxItem = computed<ProjectGalleryItem | undefined>(() => {
+    const index = this.activeGalleryLightboxIndex();
+
+    if (index === null) {
+      return undefined;
+    }
+
+    return this.project()?.gallery[index];
   });
 
   /** Initialisiert Route- und SEO-Reaktionen. */
@@ -112,6 +140,60 @@ export class ProjectDetailPageComponent {
     this.selectAppModule(modules[nextIndex]?.id ?? modules[0].id);
   }
 
+  /** Wählt eine konkrete Katalog-Doppelseite aus. */
+  selectCatalogSpread(index: number): void {
+    const spreads = this.project()?.catalogShowcase?.spreads ?? [];
+
+    if (!spreads.length) {
+      return;
+    }
+
+    this.activeCatalogSpreadIndex.set((index + spreads.length) % spreads.length);
+  }
+
+  /** Öffnet oder schließt das Inhaltsverzeichnis des Designkatalogs. */
+  toggleCatalogMenu(): void {
+    this.isCatalogMenuOpen.update((isOpen) => !isOpen);
+  }
+
+  /** Schließt das Inhaltsverzeichnis des Designkatalogs. */
+  closeCatalogMenu(): void {
+    this.isCatalogMenuOpen.set(false);
+  }
+
+  /** Wechselt zur vorherigen oder nächsten Katalog-Doppelseite. */
+  selectAdjacentCatalogSpread(direction: 1 | -1): void {
+    this.selectCatalogSpread(this.getNormalizedCatalogSpreadIndex() + direction);
+  }
+
+  /** Öffnet einen Eintrag der Design-Masonry-Galerie in der Lightbox. */
+  openGalleryLightbox(index: number): void {
+    const items = this.project()?.gallery ?? [];
+
+    if (!items[index]) {
+      return;
+    }
+
+    this.activeGalleryLightboxIndex.set(index);
+  }
+
+  /** Schließt die Design-Masonry-Lightbox. */
+  closeGalleryLightbox(): void {
+    this.activeGalleryLightboxIndex.set(null);
+  }
+
+  /** Wechselt in der Design-Masonry-Lightbox zum vorherigen oder nächsten Bild. */
+  selectAdjacentGalleryItem(direction: 1 | -1): void {
+    const items = this.project()?.gallery ?? [];
+    const index = this.activeGalleryLightboxIndex();
+
+    if (!items.length || index === null) {
+      return;
+    }
+
+    this.activeGalleryLightboxIndex.set((index + direction + items.length) % items.length);
+  }
+
   /** Prüft, ob ein Terminalfenster im Hero noch sichtbar ist. */
   isTerminalWidgetVisible(widgetId: string): boolean {
     return !this.closedTerminalWidgetIds().includes(widgetId);
@@ -138,8 +220,22 @@ export class ProjectDetailPageComponent {
     this.selectedArchitectureNodeId.set('');
     this.selectedAppModuleId.set('');
     this.closedTerminalWidgetIds.set([]);
+    this.activeCatalogSpreadIndex.set(0);
+    this.activeGalleryLightboxIndex.set(null);
+    this.isCatalogMenuOpen.set(false);
     this.isTerminalVisible.set(true);
     this.isCaseNoteVisible.set(true);
+  }
+
+  /** Ermittelt den gültigen Katalog-Index für aktuelle Projektdaten. */
+  private getNormalizedCatalogSpreadIndex(): number {
+    const spreads = this.project()?.catalogShowcase?.spreads ?? [];
+
+    if (!spreads.length) {
+      return 0;
+    }
+
+    return Math.min(Math.max(this.activeCatalogSpreadIndex(), 0), spreads.length - 1);
   }
 
   /** Schreibt SEO-Daten für Treffer oder Missing-State. */

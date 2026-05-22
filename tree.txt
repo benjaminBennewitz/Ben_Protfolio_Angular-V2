@@ -202,15 +202,17 @@ ben-portfolio-angular-v2/
 │   │   │   │   ├── trash-red.webp
 │   │   │   │   └── trust-not-found.webp
 │   │   │   ├── brain_rotation.gif
+│   │   │   ├── chocolate-egg.webp
 │   │   │   ├── default-hero-head.webp
 │   │   │   ├── fuelli.webp
 │   │   │   ├── hero-brain-halftone.webp
 │   │   │   ├── hero-head-fck.webp
 │   │   │   ├── hero-head-insane.webp
 │   │   │   ├── hero-head-lol.webp
+│   │   │   ├── me-after-chocolate.webp
 │   │   │   ├── me-and-coffee.webp
 │   │   │   ├── me-and-coffee-error.webp
-│   │   │   ├── me-and-coffe-error.webp
+│   │   │   ├── me-with-chocolate.webp
 │   │   │   └── nice-head-loader.webp
 │   │   ├── social/
 │   │   │   └── og-portfolio-preview.svg

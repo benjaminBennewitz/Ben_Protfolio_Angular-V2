@@ -258,10 +258,25 @@
         </aside>
         }
 
-        <figure class="projects-kickoff__portrait" [attr.aria-label]="content().projectsIntro.imageLabel">
-          <img class="projects-kickoff__portrait-image" [src]="currentProjectsChocolateSrc()"
-            [attr.alt]="content().projectsIntro.imageAlt" width="1122" height="1402" loading="lazy" decoding="async"
-            (error)="resetProjectsChocolateImage()" />
+        <figure class="projects-kickoff__portrait" [class.is-eaten]="isProjectsChocolateEaten()" [attr.aria-label]="content().projectsIntro.imageLabel">
+          <img class="projects-kickoff__portrait-image projects-kickoff__portrait-image--default"
+            [class.is-hidden]="isProjectsChocolateEaten()" [src]="projectsChocolateDefaultSrc"
+            [attr.alt]="content().projectsIntro.imageAlt" width="1122" height="1402" loading="lazy" decoding="async" />
+          <img class="projects-kickoff__portrait-image projects-kickoff__portrait-image--eaten"
+            [class.is-visible]="isProjectsChocolateEaten()" [src]="projectsChocolateEatenSrc" [attr.alt]=""
+            width="1122" height="1402" loading="lazy" decoding="async" />
+
+          <div class="projects-kickoff__egg-rain" aria-hidden="true">
+            @for (egg of projectChocolateEggs; track $index) {
+            <span class="projects-kickoff__egg" [style.--egg-left]="egg.left" [style.--egg-bottom]="egg.bottom"
+              [style.--egg-rotate]="egg.rotate" [style.--egg-start-rotate]="egg.startRotate"
+              [style.--egg-scale]="egg.scale" [style.--egg-z-index]="egg.zIndex"
+              [style.--egg-delay]="egg.delayMs + 'ms'" [style.--egg-duration]="egg.durationMs + 'ms'">
+              <img src="assets/images/chocolate-egg.webp" alt="" width="256" height="191" loading="lazy" decoding="async" />
+            </span>
+            }
+          </div>
+
           <button class="projects-kickoff__portrait-action" type="button" (click)="showProjectsChocolateEaten()">
             {{ projectsChocolateActionLabel() }}
           </button>

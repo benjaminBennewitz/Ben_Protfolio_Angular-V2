@@ -15,6 +15,7 @@ export type AchievementId =
   | 'hero-face-switch'
   | 'nostalgia-hater'
   | 'coffee-glitch'
+  | 'sugar-covered'
   | 'eye-poke'
   | 'bomb-defused'
   | 'game-oneup'
@@ -74,6 +75,7 @@ export class AchievementService {
     { id: 'hero-face-switch', icon: 'face_retouching_natural', category: 'hero' },
     { id: 'nostalgia-hater', icon: 'close', category: 'hero' },
     { id: 'coffee-glitch', icon: 'local_cafe', category: 'about' },
+    { id: 'sugar-covered', icon: 'cookie', category: 'project' },
     { id: 'eye-poke', icon: 'visibility', category: 'project' },
     { id: 'bomb-defused', icon: 'explosion', category: 'project' },
     { id: 'game-oneup', icon: 'sports_esports', category: 'project' },
@@ -249,6 +251,11 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       description: 'err, 404 Koffeein not found.',
       hint: 'Ein guter Tag startet mit einer Tasse Kaffee.',
     },
+    'sugar-covered': {
+      title: 'Tagesbedarf gedeckt',
+      description: 'Tagesbedarf an Zucker ist gedeckt.',
+      hint: 'Die WHO empfiehlt max. 50g Zucker am Tag.',
+    },
     'eye-poke': {
       title: 'Nicht ins Auge',
       description: 'Musst du alles anfassen?',
@@ -305,6 +312,11 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       title: 'Caffeine Fault',
       description: 'err, 404 caffeine not found.',
       hint: 'A good day starts with a cup of coffee.',
+    },
+    'sugar-covered': {
+      title: 'Daily Needs Covered',
+      description: 'Your daily sugar needs are covered.',
+      hint: 'The WHO recommends a maximum of 50g sugar per day.',
     },
     'eye-poke': {
       title: 'Do Not Poke',

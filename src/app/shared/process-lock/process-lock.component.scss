@@ -278,18 +278,6 @@
    ========================================================================== */
 
 @media (max-width: 1120px) {
-  .process-lock__sticky {
-    grid-template-columns: 1fr;
-    align-content: start;
-    overflow-y: clip;
-  }
-
-  .process-lock__object {
-    min-height: 240px;
-  }
-}
-
-@media (max-width: 640px) {
   .process-lock {
     height: auto;
     min-height: auto;
@@ -297,11 +285,38 @@
 
   .process-lock__sticky {
     position: relative;
+    grid-template-columns: 1fr;
+    align-content: start;
+    height: auto;
     min-height: auto;
+    overflow: visible;
+  }
+
+  .process-lock__object {
+    min-height: 240px;
   }
 
   .process-lock__step {
     opacity: 1;
     transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .process-lock__sticky {
+    gap: var(--bp-space-4);
+    padding: calc(var(--bp-header-height) + var(--bp-space-5)) var(--bp-section-px) var(--bp-space-5);
+  }
+
+  .process-lock__object {
+    min-height: 190px;
+  }
+
+  .process-lock__cube {
+    width: clamp(112px, 40vw, 168px);
+  }
+
+  .process-lock__orbit {
+    width: clamp(168px, 58vw, 250px);
   }
 }

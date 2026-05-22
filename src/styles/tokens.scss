@@ -21,10 +21,11 @@
 
    01   Font Face
    02   Basis-Tokens
-   03   Dark Theme
-   04   Light Theme
-   05   Accessibility Overrides
-   06   Material Icons
+   03   Viewport-Tokens
+   04   Dark Theme
+   05   Light Theme
+   06   Accessibility Overrides
+   07   Material Icons
    ========================================================================== */
 
 /* ==========================================================================
@@ -61,9 +62,11 @@
    --bp-space-6: clamp(2rem, 1.56rem + 2.22vw, 3rem);
    --bp-space-7: clamp(3rem, 2.33rem + 3.33vw, 4.5rem);
    --bp-space-8: clamp(4rem, 3.11rem + 4.44vw, 6rem);
-   --bp-section-px: clamp(1rem, 4vw, 5rem);
+   --bp-section-px: clamp(0.75rem, 4vw, 5rem);
    --bp-header-height: 76px;
-   --bp-max-width: 1440px;
+   --bp-max-width: 1660px;
+   --bp-viewport-max: 1920px;
+   --bp-stage-gutter: max(var(--bp-section-px), calc((100vw - var(--bp-viewport-max)) / 2 + var(--bp-section-px)));
    --bp-z-cursor: 80;
    --bp-z-loader: 100;
    --bp-z-nav: 60;
@@ -72,7 +75,18 @@
 }
 
 /* ==========================================================================
-   03   Dark Theme
+   03   Viewport-Tokens
+   ========================================================================== */
+
+@media (max-width: 360px) {
+   :root {
+      --bp-header-height: 68px;
+      --bp-section-px: 0.75rem;
+   }
+}
+
+/* ==========================================================================
+   04   Dark Theme
    ========================================================================== */
 
 :root,
@@ -98,7 +112,7 @@
 }
 
 /* ==========================================================================
-   04   Light Theme
+   05   Light Theme
    ========================================================================== */
 
 :root[data-theme='light'] {
@@ -124,7 +138,7 @@
 }
 
 /* ==========================================================================
-   05   Accessibility Overrides
+   06   Accessibility Overrides
    ========================================================================== */
 
 :root[data-contrast='high'] {
@@ -188,7 +202,7 @@
 }
 
 /* ==========================================================================
-   06   Material Icons
+   07   Material Icons
    ========================================================================== */
 
 .material-symbols-outlined {

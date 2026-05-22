@@ -61,7 +61,7 @@
   grid-template-columns: minmax(0, 0.74fr) minmax(360px, 1fr) minmax(128px, 0.18fr);
   align-items: center;
   gap: var(--bp-space-4);
-  width: 100vw;
+  width: min(100%, var(--bp-viewport-max));
   height: 100vh;
   min-height: 100vh;
   height: 100dvh;
@@ -69,7 +69,8 @@
   scroll-snap-align: start;
   scroll-snap-stop: normal;
   scroll-margin-top: 0;
-  padding: calc(var(--bp-header-height) + var(--bp-space-3)) var(--bp-section-px) var(--bp-space-3);
+  margin-inline: auto;
+  padding: calc(var(--bp-header-height) + var(--bp-space-3)) var(--bp-stage-gutter) var(--bp-space-3);
   overflow: hidden;
   border-top: 1px solid var(--bp-color-border);
   background: color-mix(in srgb, var(--bp-color-bg) 88%, black 12%);
@@ -172,11 +173,11 @@
 }
 
 .project-stack__decor-asset--shocked {
-  left: calc(50% - 150px);
+  left: calc(50% - 100px);
   bottom: 0;
   z-index: 9;
   width: clamp(150px, 17vw, 250px);
-  transform: translateX(-50%);
+  transform: translateX(-50%) scaleX(-1);
 }
 
 .project-stack__panel--intro .project-stack__decor-asset {
@@ -323,6 +324,14 @@
 }
 
 
+
+.project-stack__panel--game .project-stack__copy h3 {
+  width: min-content;
+  max-width: none;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
 /* ==========================================================================
    06   HTML5 Game Szene
    ========================================================================== */
@@ -450,6 +459,7 @@
   width: clamp(310px, 34vw, 470px);
   height: clamp(145px, 22vh, 220px);
   pointer-events: none;
+  transform: translateY(-80px);
 }
 
 .project-stack__trash-bin {
@@ -621,7 +631,7 @@
   align-self: center;
   width: clamp(112px, 8.2vw, 138px);
   gap: 0.58rem;
-  margin-right: calc(var(--bp-section-px) * -0.58);
+  margin-right: calc(var(--bp-section-px) * -0.28);
 }
 
 .project-stack__preview {
@@ -749,8 +759,9 @@
   .project-stack__panel {
     position: relative;
     grid-template-columns: 1fr;
-    width: auto;
-    min-height: auto;
+    width: min(100%, var(--bp-viewport-max));
+    height: auto;
+    min-height: 100svh;
   }
 
   .project-stack__previews {
@@ -774,9 +785,10 @@
   }
 
   .project-stack__decor-asset--shocked {
-    left: calc(50% - 40px);
+    left: calc(50% + 10px);
     bottom: 0;
     width: 120px;
+    transform: translateX(-50%) scaleX(-1);
   }
 
   .project-stack__trash-scene {
@@ -787,8 +799,34 @@
 }
 
 @media (max-width: 640px) {
+  .project-stack__panel {
+    gap: var(--bp-space-4);
+    padding-top: calc(var(--bp-header-height) + var(--bp-space-4));
+    padding-bottom: var(--bp-space-5);
+  }
+
+  .project-stack__section-title,
+  .project-stack__copy h3,
+  .project-stack__kicker--headline {
+    max-width: 100%;
+  }
+
+  .project-stack__section-title {
+    font-size: clamp(2rem, 13vw, 3.8rem);
+  }
+
   .project-stack__copy h3 {
     font-size: clamp(2.6rem, 16vw, 4.4rem);
+  }
+
+  .project-stack__panel--game .project-stack__copy h3 {
+    width: min-content;
+    max-width: none;
+  }
+
+  .project-stack__decor-asset--eyeball {
+    right: -1.6rem;
+    opacity: 0.12;
   }
 
   .project-stack__trash-scene {
@@ -801,5 +839,34 @@
     --paper-arc-lift: 112px;
     bottom: 1.25rem;
     height: 126px;
+  }
+}
+
+@media (max-width: 420px) {
+  .project-stack__panel {
+    min-height: auto;
+  }
+
+  .project-stack__copy {
+    padding-right: 0;
+  }
+
+  .project-stack__intro,
+  .project-stack__summary {
+    max-width: 100%;
+    font-size: 0.94rem;
+    line-height: 1.52;
+  }
+
+  .project-stack__tags li {
+    font-size: 0.62rem;
+  }
+
+  .project-stack__trash-scene {
+    --paper-start-left: min(72vw, 218px);
+    --paper-land-x: -205px;
+    --paper-land-y: -112px;
+    left: 0.75rem;
+    width: min(88vw, 300px);
   }
 }

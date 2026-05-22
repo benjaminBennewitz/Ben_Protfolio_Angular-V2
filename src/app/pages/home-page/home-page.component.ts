@@ -426,7 +426,7 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const threshold = panel.offsetHeight > window.innerHeight ? 0.58 : 0.92;
+    const threshold = this.skillLevelThreshold(panel);
 
     this.skillLevelsObserver = new IntersectionObserver(
       ([entry]) => {
@@ -437,9 +437,26 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
         this.areSkillLevelsLoaded.set(true);
         this.skillLevelsObserver?.disconnect();
       },
-      { threshold: [threshold] },
+      { rootMargin: '0px 0px -8% 0px', threshold: [threshold] },
     );
 
     this.skillLevelsObserver.observe(panel);
+  }
+
+  /**
+   * Bestimmt einen erreichbaren Sichtbarkeitswert für die Skill-Balken.
+   * @param panel Beobachtetes Skill-Panel.
+   * @returns Viewportabhängiger Intersection-Threshold.
+   */
+  private skillLevelThreshold(panel: HTMLElement): number {
+    if (window.innerWidth <= 420) {
+      return 0.18;
+    }
+
+    if (panel.offsetHeight > window.innerHeight) {
+      return 0.34;
+    }
+
+    return 0.72;
   }
 }

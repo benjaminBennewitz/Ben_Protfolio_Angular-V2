@@ -42,8 +42,9 @@
 .footer {
   position: relative;
   min-height: 72svh;
-  padding: var(--bp-space-8) var(--bp-section-px) var(--bp-space-4);
-  overflow: hidden;
+  padding: var(--bp-space-8) var(--bp-stage-gutter) var(--bp-space-4);
+  overflow-x: clip;
+  overflow-y: visible;
   border-top: 1px solid var(--bp-color-border);
   background: linear-gradient(135deg, color-mix(in srgb, var(--bp-color-bg) 92%, black 8%), color-mix(in srgb, var(--bp-color-surface-solid) 82%, black 18%));
 }
@@ -63,7 +64,7 @@
 }
 
 .footer::after {
-  right: -9vw;
+  right: max(-9vw, calc((100vw - var(--bp-viewport-max)) / 2 - 9vw));
   bottom: -12vw;
   width: min(46vw, 620px);
   aspect-ratio: 1;
@@ -88,12 +89,17 @@
   justify-content: center;
   gap: 56px;
   align-items: start;
-  width: min(100%, 1460px);
+  width: min(100%, var(--bp-max-width));
 }
 
 /* =================================================================================================
    03   Branding
    ================================================================================================= */
+
+.footer__brand {
+  position: relative;
+  z-index: 6;
+}
 
 .footer__brand h2 {
   max-width: 11.6ch;
@@ -252,7 +258,7 @@
   position: absolute;
   left: 82%;
   top: 81%;
-  z-index: 5;
+  z-index: 20;
   display: grid;
   place-items: center;
   width: clamp(92px, 9.4vw, 154px);
@@ -290,8 +296,9 @@
   position: absolute;
   left: 50%;
   bottom: calc(100% + 0.75rem);
+  z-index: 21;
   display: grid;
-  width: min(330px, 78vw);
+  width: min(280px, 70vw);
   opacity: 0;
   pointer-events: none;
   text-align: left;
@@ -363,6 +370,11 @@
     justify-self: stretch;
   }
 
+  .footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .footer__links {
     min-height: 0;
     padding-bottom: var(--bp-space-5);
@@ -373,36 +385,79 @@
   }
 
   .footer__pet-trigger {
-    left: 82%;
+    left: max(54%, calc(82% - 60px));
     top: 81%;
+  }
+
+  .footer__pet-dialog {
+    left: 0;
+    bottom: calc(100% + 0.75rem);
+    width: min(260px, calc(100vw - 2rem));
+    transform: translate3d(0, 14px, 0) rotate(-1.2deg) scale(0.96);
+  }
+
+  .footer__pet-trigger:hover .footer__pet-dialog,
+  .footer__pet-trigger:focus-visible .footer__pet-dialog {
+    transform: translate3d(0, 0, 0) rotate(-1.2deg) scale(1);
   }
 }
 
 @media (max-width: 640px) {
   .footer {
     min-height: auto;
+    padding-top: var(--bp-space-7);
   }
 
   .footer__links {
     padding: var(--bp-space-4);
   }
 
-  .footer__terminal-head,
-  .footer__bottom {
+  .footer__terminal-head {
     flex-direction: column;
     align-items: flex-start;
   }
 
 
   .footer__pet-trigger {
-    left: 82%;
-    top: 81%;
-    width: clamp(82px, 22vw, 118px);
+    left: max(48%, calc(76% - 60px));
+    top: 76%;
+    width: clamp(64px, 18vw, 92px);
   }
 
   .footer__pet-dialog {
-    left: 50%;
-    right: auto;
-    bottom: calc(100% + 0.5rem);
+    top: calc(100% + 0.55rem);
+    right: 0;
+    bottom: auto;
+    left: auto;
+    width: min(230px, calc(100vw - 1.5rem));
+    transform: translate3d(0, -8px, 0) rotate(-1.2deg) scale(0.96);
+  }
+
+  .footer__pet-trigger:hover .footer__pet-dialog,
+  .footer__pet-trigger:focus-visible .footer__pet-dialog {
+    transform: translate3d(0, 0, 0) rotate(-1.2deg) scale(1);
+  }
+}
+
+@media (max-width: 360px) {
+  .footer__grid {
+    gap: var(--bp-space-5);
+  }
+
+  .footer__links {
+    padding: var(--bp-space-3);
+  }
+
+  .footer__columns {
+    gap: var(--bp-space-4);
+  }
+
+  .footer__pet-trigger {
+    left: max(46%, calc(78% - 60px));
+    width: clamp(58px, 19vw, 76px);
+  }
+
+  .footer__pet-dialog {
+    width: min(214px, calc(100vw - 1.25rem));
   }
 }

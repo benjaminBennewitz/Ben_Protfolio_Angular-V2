@@ -188,14 +188,14 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
 
     this.blocks = this.words.map((word, index) => ({
       label: word,
-      x: Math.min(width - 170, 80 + index * 190),
+      x: Math.min(width - this.blockWidth(word) - 24, 80 + index * this.blockGap()),
       y: -baseY - index * 42,
       vx: (index - 1.5) * 0.65,
       vy: 0,
       rotation: [-12, 9, -6, 14][index] ?? 0,
       angularVelocity: [-0.15, 0.11, -0.1, 0.18][index] ?? 0.08,
       width: this.blockWidth(word),
-      height: this.isIconBlock(word) ? 80 : 86,
+      height: this.blockHeight(word),
       hasTouchedFloor: false,
       airborneSince: null,
     }));
@@ -207,11 +207,29 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
 
   /** Berechnet die passende Breite für Text- und Icon-Bausteine. */
   private blockWidth(word: string): number {
-    if (this.isIconBlock(word)) {
-      return 104;
+    if (this.usesCompactMobilePhysics()) {
+      return this.isIconBlock(word) ? 54 : word === 'touch' ? 84 : 64;
     }
 
-    return word === 'touch' ? 184 : 132;
+    if (this.isIconBlock(word)) {
+      return 74;
+    }
+
+    return word === 'touch' ? 130 : 94;
+  }
+
+  /** Berechnet die Höhe eines Bausteins passend zur aktuellen Eingabeart. */
+  private blockHeight(word: string): number {
+    if (this.usesCompactMobilePhysics()) {
+      return this.isIconBlock(word) ? 42 : 44;
+    }
+
+    return this.isIconBlock(word) ? 56 : 60;
+  }
+
+  /** Liefert den horizontalen Startabstand der Bausteine. */
+  private blockGap(): number {
+    return this.usesCompactMobilePhysics() ? 76 : 134;
   }
 
   /** Startet und pausiert die Animation abhängig von der Sichtbarkeit. */
@@ -264,7 +282,7 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
       return false;
     }
 
-    return Math.abs(rect.top) <= 72;
+    return this.usesCompactMobilePhysics() ? Math.abs(rect.top) <= 160 : Math.abs(rect.top) <= 72;
   }
 
   /** Startet oder setzt die requestAnimationFrame-Schleife außerhalb Angulars fort. */
@@ -420,15 +438,32 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     const stage = this.stageRef?.nativeElement;
     const width = stage?.clientWidth ?? 1000;
     const floor = Math.max(180, (stage?.clientHeight ?? 360) - 96);
+    const compact = this.usesCompactMobilePhysics();
+    const gap = compact ? 10 : 0;
+    const compactColumnWidth = 84;
+    const columns = compact ? 2 : this.blocks.length;
+    const startX = compact ? Math.max(14, (width - 2 * compactColumnWidth - gap) / 2) : 72;
 
     this.blocks.forEach((block, index) => {
-      block.x = Math.min(width - block.width - 16, 72 + index * 190);
-      block.y = floor - block.height;
+      const column = compact ? index % columns : index;
+      const row = compact ? Math.floor(index / columns) : 0;
+
+      block.x = compact ? startX + column * (compactColumnWidth + gap) : Math.min(width - block.width - 16, startX + index * 134);
+      block.y = compact ? floor - block.height - row * (block.height + gap) : floor - block.height;
+      block.vx = 0;
+      block.vy = 0;
+      block.angularVelocity = 0;
+      block.rotation = [-8, 5, -4, 8][index] ?? 0;
       block.hasTouchedFloor = true;
       block.airborneSince = null;
     });
 
     this.publishStyles();
+  }
+
+  /** Nutzt auf Touch-/Kleinstscreens kompaktere Bausteinmaße. */
+  private usesCompactMobilePhysics(): boolean {
+    return window.innerWidth <= 720 || window.matchMedia('(pointer: coarse)').matches;
   }
 
   /** Überträgt den Simulationszustand in CSS-Styles. */

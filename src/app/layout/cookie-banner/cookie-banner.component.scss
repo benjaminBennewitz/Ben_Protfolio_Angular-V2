@@ -277,26 +277,22 @@
   align-items: center;
   justify-content: center;
   min-height: 2.65rem;
-  border: 1px solid var(--bp-color-accent);
+  border: 1px solid var(--bp-color-border-strong);
   padding: 0.62rem 0.9rem;
+  background: color-mix(in srgb, var(--bp-color-surface) 82%, transparent);
+  color: var(--bp-color-text);
   font-family: var(--bp-font-mono);
   font-size: 0.76rem;
   font-weight: 950;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--bp-color-accent) 36%, transparent);
   cursor: pointer;
-  transition: transform 180ms var(--bp-ease-out), box-shadow 180ms ease, filter 180ms ease, background-color 180ms ease, color 180ms ease;
-}
-
-.cookie-banner__details {
-  background: color-mix(in srgb, var(--bp-color-bg) 74%, transparent);
-  color: var(--bp-color-accent);
+  transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
 }
 
 .cookie-banner__submit {
   gap: 0.42rem;
-  background: var(--bp-color-accent);
-  color: var(--bp-color-on-accent);
   overflow: hidden;
 }
 
@@ -304,24 +300,16 @@
 .cookie-banner__details:focus-visible,
 .cookie-banner__submit:hover,
 .cookie-banner__submit:focus-visible {
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 28%, transparent);
-  transform: translate3d(-2px, -2px, 0);
-}
-
-.cookie-banner__details:hover,
-.cookie-banner__details:focus-visible {
-  background: var(--bp-color-accent);
-  color: var(--bp-color-on-accent);
-}
-
-.cookie-banner__submit:hover,
-.cookie-banner__submit:focus-visible {
-  color: var(--bp-color-on-accent);
+  border-color: var(--bp-color-accent);
+  background: color-mix(in srgb, var(--bp-color-accent) 13%, var(--bp-color-surface));
+  color: var(--bp-color-text);
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 54%, transparent);
+  transform: translate3d(-2px, -2px, 0) rotate(-0.9deg);
 }
 
 .cookie-banner__submit:hover .material-symbols-outlined,
 .cookie-banner__submit:focus-visible .material-symbols-outlined {
-  color: var(--bp-color-on-accent);
+  color: currentColor;
 }
 
 /* ===========================================================================

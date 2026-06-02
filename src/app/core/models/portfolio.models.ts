@@ -72,6 +72,8 @@ export interface AboutContent {
   readonly title: string;
   readonly text: readonly string[];
   readonly highlights: readonly HighlightItem[];
+  /** Interaktive Fun-Kennzahlen mit Einheitenwechsel. */
+  readonly metrics: AboutMetricsContent;
   /** Zugängliche Beschriftung des About-Bildbereichs. */
   readonly imageLabel: string;
   /** Alternativtext für das About-Kaffeebild. */
@@ -86,6 +88,52 @@ export interface AboutContent {
   readonly dialogActionAfterClick: string;
   /** Zugängliche Beschriftung des Dialog-Schließen-Buttons. */
   readonly dialogCloseLabel: string;
+}
+
+/** Inhalt des interaktiven Fun-Metrics-Fensters. */
+export interface AboutMetricsContent {
+  /** Beschriftung des Buttons zum Öffnen des Fensters. */
+  readonly triggerLabel: string;
+  /** Zugängliche Beschriftung des Dialogfensters. */
+  readonly dialogLabel: string;
+  /** Titel in der MS-DOS-Titelleiste. */
+  readonly title: string;
+  /** Zugängliche Beschriftung zum Schließen des Fensters. */
+  readonly closeLabel: string;
+  /** Beschriftung des normalen Einheitenmodus. */
+  readonly metricLabel: string;
+  /** Beschriftung des absurden Einheitenmodus. */
+  readonly weirdLabel: string;
+  /** Zugängliche Beschriftung der Modus-Umschaltung. */
+  readonly unitSwitcherLabel: string;
+  /** Kurzer Genauigkeitshinweis im Fenster. */
+  readonly precisionText: string;
+  /** Kleine Statuszeile im Fenster. */
+  readonly statusText: string;
+  /** Kennzahlen, die zwischen normal und absurd wechseln. */
+  readonly facts: readonly AboutMetricFact[];
+}
+
+/** Einzelne Kennzahl im Fun-Metrics-Fenster. */
+export interface AboutMetricFact {
+  /** Stabile ID für Tracking und Animation. */
+  readonly id: string;
+  /** Material-Symbol der Kennzahl. */
+  readonly icon: string;
+  /** Sichtbarer Name der Kennzahl. */
+  readonly label: string;
+  /** Normaler metrischer oder sachlicher Wert. */
+  readonly metricValue: string;
+  /** Einheit des normalen Werts. */
+  readonly metricUnit: string;
+  /** Kurzer Hinweis zum normalen Wert. */
+  readonly metricNote: string;
+  /** Absurder Alternativwert. */
+  readonly weirdValue: string;
+  /** Absurde Einheit oder leere Einheit bei Textwerten. */
+  readonly weirdUnit: string;
+  /** Kurzer Hinweis zum absurden Wert. */
+  readonly weirdNote: string;
 }
 
 /** Kurzer Highlight-Eintrag. */

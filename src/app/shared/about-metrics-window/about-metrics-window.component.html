@@ -1,0 +1,56 @@
+<!-- src/app/shared/about-metrics-window/about-metrics-window.component.html -->
+<div class="about-metrics">
+  <button #metricsTrigger class="about-metrics__trigger" type="button" [attr.aria-expanded]="isOpen()"
+    aria-controls="about-metrics-window" (click)="toggleWindow()">
+    <span class="material-symbols-outlined" aria-hidden="true">straighten</span>
+    <span>{{ content().triggerLabel }}</span>
+  </button>
+
+  @if (isOpen()) {
+  <aside #metricsWindow id="about-metrics-window" class="about-metrics__window bp-dos-window"
+    [class.is-recalculating]="isRecalculating()" role="dialog" tabindex="-1"
+    [attr.aria-label]="content().dialogLabel">
+    <div class="bp-dos-window__bar">
+      <span>{{ content().title }}</span>
+      <button class="about-metrics__close" type="button" [attr.aria-label]="content().closeLabel"
+        (click)="closeWindow()">×</button>
+    </div>
+
+    <div class="bp-dos-window__body about-metrics__body">
+      <div class="about-metrics__switch" role="group" [attr.aria-label]="content().unitSwitcherLabel">
+        <button type="button" [class.is-active]="activeMode() === 'metric'"
+          [attr.aria-pressed]="activeMode() === 'metric'" (click)="setMode('metric')">
+          {{ content().metricLabel }}
+        </button>
+        <button type="button" [class.is-active]="activeMode() === 'weird'"
+          [attr.aria-pressed]="activeMode() === 'weird'" (click)="setMode('weird')">
+          {{ content().weirdLabel }}
+        </button>
+      </div>
+
+      <ul class="about-metrics__list">
+        @for (fact of displayedFacts(); track fact.id) {
+        <li class="about-metrics__item" [style.--metric-index]="$index">
+          <span class="about-metrics__icon material-symbols-outlined" aria-hidden="true">{{ fact.icon }}</span>
+          <span class="about-metrics__label">{{ fact.label }}</span>
+          <strong class="about-metrics__value">
+            <span>{{ fact.value }}</span>
+            @if (fact.unit) {
+            <small>{{ fact.unit }}</small>
+            }
+          </strong>
+          <span class="about-metrics__note">{{ fact.note }}</span>
+        </li>
+        }
+      </ul>
+
+      <p class="about-metrics__precision">{{ content().precisionText }}</p>
+      <p class="about-metrics__status">
+        <span>status:</span>
+        {{ content().statusText }}
+        <i aria-hidden="true"></i>
+      </p>
+    </div>
+  </aside>
+  }
+</div>

@@ -36,7 +36,7 @@
               <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
             </a>
             @if (!activeProject.catalogShowcase) {
-            <a class="bp-button bp-button--ghost project-detail__hero-demo-link" href="#project-live-demo">
+            <a class="bp-button project-detail__hero-demo-link" href="#project-live-demo">
               <span>{{ content().projectsIntro.openDemoLabel }}</span>
               <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
             </a>
@@ -829,7 +829,7 @@
           } @else {
           <span class="project-detail__demo-status">{{ demo.status }}</span>
           }
-          <a class="bp-button bp-button--ghost" routerLink="/" fragment="contact">
+          <a class="bp-button" routerLink="/" fragment="contact">
             <span>{{ content().projectsIntro.demoRequestLabel }}</span>
             <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
           </a>

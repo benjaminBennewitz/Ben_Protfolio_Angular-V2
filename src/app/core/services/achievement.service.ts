@@ -15,6 +15,7 @@ export type AchievementId =
   | 'hero-face-switch'
   | 'nostalgia-hater'
   | 'coffee-glitch'
+  | 'weird-units'
   | 'sugar-covered'
   | 'eye-poke'
   | 'bomb-defused'
@@ -75,6 +76,7 @@ export class AchievementService {
     { id: 'hero-face-switch', icon: 'face_retouching_natural', category: 'hero' },
     { id: 'nostalgia-hater', icon: 'close', category: 'hero' },
     { id: 'coffee-glitch', icon: 'local_cafe', category: 'about' },
+    { id: 'weird-units', icon: 'straighten', category: 'about' },
     { id: 'sugar-covered', icon: 'cookie', category: 'project' },
     { id: 'eye-poke', icon: 'visibility', category: 'project' },
     { id: 'bomb-defused', icon: 'explosion', category: 'project' },
@@ -251,6 +253,11 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       description: 'err, 404 Koffeein not found.',
       hint: 'Ein guter Tag startet mit einer Tasse Kaffee.',
     },
+    'weird-units': {
+      title: 'Einheitenkrise',
+      description: 'Du hast normale Maße erfolgreich in Snacks umgerechnet.',
+      hint: 'Nicht alles muss in Zentimetern gemessen werden.',
+    },
     'sugar-covered': {
       title: 'Tagesbedarf gedeckt',
       description: 'Tagesbedarf an Zucker ist gedeckt.',
@@ -312,6 +319,11 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       title: 'Caffeine Fault',
       description: 'err, 404 caffeine not found.',
       hint: 'A good day starts with a cup of coffee.',
+    },
+    'weird-units': {
+      title: 'Unit Crisis',
+      description: 'You successfully converted normal measurements into snacks.',
+      hint: 'Not everything has to be measured in centimeters.',
     },
     'sugar-covered': {
       title: 'Daily Needs Covered',

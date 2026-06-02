@@ -1,0 +1,444 @@
+/*###############################
+###
+###     about-metrics-window.component.scss
+###     Portfolio App
+###     BASED ON: Angular  21.2.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+/* ========================================================================== 
+   INHALTSVERZEICHNIS
+
+   01   Host und Trigger
+   02   Fenster
+   03   Einheiten-Switch
+   04   Kennzahlen
+   05   Statuszeile
+   06   Light Theme
+   07   Animationen
+   08   Responsive und Reduced Motion
+   ========================================================================== */
+
+/* ========================================================================== 
+   01   Host und Trigger
+   ========================================================================== */
+
+:host {
+  display: block;
+  margin-top: clamp(1.15rem, 2vw, 1.8rem);
+}
+
+.about-metrics {
+  position: relative;
+  width: min(100%, 620px);
+}
+
+.about-metrics__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid var(--bp-color-border-strong);
+  padding: 0.72rem 1rem;
+  background: color-mix(in srgb, var(--bp-color-surface) 84%, transparent);
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-mono);
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 62%, transparent);
+  cursor: pointer;
+  transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.about-metrics__trigger:hover,
+.about-metrics__trigger:focus-visible {
+  border-color: var(--bp-color-accent);
+  background: color-mix(in srgb, var(--bp-color-accent) 15%, var(--bp-color-surface));
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 72%, transparent);
+  transform: translate(-2px, -2px) rotate(-1.2deg);
+}
+
+.about-metrics__trigger .material-symbols-outlined {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+/* ========================================================================== 
+   02   Fenster
+   ========================================================================== */
+
+.about-metrics__window {
+  position: relative;
+  z-index: 6;
+  width: min(100%, 560px);
+  margin-top: 1.2rem;
+  outline: none;
+  transform: rotate(-0.7deg);
+  transform-origin: 10% 0;
+  animation: about-metrics-window-in 360ms var(--bp-ease-pop) both;
+}
+
+.about-metrics__window::before,
+.about-metrics__window::after {
+  position: absolute;
+  pointer-events: none;
+  content: '';
+}
+
+.about-metrics__window::before {
+  inset: 0;
+  z-index: 2;
+  background: repeating-linear-gradient(0deg, transparent 0 7px, rgba(17, 17, 17, 0.08) 7px 8px);
+  mix-blend-mode: multiply;
+}
+
+.about-metrics__window::after {
+  top: 0.55rem;
+  right: -0.72rem;
+  width: 46%;
+  height: 2px;
+  background: var(--bp-color-accent);
+  opacity: 0.82;
+  filter: drop-shadow(0 0 0.45rem color-mix(in srgb, var(--bp-color-accent) 70%, transparent));
+  animation: about-metrics-scan 2.8s steps(5, end) infinite;
+}
+
+.about-metrics__body {
+  position: relative;
+  z-index: 3;
+  gap: 0.9rem;
+  padding: clamp(0.95rem, 2vw, 1.25rem);
+}
+
+.about-metrics__close {
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
+}
+
+.about-metrics__close:hover,
+.about-metrics__close:focus-visible {
+  background: #ff2b2b;
+  color: #ffffff;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.36), 0 0 0.85rem rgba(255, 43, 43, 0.32);
+  transform: translate(-1px, -1px);
+}
+
+/* ========================================================================== 
+   03   Einheiten-Switch
+   ========================================================================== */
+
+.about-metrics__switch {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+  padding: 0.28rem;
+  border: 1px solid #111111;
+  background: rgba(17, 17, 17, 0.12);
+}
+
+.about-metrics__switch button {
+  border: 1px solid transparent;
+  padding: 0.48rem 0.58rem;
+  background: transparent;
+  color: #111111;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, transform 160ms var(--bp-ease-out);
+}
+
+.about-metrics__switch button:hover,
+.about-metrics__switch button:focus-visible,
+.about-metrics__switch button.is-active {
+  border-color: #111111;
+  background: var(--bp-color-accent);
+  color: #111111;
+  transform: translateY(-1px);
+}
+
+/* ========================================================================== 
+   04   Kennzahlen
+   ========================================================================== */
+
+.about-metrics__list {
+  display: grid;
+  gap: 0.58rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-metrics__item {
+  --metric-index: 0;
+  display: grid;
+  grid-template-columns: auto minmax(5.7rem, 0.62fr) minmax(7rem, 0.95fr);
+  gap: 0.5rem 0.7rem;
+  align-items: center;
+  border: 1px solid rgba(17, 17, 17, 0.28);
+  padding: 0.62rem 0.68rem;
+  background: color-mix(in srgb, #f6f0e8 82%, var(--bp-color-accent) 8%);
+  box-shadow: 2px 2px 0 rgba(17, 17, 17, 0.16);
+}
+
+.about-metrics__icon {
+  display: grid;
+  grid-row: 1 / span 2;
+  place-items: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  border: 1px solid #111111;
+  background: #111111;
+  color: var(--bp-color-accent);
+  font-size: 1.2rem;
+}
+
+.about-metrics__label {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: rgba(17, 17, 17, 0.72);
+}
+
+.about-metrics__value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.32rem;
+  min-width: 0;
+  font-family: var(--bp-font-display);
+  font-size: clamp(1.2rem, 2vw, 1.9rem);
+  line-height: 0.92;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+}
+
+.about-metrics__value small {
+  font-family: var(--bp-font-mono);
+  font-size: 0.62rem;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+.about-metrics__note {
+  grid-column: 2 / -1;
+  color: rgba(17, 17, 17, 0.7);
+  font-size: 0.68rem;
+  line-height: 1.35;
+  text-transform: none;
+}
+
+.about-metrics__window.is-recalculating .about-metrics__item {
+  animation: about-metrics-item-swap 420ms var(--bp-ease-out) both;
+  animation-delay: calc(var(--metric-index) * 38ms);
+}
+
+.about-metrics__window.is-recalculating .about-metrics__value {
+  animation: about-metrics-value-glitch 420ms steps(3, end) both;
+}
+
+/* ========================================================================== 
+   05   Statuszeile
+   ========================================================================== */
+
+.about-metrics__precision,
+.about-metrics__status {
+  margin: 0;
+  color: rgba(17, 17, 17, 0.72);
+  font-size: 0.68rem;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.about-metrics__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  border-top: 1px dashed rgba(17, 17, 17, 0.32);
+  padding-top: 0.5rem;
+}
+
+.about-metrics__status span {
+  color: #111111;
+}
+
+.about-metrics__status i {
+  width: 0.55rem;
+  height: 1em;
+  background: #111111;
+  animation: about-metrics-cursor 980ms steps(2, end) infinite;
+}
+
+/* ========================================================================== 
+   06   Light Theme
+   ========================================================================== */
+
+:root[data-theme='light'] .about-metrics__trigger,
+:host-context(:root[data-theme='light']) .about-metrics__trigger {
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 72%, #111111 12%);
+}
+
+:root[data-theme='light'] .about-metrics__trigger:hover,
+:root[data-theme='light'] .about-metrics__trigger:focus-visible,
+:host-context(:root[data-theme='light']) .about-metrics__trigger:hover,
+:host-context(:root[data-theme='light']) .about-metrics__trigger:focus-visible {
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 78%, #111111 14%);
+}
+
+/* ========================================================================== 
+   07   Animationen
+   ========================================================================== */
+
+@keyframes about-metrics-window-in {
+  0% {
+    opacity: 0;
+    transform: translate3d(-0.65rem, 0.8rem, 0) rotate(-2.4deg) scale(0.94);
+    filter: blur(2px) contrast(1.35);
+  }
+
+  58% {
+    opacity: 1;
+    transform: translate3d(0.18rem, -0.15rem, 0) rotate(0.7deg) scale(1.015);
+    filter: blur(0) contrast(1.12);
+  }
+
+  100% {
+    opacity: 1;
+    transform: rotate(-0.7deg) scale(1);
+    filter: none;
+  }
+}
+
+@keyframes about-metrics-scan {
+  0%,
+  54%,
+  100% {
+    transform: translateX(0) scaleX(0.26);
+    opacity: 0.2;
+  }
+
+  58% {
+    transform: translateX(-132%) scaleX(1);
+    opacity: 0.86;
+  }
+
+  64% {
+    transform: translateX(18%) scaleX(0.44);
+    opacity: 0.44;
+  }
+}
+
+@keyframes about-metrics-item-swap {
+  0% {
+    transform: translateX(0);
+    filter: contrast(1);
+  }
+
+  36% {
+    transform: translateX(4px);
+    filter: contrast(1.65);
+  }
+
+  68% {
+    transform: translateX(-3px);
+    filter: contrast(1.24);
+  }
+
+  100% {
+    transform: translateX(0);
+    filter: contrast(1);
+  }
+}
+
+@keyframes about-metrics-value-glitch {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  30% {
+    transform: translateX(-3px) skewX(-8deg);
+    opacity: 0.52;
+  }
+
+  62% {
+    transform: translateX(4px) skewX(7deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes about-metrics-cursor {
+  0%,
+  48% {
+    opacity: 1;
+  }
+
+  49%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ========================================================================== 
+   08   Responsive und Reduced Motion
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  .about-metrics,
+  .about-metrics__window {
+    width: 100%;
+  }
+
+  .about-metrics__window {
+    transform: none;
+  }
+
+  .about-metrics__item {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .about-metrics__value,
+  .about-metrics__note {
+    grid-column: 2 / -1;
+  }
+}
+
+@media (max-width: 420px) {
+  .about-metrics__trigger {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .about-metrics__switch {
+    grid-template-columns: 1fr;
+  }
+
+  .about-metrics__item {
+    padding: 0.58rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-metrics__trigger,
+  .about-metrics__window,
+  .about-metrics__window::after,
+  .about-metrics__item,
+  .about-metrics__value,
+  .about-metrics__status i {
+    transition: none;
+    animation: none;
+  }
+}

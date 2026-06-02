@@ -162,26 +162,21 @@ html[data-motion='reduced']::before {
 }
 
 :root[data-theme='light'] .bp-button {
-  background: color-mix(in srgb, var(--bp-color-surface-solid) 92%, transparent);
-  color: #101010;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 72%, #111111 12%);
 }
 
 :root[data-theme='light'] .bp-button--accent {
-  border-color: #101010;
+  border-color: color-mix(in srgb, #101010 78%, var(--bp-color-accent) 22%);
   background: var(--bp-color-accent);
-  color: #fffdf8;
+  color: var(--bp-color-on-accent);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 68%, #111111 18%), 0 14px 34px var(--bp-color-shadow);
 }
 
-:root[data-theme='light'] .bp-button--ghost {
-  border-color: rgba(17, 17, 17, 0.52);
-  background: rgba(255, 253, 248, 0.78);
-}
-
-:root[data-theme='light'] .bp-button:hover,
-:root[data-theme='light'] .bp-button:focus-visible,
-:root[data-theme='light'] .bp-button:hover > *,
-:root[data-theme='light'] .bp-button:focus-visible > * {
-  color: #f6f0e8;
+:root[data-theme='light'] .bp-button--accent:hover,
+:root[data-theme='light'] .bp-button--accent:focus-visible,
+:root[data-theme='light'] .bp-button--accent:hover > *,
+:root[data-theme='light'] .bp-button--accent:focus-visible > * {
+  color: var(--bp-color-on-accent);
 }
 
 /* ==========================================================================
@@ -216,94 +211,66 @@ html[data-motion='reduced']::before {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.65rem;
-  min-height: 48px;
+  gap: 0.55rem;
+  min-height: 0;
   border: 1px solid var(--bp-color-border-strong);
-  padding: 0.82rem 1.2rem;
+  padding: 0.72rem 1rem;
   overflow: hidden;
-  background: var(--bp-color-surface-solid);
+  background: color-mix(in srgb, var(--bp-color-surface) 84%, transparent);
   color: var(--bp-color-text);
   font-family: var(--bp-font-mono);
+  font-size: 0.78rem;
   font-weight: 950;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 62%, transparent);
   cursor: pointer;
-  transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease, color 180ms ease;
+  transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
 }
 
-.bp-button::before {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 18px;
-  height: 18px;
-  content: '';
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.35);
-  transition: opacity 180ms ease, transform 220ms var(--bp-ease-out);
-}
-
-.bp-button::after {
-  position: absolute;
-  inset: 0;
-  content: '';
-  opacity: 0;
-  background: linear-gradient(110deg, var(--bp-color-accent), var(--bp-color-info));
-  transition: opacity 180ms ease;
-}
-
-.bp-button>* {
-  position: relative;
-  z-index: 1;
-}
-
-.bp-button:hover {
-  transform: translateY(-2px);
+.bp-button:hover,
+.bp-button:focus-visible {
   border-color: var(--bp-color-accent);
-  color: #111111;
-  box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 28%, transparent), 0 18px 45px var(--bp-color-shadow);
-}
-
-.bp-button:hover::before {
-  opacity: 0.84;
-  transform: translate(-50%, -50%) scale(6.4);
-}
-
-.bp-button:hover::after {
-  opacity: 0.86;
-}
-
-:root[data-theme='dark'] .bp-button:hover,
-:root[data-theme='dark'] .bp-button:focus-visible,
-:root[data-theme='dark'] .bp-button:hover > *,
-:root[data-theme='dark'] .bp-button:focus-visible > * {
-  color: #111111;
-}
-
-:root[data-theme='light'] .bp-button:hover,
-:root[data-theme='light'] .bp-button:focus-visible,
-:root[data-theme='light'] .bp-button:hover > *,
-:root[data-theme='light'] .bp-button:focus-visible > * {
-  color: #f6f0e8;
+  background: color-mix(in srgb, var(--bp-color-accent) 15%, var(--bp-color-surface));
+  color: var(--bp-color-text);
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 72%, transparent);
+  transform: translate(-2px, -2px) rotate(-1.2deg);
 }
 
 .bp-button--ghost {
-  background: color-mix(in srgb, var(--bp-color-surface-solid) 38%, transparent);
+  background: color-mix(in srgb, var(--bp-color-surface) 84%, transparent);
 }
 
 .bp-button--accent {
-  border-color: #111111;
+  border-color: color-mix(in srgb, var(--bp-color-text) 78%, var(--bp-color-accent) 22%);
   background: var(--bp-color-accent);
-  color: #111111;
+  color: var(--bp-color-on-accent);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 64%, #000000 20%), 0 14px 34px var(--bp-color-shadow);
 }
 
+.bp-button--accent:hover,
+.bp-button--accent:focus-visible {
+  border-color: color-mix(in srgb, var(--bp-color-text) 84%, var(--bp-color-accent) 16%);
+  background: color-mix(in srgb, var(--bp-color-accent) 88%, var(--bp-color-text) 12%);
+  color: var(--bp-color-on-accent);
+  box-shadow: 10px 10px 0 color-mix(in srgb, var(--bp-color-accent) 56%, #000000 36%), 0 0 0 3px color-mix(in srgb, var(--bp-color-accent) 28%, transparent), 0 24px 64px var(--bp-color-shadow);
+  transform: translate(-3px, -3px) rotate(-1.2deg);
+}
+
+.bp-button--accent:hover > *,
+.bp-button--accent:focus-visible > * {
+  color: var(--bp-color-on-accent);
+}
 
 :root[data-color-vision='achromatopsia'] .bp-button--accent,
 :root[data-color-vision='achromatopsia'] .bp-button:hover {
   border-color: #f6f0e8;
   background: #111111;
+  color: #f6f0e8;
+}
+
+:root[data-color-vision='achromatopsia'] .bp-button--accent:hover > *,
+:root[data-color-vision='achromatopsia'] .bp-button:hover > * {
   color: #f6f0e8;
 }
 

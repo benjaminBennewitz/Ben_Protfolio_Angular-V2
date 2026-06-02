@@ -85,6 +85,10 @@ ben-portfolio-angular-v2/
 │   │   │       ├── thank-you-page.component.scss
 │   │   │       └── thank-you-page.component.ts
 │   │   ├── shared/
+│   │   │   ├── about-metrics-window/
+│   │   │   │   ├── about-metrics-window.component.html
+│   │   │   │   ├── about-metrics-window.component.scss
+│   │   │   │   └── about-metrics-window.component.ts
 │   │   │   ├── built-without/
 │   │   │   │   ├── built-without.component.html
 │   │   │   │   ├── built-without.component.scss

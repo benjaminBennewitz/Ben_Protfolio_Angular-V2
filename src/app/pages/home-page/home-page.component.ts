@@ -9,6 +9,7 @@ import { DOCUMENT } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AchievementService } from '../../core/services/achievement.service';
+import { AboutMetricsWindowComponent } from '../../shared/about-metrics-window/about-metrics-window.component';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
 import { BuiltWithoutComponent } from '../../shared/built-without/built-without.component';
@@ -61,7 +62,7 @@ interface ProjectsChocolateEgg {
 @Component({
   selector: 'bp-home-page',
   standalone: true,
-  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProjectStackComponent, ProcessLockComponent, BuiltWithoutComponent, ChaosCtaComponent, ContactFormComponent, ViewportActivityDirective],
+  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProjectStackComponent, ProcessLockComponent, BuiltWithoutComponent, ChaosCtaComponent, ContactFormComponent, AboutMetricsWindowComponent, ViewportActivityDirective],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })
@@ -319,6 +320,11 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   /** Entfernt das About-Dialogfenster aus der Startansicht. */
   closeAboutDialog(): void {
     this.isAboutDialogVisible.set(false);
+  }
+
+  /** Schaltet die Trophäe für absurde Maßeinheiten frei. */
+  unlockMetricsAchievement(): void {
+    this.achievementService.unlock('weird-units');
   }
 
   /** Entfernt das Skill-Level-Dialogfenster aus dem Techstack-Bereich. */

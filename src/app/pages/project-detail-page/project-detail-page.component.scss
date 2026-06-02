@@ -213,11 +213,6 @@
   margin-top: var(--bp-space-5);
 }
 
-.project-detail__hero-actions .bp-button--ghost {
-  border-color: rgba(246, 240, 232, 0.3);
-  color: var(--project-detail-ink);
-}
-
 .project-detail__hero-stage {
   position: relative;
   min-height: clamp(520px, 56vw, 760px);
@@ -1791,51 +1786,6 @@
   animation: project-detail-copy-in 720ms var(--bp-ease-out) 320ms both;
 }
 
-.project-detail__hero-actions .bp-button--ghost,
-.project-detail__hero-demo-link {
-  border-color: var(--bp-color-border-strong) !important;
-  background: color-mix(in srgb, var(--bp-color-surface-solid) 38%, transparent) !important;
-  color: var(--bp-color-text) !important;
-}
-
-:root[data-theme='light'] .project-detail__hero-actions .bp-button--ghost,
-:root[data-theme='light'] .project-detail__hero-demo-link,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button--ghost,
-:host-context(:root[data-theme='light']) .project-detail__hero-demo-link {
-  border-color: rgba(17, 17, 17, 0.52) !important;
-  background: rgba(255, 253, 248, 0.78) !important;
-  color: #101010 !important;
-}
-
-.project-detail__hero-actions .bp-button:hover,
-.project-detail__hero-actions .bp-button:focus-visible,
-.project-detail__hero-actions .bp-button:hover > *,
-.project-detail__hero-actions .bp-button:focus-visible > *,
-.project-detail__hero-demo-link:hover,
-.project-detail__hero-demo-link:focus-visible,
-.project-detail__hero-demo-link:hover > *,
-.project-detail__hero-demo-link:focus-visible > * {
-  color: #111111 !important;
-}
-
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:hover,
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:focus-visible,
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:hover > *,
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:focus-visible > *,
-:root[data-theme='light'] .project-detail__hero-demo-link:hover,
-:root[data-theme='light'] .project-detail__hero-demo-link:focus-visible,
-:root[data-theme='light'] .project-detail__hero-demo-link:hover > *,
-:root[data-theme='light'] .project-detail__hero-demo-link:focus-visible > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:hover,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:focus-visible,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:hover > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:focus-visible > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-demo-link:hover,
-:host-context(:root[data-theme='light']) .project-detail__hero-demo-link:focus-visible,
-:host-context(:root[data-theme='light']) .project-detail__hero-demo-link:hover > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-demo-link:focus-visible > * {
-  color: #f6f0e8 !important;
-}
 
 .project-detail__hero-stage {
   min-height: clamp(380px, 45vw, 500px);
@@ -2268,16 +2218,6 @@
 .project-detail__demo-icon {
   border-color: var(--project-detail-blue);
   color: var(--project-detail-blue);
-}
-
-.project-detail__demo-panel .bp-button--accent,
-.project-detail__demo-panel .bp-button--ghost {
-  border-color: var(--project-detail-blue);
-}
-
-.project-detail__demo-panel .bp-button:hover,
-.project-detail__demo-panel .bp-button:focus-visible {
-  border-color: transparent;
 }
 
 .project-detail__animated-item.bp-reveal {

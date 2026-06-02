@@ -21,6 +21,11 @@
    ========================================================================== */
 
 .built-strip {
+  --built-strip-card-bg: var(--bp-color-surface-solid);
+  --built-strip-item-bg: var(--bp-color-surface-strong);
+  --built-strip-item-text: var(--bp-color-text-muted);
+  --built-strip-icon-cross: var(--bp-color-danger);
+  --built-strip-icon-check: var(--bp-color-accent);
   position: relative;
   min-height: auto;
   padding: clamp(2.5rem, 5vw, 4.5rem) var(--bp-section-px);
@@ -96,7 +101,8 @@
 .built-strip__group {
   border: 1px solid var(--bp-color-border);
   padding: clamp(0.9rem, 1.6vw, 1.2rem);
-  background: var(--bp-color-surface-solid);
+  background: var(--built-strip-card-bg);
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 14%, transparent);
 }
 
 .built-strip__group h3 {
@@ -124,8 +130,8 @@
   min-height: 2.1rem;
   border: 1px solid color-mix(in srgb, var(--bp-color-border) 74%, transparent);
   padding: 0.38rem 0.48rem;
-  background: var(--bp-color-surface-strong);
-  color: var(--bp-color-text-muted);
+  background: var(--built-strip-item-bg);
+  color: var(--built-strip-item-text);
   font-family: var(--bp-font-mono);
   font-size: 0.72rem;
   font-weight: 850;
@@ -133,17 +139,33 @@
 }
 
 .built-strip__group li .material-symbols-outlined {
-  color: var(--bp-color-accent);
+  color: var(--built-strip-icon-check);
   font-size: 1rem;
 }
 
 .built-strip__group--without li .material-symbols-outlined {
-  color: var(--bp-color-danger);
+  color: var(--built-strip-icon-cross);
 }
 
 :root[data-theme='light'] .built-strip,
 :host-context(:root[data-theme='light']) .built-strip {
+  --built-strip-card-bg: color-mix(in srgb, var(--bp-color-surface-solid) 92%, var(--bp-color-bg) 8%);
+  --built-strip-item-bg: color-mix(in srgb, var(--bp-color-surface-solid) 84%, var(--bp-color-bg) 16%);
+  --built-strip-item-text: color-mix(in srgb, var(--bp-color-text) 82%, var(--bp-color-bg) 18%);
+  --built-strip-icon-cross: color-mix(in srgb, var(--bp-color-text) 74%, var(--bp-color-danger) 26%);
+  --built-strip-icon-check: color-mix(in srgb, var(--bp-color-text) 68%, var(--bp-color-accent) 32%);
   background: color-mix(in srgb, var(--bp-color-surface-solid) 82%, var(--bp-color-accent) 6%);
+}
+
+:root[data-theme='light'] .built-strip__group,
+:host-context(:root[data-theme='light']) .built-strip__group {
+  border-color: color-mix(in srgb, var(--bp-color-border-strong) 72%, transparent);
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 18%, transparent);
+}
+
+:root[data-theme='light'] .built-strip__group h3,
+:host-context(:root[data-theme='light']) .built-strip__group h3 {
+  color: color-mix(in srgb, var(--bp-color-text) 76%, var(--bp-color-accent) 24%);
 }
 
 /* ========================================================================== 

@@ -41,10 +41,9 @@
 
 .footer {
   position: relative;
-  min-height: 72svh;
+  min-height: auto;
   padding: var(--bp-space-8) var(--bp-stage-gutter) var(--bp-space-4);
-  overflow-x: clip;
-  overflow-y: visible;
+  overflow: hidden;
   border-top: 1px solid var(--bp-color-border);
   background: linear-gradient(135deg, color-mix(in srgb, var(--bp-color-bg) 92%, black 8%), color-mix(in srgb, var(--bp-color-surface-solid) 82%, black 18%));
 }
@@ -65,7 +64,7 @@
 
 .footer::after {
   right: max(-9vw, calc((100vw - var(--bp-viewport-max)) / 2 - 9vw));
-  bottom: -12vw;
+  bottom: -18vw;
   width: min(46vw, 620px);
   aspect-ratio: 1;
   border: 1px solid color-mix(in srgb, var(--bp-color-accent) 38%, transparent);

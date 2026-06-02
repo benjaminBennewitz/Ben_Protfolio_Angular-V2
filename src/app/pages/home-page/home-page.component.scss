@@ -435,13 +435,6 @@
   margin-top: clamp(1rem, 2.2vh, 1.6rem);
 }
 
-.hero__actions .bp-button:hover,
-.hero__actions .bp-button:focus-visible,
-.hero__actions .bp-button:hover > *,
-.hero__actions .bp-button:focus-visible > * {
-  color: #111111;
-}
-
 /* ==========================================================================
    05   Hero Dialoge
    ========================================================================== */
@@ -750,20 +743,6 @@
   color: #111111;
   font-weight: 760;
   text-shadow: none;
-}
-
-:root[data-theme='light'] .hero__actions .bp-button:hover,
-:root[data-theme='light'] .hero__actions .bp-button:focus-visible,
-:root[data-theme='light'] .hero__actions .bp-button:hover > *,
-:root[data-theme='light'] .hero__actions .bp-button:focus-visible > * {
-  color: #f6f0e8;
-}
-
-:host-context(:root[data-theme='light']) .hero__actions .bp-button:hover,
-:host-context(:root[data-theme='light']) .hero__actions .bp-button:focus-visible,
-:host-context(:root[data-theme='light']) .hero__actions .bp-button:hover > *,
-:host-context(:root[data-theme='light']) .hero__actions .bp-button:focus-visible > * {
-  color: #f6f0e8;
 }
 
 :root[data-theme='light'] .hero__dialog-actions button:hover,
@@ -1268,7 +1247,7 @@
 .about__popup {
   position: absolute;
   z-index: 4;
-  top: clamp(-2.75rem, -2vw, -1.35rem);
+  top: calc(clamp(-2.75rem, -2vw, -1.35rem) - 130px);
   left: 5%;
   width: min(370px, 92%);
   transform: rotate(-2.5deg);
@@ -1944,11 +1923,13 @@
 
 .projects-kickoff__portrait-image {
   position: absolute;
-  inset: auto 0 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 1;
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
   object-position: center bottom;
   filter: grayscale(1) contrast(1.22) brightness(1.03);
   transition: opacity 420ms ease, transform 580ms var(--bp-ease-out), filter 320ms ease;
@@ -1965,9 +1946,6 @@
 }
 
 .projects-kickoff__portrait-image--eaten {
-  height: 100%;
-  object-fit: contain;
-  object-position: center bottom;
   opacity: 0;
   transform: translate3d(0, 12px, 0) scale(0.985);
 }

@@ -37,7 +37,7 @@
             <span>{{ content().hero.primaryCta }}</span>
             <span class="material-symbols-outlined" aria-hidden="true">mail</span>
           </button>
-          <a class="bp-button bp-button--ghost" routerLink="/" fragment="about">
+          <a class="bp-button" routerLink="/" fragment="about">
             <span>{{ content().hero.secondaryCta }}</span>
             <span class="material-symbols-outlined" aria-hidden="true">terminal</span>
           </a>
@@ -134,6 +134,8 @@
         @for (paragraph of content().about.text; track $index) {
         <p class="bp-subtitle">{{ paragraph }}</p>
         }
+        <bp-about-metrics-window [content]="content().about.metrics"
+          (weirdModeSelected)="unlockMetricsAchievement()" />
       </div>
 
       <div class="about__cards" bpReveal>

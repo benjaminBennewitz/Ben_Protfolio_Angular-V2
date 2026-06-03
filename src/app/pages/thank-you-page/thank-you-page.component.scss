@@ -82,7 +82,7 @@
   color: var(--bp-color-text);
   font-family: var(--bp-font-mono);
   font-size: 0.74rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms var(--bp-ease-out);
@@ -165,7 +165,7 @@
 .thank-you__dialog p::before {
   content: '> ';
   color: var(--bp-color-accent);
-  font-weight: 950;
+  font-weight: 900;
 }
 
 /* =================================================================================================

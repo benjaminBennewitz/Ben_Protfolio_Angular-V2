@@ -445,7 +445,7 @@
   right: -1%;
   z-index: 4;
   width: min(100%, 440px);
-  transform: rotate(1.2deg);
+  transform: translate3d(0, 0, 0);
 }
 
 .hero__dialog-icon {
@@ -460,7 +460,7 @@
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
   font-family: var(--bp-font-mono);
   font-size: 1.45rem;
-  font-weight: 950;
+  font-weight: 900;
 }
 
 .hero__dialog-icon span {
@@ -473,10 +473,19 @@
   gap: 0.55rem;
 }
 
+.hero__dos .bp-dos-window__bar {
+  font-weight: 800;
+  line-height: 1.15;
+  text-rendering: auto;
+}
+
 .hero__dos .bp-dos-window__body {
   gap: 1rem;
   padding-bottom: 1.15rem;
   overflow: visible;
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-rendering: auto;
 }
 
 .hero__dos .bp-dos-window__bar button {
@@ -501,11 +510,12 @@
   padding: 0.4rem 0.6rem;
   background: #eeeeee;
   color: #111111;
-  line-height: 1;
+  line-height: 1.12;
   font-family: var(--bp-font-mono);
-  font-size: 0.74rem;
-  font-weight: 950;
+  font-size: 0.8rem;
+  font-weight: 800;
   text-align: center;
+  text-rendering: auto;
   transition: transform 160ms var(--bp-ease-out), background-color 160ms ease, box-shadow 160ms ease;
 }
 
@@ -545,7 +555,7 @@
   color: var(--bp-color-accent);
   font-family: var(--bp-font-mono);
   font-size: 0.76rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1278,7 +1288,7 @@
   background: #f6f0e8;
   color: #111111;
   font-family: var(--bp-font-mono);
-  font-weight: 950;
+  font-weight: 900;
   cursor: pointer;
   transition: background-color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
 }
@@ -1300,6 +1310,11 @@
 
 .about__copy {
   min-width: 0;
+}
+
+.about__copy.bp-reveal--visible {
+  transform: none;
+  filter: none;
 }
 
 .about__cards,
@@ -1452,7 +1467,7 @@
   color: var(--bp-color-text);
   font-family: var(--bp-font-mono);
   font-size: 0.78rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1666,7 +1681,7 @@
 .skills__level-meta b {
   font-family: var(--bp-font-mono);
   font-size: 0.82rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -1881,7 +1896,7 @@
 .projects-kickoff__window p::before {
   content: '> ';
   color: #111111;
-  font-weight: 950;
+  font-weight: 900;
 }
 
 .projects-kickoff__portrait {
@@ -1997,7 +2012,7 @@
   color: #111111;
   font-family: var(--bp-font-mono);
   font-size: 0.72rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
@@ -2211,7 +2226,7 @@
   color: #111111;
   font-family: var(--bp-font-mono);
   font-size: 0.68rem;
-  font-weight: 950;
+  font-weight: 900;
   text-transform: uppercase;
 }
 

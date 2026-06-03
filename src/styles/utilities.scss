@@ -80,7 +80,7 @@
   color: var(--bp-color-accent);
   font-family: var(--bp-font-mono);
   font-size: 0.74rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent);
@@ -230,7 +230,7 @@ html[data-motion='reduced']::before {
   color: var(--bp-color-text);
   font-family: var(--bp-font-mono);
   font-size: 0.78rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 62%, transparent);
@@ -357,7 +357,7 @@ html[data-motion='reduced']::before {
   background: #545454;
   color: #f6f0e8;
   font-size: 0.72rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }

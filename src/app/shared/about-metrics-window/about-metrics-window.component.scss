@@ -54,9 +54,10 @@
   background: color-mix(in srgb, var(--bp-color-surface) 84%, transparent);
   color: var(--bp-color-text);
   font-family: var(--bp-font-mono);
-  font-size: 0.78rem;
-  font-weight: 950;
-  letter-spacing: 0.04em;
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.035em;
   text-transform: uppercase;
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 62%, transparent);
   cursor: pointer;
@@ -68,7 +69,7 @@
   border-color: var(--bp-color-accent);
   background: color-mix(in srgb, var(--bp-color-accent) 15%, var(--bp-color-surface-solid));
   box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 72%, transparent);
-  transform: translate(-2px, -2px) rotate(-1.2deg);
+  transform: translate(-2px, -2px);
 }
 
 .about-metrics__trigger .material-symbols-outlined {
@@ -86,7 +87,7 @@
   width: min(100%, 560px);
   margin-top: 1.2rem;
   outline: none;
-  transform: rotate(-0.7deg);
+  transform: none;
   transform-origin: 10% 0;
   animation: about-metrics-window-in 360ms var(--bp-ease-pop) both;
 }
@@ -101,7 +102,7 @@
 .about-metrics__window::before {
   inset: 0;
   z-index: 2;
-  background: repeating-linear-gradient(0deg, transparent 0 7px, rgba(17, 17, 17, 0.08) 7px 8px);
+  background: repeating-linear-gradient(0deg, transparent 0 9px, rgba(17, 17, 17, 0.035) 9px 10px);
   mix-blend-mode: multiply;
 }
 
@@ -121,6 +122,23 @@
   z-index: 3;
   gap: 0.9rem;
   padding: clamp(0.95rem, 2vw, 1.25rem);
+}
+
+.about-metrics .bp-dos-window__bar,
+.about-metrics .bp-dos-window__body {
+  -webkit-font-smoothing: auto;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+.about-metrics .bp-dos-window__bar {
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.about-metrics .bp-dos-window__body {
+  font-weight: 800;
 }
 
 .about-metrics__close {
@@ -155,9 +173,10 @@
   background: transparent;
   color: #111111;
   font: inherit;
-  font-size: 0.7rem;
-  font-weight: 950;
-  letter-spacing: 0.08em;
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.055em;
   text-transform: uppercase;
   cursor: pointer;
   transition: background-color 160ms ease, border-color 160ms ease, transform 160ms var(--bp-ease-out);
@@ -215,8 +234,9 @@
 
 .about-metrics__label {
   color: rgba(17, 17, 17, 0.82);
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
+  font-size: 0.74rem;
+  line-height: 1.25;
+  letter-spacing: 0.07em;
 }
 
 .about-metrics__value {
@@ -241,8 +261,8 @@
 
 .about-metrics__value small {
   font-family: var(--bp-font-mono);
-  font-size: 0.62rem;
-  line-height: 1.1;
+  font-size: 0.68rem;
+  line-height: 1.16;
   letter-spacing: 0.02em;
 }
 
@@ -258,8 +278,8 @@
 
 .about-metrics__note {
   color: rgba(17, 17, 17, 0.7);
-  font-size: 0.68rem;
-  line-height: 1.35;
+  font-size: 0.74rem;
+  line-height: 1.4;
   text-transform: none;
 }
 
@@ -280,8 +300,8 @@
 .about-metrics__status {
   margin: 0;
   color: rgba(17, 17, 17, 0.72);
-  font-size: 0.68rem;
-  line-height: 1.35;
+  font-size: 0.74rem;
+  line-height: 1.4;
   text-transform: uppercase;
 }
 
@@ -325,7 +345,7 @@
   color: var(--bp-color-text);
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 64%, transparent);
   cursor: pointer;
-  transform: rotate(1.2deg);
+  transform: none;
   animation: about-metrics-teaser-in 460ms var(--bp-ease-pop) both;
   transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, background-color 180ms ease, box-shadow 180ms ease;
 }
@@ -335,7 +355,7 @@
   border-color: var(--bp-color-accent);
   background: color-mix(in srgb, var(--bp-color-accent) 15%, var(--bp-color-surface-solid));
   box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 74%, transparent);
-  transform: translate(-2px, -2px) rotate(-1.2deg);
+  transform: translate(-2px, -2px);
 }
 
 .about-metrics__calculator-teaser .material-symbols-outlined {
@@ -346,22 +366,26 @@
 .about-metrics__calculator-teaser strong,
 .about-metrics__calculator-teaser small {
   min-width: 0;
+  line-height: 1.18;
   text-align: left;
+  text-rendering: auto;
 }
 
 .about-metrics__calculator-teaser strong {
   font-family: var(--bp-font-mono);
-  font-size: 0.72rem;
-  font-weight: 950;
-  letter-spacing: 0.06em;
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: 0.035em;
   text-transform: uppercase;
 }
 
 .about-metrics__calculator-teaser small {
   color: color-mix(in srgb, var(--bp-color-text) 68%, transparent);
   font-family: var(--bp-font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.03em;
+  font-size: 0.72rem;
+  line-height: 1.22;
+  letter-spacing: 0.018em;
   text-transform: uppercase;
 }
 
@@ -374,7 +398,7 @@
   max-height: min(calc(100vh - 8rem), 760px);
   outline: none;
   overflow: auto;
-  transform: rotate(-0.45deg);
+  transform: none;
   animation: about-metrics-calculator-in 360ms var(--bp-ease-pop) both;
 }
 
@@ -388,7 +412,7 @@
 .about-metrics__calculator-warning {
   margin: 0;
   color: rgba(17, 17, 17, 0.72);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   line-height: 1.5;
   text-transform: none;
 }
@@ -411,9 +435,10 @@
 .about-metrics__field span {
   color: rgba(17, 17, 17, 0.78);
   font-family: var(--bp-font-mono);
-  font-size: 0.66rem;
-  font-weight: 950;
-  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.22;
+  letter-spacing: 0.055em;
   text-transform: uppercase;
 }
 
@@ -427,7 +452,7 @@
   color: #111111;
   font: inherit;
   font-family: var(--bp-font-mono);
-  font-weight: 850;
+  font-weight: 800;
   outline: none;
   box-shadow: 2px 2px 0 rgba(17, 17, 17, 0.14);
   transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms var(--bp-ease-out);
@@ -457,8 +482,9 @@
 
 .about-metrics__calculator-results span {
   color: rgba(17, 17, 17, 0.72);
-  font-size: 0.64rem;
-  letter-spacing: 0.09em;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  letter-spacing: 0.065em;
   text-transform: uppercase;
 }
 
@@ -473,8 +499,9 @@
 
 .about-metrics__calculator-results small {
   font-family: var(--bp-font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.02em;
+  font-size: 0.72rem;
+  line-height: 1.22;
+  letter-spacing: 0.018em;
 }
 
 .about-metrics__calculator-results code {
@@ -484,7 +511,7 @@
   background: rgba(17, 17, 17, 0.05);
   color: rgba(17, 17, 17, 0.72);
   font-family: var(--bp-font-mono);
-  font-size: 0.62rem;
+  font-size: 0.7rem;
 }
 
 .about-metrics__calculator-results.is-recalculating article {
@@ -549,19 +576,19 @@
 @keyframes about-metrics-window-in {
   0% {
     opacity: 0;
-    transform: translate3d(-0.65rem, 0.8rem, 0) rotate(-2.4deg) scale(0.94);
-    filter: blur(2px) contrast(1.35);
+    transform: translate3d(-0.65rem, 0.8rem, 0);
+    filter: none;
   }
 
   58% {
     opacity: 1;
-    transform: translate3d(0.18rem, -0.15rem, 0) rotate(0.7deg) scale(1.015);
-    filter: blur(0) contrast(1.12);
+    transform: translate3d(0.18rem, -0.15rem, 0);
+    filter: none;
   }
 
   100% {
     opacity: 1;
-    transform: rotate(-0.7deg) scale(1);
+    transform: none;
     filter: none;
   }
 }
@@ -588,31 +615,43 @@
 @keyframes about-metrics-teaser-in {
   0% {
     opacity: 0;
-    transform: translate3d(0.8rem, 0.4rem, 0) rotate(4deg) scale(0.9);
+    transform: translate3d(0.8rem, 0.4rem, 0);
   }
 
   100% {
     opacity: 1;
-    transform: rotate(1.2deg) scale(1);
+    transform: none;
+  }
+}
+
+@keyframes about-metrics-teaser-in-flat {
+  0% {
+    opacity: 0;
+    transform: translate3d(0.8rem, 0.4rem, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
   }
 }
 
 @keyframes about-metrics-calculator-in {
   0% {
     opacity: 0;
-    transform: translate3d(1.1rem, 0.9rem, 0) rotate(-2.4deg) scale(0.94);
-    filter: blur(2px) contrast(1.25);
+    transform: translate3d(1.1rem, 0.9rem, 0);
+    filter: none;
   }
 
   62% {
     opacity: 1;
-    transform: translate3d(-0.18rem, -0.22rem, 0) rotate(0.55deg) scale(1.012);
-    filter: blur(0) contrast(1.08);
+    transform: translate3d(-0.18rem, -0.22rem, 0);
+    filter: none;
   }
 
   100% {
     opacity: 1;
-    transform: rotate(-0.45deg) scale(1);
+    transform: none;
     filter: none;
   }
 }
@@ -683,6 +722,8 @@
     right: 0.65rem;
     bottom: -0.9rem;
     width: min(14.5rem, calc(100% - 1.3rem));
+    transform: translate3d(0, 0, 0);
+    animation-name: about-metrics-teaser-in-flat;
   }
 
   .about-metrics__window {

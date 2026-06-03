@@ -109,7 +109,7 @@
   color: var(--bp-color-accent);
   font-family: var(--bp-font-mono);
   font-size: 0.68rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -154,7 +154,7 @@
   color: var(--bp-color-text);
   font-family: var(--bp-font-mono);
   font-size: 0.58rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
@@ -183,7 +183,7 @@
 .blog-page__search > span:first-child {
   color: var(--bp-color-accent);
   font-size: 0.68rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -329,7 +329,7 @@
 .blog-page__nav strong {
   font-family: var(--bp-font-mono);
   font-size: 0.72rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -493,7 +493,7 @@
   color: #ffffff;
   font-family: var(--bp-font-mono);
   font-size: 0.7rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -542,7 +542,7 @@
   color: #003f7f;
   font-family: var(--bp-font-mono);
   font-size: 0.66rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -584,7 +584,7 @@
   color: #101010;
   font-family: var(--bp-font-mono);
   font-size: 0.62rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -610,7 +610,7 @@
   color: #a7ff19;
   font-family: var(--bp-font-mono);
   font-size: 0.66rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -680,7 +680,7 @@
   color: #003f7f;
   font-family: var(--bp-font-mono);
   font-size: 0.66rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out);
@@ -742,7 +742,7 @@
   color: #a7ff19;
   font-family: var(--bp-font-mono);
   font-size: 0.62rem;
-  font-weight: 950;
+  font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -864,7 +864,7 @@
   min-height: 42px;
   background: rgba(167, 255, 25, calc(0.16 + var(--preview-index) * 0.18));
   color: #101010;
-  font-weight: 950;
+  font-weight: 900;
 }
 
 .blog-preview__default-select,

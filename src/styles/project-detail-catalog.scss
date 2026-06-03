@@ -163,7 +163,7 @@
   margin: 0 0 0.35rem;
   color: var(--project-detail-ink);
   font-size: clamp(1.7rem, 3vw, 3.3rem);
-  font-weight: 950;
+  font-weight: 900;
   line-height: 0.92;
   text-transform: uppercase;
 }
@@ -502,7 +502,7 @@
   align-self: flex-start;
   border-bottom: 2px solid var(--project-detail-catalog-ink);
   font-size: clamp(1.8rem, 5vw, 5.4rem);
-  font-weight: 950;
+  font-weight: 900;
   line-height: 0.95;
 }
 
@@ -518,7 +518,7 @@
 .project-detail__catalog-page-placeholder strong {
   max-width: 11ch;
   font-size: clamp(1.7rem, 4.2vw, 5.2rem);
-  font-weight: 950;
+  font-weight: 900;
   line-height: 0.86;
   text-transform: uppercase;
 }

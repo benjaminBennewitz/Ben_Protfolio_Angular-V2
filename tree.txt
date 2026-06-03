@@ -140,6 +140,8 @@ ben-portfolio-angular-v2/
 │   │   │   ├── native-select.html
 │   │   │   └── simple-css-spinner.html
 │   │   ├── fonts/
+│   │   │   ├── inter-variable.ttf
+│   │   │   ├── jetbrains-mono-variable.ttf
 │   │   │   └── material-symbols-outlined-latin-fill-normal.woff2
 │   │   ├── images/
 │   │   │   ├── projects/

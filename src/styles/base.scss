@@ -19,17 +19,38 @@
 /* ==========================================================================
    INHALTSVERZEICHNIS
 
-   01   Reset
-   02   Dokument
-   03   Hintergründe
-   04   Scrollbars
-   05   Interaktion
-   06   Accessibility Modes
-   07   Reduced Motion
+   01   Fonts
+   02   Reset
+   03   Dokument
+   04   Hintergründe
+   05   Scrollbars
+   06   Interaktion
+   07   Accessibility Modes
+   08   Reduced Motion
    ========================================================================== */
 
 /* ==========================================================================
-   01   Reset
+   01   Fonts
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/assets/fonts/inter-variable.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('/assets/fonts/jetbrains-mono-variable.ttf') format('truetype');
+}
+
+/* ==========================================================================
+   02   Reset
    ========================================================================== */
 
 * {
@@ -37,13 +58,17 @@
 }
 
 /* ==========================================================================
-   02   Dokument
+   03   Dokument
    ========================================================================== */
 
 html {
   min-width: 300px;
   min-height: 100%;
   background: var(--bp-color-bg);
+  font-optical-sizing: auto;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
   scroll-padding-top: 0;
   scroll-snap-type: y proximity;
@@ -59,12 +84,12 @@ body {
   background: var(--bp-color-bg);
   color: var(--bp-color-text);
   font-family: var(--bp-font-body);
-  text-rendering: optimizeLegibility;
+  text-rendering: auto;
   transition: background-color 260ms ease, color 260ms ease;
 }
 
 /* ==========================================================================
-   03   Hintergründe
+   04   Hintergründe
    ========================================================================== */
 
 body::before {
@@ -94,7 +119,7 @@ body::after {
 }
 
 /* ==========================================================================
-   04   Scrollbars
+   05   Scrollbars
    ========================================================================== */
 
 ::-webkit-scrollbar {
@@ -117,7 +142,7 @@ body::after {
 }
 
 /* ==========================================================================
-   05   Interaktion
+   06   Interaktion
    ========================================================================== */
 
 img,
@@ -158,7 +183,7 @@ button {
 }
 
 /* ==========================================================================
-   06   Accessibility Modes
+   07   Accessibility Modes
    ========================================================================== */
 
 .bp-is-paused,

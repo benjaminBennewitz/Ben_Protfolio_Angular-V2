@@ -811,7 +811,6 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         {
           title: 'Kontakt', links: [
             { label: 'E-Mail vorbereiten', href: 'mailto:kontakt@bennewitz.de' },
-            { label: 'FAQ', href: '#faq' },
             { label: 'Kontaktformular', href: '#contact' },
             { label: 'Impressum', href: '/impressum' },
           ]
@@ -1623,7 +1622,6 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         {
           title: 'Contact', links: [
             { label: 'Prepare email', href: 'mailto:contact@bennewitz.de' },
-            { label: 'FAQ', href: '#faq' },
             { label: 'Contact form', href: '#contact' },
             { label: 'Legal notice', href: '/impressum' },
           ]

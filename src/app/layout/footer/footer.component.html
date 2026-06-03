@@ -77,7 +77,17 @@
   </div>
 
   <div class="footer__bottom bp-container">
-    <span>© {{ year }} B² · Benjamin Bennewitz</span>
-    <span>Design. Code. Break the Grid.</span>
+    <nav class="footer__legal" [attr.aria-label]="legalLabels().ariaLabel">
+      <a class="footer__legal-link" routerLink="/impressum">{{ legalLabels().imprint }}</a>
+      <span aria-hidden="true">·</span>
+      <button class="footer__legal-action" type="button" (click)="openPrivacyControls()">
+        {{ privacyControlLabel() }}
+      </button>
+    </nav>
+
+    <div class="footer__bottom-main">
+      <span>© {{ year }} B² · Benjamin Bennewitz</span>
+      <span>Design. Code. Break the Grid.</span>
+    </div>
   </div>
 </footer>

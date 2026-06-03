@@ -65,6 +65,7 @@
   grid-template-columns: minmax(270px, 330px) minmax(0, 1fr);
   gap: clamp(0.85rem, 1.6vw, 1.5rem);
   height: 100%;
+  min-width: 0;
   min-height: 0;
 }
 
@@ -357,6 +358,7 @@
 .blog-page__desktop {
   position: relative;
   height: 100%;
+  min-width: 0;
   min-height: 0;
   border: 1px solid var(--bp-color-border-strong);
   overflow: hidden;
@@ -421,7 +423,9 @@
   display: flex;
   flex-direction: column;
   width: min(640px, calc(100% - var(--blog-window-x) - 1rem));
+  max-width: 100%;
   max-height: calc(100% - var(--blog-window-y) - 4rem);
+  min-width: 0;
   min-height: 0;
   border: 2px solid #101010;
   background: #c7c7c7;
@@ -554,6 +558,7 @@
   line-height: 0.9;
   letter-spacing: -0.07em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .blog-window__header p,
@@ -578,6 +583,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.34rem;
+  min-width: 0;
   border: 2px outset #ffffff;
   padding: 0.28rem 0.45rem;
   background: #efefef;
@@ -1151,7 +1157,7 @@
     position: relative;
     top: auto;
     left: auto;
-    width: 100%;
+    width: min(100%, calc(100vw - 2rem));
     max-height: none;
     margin: 1rem 0;
   }
@@ -1164,15 +1170,59 @@
     display: grid;
     gap: 1rem;
     min-height: auto;
-    padding: 3.1rem 0.8rem 0.8rem;
+    padding: 3.1rem 0.65rem 0.65rem;
+    overflow: hidden;
   }
 
   .blog-window__body {
     max-height: none;
+    padding: 0.58rem;
+  }
+
+  .blog-preview__flex-row {
+    flex-wrap: wrap;
+  }
+
+  .blog-preview__flex-row span {
+    flex: 1 1 72px;
   }
 
   .blog-window__compare article:first-child {
     border-right: 0;
     border-bottom: 1px solid rgba(246, 240, 232, 0.18);
+  }
+}
+
+
+@media (max-width: 420px) {
+  .blog-page__desktop {
+    padding-inline: 0.5rem;
+  }
+
+  .blog-window {
+    width: min(100%, calc(100vw - 1.5rem));
+  }
+
+  .blog-window__bar {
+    gap: 0.45rem;
+    padding-left: 0.5rem;
+    font-size: 0.62rem;
+  }
+
+  .blog-window__header,
+  .blog-preview__layout-compare,
+  .blog-preview__count-compare,
+  .blog-preview__select-compare,
+  .blog-preview__layout,
+  .blog-preview__count,
+  .blog-preview__signals,
+  .blog-preview__console {
+    padding: 0.52rem;
+  }
+
+  .blog-window__meta span,
+  .blog-window__notes li,
+  .blog-window__summary {
+    overflow-wrap: anywhere;
   }
 }

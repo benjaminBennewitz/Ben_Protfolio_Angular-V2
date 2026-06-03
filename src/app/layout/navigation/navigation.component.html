@@ -33,6 +33,10 @@
       <span class="material-symbols-outlined" aria-hidden="true">emoji_events</span>
     </a>
 
+    <button class="nav__action nav__access" type="button" [attr.aria-label]="accessLabel()" (click)="openAccessPanel()">
+      <span class="material-symbols-outlined" aria-hidden="true">accessibility_new</span>
+    </button>
+
     <a class="nav__contact" routerLink="/" fragment="contact" [attr.aria-label]="content().contactAccessLabel"
       (click)="closeMenu()">
       <span>// terminal_access</span>

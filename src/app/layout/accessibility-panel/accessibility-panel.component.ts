@@ -5,10 +5,12 @@
  * @description Bietet Motion-, Comfort-, Kontrast- und Farbseh-Modi als direkte Seitenmodifikation an.
  */
 
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { AccessibilityPreferenceService, ColorVisionMode, ComfortMode, ContrastMode, MotionMode } from '../../core/services/accessibility-preference.service';
 import { LanguageService } from '../../core/services/language.service';
 import { SystemToastService } from '../../core/services/system-toast.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { GlobalOverlayService } from '../../core/services/global-overlay.service';
 
 /** Übersetzte Beschriftungen des Accessibility-Panels. */
 interface AccessibilityPanelTexts {
@@ -65,6 +67,12 @@ export class AccessibilityPanelComponent {
   /** Toast-Service für kurze Accessibility-Hinweise. */
   private readonly toastService = inject(SystemToastService);
 
+  /** Lifecycle-Referenz für externe Öffnen-Events. */
+  private readonly destroyRef = inject(DestroyRef);
+
+  /** Overlay-Service für globale Öffnen-Events. */
+  private readonly overlayService = inject(GlobalOverlayService);
+
   /** Sichtbarkeit des Panels. */
   readonly open = signal<boolean>(false);
 
@@ -95,6 +103,13 @@ export class AccessibilityPanelComponent {
       texts.color[preferences.colorVision],
     ].join(' · ');
   });
+
+  /** Verbindet externe Öffnen-Events mit dem lokalen Panel-Zustand. */
+  constructor() {
+    this.overlayService.accessibilityPanelRequested$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.open.set(true));
+  }
 
   /** Öffnet oder schließt das Panel. */
   toggleOpen(): void {

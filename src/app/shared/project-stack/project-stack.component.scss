@@ -344,6 +344,10 @@
   overflow: hidden;
 }
 
+.project-stack__game-layer--visual {
+  display: none;
+}
+
 .project-stack__game-body {
   position: absolute;
   top: 0;
@@ -375,6 +379,10 @@
   inset: 0;
   z-index: 6;
   pointer-events: none;
+}
+
+.project-stack__oneup-layer--visual {
+  display: none;
 }
 
 .project-stack__oneup {
@@ -868,5 +876,85 @@
     --paper-land-y: -112px;
     left: 0.75rem;
     width: min(88vw, 300px);
+  }
+}
+
+
+/* ==========================================================================
+   15   Mobile Game Bühne
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  .project-stack__panel--game {
+    min-height: 100svh;
+  }
+
+  .project-stack__panel--game .project-stack__copy .bp-button {
+    width: fit-content;
+    max-width: 100%;
+    min-width: 0;
+    justify-self: start;
+  }
+
+  .project-stack__game-layer--panel,
+  .project-stack__oneup-layer--panel {
+    display: none;
+  }
+
+  .project-stack__game-layer--visual,
+  .project-stack__oneup-layer--visual {
+    display: block;
+    z-index: 8;
+    opacity: 0.92;
+  }
+
+  .project-stack__oneup-layer--visual {
+    z-index: 10;
+    opacity: 1;
+  }
+
+  .project-stack__oneup-layer--visual .project-stack__oneup {
+    bottom: 19%;
+    width: clamp(46px, 15vw, 62px);
+  }
+
+  .project-stack__game-body {
+    pointer-events: none;
+  }
+
+  .project-stack__game-item {
+    max-width: 34px;
+    max-height: 34px;
+  }
+
+  .project-stack__panel--game .project-stack__copy {
+    z-index: 4;
+  }
+
+  .project-stack__panel--game .project-stack__visual {
+    z-index: 3;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 420px) {
+  .project-stack__panel--game {
+    min-height: 100svh;
+    overflow: hidden;
+  }
+
+  .project-stack__panel--game .project-stack__copy h3 {
+    width: min-content;
+    max-width: 9ch;
+  }
+
+  .project-stack__game-layer--visual {
+    inset: 0;
+    opacity: 0.86;
+  }
+
+  .project-stack__game-item {
+    max-width: 30px;
+    max-height: 30px;
   }
 }

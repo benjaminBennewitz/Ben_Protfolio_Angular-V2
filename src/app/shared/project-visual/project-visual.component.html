@@ -8,10 +8,15 @@
       <span>{{ project.kicker }}</span>
       <strong>{{ project.name }}</strong>
     </div>
-    <div class="visual__window visual__window--two">
+    @if (!onlineWindowClosed()) {
+    <div class="visual__window visual__window--two" [class.visual__window--closable]="isOnlineWindowClosable()">
+      @if (isOnlineWindowClosable()) {
+      <button class="visual__window-close" type="button" (click)="closeOnlineWindow($event)" aria-label="Online-Statusfenster schließen">×</button>
+      }
       <span>system.status</span>
       <strong>online</strong>
     </div>
+    }
 
     @if (primaryAssetSrc(); as primaryAsset) {
     @if (isEyeInteractive()) {

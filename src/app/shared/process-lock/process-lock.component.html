@@ -25,7 +25,7 @@
 
     <div class="process-lock__steps" aria-label="Prozessschritte">
       @for (step of steps; track step.number; let index = $index) {
-      <article class="process-lock__step" [class.process-lock__step--active]="isStepVisible(index)">
+      <article class="process-lock__step" [class.process-lock__step--active]="isStepVisible(index)" [class.process-lock__step--current]="activeIndex() === index" [class.process-lock__step--next]="isNextStep(index)" [style.--step-index]="index">
         <span>{{ step.number }}</span>
         <h3>{{ step.title }}</h3>
         <p>{{ step.text }}</p>

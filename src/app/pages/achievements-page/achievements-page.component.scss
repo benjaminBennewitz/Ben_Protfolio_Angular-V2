@@ -36,6 +36,7 @@
   grid-template-columns: minmax(540px, 0.76fr) minmax(0, 1.24fr);
   gap: clamp(2rem, 4vw, 4.8rem);
   align-items: start;
+  min-width: 0;
 }
 
 /* ========================================================================== 
@@ -90,6 +91,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  min-width: 0;
   margin-top: var(--bp-space-5);
   padding: 1rem;
 }
@@ -144,8 +146,9 @@
 
 .achievements__list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+  min-width: 0;
   padding-top: clamp(12.2rem, 15vw, 16.2rem);
 }
 
@@ -153,6 +156,9 @@
   display: grid;
   grid-template-columns: 88px minmax(0, 1fr);
   gap: 1rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   min-height: 184px;
   padding: 1rem;
   overflow: visible;
@@ -286,7 +292,53 @@
 }
 
 @media (max-width: 560px) {
+  .achievements {
+    padding-bottom: var(--bp-space-6);
+    margin-bottom: var(--bp-space-5);
+  }
+
+  .achievements h1 {
+    font-size: clamp(2rem, 15vw, 3.2rem);
+    overflow-wrap: anywhere;
+  }
+
+  .achievements__progress {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .achievements__progress strong {
+    font-size: clamp(2rem, 18vw, 3rem);
+  }
+
   .achievement-card {
     grid-template-columns: 1fr;
+    gap: 0.8rem;
+    min-height: 0;
+    padding: 0.85rem;
+  }
+
+  .achievement-card__visual {
+    width: 76px;
+    height: 76px;
+  }
+}
+
+@media (max-width: 360px) {
+  .achievements__grid {
+    gap: 1.35rem;
+  }
+
+  .achievement-card {
+    padding: 0.72rem;
+  }
+
+  .achievement-card__copy h2 {
+    font-size: 1.1rem;
+  }
+
+  .achievement-card__copy p {
+    font-size: 0.92rem;
   }
 }

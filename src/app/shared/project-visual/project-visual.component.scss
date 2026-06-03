@@ -224,6 +224,35 @@
   transform: rotate(4deg);
 }
 
+.visual__window-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 4;
+  display: none;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid #111111;
+  border-radius: 0;
+  padding: 0;
+  background: #ff2b2b;
+  color: #ffffff;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.34);
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
+}
+
+.visual__window-close:hover,
+.visual__window-close:focus-visible {
+  background: #d90026;
+  color: #ffffff;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.42);
+  transform: translate(-1px, -1px);
+}
+
 /* ==========================================================================
    04   Assets und Hover
    ========================================================================== */
@@ -1115,6 +1144,18 @@
 /* ==========================================================================
    13   Responsive
    ========================================================================== */
+
+
+@media (max-width: 760px) {
+  .visual[data-project='html5-browser-game'] .visual__window--closable {
+    min-width: min(188px, calc(100% - 1.5rem));
+    padding-right: 2rem;
+  }
+
+  .visual[data-project='html5-browser-game'] .visual__window-close {
+    display: grid;
+  }
+}
 
 @media (max-width: 1080px) {
   .visual-shell[data-project='blutanalyse'] {

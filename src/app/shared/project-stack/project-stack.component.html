@@ -8,8 +8,8 @@
     <div class="project-stack__noise" aria-hidden="true"></div>
 
     @if (project.slug === 'html5-browser-game') {
-    <div class="project-stack__game-layer" aria-hidden="true">
-      @for (item of project2PhysicsItems; track item.src; let itemIndex = $index) {
+    <div class="project-stack__game-layer project-stack__game-layer--panel" aria-hidden="true">
+      @for (item of project2ActivePhysicsItems(); track item.src; let itemIndex = $index) {
       <span class="project-stack__game-body" [style.width]="project2ItemStyleAt(itemIndex, 'width')"
         [style.height]="project2ItemStyleAt(itemIndex, 'height')"
         [style.transform]="project2ItemStyleAt(itemIndex, 'transform')">
@@ -19,7 +19,7 @@
       }
     </div>
 
-    <div class="project-stack__oneup-layer" aria-hidden="true">
+    <div class="project-stack__oneup-layer project-stack__oneup-layer--panel" aria-hidden="true">
       @for (oneUp of project2OneUps(); track oneUp) {
       <img class="project-stack__oneup" src="assets/images/project-stack/project_2/pj2_1up.webp" alt="" width="910" height="466" loading="lazy" decoding="async" />
       }
@@ -73,6 +73,25 @@
     <div class="project-stack__visual" bpReveal>
       <bp-project-visual [project]="project" [large]="true" [hideAssets]="project.slug === 'asana-klon'"
         [showTaskStatus]="project.slug === 'asana-klon'" [taskStatusSaved]="project3SuccessVisible()" [labels]="labels" />
+
+      @if (project.slug === 'html5-browser-game') {
+      <div class="project-stack__game-layer project-stack__game-layer--visual" aria-hidden="true">
+        @for (item of project2ActivePhysicsItems(); track item.src; let itemIndex = $index) {
+        <span class="project-stack__game-body" [style.width]="project2ItemStyleAt(itemIndex, 'width')"
+          [style.height]="project2ItemStyleAt(itemIndex, 'height')"
+          [style.transform]="project2ItemStyleAt(itemIndex, 'transform')">
+          <img class="project-stack__game-item" [src]="item.src" alt="" [attr.width]="item.naturalWidth"
+            [attr.height]="item.naturalHeight" loading="lazy" decoding="async" />
+        </span>
+        }
+      </div>
+
+      <div class="project-stack__oneup-layer project-stack__oneup-layer--visual" aria-hidden="true">
+        @for (oneUp of project2OneUps(); track oneUp) {
+        <img class="project-stack__oneup" src="assets/images/project-stack/project_2/pj2_1up.webp" alt="" width="910" height="466" loading="lazy" decoding="async" />
+        }
+      </div>
+      }
     </div>
 
     <aside class="project-stack__previews" [attr.aria-label]="labels.previewAriaLabel">

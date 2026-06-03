@@ -153,6 +153,9 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     { src: 'assets/images/project-stack/project_2/pj2_flag.webp', naturalWidth: 716, naturalHeight: 1013 },
   ];
 
+  /** Auf Mobile reduzierte und sonst vollständige Projekt-2-Assetliste. */
+  readonly project2ActivePhysicsItems = signal<readonly Project2PhysicsItem[]>(this.project2PhysicsItems);
+
   /** Simulationszustand der Projekt-2-Assets. */
   private project2Items: Project2PhysicsState[] = [];
 
@@ -356,7 +359,7 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     }
 
     const panel = event.currentTarget as HTMLElement | null;
-    const rect = panel?.getBoundingClientRect();
+    const rect = this.project2StageElement()?.getBoundingClientRect() ?? panel?.getBoundingClientRect();
 
     if (!rect) {
       return;
@@ -525,17 +528,50 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     this.project2Observer?.disconnect();
     this.project2Observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry?.isIntersecting && entry.intersectionRatio >= 0.42) {
+        if (entry?.isIntersecting && entry.intersectionRatio >= this.project2VisibilityThreshold()) {
           this.startProject2Physics();
           return;
         }
 
         this.pauseProject2Physics();
       },
-      { threshold: [0, 0.42], rootMargin: '-4% 0px -4% 0px' },
+      { threshold: [0, 0.14, 0.42], rootMargin: '-4% 0px -4% 0px' },
     );
 
     this.project2Observer.observe(project2Panel);
+  }
+
+
+  /** Liefert den Start-Schwellwert für die Game-Physics je Viewport. */
+  private project2VisibilityThreshold(): number {
+    return window.matchMedia('(max-width: 760px)').matches ? 0.14 : 0.42;
+  }
+
+  /** Liefert eine kompaktere Kollisionsgröße für kleine Projektbühnen. */
+  private project2ItemSize(panelWidth: number): number {
+    return panelWidth <= 420 ? 30 : panelWidth <= 760 ? 34 : 45;
+  }
+
+  /** Gibt an, ob Projekt 2 die mobile Preview-Bühne als Spielfeld nutzt. */
+  private project2UsesCompactMobileSet(): boolean {
+    return window.matchMedia('(max-width: 760px)').matches;
+  }
+
+  /** Liefert die aktive Assetliste und entfernt mobil sechs Objekte aus der Simulation. */
+  private activeProject2PhysicsItems(): readonly Project2PhysicsItem[] {
+    if (!this.project2UsesCompactMobileSet()) {
+      return this.project2PhysicsItems;
+    }
+
+    return this.project2PhysicsItems.slice(0, Math.max(1, this.project2PhysicsItems.length - 6));
+  }
+
+  /** Aktualisiert die sichtbare Assetliste für Template und Simulationszustand. */
+  private updateProject2ActivePhysicsItems(): readonly Project2PhysicsItem[] {
+    const items = this.activeProject2PhysicsItems();
+
+    this.project2ActivePhysicsItems.set(items);
+    return items;
   }
 
   /** Beobachtet Projekt 5 und startet den Typewriter nur bei Sichtbarkeit. */
@@ -593,14 +629,16 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Erstellt Startwerte oberhalb der Projektbühne. */
   private resetProject2Items(): void {
-    const panel = this.project2PanelElement();
-    const width = panel?.clientWidth ?? window.innerWidth;
+    const stage = this.project2StageElement();
+    const width = stage?.clientWidth ?? window.innerWidth;
     const centerX = width * 0.5;
-    const spread = Math.min(300, width * 0.32);
+    const itemSize = this.project2ItemSize(width);
+    const physicsItems = this.updateProject2ActivePhysicsItems();
+    const spread = Math.min(width <= 640 ? width * 0.62 : 300, width * 0.34);
 
-    this.project2Items = this.project2PhysicsItems.map((item, index) => {
-      const slot = index - (this.project2PhysicsItems.length - 1) / 2;
-      const normalizedSlot = slot / Math.max(1, this.project2PhysicsItems.length / 2);
+    this.project2Items = physicsItems.map((item, index) => {
+      const slot = index - (physicsItems.length - 1) / 2;
+      const normalizedSlot = slot / Math.max(1, physicsItems.length / 2);
       const wobble = [0, -18, 12, -7, 22, -14, 9, -21][index % 8] ?? 0;
 
       return {
@@ -611,8 +649,8 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
         vy: 0,
         rotation: [-10, 8, -16, 14, -6, 18][index % 6] ?? 0,
         angularVelocity: [-0.12, 0.1, -0.08, 0.14, -0.1, 0.09][index % 6] ?? 0.08,
-        width: 45,
-        height: 45,
+        width: itemSize,
+        height: itemSize,
         resting: false,
         touchedFloor: false,
       };
@@ -624,16 +662,18 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   /** Simuliert Gravitation, Cursor-Abstoßung, Grenzen, Objekt- und UI-Kollisionen. */
   private tickProject2Physics(): void {
     const panel = this.project2PanelElement();
+    const stage = this.project2StageElement();
 
-    if (!panel || this.accessibility.reducesMotion()) {
+    if (!panel || !stage || this.accessibility.reducesMotion()) {
       this.pauseProject2Physics();
       return;
     }
 
-    const width = panel.clientWidth;
-    const height = panel.clientHeight;
-    const floor = Math.max(220, height - 50);
-    const obstacles = this.project2Obstacles(panel);
+    const width = stage.clientWidth;
+    const height = stage.clientHeight;
+    const floorOffset = this.project2UsesVisualStage() ? 24 : 50;
+    const floor = Math.max(160, height - floorOffset);
+    const obstacles = this.project2Obstacles(panel, stage);
 
     for (const item of this.project2Items) {
       this.applyProject2PointerForce(item);
@@ -778,27 +818,31 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   }
 
   /** Ermittelt statische UI-Flächen, mit denen die Assets kollidieren sollen. */
-  private project2Obstacles(panel: HTMLElement): readonly Project2Obstacle[] {
-    return ['.project-stack__copy', '.project-stack__visual', '.project-stack__previews', '.project-stack__game-thumb']
-      .map((selector) => this.project2ObstacleFromSelector(panel, selector))
+  private project2Obstacles(panel: HTMLElement, stage: HTMLElement): readonly Project2Obstacle[] {
+    const selectors = this.project2UsesVisualStage()
+      ? ['.visual__window--one', '.visual__window--two']
+      : ['.project-stack__copy', '.project-stack__visual', '.project-stack__previews', '.project-stack__game-thumb'];
+
+    return selectors
+      .map((selector) => this.project2ObstacleFromSelector(panel, stage, selector))
       .filter((obstacle): obstacle is Project2Obstacle => Boolean(obstacle));
   }
 
   /** Wandelt ein Element in eine relative Kollisionsfläche um. */
-  private project2ObstacleFromSelector(panel: HTMLElement, selector: string): Project2Obstacle | null {
+  private project2ObstacleFromSelector(panel: HTMLElement, stage: HTMLElement, selector: string): Project2Obstacle | null {
     const element = panel.querySelector<HTMLElement>(selector);
 
     if (!element) {
       return null;
     }
 
-    const panelRect = panel.getBoundingClientRect();
+    const stageRect = stage.getBoundingClientRect();
     const rect = element.getBoundingClientRect();
-    const inset = selector === '.project-stack__visual' ? 10 : 4;
+    const inset = selector.includes('visual__window') ? 2 : selector === '.project-stack__visual' ? 10 : 4;
 
     return {
-      x: rect.left - panelRect.left + inset,
-      y: rect.top - panelRect.top + inset,
+      x: rect.left - stageRect.left + inset,
+      y: rect.top - stageRect.top + inset,
       width: Math.max(0, rect.width - inset * 2),
       height: Math.max(0, rect.height - inset * 2),
     };
@@ -806,9 +850,10 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Setzt die Assets bei reduzierter Bewegung direkt auf den Boden. */
   private snapProject2ItemsToFloor(): void {
-    const panel = this.project2PanelElement();
-    const width = panel?.clientWidth ?? window.innerWidth;
-    const floor = Math.max(220, (panel?.clientHeight ?? window.innerHeight) - 50);
+    const stage = this.project2StageElement();
+    const width = stage?.clientWidth ?? window.innerWidth;
+    const floorOffset = this.project2UsesVisualStage() ? 24 : 50;
+    const floor = Math.max(160, (stage?.clientHeight ?? window.innerHeight) - floorOffset);
 
     this.project2Items.forEach((item, index) => {
       item.x = Math.min(width - item.width - 12, 80 + index * 54);
@@ -896,6 +941,22 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     if (Math.abs(item.angularVelocity) < 0.04) {
       item.angularVelocity = 0;
     }
+  }
+
+  /** Prüft, ob die Game-Assets auf der mobilen Preview-Bühne laufen. */
+  private project2UsesVisualStage(): boolean {
+    return window.matchMedia('(max-width: 760px)').matches;
+  }
+
+  /** Liefert die aktive Game-Bühne für Desktop oder Mobile. */
+  private project2StageElement(): HTMLElement | null {
+    const panel = this.project2PanelElement();
+
+    if (!panel || !this.project2UsesVisualStage()) {
+      return panel;
+    }
+
+    return panel.querySelector<HTMLElement>('.project-stack__game-layer--visual') ?? panel;
   }
 
   /** Liefert das Projekt-2-Panel. */

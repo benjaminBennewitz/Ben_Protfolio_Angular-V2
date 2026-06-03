@@ -89,6 +89,9 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
   /** Aktueller Gesamtzustand der Blutanalyse. */
   private readonly bloodState = signal<BloodAnalysisState>('idle');
 
+  /** Merkt, ob das mobile Online-Fenster geschlossen wurde. */
+  readonly onlineWindowClosed = signal(false);
+
   /** Sichtbarkeit des Arms der Blutanalyse-Szene. */
   private readonly bloodArmVisible = signal(false);
 
@@ -191,7 +194,7 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
 
   /** Gibt an, ob die Preview interaktive Assets enthält. */
   hasInteractiveAssets(): boolean {
-    return this.isIntranetProject() || this.isBloodAnalysisProject();
+    return this.isIntranetProject() || this.isBloodAnalysisProject() || this.isOnlineWindowClosable();
   }
 
   /** Liefert das Status-Asset für die Asana-Preview. */
@@ -237,6 +240,11 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
   /** Gibt an, ob die Blutanalyse-Variante gerendert wird. */
   isBloodAnalysisProject(): boolean {
     return this.project.slug === 'blutanalyse';
+  }
+
+  /** Gibt an, ob das Online-Fenster geschlossen werden darf. */
+  isOnlineWindowClosable(): boolean {
+    return this.project.slug === 'html5-browser-game';
   }
 
   /** Liefert den linken Viewport-Abstand als CSS-Wert. */
@@ -323,6 +331,18 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
   /** Gibt an, ob ein Statusschritt bereits aktiv ist. */
   bloodStatusIsActive(index: number): boolean {
     return this.bloodStatusIndex() >= index;
+  }
+
+  /** Schließt das mobile Online-Fenster der Game-Preview. */
+  closeOnlineWindow(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!this.isOnlineWindowClosable()) {
+      return;
+    }
+
+    this.onlineWindowClosed.set(true);
   }
 
   /** Aktiviert kurz das verletzte Auge und lässt die Träne laufen. */

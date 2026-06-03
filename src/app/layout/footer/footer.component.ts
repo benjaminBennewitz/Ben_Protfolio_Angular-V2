@@ -9,6 +9,7 @@ import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AchievementService } from '../../core/services/achievement.service';
 import { LanguageService } from '../../core/services/language.service';
+import { GlobalOverlayService } from '../../core/services/global-overlay.service';
 
 /** Footer mit semantischen Linkgruppen. */
 @Component({
@@ -25,13 +26,31 @@ export class FooterComponent {
   /** Achievement-Service für die versteckte Fülli-Trophäe. */
   private readonly achievementService = inject(AchievementService);
 
+  /** Overlay-Service für Footer-Auslöser. */
+  private readonly overlayService = inject(GlobalOverlayService);
+
   /** Aktueller Footer-Inhalt. */
   readonly footer = computed(() => this.languageService.content().footer);
+
+  /** Beschriftung des Privacy-Control-Eintrags. */
+  readonly privacyControlLabel = computed(() => this.languageService.language() === 'de' ? 'Cookie-Einstellungen' : 'Cookie settings');
+
+
+  /** Rechtliche Footer-Labels für dezente Meta-Navigation. */
+  readonly legalLabels = computed(() => this.languageService.language() === 'de'
+    ? { ariaLabel: 'Rechtliche Hinweise', imprint: 'Impressum' }
+    : { ariaLabel: 'Legal information', imprint: 'Legal notice' });
+
   /** Aktuelles Jahr für Copyright-Ausgabe. */
   readonly year = new Date().getFullYear();
   /** Schaltet die versteckte Fülli-Trophäe frei. */
   unlockPetAchievement(): void {
     this.achievementService.unlock('loyal-companion');
+  }
+
+  /** Öffnet das Cookie-/Privacy-Panel über den Footer. */
+  openPrivacyControls(): void {
+    this.overlayService.requestPrivacyPanel();
   }
 
   /** Prüft, ob ein Link als interne Angular-Route gerendert werden soll. */

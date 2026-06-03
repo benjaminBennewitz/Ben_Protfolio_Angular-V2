@@ -213,6 +213,7 @@
 }
 
 .process-lock__step {
+  --step-index: 0;
   border: 1px solid var(--bp-color-border);
   padding: clamp(0.85rem, 1vw, 1.1rem) clamp(1rem, 1.35vw, 1.35rem);
   background: color-mix(in srgb, var(--bp-color-bg) 68%, transparent);
@@ -318,5 +319,154 @@
 
   .process-lock__orbit {
     width: clamp(168px, 58vw, 250px);
+  }
+}
+
+
+/* ==========================================================================
+   09   Tablet und Mobile Scroll Deck
+   ========================================================================== */
+
+@media (max-width: 1120px) {
+  .process-lock {
+    height: calc(100svh * var(--step-total));
+    min-height: 420svh;
+  }
+
+  .process-lock__sticky {
+    position: sticky;
+    top: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(138px, 0.48fr) minmax(260px, 0.78fr);
+    align-content: stretch;
+    height: 100svh;
+    min-height: 100svh;
+    overflow: hidden;
+  }
+
+  .process-lock__object {
+    position: relative;
+    align-self: center;
+    min-height: 0;
+    z-index: 2;
+  }
+
+  .process-lock__cube {
+    width: clamp(118px, 22vw, 210px);
+  }
+
+  .process-lock__orbit {
+    width: clamp(178px, 34vw, 310px);
+  }
+
+  .process-lock__steps {
+    position: relative;
+    align-self: start;
+    min-height: clamp(250px, 34svh, 340px);
+    overflow: hidden;
+    perspective: 720px;
+  }
+
+  .process-lock__step {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    display: block;
+    max-height: min(46svh, 360px);
+    overflow: auto;
+    padding: clamp(0.78rem, 1.6vw, 1rem) clamp(0.9rem, 2vw, 1.18rem);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate3d(0, 3.5rem, -80px) scale(0.92);
+  }
+
+  .process-lock__step--active {
+    z-index: calc(var(--step-index) + 1);
+    opacity: 0.28;
+    transform: translate3d(0, -0.9rem, -64px) scale(0.94);
+  }
+
+  .process-lock__step--current {
+    z-index: 50;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  .process-lock__step--next {
+    z-index: 42;
+    border-color: color-mix(in srgb, var(--bp-color-accent) 70%, var(--bp-color-border));
+    opacity: 0.58;
+    transform: translate3d(0, calc(100% - 2.45rem), -38px) scale(0.955);
+  }
+
+  .process-lock__step h3 {
+    font-size: clamp(1.35rem, 3.1vw, 2.05rem);
+  }
+
+  .process-lock__step p {
+    font-size: clamp(0.92rem, 1.7vw, 1rem);
+    line-height: 1.48;
+  }
+
+  .process-lock__step code {
+    font-size: clamp(0.74rem, 1.45vw, 0.82rem);
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1120px) {
+  .process-lock__cube {
+    width: clamp(154px, 28.6vw, 273px);
+  }
+
+  .process-lock__orbit {
+    width: clamp(231px, 44.2vw, 403px);
+  }
+}
+
+@media (max-width: 640px) {
+  .process-lock {
+    min-height: 430svh;
+  }
+
+  .process-lock__sticky {
+    grid-template-rows: auto minmax(120px, 0.38fr) minmax(244px, 0.72fr);
+    gap: var(--bp-space-3);
+  }
+
+  .process-lock__intro h2 {
+    font-size: clamp(2.05rem, 13vw, 3.8rem);
+  }
+
+  .process-lock__intro p:not(.bp-eyebrow) {
+    margin-top: var(--bp-space-3);
+    line-height: 1.52;
+  }
+
+  .process-lock__intro span {
+    margin-top: var(--bp-space-3);
+  }
+
+  .process-lock__cube {
+    width: clamp(96px, 34vw, 140px);
+  }
+
+  .process-lock__orbit {
+    width: clamp(146px, 52vw, 218px);
+  }
+
+  .process-lock__steps {
+    min-height: clamp(232px, 36svh, 310px);
+  }
+
+  .process-lock__step {
+    max-height: min(42svh, 300px);
+    padding: 0.82rem 0.92rem;
+  }
+
+  .process-lock__step--next {
+    transform: translate3d(0, calc(100% - 2.15rem), -36px) scale(0.95);
   }
 }

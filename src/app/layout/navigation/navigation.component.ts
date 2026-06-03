@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { SystemToastService } from '../../core/services/system-toast.service';
+import { GlobalOverlayService } from '../../core/services/global-overlay.service';
 
 /** Globale Navigation der Portfolio-Seite. */
 @Component({
@@ -29,6 +30,9 @@ export class NavigationComponent {
   /** Toast-Service für kurze Systemmeldungen. */
   private readonly toastService = inject(SystemToastService);
 
+  /** Overlay-Service für globale Panels aus der Navigation. */
+  private readonly overlayService = inject(GlobalOverlayService);
+
   /** Sichtbarkeit des mobilen Menüs. */
   readonly menuOpen = signal<boolean>(false);
 
@@ -41,6 +45,9 @@ export class NavigationComponent {
   /** Übersetzter Navigationsinhalt. */
   readonly content = computed(() => this.languageService.content().nav);
 
+  /** Beschriftung des mobilen Access-Buttons. */
+  readonly accessLabel = computed(() => this.languageService.language() === 'de' ? 'Access-Modus öffnen' : 'Open access mode');
+
   /** Öffnet oder schließt das mobile Menü. */
   toggleMenu(): void {
     this.menuOpen.update((isOpen) => !isOpen);
@@ -49,6 +56,12 @@ export class NavigationComponent {
   /** Schließt das mobile Menü nach einer Navigation. */
   closeMenu(): void {
     this.menuOpen.set(false);
+  }
+
+  /** Öffnet das globale Access-Panel aus der mobilen Navigation. */
+  openAccessPanel(): void {
+    this.overlayService.requestAccessibilityPanel();
+    this.closeMenu();
   }
 
   /** Wechselt das Theme und zeigt eine kurze Systemmeldung. */

@@ -232,6 +232,8 @@
   transform: scaleX(1);
 }
 
+
+
 /* =================================================================================================
    05   Social Icons
    ================================================================================================= */
@@ -394,9 +396,8 @@
    ================================================================================================= */
 
 .footer__bottom {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
+  display: grid;
+  gap: 0.78rem;
   margin-top: var(--bp-space-6);
   border-top: 1px solid var(--bp-color-border);
   padding-top: var(--bp-space-4);
@@ -406,15 +407,62 @@
   font-size: 0.82rem;
 }
 
+.footer__legal,
+.footer__bottom-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem 1rem;
+}
+
+.footer__legal {
+  justify-content: flex-start;
+  color: color-mix(in srgb, var(--bp-color-text-muted) 86%, transparent);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.footer__legal-link,
+.footer__legal-action {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  transition: color 160ms ease, text-shadow 160ms ease;
+}
+
+.footer__legal-link:hover,
+.footer__legal-link:focus-visible,
+.footer__legal-action:hover,
+.footer__legal-action:focus-visible {
+  color: var(--bp-color-accent);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--bp-color-accent) 30%, transparent);
+}
+
+.footer__legal-link:focus-visible,
+.footer__legal-action:focus-visible {
+  outline: 2px solid var(--bp-color-accent);
+  outline-offset: 4px;
+}
+
 /* =================================================================================================
    08   Responsive
    ================================================================================================= */
 
 @media (max-width: 980px) {
 
-  .footer__grid,
-  .footer__columns {
+  .footer__grid {
     grid-template-columns: 1fr;
+  }
+
+  .footer__columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .footer__links {
@@ -422,9 +470,9 @@
     justify-self: stretch;
   }
 
-  .footer__bottom {
-    flex-direction: column;
-    align-items: flex-start;
+  .footer__legal,
+  .footer__bottom-main {
+    justify-content: flex-start;
   }
 
   .footer__links {
@@ -461,12 +509,29 @@
   }
 
   .footer__links {
+    gap: var(--bp-space-5);
     padding: var(--bp-space-4);
+  }
+
+  .footer__columns {
+    gap: var(--bp-space-6);
+  }
+
+  .footer__column ul {
+    gap: 0.9rem;
+  }
+
+  .footer__column h3 {
+    margin-bottom: 1.15rem;
   }
 
   .footer__terminal-head {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .footer__columns {
+    grid-template-columns: 1fr;
   }
 
 
@@ -501,7 +566,7 @@
   }
 
   .footer__columns {
-    gap: var(--bp-space-4);
+    gap: var(--bp-space-5);
   }
 
   .footer__pet-trigger {
@@ -511,5 +576,37 @@
 
   .footer__pet-dialog {
     width: min(214px, calc(100vw - 1.25rem));
+  }
+}
+
+
+/* =================================================================================================
+   09   Footer Label Stack
+   ================================================================================================= */
+
+.footer__brand {
+  display: grid;
+  justify-items: start;
+}
+
+.footer__brand .bp-eyebrow {
+  display: inline-flex;
+  grid-row: 1;
+  max-width: 100%;
+}
+
+.footer__title-wrap {
+  grid-row: 2;
+}
+
+@media (max-width: 1180px) {
+  .footer__brand {
+    display: grid;
+    justify-items: start;
+  }
+
+  .footer__brand .bp-eyebrow,
+  .footer__title-wrap {
+    grid-column: 1;
   }
 }

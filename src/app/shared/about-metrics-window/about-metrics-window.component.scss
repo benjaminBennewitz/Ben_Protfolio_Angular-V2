@@ -790,3 +790,42 @@
     animation: none;
   }
 }
+
+
+/* ========================================================================== 
+   10   Mobile Rechnerposition
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  .about-metrics__calculator-teaser {
+    position: static;
+    justify-self: center;
+    width: min(17rem, 100%);
+    margin: 0.85rem auto 0;
+    transform: none;
+  }
+
+  .about-metrics__calculator-teaser:hover,
+  .about-metrics__calculator-teaser:focus-visible {
+    transform: translate(-2px, -2px);
+  }
+
+  .about-metrics__calculator {
+    position: fixed;
+    top: max(4.4rem, env(safe-area-inset-top));
+    right: max(0.75rem, env(safe-area-inset-right));
+    left: max(0.75rem, env(safe-area-inset-left));
+    width: auto;
+    max-height: calc(100svh - 5.4rem);
+  }
+}
+
+@media (max-width: 420px) {
+  .about-metrics__calculator {
+    top: max(4.15rem, env(safe-area-inset-top));
+    right: max(0.62rem, env(safe-area-inset-right));
+    left: max(0.62rem, env(safe-area-inset-left));
+    width: auto;
+    max-height: calc(100svh - 5rem);
+  }
+}

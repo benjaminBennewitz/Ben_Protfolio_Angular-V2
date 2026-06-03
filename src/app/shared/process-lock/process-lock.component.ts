@@ -71,4 +71,9 @@ export class ProcessLockComponent {
   isStepVisible(index: number): boolean {
     return index <= this.activeIndex();
   }
+
+  /** Prüft, ob ein Schritt als nächste Vorschaukarte angezeigt wird. */
+  isNextStep(index: number): boolean {
+    return index === this.activeIndex() + 1;
+  }
 }

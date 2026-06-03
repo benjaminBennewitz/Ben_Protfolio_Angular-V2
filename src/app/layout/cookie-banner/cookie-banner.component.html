@@ -1,9 +1,4 @@
 <!-- src/app/layout/cookie-banner/cookie-banner.component.html -->
-<button class="cookie-consent-toggle" type="button" [class.is-active]="visible()" [attr.aria-label]="texts().toggleLabel"
-  [title]="texts().toggleLabel" (click)="reopenBanner()">
-  <span class="material-symbols-outlined" aria-hidden="true">cookie</span>
-</button>
-
 @if (visible()) {
 <section class="cookie-banner" [class.cookie-banner--details]="detailsOpen()" role="dialog" aria-live="polite"
   [attr.aria-label]="texts().ariaLabel">

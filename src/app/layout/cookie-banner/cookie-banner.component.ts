@@ -5,9 +5,11 @@
  * @description Informiert über notwendige lokale Technologien ohne externe Consent-Dienstleister.
  */
 
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { LanguageService } from '../../core/services/language.service';
 import { SystemToastService } from '../../core/services/system-toast.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { GlobalOverlayService } from '../../core/services/global-overlay.service';
 
 /** Einzelner Eintrag im Privacy-Control-Panel. */
 interface PrivacyControlItem {
@@ -73,6 +75,12 @@ export class CookieBannerComponent {
   /** Toast-Service für kurze Privacy-Hinweise. */
   private readonly toastService = inject(SystemToastService);
 
+  /** Lifecycle-Referenz für externe Öffnen-Events. */
+  private readonly destroyRef = inject(DestroyRef);
+
+  /** Overlay-Service für globale Privacy-Auslöser. */
+  private readonly overlayService = inject(GlobalOverlayService);
+
   /** Schlüssel für die lokale Bestätigung des Hinweises. */
   private readonly storageKey = 'bp-cookie-consent-v1';
 
@@ -85,7 +93,14 @@ export class CookieBannerComponent {
   /** Übersetzte Bannertexte der aktiven Sprache. */
   readonly texts = computed<CookieBannerTexts>(() => COOKIE_BANNER_TEXTS[this.languageService.language()]);
 
-  /** Öffnet den Hinweis erneut über das globale Cookie-Icon. */
+  /** Verbindet Footer-Auslöser mit dem lokalen Banner-Zustand. */
+  constructor() {
+    this.overlayService.privacyPanelRequested$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.reopenBanner());
+  }
+
+  /** Öffnet den Hinweis erneut über den Footer-Eintrag. */
   reopenBanner(): void {
     this.visible.set(true);
     this.detailsOpen.set(true);

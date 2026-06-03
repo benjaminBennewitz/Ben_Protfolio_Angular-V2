@@ -958,3 +958,49 @@
     max-height: 30px;
   }
 }
+
+/* ==========================================================================
+   16   Responsive Projekt-Navi Korrektur
+   ========================================================================== */
+
+@media (min-width: 1121px) and (max-width: 1500px) {
+  .project-stack__panel {
+    grid-template-columns: minmax(0, 0.72fr) minmax(340px, 0.98fr) minmax(168px, 0.22fr);
+    gap: clamp(1rem, 2vw, 2rem);
+    padding-right: max(var(--bp-stage-gutter), clamp(1.25rem, 2.8vw, 3rem));
+  }
+
+  .project-stack__panel--intro {
+    grid-template-columns: minmax(0, 0.72fr) minmax(340px, 0.98fr) minmax(178px, 0.24fr);
+  }
+
+  .project-stack__previews {
+    width: min(100%, 180px);
+    margin-right: 0;
+  }
+
+  .project-stack__preview {
+    grid-template-columns: 28px minmax(0, 1fr);
+    min-height: 56px;
+    padding: 0.4rem;
+  }
+
+  .project-stack__preview span {
+    width: 28px;
+    height: 28px;
+    font-size: 0.76rem;
+  }
+
+  .project-stack__preview strong {
+    min-width: 0;
+    font-size: 0.56rem;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  .project-stack__decor-asset--shocked {
+    display: none;
+  }
+}

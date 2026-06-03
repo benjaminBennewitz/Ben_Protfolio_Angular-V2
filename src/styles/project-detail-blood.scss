@@ -408,3 +408,44 @@
 :root[data-motion='reduced'] .project-detail__character-fallback {
   animation: none;
 }
+
+/* ========================================================================== 
+   03   Detail-Fixes
+   ========================================================================== */
+
+.project-detail__blood-window,
+.project-detail__blood-guide,
+.project-detail__blood-document,
+.project-detail__blood-value,
+.project-detail__blood-guide-card,
+.project-detail__blood-step,
+.project-detail__blood-document > .material-symbols-outlined,
+.project-detail__blood-step > .material-symbols-outlined {
+  border-radius: 0;
+}
+
+.project-detail__blood-pipeline-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+}
+
+.project-detail__blood-step {
+  min-width: 0;
+}
+
+.project-detail__blood-step h3 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+@media (max-width: 1180px) {
+  .project-detail__blood-pipeline-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .project-detail__blood-pipeline-grid {
+    grid-template-columns: 1fr;
+  }
+}

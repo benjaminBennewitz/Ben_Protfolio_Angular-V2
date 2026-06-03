@@ -42,7 +42,7 @@
   color: var(--bp-color-text);
   box-shadow: 6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent), 0 18px 48px var(--bp-color-shadow);
   cursor: pointer;
-  transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+  transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
 }
 
 .cookie-consent-toggle:hover,
@@ -51,7 +51,8 @@
   border-color: var(--bp-color-accent);
   background: var(--bp-color-accent);
   color: var(--bp-color-on-accent);
-  transform: translateY(-2px);
+  box-shadow: 9px 9px 0 color-mix(in srgb, var(--bp-color-accent) 42%, transparent), 0 24px 62px var(--bp-color-shadow);
+  transform: translate3d(-2px, -2px, 0) rotate(-1.2deg);
 }
 
 .cookie-consent-toggle .material-symbols-outlined {
@@ -303,8 +304,8 @@
   border-color: var(--bp-color-accent);
   background: color-mix(in srgb, var(--bp-color-accent) 13%, var(--bp-color-surface));
   color: var(--bp-color-text);
-  box-shadow: 6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 54%, transparent);
-  transform: translate3d(-2px, -2px, 0) rotate(-0.9deg);
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 58%, transparent);
+  transform: translate3d(-2px, -2px, 0) rotate(-1.2deg);
 }
 
 .cookie-banner__submit:hover .material-symbols-outlined,

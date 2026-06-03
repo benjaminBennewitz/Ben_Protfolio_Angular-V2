@@ -28,18 +28,20 @@
         </button>
       </div>
 
-      <ul class="about-metrics__list">
+      <ul class="about-metrics__list" [class.is-weird-mode]="activeMode() === 'weird'">
         @for (fact of displayedFacts(); track fact.id) {
         <li class="about-metrics__item" [style.--metric-index]="$index">
           <span class="about-metrics__icon material-symbols-outlined" aria-hidden="true">{{ fact.icon }}</span>
-          <span class="about-metrics__label">{{ fact.label }}</span>
+          <span class="about-metrics__meta">
+            <span class="about-metrics__label">{{ fact.label }}</span>
+            <span class="about-metrics__note">{{ fact.note }}</span>
+          </span>
           <strong class="about-metrics__value">
             <span>{{ fact.value }}</span>
             @if (fact.unit) {
             <small>{{ fact.unit }}</small>
             }
           </strong>
-          <span class="about-metrics__note">{{ fact.note }}</span>
         </li>
         }
       </ul>
@@ -51,6 +53,69 @@
         <i aria-hidden="true"></i>
       </p>
     </div>
+
+    @if (isCalculatorTeaserVisible()) {
+    <button #calculatorTrigger class="about-metrics__calculator-teaser" type="button" aria-haspopup="dialog"
+      aria-controls="about-metrics-calculator" [attr.aria-expanded]="isCalculatorOpen()" (click)="openCalculator()">
+      <span class="material-symbols-outlined" aria-hidden="true">function</span>
+      <strong>{{ content().calculator.teaserTitle }}</strong>
+      <small>{{ content().calculator.teaserText }}</small>
+    </button>
+    }
   </aside>
+  }
+
+  @if (isCalculatorOpen()) {
+  <section #calculatorWindow id="about-metrics-calculator" class="about-metrics__calculator bp-dos-window"
+    role="dialog" tabindex="-1" [attr.aria-label]="content().calculator.dialogLabel">
+    <div class="bp-dos-window__bar">
+      <span>{{ content().calculator.title }}</span>
+      <button class="about-metrics__close" type="button" [attr.aria-label]="content().calculator.closeLabel"
+        (click)="closeCalculator()">×</button>
+    </div>
+
+    <div class="bp-dos-window__body about-metrics__calculator-body">
+      <p class="about-metrics__calculator-intro">{{ content().calculator.intro }}</p>
+
+      <div class="about-metrics__calculator-grid">
+        <label class="about-metrics__field">
+          <span>{{ content().calculator.heightLabel }}</span>
+          <input type="number" min="0" inputmode="decimal" [value]="calculatorHeightCm()"
+            (input)="updateCalculatorHeight($event)" />
+        </label>
+
+        <label class="about-metrics__field">
+          <span>{{ content().calculator.weightLabel }}</span>
+          <input type="number" min="0" inputmode="decimal" [value]="calculatorWeightKg()"
+            (input)="updateCalculatorWeight($event)" />
+        </label>
+
+        <label class="about-metrics__field about-metrics__field--wide">
+          <span>{{ content().calculator.unitLabel }}</span>
+          <select [value]="calculatorUnitKey()" (change)="updateCalculatorUnit($event)">
+            @for (unit of content().calculator.units; track unit.key) {
+            <option [value]="unit.key">{{ unit.label }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="about-metrics__calculator-results" [class.is-recalculating]="isRecalculating()">
+        <article>
+          <span>{{ content().calculator.heightResultLabel }}</span>
+          <strong>≈ {{ calculatorHeightResult().count }} <small>{{ calculatorHeightResult().unit }}</small></strong>
+          <code>{{ calculatorHeightResult().formula }}</code>
+        </article>
+        <article>
+          <span>{{ content().calculator.weightResultLabel }}</span>
+          <strong>≈ {{ calculatorWeightResult().count }} <small>{{ calculatorWeightResult().unit }}</small></strong>
+          <code>{{ calculatorWeightResult().formula }}</code>
+        </article>
+      </div>
+
+      <p class="about-metrics__calculator-note">{{ content().calculator.sourceNote }}</p>
+      <p class="about-metrics__calculator-warning">{{ content().calculator.sourceWarning }}</p>
+    </div>
+  </section>
   }
 </div>

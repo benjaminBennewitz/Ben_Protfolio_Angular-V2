@@ -1173,12 +1173,13 @@
    ========================================================================== */
 
 .about {
+  z-index: 4;
   min-height: 100svh;
   padding-top: calc(var(--bp-header-height) + var(--bp-space-4));
   padding-bottom: var(--bp-space-5);
   scroll-snap-align: start;
   scroll-snap-stop: normal;
-  overflow: hidden;
+  overflow: visible;
   background: linear-gradient(110deg, color-mix(in srgb, var(--bp-color-bg) 88%, black 12%), color-mix(in srgb, var(--bp-color-surface-solid) 72%, var(--bp-color-text) 8%));
 }
 

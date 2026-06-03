@@ -112,9 +112,56 @@ export interface AboutMetricsContent {
   readonly statusText: string;
   /** Kennzahlen, die zwischen normal und absurd wechseln. */
   readonly facts: readonly AboutMetricFact[];
+  /** Inhalte und Labels für den verzögerten Absurditäten-Rechner. */
+  readonly calculator: AboutMetricsCalculatorContent;
 }
 
 /** Einzelne Kennzahl im Fun-Metrics-Fenster. */
+/** Verfügbare Einheiten des Absurditäten-Rechners. */
+export type AboutMetricsCalculatorUnitKey = 'miniSpringRoll' | 'wiener' | 'mentos' | 'gummyBear';
+
+/** Inhalt des verzögerten Absurditäten-Rechners. */
+export interface AboutMetricsCalculatorContent {
+  /** Hauptzeile des seitlichen Teaser-Buttons. */
+  readonly teaserTitle: string;
+  /** Unterzeile des seitlichen Teaser-Buttons. */
+  readonly teaserText: string;
+  /** Zugängliche Beschriftung des Rechner-Dialogs. */
+  readonly dialogLabel: string;
+  /** Titel in der MS-DOS-Titelleiste. */
+  readonly title: string;
+  /** Kurzer Erklärungstext im Rechner. */
+  readonly intro: string;
+  /** Label für die Größeneingabe. */
+  readonly heightLabel: string;
+  /** Label für die Gewichtseingabe. */
+  readonly weightLabel: string;
+  /** Label für die Einheitenauswahl. */
+  readonly unitLabel: string;
+  /** Ergebnislabel für die Größe. */
+  readonly heightResultLabel: string;
+  /** Ergebnislabel für das Gewicht. */
+  readonly weightResultLabel: string;
+  /** Zugängliche Beschriftung zum Schließen des Rechners. */
+  readonly closeLabel: string;
+  /** Kurzer Hinweis zu den Berechnungswerten. */
+  readonly sourceNote: string;
+  /** Hinweis bei ungenauen oder nicht standardisierten Einheiten. */
+  readonly sourceWarning: string;
+  /** Sichtbare Einheitennamen für die Auswahl. */
+  readonly units: readonly AboutMetricsCalculatorUnitContent[];
+}
+
+/** Sichtbarer Einheitenname des Absurditäten-Rechners. */
+export interface AboutMetricsCalculatorUnitContent {
+  /** Stabile Einheit zur Verknüpfung mit den Rechenwerten. */
+  readonly key: AboutMetricsCalculatorUnitKey;
+  /** Voller sichtbarer Einheitenname. */
+  readonly label: string;
+  /** Kurzer Name für kompakte Ergebniszeilen. */
+  readonly shortLabel: string;
+}
+
 export interface AboutMetricFact {
   /** Stabile ID für Tracking und Animation. */
   readonly id: string;

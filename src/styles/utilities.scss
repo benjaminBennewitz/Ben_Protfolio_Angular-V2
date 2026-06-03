@@ -165,11 +165,21 @@ html[data-motion='reduced']::before {
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 72%, #111111 12%);
 }
 
+:root[data-theme='light'] .bp-button:hover,
+:root[data-theme='light'] .bp-button:focus-visible {
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 78%, #111111 14%);
+}
+
 :root[data-theme='light'] .bp-button--accent {
   border-color: color-mix(in srgb, #101010 78%, var(--bp-color-accent) 22%);
   background: var(--bp-color-accent);
   color: var(--bp-color-on-accent);
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 68%, #111111 18%), 0 14px 34px var(--bp-color-shadow);
+}
+
+:root[data-theme='light'] .bp-button--accent:hover,
+:root[data-theme='light'] .bp-button--accent:focus-visible {
+  box-shadow: 10px 10px 0 color-mix(in srgb, var(--bp-color-accent) 62%, #111111 26%), 0 0 0 3px color-mix(in srgb, var(--bp-color-accent) 28%, transparent), 0 24px 64px var(--bp-color-shadow);
 }
 
 :root[data-theme='light'] .bp-button--accent:hover,

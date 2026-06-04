@@ -42,7 +42,7 @@
   display: grid;
   align-items: start;
   min-height: 100svh;
-  padding: calc(var(--bp-header-height) + var(--bp-space-5)) var(--bp-section-px) var(--bp-space-5);
+  padding: calc(var(--bp-header-height) + var(--bp-space-5)) var(--bp-stage-gutter) var(--bp-space-5);
   overflow: hidden;
   border-block: 1px solid var(--bp-color-border);
   background: color-mix(in srgb, var(--bp-color-bg) 82%, black 18%);
@@ -83,6 +83,13 @@
 .chaos-cta__copy {
   position: relative;
   z-index: 3;
+  width: min(100%, var(--bp-content-max-width));
+  max-width: var(--bp-content-max-width);
+  margin-inline: auto;
+}
+
+.chaos-cta__copy h2,
+.chaos-cta__copy p:not(.bp-eyebrow) {
   max-width: 920px;
 }
 
@@ -112,9 +119,9 @@
 
 .chaos-cta__floor {
   position: absolute;
-  right: var(--bp-section-px);
+  right: var(--bp-stage-gutter);
   bottom: 92px;
-  left: var(--bp-section-px);
+  left: var(--bp-stage-gutter);
   z-index: 1;
   height: 2px;
   background: var(--bp-color-accent);
@@ -123,7 +130,8 @@
 
 .chaos-cta__blocks {
   position: absolute;
-  inset: 0;
+  inset-block: 0;
+  inset-inline: var(--bp-viewport-gutter);
   z-index: 2;
   pointer-events: none;
 }
@@ -175,7 +183,7 @@
 
 .chaos-cta__dialog {
   position: absolute;
-  right: var(--bp-section-px);
+  right: var(--bp-stage-gutter);
   bottom: clamp(1.2rem, 6vw, 5rem);
   z-index: 3;
   display: grid;

@@ -470,3 +470,20 @@
     transform: translate3d(0, calc(100% - 2.15rem), -36px) scale(0.95);
   }
 }
+
+
+/* ==========================================================================
+   10   Wide Screen Bühne
+   ========================================================================== */
+
+@media (min-width: 1921px) {
+  .process-lock__sticky {
+    padding-inline: calc(var(--bp-viewport-gutter) + var(--bp-section-px));
+  }
+
+  .process-lock__intro,
+  .process-lock__object,
+  .process-lock__steps {
+    min-width: 0;
+  }
+}

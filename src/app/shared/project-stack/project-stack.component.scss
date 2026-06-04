@@ -61,7 +61,7 @@
   grid-template-columns: minmax(0, 0.74fr) minmax(360px, 1fr) minmax(128px, 0.18fr);
   align-items: center;
   gap: var(--bp-space-4);
-  width: min(100%, var(--bp-viewport-max));
+  width: 100%;
   height: 100vh;
   min-height: 100vh;
   height: 100dvh;
@@ -69,7 +69,7 @@
   scroll-snap-align: start;
   scroll-snap-stop: normal;
   scroll-margin-top: 0;
-  margin-inline: auto;
+  margin-inline: 0;
   padding: calc(var(--bp-header-height) + var(--bp-space-3)) var(--bp-stage-gutter) var(--bp-space-3);
   overflow: hidden;
   border-top: 1px solid var(--bp-color-border);
@@ -152,7 +152,8 @@
 
 .project-stack__decor {
   position: absolute;
-  inset: 0;
+  inset-block: 0;
+  inset-inline: var(--bp-viewport-gutter);
   z-index: 8;
   pointer-events: none;
 }
@@ -338,10 +339,15 @@
 
 .project-stack__game-layer {
   position: absolute;
-  inset: 0;
+  inset-block: 0;
+  inset-inline: 0;
   z-index: 3;
   pointer-events: none;
   overflow: hidden;
+}
+
+.project-stack__game-layer--panel {
+  inset-inline: var(--bp-viewport-gutter);
 }
 
 .project-stack__game-layer--visual {
@@ -376,9 +382,14 @@
 
 .project-stack__oneup-layer {
   position: absolute;
-  inset: 0;
+  inset-block: 0;
+  inset-inline: 0;
   z-index: 6;
   pointer-events: none;
+}
+
+.project-stack__oneup-layer--panel {
+  inset-inline: var(--bp-viewport-gutter);
 }
 
 .project-stack__oneup-layer--visual {
@@ -1002,5 +1013,100 @@
 @media (max-width: 760px) {
   .project-stack__decor-asset--shocked {
     display: none;
+  }
+}
+
+
+/* ==========================================================================
+   17   Wide Screen Bühne
+   ========================================================================== */
+
+@media (min-width: 1921px) {
+  .project-stack__panel {
+    width: 100vw;
+    padding-inline: calc(var(--bp-viewport-gutter) + var(--bp-section-px));
+  }
+
+  .project-stack__panel::before,
+  .project-stack__panel::after,
+  .project-stack__noise {
+    inset-inline: 0;
+  }
+
+  .project-stack__decor,
+  .project-stack__game-layer--panel,
+  .project-stack__oneup-layer--panel {
+    inset-inline: var(--bp-viewport-gutter);
+  }
+
+  .project-stack__copy,
+  .project-stack__visual,
+  .project-stack__previews {
+    min-width: 0;
+  }
+}
+
+/* ========================================================================== 
+   18   Wide Screen Projekt-Bühne
+   ========================================================================== */
+
+@media (min-width: 1921px) {
+  .project-stack__panel {
+    grid-template-columns: minmax(560px, 620px) minmax(700px, 860px) 180px;
+    justify-content: center;
+    gap: clamp(2rem, 2.2vw, 3rem);
+    width: 100vw;
+    padding-inline: 0;
+  }
+
+  .project-stack__panel--intro {
+    grid-template-columns: minmax(560px, 620px) minmax(700px, 840px) 190px;
+  }
+
+  .project-stack__copy {
+    align-self: center;
+    width: 100%;
+    max-width: 620px;
+    padding-right: 0;
+  }
+
+  .project-stack__copy h3,
+  .project-stack__kicker--headline,
+  .project-stack__section-title {
+    max-width: 100%;
+  }
+
+  .project-stack__panel--game .project-stack__copy h3 {
+    width: auto;
+    max-width: 620px;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .project-stack__visual {
+    align-self: center;
+    width: 100%;
+    margin-top: clamp(1.8rem, 4vh, 3.6rem);
+    margin-left: 0;
+  }
+
+  .project-stack__previews {
+    align-self: center;
+    justify-self: end;
+    width: 180px;
+    margin-right: 0;
+  }
+
+  .project-stack__game-layer--panel,
+  .project-stack__oneup-layer--panel {
+    left: 50%;
+    right: auto;
+    width: var(--bp-viewport-max);
+    max-width: var(--bp-viewport-max);
+    transform: translateX(-50%);
+  }
+
+  .project-stack__oneup-layer--panel .project-stack__oneup {
+    bottom: 26%;
   }
 }

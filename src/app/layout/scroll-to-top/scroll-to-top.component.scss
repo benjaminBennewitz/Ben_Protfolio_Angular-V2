@@ -31,7 +31,7 @@
 
 .scroll-top {
   position: fixed;
-  right: clamp(1rem, 2vw, 1.5rem);
+  right: calc(var(--bp-viewport-gutter) + clamp(1rem, 2vw, 1.5rem));
   bottom: clamp(1rem, 2vw, 1.5rem);
   z-index: 58;
   display: grid;

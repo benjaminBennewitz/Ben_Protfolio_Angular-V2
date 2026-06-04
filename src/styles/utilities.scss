@@ -47,6 +47,7 @@
 .bp-section {
   position: relative;
   display: grid;
+  width: 100%;
   align-items: center;
   min-height: 100svh;
   padding: calc(var(--bp-header-height) + var(--bp-space-6)) var(--bp-stage-gutter) var(--bp-space-7);
@@ -56,8 +57,8 @@
 }
 
 .bp-container {
-  width: min(100%, var(--bp-max-width));
-  max-width: calc(var(--bp-viewport-max) - (var(--bp-section-px) * 2));
+  width: min(100%, var(--bp-content-max-width));
+  max-width: var(--bp-content-max-width);
   margin: 0 auto;
 }
 
@@ -494,5 +495,16 @@ html[data-motion='reduced']::before {
   .bp-tag {
     padding: 0.42rem 0.54rem;
     font-size: 0.66rem;
+  }
+}
+
+
+/* ==========================================================================
+   11   Wide Screens
+   ========================================================================== */
+
+@media (min-width: 1921px) {
+  .bp-section {
+    background-position: center top;
   }
 }

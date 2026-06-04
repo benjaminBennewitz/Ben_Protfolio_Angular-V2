@@ -30,7 +30,7 @@
 
 .cookie-consent-toggle {
   position: fixed;
-  right: clamp(1rem, 2vw, 1.5rem);
+  right: calc(var(--bp-viewport-gutter) + clamp(1rem, 2vw, 1.5rem));
   bottom: calc(clamp(1rem, 2vw, 1.5rem) + 136px);
   z-index: calc(var(--bp-z-nav) + 2);
   display: inline-grid;
@@ -65,7 +65,7 @@
 
 .cookie-banner {
   position: fixed;
-  left: clamp(1rem, 2.4vw, 1.8rem);
+  left: calc(var(--bp-viewport-gutter) + clamp(1rem, 2.4vw, 1.8rem));
   bottom: clamp(1rem, 2.4vw, 1.8rem);
   z-index: calc(var(--bp-z-nav) + 3);
   width: min(31rem, calc(100vw - 2rem));

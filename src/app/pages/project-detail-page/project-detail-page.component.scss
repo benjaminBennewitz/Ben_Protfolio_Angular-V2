@@ -3971,3 +3971,25 @@
     padding-bottom: clamp(2.8rem, 10vw, 4.4rem);
   }
 }
+
+
+/* ==========================================================================
+   21   Wide Screens
+   ========================================================================== */
+
+@media (min-width: 1921px) {
+  .project-detail__hero::before {
+    right: calc(var(--bp-viewport-gutter) - 9rem);
+    width: min(46vw, 900px);
+  }
+
+  .project-detail__hero::after,
+  .project-detail__chapters-section::after {
+    right: var(--bp-viewport-gutter);
+  }
+
+  .project-detail__runner-track {
+    overflow: hidden;
+  }
+}
+

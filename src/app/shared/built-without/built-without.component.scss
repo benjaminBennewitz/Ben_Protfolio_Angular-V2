@@ -28,7 +28,7 @@
   --built-strip-icon-check: var(--bp-color-accent);
   position: relative;
   min-height: auto;
-  padding: clamp(2.5rem, 5vw, 4.5rem) var(--bp-section-px);
+  padding: clamp(2.5rem, 5vw, 4.5rem) var(--bp-stage-gutter);
   overflow: hidden;
   border-top: 1px solid var(--bp-color-border);
   border-bottom: 1px solid var(--bp-color-border);

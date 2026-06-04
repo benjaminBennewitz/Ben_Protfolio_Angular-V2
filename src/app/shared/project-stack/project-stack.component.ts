@@ -948,15 +948,19 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     return window.matchMedia('(max-width: 760px)').matches;
   }
 
-  /** Liefert die aktive Game-Bühne für Desktop oder Mobile. */
+  /** Liefert die aktive Game-Bühne für Desktop, Wide-Screen oder Mobile. */
   private project2StageElement(): HTMLElement | null {
     const panel = this.project2PanelElement();
 
-    if (!panel || !this.project2UsesVisualStage()) {
-      return panel;
+    if (!panel) {
+      return null;
     }
 
-    return panel.querySelector<HTMLElement>('.project-stack__game-layer--visual') ?? panel;
+    if (this.project2UsesVisualStage()) {
+      return panel.querySelector<HTMLElement>('.project-stack__game-layer--visual') ?? panel;
+    }
+
+    return panel.querySelector<HTMLElement>('.project-stack__game-layer--panel') ?? panel;
   }
 
   /** Liefert das Projekt-2-Panel. */

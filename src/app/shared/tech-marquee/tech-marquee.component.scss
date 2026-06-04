@@ -31,10 +31,15 @@
    01   Basis
    ========================================================================== */
 
+:host {
+  display: block;
+  width: 100%;
+}
+
 .marquee {
   position: relative;
   width: 100vw;
-  margin-left: calc(var(--bp-section-px) * -1);
+  margin-inline: calc(50% - 50vw);
   overflow: hidden;
   border-block: 1px solid var(--bp-color-border);
   background: color-mix(in srgb, var(--bp-color-surface-solid) 70%, transparent);

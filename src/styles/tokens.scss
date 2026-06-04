@@ -66,7 +66,10 @@
    --bp-header-height: 76px;
    --bp-max-width: 1660px;
    --bp-viewport-max: 1920px;
-   --bp-stage-gutter: max(var(--bp-section-px), calc((100vw - var(--bp-viewport-max)) / 2 + var(--bp-section-px)));
+   --bp-viewport-gutter: max(0px, calc((100vw - var(--bp-viewport-max)) / 2));
+   --bp-stage-width: min(100%, var(--bp-viewport-max));
+   --bp-stage-gutter: max(var(--bp-section-px), calc(var(--bp-viewport-gutter) + var(--bp-section-px)));
+   --bp-content-max-width: min(var(--bp-max-width), calc(var(--bp-viewport-max) - (var(--bp-section-px) * 2)));
    --bp-z-cursor: 80;
    --bp-z-loader: 100;
    --bp-z-nav: 60;

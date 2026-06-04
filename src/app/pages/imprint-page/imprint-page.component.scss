@@ -259,3 +259,17 @@
     font-size: clamp(2.8rem, 15vw, 4.8rem);
   }
 }
+
+/* =================================================================================================
+   05   Wide Screens
+   ================================================================================================= */
+
+@media (min-width: 1921px) {
+  .imprint::before {
+    right: calc(var(--bp-viewport-gutter) - 7rem);
+  }
+
+  .imprint::after {
+    left: calc(var(--bp-viewport-gutter) - 8rem);
+  }
+}

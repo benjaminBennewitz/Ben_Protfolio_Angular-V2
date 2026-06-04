@@ -27,8 +27,9 @@
    06   Terminal Status
    07   Freigabe Button
    08   Animationen
-   09   Responsive Anpassungen
-   10   Reduced Motion
+   09   Wide-Screen Begrenzung
+   10   Responsive Anpassungen
+   11   Reduced Motion
    ========================================================================== */
 
 /* ==========================================================================
@@ -36,6 +37,8 @@
    ========================================================================== */
 
 .loader {
+  --loader-stage-max: 1500px;
+
   position: fixed;
   z-index: var(--bp-z-loader);
   inset: 0;
@@ -210,7 +213,9 @@
 
 .loader__dialog-stack {
   position: absolute;
-  inset: 0;
+  inset: 0 auto 0 50%;
+  width: min(1500px, calc(100vw - 2rem));
+  transform: translateX(-50%);
 }
 
 .loader-dialog {
@@ -218,7 +223,7 @@
   top: var(--dialog-top);
   left: var(--dialog-left);
   z-index: var(--dialog-z);
-  width: min(33rem, 42vw);
+  width: min(33rem, 42%);
   min-width: 18rem;
   border: 2px solid #101010;
   background: #cfcfcf;
@@ -678,7 +683,30 @@
 }
 
 /* ==========================================================================
-   09   Responsive Anpassungen
+   09   Wide-Screen Begrenzung
+   ========================================================================== */
+
+@media (min-width: 1921px) {
+  .loader__brand,
+  .loader__terminal {
+    left: calc((100vw - var(--loader-stage-max)) / 2 + 2rem);
+  }
+
+  .loader__brand > span {
+    font-size: 8.4rem;
+  }
+
+  .loader__terminal {
+    width: min(29.75rem, calc(var(--loader-stage-max) - 4rem));
+  }
+
+  .loader__ready {
+    width: min(42rem, calc(var(--loader-stage-max) - 4rem));
+  }
+}
+
+/* ==========================================================================
+   10   Responsive Anpassungen
    ========================================================================== */
 
 @media (max-width: 900px) {
@@ -733,7 +761,7 @@
 }
 
 /* ==========================================================================
-   10   Reduced Motion
+   11   Reduced Motion
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {

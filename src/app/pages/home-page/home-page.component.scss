@@ -67,10 +67,7 @@
 .hero::before,
 .hero::after {
   position: absolute;
-  top: 0;
-  right: max(0px, calc((100vw - var(--bp-viewport-max)) / 2));
-  bottom: 0;
-  left: max(0px, calc((100vw - var(--bp-viewport-max)) / 2));
+  inset: 0;
   pointer-events: none;
   content: '';
 }
@@ -93,7 +90,8 @@
 
 .hero__poster {
   position: absolute;
-  inset: 0;
+  inset-block: 0;
+  inset-inline: 0;
   pointer-events: none;
   overflow: hidden;
 }
@@ -2852,5 +2850,67 @@
   .clients__card:focus .clients__stack {
     opacity: 1;
     transform: translate3d(0, 0, 0) rotate(1.2deg) scale(1);
+  }
+}
+
+
+/* ==========================================================================
+   18   Wide Screens
+   ========================================================================== */
+
+@media (min-width: 1921px) {
+  .hero__layout,
+  .about__layout,
+  .experience__layout,
+  .skills > .bp-container,
+  .projects-kickoff__layout,
+  .clients > .bp-container,
+  .faq > .bp-container,
+  .contact__layout {
+    justify-self: center;
+    width: min(100%, var(--bp-content-max-width));
+    max-width: var(--bp-content-max-width);
+    margin-inline: auto;
+  }
+
+  .hero__head-stage {
+    right: calc(var(--bp-viewport-gutter) + clamp(12rem, 15vw, 18rem));
+  }
+
+  .hero__status {
+    right: calc(var(--bp-viewport-gutter) + clamp(2rem, 4vw, 5rem));
+  }
+
+  .skills {
+    justify-items: center;
+  }
+
+  .skills > .bp-container {
+    padding-inline: 0;
+  }
+}
+
+
+
+/* ==========================================================================
+   19   Techstack Wide-Screen Zentrierung
+   ========================================================================== */
+
+@media (min-width: 1921px) {
+  .skills.bp-section {
+    padding-inline: var(--bp-section-px);
+  }
+
+  .skills > .bp-container {
+    justify-self: center;
+    width: min(var(--bp-content-max-width), calc(100vw - (var(--bp-section-px) * 2)));
+    max-width: var(--bp-content-max-width);
+    margin-inline: auto;
+  }
+
+  .skills > bp-tech-marquee {
+    justify-self: stretch;
+    width: 100%;
+    max-width: none;
   }
 }

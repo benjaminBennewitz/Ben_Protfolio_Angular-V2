@@ -485,7 +485,7 @@
   right: auto;
   left: calc(var(--blood-left-offset, 0px) * -1);
   bottom: 0;
-  width: min(100vw, var(--bp-viewport-max));
+  width: min(100%, var(--bp-viewport-max));
   height: clamp(170px, 18vw, 230px);
   overflow: visible;
   pointer-events: none;

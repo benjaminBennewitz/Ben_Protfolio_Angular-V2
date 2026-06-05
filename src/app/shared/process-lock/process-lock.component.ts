@@ -7,11 +7,14 @@
 
 import { Component, ElementRef, HostListener, Input, ViewChild, computed, signal } from '@angular/core';
 import { ProcessStep } from '../../core/models/portfolio.models';
+import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
+import { RevealTextComponent } from '../reveal-text/reveal-text.component';
 
 /** Sticky Scroll-Reveal ohne globalen inneren Scrollcontainer. */
 @Component({
   selector: 'bp-process-lock',
   standalone: true,
+  imports: [RevealTextComponent, RevealOnScrollDirective],
   templateUrl: './process-lock.component.html',
   styleUrl: './process-lock.component.scss',
 })

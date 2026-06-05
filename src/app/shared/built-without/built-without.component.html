@@ -1,14 +1,13 @@
 <!-- src/app/shared/built-without/built-without.component.html -->
 <section class="built-strip" id="quality" bpViewportActivity>
-  <div class="built-strip__layout bp-container" bpReveal>
-    <div class="built-strip__copy">
-      <p class="bp-eyebrow">{{ content().eyebrow }}</p>
-      <h2>{{ content().title }}</h2>
+  <div class="built-strip__layout bp-container">
+    <div class="built-strip__copy bp-motion-copy" bpReveal>
+      <bp-reveal-text class="built-strip__title-reveal" [eyebrow]="content().eyebrow" [text]="content().title" />
       <p>{{ content().text }}</p>
     </div>
 
-    <div class="built-strip__groups">
-      <article class="built-strip__group built-strip__group--without">
+    <div class="built-strip__groups bp-stagger-list bp-stagger-list--right" bpReveal>
+      <article class="built-strip__group built-strip__group--without bp-stagger-item" [style.--bp-stagger-delay.ms]="120">
         <h3>{{ content().withoutLabel }}</h3>
         <ul>
           @for (item of content().withoutItems; track $index) {
@@ -17,7 +16,7 @@
         </ul>
       </article>
 
-      <article class="built-strip__group built-strip__group--capabilities">
+      <article class="built-strip__group built-strip__group--capabilities bp-stagger-item" [style.--bp-stagger-delay.ms]="240">
         <h3>{{ content().capabilityLabel }}</h3>
         <ul>
           @for (item of content().capabilityItems; track $index) {

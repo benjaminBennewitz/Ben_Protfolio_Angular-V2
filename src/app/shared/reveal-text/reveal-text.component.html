@@ -1,19 +1,25 @@
 <!-- src/app/shared/reveal-text/reveal-text.component.html -->
-<div class="reveal" [class.reveal--hero]="size === 'hero'">
+<div class="reveal" [class.reveal--hero]="size === 'hero'" [class.reveal--visible]="isVisible()">
   @if (eyebrow) {
   <p class="bp-eyebrow">{{ eyebrow }}</p>
   }
 
-  @if (size === 'hero') {
-  <h1 class="bp-title reveal__title">
+  @if (level === 'h1') {
+  <h1 [class]="headingClassList()">
     @for (word of words; track word + $index; let index = $index) {
-    <span class="reveal__word" [style.--delay.ms]="index * 70"><span>{{ word }}</span></span>
+    <span class="reveal__word" [style.--delay.ms]="index * wordDelay()"><span>{{ word }}</span></span>
     }
   </h1>
-  } @else {
-  <h2 class="bp-title reveal__title reveal__title--section">
+  } @else if (level === 'h3') {
+  <h3 [class]="headingClassList()">
     @for (word of words; track word + $index; let index = $index) {
-    <span class="reveal__word" [style.--delay.ms]="index * 70"><span>{{ word }}</span></span>
+    <span class="reveal__word" [style.--delay.ms]="index * wordDelay()"><span>{{ word }}</span></span>
+    }
+  </h3>
+  } @else {
+  <h2 [class]="headingClassList()">
+    @for (word of words; track word + $index; let index = $index) {
+    <span class="reveal__word" [style.--delay.ms]="index * wordDelay()"><span>{{ word }}</span></span>
     }
   </h2>
   }

@@ -12,6 +12,7 @@ import { AccessibilityPreferenceService } from '../../core/services/accessibilit
 import { AchievementService } from '../../core/services/achievement.service';
 import { ProjectVisualComponent } from '../project-visual/project-visual.component';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
+import { RevealTextComponent } from '../reveal-text/reveal-text.component';
 
 /** Dekoratives Game-Asset mit Bildquelle und nativer Bildgröße. */
 interface Project2PhysicsItem {
@@ -77,7 +78,7 @@ interface ProjectSnapMetrics {
 @Component({
   selector: 'bp-project-stack',
   standalone: true,
-  imports: [RouterLink, ProjectVisualComponent, RevealOnScrollDirective],
+  imports: [RouterLink, ProjectVisualComponent, RevealOnScrollDirective, RevealTextComponent],
   templateUrl: './project-stack.component.html',
   styleUrl: './project-stack.component.scss',
 })

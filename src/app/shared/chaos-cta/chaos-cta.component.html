@@ -2,9 +2,8 @@
 <section #stageRef class="chaos-cta" id="cta" role="link" tabindex="0" data-cursor="chaos"
   aria-label="Zur Kontaktsection springen" (click)="goToContact()" (keydown)="onKeyDown($event)"
   (pointermove)="onPointerMove($event)" (pointerleave)="onPointerLeave()">
-  <div class="chaos-cta__copy" bpReveal>
-    <p class="bp-eyebrow">{{ eyebrow }}</p>
-    <h2>{{ title }}</h2>
+  <div class="chaos-cta__copy bp-motion-copy" bpReveal>
+    <bp-reveal-text class="chaos-cta__title-reveal" [eyebrow]="eyebrow" [text]="title" />
     <p>{{ hint }}</p>
   </div>
 

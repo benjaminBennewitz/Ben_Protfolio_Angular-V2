@@ -68,6 +68,14 @@
   margin: 0;
 }
 
+.built-strip__title-reveal {
+  --bp-reveal-title-max-width: 12ch;
+  --bp-reveal-title-size: clamp(1.9rem, 4vw, 4rem);
+  --bp-reveal-title-line-height: 0.9;
+  --bp-reveal-title-letter-spacing: -0.07em;
+  --bp-reveal-eyebrow-margin-bottom: clamp(0.65rem, 1.4vw, 1rem);
+}
+
 .built-strip__copy .bp-eyebrow {
   margin-bottom: clamp(0.65rem, 1.4vw, 1rem);
   transform: translateY(-1.65rem);

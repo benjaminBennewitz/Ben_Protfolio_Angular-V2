@@ -8,6 +8,7 @@
 import { AchievementService } from '../../core/services/achievement.service';
 import { AccessibilityPreferenceService } from '../../core/services/accessibility-preference.service';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
+import { RevealTextComponent } from '../reveal-text/reveal-text.component';
 import { AfterViewInit, Component, ElementRef, HostListener, Input, NgZone, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 
 /** Bewegungszustand eines CTA-Bausteins. */
@@ -40,7 +41,7 @@ interface CtaBlockState {
 @Component({
   selector: 'bp-chaos-cta',
   standalone: true,
-  imports: [RevealOnScrollDirective],
+  imports: [RevealOnScrollDirective, RevealTextComponent],
   templateUrl: './chaos-cta.component.html',
   styleUrl: './chaos-cta.component.scss',
 })

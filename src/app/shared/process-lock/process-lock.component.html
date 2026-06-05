@@ -3,9 +3,8 @@
   <div class="process-lock__sticky">
     <div class="process-lock__backdrop" aria-hidden="true"></div>
 
-    <div class="process-lock__intro">
-      <p class="bp-eyebrow">{{ eyebrow }}</p>
-      <h2>{{ title }}</h2>
+    <div class="process-lock__intro bp-motion-copy" bpReveal>
+      <bp-reveal-text class="process-lock__title-reveal" [eyebrow]="eyebrow" [text]="title" />
       @if (subtitle) {
       <p>{{ subtitle }}</p>
       }

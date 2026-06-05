@@ -1,5 +1,5 @@
 <!-- src/app/shared/contact-form/contact-form.component.html -->
-<form class="contact-form bp-card" (ngSubmit)="submit()" novalidate>
+<form class="contact-form bp-card" bpReveal (ngSubmit)="submit()" novalidate>
   <p class="contact-form__required-hint">{{ content().requiredHint }}</p>
 
   <div class="contact-form__honeypot" aria-hidden="true">

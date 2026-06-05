@@ -1392,6 +1392,12 @@
   min-width: 0;
 }
 
+.experience__title-reveal {
+  --bp-reveal-title-size: clamp(2.1rem, 4.8vw, 5.35rem);
+  --bp-reveal-title-line-height: 0.92;
+  --bp-reveal-title-letter-spacing: -0.07em;
+}
+
 .experience__title {
   margin: 0;
   font-family: var(--bp-font-display);
@@ -1596,6 +1602,8 @@
 }
 
 .skills__level-panel {
+  --bp-stagger-x: 0px;
+  --bp-stagger-y: 28px;
   position: relative;
   display: grid;
   grid-template-columns: minmax(340px, 0.42fr) minmax(0, 1fr);
@@ -1625,6 +1633,17 @@
   z-index: 1;
 }
 
+.skills__level-head {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  filter: blur(8px);
+  will-change: opacity, transform, filter;
+}
+
+.skills__level-panel.bp-reveal--visible .skills__level-head {
+  animation: bp-copy-in 760ms var(--bp-ease-out) 120ms both;
+}
+
 .skills__level-head h3 {
   margin: 0;
   font-family: var(--bp-font-display);
@@ -1652,6 +1671,10 @@
 .skills__level {
   display: grid;
   gap: 0.8rem;
+  opacity: 0;
+  transform: translate3d(var(--bp-stagger-x), var(--bp-stagger-y), 0) scale(0.972);
+  filter: blur(10px);
+  will-change: opacity, transform, filter;
   border: 1px solid var(--bp-color-border);
   padding: 0.95rem;
   background: color-mix(in srgb, var(--bp-color-bg) 54%, transparent);
@@ -1662,6 +1685,11 @@
   border-color: var(--bp-color-accent);
   background: color-mix(in srgb, var(--bp-color-surface-solid) 76%, var(--bp-color-accent) 10%);
   transform: translateY(-3px);
+}
+
+.skills__level-panel.bp-reveal--visible .skills__level {
+  animation: bp-stagger-in 880ms var(--bp-ease-out) both;
+  animation-delay: var(--bp-stagger-delay, 180ms);
 }
 
 .skills__level-meta {
@@ -1712,9 +1740,19 @@
   transform-origin: left center;
 }
 
-.skills__level-panel.is-loaded .skills__level-track span,
 .skills__level-panel.bp-reveal--visible .skills__level-track span {
   animation: skill-bar-load 920ms var(--bp-ease-out) both;
+  animation-delay: calc(var(--bp-stagger-delay, 180ms) + 280ms);
+}
+
+:host-context(:root[data-motion='reduced']) .skills__level-head,
+:host-context(:root[data-motion='off']) .skills__level-head,
+:host-context(:root[data-motion='reduced']) .skills__level,
+:host-context(:root[data-motion='off']) .skills__level {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
 }
 
 :host-context(:root[data-motion='reduced']) .skills__level-track span,
@@ -1805,6 +1843,13 @@
 .projects-kickoff__copy {
   display: grid;
   gap: clamp(0.9rem, 1.6vw, 1.25rem);
+}
+
+.projects-kickoff__title-reveal {
+  --bp-reveal-title-max-width: 18ch;
+  --bp-reveal-title-size: clamp(2.6rem, 5.6vw, 6.8rem);
+  --bp-reveal-title-line-height: 0.88;
+  --bp-reveal-title-letter-spacing: -0.075em;
 }
 
 .projects-kickoff h2 {
@@ -2087,6 +2132,13 @@
   min-width: 0;
 }
 
+.clients__title-reveal {
+  --bp-reveal-title-max-width: 12ch;
+  --bp-reveal-title-size: clamp(2.1rem, 4.8vw, 5.2rem);
+  --bp-reveal-title-line-height: 0.9;
+  --bp-reveal-title-letter-spacing: -0.07em;
+}
+
 .clients__title {
   margin: 0;
   font-family: var(--bp-font-display);
@@ -2291,6 +2343,14 @@
   background-image: radial-gradient(circle at 1px 1px, var(--bp-color-text) 1px, transparent 0);
   background-size: 8px 8px;
   clip-path: polygon(50% 0, 63% 32%, 100% 36%, 70% 58%, 82% 96%, 50% 74%, 18% 96%, 30% 58%, 0 36%, 37% 32%);
+}
+
+.faq__title-reveal,
+.contact__title-reveal {
+  --bp-reveal-title-max-width: 12ch;
+  --bp-reveal-title-size: clamp(2.1rem, 4.8vw, 5.2rem);
+  --bp-reveal-title-line-height: 0.9;
+  --bp-reveal-title-letter-spacing: -0.07em;
 }
 
 .faq__title,

@@ -95,6 +95,12 @@
   z-index: 1;
 }
 
+.process-lock__title-reveal {
+  --bp-reveal-title-size: clamp(2.25rem, 5.3vw, 6.1rem);
+  --bp-reveal-title-line-height: 0.86;
+  --bp-reveal-title-letter-spacing: -0.08em;
+}
+
 .process-lock__intro h2 {
   margin: 0;
   font-family: var(--bp-font-display);

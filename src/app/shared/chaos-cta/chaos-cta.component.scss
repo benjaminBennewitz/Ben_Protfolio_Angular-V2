@@ -93,6 +93,13 @@
   max-width: 920px;
 }
 
+.chaos-cta__title-reveal {
+  --bp-reveal-title-max-width: 920px;
+  --bp-reveal-title-size: clamp(2.4rem, 6vw, 7rem);
+  --bp-reveal-title-line-height: 0.88;
+  --bp-reveal-title-letter-spacing: -0.08em;
+}
+
 .chaos-cta__copy h2 {
   margin: 0;
   font-family: var(--bp-font-display);

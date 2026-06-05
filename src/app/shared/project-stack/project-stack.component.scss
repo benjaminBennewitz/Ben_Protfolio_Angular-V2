@@ -233,6 +233,12 @@
   font-weight: 900;
 }
 
+.project-stack__title-reveal {
+  --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
+  --bp-reveal-title-line-height: 0.82;
+  --bp-reveal-title-letter-spacing: -0.08em;
+}
+
 .project-stack__copy h3 {
   max-width: 620px;
   margin: 0;
@@ -326,7 +332,13 @@
 
 
 
-.project-stack__panel--game .project-stack__copy h3 {
+.project-stack__panel--game .project-stack__title-reveal {
+  --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
+  --bp-reveal-title-line-height: 0.82;
+  --bp-reveal-title-letter-spacing: -0.08em;
+}
+
+.project-stack__copy h3 {
   width: min-content;
   max-width: none;
   overflow-wrap: normal;
@@ -834,11 +846,23 @@
     font-size: clamp(2rem, 13vw, 3.8rem);
   }
 
-  .project-stack__copy h3 {
+  .project-stack__title-reveal {
+  --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
+  --bp-reveal-title-line-height: 0.82;
+  --bp-reveal-title-letter-spacing: -0.08em;
+}
+
+.project-stack__copy h3 {
     font-size: clamp(2.6rem, 16vw, 4.4rem);
   }
 
-  .project-stack__panel--game .project-stack__copy h3 {
+  .project-stack__panel--game .project-stack__title-reveal {
+  --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
+  --bp-reveal-title-line-height: 0.82;
+  --bp-reveal-title-letter-spacing: -0.08em;
+}
+
+.project-stack__copy h3 {
     width: min-content;
     max-width: none;
   }
@@ -954,7 +978,13 @@
     overflow: hidden;
   }
 
-  .project-stack__panel--game .project-stack__copy h3 {
+  .project-stack__panel--game .project-stack__title-reveal {
+  --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
+  --bp-reveal-title-line-height: 0.82;
+  --bp-reveal-title-letter-spacing: -0.08em;
+}
+
+.project-stack__copy h3 {
     width: min-content;
     max-width: 9ch;
   }
@@ -1076,7 +1106,13 @@
     max-width: 100%;
   }
 
-  .project-stack__panel--game .project-stack__copy h3 {
+  .project-stack__panel--game .project-stack__title-reveal {
+  --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
+  --bp-reveal-title-line-height: 0.82;
+  --bp-reveal-title-letter-spacing: -0.08em;
+}
+
+.project-stack__copy h3 {
     width: auto;
     max-width: 620px;
     overflow-wrap: normal;

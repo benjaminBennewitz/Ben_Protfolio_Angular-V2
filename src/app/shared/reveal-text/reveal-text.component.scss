@@ -29,12 +29,35 @@
    01   Basis
    ========================================================================== */
 
+:host {
+  display: block;
+}
+
 .reveal {
   max-width: min(100%, 1180px);
   padding-right: 0.22em;
 }
 
+.reveal .bp-eyebrow {
+  margin-bottom: var(--bp-reveal-eyebrow-margin-bottom, clamp(0.75rem, 1.2vw, 1rem));
+  opacity: 0;
+  transform: translate3d(0, 0.8rem, 0);
+  transition: opacity 460ms var(--bp-ease-out), transform 520ms var(--bp-ease-out);
+}
+
+.reveal--visible .bp-eyebrow {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
 .reveal__title {
+  max-width: var(--bp-reveal-title-max-width, min(100%, 1120px));
+  margin: var(--bp-reveal-title-margin, 0);
+  font-family: var(--bp-font-display);
+  font-size: var(--bp-reveal-title-size, clamp(2.05rem, 5.6vw, 6.15rem));
+  line-height: var(--bp-reveal-title-line-height, 0.9);
+  letter-spacing: var(--bp-reveal-title-letter-spacing, -0.07em);
+  text-transform: var(--bp-reveal-title-transform, uppercase);
   overflow-wrap: anywhere;
   word-break: normal;
   hyphens: auto;
@@ -65,21 +88,27 @@
   content: '';
   background: var(--bp-color-accent);
   transform: translateX(-104%);
-  animation: reveal-slice 820ms var(--bp-ease-out) forwards;
-  animation-delay: calc(var(--delay) * 1ms);
 }
 
 .reveal__word span {
   display: inline-block;
   opacity: 0;
   transform: translate3d(0, 1.05em, 0) skewY(4deg);
-  animation: reveal-word 820ms var(--bp-ease-out) forwards;
-  animation-delay: calc((var(--delay) + 120) * 1ms);
+}
+
+.reveal--visible .reveal__word::before {
+  animation: reveal-slice 760ms var(--bp-ease-out) forwards;
+  animation-delay: calc(var(--delay) * 1ms);
+}
+
+.reveal--visible .reveal__word span {
+  animation: reveal-word 760ms var(--bp-ease-out) forwards;
+  animation-delay: calc((var(--delay) + 90) * 1ms);
 }
 
 .reveal__title--section {
-  max-width: min(100%, 1120px);
-  font-size: clamp(2.05rem, 5.6vw, 6.15rem);
+  max-width: var(--bp-reveal-title-max-width, min(100%, 1120px));
+  font-size: var(--bp-reveal-title-size, clamp(2.05rem, 5.6vw, 6.15rem));
 }
 
 /* ==========================================================================

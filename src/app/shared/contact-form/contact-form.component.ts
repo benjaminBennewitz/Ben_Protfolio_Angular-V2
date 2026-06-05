@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ContactTopic } from '../../core/models/portfolio.models';
 import { LanguageService } from '../../core/services/language.service';
+import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 
 /** Formularfelder mit eigener Validierung und Fehlerausgabe. */
 type ContactField = 'name' | 'email' | 'message';
@@ -30,7 +31,7 @@ interface ContactPayload {
 @Component({
   selector: 'bp-contact-form',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RevealOnScrollDirective],
   templateUrl: './contact-form.component.html',
   styleUrl: './contact-form.component.scss',
 })

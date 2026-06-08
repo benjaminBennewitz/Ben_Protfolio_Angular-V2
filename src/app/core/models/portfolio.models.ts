@@ -31,6 +31,10 @@ export interface NavigationContent {
   readonly about: string;
   readonly skills: string;
   readonly projects: string;
+  /** Navigationslabel für die Angebots- und Preissektion. */
+  readonly services: string;
+  /** Navigationslabel für die ausgelagerte Portfolio-Route. */
+  readonly portfolio: string;
   readonly blog: string;
   readonly process: string;
   readonly faq: string;
@@ -237,6 +241,59 @@ export interface SkillLevel {
   readonly group: string;
 }
 
+
+/** Inhalt der Angebots- und Preiskarten-Section. */
+export interface PricingContent {
+  /** Kleine technische Beschriftung oberhalb der Überschrift. */
+  readonly eyebrow: string;
+  /** Hauptüberschrift der Angebotssection. */
+  readonly title: string;
+  /** Einleitung unter der Überschrift. */
+  readonly subtitle: string;
+  /** Hinweistext zu Einstiegspreisen und Aufwandsschätzung. */
+  readonly note: string;
+  /** ARIA-Label der Angebotskartenliste. */
+  readonly ariaLabel: string;
+  /** Aufklappbarer Support-Titel. */
+  readonly supportTitle: string;
+  /** Aufklappbarer Supporttext. */
+  readonly supportText: string;
+  /** Kompakte Support-Zeile innerhalb jeder Angebotskarte. */
+  readonly supportCardLabel: string;
+  /** Sichtbare Abo-Preise im aufklappbaren Supportbereich. */
+  readonly supportPlans: readonly PricingSupportPlan[];
+  /** Sichtbare Angebotskarten. */
+  readonly cards: readonly PricingCard[];
+}
+
+/** Einzelner monatlicher Support-Baustein. */
+export interface PricingSupportPlan {
+  /** Name des Support-Bausteins. */
+  readonly name: string;
+  /** Monatlicher Einstiegspreis des Support-Bausteins. */
+  readonly price: string;
+  /** Kurze Beschreibung des enthaltenen Supports. */
+  readonly text: string;
+}
+
+/** Einzelne Angebots- oder Preiskarte. */
+export interface PricingCard {
+  /** Name des Angebots. */
+  readonly title: string;
+  /** Einstiegspreis als kompakte UI-Zeile. */
+  readonly price: string;
+  /** Kurze Positionierung des Angebots. */
+  readonly description: string;
+  /** Kurzer Badge, zum Beispiel Empfehlung. */
+  readonly badge?: string;
+  /** Gibt an, ob die Karte visuell hervorgehoben wird. */
+  readonly featured?: boolean;
+  /** Enthaltene Leistungsbausteine. */
+  readonly features: readonly string[];
+  /** Buttontext der Karte. */
+  readonly ctaLabel: string;
+}
+
 /** Inhalt der Projektübersicht. */
 export interface ProjectsContent {
   readonly eyebrow: string;
@@ -244,6 +301,8 @@ export interface ProjectsContent {
   readonly subtitle: string;
   /** Ergänzende Einleitungstexte vor dem Projekt-Stack. */
   readonly introText: readonly string[];
+  /** Beschriftung des Rücklinks von der Portfolio-Seite zu den Leistungen. */
+  readonly servicesBackLabel: string;
   /** Titel des dekorativen Projekt-Terminalfensters. */
   readonly dialogTitle: string;
   /** ARIA-Label zum Schließen des Projekt-Terminalfensters. */
@@ -891,6 +950,10 @@ export interface ContactContent {
   readonly nameLabel: string;
   readonly emailLabel: string;
   readonly messageLabel: string;
+  /** Label für das optionale Gutscheincode-Feld. */
+  readonly couponCodeLabel: string;
+  /** Platzhalter für das optionale Gutscheincode-Feld. */
+  readonly couponCodePlaceholder: string;
   /** Hinweis auf Pflichtfelder im Formular. */
   readonly requiredHint: string;
   /** Zugängliches Label für den Pflichtstern. */
@@ -1013,6 +1076,8 @@ export interface PortfolioContent {
   readonly about: AboutContent;
   readonly experience: ExperienceContent;
   readonly skills: SkillsContent;
+  /** Inhalte der Angebots- und Preiskarten-Section. */
+  readonly pricing: PricingContent;
   readonly projectsIntro: ProjectsContent;
   readonly projects: readonly PortfolioProject[];
   readonly process: ProcessContent;

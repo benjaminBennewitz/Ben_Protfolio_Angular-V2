@@ -1,0 +1,397 @@
+/*###############################
+###
+###     portfolio-page.component.scss
+###     Portfolio
+###     BASED ON: Angular  21.02.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+/* ========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Portfolio Intro
+   02   Schoko-Objekt
+   03   Animationen
+   04   Responsive Anpassungen
+   ======================================================================== */
+
+/* ========================================================================
+   01   Portfolio Intro
+   ======================================================================== */
+
+.portfolio-page {
+  position: relative;
+}
+
+.projects-kickoff {
+  min-height: 100svh;
+  padding-top: calc(var(--bp-header-height) + var(--bp-space-4));
+  padding-bottom: var(--bp-space-4);
+  background:
+    radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--bp-color-accent) 16%, transparent), transparent 26%),
+    linear-gradient(135deg, color-mix(in srgb, var(--bp-color-bg) 88%, black 12%), var(--bp-color-bg));
+  scroll-snap-align: start;
+}
+
+.projects-kickoff__layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(270px, 380px);
+  gap: clamp(1.5rem, 5vw, 5rem);
+  align-content: center;
+  align-items: center;
+  min-height: calc(100svh - var(--bp-header-height) - var(--bp-space-8));
+}
+
+.projects-kickoff__copy {
+  display: grid;
+  gap: clamp(0.9rem, 1.6vw, 1.25rem);
+}
+
+.portfolio-page__back {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: fit-content;
+  color: var(--bp-color-muted);
+  font-family: var(--bp-font-mono);
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.portfolio-page__back:hover,
+.portfolio-page__back:focus-visible {
+  color: var(--bp-color-accent);
+  transform: translateX(-0.25rem);
+}
+
+.projects-kickoff__title-reveal {
+  --bp-reveal-title-max-width: 18ch;
+  --bp-reveal-title-size: clamp(2.6rem, 5.6vw, 6.8rem);
+  --bp-reveal-title-line-height: 0.88;
+  --bp-reveal-title-letter-spacing: -0.075em;
+}
+
+.projects-kickoff h2 {
+  max-width: 18ch;
+  margin: 0;
+  font-family: var(--bp-font-display);
+  font-size: clamp(2.6rem, 5.6vw, 6.8rem);
+  line-height: 0.88;
+  letter-spacing: -0.075em;
+  text-transform: uppercase;
+}
+
+.projects-kickoff__lead,
+.projects-kickoff__text p {
+  max-width: 760px;
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  line-height: 1.55;
+}
+
+.projects-kickoff__lead {
+  font-size: clamp(1rem, 1.28vw, 1.2rem);
+}
+
+.projects-kickoff__text {
+  display: grid;
+  gap: 0.7rem;
+  max-width: 760px;
+}
+
+.projects-kickoff__text p {
+  font-size: clamp(0.88rem, 1vw, 1rem);
+}
+
+.projects-kickoff__side {
+  align-self: start;
+  justify-self: end;
+  display: grid;
+  gap: 1.15rem;
+  width: min(100%, 380px);
+  margin-top: clamp(0.5rem, 3vw, 2.2rem);
+}
+
+.projects-kickoff__window {
+  width: 100%;
+  transform: translate3d(0, 0, 0) rotate(1.2deg);
+}
+
+.projects-kickoff__window .bp-dos-window__body {
+  min-height: auto;
+}
+
+.projects-kickoff__window-close {
+  display: inline-grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid #111111;
+  border-radius: 0;
+  background: #ff2b2b;
+  color: #ffffff;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.34);
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
+}
+
+.projects-kickoff__window-close:hover,
+.projects-kickoff__window-close:focus-visible {
+  background: #d90026;
+  color: #ffffff;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.42);
+  transform: translate(-1px, -1px);
+}
+
+.projects-kickoff__window p {
+  margin: 0;
+  color: #111111;
+  font-family: var(--bp-font-mono);
+  font-size: 0.72rem;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.projects-kickoff__window p::before {
+  content: '> ';
+  color: #111111;
+  font-weight: 900;
+}
+
+/* ========================================================================
+   02   Schoko-Objekt
+   ======================================================================== */
+
+.projects-kickoff__portrait {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-items: end;
+  min-height: clamp(310px, 38vw, 430px);
+  margin: 0;
+  border: 2px solid color-mix(in srgb, var(--bp-color-text) 72%, transparent);
+  background:
+    radial-gradient(circle at 42% 26%, color-mix(in srgb, var(--bp-color-accent) 22%, transparent), transparent 28%),
+    linear-gradient(145deg, color-mix(in srgb, var(--bp-color-surface-solid) 78%, black 12%), var(--bp-color-bg));
+  overflow: hidden;
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.28);
+  transform: rotate(-1.1deg);
+}
+
+.projects-kickoff__portrait::before,
+.projects-kickoff__portrait::after {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  content: '';
+}
+
+.projects-kickoff__portrait::before {
+  opacity: 0.22;
+  background-image: radial-gradient(circle at 1px 1px, var(--bp-color-text) 1px, transparent 0);
+  background-size: 8px 8px;
+  mix-blend-mode: multiply;
+}
+
+.projects-kickoff__portrait::after {
+  opacity: 0.18;
+  background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(255, 255, 255, 0.24) 2px 3px, transparent 3px 7px);
+  mix-blend-mode: screen;
+}
+
+.projects-kickoff__portrait-image {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-position: center bottom;
+  filter: grayscale(1) contrast(1.22) brightness(1.03);
+  transition: opacity 420ms ease, transform 580ms var(--bp-ease-out), filter 320ms ease;
+}
+
+.projects-kickoff__portrait-image--default {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.projects-kickoff__portrait-image--default.is-hidden {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0) scale(0.985);
+}
+
+.projects-kickoff__portrait-image--eaten {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0) scale(0.985);
+}
+
+.projects-kickoff__portrait-image--eaten.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.projects-kickoff__egg-rain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.projects-kickoff__egg {
+  position: absolute;
+  left: var(--egg-left);
+  bottom: var(--egg-bottom);
+  z-index: var(--egg-z-index);
+  width: clamp(82px, 8.2vw, 118px);
+  opacity: 0;
+  transform: translate3d(0, calc(-100% - 420px), 0) rotate(var(--egg-start-rotate)) scale(var(--egg-scale));
+  transform-origin: center center;
+}
+
+.projects-kickoff__egg img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(1) contrast(1.15) brightness(1.01) drop-shadow(0 14px 24px rgba(0, 0, 0, 0.42));
+}
+
+.projects-kickoff__portrait.is-eaten .projects-kickoff__egg {
+  animation: projects-kickoff-egg-drop var(--egg-duration) cubic-bezier(0.18, 0.88, 0.26, 1) var(--egg-delay) forwards;
+}
+
+.projects-kickoff__portrait-action {
+  position: relative;
+  z-index: 4;
+  justify-self: start;
+  margin: 0 0 1rem 1rem;
+  border: 2px solid #111111;
+  padding: 0.55rem 0.75rem;
+  background: #f6f0e8;
+  color: #111111;
+  font-family: var(--bp-font-mono);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 #111111;
+  transition: transform 160ms var(--bp-ease-out), box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.projects-kickoff__portrait-action:hover,
+.projects-kickoff__portrait-action:focus-visible {
+  background: var(--bp-color-accent);
+  color: #111111;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #111111;
+}
+
+:root[data-theme='light'] .projects-kickoff__portrait-action:hover,
+:root[data-theme='light'] .projects-kickoff__portrait-action:focus-visible,
+:host-context(:root[data-theme='light']) .projects-kickoff__portrait-action:hover,
+:host-context(:root[data-theme='light']) .projects-kickoff__portrait-action:focus-visible {
+  color: #f6f0e8;
+}
+
+/* ========================================================================
+   03   Animationen
+   ======================================================================== */
+
+@keyframes projects-kickoff-egg-drop {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, calc(-100% - 420px), 0) rotate(var(--egg-start-rotate)) scale(var(--egg-scale));
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  68% {
+    opacity: 1;
+    transform: translate3d(0, 14px, 0) rotate(calc(var(--egg-rotate) * 1.08)) scale(var(--egg-scale));
+  }
+
+  82% {
+    opacity: 1;
+    transform: translate3d(0, -10px, 0) rotate(calc(var(--egg-rotate) * 0.96)) scale(var(--egg-scale));
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(var(--egg-rotate)) scale(var(--egg-scale));
+  }
+}
+
+/* ========================================================================
+   04   Responsive Anpassungen
+   ======================================================================== */
+
+@media (max-width: 1180px) {
+  .projects-kickoff__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .projects-kickoff__side {
+    justify-self: center;
+    width: min(430px, 100%);
+    max-width: 430px;
+  }
+
+  .projects-kickoff__portrait {
+    width: 100%;
+    min-height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  .projects-kickoff__window {
+    transform: rotate(0.8deg);
+  }
+}
+
+@media (max-width: 760px) {
+  .projects-kickoff__side {
+    width: min(360px, 100%);
+  }
+}
+
+@media (max-width: 640px) {
+  .projects-kickoff {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .projects-kickoff__side {
+    width: min(320px, 100%);
+  }
+}
+
+@media (min-width: 1921px) {
+  .projects-kickoff__layout {
+    justify-self: center;
+    width: min(100%, var(--bp-content-max-width));
+    max-width: var(--bp-content-max-width);
+    margin-inline: auto;
+  }
+}

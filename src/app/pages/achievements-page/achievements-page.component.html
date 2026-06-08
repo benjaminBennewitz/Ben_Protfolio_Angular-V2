@@ -24,7 +24,10 @@
 
     <section class="achievements__list" aria-label="Achievements">
       @for (achievement of achievementsService.achievements(); track achievement.id) {
-      <article class="achievement-card bp-card" [class.achievement-card--unlocked]="achievement.unlocked">
+      <article class="achievement-card bp-card" [class.achievement-card--unlocked]="achievement.unlocked"
+        [class.achievement-card--interactive]="achievementIsInteractive(achievement)" [attr.role]="achievementIsInteractive(achievement) ? 'button' : null"
+        [attr.tabindex]="achievementIsInteractive(achievement) ? 0 : null" (click)="openAchievement(achievement)"
+        (keydown.enter)="openAchievement(achievement)" (keydown.space)="openAchievement(achievement)">
         <div class="achievement-card__visual" aria-hidden="true">
           @if (achievement.unlocked) {
           <span class="material-symbols-outlined">{{ achievement.icon }}</span>
@@ -43,7 +46,7 @@
           @if (achievement.hintVisible) {
           <p>{{ achievement.hint }}</p>
           } @else {
-          <button type="button" (click)="revealHint(achievement.id)">{{ texts().hintButton }}</button>
+          <button type="button" (click)="$event.stopPropagation(); revealHint(achievement.id)">{{ texts().hintButton }}</button>
           }
           }
         </div>

@@ -52,6 +52,10 @@ ben-portfolio-angular-v2/
 │   │   │   │   ├── navigation.component.html
 │   │   │   │   ├── navigation.component.scss
 │   │   │   │   └── navigation.component.ts
+│   │   │   ├── platinum-discount-modal/
+│   │   │   │   ├── platinum-discount-modal.component.html
+│   │   │   │   ├── platinum-discount-modal.component.scss
+│   │   │   │   └── platinum-discount-modal.component.ts
 │   │   │   ├── scroll-to-top/
 │   │   │   │   ├── scroll-to-top.component.html
 │   │   │   │   ├── scroll-to-top.component.scss
@@ -77,6 +81,10 @@ ben-portfolio-angular-v2/
 │   │   │   │   ├── imprint-page.component.html
 │   │   │   │   ├── imprint-page.component.scss
 │   │   │   │   └── imprint-page.component.ts
+│   │   │   ├── portfolio-page/
+│   │   │   │   ├── portfolio-page.component.html
+│   │   │   │   ├── portfolio-page.component.scss
+│   │   │   │   └── portfolio-page.component.ts
 │   │   │   ├── project-detail-page/
 │   │   │   │   ├── project-detail-page.component.html
 │   │   │   │   ├── project-detail-page.component.scss

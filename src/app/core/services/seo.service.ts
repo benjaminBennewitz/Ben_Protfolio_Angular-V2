@@ -289,7 +289,7 @@ export class SeoService {
     ];
 
     if (isProject) {
-      list.push({ '@type': 'ListItem', position: 2, name: 'Projekte', item: this.absoluteUrl('/#projects') });
+      list.push({ '@type': 'ListItem', position: 2, name: 'Portfolio', item: this.absoluteUrl('/portfolio') });
       list.push({ '@type': 'ListItem', position: 3, name: currentName, item: this.absoluteUrl(path) });
     } else {
       list.push({ '@type': 'ListItem', position: 2, name: currentName, item: this.absoluteUrl(path) });

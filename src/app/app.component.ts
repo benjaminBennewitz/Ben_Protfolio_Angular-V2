@@ -16,6 +16,7 @@ import { CustomCursorComponent } from './layout/custom-cursor/custom-cursor.comp
 import { FooterComponent } from './layout/footer/footer.component';
 import { LoaderComponent } from './layout/loader/loader.component';
 import { NavigationComponent } from './layout/navigation/navigation.component';
+import { PlatinumDiscountModalComponent } from './layout/platinum-discount-modal/platinum-discount-modal.component';
 import { ScrollToTopComponent } from './layout/scroll-to-top/scroll-to-top.component';
 import { SystemToastComponent } from './layout/system-toast/system-toast.component';
 
@@ -23,7 +24,7 @@ import { SystemToastComponent } from './layout/system-toast/system-toast.compone
 @Component({
   selector: 'bp-root',
   standalone: true,
-  imports: [RouterOutlet, NavigationComponent, LoaderComponent, CustomCursorComponent, ScrollToTopComponent, FooterComponent, AccessibilityPanelComponent, AchievementToastComponent, CookieBannerComponent, SystemToastComponent],
+  imports: [RouterOutlet, NavigationComponent, LoaderComponent, CustomCursorComponent, ScrollToTopComponent, FooterComponent, AccessibilityPanelComponent, AchievementToastComponent, PlatinumDiscountModalComponent, CookieBannerComponent, SystemToastComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

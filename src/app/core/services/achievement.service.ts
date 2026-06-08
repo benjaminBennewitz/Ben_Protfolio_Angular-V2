@@ -23,7 +23,9 @@ export type AchievementId =
   | 'trash-dunk'
   | 'blood-complete'
   | 'cta-contact'
-  | 'loyal-companion';
+  | 'world-upside-down'
+  | 'loyal-companion'
+  | 'platinum-discount';
 
 /** Technische Definition einer Trophäe. */
 interface AchievementDefinition {
@@ -84,7 +86,9 @@ export class AchievementService {
     { id: 'trash-dunk', icon: 'delete', category: 'project' },
     { id: 'blood-complete', icon: 'hematology', category: 'project' },
     { id: 'cta-contact', icon: 'arrow_outward', category: 'contact' },
+    { id: 'world-upside-down', icon: 'accessibility_new', category: 'access' },
     { id: 'loyal-companion', icon: 'music_note', category: 'footer' },
+    { id: 'platinum-discount', icon: 'workspace_premium', category: 'platin' },
   ];
 
   /** Interner Fortschrittszustand. */
@@ -93,11 +97,17 @@ export class AchievementService {
   /** Aktuell sichtbare Trophy-Notification. */
   private readonly activeUnlockIdSignal = signal<AchievementId | null>(null);
 
+  /** Sichtbarkeit des großen Platin-Rabatt-Popups. */
+  private readonly platinumModalVisibleSignal = signal<boolean>(false);
+
   /** Warteschlange für mehrere direkte Unlocks nacheinander. */
   private readonly unlockToastQueue: AchievementId[] = [];
 
   /** Timeout-ID für den automatischen Dismiss der Notification. */
   private activeUnlockTimeoutId: number | null = null;
+
+  /** Timeout-ID für das verzögerte Platin-Popup nach der Platin-Notification. */
+  private platinumModalTimeoutId: number | null = null;
 
   /** Sichtbare Achievement-Liste in aktiver Sprache. */
   readonly achievements = computed<readonly AchievementView[]>(() => {
@@ -117,6 +127,9 @@ export class AchievementService {
     const activeId = this.activeUnlockIdSignal();
     return activeId ? this.achievements().find((achievement) => achievement.id === activeId) ?? null : null;
   });
+
+  /** Sichtbarkeit des großen Platin-Rabatt-Popups. */
+  readonly isPlatinumModalVisible = computed<boolean>(() => this.platinumModalVisibleSignal());
 
   /** Anzahl freigeschalteter Trophäen. */
   readonly unlockedCount = computed<number>(() => this.stateSignal().unlocked.length);
@@ -139,7 +152,20 @@ export class AchievementService {
 
     if (unlockedNow) {
       this.enqueueUnlockToast(id);
+      this.unlockPlatinumDiscount(id);
     }
+  }
+
+  /** Öffnet das große Platin-Rabatt-Popup manuell. */
+  showPlatinumModal(): void {
+    this.clearPlatinumModalTimeout();
+    this.platinumModalVisibleSignal.set(true);
+  }
+
+  /** Schließt das große Platin-Rabatt-Popup. */
+  dismissPlatinumModal(): void {
+    this.clearPlatinumModalTimeout();
+    this.platinumModalVisibleSignal.set(false);
   }
 
   /** Blendet den Hinweis zu einer Trophäe ein. */
@@ -174,7 +200,28 @@ export class AchievementService {
     }
 
     this.activeUnlockIdSignal.set(null);
+    this.clearPlatinumModalTimeout();
+    this.platinumModalVisibleSignal.set(false);
     this.stateSignal.set(this.persistState({ unlocked: [], hints: [] }));
+  }
+
+
+  /** Schaltet die Platin-Trophäe frei, sobald alle anderen Trophäen aktiv sind. */
+  private unlockPlatinumDiscount(lastUnlockedId: AchievementId): void {
+    if (lastUnlockedId === 'platinum-discount') {
+      return;
+    }
+
+    const state = this.stateSignal();
+    const regularIds = this.definitions.filter((definition) => definition.id !== 'platinum-discount').map((definition) => definition.id);
+    const allRegularUnlocked = regularIds.every((id) => state.unlocked.includes(id));
+
+    if (!allRegularUnlocked || state.unlocked.includes('platinum-discount')) {
+      return;
+    }
+
+    this.stateSignal.set(this.persistState({ ...state, unlocked: [...state.unlocked, 'platinum-discount'] }));
+    this.enqueueUnlockToast('platinum-discount');
   }
 
   /** Liest den Fortschritt aus LocalStorage. */
@@ -217,7 +264,31 @@ export class AchievementService {
     }
 
     this.activeUnlockIdSignal.set(nextId);
+
+    if (nextId === 'platinum-discount') {
+      this.schedulePlatinumModal();
+    }
+
     this.activeUnlockTimeoutId = window.setTimeout(() => this.dismissActiveUnlock(), 4200);
+  }
+
+  /** Plant das große Platin-Popup zwei Sekunden nach Start der Platin-Notification. */
+  private schedulePlatinumModal(): void {
+    this.clearPlatinumModalTimeout();
+    this.platinumModalTimeoutId = window.setTimeout(() => {
+      this.platinumModalTimeoutId = null;
+      this.platinumModalVisibleSignal.set(true);
+    }, 2000);
+  }
+
+  /** Entfernt ein noch ausstehendes Platin-Popup-Timeout. */
+  private clearPlatinumModalTimeout(): void {
+    if (this.platinumModalTimeoutId === null) {
+      return;
+    }
+
+    window.clearTimeout(this.platinumModalTimeoutId);
+    this.platinumModalTimeoutId = null;
   }
 
   /** Filtert gespeicherte IDs auf bekannte Achievement-IDs. */
@@ -245,8 +316,8 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
     },
     'nostalgia-hater': {
       title: 'Ich hasse Nostalgie',
-      description: 'Du hast den ersten MS-DOS-Dialog ohne Sentimentalität konsequent geschlossen.',
-      hint: 'Windows 95 war gestern.',
+      description: 'Du hast dein erstes MS-DOS-Fenster ohne Sentimentalität konsequent geschlossen.',
+      hint: 'Schließe irgendein MS-DOS-Fenster. Hauptsache ohne Sentimentalität.',
     },
     'coffee-glitch': {
       title: 'Koffeinfehler',
@@ -293,10 +364,20 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       description: 'you can touch this und jonglieren - cool',
       hint: 'Besiege die Schwerkraft.',
     },
+    'world-upside-down': {
+      title: 'Verkehrte Welt',
+      description: 'Sieh die Welt aus anderen Augen.',
+      hint: 'Passe das Weberlebnis an.',
+    },
     'loyal-companion': {
       title: 'I feel good',
       description: 'Sie wird dort, immer auf dich warten.',
       hint: 'Finde einen treuen Begleiter.',
+    },
+    'platinum-discount': {
+      title: 'Platin freigeschaltet',
+      description: 'Du hast alle versteckten Details gefunden. Code REPEAT10 gibt dir 10 % Rabatt auf ein Angebot deiner Wahl.',
+      hint: 'Schalte alle anderen Trophäen frei und finde den Rabattcode.',
     },
   },
   en: {
@@ -312,8 +393,8 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
     },
     'nostalgia-hater': {
       title: 'I Hate Nostalgia',
-      description: 'You closed the first MS-DOS dialog with absolutely no sentimentality.',
-      hint: 'Windows 95 was yesterday.',
+      description: 'You closed your first MS-DOS window with absolutely no sentimentality.',
+      hint: 'Close any MS-DOS window. Preferably without sentimentality.',
     },
     'coffee-glitch': {
       title: 'Caffeine Fault',
@@ -360,10 +441,20 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       description: 'you can touch this and juggle - cool',
       hint: 'Defeat gravity.',
     },
+    'world-upside-down': {
+      title: 'Upside Down',
+      description: 'See the world through different eyes.',
+      hint: 'Adjust the web experience.',
+    },
     'loyal-companion': {
       title: 'I Feel Good',
       description: 'She will always be waiting for you there.',
       hint: 'Find a loyal companion.',
+    },
+    'platinum-discount': {
+      title: 'Platinum Unlocked',
+      description: 'You found every hidden detail. Code REPEAT10 gives you 10% off one offer of your choice.',
+      hint: 'Unlock every other trophy and reveal the discount code.',
     },
   },
 };

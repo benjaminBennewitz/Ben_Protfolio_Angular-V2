@@ -5,7 +5,7 @@
     <header class="project-detail__hero bp-section" [style.--project-detail-game-landscape]="activeProject.gameShowcase?.heroBackdropAsset ? 'url(' + activeProject.gameShowcase?.heroBackdropAsset + ')' : null">
       <div class="project-detail__hero-grid bp-container">
         <div class="project-detail__hero-copy">
-          <a class="project-detail__back" routerLink="/" fragment="projects">
+          <a class="project-detail__back" routerLink="/portfolio">
             <span class="material-symbols-outlined" aria-hidden="true">keyboard_backspace</span>
             <span>{{ content().projectsIntro.overviewLabel }}</span>
           </a>
@@ -962,7 +962,7 @@
       <p class="bp-eyebrow">404</p>
       <h1 class="bp-title">{{ content().notFoundTitle }}</h1>
       <p class="bp-subtitle">{{ content().notFoundText }}</p>
-      <a class="bp-button bp-button--accent" routerLink="/" fragment="projects">
+      <a class="bp-button bp-button--accent" routerLink="/portfolio">
         <span>{{ content().projectsIntro.overviewLabel }}</span>
         <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
       </a>

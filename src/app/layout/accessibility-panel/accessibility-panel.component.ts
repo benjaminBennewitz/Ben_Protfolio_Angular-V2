@@ -11,6 +11,7 @@ import { LanguageService } from '../../core/services/language.service';
 import { SystemToastService } from '../../core/services/system-toast.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { GlobalOverlayService } from '../../core/services/global-overlay.service';
+import { AchievementService } from '../../core/services/achievement.service';
 
 /** Übersetzte Beschriftungen des Accessibility-Panels. */
 interface AccessibilityPanelTexts {
@@ -73,6 +74,9 @@ export class AccessibilityPanelComponent {
   /** Overlay-Service für globale Öffnen-Events. */
   private readonly overlayService = inject(GlobalOverlayService);
 
+  /** Achievement-Service für Access-Mode-Trophäen. */
+  private readonly achievementService = inject(AchievementService);
+
   /** Sichtbarkeit des Panels. */
   readonly open = signal<boolean>(false);
 
@@ -124,6 +128,7 @@ export class AccessibilityPanelComponent {
   /** Aktiviert den neuro-sensitiven Modus und zeigt einen kurzen Statushinweis. */
   enableCalmMode(): void {
     this.accessibility.enableCalmMode();
+    this.unlockAccessAchievement();
     this.showAccessibilityToast();
   }
 
@@ -136,25 +141,34 @@ export class AccessibilityPanelComponent {
   /** Setzt den Bewegungsmodus und zeigt einen kurzen Statushinweis. */
   setMotionMode(mode: MotionMode): void {
     this.accessibility.setMotionMode(mode);
+    this.unlockAccessAchievement();
     this.showAccessibilityToast();
   }
 
   /** Setzt den Oberflächenmodus und zeigt einen kurzen Statushinweis. */
   setComfortMode(mode: ComfortMode): void {
     this.accessibility.setComfortMode(mode);
+    this.unlockAccessAchievement();
     this.showAccessibilityToast();
   }
 
   /** Setzt den Kontrastmodus und zeigt einen kurzen Statushinweis. */
   setContrastMode(mode: ContrastMode): void {
     this.accessibility.setContrastMode(mode);
+    this.unlockAccessAchievement();
     this.showAccessibilityToast();
   }
 
   /** Setzt den Farbsehmodus und zeigt einen kurzen Statushinweis. */
   setColorVisionMode(mode: ColorVisionMode): void {
     this.accessibility.setColorVisionMode(mode);
+    this.unlockAccessAchievement();
     this.showAccessibilityToast();
+  }
+
+  /** Schaltet die Access-Mode-Trophäe frei. */
+  private unlockAccessAchievement(): void {
+    this.achievementService.unlock('world-upside-down');
   }
 
   /** Zeigt eine kurze technische Meldung nach einer Accessibility-Änderung. */

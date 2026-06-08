@@ -1,0 +1,277 @@
+/*###############################
+###
+###     platinum-discount-modal.component.scss
+###     Portfolio App
+###     BASED ON: Angular 21.02.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+#################################*/
+
+/* ========================================================================== 
+   INHALTSVERZEICHNIS
+
+   01   Layer
+   02   Fenster
+   03   Dekor
+   04   Inhalt
+   05   Responsive
+   ========================================================================== */
+
+/* ========================================================================== 
+   01   Layer
+   ========================================================================== */
+
+.platinum-modal {
+  position: fixed;
+  z-index: calc(var(--bp-z-loader) - 1);
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 2rem);
+}
+
+.platinum-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: color-mix(in srgb, #000000 64%, transparent);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+/* ========================================================================== 
+   02   Fenster
+   ========================================================================== */
+
+.platinum-modal__window {
+  position: relative;
+  width: min(100%, 860px);
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--bp-color-accent) 68%, var(--bp-color-border));
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--bp-color-surface-solid) 96%, transparent), color-mix(in srgb, var(--bp-color-bg) 84%, var(--bp-color-accent) 8%));
+  box-shadow: 0 28px 90px color-mix(in srgb, var(--bp-color-accent) 18%, var(--bp-color-shadow)), 10px 10px 0 color-mix(in srgb, var(--bp-color-accent) 22%, transparent);
+  animation: platinum-modal-in 820ms var(--bp-ease-out) both;
+}
+
+.platinum-modal__window::before,
+.platinum-modal__window::after {
+  position: absolute;
+  pointer-events: none;
+  content: '';
+}
+
+.platinum-modal__window::before {
+  inset: 0;
+  opacity: 0.13;
+  background-image: radial-gradient(circle at 1px 1px, var(--bp-color-text) 1px, transparent 0);
+  background-size: 12px 12px;
+}
+
+.platinum-modal__window::after {
+  right: -88px;
+  bottom: -122px;
+  width: 300px;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent) 42%, transparent);
+  background: repeating-linear-gradient(135deg, transparent 0 13px, color-mix(in srgb, var(--bp-color-accent) 18%, transparent) 13px 15px);
+  transform: rotate(-12deg);
+}
+
+/* ========================================================================== 
+   03   Dekor
+   ========================================================================== */
+
+.platinum-modal__shape {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.platinum-modal__shape--one {
+  top: -72px;
+  left: -52px;
+  width: 220px;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, color-mix(in srgb, var(--bp-color-accent) 28%, transparent), transparent 68%);
+}
+
+.platinum-modal__shape--two {
+  top: 74px;
+  right: 42px;
+  width: 118px;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent-2) 54%, transparent);
+  background: color-mix(in srgb, var(--bp-color-accent-2) 12%, transparent);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  transform: rotate(18deg);
+}
+
+.platinum-modal__bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 38px;
+  border-bottom: 1px solid var(--bp-color-border);
+  padding: 0.48rem 0.72rem;
+  background: color-mix(in srgb, var(--bp-color-bg) 76%, transparent);
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.platinum-modal__bar button {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid var(--bp-color-border);
+  background: var(--bp-color-surface-strong);
+  color: var(--bp-color-text-muted);
+  cursor: pointer;
+  transition: transform 180ms var(--bp-ease-out), background-color 180ms ease, color 180ms ease;
+}
+
+.platinum-modal__bar button:hover,
+.platinum-modal__bar button:focus-visible {
+  background: var(--bp-color-danger);
+  color: #ffffff;
+  transform: translate3d(-1px, -1px, 0);
+}
+
+/* ========================================================================== 
+   04   Inhalt
+   ========================================================================== */
+
+.platinum-modal__body {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.15rem, 4vw, 2rem);
+}
+
+.platinum-modal__trophy {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent) 74%, var(--bp-color-border));
+  background: color-mix(in srgb, var(--bp-color-accent) 18%, var(--bp-color-surface-strong));
+  color: var(--bp-color-accent);
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 18%, transparent);
+}
+
+.platinum-modal__trophy .material-symbols-outlined {
+  font-size: 2.4rem;
+  font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 48;
+}
+
+.platinum-modal h2,
+.platinum-modal p {
+  margin: 0;
+}
+
+.platinum-modal h2 {
+  max-width: 10ch;
+  font-family: var(--bp-font-display);
+  font-size: clamp(2.65rem, 7vw, 5.7rem);
+  line-height: 0.9;
+  text-wrap: balance;
+  text-transform: uppercase;
+}
+
+.platinum-modal p {
+  color: var(--bp-color-text-muted);
+  font-size: clamp(0.98rem, 1.8vw, 1.1rem);
+  line-height: 1.48;
+}
+
+.platinum-modal p strong {
+  color: var(--bp-color-text);
+  font-weight: 900;
+}
+
+.platinum-modal__code {
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  gap: 0.7rem;
+  align-items: center;
+  justify-self: start;
+  border: 1px solid var(--bp-color-border-strong);
+  padding: 0.55rem 0.72rem;
+  background: color-mix(in srgb, var(--bp-color-bg) 72%, transparent);
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--bp-color-accent) 18%, transparent);
+}
+
+.platinum-modal__code span,
+.platinum-modal__code code {
+  font-family: var(--bp-font-mono);
+  font-weight: 950;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.platinum-modal__code span {
+  color: var(--bp-color-text-muted);
+  font-size: 0.72rem;
+}
+
+.platinum-modal__code code {
+  color: var(--bp-color-accent);
+  font-size: 1rem;
+}
+
+.platinum-modal__note {
+  max-width: 54ch;
+  font-size: 0.9rem;
+}
+
+.platinum-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+@keyframes platinum-modal-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 120px, 0) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* ========================================================================== 
+   05   Responsive
+   ========================================================================== */
+
+@media (max-width: 560px) {
+  .platinum-modal__window {
+    box-shadow: 0 22px 70px var(--bp-color-shadow), 6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 20%, transparent);
+  }
+
+  .platinum-modal h2 {
+    max-width: 9ch;
+    font-size: clamp(2.35rem, 18vw, 4.2rem);
+  }
+
+  .platinum-modal__code {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .platinum-modal__window {
+    animation-duration: 0.001ms;
+  }
+}

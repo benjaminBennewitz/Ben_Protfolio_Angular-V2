@@ -1,0 +1,40 @@
+<!-- src/app/layout/platinum-discount-modal/platinum-discount-modal.component.html -->
+@if (achievementService.isPlatinumModalVisible()) {
+<div class="platinum-modal" role="presentation">
+  <button class="platinum-modal__backdrop" type="button" [attr.aria-label]="texts().closeLabel" (click)="achievementService.dismissPlatinumModal()"></button>
+
+  <section class="platinum-modal__window bp-card" role="dialog" aria-modal="true" aria-labelledby="platinum-modal-title">
+    <span class="platinum-modal__shape platinum-modal__shape--one" aria-hidden="true"></span>
+    <span class="platinum-modal__shape platinum-modal__shape--two" aria-hidden="true"></span>
+    <div class="platinum-modal__bar">
+      <span>{{ texts().eyebrow }}</span>
+      <button type="button" [attr.aria-label]="texts().closeLabel" (click)="achievementService.dismissPlatinumModal()">×</button>
+    </div>
+
+    <div class="platinum-modal__body">
+      <div class="platinum-modal__trophy" aria-hidden="true">
+        <span class="material-symbols-outlined">workspace_premium</span>
+      </div>
+
+      <p class="bp-eyebrow">{{ texts().eyebrow }}</p>
+      <h2 id="platinum-modal-title">{{ texts().title }}</h2>
+      <p>{{ texts().intro }}<br>{{ texts().blink }}</p>
+      <p><strong>{{ texts().reward }}</strong></p>
+
+      <div class="platinum-modal__code" aria-label="REPEAT10">
+        <span>{{ texts().codeLabel }}</span>
+        <code>REPEAT10</code>
+      </div>
+
+      <p class="platinum-modal__note">{{ texts().validity }} {{ texts().note }}</p>
+
+      <div class="platinum-modal__actions">
+        <button class="bp-button bp-button--accent" type="button" (click)="startDiscountInquiry()">
+          <span>{{ texts().ctaLabel }}</span>
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+}

@@ -8,6 +8,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
+import { AchievementService } from '../../core/services/achievement.service';
 import { SeoService } from '../../core/services/seo.service';
 
 /** Dankeseite nach erfolgreichem Kontaktformular-Submit. */
@@ -25,6 +26,9 @@ export class ThankYouPageComponent {
   /** SEO-Service für noindex-Meta-Daten der Dankeseite. */
   private readonly seoService = inject(SeoService);
 
+  /** Achievement-Service für geschlossene MS-DOS-Fenster. */
+  private readonly achievementService = inject(AchievementService);
+
   /** Übersetzter Inhalt der Dankeseite. */
   readonly content = computed(() => this.languageService.content().thankYou);
 
@@ -38,6 +42,7 @@ export class ThankYouPageComponent {
 
   /** Schließt das dekorative Statusfenster. */
   closeDialog(): void {
+    this.achievementService.unlock('nostalgia-hater');
     this.isDialogVisible.set(false);
   }
 }

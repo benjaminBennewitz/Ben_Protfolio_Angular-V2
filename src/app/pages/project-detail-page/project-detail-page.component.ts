@@ -11,6 +11,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjectAppModule, ProjectCatalogSpread, ProjectGalleryItem } from '../../core/models/portfolio.models';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { LanguageService } from '../../core/services/language.service';
+import { AchievementService } from '../../core/services/achievement.service';
 import { SeoService } from '../../core/services/seo.service';
 
 /** Detailseite für einzelne Projekte. */
@@ -30,6 +31,9 @@ export class ProjectDetailPageComponent {
 
   /** SEO-Service für Detailseiten-Meta-Daten. */
   private readonly seoService = inject(SeoService);
+
+  /** Achievement-Service für geschlossene MS-DOS-Fenster. */
+  private readonly achievementService = inject(AchievementService);
 
   /** Aktueller Slug aus der Route. */
   private readonly slug = signal<string>('');
@@ -201,16 +205,19 @@ export class ProjectDetailPageComponent {
 
   /** Schließt ein einzelnes Terminalfenster im Hero. */
   closeTerminalWidget(widgetId: string): void {
+    this.achievementService.unlock('nostalgia-hater');
     this.closedTerminalWidgetIds.update((ids) => (ids.includes(widgetId) ? ids : [...ids, widgetId]));
   }
 
   /** Schließt das Fallback-MS-DOS-Terminalfenster im Hero. */
   closeTerminal(): void {
+    this.achievementService.unlock('nostalgia-hater');
     this.isTerminalVisible.set(false);
   }
 
   /** Schließt das technische Hinweisfenster im Deep-Dive. */
   closeCaseNote(): void {
+    this.achievementService.unlock('nostalgia-hater');
     this.isCaseNoteVisible.set(false);
   }
 

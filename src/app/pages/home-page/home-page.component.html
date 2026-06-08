@@ -26,8 +26,8 @@
         <p class="bp-eyebrow hero__eyebrow">{{ content().hero.eyebrow }}</p>
 
         <h1 class="hero__headline" [attr.aria-label]="content().hero.title">
-          <span class="hero__headline-line"><span>Design. Code.</span></span>
-          <span class="hero__headline-line hero__headline-line--accent"><span>Break the Grid.</span></span>
+          <span class="hero__headline-line"><span>design.code.</span></span>
+          <span class="hero__headline-line hero__headline-line--accent"><span>repeat.</span></span>
         </h1>
 
         <p class="hero__subtitle">{{ content().hero.subtitle }}</p>
@@ -229,66 +229,55 @@
     <bp-tech-marquee bpViewportActivity bpReveal [items]="content().skills.marquee" />
   </section>
 
-  <section class="projects-kickoff bp-section" id="projects" bpViewportActivity>
-    <div class="bp-container projects-kickoff__layout">
-      <div class="projects-kickoff__copy bp-motion-copy" bpReveal>
-        <bp-reveal-text class="projects-kickoff__title-reveal" [eyebrow]="content().projectsIntro.eyebrow" [text]="content().projectsIntro.title" headingClass="projects-kickoff__title" />
-        @if (content().projectsIntro.subtitle) {
-        <p class="projects-kickoff__lead">{{ content().projectsIntro.subtitle }}</p>
-        }
+  <section class="pricing bp-section" id="services" bpViewportActivity>
+    <div class="pricing__layout bp-container">
+      <div class="pricing__head bp-motion-copy" bpReveal>
+        <bp-reveal-text class="pricing__title-reveal" [eyebrow]="content().pricing.eyebrow" [text]="content().pricing.title" headingClass="pricing__title" />
+        <p class="bp-subtitle">{{ content().pricing.subtitle }}</p>
+      </div>
 
-        <div class="projects-kickoff__text">
-          @for (paragraph of content().projectsIntro.introText; track $index) {
-          <p>{{ paragraph }}</p>
+      <div class="pricing__cards bp-stagger-list bp-stagger-list--soft" [attr.aria-label]="content().pricing.ariaLabel" bpReveal>
+        @for (card of content().pricing.cards; track card.title; let index = $index) {
+        <article class="pricing-card bp-card bp-stagger-item" [class.pricing-card--featured]="card.featured" [style.--bp-stagger-delay.ms]="index * 120 + 120">
+          @if (card.badge) {
+          <span class="pricing-card__badge">{{ card.badge }}</span>
+          }
+          <div class="pricing-card__top">
+            <h3>{{ card.title }}</h3>
+            <strong>{{ card.price }}</strong>
+          </div>
+          <p>{{ card.description }}</p>
+          <span class="pricing-card__support">{{ content().pricing.supportCardLabel }}</span>
+          <ul>
+            @for (feature of card.features; track feature) {
+            <li><span class="material-symbols-outlined" aria-hidden="true">check</span>{{ feature }}</li>
+            }
+          </ul>
+          <a class="bp-button pricing-card__cta" routerLink="/" fragment="contact">
+            <span>{{ card.ctaLabel }}</span>
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+          </a>
+        </article>
+        }
+      </div>
+
+      <details class="pricing__support bp-card">
+        <summary>{{ content().pricing.supportTitle }}</summary>
+        <p>{{ content().pricing.supportText }}</p>
+        <div class="pricing__support-plans">
+          @for (plan of content().pricing.supportPlans; track plan.name) {
+          <article class="pricing__support-plan">
+            <strong>{{ plan.name }}</strong>
+            <span>{{ plan.price }}</span>
+            <p>{{ plan.text }}</p>
+          </article>
           }
         </div>
-      </div>
+      </details>
 
-      <div class="projects-kickoff__side" bpReveal>
-        @if (isProjectsDialogVisible()) {
-        <aside class="projects-kickoff__window bp-dos-window" role="dialog" [attr.aria-label]="content().projectsIntro.dialogTitle">
-          <div class="bp-dos-window__bar">
-            <span>{{ content().projectsIntro.dialogTitle }}</span>
-            <button class="projects-kickoff__window-close" type="button"
-              [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeProjectsDialog()">×</button>
-          </div>
-          <div class="bp-dos-window__body">
-            @for (line of content().projectsIntro.dialogLines; track $index) {
-            <p>{{ line }}</p>
-            }
-          </div>
-        </aside>
-        }
-
-        <figure class="projects-kickoff__portrait" [class.is-eaten]="isProjectsChocolateEaten()" [attr.aria-label]="content().projectsIntro.imageLabel">
-          <img class="projects-kickoff__portrait-image projects-kickoff__portrait-image--default"
-            [class.is-hidden]="isProjectsChocolateEaten()" [src]="projectsChocolateDefaultSrc"
-            [attr.alt]="content().projectsIntro.imageAlt" width="1122" height="1402" loading="lazy" decoding="async" />
-          <img class="projects-kickoff__portrait-image projects-kickoff__portrait-image--eaten"
-            [class.is-visible]="isProjectsChocolateEaten()" [src]="projectsChocolateEatenSrc" [attr.alt]=""
-            width="1122" height="1402" loading="lazy" decoding="async" />
-
-          <div class="projects-kickoff__egg-rain" aria-hidden="true">
-            @for (egg of projectChocolateEggs; track $index) {
-            <span class="projects-kickoff__egg" [style.--egg-left]="egg.left" [style.--egg-bottom]="egg.bottom"
-              [style.--egg-rotate]="egg.rotate" [style.--egg-start-rotate]="egg.startRotate"
-              [style.--egg-scale]="egg.scale" [style.--egg-z-index]="egg.zIndex"
-              [style.--egg-delay]="egg.delayMs + 'ms'" [style.--egg-duration]="egg.durationMs + 'ms'">
-              <img src="assets/images/chocolate-egg.webp" alt="" width="256" height="191" loading="lazy" decoding="async" />
-            </span>
-            }
-          </div>
-
-          <button class="projects-kickoff__portrait-action" type="button" (click)="showProjectsChocolateEaten()">
-            {{ projectsChocolateActionLabel() }}
-          </button>
-        </figure>
-      </div>
+      <p class="pricing__note" bpReveal>{{ content().pricing.note }}</p>
     </div>
   </section>
-
-  <bp-project-stack bpViewportActivity [detailLabel]="content().projectsIntro.detailLabel"
-    [labels]="content().projectsIntro" [projects]="content().projects" />
 
   <bp-process-lock bpViewportActivity [eyebrow]="content().process.eyebrow" [title]="content().process.title"
     [subtitle]="content().process.subtitle" [hint]="content().process.hint" [steps]="content().process.steps" />

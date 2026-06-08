@@ -8,6 +8,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
+import { AchievementService } from '../../core/services/achievement.service';
 import { SeoService } from '../../core/services/seo.service';
 
 /** Statische Impressumsseite mit übersetzbaren Pflichtangaben. */
@@ -25,6 +26,9 @@ export class ImprintPageComponent {
   /** SEO-Service für Meta-Daten der Impressumsroute. */
   private readonly seoService = inject(SeoService);
 
+  /** Achievement-Service für geschlossene MS-DOS-Fenster. */
+  private readonly achievementService = inject(AchievementService);
+
   /** Übersetzter Impressumsinhalt der aktuellen Sprache. */
   readonly imprint = computed(() => this.languageService.content().imprint);
 
@@ -38,6 +42,7 @@ export class ImprintPageComponent {
 
   /** Entfernt das Legal-Check-Dialogfenster aus der Ansicht. */
   closeLegalDialog(): void {
+    this.achievementService.unlock('nostalgia-hater');
     this.isLegalDialogVisible.set(false);
   }
 }

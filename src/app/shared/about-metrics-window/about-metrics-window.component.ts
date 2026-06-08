@@ -5,8 +5,9 @@
  * @description Öffnet ein kleines MS-DOS-artiges Systemfenster und wechselt persönliche Kennzahlen zwischen metrischen und absurden Einheiten.
  */
 
-import { Component, ElementRef, HostListener, OnDestroy, ViewChild, computed, input, output, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, ViewChild, computed, inject, input, output, signal } from '@angular/core';
 import { AboutMetricFact, AboutMetricsCalculatorUnitKey, AboutMetricsContent } from '../../core/models/portfolio.models';
+import { AchievementService } from '../../core/services/achievement.service';
 
 /** Verfügbare Darstellungsmodi für die About-Kennzahlen. */
 type AboutMetricsMode = 'metric' | 'weird';
@@ -55,6 +56,9 @@ interface AbsurdCalculatorResult {
   styleUrl: './about-metrics-window.component.scss',
 })
 export class AboutMetricsWindowComponent implements OnDestroy {
+  /** Achievement-Service für geschlossene MS-DOS-Fenster. */
+  private readonly achievementService = inject(AchievementService);
+
   /** Übersetzte Inhalte und Labels des Metrics-Fensters. */
   readonly content = input.required<AboutMetricsContent>();
 
@@ -151,6 +155,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
   /** Schließt das Metrics-Fenster und stellt den Fokus auf den Trigger zurück. */
   closeWindow(): void {
+    this.achievementService.unlock('nostalgia-hater');
     if (!this.isOpen()) {
       return;
     }
@@ -198,6 +203,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
   /** Schließt den Absurditäten-Rechner und stellt den Fokus auf den Teaser zurück. */
   closeCalculator(): void {
+    this.achievementService.unlock('nostalgia-hater');
     if (!this.isCalculatorOpen()) {
       return;
     }

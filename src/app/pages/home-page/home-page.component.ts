@@ -2,7 +2,7 @@
 
 /**
  * @file Startseite des Portfolios.
- * @description Kombiniert Hero, Über-mich, Techstack, Fullscreen-Projekte, Process-Lock, Chaos-CTA, FAQ und Kontakt.
+ * @description Kombiniert Hero, Über-mich, Techstack, Leistungen, Process-Lock, Chaos-CTA, FAQ und Kontakt.
  */
 
 import { DOCUMENT } from '@angular/common';
@@ -16,7 +16,6 @@ import { BuiltWithoutComponent } from '../../shared/built-without/built-without.
 import { ChaosCtaComponent } from '../../shared/chaos-cta/chaos-cta.component';
 import { ContactFormComponent } from '../../shared/contact-form/contact-form.component';
 import { ProcessLockComponent } from '../../shared/process-lock/process-lock.component';
-import { ProjectStackComponent } from '../../shared/project-stack/project-stack.component';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { RevealTextComponent } from '../../shared/reveal-text/reveal-text.component';
 import { TechMarqueeComponent } from '../../shared/tech-marquee/tech-marquee.component';
@@ -62,7 +61,7 @@ interface ProjectsChocolateEgg {
 @Component({
   selector: 'bp-home-page',
   standalone: true,
-  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProjectStackComponent, ProcessLockComponent, AboutMetricsWindowComponent, BuiltWithoutComponent, ChaosCtaComponent, ContactFormComponent, ViewportActivityDirective],
+  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProcessLockComponent, AboutMetricsWindowComponent, BuiltWithoutComponent, ChaosCtaComponent, ContactFormComponent, ViewportActivityDirective],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })
@@ -319,16 +318,19 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   /** Entfernt das About-Dialogfenster aus der Startansicht. */
   closeAboutDialog(): void {
+    this.achievementService.unlock('nostalgia-hater');
     this.isAboutDialogVisible.set(false);
   }
 
   /** Entfernt das Skill-Level-Dialogfenster aus dem Techstack-Bereich. */
   closeSkillsDialog(): void {
+    this.achievementService.unlock('nostalgia-hater');
     this.isSkillsDialogVisible.set(false);
   }
 
   /** Entfernt das Projekt-Einstieg-Dialogfenster aus der Projektübersicht. */
   closeProjectsDialog(): void {
+    this.achievementService.unlock('nostalgia-hater');
     this.isProjectsDialogVisible.set(false);
   }
 
@@ -346,6 +348,7 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
+    this.achievementService.unlock('nostalgia-hater');
     this.isContactModalVisible.set(false);
     this.document.documentElement.classList.remove('bp-modal-open');
     this.contactModalTrigger?.focus();

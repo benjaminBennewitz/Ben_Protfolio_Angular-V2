@@ -23,6 +23,8 @@ interface ContactPayload {
   readonly email: string;
   /** Freitextnachricht des Absenders. */
   readonly message: string;
+  /** Optionaler Gutscheincode des Absenders. */
+  readonly couponCode: string;
   /** Gewählte Themen als stabile technische Werte. */
   readonly topics: readonly string[];
 }
@@ -57,6 +59,9 @@ export class ContactFormComponent {
   /** ID des Nachrichtenfelds. */
   readonly messageId = `${this.formId}-message`;
 
+  /** ID des optionalen Gutscheincode-Felds. */
+  readonly couponCodeId = `${this.formId}-coupon-code`;
+
   /** ID der Namen-Fehlermeldung. */
   readonly nameErrorId = `${this.nameId}-error`;
 
@@ -78,6 +83,9 @@ export class ContactFormComponent {
   /** Nachricht aus dem Formular. */
   readonly message = signal<string>('');
 
+  /** Optionaler Gutscheincode aus dem Formular. */
+  readonly couponCode = signal<string>('');
+
   /** Unsichtbares Honeypot-Feld gegen einfache Bot-Submits. */
   readonly website = signal<string>('');
 
@@ -94,7 +102,7 @@ export class ContactFormComponent {
   readonly isSubmitting = signal<boolean>(false);
 
   /** Aktualisiert ein Feld anhand des Eingabe-Events. */
-  updateField(field: ContactField | 'website', event: Event): void {
+  updateField(field: ContactField | 'website' | 'couponCode', event: Event): void {
     const value = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement ? event.target.value : '';
 
     if (field === 'name') {
@@ -107,6 +115,10 @@ export class ContactFormComponent {
 
     if (field === 'message') {
       this.message.set(value);
+    }
+
+    if (field === 'couponCode') {
+      this.couponCode.set(value);
     }
 
     if (field === 'website') {
@@ -219,9 +231,11 @@ export class ContactFormComponent {
       name: this.name().trim(),
       email: this.email().trim(),
       message: this.message().trim(),
+      couponCode: this.couponCode().trim(),
       topics: this.selectedTopics(),
     };
   }
+
 
   /** Prüft Mindestfelder und einfache E-Mail-Syntax. */
   private isValid(): boolean {

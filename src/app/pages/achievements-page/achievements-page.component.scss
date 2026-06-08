@@ -187,6 +187,15 @@
   transform: translate3d(0, -6px, 0) rotate(-0.8deg);
 }
 
+.achievement-card--interactive {
+  cursor: pointer;
+}
+
+.achievement-card--interactive:focus-visible {
+  outline: 3px solid var(--bp-color-focus);
+  outline-offset: 4px;
+}
+
 .achievement-card__visual,
 .achievement-card__copy {
   position: relative;

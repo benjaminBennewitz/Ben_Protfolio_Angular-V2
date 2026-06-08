@@ -7,7 +7,7 @@
 
 import { Component, computed, effect, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AchievementId, AchievementService } from '../../core/services/achievement.service';
+import { AchievementId, AchievementService, AchievementView } from '../../core/services/achievement.service';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
 
@@ -62,6 +62,20 @@ export class AchievementsPageComponent {
   /** Synchronisiert Meta-Daten mit der aktiven Sprache. */
   constructor() {
     effect(() => this.seoService.setPageSeo(this.texts().metaTitle, this.texts().metaDescription, '/achievements'));
+  }
+
+  /** Öffnet besondere Aktionen für freigeschaltete Achievement-Karten. */
+  openAchievement(achievement: AchievementView): void {
+    if (achievement.id !== 'platinum-discount' || !achievement.unlocked) {
+      return;
+    }
+
+    this.achievementsService.showPlatinumModal();
+  }
+
+  /** Gibt zurück, ob eine Achievement-Karte direkt interaktiv ist. */
+  achievementIsInteractive(achievement: AchievementView): boolean {
+    return achievement.id === 'platinum-discount' && achievement.unlocked;
   }
 
   /** Blendet einen Hinweis für eine gesperrte Trophäe ein. */

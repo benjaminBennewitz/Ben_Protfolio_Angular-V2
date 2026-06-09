@@ -356,7 +356,7 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
     },
     'blood-complete': {
       title: 'Betriebsarzt',
-      description: 'Die Blutanalyse hat ergeben, dass Sie zu 99,9% Hammer sind.',
+      description: 'Das Dashboard behauptet, dass Sie zu 99,9% Hammer sind.',
       hint: 'Geh mal zum Arzt!',
     },
     'cta-contact': {
@@ -433,7 +433,7 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
     },
     'blood-complete': {
       title: 'Company Doctor',
-      description: 'The blood analysis says you are 99.9% awesome.',
+      description: 'The dashboard claims you are 99.9% awesome.',
       hint: 'Go see a doctor!',
     },
     'cta-contact': {

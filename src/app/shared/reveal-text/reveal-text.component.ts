@@ -7,6 +7,18 @@
 
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, inject, signal } from '@angular/core';
 
+/** Einzelnes Wort mit globalem Animationsindex. */
+interface RevealWord {
+  /** Sichtbarer Wortinhalt. */
+  readonly text: string;
+
+  /** Fortlaufender Index für die Delay-Berechnung. */
+  readonly index: number;
+}
+
+/** Einzelne Textzeile der Reveal-Headline. */
+type RevealLine = readonly RevealWord[];
+
 /** Rendert animierte Headlines mit gestaffelten Wort-Reveals. */
 @Component({
   selector: 'bp-reveal-text',
@@ -75,9 +87,14 @@ export class RevealTextComponent implements AfterViewInit, OnDestroy {
     this.cleanupListeners?.();
   }
 
-  /** Liefert die einzelnen Wörter für die Reveal-Animation. */
-  get words(): readonly string[] {
-    return this.text.split(/\s+/).filter(Boolean);
+  /** Liefert die Zeilen und Wörter für die Reveal-Animation. */
+  get wordLines(): readonly RevealLine[] {
+    let index = 0;
+
+    return this.text
+      .split(/\r?\n|<br\s*\/?>/gi)
+      .map((line) => line.split(/\s+/).filter(Boolean).map((word) => ({ text: word, index: index++ })))
+      .filter((line) => line.length > 0);
   }
 
   /** Liefert den Wortabstand der Animation passend zur Titelgröße. */

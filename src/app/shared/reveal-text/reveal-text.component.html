@@ -6,20 +6,32 @@
 
   @if (level === 'h1') {
   <h1 [class]="headingClassList()">
-    @for (word of words; track word + $index; let index = $index) {
-    <span class="reveal__word" [style.--delay.ms]="index * wordDelay()"><span>{{ word }}</span></span>
+    @for (line of wordLines; track $index) {
+    <span class="reveal__line">
+      @for (word of line; track word.text + word.index) {
+      <span class="reveal__word" [style.--delay.ms]="word.index * wordDelay()"><span>{{ word.text }}</span></span>
+      }
+    </span>
     }
   </h1>
   } @else if (level === 'h3') {
   <h3 [class]="headingClassList()">
-    @for (word of words; track word + $index; let index = $index) {
-    <span class="reveal__word" [style.--delay.ms]="index * wordDelay()"><span>{{ word }}</span></span>
+    @for (line of wordLines; track $index) {
+    <span class="reveal__line">
+      @for (word of line; track word.text + word.index) {
+      <span class="reveal__word" [style.--delay.ms]="word.index * wordDelay()"><span>{{ word.text }}</span></span>
+      }
+    </span>
     }
   </h3>
   } @else {
   <h2 [class]="headingClassList()">
-    @for (word of words; track word + $index; let index = $index) {
-    <span class="reveal__word" [style.--delay.ms]="index * wordDelay()"><span>{{ word }}</span></span>
+    @for (line of wordLines; track $index) {
+    <span class="reveal__line">
+      @for (word of line; track word.text + word.index) {
+      <span class="reveal__word" [style.--delay.ms]="word.index * wordDelay()"><span>{{ word.text }}</span></span>
+      }
+    </span>
     }
   </h2>
   }

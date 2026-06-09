@@ -47,7 +47,7 @@
     <div class="project-stack__copy bp-motion-copy" bpReveal>
       <p class="project-stack__kicker project-stack__kicker--headline">{{ project.overviewKicker ?? project.kicker }}</p>
       <div class="project-stack__number">{{ (index + 1).toString().padStart(2, '0') }}</div>
-      <bp-reveal-text class="project-stack__title-reveal" level="h3" [text]="project.name" />
+      <bp-reveal-text class="project-stack__title-reveal" level="h3" [text]="projectTitleText(project)" />
       <p class="project-stack__summary">{{ project.overviewSummary ?? project.summary }}</p>
 
       <ul class="project-stack__tags" [attr.aria-label]="labels.techStackAriaLabel">

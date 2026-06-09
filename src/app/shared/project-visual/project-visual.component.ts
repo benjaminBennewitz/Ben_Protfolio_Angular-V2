@@ -63,7 +63,7 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
   readonly bombButtonLabel = () => this.labels?.bombButtonLabel ?? 'Bombe zünden';
 
   /** Zugängliche Beschriftung für die Blutanalyse-Interaktion. */
-  readonly bloodButtonLabel = () => this.labels?.bloodButtonLabel ?? 'Start blood analysis';
+  readonly bloodButtonLabel = () => this.labels?.bloodButtonLabel ?? 'Dashboard starten';
 
   /** Dauer, bis Auge und Träne wieder zurückgesetzt werden. */
   private readonly eyeResetDelayMs = 2800;

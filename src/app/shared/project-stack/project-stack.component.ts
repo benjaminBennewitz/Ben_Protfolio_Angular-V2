@@ -348,6 +348,11 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     return this.projects.filter((project) => project.slug !== activeProject.slug);
   }
 
+  /** Liefert den animierten Projekttitel mit optionalen festen Zeilenumbrüchen. */
+  projectTitleText(project: PortfolioProject): string {
+    return project.titleLines?.join('\n') ?? project.name;
+  }
+
   /** Gibt an, ob es sich um das Grafikdesign-Katalog-Projekt handelt. */
   isGraphicCatalogProject(project: PortfolioProject): boolean {
     return project.slug === 'grafikdesign-katalog';

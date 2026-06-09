@@ -449,6 +449,8 @@ export interface ProjectGalleryItem {
   readonly text: string;
   /** Optionaler Bildpfad für echte Screenshots oder Galeriebilder. */
   readonly image?: string;
+  /** Dominante Hintergrundfarbe für rahmende Bildcontainer. */
+  readonly backgroundColor?: string;
   /** Geplanter Dateipfad, wenn ein Galeriebild später ergänzt wird. */
   readonly imageHint?: string;
   /** Alternativtext für echte Screenshots. */
@@ -471,20 +473,42 @@ export interface ProjectGalleryItem {
 export interface ProjectCatalogPage {
   /** Sichtbare Seitenzahl oder Seitenkennung. */
   readonly number: string;
+  /** Position der Seite im Spread, wenn nur eine Seite sichtbar ist. */
+  readonly side?: 'left' | 'right';
   /** Kleine Kapitel- oder Bildbeschriftung. */
   readonly eyebrow: string;
   /** Titel der Katalogseite. */
   readonly title: string;
   /** Kurzer editorialer Seiteninhalt. */
   readonly text: string;
-  /** Optionaler Bildpfad für ein echtes Katalogseitenmotiv. */
+  /** Optionaler Dateipfad für ein echtes Katalogseitenmotiv. */
   readonly image?: string;
+  /** Sprachabhängige Dateipfade für lokalisierte Katalogseiten. */
+  readonly imageByLanguage?: Partial<Record<PortfolioLanguage, string>>;
+  /** Dateityp des Katalogseitenmotivs. */
+  readonly assetType?: 'image' | 'pdf';
   /** Alternativtext für das Katalogseitenmotiv. */
   readonly alt: string;
-  /** Geplanter Dateipfad, wenn das Bild später ergänzt wird. */
+  /** Geplanter Dateipfad, wenn das Motiv später ergänzt wird. */
   readonly imageHint: string;
   /** Visuelle Stimmung der Seite für CSS-Varianten. */
   readonly mood: 'cover' | 'image' | 'type' | 'detail';
+}
+
+/** Eintrag im Katalog-Inhaltsverzeichnis. */
+export interface ProjectCatalogTocItem {
+  /** Sichtbare Kapitelnummer. */
+  readonly number: string;
+  /** Titel des Kapitels. */
+  readonly title: string;
+  /** Untertitel des Kapitels. */
+  readonly subtitle: string;
+  /** Kurzer Kontexttext zum Kapitel. */
+  readonly text: string;
+  /** Optionaler Werkzeug- oder Themenschwerpunkt. */
+  readonly tool?: string;
+  /** Zielindex im Reader. */
+  readonly targetSpreadIndex: number;
 }
 
 /** Doppelseite des digitalen Designkatalogs. */
@@ -495,7 +519,7 @@ export interface ProjectCatalogSpread {
   readonly title: string;
   /** Kurzer Kontext zur Doppelseite. */
   readonly text: string;
-  /** Linke und rechte DIN-A4-Seite, zusammen als A3-Spread. */
+  /** Linke und rechte Katalogseite im proportionalen Sonderformat-Spread. */
   readonly pages: readonly ProjectCatalogPage[];
 }
 
@@ -531,6 +555,8 @@ export interface ProjectCatalogShowcase {
   readonly previousLabel: string;
   /** Beschriftung für nächste Doppelseite. */
   readonly nextLabel: string;
+  /** Kapitel aus dem sichtbaren Katalog-Inhaltsverzeichnis. */
+  readonly tocItems?: readonly ProjectCatalogTocItem[];
   /** Interaktive Doppelseiten des Katalogs. */
   readonly spreads: readonly ProjectCatalogSpread[];
   /** Eyebrow für die Masonry-Galerie. */

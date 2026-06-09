@@ -3,6 +3,14 @@
   @if (project(); as activeProject) {
   <article>
     <header class="project-detail__hero bp-section" [style.--project-detail-game-landscape]="activeProject.gameShowcase?.heroBackdropAsset ? 'url(' + activeProject.gameShowcase?.heroBackdropAsset + ')' : null">
+      @if (activeProject.catalogShowcase) {
+      <div class="project-detail__catalog-flow" aria-hidden="true">
+        <canvas #catalogFlowCanvas class="project-detail__catalog-flow-canvas"></canvas>
+        <span class="project-detail__catalog-flow-orb project-detail__catalog-flow-orb--primary"></span>
+        <span class="project-detail__catalog-flow-orb project-detail__catalog-flow-orb--secondary"></span>
+      </div>
+      }
+
       <div class="project-detail__hero-grid bp-container">
         <div class="project-detail__hero-copy">
           <a class="project-detail__back" routerLink="/portfolio">
@@ -31,7 +39,7 @@
           </ul>
 
           <div class="project-detail__hero-actions">
-            <a class="bp-button bp-button--accent" [attr.href]="activeProject.boardShowcase ? '#project-board-workflow' : activeProject.gameShowcase ? '#project-game-making' : activeProject.bloodShowcase ? '#project-blood-workflow' : activeProject.catalogShowcase ? '#project-catalog-spread' : '#project-deep-dive'">
+            <a class="bp-button bp-button--accent" [routerLink]="['/projects', activeProject.slug]" [fragment]="primaryDetailFragment()">
               <span>{{ activeProject.boardShowcase?.ctaLabel ?? activeProject.gameShowcase?.ctaLabel ?? activeProject.bloodShowcase?.ctaLabel ?? activeProject.catalogShowcase?.ctaLabel ?? content().projectsIntro.caseStudyLabel }}</span>
               <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
             </a>
@@ -44,6 +52,7 @@
           </div>
         </div>
 
+        @if (!activeProject.catalogShowcase) {
         <div class="project-detail__hero-stage" [attr.aria-label]="content().projectsIntro.previewAriaLabel">
           @if (activeProject.boardShowcase; as boardShowcase) {
           <aside class="project-detail__board-showcase" [attr.aria-label]="boardShowcase.boardLabel">
@@ -183,35 +192,6 @@
               </div>
             </div>
           </aside>
-          } @else if (activeProject.catalogShowcase; as catalogShowcase) {
-          <aside class="project-detail__catalog-showcase" [attr.aria-label]="catalogShowcase.readerLabel">
-            <div class="project-detail__catalog-window">
-              <div class="project-detail__catalog-bar">
-                <span></span>
-                <strong>{{ catalogShowcase.eyebrow }}</strong>
-                <small>{{ catalogShowcase.status }}</small>
-              </div>
-
-              <div class="project-detail__catalog-head">
-                <div>
-                  <p>{{ catalogShowcase.title }}</p>
-                  <span>{{ catalogShowcase.lead }}</span>
-                </div>
-                <ul>
-                  @for (chip of catalogShowcase.chips; track chip) {
-                  <li>{{ chip }}</li>
-                  }
-                </ul>
-              </div>
-
-              <div class="project-detail__catalog-hero-preview" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          </aside>
           } @else if ((activeProject.appModules?.length ?? 0) > 0) {
           <div class="project-detail__app-stack" [style.--stack-active]="activeAppModuleIndex()" aria-label="Interaktive App-Karten">
             @for (app of activeProject.appModules ?? []; track app.id; let index = $index) {
@@ -294,6 +274,7 @@
           </div>
           }
         </div>
+        }
       </div>
     </header>
 
@@ -340,9 +321,9 @@
       </div>
     </section>
 
-    <section class="project-detail__info bp-section" bpReveal>
+    <section class="project-detail__info bp-section">
       <div class="bp-container project-detail__info-grid">
-        <aside class="project-detail__meta bp-card" [attr.aria-label]="content().projectsIntro.metaAriaLabel">
+        <aside class="project-detail__meta bp-card" [attr.aria-label]="content().projectsIntro.metaAriaLabel" bpReveal>
           <dl>
             <div>
               <dt>{{ content().projectsIntro.typeLabel }}</dt>
@@ -359,7 +340,7 @@
           </dl>
         </aside>
 
-        <div class="project-detail__copy">
+        <div class="project-detail__copy" bpReveal>
           <section>
             <h2>{{ content().projectsIntro.descriptionLabel }}</h2>
             <p>{{ activeProject.description }}</p>
@@ -715,48 +696,53 @@
     }
 
     @if (activeProject.catalogShowcase; as catalogShowcase) {
-    <section id="project-catalog-spread" class="project-detail__catalog-reader-section bp-section" bpReveal>
-      <div class="project-detail__catalog-reader">
-        <div class="project-detail__catalog-reader-head" bpReveal>
-          <div>
-            <p class="bp-eyebrow">{{ catalogShowcase.readerEyebrow }}</p>
-            <h2>{{ catalogShowcase.readerTitle }}</h2>
-            <span>{{ catalogShowcase.readerHint }}</span>
-          </div>
+    <section class="project-detail__catalog-reader-intro" bpReveal>
+      <div class="bp-container project-detail__catalog-reader-head">
+        <p class="bp-eyebrow">{{ catalogShowcase.readerEyebrow }}</p>
+        <h2>{{ catalogShowcase.readerTitle }}</h2>
+        @if (catalogShowcase.readerHint) {
+        <span>{{ catalogShowcase.readerHint }}</span>
+        }
+      </div>
+    </section>
 
+    <section id="project-catalog-spread" class="project-detail__catalog-reader-section bp-section" bpReveal (contextmenu)="blockProtectedAssetEvent($event)" (dragstart)="blockProtectedAssetEvent($event)">
+      <div class="project-detail__catalog-reader">
+        @if (activeCatalogSpread(); as spread) {
+        <div class="project-detail__catalog-reader-frame" [attr.aria-label]="catalogShowcase.readerLabel">
           <button type="button" class="project-detail__catalog-menu-button" [attr.aria-label]="catalogShowcase.tocOpenLabel" [attr.aria-expanded]="isCatalogMenuOpen()" (click)="toggleCatalogMenu()">
             <span class="material-symbols-outlined" aria-hidden="true">menu</span>
             <strong>{{ catalogShowcase.tocTitle }}</strong>
           </button>
-        </div>
 
-        @if (activeCatalogSpread(); as spread) {
-        <div class="project-detail__catalog-reader-layout">
-          <div class="project-detail__catalog-reader-frame" [attr.aria-label]="catalogShowcase.readerLabel">
-            <div class="project-detail__catalog-reader-controls">
-              <button type="button" [attr.aria-label]="catalogShowcase.previousLabel" (click)="selectAdjacentCatalogSpread(-1)">
-                <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-              </button>
-              <span>{{ spread.title }} · {{ activeCatalogSpreadIndex() + 1 }} / {{ catalogShowcase.spreads.length }}</span>
-              <button type="button" [attr.aria-label]="catalogShowcase.nextLabel" (click)="selectAdjacentCatalogSpread(1)">
-                <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-              </button>
-            </div>
-
-            <div class="project-detail__catalog-book project-detail__catalog-book--reader">
-              @for (page of spread.pages; track page.number) {
-              <article [class]="'project-detail__catalog-page project-detail__catalog-page--' + page.mood">
-                <div class="project-detail__catalog-page-placeholder">
-                  <span>{{ page.number }}</span>
-                  <em>{{ page.eyebrow }}</em>
-                  <strong>{{ page.title }}</strong>
-                  <p>{{ page.text }}</p>
-                  <small>{{ page.imageHint }}</small>
-                  <i aria-hidden="true"></i>
-                </div>
-              </article>
+          <div class="project-detail__catalog-book project-detail__catalog-book--reader" [class.project-detail__catalog-book--next]="catalogSpreadDirection() === 1" [class.project-detail__catalog-book--previous]="catalogSpreadDirection() === -1" [class.project-detail__catalog-book--loading]="isCatalogReaderBusy()">
+            @for (page of spread.pages; track page.number) {
+            <article [class]="'project-detail__catalog-page project-detail__catalog-page--' + page.mood + (page.side ? ' project-detail__catalog-page--' + page.side : '')">
+              @if (page.asset) {
+              <img class="project-detail__catalog-page-image" [src]="page.asset" [alt]="page.alt" loading="eager" decoding="async" fetchpriority="high" draggable="false" (contextmenu)="blockProtectedAssetEvent($event)" (dragstart)="blockProtectedAssetEvent($event)" />
+              <span class="project-detail__catalog-page-shield" aria-hidden="true"></span>
+              } @else {
+              <div class="project-detail__catalog-page-placeholder">
+                <span>{{ page.number }}</span>
+                <em>{{ page.eyebrow }}</em>
+                <strong>{{ page.title }}</strong>
+                <p>{{ page.text }}</p>
+                <small>{{ page.imageHint }}</small>
+                <i aria-hidden="true"></i>
+              </div>
               }
-            </div>
+            </article>
+            }
+          </div>
+
+          <div class="project-detail__catalog-reader-controls">
+            <button type="button" [attr.aria-label]="catalogShowcase.previousLabel" [disabled]="isCatalogReaderBusy()" (click)="selectAdjacentCatalogSpread(-1)">
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+            </button>
+            <span>{{ spread.pageLabel }}</span>
+            <button type="button" [attr.aria-label]="catalogShowcase.nextLabel" [disabled]="isCatalogReaderBusy()" (click)="selectAdjacentCatalogSpread(1)">
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+            </button>
           </div>
         </div>
 
@@ -768,7 +754,20 @@
           </button>
           <p class="bp-eyebrow">{{ catalogShowcase.eyebrow }}</p>
           <h3>{{ catalogShowcase.tocTitle }}</h3>
-          <p>{{ spread.text }}</p>
+          @if (catalogShowcase.tocItems?.length) {
+          <div class="project-detail__catalog-toc-list" [attr.aria-label]="catalogShowcase.tocTitle">
+            @for (tocItem of catalogShowcase.tocItems; track tocItem.number) {
+            <button type="button" [class.is-active]="activeCatalogSpreadIndex() === tocItem.targetSpreadIndex" (click)="selectCatalogSpread(tocItem.targetSpreadIndex); closeCatalogMenu()">
+              <span>{{ tocItem.number }}</span>
+              <strong>{{ tocItem.title }}</strong>
+              <em>{{ tocItem.subtitle }}</em>
+              @if (tocItem.tool) {
+              <small>{{ tocItem.tool }}</small>
+              }
+            </button>
+            }
+          </div>
+          } @else {
           <div class="project-detail__catalog-spread-tabs" [attr.aria-label]="catalogShowcase.readerLabel">
             @for (catalogSpread of catalogShowcase.spreads; track catalogSpread.id; let index = $index) {
             <button type="button" [class.is-active]="activeCatalogSpreadIndex() === index" (click)="selectCatalogSpread(index); closeCatalogMenu()">
@@ -777,6 +776,7 @@
             </button>
             }
           </div>
+          }
         </aside>
         }
         }
@@ -844,16 +844,16 @@
       <div class="bp-container">
         <div class="project-detail__section-head">
           <p class="bp-eyebrow">{{ catalogShowcase.galleryEyebrow }}</p>
-          <h2>{{ catalogShowcase.galleryTitle }}</h2>
         </div>
 
         <div class="project-detail__masonry-gallery">
           @for (item of activeProject.gallery; track item.title; let index = $index) {
-          <article [class]="'project-detail__masonry-card project-detail__masonry-card--' + item.size" [style.--reveal-index]="index" bpReveal>
-            <button type="button" [attr.aria-label]="catalogShowcase.lightboxOpenLabel + ': ' + item.title" (click)="openGalleryLightbox(index)">
+          <article [class]="'project-detail__masonry-card project-detail__masonry-card--' + item.size" [style.--reveal-index]="index" [style.--gallery-bg]="item.backgroundColor" bpReveal>
+            <button type="button" [attr.aria-label]="catalogShowcase.lightboxOpenLabel + ': ' + item.title" (click)="openGalleryLightbox(index)" (contextmenu)="blockProtectedAssetEvent($event)" (dragstart)="blockProtectedAssetEvent($event)">
               <span class="project-detail__masonry-image">
                 @if (item.image) {
-                <img [src]="item.image" [alt]="item.alt ?? item.title" loading="lazy" decoding="async" />
+                <img [src]="item.image" [alt]="item.alt ?? item.title" loading="lazy" decoding="async" fetchpriority="low" draggable="false" (contextmenu)="blockProtectedAssetEvent($event)" (dragstart)="blockProtectedAssetEvent($event)" />
+                  <span class="project-detail__masonry-shield" aria-hidden="true"></span>
                 } @else {
                 <span class="project-detail__masonry-placeholder" aria-hidden="true">
                   <span class="material-symbols-outlined">{{ item.icon ?? 'image' }}</span>
@@ -862,54 +862,61 @@
                 </span>
                 }
               </span>
+              <span class="project-detail__masonry-caption">
+                <strong>{{ item.title }}</strong>
+                <small>{{ item.text }}</small>
+              </span>
             </button>
           </article>
           }
         </div>
       </div>
 
-      @if (activeGalleryLightboxItem(); as lightboxItem) {
-      <div class="project-detail__lightbox" role="dialog" aria-modal="true" [attr.aria-label]="lightboxItem.title" (click)="closeGalleryLightbox()">
-        <div class="project-detail__lightbox-panel" (click)="$event.stopPropagation()">
-          <button type="button" class="project-detail__lightbox-close" [attr.aria-label]="catalogShowcase.lightboxCloseLabel" (click)="closeGalleryLightbox()">
-            <span class="material-symbols-outlined" aria-hidden="true">close</span>
-          </button>
-
-          <div class="project-detail__lightbox-visual">
-            @if (lightboxItem.image) {
-            <img [src]="lightboxItem.image" [alt]="lightboxItem.alt ?? lightboxItem.title" />
-            } @else {
-            <div class="project-detail__lightbox-placeholder">
-              <span class="material-symbols-outlined" aria-hidden="true">{{ lightboxItem.icon ?? 'image' }}</span>
-              <strong>{{ lightboxItem.title }}</strong>
-              <small>{{ lightboxItem.imageHint }}</small>
-            </div>
-            }
-          </div>
-
-          <div class="project-detail__lightbox-copy">
-            <p class="bp-eyebrow">{{ lightboxItem.year }}</p>
-            <h3>{{ lightboxItem.title }}</h3>
-            <p>{{ lightboxItem.detail ?? lightboxItem.text }}</p>
-            <ul>
-              @for (tool of lightboxItem.tools ?? []; track tool) {
-              <li>{{ tool }}</li>
-              }
-            </ul>
-          </div>
-
-          <div class="project-detail__lightbox-actions">
-            <button type="button" [attr.aria-label]="catalogShowcase.lightboxPreviousLabel" (click)="selectAdjacentGalleryItem(-1)">
-              <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-            </button>
-            <button type="button" [attr.aria-label]="catalogShowcase.lightboxNextLabel" (click)="selectAdjacentGalleryItem(1)">
-              <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-            </button>
-          </div>
-        </div>
-      </div>
-      }
     </section>
+
+    @if (activeGalleryLightboxItem(); as lightboxItem) {
+    <div class="project-detail__lightbox" role="dialog" aria-modal="true" [attr.aria-label]="lightboxItem.title" (click)="closeGalleryLightbox()">
+      <div class="project-detail__lightbox-panel" [class.is-lightbox-fading-out]="galleryLightboxSwitchPhase() === 'fade-out'" [class.is-lightbox-fading-in]="galleryLightboxSwitchPhase() === 'fade-in'" [class.project-detail__lightbox-panel--switch-next]="galleryLightboxSwitchDirection() === 1" [class.project-detail__lightbox-panel--switch-prev]="galleryLightboxSwitchDirection() === -1" [style.--gallery-bg]="galleryLightboxBackground()" (click)="$event.stopPropagation()">
+        <button type="button" class="project-detail__lightbox-close" [attr.aria-label]="catalogShowcase.lightboxCloseLabel" (click)="closeGalleryLightbox()">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+
+        <div class="project-detail__lightbox-visual">
+          @if (lightboxItem.image) {
+          <img [src]="lightboxItem.image" [alt]="lightboxItem.alt ?? lightboxItem.title" draggable="false" (contextmenu)="blockProtectedAssetEvent($event)" (dragstart)="blockProtectedAssetEvent($event)" />
+          <span class="project-detail__lightbox-shield" aria-hidden="true"></span>
+          } @else {
+          <div class="project-detail__lightbox-placeholder">
+            <span class="material-symbols-outlined" aria-hidden="true">{{ lightboxItem.icon ?? 'image' }}</span>
+            <strong>{{ lightboxItem.title }}</strong>
+            <small>{{ lightboxItem.imageHint }}</small>
+          </div>
+          }
+        </div>
+
+        <div class="project-detail__lightbox-copy">
+          <p class="bp-eyebrow">{{ lightboxItem.year }}</p>
+          <h3>{{ lightboxItem.title }}</h3>
+          <p>{{ lightboxItem.detail ?? lightboxItem.text }}</p>
+          <ul>
+            @for (tool of lightboxItem.tools ?? []; track tool) {
+            <li>{{ tool }}</li>
+            }
+          </ul>
+        </div>
+
+        <div class="project-detail__lightbox-actions">
+          <button type="button" [attr.aria-label]="catalogShowcase.lightboxPreviousLabel" (click)="selectAdjacentGalleryItem(-1)">
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+          </button>
+          <button type="button" [attr.aria-label]="catalogShowcase.lightboxNextLabel" (click)="selectAdjacentGalleryItem(1)">
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+    }
     } @else {
     <section class="project-detail__gallery bp-section" bpReveal>
       <div class="bp-container">

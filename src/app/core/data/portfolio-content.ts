@@ -5,7 +5,294 @@
  * @description Alle sichtbaren Texte sind hier sprachabhängig vorbereitet.
  */
 
-import { PortfolioContent } from '../models/portfolio.models';
+import { PortfolioContent, PortfolioLanguage, ProjectCatalogPage, ProjectCatalogSpread, ProjectCatalogTocItem, ProjectGalleryItem } from '../models/portfolio.models';
+
+
+/** Anzahl der einzeln ausgelieferten Katalogseiten inklusive Cover und Rückseite. */
+const DESIGN_CATALOG_PAGE_COUNT = 54;
+
+/** Struktur eines Kapitel-Eintrags aus dem Katalog-Inhaltsverzeichnis. */
+interface DesignCatalogChapterSeed {
+  /** Sichtbare Kapitelnummer. */
+  readonly number: string;
+  /** Kapitelname aus dem Katalog. */
+  readonly title: string;
+  /** Unterzeile aus dem Katalog. */
+  readonly subtitle: string;
+  /** Erste Seite des Kapitels im Reader. */
+  readonly startPage: number;
+  /** Kurzer Kontexttext aus dem Inhaltsverzeichnis. */
+  readonly text: string;
+  /** Zugeordnetes Werkzeug oder Thema. */
+  readonly tool: string;
+  /** Visuelle Seitenstimmung für Platzhalter und Animation. */
+  readonly mood: ProjectCatalogPage['mood'];
+}
+
+/** Kapitelstruktur des Designkatalogs aus der gelieferten Inhaltsverzeichnis-Seite. */
+const DESIGN_CATALOG_CHAPTERS: readonly DesignCatalogChapterSeed[] = [
+  { number: '01', title: 'Personal Profile', subtitle: 'resume CV', startPage: 4, text: 'Who is the guy whose portfolio you are holding in your hands? And what is behind the name UNIQUE IDEA?', tool: 'Motivation - Analysis', mood: 'type' },
+  { number: '02', title: 'Processing', subtitle: 'chaos or symmetry', startPage: 5, text: 'I like the idea of controlling chaos. A paradox. Is that even possible - I think so.', tool: 'Processing - Generative Arts', mood: 'image' },
+  { number: '03', title: 'Illustrations', subtitle: 'vector arts', startPage: 11, text: 'There is nothing nicer than pin-sharp typography - it is essential for printing.', tool: 'Illustrator CC', mood: 'type' },
+  { number: '04', title: 'Image Processing', subtitle: 'and photography', startPage: 19, text: 'Digital image editing is a miracle with great power. It makes us wonder and laugh.', tool: 'Photoshop CC', mood: 'detail' },
+  { number: '05', title: 'Layout and Typo', subtitle: 'printing stuff', startPage: 43, text: 'The classical advertising media, indispensable for anyone who wants to present themselves.', tool: 'InDesign CC', mood: 'cover' },
+];
+
+/** Erstellt die Kapitelnavigation für den Katalog-Reader. */
+function createDesignCatalogTocItems(): readonly ProjectCatalogTocItem[] {
+  return DESIGN_CATALOG_CHAPTERS.map((chapter) => ({
+    number: chapter.number,
+    title: chapter.title,
+    subtitle: chapter.subtitle,
+    text: chapter.text,
+    tool: chapter.tool,
+    targetSpreadIndex: getDesignCatalogSpreadIndexForPage(chapter.startPage),
+  }));
+}
+
+/** Erstellt alle Reader-Ansichten: Seite 1 rechts, Doppelseiten, Seite 54 links. */
+function createDesignCatalogSpreads(): readonly ProjectCatalogSpread[] {
+  const spreads: ProjectCatalogSpread[] = [
+    {
+      id: 'catalog-spread-01',
+      title: 'Cover',
+      text: 'Erste Katalogseite als rechter Einstieg im Reader.',
+      pages: [createDesignCatalogPage(1, 'right')],
+    },
+  ];
+
+  for (let pageNumber = 2; pageNumber < DESIGN_CATALOG_PAGE_COUNT; pageNumber += 2) {
+    spreads.push({
+      id: `catalog-spread-${formatDesignCatalogPageNumber(pageNumber)}-${formatDesignCatalogPageNumber(pageNumber + 1)}`,
+      title: `Pages ${formatDesignCatalogPageNumber(pageNumber)}-${formatDesignCatalogPageNumber(pageNumber + 1)}`,
+      text: getDesignCatalogChapterForPage(pageNumber).title,
+      pages: [createDesignCatalogPage(pageNumber, 'left'), createDesignCatalogPage(pageNumber + 1, 'right')],
+    });
+  }
+
+  spreads.push({
+    id: `catalog-spread-${formatDesignCatalogPageNumber(DESIGN_CATALOG_PAGE_COUNT)}`,
+    title: 'Back Cover',
+    text: 'Letzte Katalogseite als linker Abschluss im Reader.',
+    pages: [createDesignCatalogPage(DESIGN_CATALOG_PAGE_COUNT, 'left')],
+  });
+
+  return spreads;
+}
+
+/** Erstellt eine einzelne JPG-Katalogseite mit sprachabhängiger Datei. */
+function createDesignCatalogPage(pageNumber: number, side: ProjectCatalogPage['side']): ProjectCatalogPage {
+  const chapter = getDesignCatalogChapterForPage(pageNumber);
+  const number  = formatDesignCatalogPageNumber(pageNumber);
+
+  return {
+    number,
+    side,
+    eyebrow: chapter.number,
+    title: chapter.title,
+    text: chapter.subtitle,
+    image: getDesignCatalogPagePath('de', pageNumber),
+    imageByLanguage: {
+      de: getDesignCatalogPagePath('de', pageNumber),
+      en: getDesignCatalogPagePath('en', pageNumber),
+    },
+    assetType: 'image',
+    alt: `Designkatalog Seite ${number}: ${chapter.title}`,
+    imageHint: getDesignCatalogPagePath('en', pageNumber),
+    mood: chapter.mood,
+  };
+}
+
+/** Gibt die Kapitelmetadaten zur jeweiligen Katalogseite zurück. */
+function getDesignCatalogChapterForPage(pageNumber: number): DesignCatalogChapterSeed {
+  return [...DESIGN_CATALOG_CHAPTERS].reverse().find((chapter) => pageNumber >= chapter.startPage) ?? DESIGN_CATALOG_CHAPTERS[0];
+}
+
+/** Berechnet den Reader-Index zur echten Seitenzahl. */
+function getDesignCatalogSpreadIndexForPage(pageNumber: number): number {
+  if (pageNumber <= 1) {
+    return 0;
+  }
+
+  if (pageNumber >= DESIGN_CATALOG_PAGE_COUNT) {
+    return Math.ceil((DESIGN_CATALOG_PAGE_COUNT - 1) / 2);
+  }
+
+  return Math.ceil((pageNumber - 1) / 2);
+}
+
+/** Formatiert Katalogseiten stabil zweistellig. */
+function formatDesignCatalogPageNumber(pageNumber: number): string {
+  return pageNumber.toString().padStart(2, '0');
+}
+
+/** Baut den erwarteten Asset-Pfad für eine JPG-Katalogseite. */
+function getDesignCatalogPagePath(language: PortfolioLanguage, pageNumber: number): string {
+  return `assets/images/projects/design-catalog/${language}/catalog-page-${formatDesignCatalogPageNumber(pageNumber)}.jpg`;
+}
+
+
+/** Sprachabhängige Textdaten für ein Masonry-Asset. */
+interface DesignCatalogGalleryTextSeed {
+  /** Sichtbarer Titel der Galeriearbeit. */
+  readonly title: string;
+  /** Kurzer Kartentext unter dem Masonry-Bild. */
+  readonly text: string;
+  /** Ausführlicher Lightbox-Text zur Gestaltungsidee. */
+  readonly detail: string;
+  /** Alternativtext für das Galeriebild. */
+  readonly alt: string;
+}
+
+/** Rohdaten für eine echte Masonry-Arbeit aus dem Asset-Ordner. */
+interface DesignCatalogGallerySeed {
+  /** Zweistellige oder vorhandene Dateinummer im Masonry-Ordner. */
+  readonly file: string;
+  /** Visuelle Gewichtung im Masonry-Raster. */
+  readonly size: ProjectGalleryItem['size'];
+  /** Material-Symbol für Fallbacks und interne Semantik. */
+  readonly icon: string;
+  /** Aus dem Asset analysierte Container-Hintergrundfarbe. */
+  readonly backgroundColor?: string;
+  /** Genutzte oder naheliegende Werkzeuge. */
+  readonly tools: readonly string[];
+  /** Jahr oder grober Zeitraum der Arbeit. */
+  readonly year: string;
+  /** Deutsche Texte für die Galerie. */
+  readonly de: DesignCatalogGalleryTextSeed;
+  /** Englische Texte für die Galerie. */
+  readonly en: DesignCatalogGalleryTextSeed;
+}
+
+/** Analysierte Hintergrundfarben der lokalen WebP-Galerieassets. */
+const DESIGN_CATALOG_GALLERY_BACKGROUNDS: Record<string, string> = {
+  '01': '#000000',
+  '02': '#fff5e1',
+  '03': '#d1d5d7',
+  '04': '#78a175',
+  '05': '#ffffff',
+  '06': '#020300',
+  '07': '#03060f',
+  '08': '#292929',
+  '09': '#653502',
+  '10': '#d3d3d3',
+  '11': '#c0daae',
+  '12': '#fff7f3',
+  '13': '#916032',
+  '14': '#030303',
+  '15': '#374c64',
+  '16': '#182122',
+  '17': '#f2f2f2',
+  '18': '#ffffff',
+  '19': '#010101',
+  '20': '#ffffff',
+  '21': '#1a171a',
+  '22': '#030332',
+  '23': '#ffffff',
+  '24': '#ffffff',
+  '25': '#e2e2e2',
+  '26': '#ffffff',
+  '27': '#c3dce3',
+  '28': '#cbdce4',
+  '29': '#777877',
+  '31': '#000000',
+  '32': '#65e2ff',
+  '33': '#ffffff',
+  '34': '#df7909',
+  '35': '#000000',
+  '36': '#ffffff',
+  '37': '#6a6b70',
+  '39': '#000000',
+  '40': '#ffffff',
+  '41': '#c2bdc3',
+  '47': '#000000',
+  '49': '#000000',
+  '50': '#211717',
+  '51': '#312828',
+  '52': '#362924',
+  '53': '#4f4f4d',
+  '54': '#999999',
+  '55': '#a0782b',
+  '56': '#2e4007',
+  '57': '#442e13',
+  '58': '#262c3d',
+};
+
+/** Einzelne Arbeiten der Masonry-Galerie mit passendem Kurzkontext. */
+const DESIGN_CATALOG_GALLERY_ITEMS: readonly DesignCatalogGallerySeed[] = [
+  { file: '01', size: 'md', icon: 'face_retouching_natural', tools: ['Photoshop'], year: '2022', de: { title: 'Political Portrait', text: 'Kontraststarkes Portrait mit rauer Textur und dramatischem Licht.', detail: 'Die Arbeit setzt auf harte Tonwerte, digitale Körnung und einen fast plakativen Portraitschnitt.', alt: 'Dunkles digitales Portrait im Posterlook' }, en: { title: 'Political portrait', text: 'High-contrast portrait with rough texture and dramatic light.', detail: 'The work uses hard tonal values, digital grain and an almost poster-like portrait crop.', alt: 'Dark digital portrait in a poster look' } },
+  { file: '02', size: 'md', icon: 'face_retouching_natural', tools: ['Photoshop'], year: '2022', de: { title: 'Face Code', text: 'Surreales Gesicht mit grafischen Schnitten und Farbakzenten.', detail: 'Ein Portrait-Experiment zwischen Beauty-Retusche, Maske und Interface-Ästhetik.', alt: 'Surreales Portrait mit grafischen Farbbändern' }, en: { title: 'Face code', text: 'Surreal face with graphic cuts and color accents.', detail: 'A portrait experiment between beauty retouching, mask and interface aesthetics.', alt: 'Surreal portrait with graphic color bands' } },
+  { file: '03', size: 'md', icon: 'egg_alt', tools: ['Photoshop'], year: '2023', de: { title: 'Broken Egg', text: 'Zerbrechliches Stillleben mit kühler Farbwelt und schwebenden Elementen.', detail: 'Das Motiv spielt mit Materialkontrast, Schale, Glasigkeit und einer fast klinischen Bildruhe.', alt: 'Schwebende Eierschalen und Kugeln auf hellem Grund' }, en: { title: 'Broken egg', text: 'Fragile still life with a cool color world and floating elements.', detail: 'The motif plays with material contrast, shell, glassiness and an almost clinical calm.', alt: 'Floating egg shells and spheres on a bright background' } },
+  { file: '04', size: 'md', icon: 'eco', tools: ['Photoshop'], year: '2023', de: { title: 'Green Mutation', text: 'Organische Form mit Nebel, Unschärfe und reduzierter Farbpalette.', detail: 'Die Arbeit verbindet Makrogefühl, Sci-Fi-Stimmung und weiche Tiefenstaffelung.', alt: 'Grüne organische Form mit schwebenden Partikeln' }, en: { title: 'Green mutation', text: 'Organic form with haze, blur and a reduced color palette.', detail: 'The piece combines macro feeling, sci-fi mood and soft depth layering.', alt: 'Green organic form with floating particles' } },
+  { file: '05', size: 'lg', icon: 'auto_fix_high', tools: ['Photoshop'], year: '2023', de: { title: 'Painted Face', text: 'Portrait-Retusche mit malerischer Auflösung und weichen Kanten.', detail: 'Die Collage arbeitet mit Auflösung, Hauttönen und bewusst offener Fläche.', alt: 'Malerisch aufgelöstes Gesicht auf hellem Hintergrund' }, en: { title: 'Painted face', text: 'Portrait retouch with painterly dissolution and soft edges.', detail: 'The collage works with dissolution, skin tones and deliberately open space.', alt: 'Painterly dissolved face on a bright background' } },
+  { file: '06', size: 'lg', icon: 'local_fire_department', tools: ['Photoshop'], year: '2022', de: { title: 'Impact Type', text: 'Brennende Typografie mit Funken, Rauch und hoher Energie.', detail: 'Ein typografisches Effektmotiv, bei dem Lesbarkeit und Explosion gleichzeitig funktionieren müssen.', alt: 'Brennender Schriftzug mit Partikeln und Rauch' }, en: { title: 'Impact type', text: 'Burning typography with sparks, smoke and high energy.', detail: 'A typographic effect motif where readability and explosion have to work at the same time.', alt: 'Burning lettering with particles and smoke' } },
+  { file: '07', size: 'lg', icon: 'diamond', tools: ['Photoshop'], year: '2022', de: { title: 'Crystal Noise', text: 'Glitch-artige Komposition aus Licht, Rauch und geometrischem Zentrum.', detail: 'Das Motiv bündelt viele Ebenen zu einem dunklen, leuchtenden Posterlook.', alt: 'Dunkle Glitch-Komposition mit geometrischem Kristall' }, en: { title: 'Crystal noise', text: 'Glitch-like composition of light, smoke and a geometric center.', detail: 'The motif combines many layers into a dark glowing poster look.', alt: 'Dark glitch composition with geometric crystal' } },
+  { file: '08', size: 'md', icon: 'theater_comedy', tools: ['Photoshop'], year: '2022', de: { title: 'Mask Fragment', text: 'Abstraktes Maskenmotiv mit Bewegung, Weißraum und rauen Formen.', detail: 'Die Arbeit setzt auf starke Hell-Dunkel-Kontraste und schnelle, expressive Formen.', alt: 'Abstraktes Maskenmotiv mit roten und weißen Fragmenten' }, en: { title: 'Mask fragment', text: 'Abstract mask motif with movement, white space and rough shapes.', detail: 'The work relies on strong light-dark contrast and fast expressive forms.', alt: 'Abstract mask motif with red and white fragments' } },
+  { file: '09', size: 'md', icon: 'apartment', tools: ['Lightroom'], year: '2024', de: { title: 'Brutalist Gold', text: 'Architekturfoto mit warmem Farbstich und strengem Zuschnitt.', detail: 'Das Bild lebt von Kanten, Wiederholung und einer fast grafischen Fassadenwirkung.', alt: 'Warm getöntes Architekturfoto mit kantiger Betonfassade' }, en: { title: 'Brutalist gold', text: 'Architectural photo with warm color cast and strict crop.', detail: 'The image lives from edges, repetition and an almost graphic facade effect.', alt: 'Warm tinted architecture photo with angular concrete facade' } },
+  { file: '10', size: 'lg', icon: 'apartment', tools: ['Lightroom'], year: '2024', de: { title: 'Facade Rhythm', text: 'Schwarzweiß-Architektur mit Raster, Kanten und klarer Perspektive.', detail: 'Ein reduziertes Fassadenmotiv, das durch Wiederholung und negative Fläche funktioniert.', alt: 'Schwarzweißfoto einer modernen Fassade' }, en: { title: 'Facade rhythm', text: 'Black-and-white architecture with grid, edges and clear perspective.', detail: 'A reduced facade motif that works through repetition and negative space.', alt: 'Black-and-white photo of a modern facade' } },
+  { file: '11', size: 'md', icon: 'pets', tools: ['Lightroom'], year: '2024', de: { title: 'Forest Dog', text: 'Tierportrait mit natürlichem Licht, Grünwerten und ruhigem Hintergrund.', detail: 'Der Fokus liegt auf Blickführung, Schärfe und einem weichen dokumentarischen Look.', alt: 'Hund im Wald mit natürlichem Licht' }, en: { title: 'Forest dog', text: 'Animal portrait with natural light, green tones and a calm background.', detail: 'The focus is on eye guidance, sharpness and a soft documentary look.', alt: 'Dog in a forest with natural light' } },
+  { file: '12', size: 'md', icon: 'water', tools: ['Lightroom'], year: '2024', de: { title: 'Silent Lake', text: 'Ruhige Landschaft mit Spiegelung und pastelligem Color Grading.', detail: 'Die Bearbeitung reduziert Kontrast und erzeugt eine leichte, fast analoge Stimmung.', alt: 'Ruhiger See mit Baumspiegelung' }, en: { title: 'Silent lake', text: 'Quiet landscape with reflection and pastel color grading.', detail: 'The edit reduces contrast and creates a light almost analog mood.', alt: 'Quiet lake with tree reflection' } },
+  { file: '13', size: 'md', icon: 'texture', tools: ['Lightroom', 'Photoshop'], year: '2024', de: { title: 'Stone Texture', text: 'Farbige Naturstruktur mit hoher Detailtiefe und körnigem Kontrast.', detail: 'Das Motiv eignet sich als reine Texturfläche und als Ausgangspunkt für digitale Oberflächen.', alt: 'Orange-graue Steinstruktur als Textur' }, en: { title: 'Stone texture', text: 'Colorful natural structure with high detail and grainy contrast.', detail: 'The motif works as a pure texture surface and as a base for digital surfaces.', alt: 'Orange gray stone structure as texture' } },
+  { file: '14', size: 'md', icon: 'local_fire_department', tools: ['Photoshop'], year: '2022', de: { title: 'Battle Atmosphere', text: 'Dunkle Szene mit Feuer, Partikeln und cineastischer Tiefenwirkung.', detail: 'Hier geht es um Atmosphäre: viele kleine Lichtquellen erzeugen einen großen szenischen Raum.', alt: 'Dunkle Kampfszene mit Feuer und Rauch' }, en: { title: 'Battle atmosphere', text: 'Dark scene with fire, particles and cinematic depth.', detail: 'This is about atmosphere: many small light sources create a large scenic space.', alt: 'Dark battle scene with fire and smoke' } },
+  { file: '15', size: 'md', icon: 'description', tools: ['Photoshop'], year: '2025', de: { title: 'Floating Letterhead', text: 'Mockup eines Briefbogens mit reduzierter Perspektive und ruhigem Hintergrund.', detail: 'Ein klassisches Präsentationsmockup, das Layout und Papierwertigkeit sichtbar macht.', alt: 'Schwebender Briefbogen auf blauem Hintergrund' }, en: { title: 'Floating letterhead', text: 'Letterhead mockup with reduced perspective and calm background.', detail: 'A classic presentation mockup that shows layout and paper quality.', alt: 'Floating letterhead on blue background' } },
+  { file: '16', size: 'md', icon: 'local_activity', tools: ['Photoshop', 'Illustrator'], year: '2025', de: { title: 'Event Poster', text: 'Leuchtendes Posterdesign mit Linien, Farbe und starkem Zentrum.', detail: 'Die Gestaltung nutzt Kontrast, Neonflächen und ein klares Hierarchieprinzip.', alt: 'Buntes Eventposter auf dunklem Hintergrund' }, en: { title: 'Event poster', text: 'Bright poster design with lines, color and a strong center.', detail: 'The design uses contrast, neon surfaces and a clear hierarchy principle.', alt: 'Colorful event poster on dark background' } },
+  { file: '17', size: 'lg', icon: 'view_carousel', tools: ['Photoshop', 'Illustrator'], year: '2025', de: { title: 'Corporate Spread', text: 'Aufgefächertes Print-Mockup mit Karten, Flächen und Markenfarben.', detail: 'Das Mockup zeigt, wie mehrere Printstücke als ein konsistentes System wirken können.', alt: 'Aufgefächertes Corporate-Design-Printmockup' }, en: { title: 'Corporate spread', text: 'Fanned print mockup with cards, surfaces and brand colors.', detail: 'The mockup shows how several print pieces can work as one consistent system.', alt: 'Fanned corporate design print mockup' } },
+  { file: '18', size: 'md', icon: 'text_fields', tools: ['Illustrator'], year: '2023', de: { title: 'UNX Lettering', text: 'Dreidimensional wirkender Schriftzug mit Linienraster und Tiefe.', detail: 'Ein typografisches Experiment zwischen Isometrie, Schatten und Vektorpräzision.', alt: 'Schriftzug UNX mit dreidimensionalem Linienraster' }, en: { title: 'UNX lettering', text: 'Three-dimensional lettering with line grid and depth.', detail: 'A typographic experiment between isometry, shadow and vector precision.', alt: 'UNX lettering with three-dimensional line grid' } },
+  { file: '19', size: 'sm', icon: 'waves', tools: ['Processing'], year: '2023', de: { title: 'Smoke Lines', text: 'Generative Linienstruktur mit Rauchwirkung und fließender Bewegung.', detail: 'Die Grafik zeigt kontrolliertes Chaos als ruhige, aber sehr dichte Oberfläche.', alt: 'Schwarze generative Rauchlinien auf dunklem Grund' }, en: { title: 'Smoke lines', text: 'Generative line structure with smoke effect and flowing motion.', detail: 'The graphic shows controlled chaos as a calm but very dense surface.', alt: 'Black generative smoke lines on dark background' } },
+  { file: '20', size: 'sm', icon: 'all_inclusive', tools: ['Processing'], year: '2023', de: { title: 'Wire Petal', text: 'Feine generative Linienform mit transparenter Blütenwirkung.', detail: 'Ein sehr reduziertes Processing-Motiv, das über Überlagerung und Wiederholung entsteht.', alt: 'Transparente generative Linienform wie eine Blüte' }, en: { title: 'Wire petal', text: 'Fine generative line form with transparent flower effect.', detail: 'A very reduced Processing motif created through overlap and repetition.', alt: 'Transparent generative line form like a flower' } },
+  { file: '21', size: 'lg', icon: 'texture', tools: ['Processing', 'Photoshop'], year: '2023', de: { title: 'Purple Flow Field', text: 'Dunkle Linienoberfläche mit violettem Glühen und Rahmenwirkung.', detail: 'Das Bild kombiniert generative Bewegung mit einer posterartigen Präsentationsfläche.', alt: 'Violettes generatives Flow-Field mit Rahmen' }, en: { title: 'Purple flow field', text: 'Dark line surface with violet glow and frame effect.', detail: 'The image combines generative movement with a poster-like presentation surface.', alt: 'Violet generative flow field with frame' } },
+  { file: '22', size: 'md', icon: 'waves', tools: ['Processing'], year: '2023', de: { title: 'Electric Veins', text: 'Organische Linien mit Orange-Blau-Kontrast und starker Energie.', detail: 'Das Motiv wirkt wie ein mikroskopisches Netz aus Strom, Wurzeln und Bewegung.', alt: 'Orange-blaue generative Linienstruktur' }, en: { title: 'Electric veins', text: 'Organic lines with orange-blue contrast and strong energy.', detail: 'The motif feels like a microscopic network of electricity, roots and movement.', alt: 'Orange-blue generative line structure' } },
+  { file: '23', size: 'sm', icon: 'all_inclusive', tools: ['Processing'], year: '2023', de: { title: 'Wing Curve', text: 'Reduzierte Linienform mit symmetrischem Schwung und klarer Kante.', detail: 'Eine generative Form, die fast wie ein technischer Flügel oder ein Drahtmodell wirkt.', alt: 'Symmetrische schwarze Linienform auf hellem Grund' }, en: { title: 'Wing curve', text: 'Reduced line form with symmetrical motion and a clear edge.', detail: 'A generative form that almost feels like a technical wing or wireframe.', alt: 'Symmetrical black line form on bright background' } },
+  { file: '24', size: 'sm', icon: 'all_inclusive', tools: ['Processing'], year: '2023', de: { title: 'Orbital Knot', text: 'Geometrische Linienkurve zwischen Kreis, Knoten und Konstruktion.', detail: 'Die Arbeit zeigt, wie mathematische Wiederholung eine organische Figur erzeugt.', alt: 'Schwarze generative Kreislinien als Knotenform' }, en: { title: 'Orbital knot', text: 'Geometric line curve between circle, knot and construction.', detail: 'The work shows how mathematical repetition creates an organic figure.', alt: 'Black generative circular lines as knot form' } },
+  { file: '25', size: 'md', icon: 'grain', tools: ['Processing'], year: '2023', de: { title: 'Ink Cloud', text: 'Dichte Schwarzweiß-Struktur wie Rauch, Tusche oder digitale Wurzeln.', detail: 'Das Motiv funktioniert als abstrakte Fläche und als Beweis für generative Varianz.', alt: 'Dichte schwarzweiße generative Rauchstruktur' }, en: { title: 'Ink cloud', text: 'Dense black-and-white structure like smoke, ink or digital roots.', detail: 'The motif works as an abstract surface and as proof of generative variance.', alt: 'Dense black-and-white generative smoke structure' } },
+  { file: '26', size: 'md', icon: 'campaign', tools: ['InDesign', 'Photoshop'], year: '2025', de: { title: 'Made In Poster', text: 'Posterlayout mit Fotografie, Branding und klaren Infozonen.', detail: 'Die Seite zeigt eine klassische Print-Komposition mit Bildgewicht und scannbaren Elementen.', alt: 'Posterlayout mit Person und Markenmodulen' }, en: { title: 'Made In poster', text: 'Poster layout with photography, branding and clear info zones.', detail: 'The page shows a classic print composition with image weight and scannable elements.', alt: 'Poster layout with person and brand modules' } },
+  { file: '27', size: 'lg', icon: 'groups', tools: ['Photoshop', 'Lightroom'], year: '2025', de: { title: 'Team Wall', text: 'Gruppenmotiv vor grafischer Wand mit hellblauem Kampagnenlook.', detail: 'Der Fokus liegt auf freundlicher Inszenierung, sauberer Freistellung und Markenstimmung.', alt: 'Gruppenfoto vor hellblauer grafischer Wand' }, en: { title: 'Team wall', text: 'Group motif in front of a graphic wall with a light blue campaign look.', detail: 'The focus is on friendly staging, clean extraction and brand mood.', alt: 'Group photo in front of a light blue graphic wall' } },
+  { file: '28', size: 'sm', icon: 'menu_book', tools: ['InDesign', 'Photoshop'], year: '2025', de: { title: 'Campaign Spread', text: 'Schmale Editorial-Doppelseite mit Bildgruppe und ruhigem Weißraum.', detail: 'Ein Layoutbeispiel für Seitenrhythmus, kurze Textblöcke und klare Blickführung.', alt: 'Schmale Editorial-Doppelseite mit Gruppenbild' }, en: { title: 'Campaign spread', text: 'Narrow editorial double page with group image and calm white space.', detail: 'A layout example for page rhythm, short text blocks and clear eye guidance.', alt: 'Narrow editorial double page with group image' } },
+  { file: '29', size: 'md', icon: 'badge', tools: ['Photoshop', 'Illustrator'], year: '2025', de: { title: 'Business Cards', text: 'Visitenkarten-Mockup mit dunkler Marke und haptischer Präsentation.', detail: 'Das Motiv zeigt, wie ein kleines Printprodukt über Licht und Material wertiger wirkt.', alt: 'Dunkles Visitenkarten-Mockup mit Logo' }, en: { title: 'Business cards', text: 'Business card mockup with dark brand and tactile presentation.', detail: 'The motif shows how a small print product gains value through light and material.', alt: 'Dark business card mockup with logo' } },
+  { file: '31', size: 'sm', icon: 'flare', tools: ['Illustrator'], year: '2023', de: { title: 'Fox Mark', text: 'Reduziertes Signet mit Fuchsform, Flamme und warmer Farbwelt.', detail: 'Ein Logoexperiment, das Tierform und abstraktes Zeichen zusammenführt.', alt: 'Abstraktes Fuchs- oder Flammenlogo' }, en: { title: 'Fox mark', text: 'Reduced signet with fox form, flame and warm color palette.', detail: 'A logo experiment that brings animal shape and abstract mark together.', alt: 'Abstract fox or flame logo' } },
+  { file: '32', size: 'sm', icon: 'sports_esports', tools: ['Illustrator'], year: '2023', de: { title: 'Pixel Runner', text: 'Kleine Sprite-Serie mit Retro-Game-Charakter und klaren Posen.', detail: 'Die Figuren zeigen einfache Animationstauglichkeit und wiedererkennbare Pixel-Silhouetten.', alt: 'Pixel-Art-Figuren auf blauem Hintergrund' }, en: { title: 'Pixel runner', text: 'Small sprite series with retro game character and clear poses.', detail: 'The figures show simple animation usability and recognizable pixel silhouettes.', alt: 'Pixel art figures on blue background' } },
+  { file: '33', size: 'md', icon: 'person', tools: ['Illustrator'], year: '2023', de: { title: 'Avatar Set', text: 'Vektor-Charakter mit Mimikvarianten und einfacher Business-Haltung.', detail: 'Das Set zeigt, wie ein Charakter über wenige Formen verschiedene Zustände tragen kann.', alt: 'Vektorfigur mit mehreren Gesichtsausdrücken' }, en: { title: 'Avatar set', text: 'Vector character with expression variants and simple business posture.', detail: 'The set shows how a character can carry different states with only a few shapes.', alt: 'Vector figure with multiple facial expressions' } },
+  { file: '34', size: 'md', icon: 'accessibility_new', tools: ['Photoshop', 'Illustrator'], year: '2023', de: { title: 'Fighter Concept', text: 'Charaktergrafik mit orangem Hintergrund und starkem Posenfokus.', detail: 'Ein illustratives Character-Motiv, das Haltung, Silhouette und Farbkontrast testet.', alt: 'Kampfcharakter auf orangefarbenem Hintergrund' }, en: { title: 'Fighter concept', text: 'Character graphic with orange background and strong pose focus.', detail: 'An illustrative character motif testing posture, silhouette and color contrast.', alt: 'Fighter character on orange background' } },
+  { file: '35', size: 'sm', icon: 'donut_large', tools: ['Processing'], year: '2023', de: { title: 'Neon Loop', text: 'Generativer Kreis aus farbigen Linien mit rhythmischer Wiederholung.', detail: 'Die Grafik wirkt wie ein digitales Ornament und zeigt präzise Wiederholung ohne Starre.', alt: 'Bunter generativer Linienkreis auf schwarzem Grund' }, en: { title: 'Neon loop', text: 'Generative circle of colored lines with rhythmic repetition.', detail: 'The graphic feels like a digital ornament and shows precise repetition without stiffness.', alt: 'Colorful generative line circle on black background' } },
+  { file: '36', size: 'sm', icon: 'cyclone', tools: ['Processing'], year: '2023', de: { title: 'Blue Spiral', text: 'Helle Linienrotation mit optischer Tiefe und sauberem Zentrum.', detail: 'Ein konstruktives Processing-Motiv, das Bewegung durch reine Wiederholung erzeugt.', alt: 'Blaue generative Spirale auf hellem Hintergrund' }, en: { title: 'Blue spiral', text: 'Bright line rotation with optical depth and clean center.', detail: 'A constructive Processing motif that creates movement through pure repetition.', alt: 'Blue generative spiral on bright background' } },
+  { file: '37', size: 'lg', icon: 'checkroom', tools: ['Photoshop', 'Illustrator'], year: '2025', de: { title: 'Shirt Grid', text: 'T-Shirt-Mockups als Serienwand mit Varianten und dunklem Studio-Look.', detail: 'Das Bild zeigt Produktvariation, Ordnung und eine klare Präsentationslogik.', alt: 'T-Shirt-Mockups in mehreren Reihen' }, en: { title: 'Shirt grid', text: 'T-shirt mockups as a series wall with variants and dark studio look.', detail: 'The image shows product variation, order and a clear presentation logic.', alt: 'T-shirt mockups in several rows' } },
+  { file: '39', size: 'sm', icon: 'flutter_dash', tools: ['Illustrator'], year: '2023', de: { title: 'Hummingbird Mark', text: 'Abstraktes Vogelzeichen mit weichen Farbflächen und dunklem Raum.', detail: 'Ein Signet-Experiment mit Überlagerungen, Kurven und reduzierter Formensprache.', alt: 'Abstraktes Kolibri-Logo auf dunklem Hintergrund' }, en: { title: 'Hummingbird mark', text: 'Abstract bird mark with soft color surfaces and dark space.', detail: 'A signet experiment with overlaps, curves and reduced form language.', alt: 'Abstract hummingbird logo on dark background' } },
+  { file: '40', size: 'md', icon: 'article', tools: ['InDesign', 'Photoshop'], year: '2025', de: { title: 'Info Poster', text: 'Hochformatiges Layout mit Kampagnenbildern, Prozentwerten und Modulen.', detail: 'Die Gestaltung verbindet Informationsdichte mit einem klaren visuellen Raster.', alt: 'Hochformatiges Poster mit Kampagnenbildern und Prozentwerten' }, en: { title: 'Info poster', text: 'Portrait layout with campaign images, percentages and modules.', detail: 'The design combines information density with a clear visual grid.', alt: 'Portrait poster with campaign images and percentages' } },
+  { file: '41', size: 'sm', icon: 'emoji_emotions', tools: ['Illustrator', 'Photoshop'], year: '2023', de: { title: 'Monster Buttons', text: 'Glänzende Character-Icons mit Spielzeugwirkung und starker Farbe.', detail: 'Die Motive testen Licht, Form und Mimik in einer kompakten Icon-Welt.', alt: 'Drei farbige Monster-Icons mit Gesichtern' }, en: { title: 'Monster buttons', text: 'Glossy character icons with toy-like feel and strong color.', detail: 'The motifs test light, form and expression in a compact icon world.', alt: 'Three colorful monster icons with faces' } },
+  { file: '47', size: 'lg', icon: 'change_history', tools: ['Photoshop'], year: '2022', de: { title: 'Triangle Glitch', text: 'Dunkle Posterfläche mit Prisma, Farbrauschen und zentraler Geometrie.', detail: 'Ein weiteres Posterexperiment, das Lichtkanten und Chaos zu einem Fokuspunkt bündelt.', alt: 'Dunkles Glitch-Poster mit Dreieck und Farblicht' }, en: { title: 'Triangle glitch', text: 'Dark poster surface with prism, color noise and central geometry.', detail: 'Another poster experiment bundling light edges and chaos into one focal point.', alt: 'Dark glitch poster with triangle and colored light' } },
+  { file: '49', size: 'lg', icon: 'photo_camera', tools: ['Lightroom'], year: '2024', de: { title: 'Riverside Mono', text: 'Schwarzweiß-Foto mit weitem Himmel, Brücke und ruhiger Perspektive.', detail: 'Die Bearbeitung setzt auf klassische Tonwerte und eine klare dokumentarische Stimmung.', alt: 'Schwarzweißfoto einer Person am Fluss mit Brücke' }, en: { title: 'Riverside mono', text: 'Black-and-white photo with wide sky, bridge and calm perspective.', detail: 'The edit relies on classic tonal values and a clear documentary mood.', alt: 'Black-and-white photo of a person by a river with bridge' } },
+  { file: '50', size: 'sm', icon: 'landscape', tools: ['Photoshop'], year: '2022', de: { title: 'Dark Landscape', text: 'Cineastische Landschaft mit warmem Licht, Nebel und dramatischem Himmel.', detail: 'Das Composing baut Tiefe über Lichtquellen, Silhouetten und atmosphärische Ebenen auf.', alt: 'Dunkle Fantasielandschaft mit warmem Licht' }, en: { title: 'Dark landscape', text: 'Cinematic landscape with warm light, haze and dramatic sky.', detail: 'The compositing builds depth through light sources, silhouettes and atmospheric layers.', alt: 'Dark fantasy landscape with warm light' } },
+  { file: '51', size: 'sm', icon: 'accessibility_new', tools: ['Photoshop', 'Illustrator'], year: '2023', de: { title: 'Sci-Fi Character', text: 'Schmale Character-Studie mit technischer Rüstung und rotem Akzent.', detail: 'Die Figur zeigt Silhouette, Materialflächen und einen klaren Farbfokus.', alt: 'Sci-Fi-Charakter mit dunkler Rüstung und roten Details' }, en: { title: 'Sci-fi character', text: 'Narrow character study with technical armor and red accent.', detail: 'The figure shows silhouette, material surfaces and a clear color focus.', alt: 'Sci-fi character with dark armor and red details' } },
+  { file: '52', size: 'md', icon: 'brush', tools: ['Photoshop'], year: '2023', de: { title: 'Interior Concept', text: 'Skizzenhafte Innenraumszene mit Lichtquelle und malerischem Duktus.', detail: 'Das Motiv zeigt schnelle Raumstimmung, Werteverteilung und narrative Umgebung.', alt: 'Malerische Innenraumszene mit Lichtquelle' }, en: { title: 'Interior concept', text: 'Sketch-like interior scene with light source and painterly stroke.', detail: 'The motif shows quick room mood, value distribution and narrative environment.', alt: 'Painterly interior scene with light source' } },
+  { file: '53', size: 'sm', icon: 'view_in_ar', tools: ['Photoshop', 'Illustrator'], year: '2023', de: { title: 'Character Sheet', text: 'Figurenübersicht mit Front-, Seiten- und Rückansicht.', detail: 'Das Blatt ordnet Designentscheidungen und macht Proportionen vergleichbar.', alt: 'Character Sheet mit mehreren Ansichten einer Figur' }, en: { title: 'Character sheet', text: 'Figure overview with front, side and back view.', detail: 'The sheet organizes design decisions and makes proportions comparable.', alt: 'Character sheet with several views of a figure' } },
+  { file: '54', size: 'sm', icon: 'bug_report', tools: ['Photoshop'], year: '2023', de: { title: 'Bug Concept', text: 'Insektenentwurf mit Skizzenebene, Farbe und technischem Aufbau.', detail: 'Das Motiv kombiniert lose Konstruktion und ausgearbeitetes Creature-Design.', alt: 'Insekten-Concept-Art mit Skizzen und Farbfassung' }, en: { title: 'Bug concept', text: 'Insect design with sketch layer, color and technical structure.', detail: 'The motif combines loose construction and developed creature design.', alt: 'Insect concept art with sketches and color version' } },
+  { file: '55', size: 'lg', icon: 'desktop_windows', tools: ['Photoshop', 'Illustrator'], year: '2025', de: { title: 'Screen Layouts', text: 'Web- und Präsentationsflächen als Geräteübersicht mit warmem Hintergrund.', detail: 'Die Arbeit bündelt mehrere digitale Ansichten zu einer ruhigen Portfolio-Präsentation.', alt: 'Mehrere Bildschirmmockups auf goldenem Hintergrund' }, en: { title: 'Screen layouts', text: 'Web and presentation surfaces as a device overview on warm background.', detail: 'The work combines several digital views into a calm portfolio presentation.', alt: 'Several screen mockups on a golden background' } },
+  { file: '56', size: 'lg', icon: 'local_florist', tools: ['Lightroom'], year: '2024', de: { title: 'Foxglove Macro', text: 'Blütenfoto mit kräftigem Magenta, Bokeh und natürlicher Bewegung.', detail: 'Der Look setzt auf Farbe, Unschärfe und einen klaren Fokuspunkt im Detail.', alt: 'Makrofoto einer pinken Blüte mit Biene' }, en: { title: 'Foxglove macro', text: 'Flower photo with strong magenta, bokeh and natural movement.', detail: 'The look relies on color, blur and a clear focal point in the detail.', alt: 'Macro photo of a pink flower with a bee' } },
+  { file: '57', size: 'lg', icon: 'texture', tools: ['Lightroom', 'Photoshop'], year: '2024', de: { title: 'Paper Surface', text: 'Warme Texturfläche mit Körnung, Flecken und analogem Materialgefühl.', detail: 'Eine reine Oberfläche, die sich als Hintergrund, Overlay oder visuelles Klima nutzen lässt.', alt: 'Warme körnige Papiertextur' }, en: { title: 'Paper surface', text: 'Warm texture surface with grain, stains and analog material feel.', detail: 'A pure surface that can be used as background, overlay or visual climate.', alt: 'Warm grainy paper texture' } },
+  { file: '58', size: 'lg', icon: 'menu_book', tools: ['InDesign', 'Photoshop'], year: '2025', de: { title: 'Bug Talk Booklet', text: 'Print-Mockup eines kleinen Magazins mit illustrativem Titelmotiv.', detail: 'Das Mockup zeigt Editorialwirkung, Coverhierarchie und ein klares Präsentationssetting.', alt: 'Print-Mockup eines Bug-Talk-Booklets' }, en: { title: 'Bug talk booklet', text: 'Print mockup of a small magazine with illustrative cover motif.', detail: 'The mockup shows editorial impact, cover hierarchy and a clear presentation setting.', alt: 'Print mockup of a Bug Talk booklet' } },
+];
+
+/** Baut die sichtbaren Masonry-Galerieeinträge für die aktuelle Sprache. */
+function createDesignCatalogGalleryItems(language: PortfolioLanguage): readonly ProjectGalleryItem[] {
+  return DESIGN_CATALOG_GALLERY_ITEMS.map((item) => {
+    const text = item[language];
+    const image = `assets/images/projects/design-catalog/masonry/${item.file}.webp`;
+
+    return {
+      title: text.title,
+      text: text.text,
+      detail: text.detail,
+      image,
+      backgroundColor: item.backgroundColor ?? DESIGN_CATALOG_GALLERY_BACKGROUNDS[item.file],
+      imageHint: image,
+      alt: text.alt,
+      size: item.size,
+      icon: item.icon,
+      tools: item.tools,
+      year: item.year,
+    };
+  });
+}
 
 /** Übersetzte Portfolio-Inhalte für Deutsch und Englisch. */
 export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
@@ -219,7 +506,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       goalLabel: 'Anforderungen / Zielsetzung',
       roleLabel: 'Rolle / Aufgaben',
       highlightsEyebrow: 'Highlights',
-      highlightsTitle: 'Was dieses Projekt zeigt',
+      highlightsTitle: 'In diesem Projekt',
       metaAriaLabel: 'Projektinformationen',
       techStackAriaLabel: 'Techstack des Projekts',
       previewAriaLabel: 'Weitere Projekte',
@@ -227,7 +514,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       typewriterLabel: 'Simulierter Dateiname',
       eyeButtonLabel: 'Auge anstupsen',
       bombButtonLabel: 'Bombe zünden',
-      bloodButtonLabel: 'Blutanalyse starten',
+      bloodButtonLabel: 'Dashboard starten',
       metricsLabel: 'Projektkennzahlen',
       caseStudyLabel: 'Case Study / Deep Dive',
       architectureLabel: 'Architektur-Blueprint',
@@ -521,26 +808,26 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       },
       {
         slug: 'blutanalyse',
-        name: 'Blutanalysetool',
-        kicker: 'Dokumentenimport, Laborwerte und verständliche Datenaufbereitung.',
-        summary: 'Ein technisches Analyse-Tool für Laborbefunde: Dokumente importieren, Werte erfassen, prüfen, strukturieren und so visualisieren, dass Nutzer schnell verstehen, was ein Blutwert bedeutet und wo er im Referenzbereich liegt.',
+        name: 'Laborwerte Dashboard',
+        kicker: 'Dokumentenimport, Laborwerte und visuelle Ergebnisaufbereitung.',
+        summary: 'Ein Dashboard für Laborbefunde: Dokumente importieren, Werte erfassen, prüfen, strukturieren und als klare Karten, Skalen und Diagramme aufbereiten, damit Ergebnisse schneller lesbar werden.',
         overviewKicker: 'Datenauswertungen und übersichtliche Dashboards.',
-        overviewSummary: 'Ein Blutanalyse-Tool, das komplexe Laborwerte aus PDF-Befunden verständlich macht. Die Anwendung scannt hochgeladene Dokumente, übernimmt relevante Werte, ordnet sie Referenzbereichen zu und visualisiert, wo einzelne Blutwerte liegen.',
+        overviewSummary: 'Ein Laborwerte-Dashboard, das komplexe PDF-Befunde in eine übersichtliche Oberfläche übersetzt. Die Anwendung übernimmt relevante Werte, ordnet sie Gruppen und Referenzbereichen zu und bereitet Ergebnisse mit klareren Grafiken auf.',
         overviewTechStack: ['Angular', 'TypeScript', 'Python', 'Datenmodellierung', 'SCSS'],
-        description: 'Das Projekt konzentriert sich auf die Brücke zwischen medizinischem Dokument und benutzbarer Oberfläche. Befunde werden importiert, relevante Laborwerte werden gelesen oder manuell ergänzt, Einheiten und Referenzbereiche werden sauber erfasst und anschließend als verständliche Karten, Skalen, Hinweise und Detailansichten aufbereitet.',
-        goal: 'Ziel war eine Oberfläche, die Laborwerte nicht nur auflistet, sondern verständlich erklärt: mit Import-Flow, Validierung, visueller Einordnung, Hilfetexten, Tipps und einer klaren Trennung zwischen Daten, Hinweis und medizinischer Bewertung.',
-        role: 'Konzept für Dokumentenimport, Werteerfassung, Datenmodell, Validierungslogik, UI-Komponenten, Dashboard-Struktur, Hilfetexte, Referenzbereich-Darstellung, Fehlzustände und erklärende Detailkarten.',
+        description: 'Das Projekt konzentriert sich auf die Brücke zwischen medizinischem Dokument und benutzbarer Oberfläche. Befunde werden importiert, relevante Laborwerte werden gelesen oder manuell ergänzt, Einheiten und Referenzbereiche werden sauber erfasst und anschließend als übersichtliche Karten, Skalen, Diagramme, Hinweise und Detailansichten aufbereitet.',
+        goal: 'Ziel war eine Oberfläche, die Laborwerte nicht nur auflistet, sondern visuell besser erfassbar macht: mit Import-Flow, Validierung, Dashboard-Struktur, Referenzbereichen, Hilfetexten und einer klaren Trennung zwischen Datenaufbereitung, Hinweis und medizinischer Bewertung.',
+        role: 'Konzept für Dokumentenimport, Werteerfassung, Datenmodell, Validierungslogik, UI-Komponenten, Dashboard-Struktur, Hilfetexte, Referenzbereich-Darstellung, Fehlzustände und visuelle Ergebnisaufbereitung.',
         year: '2025',
         type: 'Health Data UI / Document Import',
         accent: 'blue',
         techStack: ['Angular', 'TypeScript', 'Python', 'PDF Import', 'Datenmodellierung', 'SCSS'],
-        highlights: ['Dokumentenimport', 'Werteerfassung', 'Referenzbereich-Skalen', 'Erklärkarten', 'Validierung', 'Trend-Ansicht', 'Hinweislogik', 'Barrierearme Daten-UI'],
+        highlights: ['Dokumentenimport', 'Werteerfassung', 'Referenzbereich-Skalen', 'Dashboard-Karten', 'Validierung', 'Trend-Ansicht', 'Hinweislogik', 'Barrierearme Daten-UI'],
         technicalHighlights: [
-          { icon: 'upload_file', title: 'Dokumente importieren', text: 'Befunde werden als PDF oder Datei-Input gedacht und anschließend in einen prüfbaren Analysefluss überführt.' },
+          { icon: 'upload_file', title: 'Dokumente importieren', text: 'Befunde werden als PDF oder Datei-Input gedacht und anschließend in einen prüfbaren Aufbereitungsflow überführt.' },
           { icon: 'document_scanner', title: 'Werte erfassen', text: 'Laborwerte, Einheiten, Referenzbereiche und Auffälligkeiten werden strukturiert übernommen oder manuell ergänzt.' },
           { icon: 'fact_check', title: 'Validierung', text: 'Die Oberfläche muss unsichere oder fehlende Werte sichtbar machen, statt sie stillschweigend zu übernehmen.' },
           { icon: 'monitoring', title: 'Visuelle Einordnung', text: 'Skalen, Status, Gruppen und Detailkarten erklären Werte schneller als reine Tabellen.' },
-          { icon: 'psychology_alt', title: 'Hilfetexte', text: 'Zu jedem Wert können einfache Erklärungen, Hinweise und nächste Fragen angezeigt werden.' },
+          { icon: 'psychology_alt', title: 'Hilfetexte', text: 'Zu jedem Wert können einfache Hinweise, Kontextfragen und verständliche Zusatzinformationen angezeigt werden.' },
           { icon: 'privacy_tip', title: 'Sensible Daten', text: 'Echte Gesundheitsdaten brauchen klare Demo-Grenzen, Dummy-Daten und bewusst reduzierte öffentliche Beispiele.' },
           { icon: 'trending_up', title: 'Verlauf', text: 'Mehrere Befunde können später als Verlauf gelesen werden, damit einzelne Werte nicht isoliert wirken.' },
           { icon: 'accessibility_new', title: 'Lesbarkeit', text: 'Farben, Kontraste, klare Labels und verständliche Begriffe sind wichtiger als ein rein technisches Dashboard.' },
@@ -557,15 +844,15 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
           { value: 'Demo', label: 'Datenschutz', text: 'Öffentliche Beispiele sollten ausschließlich synthetische Werte verwenden.' },
         ],
         bloodShowcase: {
-          eyebrow: 'Blood Data Pipeline',
+          eyebrow: 'Lab Data Pipeline',
           title: 'Befund rein, verständliche Werte raus',
-          status: 'Import · Parse · Explain',
-          lead: 'Der Kern ist kein hübsches Diagramm allein, sondern ein nachvollziehbarer Ablauf: Dokument hochladen, Werte lesen, Daten prüfen, Referenzbereiche abbilden und daraus verständliche Hinweise erzeugen.',
-          ctaLabel: 'Analysefluss ansehen',
+          status: 'Import · Prüfen · Visualisieren',
+          lead: 'Der Kern ist kein einzelnes Diagramm, sondern ein nachvollziehbarer Ablauf: Dokument hochladen, Werte lesen, Daten prüfen, Referenzbereiche abbilden und daraus ein übersichtliches Dashboard erzeugen.',
+          ctaLabel: 'Dashboard-Flow ansehen',
           chips: ['PDF Import', 'Value Parser', 'Reference Ranges', 'Help Cards'],
           documentTitle: 'laborbefund_2025.pdf',
           documentText: 'Dokument erkannt · Werte werden extrahiert · unsichere Felder bleiben prüfbar.',
-          previewLabel: 'Vorschau eines Blutanalyse-Dashboards mit Dokumentenimport und Laborwerten',
+          previewLabel: 'Vorschau eines Laborwerte-Dashboards mit Dokumentenimport und Ergebnisgrafiken',
           values: [
             { label: 'Hb', value: '13.8', unit: 'g/dl', range: '12.0–16.0', position: 55, tone: 'normal', hint: 'Sauerstofftransport wirkt im Beispiel unauffällig.' },
             { label: 'CRP', value: '7.2', unit: 'mg/l', range: '< 5.0', position: 78, tone: 'high', hint: 'Kann ein Hinweis auf Entzündung sein und braucht Kontext.' },
@@ -573,9 +860,9 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
             { label: 'Vitamin D', value: '22', unit: 'ng/ml', range: '30–60', position: 18, tone: 'low', hint: 'Unter dem Zielbereich: verständlicher Hinweis statt Alarmismus.' },
           ],
           pipelineEyebrow: 'Technischer Datenfluss',
-          pipelineTitle: 'Vom Dokument zur erklärbaren Auswertung',
+          pipelineTitle: 'Vom Dokument zum übersichtlichen Dashboard',
           pipelineSteps: [
-            { icon: 'upload_file', title: 'Import', text: 'Der Nutzer startet mit einem Befunddokument oder einer manuellen Eingabe. Wichtig ist ein sauberer Einstieg mit Status, Dateityp und Fehlermeldungen.', points: ['PDF/File Input', 'Analyse-Status', 'Fehlerzustände'] },
+            { icon: 'upload_file', title: 'Import', text: 'Der Nutzer startet mit einem Befunddokument oder einer manuellen Eingabe. Wichtig ist ein sauberer Einstieg mit Status, Dateityp und Fehlermeldungen.', points: ['PDF/File Input', 'Aufbereitungsstatus', 'Fehlerzustände'] },
             { icon: 'document_scanner', title: 'Lesen & Erfassen', text: 'Werte werden erkannt, normalisiert und in bearbeitbare Felder übertragen. Unsichere Treffer müssen sichtbar bleiben.', points: ['Wertname', 'Einheit', 'Referenzbereich'] },
             { icon: 'rule_settings', title: 'Prüfen', text: 'Die Daten werden gegen erwartete Formate, Einheiten und Referenzbereiche geprüft, bevor sie in die Auswertung gehen.', points: ['Validierung', 'Plausibilität', 'Manuelle Korrektur'] },
             { icon: 'analytics', title: 'Visualisieren', text: 'Das UI übersetzt Zahlen in Skalen, Gruppen, Status und Detailkarten, damit Zusammenhänge schneller erfassbar werden.', points: ['Skalen', 'Gruppen', 'Trend-Idee'] },
@@ -584,7 +871,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
           guideEyebrow: 'Werte-Guide',
           guideTitle: 'Blutwerte brauchen Kontext, nicht nur Farbe',
           disclaimer: 'Die Oberfläche soll verständlich erklären und Hinweise geben. Sie ersetzt keine ärztliche Diagnose und sollte mit synthetischen Demo-Daten gezeigt werden.',
-          galleryEyebrow: 'Analyse Evidence',
+          galleryEyebrow: 'Dashboard Evidence',
           galleryTitle: 'Screens für Import, Werte, Erklärungen und Verlauf',
         },
         chapters: [
@@ -594,7 +881,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
           { eyebrow: 'Hilfesystem', title: 'Tipps direkt am Wert', text: 'Nutzer brauchen eine erste verständliche Einordnung: Was beschreibt der Wert, warum kann er relevant sein und welche Kontextfragen helfen beim Gespräch mit Fachpersonal?', points: ['Einfache Erklärtexte', 'Kontextfragen', 'Nächste sinnvolle Schritte'] },
         ],
         gallery: [
-          { title: 'Import Flow', text: 'Dokument hochladen, Analyse starten, unsichere Felder sichtbar prüfen.', size: 'md', icon: 'upload_file', annotations: ['PDF', 'Status', 'Review'] },
+          { title: 'Import Flow', text: 'Dokument hochladen, Dashboard erzeugen, unsichere Felder sichtbar prüfen.', size: 'md', icon: 'upload_file', annotations: ['PDF', 'Status', 'Review'] },
           { title: 'Werte-Dashboard', text: 'Laborwerte gruppieren, Referenzbereiche anzeigen und Auffälligkeiten priorisieren.', size: 'lg', icon: 'monitoring', annotations: ['Hb', 'CRP', 'Ferritin'] },
           { title: 'Detailkarte pro Wert', text: 'Erklärung, Referenzbereich, Hinweis, Quelle und manuelle Korrektur an einer Stelle.', size: 'md', icon: 'clinical_notes', annotations: ['Range', 'Hint', 'Source'] },
           { title: 'Verlauf & Vergleich', text: 'Mehrere Befunde können später als Trend gelesen werden, statt Werte isoliert zu betrachten.', size: 'sm', icon: 'show_chart', annotations: ['Trend', 'Diff', 'Date'] },
@@ -603,23 +890,23 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       },
       {
         slug: 'grafikdesign-katalog',
-        name: 'Designarchiv',
-        titleLines: ['Design-', 'archiv'],
+        name: 'Design Archiv',
+        titleLines: ['Design', 'Archiv'],
         kicker: 'Editorial Design / Bildarchiv',
-        summary: 'Ein rein grafisches Portfolio-Kapitel: ausgewählte Layouts, Motive, Retuschen und Designexperimente werden als digital nachgebauter Editorial-Katalog und als visuelle Masonry-Galerie inszeniert.',
-        description: 'Das Designarchiv bündelt ausgewählte Arbeiten aus Photoshop, Lightroom und Illustrator. Im Mittelpunkt stehen Bildbearbeitung, Komposition, Farbe, Typografie, Layoutgefühl und ein digital nachgebauter Katalog, der sich wie ein kleines Editorial-Objekt anfühlen soll.',
+        summary: 'Ein rein grafisches Portfolio-Kapitel: ausgewählte Layouts, Motive, Retuschen und Designexperimente werden als vorbereitete PDF-Katalogseiten und als visuelle Masonry-Galerie inszeniert.',
+        description: 'Das Designarchiv bündelt ausgewählte Arbeiten aus Photoshop, Lightroom und Illustrator. Im Mittelpunkt stehen Bildbearbeitung, Komposition, Farbe, Typografie, Layoutgefühl und vollständige Katalogseiten, die als PDF-Seiten sauber, ruhig und editorial dargestellt werden.',
         goal: 'Ziel ist eine visuelle Bühne, die nicht erklärt wie eine Business-App, sondern Arbeiten zeigt: groß, ruhig, bildstark und mit genug Kontext, damit Betrachter Stil, Werkzeug und gestalterische Entscheidung verstehen.',
         role: 'Bildauswahl, Retusche, Farblook, Composing, Vektorarbeit, Typografie, Layoutaufbau, Seitenrhythmus und digitale Inszenierung des Katalogs.',
         year: '2022–2025',
         type: 'Grafikdesign / Editorial',
         accent: 'pink',
         techStack: ['Photoshop', 'Lightroom', 'Illustrator', 'Composing', 'Editorial Design'],
-        highlights: ['Interaktives Designarchiv', 'A3-Doppelseiten', 'Masonry-Galerie', 'Lightbox mit Bilddetails', 'Photoshop-Retusche', 'Lightroom-Looks', 'Illustrator-Assets', 'Editorialer Seitenrhythmus'],
-        requirements: ['Große Bildflächen', 'Klarer Seitenrhythmus', 'Bilddetails sichtbar machen', 'Werkzeuge nennen', 'Keine technische Case Study', 'Responsive Galerie', 'Tastaturbedienbare Lightbox', 'Später echte Assets austauschbar'],
+        highlights: ['PDF-Katalogseiten', 'Sonderformat-Reader', 'Masonry-Galerie', 'Lightbox mit Bilddetails', 'Photoshop-Retusche', 'Lightroom-Looks', 'Illustrator-Assets', 'Editorialer Seitenrhythmus'],
+        requirements: ['Komplette Katalogseiten als PDF zeigen', 'Sonderformat proportional darstellen', 'Bilddetails sichtbar machen', 'Werkzeuge nennen', 'Keine technische Case Study', 'Responsive Galerie', 'Tastaturbedienbare Lightbox', 'Assets später einfach austauschbar halten'],
         detailMode: 'editorial',
         metrics: [
           { value: '2022–25', label: 'Zeitraum', text: 'Ausgewählte Arbeiten werden als visuelles Archiv zusammengeführt.' },
-          { value: 'A3', label: 'Doppelseite', text: 'Zwei DIN-A4-Seiten bilden im Reader eine breite Katalogansicht.' },
+          { value: '21×25', label: 'Format', text: 'Das Sonderformat wird im Reader proportional und möglichst groß dargestellt.' },
           { value: 'PS', label: 'Photoshop', text: 'Composings, Retuschen, Freisteller und Bildmontagen.' },
           { value: 'LR', label: 'Lightroom', text: 'Bildlook, Farbserien, Kontrast und konsistente Stimmungen.' },
           { value: 'AI', label: 'Illustrator', text: 'Vektoren, Zeichen, Layoutgrafiken und präzise Formen.' },
@@ -628,79 +915,34 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         catalogShowcase: {
           eyebrow: 'digital_catalog.indd',
           title: 'Digitales Editorial',
-          status: 'Interactive Editorial',
-          lead: 'Die analoge Katalogidee wird als klickbares Web-Layout nachgebaut: Doppelseiten, Typografie, Bildflächen und Seitenwechsel entstehen direkt aus HTML und CSS.',
-          ctaLabel: 'Katalog ansehen',
-          chips: ['Photoshop', 'Lightroom', 'Illustrator', 'A3 Spread'],
-          readerLabel: 'Interaktives Designarchiv mit animierten Doppelseiten',
+          status: 'Static PDF Editorial',
+          lead: 'Die analoge Katalogidee wird nicht mehr als Web-Layout nachgebaut. Stattdessen werden vorbereitete Komplettseiten als PDF gezeigt: ruhig, bildstark und näher am echten Editorial-Export.',
+          ctaLabel: 'Katalogseiten ansehen',
+          chips: ['Photoshop', 'Lightroom', 'Illustrator', 'PDF Reader'],
+          readerLabel: 'Designarchiv mit vorbereiteten PDF-Katalogseiten',
           readerEyebrow: 'Katalog Reader',
-          readerTitle: 'Digital nachgebauter Katalog auf voller Breite',
-          readerHint: 'Die Doppelseiten sind keine fertigen Screenshots, sondern strukturierte Web-Seiten mit Layoutflächen, Typografie und interaktiver Navigation.',
+          readerTitle: 'Ausgewählte Katalogseiten',
+          readerHint: '',
           tocOpenLabel: 'Inhaltsverzeichnis öffnen',
           tocCloseLabel: 'Inhaltsverzeichnis schließen',
-          tocTitle: 'Katalog-Inhalt',
+          tocTitle: 'Inhaltsverzeichnis',
           previousLabel: 'Vorherige Doppelseite',
           nextLabel: 'Nächste Doppelseite',
           galleryEyebrow: 'Masonry Gallery',
-          galleryTitle: 'Bildauswahl statt Screenshot-Karten',
+          galleryTitle: 'Ausgewählte Arbeiten als Bildwand',
           lightboxOpenLabel: 'Bilddetails öffnen',
           lightboxCloseLabel: 'Lightbox schließen',
           lightboxPreviousLabel: 'Vorheriges Bild',
           lightboxNextLabel: 'Nächstes Bild',
-          spreads: [
-            {
-              id: 'cover',
-              title: 'Cover & Einstieg',
-              text: 'Der Einstieg setzt den grafischen Ton: viel Fläche, klares Motiv, wenige Worte und ein Gefühl von Print.',
-              pages: [
-                { number: '01', eyebrow: 'Cover', title: 'Editorial 2022–2025', text: 'Ausgewählte grafische Arbeiten, Motive und Layouts als visuelles Archiv.', alt: 'Coverseite des Designarchivs', imageHint: 'HTML/CSS-Seitenlayout', mood: 'cover' },
-                { number: '02', eyebrow: 'Intro', title: 'Design als Sammlung', text: 'Nicht jedes Motiv braucht eine lange Erklärung. Wichtig sind Rhythmus, Blickführung und Wiedererkennung.', alt: 'Intro-Seite des Designarchivs', imageHint: 'HTML/CSS-Seitenlayout', mood: 'type' },
-              ],
-            },
-            {
-              id: 'photo-work',
-              title: 'Retusche & Look',
-              text: 'Bildbearbeitung, Licht, Farbe und Details werden als eigener gestalterischer Schwerpunkt gezeigt.',
-              pages: [
-                { number: '03', eyebrow: 'Photoshop', title: 'Retusche und Composing', text: 'Freisteller, Schatten, harte Kanten, Texturen und saubere Bildmontagen.', alt: 'Photoshop-Retusche und Composing im Katalog', imageHint: 'HTML/CSS-Seitenlayout', mood: 'image' },
-                { number: '04', eyebrow: 'Lightroom', title: 'Farbe, Körnung, Stimmung', text: 'Serien sollen zusammenpassen, ohne gleichförmig zu wirken.', alt: 'Lightroom-Farblook und Bildserie im Katalog', imageHint: 'HTML/CSS-Seitenlayout', mood: 'detail' },
-              ],
-            },
-            {
-              id: 'vector-layout',
-              title: 'Vektor & Layout',
-              text: 'Illustrator-Arbeiten, Zeichen, Formen und typografische Seiten bekommen eine ruhigere Bühne.',
-              pages: [
-                { number: '05', eyebrow: 'Illustrator', title: 'Vektorformen und Zeichen', text: 'Saubere Formen, Icons, Markierungen und grafische Systeme.', alt: 'Illustrator-Vektorarbeit im Designarchiv', imageHint: 'HTML/CSS-Seitenlayout', mood: 'type' },
-                { number: '06', eyebrow: 'Layout', title: 'Raster ohne Langeweile', text: 'Spannung entsteht durch Größenwechsel, Leerräume, Anschnitte und Wiederholungen.', alt: 'Editoriales Layout mit Raster und Typografie', imageHint: 'HTML/CSS-Seitenlayout', mood: 'image' },
-              ],
-            },
-            {
-              id: 'details',
-              title: 'Details & Abschluss',
-              text: 'Nahaufnahmen zeigen Kanten, Typografie, Texturen und kleine Entscheidungen, die im Gesamtmotiv oft untergehen.',
-              pages: [
-                { number: '07', eyebrow: 'Details', title: 'Crops und Texturen', text: 'Kleine Ausschnitte machen Oberfläche, Kontrast und Material sichtbar.', alt: 'Detailausschnitte mit Typografie und Textur', imageHint: 'HTML/CSS-Seitenlayout', mood: 'detail' },
-                { number: '08', eyebrow: 'Ende', title: 'Archiv, nicht Ablage', text: 'Der Katalog ist als wachsendes Objekt gedacht und kann später neue Kapitel aufnehmen.', alt: 'Abschlussseite des Designarchivs', imageHint: 'HTML/CSS-Seitenlayout', mood: 'cover' },
-              ],
-            },
-          ],
+          tocItems: createDesignCatalogTocItems(),
+          spreads: createDesignCatalogSpreads(),
         },
         chapters: [
           { eyebrow: 'Konzept', title: 'Ein Katalog, kein Screenshot-Friedhof', text: 'Die Arbeiten sollen wie ein kleines Editorial funktionieren. Der Fokus liegt auf Bildwirkung, Rhythmus und Materialität, nicht auf technischen Erklärtafeln.', points: ['Große Motive', 'Bewusster Weißraum', 'Kurze Bildkontexte'] },
           { eyebrow: 'Werkzeuge', title: 'Photoshop, Lightroom und Illustrator als Kern', text: 'Die Arbeiten entstehen über Retusche, Farblook, Vektorformen und Layoutentscheidungen. Jedes Werkzeug hat eine klare Rolle im visuellen Ergebnis.', points: ['Photoshop für Composing', 'Lightroom für Look', 'Illustrator für Vektorarbeit'] },
-          { eyebrow: 'Inszenierung', title: 'Blättern, Zoomen, Betrachten', text: 'Der digitale Nachbau soll nicht nur Bilder listen. Doppelseiten, animierte Wechsel und eine Lightbox machen aus der Sammlung ein klickbares Objekt.', points: ['A3-Doppelseite', 'Masonry-Galerie', 'Bilddetails in der Lightbox'] },
+          { eyebrow: 'Inszenierung', title: 'Blättern, Zoomen, Betrachten', text: 'Der Reader zeigt vollständige Katalogseiten als PDF, damit das originale Layout erhalten bleibt. Navigation und Lightbox machen die Sammlung trotzdem angenehm prüfbar.', points: ['Proportionaler PDF-Reader', 'Masonry-Galerie', 'Bilddetails in der Lightbox'] },
         ],
-        gallery: [
-          { title: 'Cover-Motiv', text: 'Starker Einstieg mit Titel, Fläche und klarem visuellen Ton.', detail: 'Gedacht als erste Kontaktfläche: plakativ genug für Aufmerksamkeit, aber ruhig genug für einen hochwertigen Editorial-Eindruck.', image: 'assets/images/projects/design-catalog/gallery-cover.webp', imageHint: 'assets/images/projects/design-catalog/gallery-cover.webp', alt: 'Cover-Motiv des Designarchivs', size: 'lg', icon: 'auto_stories', tools: ['Photoshop', 'Illustrator'], year: '2025' },
-          { title: 'Retusche-Serie', text: 'Bildbearbeitung, Freisteller, Lichtkorrektur und saubere Kanten.', detail: 'Diese Serie zeigt, wie stark kleine Retusche-Entscheidungen die Wertigkeit eines Motivs verändern.', image: 'assets/images/projects/design-catalog/gallery-retouch.webp', imageHint: 'assets/images/projects/design-catalog/gallery-retouch.webp', alt: 'Retusche-Serie aus Photoshop', size: 'md', icon: 'photo_filter', tools: ['Photoshop'], year: '2024' },
-          { title: 'Farblook', text: 'Lightroom-Looks mit konsistenter Stimmung über mehrere Motive.', detail: 'Der Fokus liegt auf Serienfähigkeit: Bilder dürfen unterschiedlich sein, sollen aber aus derselben visuellen Welt kommen.', image: 'assets/images/projects/design-catalog/gallery-color-look.webp', imageHint: 'assets/images/projects/design-catalog/gallery-color-look.webp', alt: 'Lightroom Farblook-Serie', size: 'sm', icon: 'tune', tools: ['Lightroom'], year: '2024' },
-          { title: 'Vektorzeichen', text: 'Grafische Zeichen, Sticker, Icons und präzise Formen.', detail: 'Vektoren schaffen klare Wiedererkennung und können später in Layouts, Stickern oder Interfaces wieder auftauchen.', image: 'assets/images/projects/design-catalog/gallery-vector.webp', imageHint: 'assets/images/projects/design-catalog/gallery-vector.webp', alt: 'Illustrator Vektorzeichen und grafische Formen', size: 'md', icon: 'polyline', tools: ['Illustrator'], year: '2023' },
-          { title: 'Editorial Spread', text: 'Doppelseite mit Bild-Text-Spannung, Raster und Anschnitt.', detail: 'Die Seite zeigt, wie Bildgewicht, Textmenge und Leerraum zusammenspielen können.', image: 'assets/images/projects/design-catalog/gallery-spread.webp', imageHint: 'assets/images/projects/design-catalog/gallery-spread.webp', alt: 'Editoriale Doppelseite des Designarchivs', size: 'lg', icon: 'view_week', tools: ['Photoshop', 'Illustrator'], year: '2025' },
-          { title: 'Typografie-Crop', text: 'Nahaufnahme von Schrift, Abstand, Kontrast und Kanten.', detail: 'Solche Ausschnitte sind wichtig, weil typografische Qualität oft in kleinen Abständen und Proportionen entsteht.', image: 'assets/images/projects/design-catalog/gallery-typography.webp', imageHint: 'assets/images/projects/design-catalog/gallery-typography.webp', alt: 'Typografischer Detailausschnitt', size: 'sm', icon: 'title', tools: ['Illustrator'], year: '2023' },
-          { title: 'Textur & Raster', text: 'Körnung, Halftone, Papiergefühl und digitale Oberfläche.', detail: 'Texturen geben digitalen Motiven mehr Körper, dürfen aber Lesbarkeit und Motivklarheit nicht zerstören.', image: 'assets/images/projects/design-catalog/gallery-texture.webp', imageHint: 'assets/images/projects/design-catalog/gallery-texture.webp', alt: 'Textur und Raster im Grafikdesign', size: 'md', icon: 'grain', tools: ['Photoshop', 'Lightroom'], year: '2022' },
-          { title: 'Asset-Sammlung', text: 'Kleine Motive, Zeichen und grafische Bausteine als visuelles Archiv.', detail: 'Diese Sammlung funktioniert wie ein Werkzeugkasten für spätere Kampagnen, Layouts oder Portfolio-Elemente.', image: 'assets/images/projects/design-catalog/gallery-assets.webp', imageHint: 'assets/images/projects/design-catalog/gallery-assets.webp', alt: 'Grafische Asset-Sammlung', size: 'md', icon: 'dashboard_customize', tools: ['Photoshop', 'Illustrator'], year: '2022–2025' },
-        ],
+        gallery: createDesignCatalogGalleryItems('de'),
       },
     ],
     process: {
@@ -851,8 +1093,8 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
             { label: 'Intranet', href: '/projects/intranet' },
             { label: 'HTML5 Browser Game', href: '/projects/html5-browser-game' },
             { label: 'Asana-Klon', href: '/projects/asana-klon' },
-            { label: 'Blutanalyse', href: '/projects/blutanalyse' },
-            { label: 'Designarchiv', href: '/projects/grafikdesign-katalog' },
+            { label: 'Laborwerte Dashboard', href: '/projects/blutanalyse' },
+            { label: 'Design Archiv', href: '/projects/grafikdesign-katalog' },
           ]
         },
         {
@@ -1077,7 +1319,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       goalLabel: 'Requirements / Goal',
       roleLabel: 'Role / Tasks',
       highlightsEyebrow: 'Highlights',
-      highlightsTitle: 'What this project shows',
+      highlightsTitle: 'Inside this project',
       metaAriaLabel: 'Project information',
       techStackAriaLabel: 'Project tech stack',
       previewAriaLabel: 'More projects',
@@ -1085,7 +1327,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       typewriterLabel: 'Simulated filename',
       eyeButtonLabel: 'Poke the eye',
       bombButtonLabel: 'Ignite the bomb',
-      bloodButtonLabel: 'Start blood analysis',
+      bloodButtonLabel: 'Start dashboard',
       metricsLabel: 'Project metrics',
       caseStudyLabel: 'Case Study / Deep Dive',
       architectureLabel: 'Architecture blueprint',
@@ -1379,26 +1621,26 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       },
       {
         slug: 'blutanalyse',
-        name: 'Blood Analysis Tool',
-        kicker: 'Document import, lab values and understandable data presentation.',
-        summary: 'A technical analysis tool for lab reports: import documents, capture values, validate them, structure them and visualize the results so users quickly understand what a blood value means and where it sits within the reference range.',
+        name: 'Lab Results Dashboard',
+        kicker: 'Document import, lab values and visual result presentation.',
+        summary: 'A dashboard for lab reports: import documents, capture values, validate them, structure them and present results as clear cards, scales and charts so the data becomes easier to read.',
         overviewKicker: 'Data evaluations and clear dashboards.',
-        overviewSummary: 'A blood analysis tool that makes complex lab values from PDF reports easier to understand. The application scans uploaded documents, extracts relevant values, maps them to reference ranges and visualizes where individual blood values sit.',
+        overviewSummary: 'A lab results dashboard that translates complex PDF reports into a clear interface. The application extracts relevant values, groups them, maps them to reference ranges and presents the results with clearer visuals.',
         overviewTechStack: ['Angular', 'TypeScript', 'Python', 'Data modeling', 'SCSS'],
-        description: 'The project focuses on the bridge between medical document and usable interface. Reports are imported, relevant lab values are read or manually completed, units and reference ranges are captured cleanly and then presented as understandable cards, scales, hints and detail views.',
-        goal: 'The goal was an interface that does not merely list lab values, but explains them clearly: with import flow, validation, visual classification, help texts, tips and a clear separation between data, hint and medical assessment.',
-        role: 'Concept for document import, value capture, data model, validation logic, UI components, dashboard structure, help texts, reference-range visualization, error states and explanatory detail cards.',
+        description: 'The project focuses on the bridge between medical document and usable interface. Reports are imported, relevant lab values are read or manually completed, units and reference ranges are captured cleanly and then presented as clear cards, scales, charts, hints and detail views.',
+        goal: 'The goal was an interface that does not merely list lab values, but makes them visually easier to grasp: with import flow, validation, dashboard structure, reference ranges, help texts and a clear separation between data preparation, hint and medical assessment.',
+        role: 'Concept for document import, value capture, data model, validation logic, UI components, dashboard structure, help texts, reference-range visualization, error states and visual result presentation.',
         year: '2025',
         type: 'Health Data UI / Document Import',
         accent: 'blue',
         techStack: ['Angular', 'TypeScript', 'Python', 'PDF Import', 'Data Modeling', 'SCSS'],
-        highlights: ['Document import', 'Value capture', 'Reference-range scales', 'Explanation cards', 'Validation', 'Trend view', 'Hint logic', 'Accessible data UI'],
+        highlights: ['Document import', 'Value capture', 'Reference-range scales', 'Dashboard cards', 'Validation', 'Trend view', 'Hint logic', 'Accessible data UI'],
         technicalHighlights: [
-          { icon: 'upload_file', title: 'Import documents', text: 'Reports are treated as PDF or file input and then moved into a reviewable analysis flow.' },
+          { icon: 'upload_file', title: 'Import documents', text: 'Reports are treated as PDF or file input and then moved into a reviewable preparation flow.' },
           { icon: 'document_scanner', title: 'Capture values', text: 'Lab values, units, reference ranges and findings are transferred into a structured model or completed manually.' },
           { icon: 'fact_check', title: 'Validation', text: 'The interface needs to expose uncertain or missing values instead of silently accepting them.' },
           { icon: 'monitoring', title: 'Visual classification', text: 'Scales, states, groups and detail cards explain values faster than plain tables.' },
-          { icon: 'psychology_alt', title: 'Help texts', text: 'Every value can provide simple explanations, hints and next context questions.' },
+          { icon: 'psychology_alt', title: 'Help texts', text: 'Every value can provide simple hints, context questions and understandable additional information.' },
           { icon: 'privacy_tip', title: 'Sensitive data', text: 'Real health data needs strict demo boundaries, dummy data and intentionally limited public examples.' },
           { icon: 'trending_up', title: 'Trends', text: 'Multiple reports can later be viewed as a trend so values do not feel isolated.' },
           { icon: 'accessibility_new', title: 'Readability', text: 'Colors, contrast, clear labels and simple terms matter more than a purely technical dashboard.' },
@@ -1415,15 +1657,15 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
           { value: 'Demo', label: 'Privacy', text: 'Public examples should only use synthetic values.' },
         ],
         bloodShowcase: {
-          eyebrow: 'Blood Data Pipeline',
-          title: 'Report in, understandable values out',
-          status: 'Import · Parse · Explain',
-          lead: 'The core is not just a nice chart, but a traceable flow: upload document, read values, validate data, map reference ranges and generate understandable hints.',
-          ctaLabel: 'View analysis flow',
+          eyebrow: 'Lab Data Pipeline',
+          title: 'Report in, readable dashboard out',
+          status: 'Import · Validate · Visualize',
+          lead: 'The core is not a single chart, but a traceable flow: upload document, read values, validate data, map reference ranges and generate a clear dashboard.',
+          ctaLabel: 'View dashboard flow',
           chips: ['PDF Import', 'Value Parser', 'Reference Ranges', 'Help Cards'],
           documentTitle: 'lab_report_2025.pdf',
           documentText: 'Document detected · values are extracted · uncertain fields remain reviewable.',
-          previewLabel: 'Preview of a blood analysis dashboard with document import and lab values',
+          previewLabel: 'Preview of a lab results dashboard with document import and result charts',
           values: [
             { label: 'Hb', value: '13.8', unit: 'g/dl', range: '12.0–16.0', position: 55, tone: 'normal', hint: 'Oxygen transport appears unremarkable in this example.' },
             { label: 'CRP', value: '7.2', unit: 'mg/l', range: '< 5.0', position: 78, tone: 'high', hint: 'May point to inflammation and needs context.' },
@@ -1431,11 +1673,11 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
             { label: 'Vitamin D', value: '22', unit: 'ng/ml', range: '30–60', position: 18, tone: 'low', hint: 'Below target range: understandable hint instead of alarmism.' },
           ],
           pipelineEyebrow: 'Technical data flow',
-          pipelineTitle: 'From document to explainable evaluation',
+          pipelineTitle: 'From document to clear dashboard',
           pipelineSteps: [
             { icon: 'upload_file', title: 'Import', text: 'The user starts with a report document or manual input. A clean entry point with state, file type and error handling matters.', points: ['PDF/File input', 'Analysis state', 'Error states'] },
             { icon: 'document_scanner', title: 'Read & capture', text: 'Values are detected, normalized and transferred into editable fields. Uncertain matches must remain visible.', points: ['Value name', 'Unit', 'Reference range'] },
-            { icon: 'rule_settings', title: 'Validate', text: 'Data is checked against expected formats, units and reference ranges before it enters the analysis.', points: ['Validation', 'Plausibility', 'Manual correction'] },
+            { icon: 'rule_settings', title: 'Validate', text: 'Data is checked against expected formats, units and reference ranges before it enters the dashboard.', points: ['Validation', 'Plausibility', 'Manual correction'] },
             { icon: 'analytics', title: 'Visualize', text: 'The UI translates numbers into scales, groups, states and detail cards so relationships become easier to read.', points: ['Scales', 'Groups', 'Trend idea'] },
             { icon: 'tips_and_updates', title: 'Explain', text: 'Help texts and tips answer the user’s first question: what does this value roughly mean and what should I check next?', points: ['Simple language', 'Context questions', 'No diagnosis replacement'] },
           ],
@@ -1452,7 +1694,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
           { eyebrow: 'Help system', title: 'Tips directly on the value', text: 'Users need a first understandable classification: what the value describes, why it can matter and which context questions help when talking to professionals.', points: ['Simple explanations', 'Context questions', 'Next useful steps'] },
         ],
         gallery: [
-          { title: 'Import Flow', text: 'Upload document, start analysis and visibly review uncertain fields.', size: 'md', icon: 'upload_file', annotations: ['PDF', 'Status', 'Review'] },
+          { title: 'Import Flow', text: 'Upload document, create dashboard and visibly review uncertain fields.', size: 'md', icon: 'upload_file', annotations: ['PDF', 'Status', 'Review'] },
           { title: 'Values Dashboard', text: 'Group lab values, show reference ranges and prioritize findings.', size: 'lg', icon: 'monitoring', annotations: ['Hb', 'CRP', 'Ferritin'] },
           { title: 'Detail Card per Value', text: 'Explanation, reference range, hint, source and manual correction in one place.', size: 'md', icon: 'clinical_notes', annotations: ['Range', 'Hint', 'Source'] },
           { title: 'Trend & Comparison', text: 'Multiple reports can later be read as a trend instead of isolated values.', size: 'sm', icon: 'show_chart', annotations: ['Trend', 'Diff', 'Date'] },
@@ -1464,20 +1706,20 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         name: 'Design Archive',
         titleLines: ['Design', 'Archive'],
         kicker: 'Editorial Design / Visual Archive',
-        summary: 'A purely graphic portfolio chapter: selected layouts, motifs, retouches and design experiments are staged as a digitally rebuilt editorial catalogue and visual masonry gallery.',
-        description: 'The design archive brings together selected work from Photoshop, Lightroom and Illustrator. The focus is image editing, composition, color, typography, layout rhythm and a digitally rebuilt catalogue that should feel like a small editorial object.',
+        summary: 'A purely graphic portfolio chapter: selected layouts, motifs, retouches and design experiments are staged as prepared PDF catalogue pages and a visual masonry gallery.',
+        description: 'The design archive brings together selected work from Photoshop, Lightroom and Illustrator. The focus is image editing, composition, color, typography, layout rhythm and complete catalogue pages displayed as calm, editorial PDF pages.',
         goal: 'The goal is a visual stage that does not explain like a business app, but shows work: large, calm, image-heavy and with enough context to understand style, tools and design decisions.',
         role: 'Image selection, retouching, color look, compositing, vector work, typography, layout structure, page rhythm and digital staging of the catalogue.',
         year: '2022–2025',
         type: 'Graphic Design / Editorial',
         accent: 'pink',
         techStack: ['Photoshop', 'Lightroom', 'Illustrator', 'Compositing', 'Editorial Design'],
-        highlights: ['Interactive design archive', 'A3 double-page spreads', 'Masonry gallery', 'Lightbox with image details', 'Photoshop retouching', 'Lightroom looks', 'Illustrator assets', 'Editorial page rhythm'],
-        requirements: ['Large image surfaces', 'Clear page rhythm', 'Make image details visible', 'Name the tools', 'No technical case study', 'Responsive gallery', 'Keyboard-friendly lightbox', 'Real assets can be swapped later'],
+        highlights: ['PDF catalogue pages', 'Custom-format reader', 'Masonry gallery', 'Lightbox with image details', 'Photoshop retouching', 'Lightroom looks', 'Illustrator assets', 'Editorial page rhythm'],
+        requirements: ['Show complete catalogue pages as PDF', 'Display the custom format proportionally', 'Make image details visible', 'Name the tools', 'No technical case study', 'Responsive gallery', 'Keyboard-friendly lightbox', 'Keep assets easy to swap later'],
         detailMode: 'editorial',
         metrics: [
           { value: '2022–25', label: 'Time span', text: 'Selected works are brought together as a visual archive.' },
-          { value: 'A3', label: 'Double page', text: 'Two DIN A4 pages become a wide catalogue spread in the reader.' },
+          { value: '21×25', label: 'Format', text: 'The custom format is shown proportionally and as large as possible in the reader.' },
           { value: 'PS', label: 'Photoshop', text: 'Compositings, retouches, cut-outs and image montages.' },
           { value: 'LR', label: 'Lightroom', text: 'Image look, color series, contrast and consistent moods.' },
           { value: 'AI', label: 'Illustrator', text: 'Vectors, signs, layout graphics and precise shapes.' },
@@ -1486,79 +1728,34 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         catalogShowcase: {
           eyebrow: 'digital_catalog.indd',
           title: 'Digital editorial',
-          status: 'Interactive Editorial',
-          lead: 'The analogue catalogue idea is rebuilt as a clickable web layout: double pages, typography, image areas and page transitions are created directly with HTML and CSS.',
-          ctaLabel: 'View catalogue',
-          chips: ['Photoshop', 'Lightroom', 'Illustrator', 'A3 Spread'],
-          readerLabel: 'Interactive design archive with animated double-page spreads',
+          status: 'Static PDF Editorial',
+          lead: 'The analogue catalogue idea is no longer rebuilt as a web layout. Instead, prepared full pages are shown as PDF files: calmer, image-led and closer to the original editorial file.',
+          ctaLabel: 'View catalogue pages',
+          chips: ['Photoshop', 'Lightroom', 'Illustrator', 'PDF Reader'],
+          readerLabel: 'Design archive with prepared PDF catalogue pages',
           readerEyebrow: 'Catalogue Reader',
-          readerTitle: 'Digitally rebuilt catalogue at full width',
-          readerHint: 'The double pages are not static screenshots, but structured web pages with layout areas, typography and interactive navigation.',
+          readerTitle: 'Selected catalogue pages',
+          readerHint: '',
           tocOpenLabel: 'Open table of contents',
           tocCloseLabel: 'Close table of contents',
           tocTitle: 'Catalogue contents',
           previousLabel: 'Previous spread',
           nextLabel: 'Next spread',
           galleryEyebrow: 'Masonry Gallery',
-          galleryTitle: 'Image selection instead of screenshot cards',
+          galleryTitle: 'Selected works as an image wall',
           lightboxOpenLabel: 'Open image details',
           lightboxCloseLabel: 'Close lightbox',
           lightboxPreviousLabel: 'Previous image',
           lightboxNextLabel: 'Next image',
-          spreads: [
-            {
-              id: 'cover',
-              title: 'Cover & entry',
-              text: 'The entry sets the graphic tone: lots of space, a clear motif, few words and a printed feeling.',
-              pages: [
-                { number: '01', eyebrow: 'Cover', title: 'Editorial 2022–2025', text: 'Selected graphic works, motifs and layouts as a visual archive.', alt: 'Cover page of the design archive', imageHint: 'HTML/CSS page layout', mood: 'cover' },
-                { number: '02', eyebrow: 'Intro', title: 'Design as a collection', text: 'Not every motif needs a long explanation. Rhythm, visual guidance and recognition matter.', alt: 'Intro page of the design archive', imageHint: 'HTML/CSS page layout', mood: 'type' },
-              ],
-            },
-            {
-              id: 'photo-work',
-              title: 'Retouching & look',
-              text: 'Image editing, light, color and details are shown as their own design focus.',
-              pages: [
-                { number: '03', eyebrow: 'Photoshop', title: 'Retouching and composing', text: 'Cut-outs, shadows, hard edges, textures and clean image montages.', alt: 'Photoshop retouching and composing in the catalogue', imageHint: 'HTML/CSS page layout', mood: 'image' },
-                { number: '04', eyebrow: 'Lightroom', title: 'Color, grain, mood', text: 'Series should fit together without looking identical.', alt: 'Lightroom color look and image series in the catalogue', imageHint: 'HTML/CSS page layout', mood: 'detail' },
-              ],
-            },
-            {
-              id: 'vector-layout',
-              title: 'Vector & layout',
-              text: 'Illustrator work, signs, shapes and typographic pages get a calmer stage.',
-              pages: [
-                { number: '05', eyebrow: 'Illustrator', title: 'Vector shapes and signs', text: 'Clean shapes, icons, marks and graphic systems.', alt: 'Illustrator vector work in the design archive', imageHint: 'HTML/CSS page layout', mood: 'type' },
-                { number: '06', eyebrow: 'Layout', title: 'Grids without boredom', text: 'Tension comes from scale changes, empty space, bleeds and repetition.', alt: 'Editorial layout with grid and typography', imageHint: 'HTML/CSS page layout', mood: 'image' },
-              ],
-            },
-            {
-              id: 'details',
-              title: 'Details & closing',
-              text: 'Close-ups show edges, typography, textures and small decisions that often disappear in the full motif.',
-              pages: [
-                { number: '07', eyebrow: 'Details', title: 'Crops and textures', text: 'Small crops make surface, contrast and material visible.', alt: 'Detail crops with typography and texture', imageHint: 'HTML/CSS page layout', mood: 'detail' },
-                { number: '08', eyebrow: 'Closing', title: 'Archive, not storage', text: 'The catalogue is designed as a growing object that can later take on new chapters.', alt: 'Closing page of the design archive', imageHint: 'HTML/CSS page layout', mood: 'cover' },
-              ],
-            },
-          ],
+          tocItems: createDesignCatalogTocItems(),
+          spreads: createDesignCatalogSpreads(),
         },
         chapters: [
           { eyebrow: 'Concept', title: 'A catalogue, not a screenshot graveyard', text: 'The work should behave like a small editorial piece. The focus is image impact, rhythm and materiality, not technical explanation boards.', points: ['Large motifs', 'Intentional white space', 'Short image context'] },
           { eyebrow: 'Tools', title: 'Photoshop, Lightroom and Illustrator at the core', text: 'The work is built through retouching, color look, vector shapes and layout decisions. Every tool has a clear role in the visual result.', points: ['Photoshop for compositing', 'Lightroom for the look', 'Illustrator for vector work'] },
-          { eyebrow: 'Staging', title: 'Browse, zoom, look closer', text: 'The digital rebuild should not just list images. Double-page spreads, animated transitions and a lightbox turn the collection into a clickable object.', points: ['A3 double spread', 'Masonry gallery', 'Image details in the lightbox'] },
+          { eyebrow: 'Staging', title: 'Browse, zoom, look closer', text: 'The reader shows complete catalogue pages as PDF files so the original layout stays intact. Navigation and the lightbox still make the collection easy to inspect.', points: ['Proportional PDF reader', 'Masonry gallery', 'Image details in the lightbox'] },
         ],
-        gallery: [
-          { title: 'Cover motif', text: 'Strong entry with title, space and a clear visual tone.', detail: 'Designed as the first contact surface: bold enough for attention, but calm enough for a high-quality editorial impression.', image: 'assets/images/projects/design-catalog/gallery-cover.webp', imageHint: 'assets/images/projects/design-catalog/gallery-cover.webp', alt: 'Cover motif of the design archive', size: 'lg', icon: 'auto_stories', tools: ['Photoshop', 'Illustrator'], year: '2025' },
-          { title: 'Retouching series', text: 'Image editing, cut-outs, light correction and clean edges.', detail: 'This series shows how strongly small retouching decisions can change the quality of a motif.', image: 'assets/images/projects/design-catalog/gallery-retouch.webp', imageHint: 'assets/images/projects/design-catalog/gallery-retouch.webp', alt: 'Retouching series from Photoshop', size: 'md', icon: 'photo_filter', tools: ['Photoshop'], year: '2024' },
-          { title: 'Color look', text: 'Lightroom looks with consistent mood across multiple motifs.', detail: 'The focus is series compatibility: images may differ, but should come from the same visual world.', image: 'assets/images/projects/design-catalog/gallery-color-look.webp', imageHint: 'assets/images/projects/design-catalog/gallery-color-look.webp', alt: 'Lightroom color look series', size: 'sm', icon: 'tune', tools: ['Lightroom'], year: '2024' },
-          { title: 'Vector signs', text: 'Graphic signs, stickers, icons and precise shapes.', detail: 'Vectors create clear recognition and can later reappear in layouts, stickers or interfaces.', image: 'assets/images/projects/design-catalog/gallery-vector.webp', imageHint: 'assets/images/projects/design-catalog/gallery-vector.webp', alt: 'Illustrator vector signs and graphic shapes', size: 'md', icon: 'polyline', tools: ['Illustrator'], year: '2023' },
-          { title: 'Editorial spread', text: 'Double page with image-text tension, grid and bleed.', detail: 'The page shows how image weight, text amount and empty space can work together.', image: 'assets/images/projects/design-catalog/gallery-spread.webp', imageHint: 'assets/images/projects/design-catalog/gallery-spread.webp', alt: 'Editorial double page of the design archive', size: 'lg', icon: 'view_week', tools: ['Photoshop', 'Illustrator'], year: '2025' },
-          { title: 'Typography crop', text: 'Close-up of type, spacing, contrast and edges.', detail: 'These crops matter because typographic quality often lives in small distances and proportions.', image: 'assets/images/projects/design-catalog/gallery-typography.webp', imageHint: 'assets/images/projects/design-catalog/gallery-typography.webp', alt: 'Typographic detail crop', size: 'sm', icon: 'title', tools: ['Illustrator'], year: '2023' },
-          { title: 'Texture & raster', text: 'Grain, halftone, paper feeling and digital surface.', detail: 'Textures give digital motifs more body, but must not destroy readability or motif clarity.', image: 'assets/images/projects/design-catalog/gallery-texture.webp', imageHint: 'assets/images/projects/design-catalog/gallery-texture.webp', alt: 'Texture and raster in graphic design', size: 'md', icon: 'grain', tools: ['Photoshop', 'Lightroom'], year: '2022' },
-          { title: 'Asset collection', text: 'Small motifs, signs and graphic building blocks as a visual archive.', detail: 'This collection works like a toolbox for later campaigns, layouts or portfolio elements.', image: 'assets/images/projects/design-catalog/gallery-assets.webp', imageHint: 'assets/images/projects/design-catalog/gallery-assets.webp', alt: 'Graphic asset collection', size: 'md', icon: 'dashboard_customize', tools: ['Photoshop', 'Illustrator'], year: '2022–2025' },
-        ],
+        gallery: createDesignCatalogGalleryItems('en'),
       },
     ],
     process: {
@@ -1709,7 +1906,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
             { label: 'Intranet', href: '/projects/intranet' },
             { label: 'HTML5 Browser Game', href: '/projects/html5-browser-game' },
             { label: 'Asana Clone', href: '/projects/asana-klon' },
-            { label: 'Blood Analysis', href: '/projects/blutanalyse' },
+            { label: 'Lab Results Dashboard', href: '/projects/blutanalyse' },
             { label: 'Design Archive', href: '/projects/grafikdesign-katalog' },
           ]
         },

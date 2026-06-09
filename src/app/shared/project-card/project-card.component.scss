@@ -83,6 +83,10 @@
   hyphens: auto;
 }
 
+.project-card h3 span {
+  display: block;
+}
+
 .project-card p:not(.project-card__kicker) {
   margin: 0;
   color: var(--bp-color-text-muted);

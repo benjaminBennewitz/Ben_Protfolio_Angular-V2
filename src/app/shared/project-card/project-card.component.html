@@ -3,7 +3,15 @@
   <bp-project-visual [project]="project" />
   <div class="project-card__body">
     <p class="project-card__kicker">{{ project.overviewKicker ?? project.kicker }}</p>
-    <h3>{{ project.name }}</h3>
+    <h3>
+      @if (project.titleLines; as titleLines) {
+      @for (line of titleLines; track line) {
+      <span>{{ line }}</span>
+      }
+      } @else {
+      {{ project.name }}
+      }
+    </h3>
     <p>{{ project.overviewSummary ?? project.summary }}</p>
     <ul class="bp-tags" aria-label="Techstack">
       @for (tech of (project.overviewTechStack ?? project.techStack).slice(0, 5); track $index) {

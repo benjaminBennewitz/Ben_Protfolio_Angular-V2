@@ -39,6 +39,28 @@ interface CatalogFlowParticle {
   phase: number;
 }
 
+/** Beweglicher Lupenzustand für den WebP-Katalogreader. */
+interface CatalogLoupeState {
+  /** Sichtbarkeit der Kataloglupe. */
+  readonly isVisible: boolean;
+  /** Seitenkennung der aktuell vergrößerten Katalogseite. */
+  readonly pageNumber: string;
+  /** Aktueller X-Wert innerhalb der Katalogseite. */
+  readonly x: number;
+  /** Aktueller Y-Wert innerhalb der Katalogseite. */
+  readonly y: number;
+  /** Breite des Lupenfensters. */
+  readonly width: number;
+  /** Höhe des Lupenfensters. */
+  readonly height: number;
+  /** Vergrößertes Hintergrundbild der aktuellen Katalogseite. */
+  readonly asset: string;
+  /** Berechnete Hintergrundgröße passend zur echten Seitengröße. */
+  readonly backgroundSize: string;
+  /** Berechnete Hintergrundposition passend zur Mausposition. */
+  readonly backgroundPosition: string;
+}
+
 /** Detailseite für einzelne Projekte. */
 @Component({
   selector: 'bp-project-detail-page',
@@ -108,6 +130,9 @@ export class ProjectDetailPageComponent implements OnDestroy {
   /** Resize-Observer für responsive Canvas-Abmessungen. */
   private catalogFlowResizeObserver?: ResizeObserver;
 
+  /** Sichtbarkeits-Observer für die Hero-gebundene Canvas-Animation. */
+  private catalogFlowVisibilityObserver?: IntersectionObserver;
+
   /** Zeitwert der Flow-Field-Bewegung. */
   private catalogFlowTime = 0;
 
@@ -116,6 +141,9 @@ export class ProjectDetailPageComponent implements OnDestroy {
 
   /** Anzahl der Flow-Partikel als Performance-Limit. */
   private readonly catalogFlowParticleCount = 180;
+
+  /** Gibt an, ob die Design-Archiv-Hero-Fläche sichtbar genug für Animation ist. */
+  readonly isCatalogFlowHeroVisible = signal<boolean>(false);
 
   /** Aktueller Slug aus der Route. */
   private readonly slug = signal<string>('');
@@ -159,11 +187,14 @@ export class ProjectDetailPageComponent implements OnDestroy {
   /** Sichtbarkeit des Inhaltsverzeichnis-Overlays im Designkatalog. */
   readonly isCatalogMenuOpen = signal<boolean>(false);
 
+  /** Bewegliche Hover-Lupe für echte Katalogseitenbilder. */
+  readonly catalogLoupe = signal<CatalogLoupeState>({ isVisible: false, pageNumber: '', x: 0, y: 0, width: 0, height: 0, asset: '', backgroundSize: '', backgroundPosition: '' });
+
   /** Canvas-Referenz der generativen Katalog-Hero-Fläche. */
   @ViewChild('catalogFlowCanvas')
   set catalogFlowCanvasRef(canvasRef: ElementRef<HTMLCanvasElement> | undefined) {
     this.catalogFlowCanvas = canvasRef?.nativeElement;
-    this.restartCatalogFlow();
+    this.connectCatalogFlowVisibilityObserver();
   }
 
   /** Übersetzter Inhalt der aktuellen Sprache. */
@@ -248,13 +279,13 @@ export class ProjectDetailPageComponent implements OnDestroy {
     effect(() => this.updateSeo());
     effect(() => this.toggleCatalogFlow());
     effect(() => this.preloadCatalogAssetsAroundActiveSpread());
-    effect(() => this.scheduleCatalogBackgroundPreload());
     effect(() => this.toggleGalleryLightboxScrollLock());
   }
 
   /** Stoppt laufende Browser-APIs beim Verlassen der Detailseite. */
   ngOnDestroy(): void {
     this.stopCatalogFlow();
+    this.catalogFlowVisibilityObserver?.disconnect();
     this.cancelCatalogBackgroundPreload?.();
     this.galleryLightboxSwitchToken += 1;
     this.resetGalleryLightboxSwitch();
@@ -288,6 +319,8 @@ export class ProjectDetailPageComponent implements OnDestroy {
 
   /** Wählt eine konkrete Katalog-Doppelseite aus. */
   selectCatalogSpread(index: number): void {
+    this.hideCatalogLoupe();
+
     const currentIndex = this.getNormalizedCatalogSpreadIndex();
     const direction    = index > currentIndex ? 1 : index < currentIndex ? -1 : 0;
 
@@ -296,6 +329,7 @@ export class ProjectDetailPageComponent implements OnDestroy {
 
   /** Öffnet oder schließt das Inhaltsverzeichnis des Designkatalogs. */
   toggleCatalogMenu(): void {
+    this.hideCatalogLoupe();
     this.isCatalogMenuOpen.update((isOpen) => !isOpen);
   }
 
@@ -306,7 +340,43 @@ export class ProjectDetailPageComponent implements OnDestroy {
 
   /** Wechselt zur vorherigen oder nächsten Katalog-Doppelseite. */
   selectAdjacentCatalogSpread(direction: 1 | -1): void {
+    this.hideCatalogLoupe();
     void this.setCatalogSpreadIndex(this.getNormalizedCatalogSpreadIndex() + direction, direction);
+  }
+
+  /** Aktualisiert die rechteckige Hover-Lupe innerhalb einer Katalogseite. */
+  updateCatalogLoupe(event: PointerEvent, page: CatalogReaderPage): void {
+    if (!page.asset || event.pointerType === 'touch' || this.isCatalogMenuOpen()) {
+      this.hideCatalogLoupe();
+      return;
+    }
+
+    const element = event.currentTarget instanceof HTMLElement ? event.currentTarget : undefined;
+
+    if (!element) {
+      this.hideCatalogLoupe();
+      return;
+    }
+
+    const rect = element.getBoundingClientRect();
+    const x    = event.clientX - rect.left;
+    const y    = event.clientY - rect.top;
+
+    if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
+      this.hideCatalogLoupe();
+      return;
+    }
+
+    this.catalogLoupe.set(this.createCatalogLoupeState(page, rect, x, y));
+  }
+
+  /** Blendet die Kataloglupe aus. */
+  hideCatalogLoupe(): void {
+    if (!this.catalogLoupe().isVisible) {
+      return;
+    }
+
+    this.catalogLoupe.set({ isVisible: false, pageNumber: '', x: 0, y: 0, width: 0, height: 0, asset: '', backgroundSize: '', backgroundPosition: '' });
   }
 
   /** Reagiert auf Tastaturbefehle innerhalb der globalen Design-Lightbox. */
@@ -368,6 +438,36 @@ export class ProjectDetailPageComponent implements OnDestroy {
 
     this.pendingGalleryLightboxIndex = nextIndex;
     void this.switchGalleryLightboxItem(nextIndex, direction);
+  }
+
+  /** Baut den stabilen Lupenzustand aus Seitengröße und Mausposition. */
+  private createCatalogLoupeState(page: CatalogReaderPage, rect: DOMRect, x: number, y: number): CatalogLoupeState {
+    const zoom   = 1.8;
+    const width  = this.getCatalogLoupeWidth();
+    const height = Math.round(width * 0.68);
+    const bgX    = -(x * zoom - width / 2);
+    const bgY    = -(y * zoom - height / 2);
+
+    return {
+      isVisible: true,
+      pageNumber: page.number,
+      x,
+      y,
+      width,
+      height,
+      asset: page.asset ?? '',
+      backgroundSize: `${rect.width * zoom}px ${rect.height * zoom}px`,
+      backgroundPosition: `${bgX}px ${bgY}px`,
+    };
+  }
+
+  /** Ermittelt eine responsive Lupenbreite ohne Layout-Messung im Template. */
+  private getCatalogLoupeWidth(): number {
+    if (typeof window === 'undefined') {
+      return 230;
+    }
+
+    return Math.round(Math.min(Math.max(window.innerWidth * 0.189, 189), 336));
   }
 
   /** Wechselt die Lightbox per ruhigem Crossfade, damit Hintergrundfarben nicht hart blitzen. */
@@ -468,14 +568,14 @@ export class ProjectDetailPageComponent implements OnDestroy {
     return { ...spread, pages, pageLabel };
   }
 
-  /** Erstellt eine stabile Reader-Seite mit decodierbarem JPG-Asset. */
+  /** Erstellt eine stabile Reader-Seite mit decodierbarem Bild-Asset. */
   private createCatalogReaderPage(page: ProjectCatalogPage): CatalogReaderPage {
     const asset = this.getCatalogPageAsset(page);
 
     return { ...page, asset };
   }
 
-  /** Gibt den passenden Katalogseiten-Pfad für die aktuell gewählte Sprache zurück. */
+  /** Gibt den passenden Katalogseiten-Pfad für den einsprachigen WebP-Katalog zurück. */
   private getCatalogPageAsset(page: ProjectCatalogPage): string | undefined {
     const language = this.languageService.language();
 
@@ -759,6 +859,7 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.resetGalleryLightboxSwitch();
     this.activeGalleryLightboxIndex.set(null);
     this.isCatalogMenuOpen.set(false);
+    this.hideCatalogLoupe();
     this.isTerminalVisible.set(true);
     this.isCaseNoteVisible.set(true);
   }
@@ -774,9 +875,9 @@ export class ProjectDetailPageComponent implements OnDestroy {
     return Math.min(Math.max(this.activeCatalogSpreadIndex(), 0), spreads.length - 1);
   }
 
-  /** Startet oder stoppt die generative Katalog-Hero-Fläche passend zum aktiven Projekt. */
+  /** Startet oder stoppt die generative Katalog-Hero-Fläche passend zu Projekt und Viewport. */
   private toggleCatalogFlow(): void {
-    if (this.project()?.slug !== 'grafikdesign-katalog') {
+    if (this.project()?.slug !== 'grafikdesign-katalog' || !this.isCatalogFlowHeroVisible()) {
       this.stopCatalogFlow();
       return;
     }
@@ -788,7 +889,7 @@ export class ProjectDetailPageComponent implements OnDestroy {
   private restartCatalogFlow(): void {
     this.stopCatalogFlow();
 
-    if (!this.catalogFlowCanvas || this.project()?.slug !== 'grafikdesign-katalog') {
+    if (!this.catalogFlowCanvas || this.project()?.slug !== 'grafikdesign-katalog' || !this.isCatalogFlowHeroVisible()) {
       return;
     }
 
@@ -812,11 +913,47 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.zone.runOutsideAngular(() => {
       const draw = () => {
         this.drawCatalogFlowFrame();
+
+        if (!this.catalogFlowContext || !this.isCatalogFlowHeroVisible()) {
+          return;
+        }
+
         this.catalogFlowAnimationId = requestAnimationFrame(draw);
       };
 
       this.catalogFlowAnimationId = requestAnimationFrame(draw);
     });
+  }
+
+  /** Verbindet die Katalog-Hero-Animation mit der echten Hero-Sichtbarkeit. */
+  private connectCatalogFlowVisibilityObserver(): void {
+    this.catalogFlowVisibilityObserver?.disconnect();
+    this.catalogFlowVisibilityObserver = undefined;
+    this.isCatalogFlowHeroVisible.set(false);
+
+    if (!this.catalogFlowCanvas || typeof window === 'undefined') {
+      this.stopCatalogFlow();
+      return;
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
+      this.isCatalogFlowHeroVisible.set(true);
+      return;
+    }
+
+    const heroElement = this.catalogFlowCanvas.closest('.project-detail__hero') ?? this.catalogFlowCanvas;
+
+    this.catalogFlowVisibilityObserver = new IntersectionObserver((entries) => {
+      const isVisible = Boolean(entries[0]?.isIntersecting);
+
+      this.isCatalogFlowHeroVisible.set(isVisible);
+
+      if (!isVisible) {
+        this.stopCatalogFlow();
+      }
+    }, { threshold: [0, 0.08, 0.2] });
+
+    this.catalogFlowVisibilityObserver.observe(heroElement);
   }
 
   /** Stoppt Canvas-Animation und Observer. */
@@ -875,6 +1012,11 @@ export class ProjectDetailPageComponent implements OnDestroy {
   /** Zeichnet eine Flow-Field-ähnliche Animationsstufe. */
   private drawCatalogFlowFrame(): void {
     if (!this.catalogFlowCanvas || !this.catalogFlowContext) {
+      return;
+    }
+
+    if (!this.isCatalogFlowHeroVisible()) {
+      this.stopCatalogFlow();
       return;
     }
 

@@ -80,7 +80,7 @@ function createDesignCatalogSpreads(): readonly ProjectCatalogSpread[] {
   return spreads;
 }
 
-/** Erstellt eine einzelne JPG-Katalogseite mit sprachabhängiger Datei. */
+/** Erstellt eine einzelne WebP-Katalogseite mit einheitlichem englischem Asset. */
 function createDesignCatalogPage(pageNumber: number, side: ProjectCatalogPage['side']): ProjectCatalogPage {
   const chapter = getDesignCatalogChapterForPage(pageNumber);
   const number  = formatDesignCatalogPageNumber(pageNumber);
@@ -91,14 +91,14 @@ function createDesignCatalogPage(pageNumber: number, side: ProjectCatalogPage['s
     eyebrow: chapter.number,
     title: chapter.title,
     text: chapter.subtitle,
-    image: getDesignCatalogPagePath('de', pageNumber),
+    image: getDesignCatalogPagePath(pageNumber),
     imageByLanguage: {
-      de: getDesignCatalogPagePath('de', pageNumber),
-      en: getDesignCatalogPagePath('en', pageNumber),
+      de: getDesignCatalogPagePath(pageNumber),
+      en: getDesignCatalogPagePath(pageNumber),
     },
     assetType: 'image',
     alt: `Designkatalog Seite ${number}: ${chapter.title}`,
-    imageHint: getDesignCatalogPagePath('en', pageNumber),
+    imageHint: getDesignCatalogPagePath(pageNumber),
     mood: chapter.mood,
   };
 }
@@ -126,9 +126,9 @@ function formatDesignCatalogPageNumber(pageNumber: number): string {
   return pageNumber.toString().padStart(2, '0');
 }
 
-/** Baut den erwarteten Asset-Pfad für eine JPG-Katalogseite. */
-function getDesignCatalogPagePath(language: PortfolioLanguage, pageNumber: number): string {
-  return `assets/images/projects/design-catalog/${language}/catalog-page-${formatDesignCatalogPageNumber(pageNumber)}.jpg`;
+/** Baut den erwarteten Asset-Pfad für eine englische WebP-Katalogseite. */
+function getDesignCatalogPagePath(pageNumber: number): string {
+  return `assets/images/projects/design-catalog/en/catalog-page-${formatDesignCatalogPageNumber(pageNumber)}.webp`;
 }
 
 
@@ -220,8 +220,8 @@ const DESIGN_CATALOG_GALLERY_BACKGROUNDS: Record<string, string> = {
 
 /** Einzelne Arbeiten der Masonry-Galerie mit passendem Kurzkontext. */
 const DESIGN_CATALOG_GALLERY_ITEMS: readonly DesignCatalogGallerySeed[] = [
-  { file: '01', size: 'md', icon: 'face_retouching_natural', tools: ['Photoshop'], year: '2022', de: { title: 'Political Portrait', text: 'Kontraststarkes Portrait mit rauer Textur und dramatischem Licht.', detail: 'Die Arbeit setzt auf harte Tonwerte, digitale Körnung und einen fast plakativen Portraitschnitt.', alt: 'Dunkles digitales Portrait im Posterlook' }, en: { title: 'Political portrait', text: 'High-contrast portrait with rough texture and dramatic light.', detail: 'The work uses hard tonal values, digital grain and an almost poster-like portrait crop.', alt: 'Dark digital portrait in a poster look' } },
-  { file: '02', size: 'md', icon: 'face_retouching_natural', tools: ['Photoshop'], year: '2022', de: { title: 'Face Code', text: 'Surreales Gesicht mit grafischen Schnitten und Farbakzenten.', detail: 'Ein Portrait-Experiment zwischen Beauty-Retusche, Maske und Interface-Ästhetik.', alt: 'Surreales Portrait mit grafischen Farbbändern' }, en: { title: 'Face code', text: 'Surreal face with graphic cuts and color accents.', detail: 'A portrait experiment between beauty retouching, mask and interface aesthetics.', alt: 'Surreal portrait with graphic color bands' } },
+  { file: '01', size: 'md', icon: 'face_retouching_natural', tools: ['Photoshop'], year: '2022', de: { title: 'Mein Wille ist dein Wille', text: 'Portrait-Composing mit Fokus auf klaren Cut-outs und präzise gesetzten Assets.', detail: 'Die Arbeit setzt auf harte Tonwerte, digitale Körnung und einen fast plakativen Portraitschnitt. Das Photoshop-Composing lebt von sauberen Cut-outs, bewusst gewählten Assets und einer strengen Lichtführung. Inhaltlich ging es darum, einen unsichtbaren Gedanken sichtbar zu machen: innere Einflussnahme, Fremdsteuerung und den Moment, in dem ein stiller Impuls plötzlich eine konkrete Form bekommt.', alt: 'Dunkles digitales Portrait im Posterlook' }, en: { title: 'Your will is my will', text: 'Portrait compositing focused on clean cut-outs and precisely placed assets.', detail: 'The piece relies on hard tonal values, digital grain and an almost poster-like portrait crop. The Photoshop compositing is driven by clean cut-outs, carefully chosen assets and strict light control. Conceptually, the goal was to make an invisible thought visible: inner influence, outside control and the moment a silent impulse suddenly takes on a concrete form.', alt: 'Dark digital portrait in a poster look' } },
+  { file: '02', size: 'md', icon: 'face_retouching_natural', tools: ['Photoshop'], year: '2022', de: { title: 'Splittend thougts', text: 'Portrait-Composing und Flächenexperiment.', detail: 'Photoshop-Composing mit Fokus auf Lichtanpassung, sauber gesetzte Schatten, erzeugte Tiefe und ein klares Cut-out. Die Arbeit visualisiert eine innere Zwiespältigkeit – das Hin und Her von Gedanken, die gleichzeitig anziehen, trennen und den Blick auf das Wesentliche verschieben.', alt: 'Surreales Portrait mit grafischen Farbbändern' }, en: { title: 'Splittend thougts', text: 'Portrait compositing and surface experiment.', detail: 'Photoshop compositing focused on light adjustments, properly placed shadows, created depth and a clean cut-out. The piece visualizes inner conflict – the back and forth of thoughts that attract, separate and shift the view away from what matters.', alt: 'Surreal portrait with graphic color bands' } },
   { file: '03', size: 'md', icon: 'egg_alt', tools: ['Photoshop'], year: '2023', de: { title: 'Broken Egg', text: 'Zerbrechliches Stillleben mit kühler Farbwelt und schwebenden Elementen.', detail: 'Das Motiv spielt mit Materialkontrast, Schale, Glasigkeit und einer fast klinischen Bildruhe.', alt: 'Schwebende Eierschalen und Kugeln auf hellem Grund' }, en: { title: 'Broken egg', text: 'Fragile still life with a cool color world and floating elements.', detail: 'The motif plays with material contrast, shell, glassiness and an almost clinical calm.', alt: 'Floating egg shells and spheres on a bright background' } },
   { file: '04', size: 'md', icon: 'eco', tools: ['Photoshop'], year: '2023', de: { title: 'Green Mutation', text: 'Organische Form mit Nebel, Unschärfe und reduzierter Farbpalette.', detail: 'Die Arbeit verbindet Makrogefühl, Sci-Fi-Stimmung und weiche Tiefenstaffelung.', alt: 'Grüne organische Form mit schwebenden Partikeln' }, en: { title: 'Green mutation', text: 'Organic form with haze, blur and a reduced color palette.', detail: 'The piece combines macro feeling, sci-fi mood and soft depth layering.', alt: 'Green organic form with floating particles' } },
   { file: '05', size: 'lg', icon: 'auto_fix_high', tools: ['Photoshop'], year: '2023', de: { title: 'Painted Face', text: 'Portrait-Retusche mit malerischer Auflösung und weichen Kanten.', detail: 'Die Collage arbeitet mit Auflösung, Hauttönen und bewusst offener Fläche.', alt: 'Malerisch aufgelöstes Gesicht auf hellem Hintergrund' }, en: { title: 'Painted face', text: 'Portrait retouch with painterly dissolution and soft edges.', detail: 'The collage works with dissolution, skin tones and deliberately open space.', alt: 'Painterly dissolved face on a bright background' } },
@@ -235,8 +235,8 @@ const DESIGN_CATALOG_GALLERY_ITEMS: readonly DesignCatalogGallerySeed[] = [
   { file: '13', size: 'md', icon: 'texture', tools: ['Lightroom', 'Photoshop'], year: '2024', de: { title: 'Stone Texture', text: 'Farbige Naturstruktur mit hoher Detailtiefe und körnigem Kontrast.', detail: 'Das Motiv eignet sich als reine Texturfläche und als Ausgangspunkt für digitale Oberflächen.', alt: 'Orange-graue Steinstruktur als Textur' }, en: { title: 'Stone texture', text: 'Colorful natural structure with high detail and grainy contrast.', detail: 'The motif works as a pure texture surface and as a base for digital surfaces.', alt: 'Orange gray stone structure as texture' } },
   { file: '14', size: 'md', icon: 'local_fire_department', tools: ['Photoshop'], year: '2022', de: { title: 'Battle Atmosphere', text: 'Dunkle Szene mit Feuer, Partikeln und cineastischer Tiefenwirkung.', detail: 'Hier geht es um Atmosphäre: viele kleine Lichtquellen erzeugen einen großen szenischen Raum.', alt: 'Dunkle Kampfszene mit Feuer und Rauch' }, en: { title: 'Battle atmosphere', text: 'Dark scene with fire, particles and cinematic depth.', detail: 'This is about atmosphere: many small light sources create a large scenic space.', alt: 'Dark battle scene with fire and smoke' } },
   { file: '15', size: 'md', icon: 'description', tools: ['Photoshop'], year: '2025', de: { title: 'Floating Letterhead', text: 'Mockup eines Briefbogens mit reduzierter Perspektive und ruhigem Hintergrund.', detail: 'Ein klassisches Präsentationsmockup, das Layout und Papierwertigkeit sichtbar macht.', alt: 'Schwebender Briefbogen auf blauem Hintergrund' }, en: { title: 'Floating letterhead', text: 'Letterhead mockup with reduced perspective and calm background.', detail: 'A classic presentation mockup that shows layout and paper quality.', alt: 'Floating letterhead on blue background' } },
-  { file: '16', size: 'md', icon: 'local_activity', tools: ['Photoshop', 'Illustrator'], year: '2025', de: { title: 'Event Poster', text: 'Leuchtendes Posterdesign mit Linien, Farbe und starkem Zentrum.', detail: 'Die Gestaltung nutzt Kontrast, Neonflächen und ein klares Hierarchieprinzip.', alt: 'Buntes Eventposter auf dunklem Hintergrund' }, en: { title: 'Event poster', text: 'Bright poster design with lines, color and a strong center.', detail: 'The design uses contrast, neon surfaces and a clear hierarchy principle.', alt: 'Colorful event poster on dark background' } },
-  { file: '17', size: 'lg', icon: 'view_carousel', tools: ['Photoshop', 'Illustrator'], year: '2025', de: { title: 'Corporate Spread', text: 'Aufgefächertes Print-Mockup mit Karten, Flächen und Markenfarben.', detail: 'Das Mockup zeigt, wie mehrere Printstücke als ein konsistentes System wirken können.', alt: 'Aufgefächertes Corporate-Design-Printmockup' }, en: { title: 'Corporate spread', text: 'Fanned print mockup with cards, surfaces and brand colors.', detail: 'The mockup shows how several print pieces can work as one consistent system.', alt: 'Fanned corporate design print mockup' } },
+  { file: '16', size: 'md', icon: 'local_activity', tools: ['Photoshop', 'Illustrator'], year: '2014', de: { title: 'Partyflyer 2014', text: 'Leuchtendes Eventlayout mit Neonfarben, klarer Blickführung und starkem Zentrum.', detail: 'Reines Photoshop-Layout und einer meiner ersten grafischen Versuche. Damals arbeitete ich ausschließlich mit Photoshop; Illustrator und InDesign habe ich erst später gelernt. Den Flyer habe ich für einen sehr guten Freund und DJ entworfen. Gedruckt wurde er in einer Auflage von 500 Stück.', alt: 'Buntes Eventposter auf dunklem Hintergrund' }, en: { title: 'Party flyer 2014', text: 'Bright event layout with neon colors, clear eye guidance and a strong center.', detail: 'A pure Photoshop layout and one of my first graphic design attempts. At the time I worked exclusively in Photoshop; I only learned Illustrator and InDesign later. I designed the flyer for a very good friend and DJ. It was printed in an edition of 500 copies.', alt: 'Colorful event poster on dark background' } },
+  { file: '17', size: 'lg', icon: 'view_carousel', tools: ['Photoshop', 'Illustrator'], year: '2021', de: { title: 'App Design', text: 'Ein erster Versuch eines einfachen App-Designs.', detail: 'Mockup einer App-Idee, die Papierstücke digitalisieren und verwaltbar machen sollte. Rundschreiben, Infos und sonstige Inhalte sollten so schneller an die Mitarbeitenden gelangen; über Lesebestätigungen sollte zusätzlich Verbindlichkeit und Kontrolle entstehen. Das Mockup zeigt vier beispielhafte Screens.', alt: 'Aufgefächertes App-Mockup mit mehreren Screens' }, en: { title: 'App design', text: 'A first attempt at a simple app design.', detail: 'Mockup of an app idea intended to digitize and manage paper-based notes. Circulars, information and other content were meant to reach employees faster, while read confirmations were supposed to add commitment and control. The mockup shows four example screens.', alt: 'Fanned app mockup with multiple screens' } },
   { file: '18', size: 'md', icon: 'text_fields', tools: ['Illustrator'], year: '2023', de: { title: 'UNX Lettering', text: 'Dreidimensional wirkender Schriftzug mit Linienraster und Tiefe.', detail: 'Ein typografisches Experiment zwischen Isometrie, Schatten und Vektorpräzision.', alt: 'Schriftzug UNX mit dreidimensionalem Linienraster' }, en: { title: 'UNX lettering', text: 'Three-dimensional lettering with line grid and depth.', detail: 'A typographic experiment between isometry, shadow and vector precision.', alt: 'UNX lettering with three-dimensional line grid' } },
   { file: '19', size: 'sm', icon: 'waves', tools: ['Processing'], year: '2023', de: { title: 'Smoke Lines', text: 'Generative Linienstruktur mit Rauchwirkung und fließender Bewegung.', detail: 'Die Grafik zeigt kontrolliertes Chaos als ruhige, aber sehr dichte Oberfläche.', alt: 'Schwarze generative Rauchlinien auf dunklem Grund' }, en: { title: 'Smoke lines', text: 'Generative line structure with smoke effect and flowing motion.', detail: 'The graphic shows controlled chaos as a calm but very dense surface.', alt: 'Black generative smoke lines on dark background' } },
   { file: '20', size: 'sm', icon: 'all_inclusive', tools: ['Processing'], year: '2023', de: { title: 'Wire Petal', text: 'Feine generative Linienform mit transparenter Blütenwirkung.', detail: 'Ein sehr reduziertes Processing-Motiv, das über Überlagerung und Wiederholung entsteht.', alt: 'Transparente generative Linienform wie eine Blüte' }, en: { title: 'Wire petal', text: 'Fine generative line form with transparent flower effect.', detail: 'A very reduced Processing motif created through overlap and repetition.', alt: 'Transparent generative line form like a flower' } },
@@ -252,8 +252,8 @@ const DESIGN_CATALOG_GALLERY_ITEMS: readonly DesignCatalogGallerySeed[] = [
   { file: '31', size: 'sm', icon: 'flare', tools: ['Illustrator'], year: '2023', de: { title: 'Fox Mark', text: 'Reduziertes Signet mit Fuchsform, Flamme und warmer Farbwelt.', detail: 'Ein Logoexperiment, das Tierform und abstraktes Zeichen zusammenführt.', alt: 'Abstraktes Fuchs- oder Flammenlogo' }, en: { title: 'Fox mark', text: 'Reduced signet with fox form, flame and warm color palette.', detail: 'A logo experiment that brings animal shape and abstract mark together.', alt: 'Abstract fox or flame logo' } },
   { file: '32', size: 'sm', icon: 'sports_esports', tools: ['Illustrator'], year: '2023', de: { title: 'Pixel Runner', text: 'Kleine Sprite-Serie mit Retro-Game-Charakter und klaren Posen.', detail: 'Die Figuren zeigen einfache Animationstauglichkeit und wiedererkennbare Pixel-Silhouetten.', alt: 'Pixel-Art-Figuren auf blauem Hintergrund' }, en: { title: 'Pixel runner', text: 'Small sprite series with retro game character and clear poses.', detail: 'The figures show simple animation usability and recognizable pixel silhouettes.', alt: 'Pixel art figures on blue background' } },
   { file: '33', size: 'md', icon: 'person', tools: ['Illustrator'], year: '2023', de: { title: 'Avatar Set', text: 'Vektor-Charakter mit Mimikvarianten und einfacher Business-Haltung.', detail: 'Das Set zeigt, wie ein Charakter über wenige Formen verschiedene Zustände tragen kann.', alt: 'Vektorfigur mit mehreren Gesichtsausdrücken' }, en: { title: 'Avatar set', text: 'Vector character with expression variants and simple business posture.', detail: 'The set shows how a character can carry different states with only a few shapes.', alt: 'Vector figure with multiple facial expressions' } },
-  { file: '34', size: 'md', icon: 'accessibility_new', tools: ['Photoshop', 'Illustrator'], year: '2023', de: { title: 'Fighter Concept', text: 'Charaktergrafik mit orangem Hintergrund und starkem Posenfokus.', detail: 'Ein illustratives Character-Motiv, das Haltung, Silhouette und Farbkontrast testet.', alt: 'Kampfcharakter auf orangefarbenem Hintergrund' }, en: { title: 'Fighter concept', text: 'Character graphic with orange background and strong pose focus.', detail: 'An illustrative character motif testing posture, silhouette and color contrast.', alt: 'Fighter character on orange background' } },
-  { file: '35', size: 'sm', icon: 'donut_large', tools: ['Processing'], year: '2023', de: { title: 'Neon Loop', text: 'Generativer Kreis aus farbigen Linien mit rhythmischer Wiederholung.', detail: 'Die Grafik wirkt wie ein digitales Ornament und zeigt präzise Wiederholung ohne Starre.', alt: 'Bunter generativer Linienkreis auf schwarzem Grund' }, en: { title: 'Neon loop', text: 'Generative circle of colored lines with rhythmic repetition.', detail: 'The graphic feels like a digital ornament and shows precise repetition without stiffness.', alt: 'Colorful generative line circle on black background' } },
+  { file: '34', size: 'md', icon: 'accessibility_new', tools: ['Photoshop', 'Illustrator'], year: '2021', de: { title: 'Fresher then Fresh', text: 'Homage an die 90er und meine absolute Lieblingsserie.', detail: 'Eine Vektorisierung in Illustrator – komplett ohne Bildnachzeichner. Die Umsetzung erfolgte in mühevoller Handarbeit, Form für Form. Als Kind der 90er hat mich diese Serie stark geprägt; die Arbeit ist deshalb zugleich Stilübung, Fan-Hommage und persönliche Reminiszenz.', alt: 'Vektorisierter Charakter auf orangefarbenem Hintergrund' }, en: { title: 'Fresher then Fresh', text: 'A homage to the 90s and my all-time favorite series.', detail: 'A vectorization created in Illustrator completely without image trace. The piece was built through painstaking manual work, shape by shape. As a child of the 90s, this series had a major influence on me, so the work is both a style exercise, a fan homage and a personal throwback.', alt: 'Vectorized character on an orange background' } },
+  { file: '35', size: 'sm', icon: 'donut_large', tools: ['Illustrator'], year: '2018', de: { title: 'Chaos or Symmetrie', text: 'Ein erster Versuch der generativen Gestaltung in Illustrator.', detail: 'Die Vektorform zeigt einen Kreis aus mehreren sich überschneidenden Schwingungen. Auf den ersten Blick wirkt alles chaotisch, auf den zweiten offenbart sich eine nahezu perfekte Symmetrie. Gerade dieser Wechsel zwischen Irritation und Ordnung macht den Reiz der Arbeit aus.', alt: 'Bunter generativer Linienkreis auf schwarzem Grund' }, en: { title: 'Chaos or symmetry', text: 'A first attempt at generative design in Illustrator.', detail: 'The vector form shows a circle built from multiple overlapping oscillations. At first glance it feels chaotic, but on a second look it reveals an almost perfect symmetry. That shift between irritation and order is exactly what gives the piece its appeal.', alt: 'Colorful generative line circle on black background' } },
   { file: '36', size: 'sm', icon: 'cyclone', tools: ['Processing'], year: '2023', de: { title: 'Blue Spiral', text: 'Helle Linienrotation mit optischer Tiefe und sauberem Zentrum.', detail: 'Ein konstruktives Processing-Motiv, das Bewegung durch reine Wiederholung erzeugt.', alt: 'Blaue generative Spirale auf hellem Hintergrund' }, en: { title: 'Blue spiral', text: 'Bright line rotation with optical depth and clean center.', detail: 'A constructive Processing motif that creates movement through pure repetition.', alt: 'Blue generative spiral on bright background' } },
   { file: '37', size: 'lg', icon: 'checkroom', tools: ['Photoshop', 'Illustrator'], year: '2025', de: { title: 'Shirt Grid', text: 'T-Shirt-Mockups als Serienwand mit Varianten und dunklem Studio-Look.', detail: 'Das Bild zeigt Produktvariation, Ordnung und eine klare Präsentationslogik.', alt: 'T-Shirt-Mockups in mehreren Reihen' }, en: { title: 'Shirt grid', text: 'T-shirt mockups as a series wall with variants and dark studio look.', detail: 'The image shows product variation, order and a clear presentation logic.', alt: 'T-shirt mockups in several rows' } },
   { file: '39', size: 'sm', icon: 'flutter_dash', tools: ['Illustrator'], year: '2023', de: { title: 'Hummingbird Mark', text: 'Abstraktes Vogelzeichen mit weichen Farbflächen und dunklem Raum.', detail: 'Ein Signet-Experiment mit Überlagerungen, Kurven und reduzierter Formensprache.', alt: 'Abstraktes Kolibri-Logo auf dunklem Hintergrund' }, en: { title: 'Hummingbird mark', text: 'Abstract bird mark with soft color surfaces and dark space.', detail: 'A signet experiment with overlaps, curves and reduced form language.', alt: 'Abstract hummingbird logo on dark background' } },
@@ -892,20 +892,20 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         slug: 'grafikdesign-katalog',
         name: 'Design Archiv',
         titleLines: ['Design', 'Archiv'],
-        kicker: 'Editorial Design / Bildarchiv',
-        summary: 'Ein rein grafisches Portfolio-Kapitel: ausgewählte Layouts, Motive, Retuschen und Designexperimente werden als vorbereitete PDF-Katalogseiten und als visuelle Masonry-Galerie inszeniert.',
-        description: 'Das Designarchiv bündelt ausgewählte Arbeiten aus Photoshop, Lightroom und Illustrator. Im Mittelpunkt stehen Bildbearbeitung, Komposition, Farbe, Typografie, Layoutgefühl und vollständige Katalogseiten, die als PDF-Seiten sauber, ruhig und editorial dargestellt werden.',
-        goal: 'Ziel ist eine visuelle Bühne, die nicht erklärt wie eine Business-App, sondern Arbeiten zeigt: groß, ruhig, bildstark und mit genug Kontext, damit Betrachter Stil, Werkzeug und gestalterische Entscheidung verstehen.',
+        kicker: 'Editorial',
+        summary: 'Ein visuelles Archiv ausgewählter Arbeiten aus den Jahren 2017–2023: Editorial-Layouts, Motive, Retuschen und Designexperimente werden als kuratierte WebP-Katalogseiten und Masonry-Galerie präsentiert.',
+        description: 'Das Designarchiv bündelt freie und angewandte Arbeiten aus 2017–2023. Im Mittelpunkt stehen Bildbearbeitung, Komposition, Farbe, Typografie, Layoutgefühl und selbst erstellte Assets, die als leichte WebP-Seiten und visuelle Galerie editorial inszeniert werden.',
+        goal: 'Ziel ist eine portfolioartige Archivbühne, die Entwicklung, Stilbreite und gestalterische Handschrift sichtbar macht: groß, ruhig, bildstark und mit genug Kontext, damit Betrachter Werkzeug, Motiv und Entscheidung verstehen.',
         role: 'Bildauswahl, Retusche, Farblook, Composing, Vektorarbeit, Typografie, Layoutaufbau, Seitenrhythmus und digitale Inszenierung des Katalogs.',
-        year: '2022–2025',
+        year: '2017–2023',
         type: 'Grafikdesign / Editorial',
         accent: 'pink',
         techStack: ['Photoshop', 'Lightroom', 'Illustrator', 'Composing', 'Editorial Design'],
-        highlights: ['PDF-Katalogseiten', 'Sonderformat-Reader', 'Masonry-Galerie', 'Lightbox mit Bilddetails', 'Photoshop-Retusche', 'Lightroom-Looks', 'Illustrator-Assets', 'Editorialer Seitenrhythmus'],
-        requirements: ['Komplette Katalogseiten als PDF zeigen', 'Sonderformat proportional darstellen', 'Bilddetails sichtbar machen', 'Werkzeuge nennen', 'Keine technische Case Study', 'Responsive Galerie', 'Tastaturbedienbare Lightbox', 'Assets später einfach austauschbar halten'],
+        highlights: ['WebP-Katalogseiten', 'Performance-Reader', 'Masonry-Galerie', 'Lightbox mit Bilddetails', 'Photoshop-Retusche', 'Lightroom-Looks', 'Illustrator-Assets', 'Editorialer Seitenrhythmus'],
+        requirements: ['Komplette Katalogseiten als WebP zeigen', 'Sonderformat proportional darstellen', 'Bilddetails sichtbar machen', 'Werkzeuge nennen', 'Keine technische Case Study', 'Responsive Galerie', 'Tastaturbedienbare Lightbox', 'Assets performancefreundlich austauschbar halten'],
         detailMode: 'editorial',
         metrics: [
-          { value: '2022–25', label: 'Zeitraum', text: 'Ausgewählte Arbeiten werden als visuelles Archiv zusammengeführt.' },
+          { value: '2017–23', label: 'Zeitraum', text: 'Ausgewählte Archivarbeiten werden als visuelles Portfolio-Kapitel zusammengeführt.' },
           { value: '21×25', label: 'Format', text: 'Das Sonderformat wird im Reader proportional und möglichst groß dargestellt.' },
           { value: 'PS', label: 'Photoshop', text: 'Composings, Retuschen, Freisteller und Bildmontagen.' },
           { value: 'LR', label: 'Lightroom', text: 'Bildlook, Farbserien, Kontrast und konsistente Stimmungen.' },
@@ -915,13 +915,13 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         catalogShowcase: {
           eyebrow: 'digital_catalog.indd',
           title: 'Digitales Editorial',
-          status: 'Static PDF Editorial',
-          lead: 'Die analoge Katalogidee wird nicht mehr als Web-Layout nachgebaut. Stattdessen werden vorbereitete Komplettseiten als PDF gezeigt: ruhig, bildstark und näher am echten Editorial-Export.',
-          ctaLabel: 'Katalogseiten ansehen',
-          chips: ['Photoshop', 'Lightroom', 'Illustrator', 'PDF Reader'],
-          readerLabel: 'Designarchiv mit vorbereiteten PDF-Katalogseiten',
+          status: 'Static WebP Editorial',
+          lead: 'Das Archiv wird nicht als technische Demo erzählt, sondern als kuratierte Bildstrecke: vorbereitete WebP-Seiten, ruhige Betrachtung und eine Galerie, die Arbeiten aus 2017 bis 2023 portfoliofähig zusammenführt.',
+          ctaLabel: 'Arbeiten ansehen',
+          chips: ['Photoshop', 'Lightroom', 'Illustrator', 'WebP Reader'],
+          readerLabel: 'Designarchiv mit vorbereiteten WebP-Katalogseiten',
           readerEyebrow: 'Katalog Reader',
-          readerTitle: 'Ausgewählte Katalogseiten',
+          readerTitle: 'Ausgewählte Arbeiten',
           readerHint: '',
           tocOpenLabel: 'Inhaltsverzeichnis öffnen',
           tocCloseLabel: 'Inhaltsverzeichnis schließen',
@@ -940,7 +940,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         chapters: [
           { eyebrow: 'Konzept', title: 'Ein Katalog, kein Screenshot-Friedhof', text: 'Die Arbeiten sollen wie ein kleines Editorial funktionieren. Der Fokus liegt auf Bildwirkung, Rhythmus und Materialität, nicht auf technischen Erklärtafeln.', points: ['Große Motive', 'Bewusster Weißraum', 'Kurze Bildkontexte'] },
           { eyebrow: 'Werkzeuge', title: 'Photoshop, Lightroom und Illustrator als Kern', text: 'Die Arbeiten entstehen über Retusche, Farblook, Vektorformen und Layoutentscheidungen. Jedes Werkzeug hat eine klare Rolle im visuellen Ergebnis.', points: ['Photoshop für Composing', 'Lightroom für Look', 'Illustrator für Vektorarbeit'] },
-          { eyebrow: 'Inszenierung', title: 'Blättern, Zoomen, Betrachten', text: 'Der Reader zeigt vollständige Katalogseiten als PDF, damit das originale Layout erhalten bleibt. Navigation und Lightbox machen die Sammlung trotzdem angenehm prüfbar.', points: ['Proportionaler PDF-Reader', 'Masonry-Galerie', 'Bilddetails in der Lightbox'] },
+          { eyebrow: 'Inszenierung', title: 'Blättern, Zoomen, Betrachten', text: 'Der Reader zeigt vollständige Archivseiten als WebP, damit Layout, Motiv und Bildwirkung erhalten bleiben. Navigation, Hover-Lupe und Lightbox machen die Sammlung angenehm prüfbar.', points: ['Proportionaler WebP-Reader', 'Masonry-Galerie', 'Bilddetails per Lupe'] },
         ],
         gallery: createDesignCatalogGalleryItems('de'),
       },
@@ -1705,20 +1705,20 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         slug: 'grafikdesign-katalog',
         name: 'Design Archive',
         titleLines: ['Design', 'Archive'],
-        kicker: 'Editorial Design / Visual Archive',
-        summary: 'A purely graphic portfolio chapter: selected layouts, motifs, retouches and design experiments are staged as prepared PDF catalogue pages and a visual masonry gallery.',
-        description: 'The design archive brings together selected work from Photoshop, Lightroom and Illustrator. The focus is image editing, composition, color, typography, layout rhythm and complete catalogue pages displayed as calm, editorial PDF pages.',
-        goal: 'The goal is a visual stage that does not explain like a business app, but shows work: large, calm, image-heavy and with enough context to understand style, tools and design decisions.',
+        kicker: 'Editorial',
+        summary: 'A visual archive of selected work from 2017–2023: editorial layouts, motifs, retouching and design experiments are presented as curated WebP catalogue pages and a masonry gallery.',
+        description: 'The design archive brings together free and applied work from 2017–2023. The focus is image editing, composition, color, typography, layout rhythm and self-built assets staged as lightweight WebP pages and a visual gallery.',
+        goal: 'The goal is a portfolio-like archive stage that makes development, range and visual handwriting visible: large, calm, image-led and with enough context to understand tools, motifs and design decisions.',
         role: 'Image selection, retouching, color look, compositing, vector work, typography, layout structure, page rhythm and digital staging of the catalogue.',
-        year: '2022–2025',
+        year: '2017–2023',
         type: 'Graphic Design / Editorial',
         accent: 'pink',
         techStack: ['Photoshop', 'Lightroom', 'Illustrator', 'Compositing', 'Editorial Design'],
-        highlights: ['PDF catalogue pages', 'Custom-format reader', 'Masonry gallery', 'Lightbox with image details', 'Photoshop retouching', 'Lightroom looks', 'Illustrator assets', 'Editorial page rhythm'],
-        requirements: ['Show complete catalogue pages as PDF', 'Display the custom format proportionally', 'Make image details visible', 'Name the tools', 'No technical case study', 'Responsive gallery', 'Keyboard-friendly lightbox', 'Keep assets easy to swap later'],
+        highlights: ['WebP catalogue pages', 'Performance reader', 'Masonry gallery', 'Lightbox with image details', 'Photoshop retouching', 'Lightroom looks', 'Illustrator assets', 'Editorial page rhythm'],
+        requirements: ['Show complete catalogue pages as WebP', 'Display the custom format proportionally', 'Make image details visible', 'Name the tools', 'No technical case study', 'Responsive gallery', 'Keyboard-friendly lightbox', 'Keep assets performance-friendly and easy to swap'],
         detailMode: 'editorial',
         metrics: [
-          { value: '2022–25', label: 'Time span', text: 'Selected works are brought together as a visual archive.' },
+          { value: '2017–23', label: 'Time span', text: 'Selected archive works are brought together as a visual portfolio chapter.' },
           { value: '21×25', label: 'Format', text: 'The custom format is shown proportionally and as large as possible in the reader.' },
           { value: 'PS', label: 'Photoshop', text: 'Compositings, retouches, cut-outs and image montages.' },
           { value: 'LR', label: 'Lightroom', text: 'Image look, color series, contrast and consistent moods.' },
@@ -1728,13 +1728,13 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         catalogShowcase: {
           eyebrow: 'digital_catalog.indd',
           title: 'Digital editorial',
-          status: 'Static PDF Editorial',
-          lead: 'The analogue catalogue idea is no longer rebuilt as a web layout. Instead, prepared full pages are shown as PDF files: calmer, image-led and closer to the original editorial file.',
-          ctaLabel: 'View catalogue pages',
-          chips: ['Photoshop', 'Lightroom', 'Illustrator', 'PDF Reader'],
-          readerLabel: 'Design archive with prepared PDF catalogue pages',
+          status: 'Static WebP Editorial',
+          lead: 'The archive is not presented as a technical demo, but as a curated image sequence: prepared WebP pages, calm viewing and a gallery that brings work from 2017 to 2023 into a portfolio-ready format.',
+          ctaLabel: 'View works',
+          chips: ['Photoshop', 'Lightroom', 'Illustrator', 'WebP Reader'],
+          readerLabel: 'Design archive with prepared WebP catalogue pages',
           readerEyebrow: 'Catalogue Reader',
-          readerTitle: 'Selected catalogue pages',
+          readerTitle: 'Selected works',
           readerHint: '',
           tocOpenLabel: 'Open table of contents',
           tocCloseLabel: 'Close table of contents',
@@ -1753,7 +1753,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         chapters: [
           { eyebrow: 'Concept', title: 'A catalogue, not a screenshot graveyard', text: 'The work should behave like a small editorial piece. The focus is image impact, rhythm and materiality, not technical explanation boards.', points: ['Large motifs', 'Intentional white space', 'Short image context'] },
           { eyebrow: 'Tools', title: 'Photoshop, Lightroom and Illustrator at the core', text: 'The work is built through retouching, color look, vector shapes and layout decisions. Every tool has a clear role in the visual result.', points: ['Photoshop for compositing', 'Lightroom for the look', 'Illustrator for vector work'] },
-          { eyebrow: 'Staging', title: 'Browse, zoom, look closer', text: 'The reader shows complete catalogue pages as PDF files so the original layout stays intact. Navigation and the lightbox still make the collection easy to inspect.', points: ['Proportional PDF reader', 'Masonry gallery', 'Image details in the lightbox'] },
+          { eyebrow: 'Staging', title: 'Browse, zoom, look closer', text: 'The reader shows complete archive pages as WebP files so layout, motif and visual impact remain intact. Navigation, hover magnifier and the lightbox keep the collection easy to inspect.', points: ['Proportional WebP reader', 'Masonry gallery', 'Image details via magnifier'] },
         ],
         gallery: createDesignCatalogGalleryItems('en'),
       },

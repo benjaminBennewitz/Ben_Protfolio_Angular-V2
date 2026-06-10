@@ -4,7 +4,7 @@
   <article>
     <header class="project-detail__hero bp-section" [style.--project-detail-game-landscape]="activeProject.gameShowcase?.heroBackdropAsset ? 'url(' + activeProject.gameShowcase?.heroBackdropAsset + ')' : null">
       @if (activeProject.catalogShowcase) {
-      <div class="project-detail__catalog-flow" aria-hidden="true">
+      <div class="project-detail__catalog-flow" [class.is-paused]="!isCatalogFlowHeroVisible()" aria-hidden="true">
         <canvas #catalogFlowCanvas class="project-detail__catalog-flow-canvas"></canvas>
         <span class="project-detail__catalog-flow-orb project-detail__catalog-flow-orb--primary"></span>
         <span class="project-detail__catalog-flow-orb project-detail__catalog-flow-orb--secondary"></span>
@@ -710,17 +710,20 @@
       <div class="project-detail__catalog-reader">
         @if (activeCatalogSpread(); as spread) {
         <div class="project-detail__catalog-reader-frame" [attr.aria-label]="catalogShowcase.readerLabel">
-          <button type="button" class="project-detail__catalog-menu-button" [attr.aria-label]="catalogShowcase.tocOpenLabel" [attr.aria-expanded]="isCatalogMenuOpen()" (click)="toggleCatalogMenu()">
+          <button type="button" class="project-detail__catalog-menu-button" [attr.aria-label]="catalogShowcase.tocOpenLabel" [attr.aria-expanded]="isCatalogMenuOpen()" (pointerenter)="hideCatalogLoupe()" (focusin)="hideCatalogLoupe()" (click)="toggleCatalogMenu()">
             <span class="material-symbols-outlined" aria-hidden="true">menu</span>
             <strong>{{ catalogShowcase.tocTitle }}</strong>
           </button>
 
           <div class="project-detail__catalog-book project-detail__catalog-book--reader" [class.project-detail__catalog-book--next]="catalogSpreadDirection() === 1" [class.project-detail__catalog-book--previous]="catalogSpreadDirection() === -1" [class.project-detail__catalog-book--loading]="isCatalogReaderBusy()">
             @for (page of spread.pages; track page.number) {
-            <article [class]="'project-detail__catalog-page project-detail__catalog-page--' + page.mood + (page.side ? ' project-detail__catalog-page--' + page.side : '')">
+            <article [class]="'project-detail__catalog-page project-detail__catalog-page--' + page.mood + (page.side ? ' project-detail__catalog-page--' + page.side : '')" (pointerenter)="updateCatalogLoupe($event, page)" (pointermove)="updateCatalogLoupe($event, page)" (pointerleave)="hideCatalogLoupe()">
               @if (page.asset) {
               <img class="project-detail__catalog-page-image" [src]="page.asset" [alt]="page.alt" loading="eager" decoding="async" fetchpriority="high" draggable="false" (contextmenu)="blockProtectedAssetEvent($event)" (dragstart)="blockProtectedAssetEvent($event)" />
               <span class="project-detail__catalog-page-shield" aria-hidden="true"></span>
+              @if (catalogLoupe().isVisible && catalogLoupe().pageNumber === page.number) {
+              <span class="project-detail__catalog-page-loupe" aria-hidden="true" [style.--catalog-loupe-x]="catalogLoupe().x + 'px'" [style.--catalog-loupe-y]="catalogLoupe().y + 'px'" [style.--catalog-loupe-width]="catalogLoupe().width + 'px'" [style.--catalog-loupe-height]="catalogLoupe().height + 'px'" [style.background-image]="'url(' + catalogLoupe().asset + ')'" [style.background-size]="catalogLoupe().backgroundSize" [style.background-position]="catalogLoupe().backgroundPosition"></span>
+              }
               } @else {
               <div class="project-detail__catalog-page-placeholder">
                 <span>{{ page.number }}</span>
@@ -735,7 +738,7 @@
             }
           </div>
 
-          <div class="project-detail__catalog-reader-controls">
+          <div class="project-detail__catalog-reader-controls" (pointerenter)="hideCatalogLoupe()" (focusin)="hideCatalogLoupe()">
             <button type="button" [attr.aria-label]="catalogShowcase.previousLabel" [disabled]="isCatalogReaderBusy()" (click)="selectAdjacentCatalogSpread(-1)">
               <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
             </button>
@@ -748,7 +751,7 @@
 
         @if (isCatalogMenuOpen()) {
         <div class="project-detail__catalog-toc-backdrop" aria-hidden="true" (click)="closeCatalogMenu()"></div>
-        <aside class="project-detail__catalog-reader-meta bp-card" role="dialog" aria-modal="true" [attr.aria-label]="catalogShowcase.tocTitle">
+        <aside class="project-detail__catalog-reader-meta bp-card" role="dialog" aria-modal="true" [attr.aria-label]="catalogShowcase.tocTitle" (pointerenter)="hideCatalogLoupe()" (focusin)="hideCatalogLoupe()">
           <button type="button" class="project-detail__catalog-toc-close" [attr.aria-label]="catalogShowcase.tocCloseLabel" (click)="closeCatalogMenu()">
             <span class="material-symbols-outlined" aria-hidden="true">close</span>
           </button>

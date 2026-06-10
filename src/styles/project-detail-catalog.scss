@@ -149,6 +149,14 @@ body.bp-lightbox-open {
   opacity: 0.82;
 }
 
+.project-detail__catalog-flow.is-paused .project-detail__catalog-flow-canvas {
+  opacity: 0.38;
+}
+
+.project-detail__catalog-flow.is-paused .project-detail__catalog-flow-orb {
+  animation-play-state: paused;
+}
+
 .project-detail__catalog-flow-orb {
   position: absolute;
   display: block;
@@ -433,8 +441,10 @@ body.bp-lightbox-open {
 .project-detail__catalog-reader-head h2 {
   max-width: 16ch;
   margin: 0;
+  overflow: visible;
+  padding-top: 0.08em;
   font-size: clamp(2.35rem, 6.2vw, 6.2rem);
-  line-height: 0.84;
+  line-height: 0.96;
   text-transform: uppercase;
 }
 
@@ -809,7 +819,35 @@ body.bp-lightbox-open {
   z-index: 2;
   inset: 0;
   background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.018));
-  cursor: default;
+  cursor: zoom-in;
+}
+
+.project-detail__catalog-page-loupe {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  width: var(--catalog-loupe-width);
+  height: var(--catalog-loupe-height);
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent), transparent 18%);
+  background-color: var(--project-detail-catalog-paper);
+  background-repeat: no-repeat;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.34), inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+  transform: translate3d(calc(var(--catalog-loupe-x) - 50%), calc(var(--catalog-loupe-y) - 50%), 0);
+  will-change: transform, background-position;
+}
+
+.project-detail__catalog-page-loupe::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.14) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.26;
 }
 
 .project-detail__catalog-page-placeholder {
@@ -1238,13 +1276,11 @@ body.bp-lightbox-open {
 }
 
 .project-detail__lightbox-copy p:not(.bp-eyebrow) {
-  display: -webkit-box;
+  display: block;
   margin: 0;
-  overflow: hidden;
+  overflow: visible;
   color: var(--bp-color-text-muted);
   line-height: 1.62;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 6;
 }
 
 .project-detail__lightbox-copy ul {
@@ -1441,9 +1477,6 @@ body.bp-lightbox-open {
     padding-bottom: 3.8rem;
   }
 
-  .project-detail__lightbox-copy p:not(.bp-eyebrow) {
-    -webkit-line-clamp: 3;
-  }
 }
 
 @media (max-width: 1080px) {

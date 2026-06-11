@@ -493,7 +493,7 @@
 
 .visual__blood-arm {
   position: absolute;
-  left: 0;
+  left: -20px;
   bottom: 0;
   width: clamp(900px, 78vw, 1120px);
   max-width: none;
@@ -1356,5 +1356,141 @@
 
   .visual__blood-leech--two {
     left: min(7.2rem, 38vw);
+  }
+}
+
+
+@media (max-width: 640px) {
+  .visual-shell[data-project='blutanalyse'],
+  .visual-shell[data-project='blutanalyse'].visual-shell--large {
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 0.55rem;
+    min-height: min(78svh, 530px);
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual {
+    order: 1;
+    min-height: clamp(150px, 31svh, 210px);
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-stage {
+    position: relative;
+    inset: auto;
+    order: 3;
+    width: 100%;
+    height: clamp(76px, 17svh, 112px);
+    overflow: hidden;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-arm {
+    left: 0;
+    bottom: 0;
+    width: min(450px, 142vw);
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-leech {
+    width: clamp(48px, 14vw, 62px);
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-leech--one {
+    left: 0.55rem;
+    top: 0.05rem;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-leech--two {
+    left: min(6.6rem, 35vw);
+    top: 1.35rem;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-label {
+    min-height: 20px;
+    border-width: 1px;
+    padding: 0.08rem 0.26rem;
+    font-size: 0.55rem;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.54);
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-analysis {
+    position: relative;
+    inset: auto;
+    order: 2;
+    justify-self: end;
+    width: min(100%, 320px);
+    max-width: 82%;
+    gap: 0.42rem;
+    padding: 0.58rem 0.62rem;
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.55);
+    transform: rotate(-0.75deg);
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-analysis-head {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-analysis-head strong,
+  .visual-shell[data-project='blutanalyse'] .visual__blood-analysis-head span {
+    font-size: 0.56rem;
+    letter-spacing: 0.08em;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-analysis-head span {
+    text-align: right;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-progress {
+    gap: 0.2rem;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-progress span {
+    height: 0.38rem;
+    border-width: 1px;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-data-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.4rem;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-data-grid dl {
+    gap: 0.22rem;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-data-grid div {
+    grid-template-columns: 1fr;
+    gap: 0.04rem;
+    padding-bottom: 0.16rem;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-data-grid dt,
+  .visual-shell[data-project='blutanalyse'] .visual__blood-data-grid dd {
+    font-size: 0.54rem;
+    letter-spacing: 0.02em;
+    text-align: left;
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-status-list {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .visual-shell[data-project='blutanalyse'],
+  .visual-shell[data-project='blutanalyse'].visual-shell--large {
+    min-height: min(76svh, 500px);
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual {
+    min-height: clamp(140px, 29svh, 190px);
+  }
+
+  .visual-shell[data-project='blutanalyse'] .visual__blood-analysis {
+    max-width: 88%;
   }
 }

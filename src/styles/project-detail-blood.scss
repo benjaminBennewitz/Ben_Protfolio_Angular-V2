@@ -21,6 +21,8 @@
 
    01   Blood Data Showcase
    02   Responsive
+   03   Detail-Fixes
+   04   Dashboard Refinements
    ========================================================================== */
 
 /* ========================================================================== 
@@ -366,6 +368,128 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+
+.project-detail__blood-guide-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-top: clamp(1rem, 2vw, 1.45rem);
+}
+
+.project-detail__blood-guide-controls button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.12rem 0.45rem;
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--project-detail-blue), transparent 66%);
+  border-radius: 0;
+  padding: 0.58rem 0.62rem;
+  background: color-mix(in srgb, var(--bp-color-bg) 82%, var(--project-detail-blue) 8%);
+  color: var(--bp-color-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 170ms ease, background-color 170ms ease, box-shadow 170ms ease, transform 170ms var(--bp-ease-out);
+}
+
+.project-detail__blood-guide-controls button:hover,
+.project-detail__blood-guide-controls button:focus-visible,
+.project-detail__blood-guide-controls button.is-active {
+  border-color: var(--project-detail-blue);
+  background: color-mix(in srgb, var(--project-detail-blue), var(--bp-color-bg) 84%);
+  box-shadow: 0 14px 32px color-mix(in srgb, var(--project-detail-blue), transparent 84%);
+  transform: translateY(-2px);
+}
+
+.project-detail__blood-guide-controls .material-symbols-outlined {
+  grid-row: span 2;
+  color: var(--project-detail-blue);
+  font-size: 1.15rem;
+}
+
+.project-detail__blood-guide-controls strong,
+.project-detail__blood-guide-controls small {
+  min-width: 0;
+  font-family: var(--bp-font-mono);
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.project-detail__blood-guide-controls strong {
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+}
+
+.project-detail__blood-guide-controls small {
+  color: var(--bp-color-text-muted);
+  font-size: 0.56rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+}
+
+.project-detail__blood-guide-graph {
+  position: relative;
+  min-height: 2.35rem;
+  margin-top: 0.7rem;
+}
+
+.project-detail__blood-guide-scale,
+.project-detail__blood-guide-bar,
+.project-detail__blood-guide-chart {
+  display: none;
+}
+
+.project-detail__blood-guide--scale .project-detail__blood-guide-scale,
+.project-detail__blood-guide--bar .project-detail__blood-guide-bar,
+.project-detail__blood-guide--chart .project-detail__blood-guide-chart {
+  display: block;
+}
+
+.project-detail__blood-guide--scale .project-detail__blood-guide-scale {
+  margin-top: 0;
+}
+
+.project-detail__blood-guide-bar {
+  position: relative;
+  height: 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--blood-state), transparent 48%);
+  background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--blood-state), transparent 90%) 0 0.5rem, transparent 0.5rem 1rem);
+  overflow: hidden;
+}
+
+.project-detail__blood-guide-bar span {
+  display: block;
+  width: clamp(0.6rem, var(--blood-position), 100%);
+  height: 100%;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--blood-state), transparent 48%), var(--blood-state));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--blood-state), transparent 68%);
+}
+
+.project-detail__blood-guide-chart {
+  width: 100%;
+  height: 2.35rem;
+  overflow: visible;
+}
+
+.project-detail__blood-guide-chart polyline,
+.project-detail__blood-guide-chart circle {
+  fill: none;
+  stroke: var(--blood-state);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.project-detail__blood-guide-chart polyline {
+  stroke-width: 4;
+}
+
+.project-detail__blood-guide-chart circle {
+  fill: var(--blood-state);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--blood-state), transparent 58%));
+}
+
 /* ========================================================================== 
    02   Responsive
    ========================================================================== */
@@ -448,4 +572,797 @@
   .project-detail__blood-pipeline-grid {
     grid-template-columns: 1fr;
   }
+}
+
+
+@media (max-width: 760px) {
+  .project-detail__blood-guide-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .project-detail__blood-guide-graph {
+    min-height: 2rem;
+  }
+}
+
+/* ========================================================================== 
+   04   Dashboard Refinements
+   ========================================================================== */
+
+
+.project-detail[data-project='blutanalyse'] .project-detail__hero-title span {
+  display: block;
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__demo {
+  scroll-snap-align: none;
+  scroll-snap-stop: normal;
+}
+
+.project-detail__blood-preview--chart {
+  grid-template-columns: minmax(0, 1.25fr) minmax(220px, 0.75fr);
+}
+
+.project-detail__blood-chart-panel {
+  display: grid;
+  min-height: 330px;
+  align-content: space-between;
+  border: 1px solid color-mix(in srgb, var(--project-detail-blue), transparent 76%);
+  border-radius: 0;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  background:
+    radial-gradient(circle at 88% 10%, color-mix(in srgb, var(--project-detail-blue), transparent 72%), transparent 28%),
+    linear-gradient(135deg, color-mix(in srgb, var(--bp-color-surface-solid) 90%, var(--project-detail-blue) 7%), color-mix(in srgb, var(--bp-color-bg) 92%, var(--project-detail-blue) 8%));
+  overflow: hidden;
+}
+
+.project-detail__blood-chart-panel header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.85rem;
+  align-items: start;
+}
+
+.project-detail__blood-chart-panel .material-symbols-outlined {
+  display: grid;
+  width: clamp(2.6rem, 4vw, 3.4rem);
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--project-detail-blue), transparent 55%);
+  background: color-mix(in srgb, var(--project-detail-blue), transparent 88%);
+  color: var(--project-detail-blue);
+  font-size: clamp(1.45rem, 2.2vw, 1.9rem);
+}
+
+.project-detail__blood-chart-panel h2 {
+  margin: 0;
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-display);
+  font-size: clamp(1.65rem, 3.4vw, 3rem);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+}
+
+.project-detail__blood-chart-panel p {
+  margin: 0.55rem 0 0;
+  color: var(--bp-color-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.52;
+}
+
+.project-detail__blood-chart-bars {
+  display: grid;
+  gap: clamp(0.7rem, 1.4vw, 1rem);
+  margin-top: clamp(1rem, 2vw, 1.8rem);
+}
+
+.project-detail__blood-chart-bar {
+  --blood-state: var(--project-detail-blue);
+  display: grid;
+  grid-template-columns: minmax(3.5rem, 0.22fr) minmax(4.2rem, 0.2fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.project-detail__blood-chart-bar--normal {
+  --blood-state: var(--project-detail-blood-ok);
+}
+
+.project-detail__blood-chart-bar--watch {
+  --blood-state: var(--project-detail-blood-watch);
+}
+
+.project-detail__blood-chart-bar--high {
+  --blood-state: var(--project-detail-blood-high);
+}
+
+.project-detail__blood-chart-bar--low {
+  --blood-state: var(--project-detail-blood-low);
+}
+
+.project-detail__blood-chart-bar span,
+.project-detail__blood-chart-bar strong {
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-mono);
+  font-size: clamp(0.62rem, 0.9vw, 0.78rem);
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-detail__blood-chart-bar strong {
+  color: var(--blood-state);
+  text-align: right;
+}
+
+.project-detail__blood-chart-bar i {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: clamp(1.75rem, 3.2vw, 3.1rem);
+  border: 1px solid color-mix(in srgb, var(--blood-state), transparent 58%);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--blood-state), transparent 90%) 1px, transparent 1px),
+    color-mix(in srgb, var(--blood-state), transparent 96%);
+  background-size: 10% 100%;
+  overflow: hidden;
+}
+
+.project-detail__blood-chart-bar i::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: clamp(2rem, var(--blood-position), 100%);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--blood-state), transparent 44%), var(--blood-state));
+  box-shadow: 0 0 24px color-mix(in srgb, var(--blood-state), transparent 62%);
+}
+
+.project-detail__blood-preview--chart .project-detail__blood-values {
+  align-content: start;
+}
+
+.project-detail__blood-preview--chart .project-detail__blood-value {
+  padding: 0.76rem;
+}
+
+.project-detail__blood-preview--chart .project-detail__blood-value small {
+  margin-top: 0.34rem;
+}
+
+.project-detail__blood-guide {
+  grid-template-columns: minmax(260px, 0.78fr) minmax(0, 1.22fr);
+}
+
+.project-detail__blood-guide-controls {
+  position: relative;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid color-mix(in srgb, var(--project-detail-blue), transparent 66%);
+  padding: 0.25rem;
+  background: color-mix(in srgb, var(--bp-color-bg) 84%, var(--project-detail-blue) 8%);
+  overflow: hidden;
+}
+
+.project-detail__blood-guide-controls::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset: 0.25rem auto 0.25rem 0.25rem;
+  width: calc((100% - 0.5rem) / 3);
+  background: color-mix(in srgb, var(--project-detail-blue), var(--bp-color-bg) 80%);
+  box-shadow: 0 14px 32px color-mix(in srgb, var(--project-detail-blue), transparent 82%);
+  transform: translateX(calc(var(--blood-guide-mode-index, 0) * 100%));
+  transition: transform 260ms var(--bp-ease-out);
+}
+
+.project-detail__blood-guide-controls button {
+  position: relative;
+  z-index: 1;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.project-detail__blood-guide-controls button:hover,
+.project-detail__blood-guide-controls button:focus-visible,
+.project-detail__blood-guide-controls button.is-active {
+  background: transparent;
+  box-shadow: none;
+}
+
+.project-detail__blood-guide-comparison {
+  display: grid;
+  gap: clamp(0.78rem, 1.25vw, 1rem);
+  border: 1px solid color-mix(in srgb, var(--project-detail-blue), transparent 70%);
+  border-radius: 0;
+  padding: clamp(0.9rem, 1.8vw, 1.25rem);
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--project-detail-blue), transparent 84%), transparent 32%),
+    color-mix(in srgb, var(--bp-color-surface-solid) 94%, var(--project-detail-blue) 4%);
+}
+
+.project-detail__blood-guide-comparison[data-guide-mode='scale'] {
+  animation: project-detail-blood-guide-scale 240ms var(--bp-ease-out);
+}
+
+.project-detail__blood-guide-comparison[data-guide-mode='bar'] {
+  animation: project-detail-blood-guide-bar 240ms var(--bp-ease-out);
+}
+
+.project-detail__blood-guide-comparison[data-guide-mode='chart'] {
+  animation: project-detail-blood-guide-chart 240ms var(--bp-ease-out);
+}
+
+.project-detail__blood-guide-row {
+  --blood-state: var(--project-detail-blue);
+  display: grid;
+  grid-template-columns: minmax(7.8rem, 0.42fr) minmax(0, 1fr) minmax(10rem, 0.55fr);
+  gap: clamp(0.75rem, 1.5vw, 1.2rem);
+  align-items: center;
+  border: 1px solid color-mix(in srgb, var(--blood-state), transparent 78%);
+  padding: clamp(0.75rem, 1.4vw, 1rem);
+  background: color-mix(in srgb, var(--blood-state), var(--bp-color-surface-solid) 96%);
+}
+
+.project-detail__blood-guide-row--normal {
+  --blood-state: var(--project-detail-blood-ok);
+}
+
+.project-detail__blood-guide-row--watch {
+  --blood-state: var(--project-detail-blood-watch);
+}
+
+.project-detail__blood-guide-row--high {
+  --blood-state: var(--project-detail-blood-high);
+}
+
+.project-detail__blood-guide-row--low {
+  --blood-state: var(--project-detail-blood-low);
+}
+
+.project-detail__blood-guide-meta {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.project-detail__blood-guide-meta span,
+.project-detail__blood-guide-meta strong,
+.project-detail__blood-guide-meta small {
+  font-family: var(--bp-font-mono);
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-detail__blood-guide-meta span {
+  color: var(--bp-color-text);
+  font-size: clamp(0.92rem, 1.5vw, 1.2rem);
+}
+
+.project-detail__blood-guide-meta strong {
+  color: var(--blood-state);
+  font-size: 0.72rem;
+}
+
+.project-detail__blood-guide-meta small {
+  color: var(--bp-color-text-muted);
+  font-size: 0.62rem;
+}
+
+.project-detail__blood-guide-row p {
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.project-detail__blood-guide-graph {
+  position: relative;
+  min-height: clamp(3rem, 5vw, 4.4rem);
+  margin-top: 0;
+}
+
+.project-detail__blood-guide-scale,
+.project-detail__blood-guide-bar,
+.project-detail__blood-guide-chart {
+  position: absolute;
+  inset: 50% 0 auto;
+  display: block;
+  opacity: 0;
+  transform: translateY(calc(-50% + 0.45rem)) scaleX(0.96);
+  transform-origin: left center;
+  transition: opacity 220ms ease, transform 260ms var(--bp-ease-out);
+}
+
+.project-detail__blood-guide--scale .project-detail__blood-guide-scale,
+.project-detail__blood-guide--bar .project-detail__blood-guide-bar,
+.project-detail__blood-guide--chart .project-detail__blood-guide-chart {
+  opacity: 1;
+  transform: translateY(-50%) scaleX(1);
+}
+
+.project-detail__blood-guide--scale .project-detail__blood-guide-scale {
+  margin-top: 0;
+}
+
+.project-detail__blood-guide-bar {
+  height: clamp(1.55rem, 2.5vw, 2.4rem);
+}
+
+.project-detail__blood-guide-bar span {
+  width: clamp(1rem, var(--blood-position), 100%);
+  transition: width 260ms var(--bp-ease-out);
+}
+
+.project-detail__blood-guide-chart {
+  width: 100%;
+  height: clamp(3rem, 5vw, 4.4rem);
+}
+
+.project-detail__blood-guide-chart polyline {
+  vector-effect: non-scaling-stroke;
+}
+
+@keyframes project-detail-blood-guide-scale {
+  0% {
+    opacity: 0.7;
+    transform: translate3d(-0.45rem, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes project-detail-blood-guide-bar {
+  0% {
+    opacity: 0.7;
+    transform: translate3d(0, 0.45rem, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes project-detail-blood-guide-chart {
+  0% {
+    opacity: 0.7;
+    transform: translate3d(0.45rem, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (max-width: 1180px) {
+  .project-detail__blood-preview--chart,
+  .project-detail__blood-guide {
+    grid-template-columns: 1fr;
+  }
+
+  .project-detail__blood-chart-panel {
+    min-height: 280px;
+  }
+}
+
+@media (max-width: 760px) {
+  .project-detail__blood-chart-panel {
+    min-height: auto;
+  }
+
+  .project-detail__blood-chart-bar {
+    grid-template-columns: minmax(3.2rem, 0.25fr) minmax(0, 1fr);
+  }
+
+  .project-detail__blood-chart-bar strong {
+    text-align: left;
+  }
+
+  .project-detail__blood-chart-bar i {
+    grid-column: 1 / -1;
+  }
+
+  .project-detail__blood-guide-row {
+    grid-template-columns: 1fr;
+  }
+
+  .project-detail__blood-guide-controls {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .project-detail__blood-guide-controls small {
+    display: none;
+  }
+}
+
+
+/* ========================================================================== 
+   05   Hero Data Objects
+   ========================================================================== */
+
+.project-detail__blood-showcase--objects {
+  display: grid;
+  width: min(100%, 720px);
+  min-height: clamp(360px, 42vw, 560px);
+  align-items: center;
+}
+
+.project-detail__blood-hero-objects {
+  position: relative;
+  min-height: clamp(360px, 42vw, 560px);
+  isolation: isolate;
+}
+
+.project-detail__blood-grid-plane,
+.project-detail__blood-data-orb,
+.project-detail__blood-object {
+  position: absolute;
+}
+
+.project-detail__blood-grid-plane {
+  inset: 18% -2% 4% 8%;
+  z-index: -2;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--project-detail-blue), transparent 78%) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, var(--project-detail-blue), transparent 86%) 1px, transparent 1px);
+  background-size: 34px 34px;
+  opacity: 0.54;
+  transform: perspective(720px) rotateX(64deg) rotateZ(-7deg);
+  mask-image: linear-gradient(90deg, transparent, black 16%, black 78%, transparent);
+}
+
+.project-detail__blood-data-orb {
+  z-index: -1;
+  border: 1px solid color-mix(in srgb, var(--project-detail-blue), transparent 56%);
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--project-detail-blue), transparent 54%), transparent 66%);
+  filter: blur(0.2px);
+  opacity: 0.72;
+  animation: project-detail-blood-object-float 5.4s var(--bp-ease-out) infinite alternate;
+}
+
+.project-detail__blood-data-orb--primary {
+  top: 6%;
+  right: 5%;
+  width: clamp(7rem, 13vw, 13rem);
+  aspect-ratio: 1;
+}
+
+.project-detail__blood-data-orb--secondary {
+  bottom: 10%;
+  left: 3%;
+  width: clamp(4.6rem, 8vw, 8rem);
+  aspect-ratio: 1;
+  animation-delay: -1.8s;
+}
+
+.project-detail__blood-object {
+  border: 1px solid color-mix(in srgb, var(--project-detail-blue), transparent 58%);
+  background: color-mix(in srgb, var(--bp-color-bg) 78%, var(--project-detail-blue) 10%);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.32), 5px 5px 0 color-mix(in srgb, var(--project-detail-blue), transparent 84%);
+  backdrop-filter: blur(16px);
+}
+
+.project-detail__blood-object--bars {
+  top: 12%;
+  left: 2%;
+  width: min(64%, 460px);
+  padding: clamp(0.9rem, 1.8vw, 1.25rem);
+  animation: project-detail-blood-object-float 4.8s var(--bp-ease-out) infinite alternate;
+}
+
+.project-detail__blood-object--line {
+  right: 0;
+  bottom: 9%;
+  width: min(48%, 350px);
+  padding: clamp(0.78rem, 1.4vw, 1rem);
+  transform: rotate(2deg);
+  animation: project-detail-blood-object-float 5.8s var(--bp-ease-out) -1.2s infinite alternate;
+}
+
+.project-detail__blood-object--range {
+  right: 11%;
+  top: 4%;
+  display: grid;
+  width: min(36%, 250px);
+  gap: 0.58rem;
+  padding: clamp(0.72rem, 1.2vw, 0.9rem);
+  transform: rotate(-3deg);
+  animation: project-detail-blood-object-float 5.2s var(--bp-ease-out) -2.1s infinite alternate;
+}
+
+.project-detail__blood-object header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: clamp(0.9rem, 1.8vw, 1.25rem);
+}
+
+.project-detail__blood-object header .material-symbols-outlined {
+  display: grid;
+  width: clamp(2.25rem, 3.4vw, 3rem);
+  aspect-ratio: 1;
+  place-items: center;
+  background: var(--project-detail-blue);
+  color: var(--project-detail-icon-fg);
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+}
+
+.project-detail__blood-object header strong,
+.project-detail__blood-object--line strong,
+.project-detail__blood-object--line span,
+.project-detail__blood-object-bar span,
+.project-detail__blood-object-bar strong,
+.project-detail__blood-object-range span {
+  font-family: var(--bp-font-mono);
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-detail__blood-object header strong {
+  display: block;
+  color: var(--bp-color-text);
+  font-size: clamp(0.72rem, 1vw, 0.9rem);
+}
+
+.project-detail__blood-object header small {
+  display: block;
+  margin-top: 0.18rem;
+  color: var(--project-detail-blue);
+  font-family: var(--bp-font-mono);
+  font-size: 0.6rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.project-detail__blood-object-bars {
+  display: grid;
+  gap: clamp(0.62rem, 1.1vw, 0.82rem);
+}
+
+.project-detail__blood-object-bar,
+.project-detail__blood-object-range {
+  --blood-state: var(--project-detail-blue);
+}
+
+.project-detail__blood-object-bar--normal,
+.project-detail__blood-object-range--normal {
+  --blood-state: var(--project-detail-blood-ok);
+}
+
+.project-detail__blood-object-bar--watch,
+.project-detail__blood-object-range--watch {
+  --blood-state: var(--project-detail-blood-watch);
+}
+
+.project-detail__blood-object-bar--high,
+.project-detail__blood-object-range--high {
+  --blood-state: var(--project-detail-blood-high);
+}
+
+.project-detail__blood-object-bar--low,
+.project-detail__blood-object-range--low {
+  --blood-state: var(--project-detail-blood-low);
+}
+
+.project-detail__blood-object-bar {
+  display: grid;
+  grid-template-columns: minmax(3.6rem, 0.22fr) minmax(0, 1fr) auto;
+  gap: 0.7rem;
+  align-items: center;
+}
+
+.project-detail__blood-object-bar span,
+.project-detail__blood-object-bar strong,
+.project-detail__blood-object-range span {
+  color: var(--bp-color-text);
+  font-size: clamp(0.58rem, 0.82vw, 0.72rem);
+}
+
+.project-detail__blood-object-bar strong {
+  color: var(--blood-state);
+}
+
+.project-detail__blood-object-bar i,
+.project-detail__blood-object-range i {
+  position: relative;
+  display: block;
+  overflow: hidden;
+}
+
+.project-detail__blood-object-bar i {
+  height: clamp(1.2rem, 2.1vw, 1.75rem);
+  border: 1px solid color-mix(in srgb, var(--blood-state), transparent 58%);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--blood-state), transparent 88%) 1px, transparent 1px),
+    color-mix(in srgb, var(--blood-state), transparent 95%);
+  background-size: 12.5% 100%;
+}
+
+.project-detail__blood-object-bar i::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: clamp(1.6rem, var(--blood-position), 100%);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--blood-state), transparent 48%), var(--blood-state));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--blood-state), transparent 62%);
+}
+
+.project-detail__blood-object--line span {
+  display: block;
+  color: var(--project-detail-blue);
+  font-size: 0.62rem;
+}
+
+.project-detail__blood-object--line svg {
+  display: block;
+  width: 100%;
+  height: clamp(5.5rem, 11vw, 8.8rem);
+  margin: 0.55rem 0;
+  overflow: visible;
+}
+
+.project-detail__blood-object--line path,
+.project-detail__blood-object--line circle {
+  fill: none;
+  stroke: var(--project-detail-blue);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.project-detail__blood-object--line path {
+  stroke-width: 4;
+  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--project-detail-blue), transparent 52%));
+}
+
+.project-detail__blood-object--line circle {
+  fill: var(--bp-color-bg);
+  stroke-width: 3;
+}
+
+.project-detail__blood-object--line strong {
+  display: block;
+  color: var(--bp-color-text-muted);
+  font-size: clamp(0.58rem, 0.82vw, 0.72rem);
+  line-height: 1.45;
+}
+
+.project-detail__blood-object-range i {
+  height: 0.62rem;
+  margin-top: 0.34rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--project-detail-blood-low), var(--project-detail-blood-ok) 45% 58%, var(--project-detail-blood-high));
+}
+
+.project-detail__blood-object-range i b {
+  position: absolute;
+  top: 50%;
+  left: clamp(0.3rem, var(--blood-position), calc(100% - 0.3rem));
+  width: 0.86rem;
+  aspect-ratio: 1;
+  border: 2px solid var(--bp-color-bg);
+  border-radius: 50%;
+  background: var(--blood-state);
+  transform: translate(-50%, -50%);
+}
+
+.project-detail__blood-pipeline {
+  min-height: 100svh;
+  align-content: center;
+  padding-top: calc(var(--bp-header-height) + clamp(1.15rem, 2.1vw, 2rem));
+  padding-bottom: clamp(0.9rem, 1.5vw, 1.35rem);
+}
+
+.project-detail__blood-pipeline .project-detail__section-head {
+  margin-bottom: 0;
+}
+
+@keyframes project-detail-blood-object-float {
+  0% {
+    translate: 0 0;
+  }
+
+  100% {
+    translate: 0 -0.7rem;
+  }
+}
+
+@media (max-width: 1180px) {
+  .project-detail__blood-showcase--objects,
+  .project-detail__blood-hero-objects {
+    min-height: clamp(390px, 62vw, 560px);
+  }
+
+  .project-detail__blood-object--bars {
+    left: 0;
+    width: min(68%, 480px);
+  }
+
+  .project-detail__blood-object--line {
+    width: min(48%, 340px);
+  }
+
+  .project-detail__blood-object--range {
+    right: 4%;
+    width: min(36%, 240px);
+  }
+}
+
+@media (max-width: 760px) {
+  .project-detail__blood-showcase--objects,
+  .project-detail__blood-hero-objects {
+    min-height: auto;
+  }
+
+  .project-detail__blood-hero-objects {
+    display: grid;
+    gap: 0.78rem;
+  }
+
+  .project-detail__blood-grid-plane,
+  .project-detail__blood-data-orb {
+    display: none;
+  }
+
+  .project-detail__blood-object {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    transform: none;
+    animation: none;
+  }
+
+  .project-detail__blood-object--bars {
+    padding: 0.78rem;
+  }
+
+  .project-detail__blood-object--line,
+  .project-detail__blood-object--range {
+    padding: 0.7rem;
+  }
+
+  .project-detail__blood-object header {
+    margin-bottom: 0.68rem;
+  }
+
+  .project-detail__blood-object-bar {
+    grid-template-columns: minmax(3.2rem, 0.28fr) minmax(0, 1fr) auto;
+    gap: 0.52rem;
+  }
+
+  .project-detail__blood-object-bar i {
+    height: 1rem;
+  }
+
+  .project-detail__blood-object--line svg {
+    height: 4.4rem;
+    margin: 0.36rem 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .project-detail__blood-object--range {
+    display: none;
+  }
+
+  .project-detail__blood-object--line strong {
+    display: none;
+  }
+}
+
+:root[data-motion='off'] .project-detail__blood-data-orb,
+:root[data-motion='reduced'] .project-detail__blood-data-orb,
+:root[data-motion='off'] .project-detail__blood-object,
+:root[data-motion='reduced'] .project-detail__blood-object {
+  animation: none;
 }

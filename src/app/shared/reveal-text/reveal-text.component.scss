@@ -85,6 +85,10 @@
   vertical-align: bottom;
 }
 
+.reveal__line .reveal__word:first-child {
+  margin-left: -0.055em;
+}
+
 .reveal__word::before {
   position: absolute;
   inset: 0.08em 0 0.1em;

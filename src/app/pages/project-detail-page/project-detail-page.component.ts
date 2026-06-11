@@ -8,7 +8,7 @@
 import { Component, ElementRef, HostListener, NgZone, OnDestroy, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ProjectAppModule, ProjectCatalogPage, ProjectCatalogSpread, ProjectGalleryItem } from '../../core/models/portfolio.models';
+import { ProjectAppModule, ProjectBloodGuideModeKey, ProjectCatalogPage, ProjectCatalogSpread, ProjectGalleryItem } from '../../core/models/portfolio.models';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { LanguageService } from '../../core/services/language.service';
 import { AchievementService } from '../../core/services/achievement.service';
@@ -162,6 +162,9 @@ export class ProjectDetailPageComponent implements OnDestroy {
 
   /** Sichtbarkeit des technischen Hinweisfensters im Deep-Dive. */
   readonly isCaseNoteVisible = signal<boolean>(true);
+
+  /** Aktiver Diagrammstil im Werte-Guide der Daten-Dashboard-Seite. */
+  readonly bloodGuideMode = signal<ProjectBloodGuideModeKey>('scale');
 
   /** Aktuell ausgewählte Doppelseite im Designkatalog. */
   readonly activeCatalogSpreadIndex = signal<number>(0);
@@ -843,6 +846,23 @@ export class ProjectDetailPageComponent implements OnDestroy {
   closeCaseNote(): void {
     this.achievementService.unlock('nostalgia-hater');
     this.isCaseNoteVisible.set(false);
+  }
+
+  /** Wechselt den Diagrammstil im Werte-Guide. */
+  selectBloodGuideMode(mode: ProjectBloodGuideModeKey): void {
+    this.bloodGuideMode.set(mode);
+  }
+
+  /** Prüft, ob der Diagrammstil im Werte-Guide aktiv ist. */
+  isBloodGuideMode(mode: ProjectBloodGuideModeKey): boolean {
+    return this.bloodGuideMode() === mode;
+  }
+
+  /** Liefert den numerischen Schalter-Index für die animierte Werte-Guide-Markierung. */
+  bloodGuideModeIndex(): number {
+    const mode = this.bloodGuideMode();
+
+    return mode === 'bar' ? 1 : mode === 'chart' ? 2 : 0;
   }
 
   /** Aktualisiert den Slug und setzt Detailseiten-Zustände zurück. */

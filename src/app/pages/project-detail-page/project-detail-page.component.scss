@@ -1805,34 +1805,50 @@
   color: #101010 !important;
 }
 
-.project-detail__hero-actions .bp-button:hover,
-.project-detail__hero-actions .bp-button:focus-visible,
-.project-detail__hero-actions .bp-button:hover > *,
-.project-detail__hero-actions .bp-button:focus-visible > *,
-.project-detail__hero-demo-link:hover,
-.project-detail__hero-demo-link:focus-visible,
-.project-detail__hero-demo-link:hover > *,
-.project-detail__hero-demo-link:focus-visible > * {
+.project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover,
+.project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible,
+.project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover > *,
+.project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible > * {
   color: #111111 !important;
 }
 
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:hover,
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:focus-visible,
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:hover > *,
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:focus-visible > *,
-:root[data-theme='light'] .project-detail__hero-demo-link:hover,
-:root[data-theme='light'] .project-detail__hero-demo-link:focus-visible,
-:root[data-theme='light'] .project-detail__hero-demo-link:hover > *,
-:root[data-theme='light'] .project-detail__hero-demo-link:focus-visible > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:hover,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:focus-visible,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:hover > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:focus-visible > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-demo-link:hover,
-:host-context(:root[data-theme='light']) .project-detail__hero-demo-link:focus-visible,
-:host-context(:root[data-theme='light']) .project-detail__hero-demo-link:hover > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-demo-link:focus-visible > * {
+:root[data-theme='light'] .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover,
+:root[data-theme='light'] .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible,
+:root[data-theme='light'] .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover > *,
+:root[data-theme='light'] .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible > *,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover > *,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible > * {
   color: #f6f0e8 !important;
+}
+
+.project-detail__hero-actions .project-detail__hero-demo-link:hover,
+.project-detail__hero-actions .project-detail__hero-demo-link:focus-visible {
+  border-color: color-mix(in srgb, var(--bp-color-accent) 72%, var(--bp-color-border-strong) 28%) !important;
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 78%, var(--bp-color-accent) 9%) !important;
+  color: var(--bp-color-text) !important;
+}
+
+.project-detail__hero-actions .project-detail__hero-demo-link:hover > *,
+.project-detail__hero-actions .project-detail__hero-demo-link:focus-visible > * {
+  color: var(--bp-color-text) !important;
+}
+
+:root[data-theme='light'] .project-detail__hero-actions .project-detail__hero-demo-link:hover,
+:root[data-theme='light'] .project-detail__hero-actions .project-detail__hero-demo-link:focus-visible,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .project-detail__hero-demo-link:hover,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .project-detail__hero-demo-link:focus-visible {
+  border-color: rgba(17, 17, 17, 0.68) !important;
+  background: rgba(255, 253, 248, 0.94) !important;
+  color: #101010 !important;
+}
+
+:root[data-theme='light'] .project-detail__hero-actions .project-detail__hero-demo-link:hover > *,
+:root[data-theme='light'] .project-detail__hero-actions .project-detail__hero-demo-link:focus-visible > *,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .project-detail__hero-demo-link:hover > *,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .project-detail__hero-demo-link:focus-visible > * {
+  color: #101010 !important;
 }
 
 .project-detail__hero-stage {
@@ -2280,8 +2296,12 @@
   border-color: transparent;
 }
 
-.project-detail__animated-item.bp-reveal {
+.project-detail__animated-item.bp-reveal:not(.project-detail__highlight-card) {
   transition-delay: calc(var(--reveal-index, 0) * 70ms);
+}
+
+.project-detail__highlight-card.bp-reveal {
+  transition-delay: 0ms;
 }
 
 .project-detail__section-head.bp-reveal,
@@ -3993,3 +4013,75 @@
   }
 }
 
+
+
+.project-detail[data-project='blutanalyse'] .project-detail__highlights {
+  display: grid;
+  min-height: 100svh;
+  align-content: center;
+  padding-top: calc(var(--bp-header-height) + clamp(1.25rem, 2vw, 2.25rem));
+  padding-bottom: clamp(1.5rem, 2.4vw, 2.6rem);
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__highlight-grid {
+  gap: clamp(0.72rem, 1.1vw, 1rem);
+  margin-top: clamp(1rem, 1.7vw, 1.45rem);
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__highlight-card {
+  min-height: clamp(142px, 17vh, 184px);
+  gap: 0.68rem;
+  padding: clamp(0.9rem, 1.4vw, 1.15rem);
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__highlight-card .material-symbols-outlined {
+  width: 40px;
+  height: 40px;
+  font-size: 1.25rem;
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__highlight-card h3 {
+  font-size: clamp(0.98rem, 1.22vw, 1.32rem);
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__highlight-card p {
+  font-size: 0.82rem;
+  line-height: 1.42;
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__metric-strip {
+  margin-top: clamp(0.8rem, 1.4vw, 1.15rem);
+  padding: 0.45rem;
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__metric {
+  gap: 0.4rem 0.55rem;
+  padding: 0.68rem 0.58rem;
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__metric > .material-symbols-outlined {
+  width: 30px;
+  height: 30px;
+  font-size: 1rem;
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__metric strong {
+  font-size: clamp(1.1rem, 1.8vw, 1.7rem);
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__metric h3 {
+  font-size: 0.58rem;
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__metric p {
+  margin-top: 0.28rem;
+  font-size: 0.68rem;
+  line-height: 1.32;
+  -webkit-line-clamp: 2;
+}
+
+@media (max-width: 1180px) {
+  .project-detail[data-project='blutanalyse'] .project-detail__highlights {
+    min-height: auto;
+  }
+}

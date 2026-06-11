@@ -149,7 +149,9 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
   /** Prüft, ob ein Snap-Bereich wie eine einzelne Fullscreen-Section behandelt werden soll. */
   private sectionUsesSnapBand(section: HTMLElement, viewportHeight: number): boolean {
     const rect = section.getBoundingClientRect();
-    const isSingleScreenSection = rect.height <= viewportHeight * 1.48;
+    const contentHeight = section.scrollHeight;
+    const contentFitsViewport = contentHeight <= viewportHeight * 1.06;
+    const isSingleScreenSection = rect.height <= viewportHeight * 1.48 && contentFitsViewport;
     const isProjectPanel = section.classList.contains('project-stack__panel');
 
     return isSingleScreenSection || isProjectPanel;

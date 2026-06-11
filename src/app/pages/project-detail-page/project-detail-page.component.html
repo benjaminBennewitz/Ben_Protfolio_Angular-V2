@@ -143,53 +143,50 @@
             </div>
           </aside>
           } @else if (activeProject.bloodShowcase; as bloodShowcase) {
-          <aside class="project-detail__blood-showcase" [attr.aria-label]="bloodShowcase.previewLabel">
-            <div class="project-detail__blood-window">
-              <div class="project-detail__blood-bar">
-                <span></span>
-                <strong>{{ bloodShowcase.eyebrow }}</strong>
-                <small>{{ bloodShowcase.status }}</small>
-              </div>
+          <aside class="project-detail__blood-showcase project-detail__blood-showcase--objects" [attr.aria-label]="bloodShowcase.previewLabel">
+            <div class="project-detail__blood-hero-objects">
+              <span class="project-detail__blood-grid-plane" aria-hidden="true"></span>
+              <span class="project-detail__blood-data-orb project-detail__blood-data-orb--primary" aria-hidden="true"></span>
+              <span class="project-detail__blood-data-orb project-detail__blood-data-orb--secondary" aria-hidden="true"></span>
 
-              <div class="project-detail__blood-head">
-                <div>
-                  <p>{{ bloodShowcase.title }}</p>
-                  <span>{{ bloodShowcase.lead }}</span>
-                </div>
-                <ul>
-                  @for (chip of bloodShowcase.chips; track chip) {
-                  <li>{{ chip }}</li>
-                  }
-                </ul>
-              </div>
-
-              <div class="project-detail__blood-preview">
-                <section class="project-detail__blood-document">
-                  <span class="material-symbols-outlined" aria-hidden="true">clinical_notes</span>
-                  <h2>{{ bloodShowcase.documentTitle }}</h2>
-                  <p>{{ bloodShowcase.documentText }}</p>
-                  <div aria-hidden="true">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
+              <section class="project-detail__blood-object project-detail__blood-object--bars" [attr.aria-label]="bloodShowcase.heroChartTitle">
+                <header>
+                  <span class="material-symbols-outlined" aria-hidden="true">bar_chart_4_bars</span>
+                  <div>
+                    <strong>{{ bloodShowcase.heroChartTitle }}</strong>
+                    <small>{{ bloodShowcase.status }}</small>
                   </div>
-                </section>
+                </header>
 
-                <section class="project-detail__blood-values">
+                <div class="project-detail__blood-object-bars" aria-hidden="true">
                   @for (value of bloodShowcase.values; track value.label) {
-                  <article [class]="'project-detail__blood-value project-detail__blood-value--' + value.tone" [style.--blood-position]="value.position + '%'">
-                    <header>
-                      <strong>{{ value.label }}</strong>
-                      <span>{{ value.value }} {{ value.unit }}</span>
-                    </header>
-                    <div class="project-detail__blood-scale" aria-hidden="true"><span></span></div>
-                    <small>{{ value.range }}</small>
-                    <p>{{ value.hint }}</p>
-                  </article>
+                  <div [class]="'project-detail__blood-object-bar project-detail__blood-object-bar--' + value.tone" [style.--blood-position]="value.position + '%'">
+                    <span>{{ value.label }}</span>
+                    <i></i>
+                    <strong>{{ value.value }}</strong>
+                  </div>
                   }
-                </section>
-              </div>
+                </div>
+              </section>
+
+              <section class="project-detail__blood-object project-detail__blood-object--line" aria-label="Trenddiagramm">
+                <span>{{ bloodShowcase.eyebrow }}</span>
+                <svg viewBox="0 0 320 150" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <path d="M12 118 L68 86 L122 98 L178 42 L238 66 L308 28"></path>
+                  <circle cx="178" cy="42" r="7"></circle>
+                  <circle cx="308" cy="28" r="7"></circle>
+                </svg>
+                <strong>{{ bloodShowcase.heroChartText }}</strong>
+              </section>
+
+              <section class="project-detail__blood-object project-detail__blood-object--range" aria-label="Referenzbereiche">
+                @for (value of bloodShowcase.values.slice(0, 3); track value.label) {
+                <div [class]="'project-detail__blood-object-range project-detail__blood-object-range--' + value.tone" [style.--blood-position]="value.position + '%'">
+                  <span>{{ value.label }}</span>
+                  <i><b></b></i>
+                </div>
+                }
+              </section>
             </div>
           </aside>
           } @else if ((activeProject.appModules?.length ?? 0) > 0) {
@@ -619,24 +616,46 @@
     </section>
 
     <section class="project-detail__blood-guide-section bp-section" bpReveal>
-      <div class="bp-container project-detail__blood-guide bp-card">
+      <div class="bp-container project-detail__blood-guide bp-card" [class.project-detail__blood-guide--scale]="isBloodGuideMode('scale')" [class.project-detail__blood-guide--bar]="isBloodGuideMode('bar')" [class.project-detail__blood-guide--chart]="isBloodGuideMode('chart')" [style.--blood-guide-mode-index]="bloodGuideModeIndex()">
         <div class="project-detail__blood-guide-copy">
           <p class="bp-eyebrow">{{ bloodShowcase.guideEyebrow }}</p>
           <h2>{{ bloodShowcase.guideTitle }}</h2>
+
+          <div class="project-detail__blood-guide-controls" [attr.aria-label]="bloodShowcase.guideModeLabel">
+            @for (mode of bloodShowcase.guideModes; track mode.key) {
+            <button type="button" [class.is-active]="isBloodGuideMode(mode.key)" [attr.aria-pressed]="isBloodGuideMode(mode.key)" (click)="selectBloodGuideMode(mode.key)">
+              <span class="material-symbols-outlined" aria-hidden="true">{{ mode.icon }}</span>
+              <strong>{{ mode.label }}</strong>
+              <small>{{ mode.description }}</small>
+            </button>
+            }
+          </div>
+
           <p>{{ bloodShowcase.disclaimer }}</p>
         </div>
 
-        <div class="project-detail__blood-guide-grid">
+        <article class="project-detail__blood-guide-comparison" [attr.data-guide-mode]="bloodGuideMode()">
           @for (value of bloodShowcase.values; track value.label) {
-          <article [class]="'project-detail__blood-guide-card project-detail__blood-guide-card--' + value.tone" [style.--blood-position]="value.position + '%'">
-            <span>{{ value.label }}</span>
-            <strong>{{ value.value }} {{ value.unit }}</strong>
-            <div class="project-detail__blood-scale" aria-hidden="true"><span></span></div>
-            <small>{{ value.range }}</small>
+          <div [class]="'project-detail__blood-guide-row project-detail__blood-guide-row--' + value.tone" [style.--blood-position]="value.position + '%'">
+            <div class="project-detail__blood-guide-meta">
+              <span>{{ value.label }}</span>
+              <strong>{{ value.value }} {{ value.unit }}</strong>
+              <small>{{ value.range }}</small>
+            </div>
+
+            <div class="project-detail__blood-guide-graph" aria-hidden="true">
+              <div class="project-detail__blood-scale project-detail__blood-guide-scale"><span></span></div>
+              <div class="project-detail__blood-guide-bar"><span></span></div>
+              <svg class="project-detail__blood-guide-chart" viewBox="0 0 240 52" preserveAspectRatio="none" focusable="false">
+                <polyline points="4,40 58,29 112,34 166,15 236,22"></polyline>
+                <circle cx="166" cy="15" r="4"></circle>
+              </svg>
+            </div>
+
             <p>{{ value.hint }}</p>
-          </article>
+          </div>
           }
-        </div>
+        </article>
       </div>
     </section>
     }

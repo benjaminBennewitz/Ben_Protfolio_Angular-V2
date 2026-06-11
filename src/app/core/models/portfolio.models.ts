@@ -776,6 +776,22 @@ export interface ProjectBloodPipelineStep {
   readonly points: readonly string[];
 }
 
+
+/** Darstellungsmodus im Werte-Guide der Daten-Dashboard-Seite. */
+export type ProjectBloodGuideModeKey = 'scale' | 'bar' | 'chart';
+
+/** Umschaltbarer Diagrammstil im Werte-Guide. */
+export interface ProjectBloodGuideMode {
+  /** Stabile ID für Zustand und CSS-Variante. */
+  readonly key: ProjectBloodGuideModeKey;
+  /** Sichtbares Label des Diagrammstils. */
+  readonly label: string;
+  /** Kurze Zusatzbeschreibung des Diagrammstils. */
+  readonly description: string;
+  /** Material-Symbol für den Modusbutton. */
+  readonly icon: string;
+}
+
 /** Inhalt für Import-, Analyse- und Hilfesystem einer Blutanalyse-Detailseite. */
 export interface ProjectBloodShowcase {
   /** Kleine technische Beschriftung im Hero-Showcase. */
@@ -794,6 +810,10 @@ export interface ProjectBloodShowcase {
   readonly documentTitle: string;
   /** Hilfetext des Dokumentenbereichs im Hero. */
   readonly documentText: string;
+  /** Titel der großen Hero-Datengrafik. */
+  readonly heroChartTitle: string;
+  /** Hilfetext der großen Hero-Datengrafik. */
+  readonly heroChartText: string;
   /** Zugängliche Beschriftung des Analyse-Containers. */
   readonly previewLabel: string;
   /** Beispielwerte für Vorschau und Werte-Guide. */
@@ -808,6 +828,10 @@ export interface ProjectBloodShowcase {
   readonly guideEyebrow: string;
   /** Überschrift für den Werte-Guide. */
   readonly guideTitle: string;
+  /** Zugängliche Beschriftung der Diagrammstil-Umschaltung. */
+  readonly guideModeLabel: string;
+  /** Sichtbare Diagrammstile für den Werte-Guide. */
+  readonly guideModes: readonly ProjectBloodGuideMode[];
   /** Hinweis, dass die Oberfläche Erklärung statt Diagnose liefert. */
   readonly disclaimer: string;
   /** Eyebrow für die Galerie. */

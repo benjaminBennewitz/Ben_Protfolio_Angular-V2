@@ -280,7 +280,6 @@ ben-portfolio-angular-v2/
 │   │   │   │   │   ├── pj2_door.webp
 │   │   │   │   │   ├── pj2_flag.webp
 │   │   │   │   │   ├── pj2_heart.webp
-│   │   │   │   │   ├── pj2_html5.webp
 │   │   │   │   │   ├── pj2_key.webp
 │   │   │   │   │   ├── pj2_lock.webp
 │   │   │   │   │   ├── pj2_potion.webp

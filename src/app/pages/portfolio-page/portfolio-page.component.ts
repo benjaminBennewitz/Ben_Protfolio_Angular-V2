@@ -130,7 +130,7 @@ export class PortfolioPageComponent {
   constructor() {
     this.seoService.setPageSeo(
       'Case Studies | Design. Code. Repeat.',
-      'Case Studies von Benjamin Bennewitz: Intranet, Browser Game, Asana-Klon, Daten Dashboards und interaktiver Grafikdesign-Katalog.',
+      'Case Studies von B² Benjamin Bennewitz: Intranet, Browser Game, Carly Managed, Globi Flow mit lokaler OCR und ein interaktives Designarchiv.',
       '/portfolio',
     );
   }

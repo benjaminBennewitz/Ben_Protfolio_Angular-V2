@@ -97,7 +97,7 @@ Der Fokus liegt auf einer Seite, die auffällt, aber trotzdem sauber gebaut blei
 | **Intranet** | Modulares Angular-/Django-System mit Apps, Rollen, Rechten, Kommunikation und Automatisierung |
 | **HTML5 Browser Game** | Interaktives Web-/Game-Projekt mit Animationen und Spiellogik |
 | **Asana-Klon** | Projektmanagement-App mit Boards, Tasks, Nutzern, UI/UX und Echtzeit-Ideen |
-| **Blutanalyse** | Datenorientiertes Softwareprojekt mit Analyse-UI und interaktiver Szene |
+| **Globi Flow** | Lokales Laborwerte-Assistenzsystem mit OCR, Review, Wissensbasis und Patientenbericht |
 | **Grafikdesign-Katalog** | Editorialer, visueller Designkatalog mit kreativer Projektinszenierung |
 
 ## Projektstruktur

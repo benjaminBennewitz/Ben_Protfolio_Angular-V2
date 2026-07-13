@@ -270,6 +270,15 @@ ben-portfolio-angular-v2/
 │   │   │   │   │   ├── gallery-texture.webp
 │   │   │   │   │   ├── gallery-typography.webp
 │   │   │   │   │   └── gallery-vector.webp
+│   │   │   │   ├── globi-flow/
+│   │   │   │   │   ├── auswertung.webp
+│   │   │   │   │   ├── importe.webp
+│   │   │   │   │   ├── ladeanimation.webp
+│   │   │   │   │   ├── patienten.webp
+│   │   │   │   │   ├── patientenbericht.webp
+│   │   │   │   │   ├── review.webp
+│   │   │   │   │   ├── uebersicht.webp
+│   │   │   │   │   └── wissensbasis.webp
 │   │   │   │   └── pepes-adventure/
 │   │   │   │       └── desert-hero-bg.webp
 │   │   │   ├── project-stack/
@@ -333,6 +342,7 @@ ben-portfolio-angular-v2/
 │   ├── styles/
 │   │   ├── base.scss
 │   │   ├── project-detail-blood.scss
+│   │   ├── project-detail-carly.scss
 │   │   ├── project-detail-catalog.scss
 │   │   ├── tokens.scss
 │   │   └── utilities.scss

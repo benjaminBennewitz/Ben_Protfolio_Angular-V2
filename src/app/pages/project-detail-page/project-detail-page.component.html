@@ -55,60 +55,42 @@
         @if (!activeProject.catalogShowcase) {
         <div class="project-detail__hero-stage" [attr.aria-label]="content().projectsIntro.previewAriaLabel">
           @if (activeProject.boardShowcase; as boardShowcase) {
-          <aside class="project-detail__board-showcase" [attr.aria-label]="boardShowcase.boardLabel">
-            <div class="project-detail__board-window">
-              <div class="project-detail__board-window-bar">
-                <span></span>
-                <strong>{{ boardShowcase.eyebrow }}</strong>
-                <small>{{ boardShowcase.status }}</small>
+          <div class="project-detail__task-cloud" [attr.aria-label]="boardShowcase.boardLabel">
+            @for (task of boardShowcase.heroTasks; track task.title; let index = $index) {
+            <article class="project-detail__floating-task" [style.--task-index]="index">
+              <header class="project-detail__floating-task-head">
+                <span>{{ boardShowcase.heroTaskLabels.todo }}</span>
+                <span class="material-symbols-outlined" aria-hidden="true">more_horiz</span>
+              </header>
+
+              <h2>{{ task.title }}</h2>
+              <p>{{ task.excerpt }}</p>
+
+              <div class="project-detail__floating-task-meta">
+                <span class="project-detail__floating-task-owner" [attr.aria-label]="boardShowcase.heroTaskLabels.owner + ': ' + task.ownerInitials">{{ task.ownerInitials }}</span>
+                <time [attr.datetime]="task.dueDateIso" [attr.aria-label]="boardShowcase.heroTaskLabels.dueDate + ': ' + task.dueDate">
+                  <span class="material-symbols-outlined" aria-hidden="true">event</span>
+                  <span>{{ task.dueDate }}</span>
+                </time>
               </div>
 
-              <div class="project-detail__board-window-head">
-                <div>
-                  <p>{{ boardShowcase.title }}</p>
-                  <span>{{ boardShowcase.lead }}</span>
-                </div>
-                <ul>
-                  @for (chip of boardShowcase.chips; track chip) {
-                  <li>{{ chip }}</li>
-                  }
-                </ul>
-              </div>
-
-              <div class="project-detail__board-preview-grid">
-                @for (column of boardShowcase.columns; track column.title) {
-                <section class="project-detail__board-column">
-                  <header>
-                    <h2>{{ column.title }}</h2>
-                    <span>{{ column.meta }}</span>
-                  </header>
-                  <div>
-                    @for (task of column.tasks; track task.title) {
-                    <article [class]="'project-detail__board-task project-detail__board-task--' + task.tone">
-                      <span>{{ task.label }}</span>
-                      <strong>{{ task.title }}</strong>
-                    </article>
-                    }
-                  </div>
-                </section>
-                }
-              </div>
-
-              <div class="project-detail__board-mascot-note">
-                <div class="project-detail__cat-avatar" aria-hidden="true">
-                  @if (boardShowcase.mascot.asset) {
-                  <img [src]="boardShowcase.mascot.asset" [alt]="boardShowcase.mascot.assetAlt" loading="lazy" decoding="async" />
-                  } @else {
-                  <span></span>
-                  }
-                </div>
-                <div>
-                  <strong>{{ boardShowcase.mascot.name }} · {{ boardShowcase.mascot.role }}</strong>
-                  <p>{{ boardShowcase.lead }}</p>
-                </div>
-              </div>
-            </div>
-          </aside>
+              <ul class="project-detail__floating-task-kpis">
+                <li [attr.aria-label]="boardShowcase.heroTaskLabels.attachments + ': ' + task.attachmentCount">
+                  <span class="material-symbols-outlined" aria-hidden="true">attachment</span>
+                  <strong>{{ task.attachmentCount }}</strong>
+                </li>
+                <li [attr.aria-label]="boardShowcase.heroTaskLabels.comments + ': ' + task.commentCount">
+                  <span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span>
+                  <strong>{{ task.commentCount }}</strong>
+                </li>
+                <li [class.is-active]="task.hasRule" [attr.aria-label]="boardShowcase.heroTaskLabels.rule + ': ' + (task.hasRule ? '1' : '0')">
+                  <span class="material-symbols-outlined" aria-hidden="true">automation</span>
+                  <strong>{{ task.hasRule ? '1' : '0' }}</strong>
+                </li>
+              </ul>
+            </article>
+            }
+          </div>
           } @else if (activeProject.gameShowcase; as gameShowcase) {
           <aside class="project-detail__game-showcase" [attr.aria-label]="gameShowcase.videoLabel">
             <div class="project-detail__game-video">
@@ -563,10 +545,20 @@
           @if (boardShowcase.mascot.asset) {
           <img [src]="boardShowcase.mascot.asset" [alt]="boardShowcase.mascot.assetAlt" loading="lazy" decoding="async" />
           } @else {
-          <div class="project-detail__cat-mascot" aria-hidden="true">
-            <span></span>
+          <div class="project-detail__carly-mascot" aria-hidden="true">
+            <div class="project-detail__carly-cat">
+              <span class="project-detail__carly-ear project-detail__carly-ear--left"></span>
+              <span class="project-detail__carly-ear project-detail__carly-ear--right"></span>
+              <div class="project-detail__carly-face">
+                <span class="project-detail__carly-eye project-detail__carly-eye--left"><i></i></span>
+                <span class="project-detail__carly-eye project-detail__carly-eye--right"><i></i></span>
+                <span class="project-detail__carly-muzzle"></span>
+              </div>
+            </div>
+            <span class="project-detail__carly-spark project-detail__carly-spark--one"></span>
+            <span class="project-detail__carly-spark project-detail__carly-spark--two"></span>
+            <span class="project-detail__carly-spark project-detail__carly-spark--three"></span>
           </div>
-          <small>{{ boardShowcase.mascot.assetHint }}</small>
           }
         </div>
 
@@ -630,6 +622,13 @@
             </button>
             }
           </div>
+
+          @if (bloodShowcase.roadmapNote) {
+          <div class="project-detail__blood-roadmap-note" role="note">
+            <span class="material-symbols-outlined" aria-hidden="true">update</span>
+            <p>{{ bloodShowcase.roadmapNote }}</p>
+          </div>
+          }
 
           <p>{{ bloodShowcase.disclaimer }}</p>
         </div>
@@ -848,8 +847,16 @@
             <span>{{ content().projectsIntro.openDemoLabel }}</span>
             <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
           </a>
-          } @else {
+          } @else if (demo.status !== 'private') {
           <span class="project-detail__demo-status">{{ demo.status }}</span>
+          }
+          @if (demo.githubUrl) {
+          <a class="bp-button bp-button--ghost project-detail__github-link" [href]="demo.githubUrl" target="_blank" rel="noreferrer">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" focusable="false">
+              <path d="M12 1.5a10.5 10.5 0 0 0-3.32 20.46c.53.1.72-.23.72-.51v-2.04c-2.95.64-3.57-1.25-3.57-1.25-.48-1.23-1.18-1.56-1.18-1.56-.96-.66.07-.65.07-.65 1.07.08 1.63 1.1 1.63 1.1.95 1.62 2.49 1.15 3.1.88.1-.69.37-1.15.68-1.42-2.35-.27-4.82-1.18-4.82-5.2 0-1.15.41-2.09 1.09-2.82-.11-.27-.47-1.34.1-2.78 0 0 .89-.29 2.89 1.07A9.98 9.98 0 0 1 12 6.43c.9 0 1.79.12 2.63.35 2-1.36 2.88-1.07 2.88-1.07.58 1.44.22 2.51.11 2.78.68.73 1.08 1.67 1.08 2.82 0 4.04-2.48 4.92-4.84 5.18.38.33.72.98.72 1.98v2.98c0 .29.19.62.73.51A10.5 10.5 0 0 0 12 1.5Z" />
+            </svg>
+            <span>{{ content().projectsIntro.githubLabel }}</span>
+          </a>
           }
           <a class="bp-button" routerLink="/" fragment="contact">
             <span>{{ content().projectsIntro.demoRequestLabel }}</span>
@@ -896,49 +903,6 @@
 
     </section>
 
-    @if (activeGalleryLightboxItem(); as lightboxItem) {
-    <div class="project-detail__lightbox" role="dialog" aria-modal="true" [attr.aria-label]="lightboxItem.title" (click)="closeGalleryLightbox()">
-      <div class="project-detail__lightbox-panel" [class.is-lightbox-fading-out]="galleryLightboxSwitchPhase() === 'fade-out'" [class.is-lightbox-fading-in]="galleryLightboxSwitchPhase() === 'fade-in'" [class.project-detail__lightbox-panel--switch-next]="galleryLightboxSwitchDirection() === 1" [class.project-detail__lightbox-panel--switch-prev]="galleryLightboxSwitchDirection() === -1" [style.--gallery-bg]="galleryLightboxBackground()" (click)="$event.stopPropagation()">
-        <button type="button" class="project-detail__lightbox-close" [attr.aria-label]="catalogShowcase.lightboxCloseLabel" (click)="closeGalleryLightbox()">
-          <span class="material-symbols-outlined" aria-hidden="true">close</span>
-        </button>
-
-        <div class="project-detail__lightbox-visual">
-          @if (lightboxItem.image) {
-          <img [src]="lightboxItem.image" [alt]="lightboxItem.alt ?? lightboxItem.title" draggable="false" (contextmenu)="blockProtectedAssetEvent($event)" (dragstart)="blockProtectedAssetEvent($event)" />
-          <span class="project-detail__lightbox-shield" aria-hidden="true"></span>
-          } @else {
-          <div class="project-detail__lightbox-placeholder">
-            <span class="material-symbols-outlined" aria-hidden="true">{{ lightboxItem.icon ?? 'image' }}</span>
-            <strong>{{ lightboxItem.title }}</strong>
-            <small>{{ lightboxItem.imageHint }}</small>
-          </div>
-          }
-        </div>
-
-        <div class="project-detail__lightbox-copy">
-          <p class="bp-eyebrow">{{ lightboxItem.year }}</p>
-          <h3>{{ lightboxItem.title }}</h3>
-          <p>{{ lightboxItem.detail ?? lightboxItem.text }}</p>
-          <ul>
-            @for (tool of lightboxItem.tools ?? []; track tool) {
-            <li>{{ tool }}</li>
-            }
-          </ul>
-        </div>
-
-        <div class="project-detail__lightbox-actions">
-          <button type="button" [attr.aria-label]="catalogShowcase.lightboxPreviousLabel" (click)="selectAdjacentGalleryItem(-1)">
-            <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-          </button>
-          <button type="button" [attr.aria-label]="catalogShowcase.lightboxNextLabel" (click)="selectAdjacentGalleryItem(1)">
-            <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-          </button>
-        </div>
-
-      </div>
-    </div>
-    }
     } @else {
     <section class="project-detail__gallery bp-section" bpReveal>
       <div class="bp-container">
@@ -957,7 +921,7 @@
                 <span></span>
               </div>
               @if (item.image) {
-              <img [src]="item.image" [alt]="item.alt ?? item.title" loading="lazy" decoding="async" />
+              <img class="project-detail__evidence-image-trigger" [src]="item.image" [alt]="item.alt ?? item.title" loading="lazy" decoding="async" role="button" tabindex="0" [attr.aria-label]="content().projectsIntro.zoomLabel + ': ' + item.title" (click)="openGalleryLightbox(index)" (keydown.enter)="openGalleryLightbox(index)" (keydown.space)="$event.preventDefault(); openGalleryLightbox(index)" />
               } @else {
               <div class="project-detail__evidence-screen" aria-hidden="true">
                 <span class="material-symbols-outlined">{{ item.icon ?? 'web_asset' }}</span>
@@ -969,7 +933,7 @@
                 </div>
               </div>
               }
-              <button type="button" class="project-detail__zoom" [attr.aria-label]="content().projectsIntro.zoomLabel">
+              <button type="button" class="project-detail__zoom" [attr.aria-label]="content().projectsIntro.zoomLabel + ': ' + item.title" (click)="openGalleryLightbox(index)">
                 <span class="material-symbols-outlined" aria-hidden="true">zoom_in</span>
               </button>
             </div>
@@ -983,6 +947,55 @@
       </div>
     </section>
     }
+    }
+
+    @if (activeGalleryLightboxItem(); as lightboxItem) {
+    <div class="project-detail__lightbox" role="dialog" aria-modal="true" [attr.aria-label]="lightboxItem.title" (click)="closeGalleryLightbox()">
+      <div class="project-detail__lightbox-panel" [class.is-lightbox-fading-out]="galleryLightboxSwitchPhase() === 'fade-out'" [class.is-lightbox-fading-in]="galleryLightboxSwitchPhase() === 'fade-in'" [class.project-detail__lightbox-panel--switch-next]="galleryLightboxSwitchDirection() === 1" [class.project-detail__lightbox-panel--switch-prev]="galleryLightboxSwitchDirection() === -1" [style.--gallery-bg]="galleryLightboxBackground()" (click)="$event.stopPropagation()">
+        <button type="button" class="project-detail__lightbox-close" [attr.aria-label]="content().projectsIntro.lightboxCloseLabel" (click)="closeGalleryLightbox()">
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+
+        <div class="project-detail__lightbox-visual">
+          @if (lightboxItem.image) {
+          <img [src]="lightboxItem.image" [alt]="lightboxItem.alt ?? lightboxItem.title" draggable="false" (contextmenu)="blockProtectedAssetEvent($event)" (dragstart)="blockProtectedAssetEvent($event)" />
+          <span class="project-detail__lightbox-shield" aria-hidden="true"></span>
+          } @else {
+          <div class="project-detail__lightbox-placeholder">
+            <span class="material-symbols-outlined" aria-hidden="true">{{ lightboxItem.icon ?? 'image' }}</span>
+            <strong>{{ lightboxItem.title }}</strong>
+            <small>{{ lightboxItem.imageHint }}</small>
+          </div>
+          }
+        </div>
+
+        <div class="project-detail__lightbox-copy">
+          @if (lightboxItem.year) {
+          <p class="bp-eyebrow">{{ lightboxItem.year }}</p>
+          }
+          <h3>{{ lightboxItem.title }}</h3>
+          <p>{{ lightboxItem.detail ?? lightboxItem.text }}</p>
+          @if ((lightboxItem.tools?.length ?? 0) > 0) {
+          <ul>
+            @for (tool of lightboxItem.tools ?? []; track tool) {
+            <li>{{ tool }}</li>
+            }
+          </ul>
+          }
+        </div>
+
+        @if (activeProject.gallery.length > 1) {
+        <div class="project-detail__lightbox-actions">
+          <button type="button" [attr.aria-label]="content().projectsIntro.lightboxPreviousLabel" (click)="selectAdjacentGalleryItem(-1)">
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+          </button>
+          <button type="button" [attr.aria-label]="content().projectsIntro.lightboxNextLabel" (click)="selectAdjacentGalleryItem(1)">
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+          </button>
+        </div>
+        }
+      </div>
+    </div>
     }
   </article>
   } @else {

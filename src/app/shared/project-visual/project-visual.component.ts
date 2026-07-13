@@ -126,7 +126,7 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
   private readonly visualAssetMap: Readonly<Record<string, readonly string[]>> = {
     intranet: ['assets/images/project-stack/eyeball-green.webp', 'assets/images/project-stack/bomb.webp'],
     'html5-browser-game': [],
-    'asana-klon': ['assets/images/project-stack/trash-red.webp', 'assets/images/project-stack/paper-crumpled-pink.webp'],
+    'kanban-klon': ['assets/images/project-stack/trash-red.webp', 'assets/images/project-stack/paper-crumpled-pink.webp'],
     'grafikdesign-katalog': ['assets/images/project-stack/thumb-lime.webp'],
   };
 
@@ -197,7 +197,7 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
     return this.isIntranetProject() || this.isBloodAnalysisProject() || this.isOnlineWindowClosable();
   }
 
-  /** Liefert das Status-Asset für die Asana-Preview. */
+  /** Liefert das Status-Asset für die Carly-Preview. */
   taskStatusSrc(): string | null {
     return this.taskStatusSaved ? 'assets/images/project-stack/planet-saved.webp' : null;
   }

@@ -121,6 +121,9 @@ export class ProjectDetailPageComponent implements OnDestroy {
   /** Timeout-ID für das Zurücksetzen der Lightbox-Fade-Phase. */
   private galleryLightboxSwitchTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
+  /** Geplante Animation-Frames für das zuverlässige Zurücksetzen der Detailseiten-Scrollposition. */
+  private readonly projectScrollResetFrameIds: number[] = [];
+
   /** Dauer der ausblendenden Lightbox-Wechselphase in Millisekunden. */
   private readonly galleryLightboxFadeOutDuration = 120;
 
@@ -175,7 +178,7 @@ export class ProjectDetailPageComponent implements OnDestroy {
   /** Ladezustand während eine Ziel-Doppelseite vor dem sichtbaren Wechsel decodiert wird. */
   readonly isCatalogReaderBusy = signal<boolean>(false);
 
-  /** Aktuell geöffneter Masonry-Galerieeintrag in der Lightbox. */
+  /** Aktuell geöffneter Projektgalerie-Eintrag in der gemeinsamen Lightbox. */
   readonly activeGalleryLightboxIndex = signal<number | null>(null);
 
   /** Aktuelle Animationsphase beim Durchschalten der Design-Lightbox. */
@@ -264,7 +267,7 @@ export class ProjectDetailPageComponent implements OnDestroy {
     return 'project-deep-dive';
   });
 
-  /** Aktiver Galerieeintrag für die Lightbox des Designkatalogs. */
+  /** Aktiver Galerieeintrag für die gemeinsame Projekt-Lightbox. */
   readonly activeGalleryLightboxItem = computed<ProjectGalleryItem | undefined>(() => {
     const index = this.activeGalleryLightboxIndex();
 
@@ -293,6 +296,7 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.galleryLightboxSwitchToken += 1;
     this.resetGalleryLightboxSwitch();
     this.unlockGalleryLightboxScroll();
+    this.clearProjectScrollResetFrames();
   }
 
   /** Setzt den aktuell sichtbaren Architektur-Knoten. */
@@ -382,7 +386,7 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.catalogLoupe.set({ isVisible: false, pageNumber: '', x: 0, y: 0, width: 0, height: 0, asset: '', backgroundSize: '', backgroundPosition: '' });
   }
 
-  /** Reagiert auf Tastaturbefehle innerhalb der globalen Design-Lightbox. */
+  /** Reagiert auf Tastaturbefehle innerhalb der gemeinsamen Projekt-Lightbox. */
   @HostListener('window:keydown', ['$event'])
   handleWindowKeydown(event: KeyboardEvent): void {
     if (this.activeGalleryLightboxIndex() === null) {
@@ -407,7 +411,7 @@ export class ProjectDetailPageComponent implements OnDestroy {
     }
   }
 
-  /** Öffnet einen Eintrag der Design-Masonry-Galerie in der Lightbox. */
+  /** Öffnet einen Eintrag der aktuellen Projektgalerie in der Lightbox. */
   openGalleryLightbox(index: number): void {
     const items = this.project()?.gallery ?? [];
 
@@ -421,14 +425,14 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.activeGalleryLightboxIndex.set(index);
   }
 
-  /** Schließt die Design-Masonry-Lightbox. */
+  /** Schließt die gemeinsame Projekt-Lightbox. */
   closeGalleryLightbox(): void {
     this.galleryLightboxSwitchToken += 1;
     this.resetGalleryLightboxSwitch();
     this.activeGalleryLightboxIndex.set(null);
   }
 
-  /** Wechselt in der Design-Masonry-Lightbox zum vorherigen oder nächsten Bild. */
+  /** Wechselt in der gemeinsamen Projekt-Lightbox zum vorherigen oder nächsten Bild. */
   selectAdjacentGalleryItem(direction: 1 | -1): void {
     const items = this.project()?.gallery ?? [];
     const index = this.pendingGalleryLightboxIndex ?? this.activeGalleryLightboxIndex();
@@ -867,6 +871,7 @@ export class ProjectDetailPageComponent implements OnDestroy {
 
   /** Aktualisiert den Slug und setzt Detailseiten-Zustände zurück. */
   private updateSlug(slug: string): void {
+    this.scrollProjectToTop();
     this.slug.set(slug);
     this.selectedArchitectureNodeId.set('');
     this.selectedAppModuleId.set('');
@@ -882,6 +887,46 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.hideCatalogLoupe();
     this.isTerminalVisible.set(true);
     this.isCaseNoteVisible.set(true);
+  }
+
+
+  /** Setzt die Body-Scrollposition beim Öffnen oder Wechseln einer Case Study zuverlässig zurück. */
+  private scrollProjectToTop(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    this.clearProjectScrollResetFrames();
+
+    const resetScroll = (): void => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
+    resetScroll();
+
+    const firstFrameId = window.requestAnimationFrame(() => {
+      resetScroll();
+
+      const secondFrameId = window.requestAnimationFrame(resetScroll);
+      this.projectScrollResetFrameIds.push(secondFrameId);
+    });
+
+    this.projectScrollResetFrameIds.push(firstFrameId);
+  }
+
+  /** Verwirft noch ausstehende Scroll-Reset-Frames bei schnellen Routenwechseln. */
+  private clearProjectScrollResetFrames(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    for (const frameId of this.projectScrollResetFrameIds) {
+      window.cancelAnimationFrame(frameId);
+    }
+
+    this.projectScrollResetFrameIds.length = 0;
   }
 
   /** Ermittelt den gültigen Katalog-Index für aktuelle Projektdaten. */

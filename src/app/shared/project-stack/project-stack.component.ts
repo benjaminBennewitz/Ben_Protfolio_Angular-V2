@@ -141,7 +141,6 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     { src: 'assets/images/project-stack/project_2/pj2_star.webp', naturalWidth: 953, naturalHeight: 941 },
     { src: 'assets/images/project-stack/project_2/pj2_key.webp', naturalWidth: 947, naturalHeight: 555 },
     { src: 'assets/images/project-stack/project_2/pj2_heart.webp', naturalWidth: 921, naturalHeight: 863 },
-    { src: 'assets/images/project-stack/project_2/pj2_html5.webp', naturalWidth: 811, naturalHeight: 1019 },
     { src: 'assets/images/project-stack/project_2/pj2_triangle.webp', naturalWidth: 908, naturalHeight: 719 },
     { src: 'assets/images/project-stack/project_2/pj2_square.webp', naturalWidth: 677, naturalHeight: 694 },
     { src: 'assets/images/project-stack/project_2/pj2_x.webp', naturalWidth: 882, naturalHeight: 882 },

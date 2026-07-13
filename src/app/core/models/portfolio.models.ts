@@ -364,8 +364,16 @@ export interface ProjectsContent {
   readonly appLandscapeTitle: string;
   /** Beschriftung für eine Demo-Anfrage. */
   readonly demoRequestLabel: string;
+  /** Beschriftung für den externen GitHub-Link eines Projekts. */
+  readonly githubLabel: string;
   /** Zugängliches Label zum Vergrößern oder Prüfen eines Evidence-Screens. */
   readonly zoomLabel: string;
+  /** Zugängliches Label zum Schließen der gemeinsamen Projekt-Lightbox. */
+  readonly lightboxCloseLabel: string;
+  /** Zugängliches Label für das vorherige Bild der gemeinsamen Projekt-Lightbox. */
+  readonly lightboxPreviousLabel: string;
+  /** Zugängliches Label für das nächste Bild der gemeinsamen Projekt-Lightbox. */
+  readonly lightboxNextLabel: string;
 }
 
 
@@ -574,24 +582,40 @@ export interface ProjectCatalogShowcase {
 }
 
 
-/** Einzelne Beispielkarte im Kanban-Hero eines Projektmanagement-Projekts. */
-export interface ProjectBoardTaskPreview {
-  /** Kurzes Status- oder Kategorie-Label. */
-  readonly label: string;
-  /** Sichtbarer Aufgabenname im Demo-Board. */
+/** Einzelne schwebende To-do-Karte im Hero eines Projektmanagement-Projekts. */
+export interface ProjectBoardHeroTask {
+  /** Sichtbarer Aufgabenname. */
   readonly title: string;
-  /** Visuelle Aufgabenstimmung für kleine Statusfarben. */
-  readonly tone: 'new' | 'active' | 'review' | 'done';
+  /** Auf maximal etwa 100 Zeichen gekürzte Aufgabenbeschreibung. */
+  readonly excerpt: string;
+  /** Initialen der verantwortlichen Person. */
+  readonly ownerInitials: string;
+  /** Lokalisiertes Fälligkeitsdatum. */
+  readonly dueDate: string;
+  /** Maschinenlesbares Fälligkeitsdatum für das Time-Element. */
+  readonly dueDateIso: string;
+  /** Anzahl der angehängten Dateien. */
+  readonly attachmentCount: number;
+  /** Anzahl der Kommentare. */
+  readonly commentCount: number;
+  /** Gibt an, ob eine Automatisierungsregel aktiv ist. */
+  readonly hasRule: boolean;
 }
 
-/** Kanban-Spalte im projektspezifischen Hero-Showcase. */
-export interface ProjectBoardColumnPreview {
-  /** Spaltentitel im Board. */
-  readonly title: string;
-  /** Kleine Spalten-Metaangabe wie Anzahl oder Status. */
-  readonly meta: string;
-  /** Beispielaufgaben der Spalte. */
-  readonly tasks: readonly ProjectBoardTaskPreview[];
+/** Lokalisierte Beschriftungen für Metadaten der Hero-Aufgabenkarten. */
+export interface ProjectBoardHeroTaskLabels {
+  /** Statuslabel der Karte. */
+  readonly todo: string;
+  /** Beschriftung der verantwortlichen Person. */
+  readonly owner: string;
+  /** Beschriftung des Fälligkeitsdatums. */
+  readonly dueDate: string;
+  /** Beschriftung der Anhänge. */
+  readonly attachments: string;
+  /** Beschriftung der Kommentare. */
+  readonly comments: string;
+  /** Beschriftung der Automatisierungsregel. */
+  readonly rule: string;
 }
 
 /** Kleine Karte für Workflow-, UX- oder Gamification-Schwerpunkte. */
@@ -644,8 +668,10 @@ export interface ProjectBoardShowcase {
   readonly chips: readonly string[];
   /** Zugängliche Beschriftung des Board-Containers. */
   readonly boardLabel: string;
-  /** Beispielspalten im visuellen Kanban-Board. */
-  readonly columns: readonly ProjectBoardColumnPreview[];
+  /** Lokalisierte Beschriftungen der Aufgabenmetadaten. */
+  readonly heroTaskLabels: ProjectBoardHeroTaskLabels;
+  /** Fünf schwebende Beispielaufgaben im Hero. */
+  readonly heroTasks: readonly ProjectBoardHeroTask[];
   /** Eyebrow für die Workflow-Section. */
   readonly workflowEyebrow: string;
   /** Überschrift für die Workflow-Section. */
@@ -832,6 +858,8 @@ export interface ProjectBloodShowcase {
   readonly guideModeLabel: string;
   /** Sichtbare Diagrammstile für den Werte-Guide. */
   readonly guideModes: readonly ProjectBloodGuideMode[];
+  /** Optionaler Hinweis zu geplanten, aber noch nicht umgesetzten Visualisierungsfunktionen. */
+  readonly roadmapNote?: string;
   /** Hinweis, dass die Oberfläche Erklärung statt Diagnose liefert. */
   readonly disclaimer: string;
   /** Eyebrow für die Galerie. */
@@ -848,6 +876,8 @@ export interface ProjectLiveDemo {
   readonly text: string;
   /** Optionaler externer Link zur Demo. */
   readonly url?: string;
+  /** Optionaler externer Link zum zugehörigen GitHub-Repository. */
+  readonly githubUrl?: string;
 }
 
 /** Detaildaten eines Portfolio-Projekts. */

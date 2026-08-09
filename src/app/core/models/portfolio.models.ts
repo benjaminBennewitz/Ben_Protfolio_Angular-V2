@@ -216,6 +216,7 @@ export interface ExperienceItem {
   readonly suffix: string;
   readonly label: string;
   readonly text: string;
+  readonly claim: string;
 }
 
 /** Inhalt des Skillbereichs. */
@@ -242,10 +243,16 @@ export interface SkillGroup {
   readonly items: readonly string[];
 }
 
-/** Prozentuale Selbsteinschätzung eines Tech- oder Design-Skills. */
+/** Status eines Werkzeugs innerhalb des projektbasierten Einsatzprofils. */
+export type SkillUsageStatus = 'CORE' | 'ACTIVE' | 'ROUTINE' | 'SPECIALIZED';
+
+/** Projektbasierte Nutzungstiefe eines Tech-, Design- oder Automatisierungswerkzeugs. */
 export interface SkillLevel {
   readonly label: string;
-  readonly value: number;
+  /** Relative Nutzungstiefe ausschließlich für die visuelle Balkendarstellung. */
+  readonly depth: number;
+  /** Lesbarer Status anstelle einer pseudo-genauen Prozentbewertung. */
+  readonly status: SkillUsageStatus;
   readonly group: string;
 }
 

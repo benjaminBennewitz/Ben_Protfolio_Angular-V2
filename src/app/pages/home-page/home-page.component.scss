@@ -1438,7 +1438,7 @@
 
 .experience__card {
   display: grid;
-  grid-template-rows: 7.25rem 2.1rem 1fr;
+  grid-template-rows: 7.25rem 2.8rem 1fr;
   gap: var(--bp-space-3);
   min-height: 292px;
   padding: clamp(0.9rem, 1.6vw, 1.15rem);
@@ -1458,7 +1458,7 @@
   background-size: 10px 10px, 100% 100%;
 }
 
-.experience__card strong {
+.experience__metric {
   display: grid;
   align-content: start;
   gap: 0.55rem;
@@ -1467,16 +1467,48 @@
   line-height: 0.78;
 }
 
-.experience__card strong span {
+.experience__metric-shell {
+  display: inline-flex;
+  width: fit-content;
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: left bottom;
+  transition: transform 460ms var(--bp-ease-pop), filter 220ms ease;
+  will-change: transform;
+}
+
+.experience__metric-value {
+  position: relative;
   display: inline-flex;
   align-items: flex-start;
   width: fit-content;
   font-size: clamp(3.25rem, 5.2vw, 5.55rem);
   letter-spacing: -0.12em;
   white-space: nowrap;
+  will-change: transform;
 }
 
-.experience__card strong em {
+.experience__metric-value::before,
+.experience__metric-value::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  content: attr(data-metric);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.experience__metric-value::before {
+  color: var(--bp-color-info);
+  clip-path: inset(8% 0 58% 0);
+}
+
+.experience__metric-value::after {
+  color: var(--bp-color-danger);
+  clip-path: inset(58% 0 8% 0);
+}
+
+.experience__metric em {
   margin-left: 0.04em;
   color: inherit;
   font-style: normal;
@@ -1485,7 +1517,7 @@
   letter-spacing: -0.08em;
 }
 
-.experience__card small {
+.experience__metric small {
   color: var(--bp-color-text);
   font-family: var(--bp-font-mono);
   font-size: 0.78rem;
@@ -1498,18 +1530,38 @@
   align-self: start;
   margin: 0;
   font-family: var(--bp-font-display);
-  font-size: clamp(1.08rem, 1.18vw, 1.34rem);
+  max-width: 100%;
+  font-size: clamp(1.02rem, 1.12vw, 1.3rem);
   line-height: 1.02;
   letter-spacing: -0.04em;
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+.experience__body {
+  display: grid;
+  align-self: start;
+  gap: 0.85rem;
 }
 
 .experience__card p {
-  align-self: start;
   margin: 0;
   color: var(--bp-color-text-muted);
   line-height: 1.6;
+}
+
+.experience__command {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .experience__card:hover,
@@ -1518,6 +1570,108 @@
   background: color-mix(in srgb, var(--bp-color-surface-solid) 76%, var(--bp-color-accent) 8%);
   box-shadow: 10px 10px 0 color-mix(in srgb, var(--bp-color-accent) 28%, transparent), 0 32px 90px var(--bp-color-shadow);
   transform: translate3d(0, -8px, 0) rotate(-1deg);
+}
+
+.experience__card:hover .experience__metric-shell,
+.experience__card:focus-within .experience__metric-shell {
+  filter: drop-shadow(0 12px 18px color-mix(in srgb, var(--bp-color-accent) 32%, transparent));
+  transform: translate3d(-0.08rem, -2.15rem, 0) scale(1.22) rotate(-1deg);
+}
+
+.experience__card:hover .experience__metric-value,
+.experience__card:focus-within .experience__metric-value {
+  animation: experience-metric-float 1.8s ease-in-out 420ms infinite;
+}
+
+.experience__card:hover .experience__metric-value::before,
+.experience__card:focus-within .experience__metric-value::before {
+  animation: experience-metric-glitch-top 1.6s steps(2, end) 120ms infinite;
+}
+
+.experience__card:hover .experience__metric-value::after,
+.experience__card:focus-within .experience__metric-value::after {
+  animation: experience-metric-glitch-bottom 1.6s steps(2, end) 180ms infinite;
+}
+
+@keyframes experience-metric-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(0.08rem, -0.38rem, 0) rotate(0.35deg);
+  }
+}
+
+@keyframes experience-metric-glitch-top {
+  0%,
+  78%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+
+  80% {
+    opacity: 0.72;
+    transform: translate3d(-0.12em, -0.02em, 0);
+  }
+
+  84% {
+    opacity: 0.48;
+    transform: translate3d(0.09em, 0, 0);
+  }
+
+  88% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes experience-metric-glitch-bottom {
+  0%,
+  82%,
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+
+  84% {
+    opacity: 0.66;
+    transform: translate3d(0.11em, 0.03em, 0);
+  }
+
+  88% {
+    opacity: 0.42;
+    transform: translate3d(-0.08em, 0, 0);
+  }
+
+  92% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+:host-context(:root[data-motion='reduced']) .experience__metric-shell,
+:host-context(:root[data-motion='off']) .experience__metric-shell {
+  transition-duration: 0ms;
+}
+
+:host-context(:root[data-motion='reduced']) .experience__card:hover .experience__metric-shell,
+:host-context(:root[data-motion='reduced']) .experience__card:focus-within .experience__metric-shell,
+:host-context(:root[data-motion='off']) .experience__card:hover .experience__metric-shell,
+:host-context(:root[data-motion='off']) .experience__card:focus-within .experience__metric-shell {
+  filter: none;
+  transform: none;
+}
+
+:host-context(:root[data-motion='reduced']) .experience__metric-value,
+:host-context(:root[data-motion='reduced']) .experience__metric-value::before,
+:host-context(:root[data-motion='reduced']) .experience__metric-value::after,
+:host-context(:root[data-motion='off']) .experience__metric-value,
+:host-context(:root[data-motion='off']) .experience__metric-value::before,
+:host-context(:root[data-motion='off']) .experience__metric-value::after {
+  animation: none !important;
 }
 
 :root[data-theme='light'] .experience,
@@ -1751,7 +1905,7 @@
 
 .skills__level-track span {
   display: block;
-  width: var(--skill-value);
+  width: var(--skill-depth);
   height: 100%;
   background: linear-gradient(90deg, var(--bp-color-accent), var(--bp-color-info));
   transform: scaleX(0);

@@ -5,7 +5,7 @@
  * @description Öffnet ein kleines MS-DOS-artiges Systemfenster und wechselt persönliche Kennzahlen zwischen metrischen und absurden Einheiten.
  */
 
-import { Component, ElementRef, HostListener, OnDestroy, ViewChild, computed, inject, input, output, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, QueryList, ViewChild, ViewChildren, computed, inject, input, output, signal } from '@angular/core';
 import { AboutMetricFact, AboutMetricsCalculatorUnitKey, AboutMetricsContent } from '../../core/models/portfolio.models';
 import { AchievementService } from '../../core/services/achievement.service';
 
@@ -44,8 +44,6 @@ interface AbsurdCalculatorResult {
   readonly count: string;
   /** Kompakte Einheit des Ergebnisses. */
   readonly unit: string;
-  /** Kleine Formel zur Nachvollziehbarkeit der Rechnung. */
-  readonly formula: string;
 }
 
 /** Kompaktes Fun-Facts-Fenster mit Einheitenwechsel. */
@@ -81,6 +79,18 @@ export class AboutMetricsWindowComponent implements OnDestroy {
   @ViewChild('calculatorWindow')
   private readonly calculatorWindow?: ElementRef<HTMLElement>;
 
+  /** Referenz auf den Custom-Einheitenwähler für Outside-Click-Erkennung. */
+  @ViewChild('calculatorUnitSelect')
+  private readonly calculatorUnitSelect?: ElementRef<HTMLElement>;
+
+  /** Referenz auf den Trigger des Custom-Einheitenwählers. */
+  @ViewChild('calculatorUnitTrigger')
+  private readonly calculatorUnitTrigger?: ElementRef<HTMLButtonElement>;
+
+  /** Fokusierbare Optionen des geöffneten Custom-Einheitenwählers. */
+  @ViewChildren('calculatorUnitOption')
+  private readonly calculatorUnitOptions?: QueryList<ElementRef<HTMLButtonElement>>;
+
   /** Timeout für die kurze Rechen-/Glitchanimation beim Moduswechsel. */
   private recalculationTimeoutId: number | null = null;
 
@@ -89,10 +99,10 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
   /** Näherungswerte für Snacks und Peripherie des Absurditäten-Rechners. */
   private readonly calculatorUnitData: Record<AboutMetricsCalculatorUnitKey, AbsurdCalculatorUnitData> = {
-    miniSpringRoll: { key: 'miniSpringRoll', grams: 8, centimeters: 7.3 },
-    wiener: { key: 'wiener', grams: 80, centimeters: 18 },
-    mentos: { key: 'mentos', grams: 38 / 14, centimeters: 2 },
-    gummyBear: { key: 'gummyBear', grams: 2.2, centimeters: 2.54 },
+    miniSpringRoll: { key: 'miniSpringRoll', grams: 15, centimeters: 8 },
+    wiener: { key: 'wiener', grams: 80, centimeters: 15 },
+    mentos: { key: 'mentos', grams: 2.7, centimeters: 0.9 },
+    gummyBear: { key: 'gummyBear', grams: 2.5, centimeters: 2.1 },
   };
 
   /** Sichtbarkeit des schwebenden Metrics-Fensters. */
@@ -109,6 +119,9 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
   /** Sichtbarkeit des überlagerten Absurditäten-Rechner-Fensters. */
   readonly isCalculatorOpen = signal<boolean>(false);
+
+  /** Sichtbarkeit des vollständig eigenen Einheiten-Dropdowns. */
+  readonly isCalculatorUnitMenuOpen = signal<boolean>(false);
 
   /** Aktuelle Größeneingabe in Zentimetern. */
   readonly calculatorHeightCm = signal<number>(185);
@@ -162,6 +175,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
     this.isOpen.set(false);
     this.isCalculatorOpen.set(false);
+    this.isCalculatorUnitMenuOpen.set(false);
     this.isCalculatorTeaserVisible.set(false);
     this.clearCalculatorTeaserTimeout();
     this.metricsTrigger?.nativeElement.focus();
@@ -170,12 +184,32 @@ export class AboutMetricsWindowComponent implements OnDestroy {
   /** Schließt das Metrics-Fenster bei Escape. */
   @HostListener('window:keydown.escape')
   closeWindowByKeyboard(): void {
+    if (this.isCalculatorUnitMenuOpen()) {
+      this.isCalculatorUnitMenuOpen.set(false);
+      return;
+    }
+
     if (this.isCalculatorOpen()) {
       this.closeCalculator();
       return;
     }
 
     this.closeWindow();
+  }
+
+  /** Schließt den Custom-Einheitenwähler bei einem Klick außerhalb des Controls. */
+  @HostListener('document:pointerdown', ['$event'])
+  closeCalculatorUnitMenuOnOutsideClick(event: PointerEvent): void {
+    if (!this.isCalculatorUnitMenuOpen()) {
+      return;
+    }
+
+    const target = event.target;
+    const selectElement = this.calculatorUnitSelect?.nativeElement;
+
+    if (!(target instanceof Node) || !selectElement?.contains(target)) {
+      this.isCalculatorUnitMenuOpen.set(false);
+    }
   }
 
   /**
@@ -197,6 +231,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
   /** Öffnet den Absurditäten-Rechner als versetztes Overlay-Fenster. */
   openCalculator(): void {
+    this.isCalculatorUnitMenuOpen.set(false);
     this.isCalculatorOpen.set(true);
     window.requestAnimationFrame(() => this.calculatorWindow?.nativeElement.focus());
   }
@@ -209,6 +244,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
     }
 
     this.isCalculatorOpen.set(false);
+    this.isCalculatorUnitMenuOpen.set(false);
     this.calculatorTrigger?.nativeElement.focus();
   }
 
@@ -228,18 +264,83 @@ export class AboutMetricsWindowComponent implements OnDestroy {
     this.calculatorWeightKg.set(this.numberFromInput(event, 87));
   }
 
-  /**
-   * Aktualisiert die gewählte Umrechnungseinheit.
-   * @param event Auswahlereignis des Select-Feldes.
-   */
-  updateCalculatorUnit(event: Event): void {
-    const target = event.target;
+  /** Öffnet oder schließt den eigenen Einheitenwähler. */
+  toggleCalculatorUnitMenu(): void {
+    this.isCalculatorUnitMenuOpen.update((isOpen) => !isOpen);
+  }
 
-    if (!(target instanceof HTMLSelectElement) || !this.isCalculatorUnitKey(target.value)) {
+  /**
+   * Öffnet den Einheitenwähler per Tastatur und fokussiert die passende Option.
+   * @param event Tastaturereignis am Trigger.
+   */
+  handleCalculatorUnitTriggerKeydown(event: KeyboardEvent): void {
+    const key = event.key;
+
+    if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') {
       return;
     }
 
-    this.calculatorUnitKey.set(target.value);
+    event.preventDefault();
+    this.isCalculatorUnitMenuOpen.set(true);
+    const selectedIndex = Math.max(0, this.content().calculator.units.findIndex((unit) => unit.key === this.calculatorUnitKey()));
+    const targetIndex = key === 'ArrowUp' || key === 'End' ? this.content().calculator.units.length - 1 : key === 'Home' ? 0 : selectedIndex;
+    window.requestAnimationFrame(() => this.focusCalculatorUnitOption(targetIndex));
+  }
+
+  /**
+   * Steuert die Custom-Dropdown-Optionen mit Pfeiltasten, Home, End und Escape.
+   * @param event Tastaturereignis der aktuellen Option.
+   * @param optionIndex Index der aktuell fokussierten Option.
+   */
+  handleCalculatorUnitOptionKeydown(event: KeyboardEvent, optionIndex: number): void {
+    const optionCount = this.content().calculator.units.length;
+    let targetIndex = optionIndex;
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.isCalculatorUnitMenuOpen.set(false);
+      this.calculatorUnitTrigger?.nativeElement.focus();
+      return;
+    }
+
+    if (event.key === 'ArrowDown') {
+      targetIndex = (optionIndex + 1) % optionCount;
+    } else if (event.key === 'ArrowUp') {
+      targetIndex = (optionIndex - 1 + optionCount) % optionCount;
+    } else if (event.key === 'Home') {
+      targetIndex = 0;
+    } else if (event.key === 'End') {
+      targetIndex = optionCount - 1;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    this.focusCalculatorUnitOption(targetIndex);
+  }
+
+  /** Schließt das Custom-Dropdown, sobald der Tastaturfokus den Wähler verlässt. */
+  closeCalculatorUnitMenuOnFocusOut(event: FocusEvent): void {
+    const nextTarget = event.relatedTarget;
+    const selectElement = this.calculatorUnitSelect?.nativeElement;
+
+    if (!(nextTarget instanceof Node) || !selectElement?.contains(nextTarget)) {
+      this.isCalculatorUnitMenuOpen.set(false);
+    }
+  }
+
+  /**
+   * Übernimmt eine Einheit aus dem Custom-Dropdown und schließt die Auswahl.
+   * @param unitKey Ausgewählte Rechner-Einheit.
+   */
+  selectCalculatorUnit(unitKey: AboutMetricsCalculatorUnitKey): void {
+    this.isCalculatorUnitMenuOpen.set(false);
+
+    if (this.calculatorUnitKey() === unitKey) {
+      return;
+    }
+
+    this.calculatorUnitKey.set(unitKey);
     this.startRecalculationAnimation();
   }
 
@@ -272,8 +373,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
     return {
       count: this.formatNumber(count),
-      unit: this.selectedCalculatorUnit()?.shortLabel ?? '',
-      formula: `${this.formatNumber(heightCm)} cm ÷ ${this.formatNumber(unitData.centimeters)} cm`,
+      unit: this.selectedCalculatorUnit().shortLabel,
     };
   }
 
@@ -288,8 +388,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
     return {
       count: this.formatNumber(count),
-      unit: this.selectedCalculatorUnit()?.shortLabel ?? '',
-      formula: `${this.formatNumber(weightKg)} kg × 1000 ÷ ${this.formatNumber(unitData.grams)} g`,
+      unit: this.selectedCalculatorUnit().shortLabel,
     };
   }
 
@@ -323,12 +422,11 @@ export class AboutMetricsWindowComponent implements OnDestroy {
   }
 
   /**
-   * Prüft, ob ein Wert eine bekannte Rechner-Einheit ist.
-   * @param value Zu prüfender Select-Wert.
-   * @returns True, wenn der Wert mit den Rechnerdaten verknüpft ist.
+   * Fokussiert eine Option im geöffneten Custom-Einheitenwähler.
+   * @param optionIndex Zielindex innerhalb der sichtbaren Optionen.
    */
-  private isCalculatorUnitKey(value: string): value is AboutMetricsCalculatorUnitKey {
-    return value === 'miniSpringRoll' || value === 'wiener' || value === 'mentos' || value === 'gummyBear';
+  private focusCalculatorUnitOption(optionIndex: number): void {
+    this.calculatorUnitOptions?.get(optionIndex)?.nativeElement.focus();
   }
 
   /**

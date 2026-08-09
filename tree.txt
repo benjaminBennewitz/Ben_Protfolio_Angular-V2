@@ -7,6 +7,7 @@ Ben_Protfolio_Angular-V2/
 │   ├── app/
 │   │   ├── core/
 │   │   │   ├── data/
+│   │   │   │   ├── portfolio-content.spec.ts
 │   │   │   │   └── portfolio-content.ts
 │   │   │   ├── models/
 │   │   │   │   └── portfolio.models.ts

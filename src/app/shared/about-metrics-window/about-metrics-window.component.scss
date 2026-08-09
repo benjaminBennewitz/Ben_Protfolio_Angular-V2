@@ -407,9 +407,7 @@
   padding: clamp(1rem, 2.4vw, 1.35rem);
 }
 
-.about-metrics__calculator-intro,
-.about-metrics__calculator-note,
-.about-metrics__calculator-warning {
+.about-metrics__calculator-intro {
   margin: 0;
   color: rgba(17, 17, 17, 0.72);
   font-size: 0.78rem;
@@ -432,7 +430,7 @@
   grid-column: 1 / -1;
 }
 
-.about-metrics__field span {
+.about-metrics__field > span {
   color: rgba(17, 17, 17, 0.78);
   font-family: var(--bp-font-mono);
   font-size: 0.72rem;
@@ -442,8 +440,31 @@
   text-transform: uppercase;
 }
 
+.about-metrics__input-with-unit {
+  position: relative;
+  min-width: 0;
+}
+
+.about-metrics__input-with-unit input {
+  width: 100%;
+  padding-right: 3.25rem;
+}
+
+.about-metrics__input-unit {
+  position: absolute;
+  top: 50%;
+  right: 0.78rem;
+  color: color-mix(in srgb, #111111 66%, transparent);
+  font-family: var(--bp-font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
 .about-metrics__field input,
-.about-metrics__field select {
+.about-metrics__custom-select-trigger {
   min-height: 2.75rem;
   border: 1px solid rgba(17, 17, 17, 0.42);
   border-radius: 0;
@@ -459,10 +480,89 @@
 }
 
 .about-metrics__field input:focus-visible,
-.about-metrics__field select:focus-visible {
+.about-metrics__custom-select-trigger:focus-visible {
   border-color: #111111;
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 72%, #111111 10%);
   transform: translate(-1px, -1px);
+}
+
+.about-metrics__custom-select {
+  position: relative;
+  min-width: 0;
+}
+
+.about-metrics__custom-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+}
+
+.about-metrics__custom-select-trigger .material-symbols-outlined {
+  flex: 0 0 auto;
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: transform 180ms var(--bp-ease-out);
+}
+
+.about-metrics__custom-select.is-open .about-metrics__custom-select-trigger .material-symbols-outlined {
+  transform: rotate(180deg);
+}
+
+.about-metrics__custom-select-menu {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  right: 0;
+  left: 0;
+  z-index: 12;
+  display: grid;
+  border: 1px solid #111111;
+  background: #fff8ef;
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--bp-color-accent) 66%, #111111 12%);
+  overflow: hidden;
+  animation: about-metrics-select-in 160ms var(--bp-ease-out) both;
+}
+
+.about-metrics__custom-select-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.55rem;
+  border: 0;
+  border-bottom: 1px dashed rgba(17, 17, 17, 0.22);
+  padding: 0.62rem 0.72rem;
+  background: #fff8ef;
+  color: #111111;
+  font-family: var(--bp-font-mono);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, padding-left 150ms var(--bp-ease-out);
+}
+
+.about-metrics__custom-select-option:last-child {
+  border-bottom: 0;
+}
+
+.about-metrics__custom-select-option:hover,
+.about-metrics__custom-select-option:focus-visible,
+.about-metrics__custom-select-option.is-selected {
+  background: var(--bp-color-accent);
+  color: var(--bp-color-on-accent);
+  outline: none;
+  padding-left: 0.95rem;
+}
+
+.about-metrics__custom-select-option .material-symbols-outlined {
+  flex: 0 0 auto;
+  font-size: 1rem;
+  line-height: 1;
 }
 
 .about-metrics__calculator-results {
@@ -504,25 +604,11 @@
   letter-spacing: 0.018em;
 }
 
-.about-metrics__calculator-results code {
-  width: fit-content;
-  border: 1px dashed rgba(17, 17, 17, 0.26);
-  padding: 0.22rem 0.35rem;
-  background: rgba(17, 17, 17, 0.05);
-  color: rgba(17, 17, 17, 0.72);
-  font-family: var(--bp-font-mono);
-  font-size: 0.7rem;
-}
 
 .about-metrics__calculator-results.is-recalculating article {
   animation: about-metrics-item-swap 420ms var(--bp-ease-out) both;
 }
 
-.about-metrics__calculator-warning {
-  border-left: 3px solid var(--bp-color-accent);
-  padding-left: 0.72rem;
-  color: rgba(17, 17, 17, 0.78);
-}
 
 /* ========================================================================== 
    07   Light Theme
@@ -572,6 +658,18 @@
 /* ========================================================================== 
    08   Animationen
    ========================================================================== */
+
+@keyframes about-metrics-select-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.3rem) scaleY(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
 
 @keyframes about-metrics-window-in {
   0% {

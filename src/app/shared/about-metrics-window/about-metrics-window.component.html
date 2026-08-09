@@ -80,41 +80,64 @@
       <div class="about-metrics__calculator-grid">
         <label class="about-metrics__field">
           <span>{{ content().calculator.heightLabel }}</span>
-          <input type="number" min="0" inputmode="decimal" [value]="calculatorHeightCm()"
-            (input)="updateCalculatorHeight($event)" />
+          <div class="about-metrics__input-with-unit">
+            <input type="number" min="0" inputmode="decimal" [value]="calculatorHeightCm()"
+              (input)="updateCalculatorHeight($event)" />
+            <span class="about-metrics__input-unit" aria-hidden="true">cm</span>
+          </div>
         </label>
 
         <label class="about-metrics__field">
           <span>{{ content().calculator.weightLabel }}</span>
-          <input type="number" min="0" inputmode="decimal" [value]="calculatorWeightKg()"
-            (input)="updateCalculatorWeight($event)" />
+          <div class="about-metrics__input-with-unit">
+            <input type="number" min="0" inputmode="decimal" [value]="calculatorWeightKg()"
+              (input)="updateCalculatorWeight($event)" />
+            <span class="about-metrics__input-unit" aria-hidden="true">kg</span>
+          </div>
         </label>
 
-        <label class="about-metrics__field about-metrics__field--wide">
+        <div class="about-metrics__field about-metrics__field--wide">
           <span>{{ content().calculator.unitLabel }}</span>
-          <select [value]="calculatorUnitKey()" (change)="updateCalculatorUnit($event)">
-            @for (unit of content().calculator.units; track unit.key) {
-            <option [value]="unit.key">{{ unit.label }}</option>
+          <div #calculatorUnitSelect class="about-metrics__custom-select"
+            [class.is-open]="isCalculatorUnitMenuOpen()" (focusout)="closeCalculatorUnitMenuOnFocusOut($event)">
+            <button #calculatorUnitTrigger class="about-metrics__custom-select-trigger" type="button" aria-haspopup="listbox"
+              aria-controls="about-metrics-unit-listbox" [attr.aria-expanded]="isCalculatorUnitMenuOpen()"
+              (click)="toggleCalculatorUnitMenu()" (keydown)="handleCalculatorUnitTriggerKeydown($event)">
+              <span>{{ selectedCalculatorUnit().label }}</span>
+              <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
+            </button>
+
+            @if (isCalculatorUnitMenuOpen()) {
+            <div id="about-metrics-unit-listbox" class="about-metrics__custom-select-menu" role="listbox"
+              [attr.aria-label]="content().calculator.unitLabel">
+              @for (unit of content().calculator.units; track unit.key) {
+              <button #calculatorUnitOption class="about-metrics__custom-select-option" type="button" role="option"
+                [class.is-selected]="calculatorUnitKey() === unit.key"
+                [attr.aria-selected]="calculatorUnitKey() === unit.key" (click)="selectCalculatorUnit(unit.key)"
+                (keydown)="handleCalculatorUnitOptionKeydown($event, $index)">
+                <span>{{ unit.label }}</span>
+                @if (calculatorUnitKey() === unit.key) {
+                <span class="material-symbols-outlined" aria-hidden="true">check</span>
+                }
+              </button>
+              }
+            </div>
             }
-          </select>
-        </label>
+          </div>
+        </div>
       </div>
 
       <div class="about-metrics__calculator-results" [class.is-recalculating]="isRecalculating()">
         <article>
           <span>{{ content().calculator.heightResultLabel }}</span>
           <strong>≈ {{ calculatorHeightResult().count }} <small>{{ calculatorHeightResult().unit }}</small></strong>
-          <code>{{ calculatorHeightResult().formula }}</code>
         </article>
         <article>
           <span>{{ content().calculator.weightResultLabel }}</span>
           <strong>≈ {{ calculatorWeightResult().count }} <small>{{ calculatorWeightResult().unit }}</small></strong>
-          <code>{{ calculatorWeightResult().formula }}</code>
         </article>
       </div>
 
-      <p class="about-metrics__calculator-note">{{ content().calculator.sourceNote }}</p>
-      <p class="about-metrics__calculator-warning">{{ content().calculator.sourceWarning }}</p>
     </div>
   </section>
   }

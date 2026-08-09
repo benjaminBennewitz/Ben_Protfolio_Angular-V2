@@ -160,10 +160,6 @@ export interface AboutMetricsCalculatorContent {
   readonly weightResultLabel: string;
   /** Zugängliche Beschriftung zum Schließen des Rechners. */
   readonly closeLabel: string;
-  /** Kurzer Hinweis zu den Berechnungswerten. */
-  readonly sourceNote: string;
-  /** Hinweis bei ungenauen oder nicht standardisierten Einheiten. */
-  readonly sourceWarning: string;
   /** Sichtbare Einheitennamen für die Auswahl. */
   readonly units: readonly AboutMetricsCalculatorUnitContent[];
 }

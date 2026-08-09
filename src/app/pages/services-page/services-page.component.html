@@ -1,0 +1,100 @@
+<!-- src/app/pages/services-page/services-page.component.html -->
+<main class="services-page">
+  <section class="services-hero bp-section" bpViewportActivity>
+    <div class="services-hero__layout bp-container">
+      <div class="services-hero__copy bp-motion-copy" bpReveal>
+        <a class="services-page__back" routerLink="/" fragment="services">
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+          {{ backLabel() }}
+        </a>
+
+        <bp-reveal-text class="services-hero__title-reveal" [eyebrow]="content().eyebrow" [text]="content().title" size="hero" level="h1"
+          headingClass="services-hero__title" />
+        <p class="services-hero__lead">{{ content().subtitle }}</p>
+      </div>
+
+      <aside class="services-hero__terminal bp-dos-window" aria-hidden="true" bpReveal>
+        <div class="bp-dos-window__bar">
+          <span>scope_check.exe</span>
+          <span>×</span>
+        </div>
+        <div class="bp-dos-window__body">
+          <p>&gt; problem first</p>
+          <p>&gt; stack second</p>
+          <p>&gt; outcome always</p>
+          <p class="services-hero__terminal-status">STATUS: READY</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="services-offers bp-section" bpViewportActivity>
+    <div class="services-offers__layout bp-container">
+      <div class="services-offers__head bp-motion-copy" bpReveal>
+        <bp-reveal-text class="services-offers__title-reveal" [eyebrow]="content().offersEyebrow"
+          [text]="content().offersTitle" headingClass="services-offers__title" />
+        <p class="bp-subtitle">{{ content().offersSubtitle }}</p>
+      </div>
+
+      <div class="services-offers__list" [attr.aria-label]="content().ariaLabel">
+        @for (card of content().cards; track card.title; let index = $index) {
+        <article class="service-offer bp-card" [class.service-offer--featured]="card.featured" bpReveal>
+          <div class="service-offer__index" aria-hidden="true">0{{ index + 1 }}</div>
+
+          <div class="service-offer__main">
+            <div class="service-offer__heading">
+              <div>
+                @if (card.badge) {
+                <span class="service-offer__badge">{{ card.badge }}</span>
+                }
+                <h3>{{ card.title }}</h3>
+              </div>
+              <strong class="service-offer__price">{{ card.price }}</strong>
+            </div>
+
+            <p class="service-offer__claim">{{ card.claim }}</p>
+            <p class="service-offer__description">{{ card.description }}</p>
+            <p class="service-offer__command">{{ card.command }}</p>
+          </div>
+
+          <div class="service-offer__details">
+            <ul>
+              @for (feature of card.features; track feature) {
+              <li><span class="material-symbols-outlined" aria-hidden="true">check</span>{{ feature }}</li>
+              }
+            </ul>
+            <p class="service-offer__quality">{{ content().qualityBaseline }}</p>
+            <a class="bp-button service-offer__cta" routerLink="/" fragment="contact">
+              <span>{{ card.ctaLabel }}</span>
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+            </a>
+          </div>
+        </article>
+        }
+      </div>
+
+      <p class="services-offers__note" bpReveal>{{ content().note }}</p>
+    </div>
+  </section>
+
+  <section class="maintenance bp-section" bpViewportActivity>
+    <div class="maintenance__layout bp-container">
+      <div class="maintenance__head bp-motion-copy" bpReveal>
+        <p class="bp-eyebrow">{{ content().supportTitle }}</p>
+        <h2>{{ content().supportHeadline }}</h2>
+        <p class="bp-subtitle">{{ content().supportText }}</p>
+      </div>
+
+      <div class="maintenance__plans bp-stagger-list bp-stagger-list--soft" bpReveal>
+        @for (plan of content().supportPlans; track plan.name; let index = $index) {
+        <article class="maintenance-card bp-card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 110 + 120">
+          <span class="maintenance-card__index">0{{ index + 1 }}</span>
+          <h3>{{ plan.name }}</h3>
+          <strong>{{ plan.price }}</strong>
+          <p>{{ plan.text }}</p>
+        </article>
+        }
+      </div>
+    </div>
+  </section>
+</main>

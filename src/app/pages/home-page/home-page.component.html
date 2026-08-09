@@ -224,53 +224,27 @@
     <bp-tech-marquee bpViewportActivity bpReveal [items]="content().skills.marquee" />
   </section>
 
-  <section class="pricing bp-section" id="services" bpViewportActivity>
-    <div class="pricing__layout bp-container">
-      <div class="pricing__head bp-motion-copy" bpReveal>
-        <bp-reveal-text class="pricing__title-reveal" [eyebrow]="content().pricing.eyebrow" [text]="content().pricing.title" headingClass="pricing__title" />
-        <p class="bp-subtitle">{{ content().pricing.subtitle }}</p>
+  <section class="services-bridge bp-section" id="services" bpViewportActivity>
+    <div class="services-bridge__layout bp-container">
+      <div class="services-bridge__copy bp-motion-copy" bpReveal>
+        <bp-reveal-text class="services-bridge__title-reveal" [eyebrow]="content().servicesTeaser.eyebrow"
+          [text]="content().servicesTeaser.title" headingClass="services-bridge__title" />
+        <p class="bp-subtitle">{{ content().servicesTeaser.subtitle }}</p>
+        <a class="bp-button services-bridge__cta" routerLink="/leistungen">
+          <span>{{ content().servicesTeaser.ctaLabel }}</span>
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+        </a>
       </div>
 
-      <div class="pricing__cards bp-stagger-list bp-stagger-list--soft" [attr.aria-label]="content().pricing.ariaLabel" bpReveal>
-        @for (card of content().pricing.cards; track card.title; let index = $index) {
-        <article class="pricing-card bp-card bp-stagger-item" [class.pricing-card--featured]="card.featured" [style.--bp-stagger-delay.ms]="index * 120 + 120">
-          @if (card.badge) {
-          <span class="pricing-card__badge">{{ card.badge }}</span>
-          }
-          <div class="pricing-card__top">
-            <h3>{{ card.title }}</h3>
-            <strong>{{ card.price }}</strong>
-          </div>
-          <p>{{ card.description }}</p>
-          <span class="pricing-card__support">{{ content().pricing.supportCardLabel }}</span>
-          <ul>
-            @for (feature of card.features; track feature) {
-            <li><span class="material-symbols-outlined" aria-hidden="true">check</span>{{ feature }}</li>
-            }
-          </ul>
-          <a class="bp-button pricing-card__cta" routerLink="/" fragment="contact">
-            <span>{{ card.ctaLabel }}</span>
-            <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
-          </a>
+      <div class="services-bridge__signals bp-stagger-list bp-stagger-list--soft"
+        [attr.aria-label]="content().servicesTeaser.ariaLabel" bpReveal>
+        @for (item of content().servicesTeaser.items; track item.label; let index = $index) {
+        <article class="services-bridge__signal bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 110 + 120">
+          <strong>{{ item.label }}</strong>
+          <span>{{ item.text }}</span>
         </article>
         }
       </div>
-
-      <details class="pricing__support bp-card">
-        <summary>{{ content().pricing.supportTitle }}</summary>
-        <p>{{ content().pricing.supportText }}</p>
-        <div class="pricing__support-plans">
-          @for (plan of content().pricing.supportPlans; track plan.name) {
-          <article class="pricing__support-plan">
-            <strong>{{ plan.name }}</strong>
-            <span>{{ plan.price }}</span>
-            <p>{{ plan.text }}</p>
-          </article>
-          }
-        </div>
-      </details>
-
-      <p class="pricing__note" bpReveal>{{ content().pricing.note }}</p>
     </div>
   </section>
 

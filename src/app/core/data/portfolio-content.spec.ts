@@ -22,6 +22,9 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(content.about.title.trim()).not.toBe('');
     expect(content.about.text.length).toBeGreaterThan(0);
     expect(content.about.metrics.facts.length).toBeGreaterThan(0);
+    expect(content.servicesTeaser.items).toHaveLength(3);
+    expect(content.pricing.cards).toHaveLength(3);
+    expect(content.pricing.metaTitle.trim()).not.toBe('');
     expect(content.projects.length).toBeGreaterThan(0);
     expect(content.faqs.length).toBeGreaterThan(0);
     expect(content.contact.title.trim()).not.toBe('');
@@ -34,6 +37,9 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(english.about.text).toHaveLength(german.about.text.length);
     expect(english.about.highlights).toHaveLength(german.about.highlights.length);
     expect(english.about.metrics.facts).toHaveLength(german.about.metrics.facts.length);
+    expect(english.servicesTeaser.items).toHaveLength(german.servicesTeaser.items.length);
+    expect(english.pricing.cards).toHaveLength(german.pricing.cards.length);
+    expect(english.pricing.supportPlans).toHaveLength(german.pricing.supportPlans.length);
     expect(english.projects).toHaveLength(german.projects.length);
     expect(english.faqs).toHaveLength(german.faqs.length);
   });

@@ -91,6 +91,10 @@ Ben_Protfolio_Angular-V2/
 │   │   │   │   ├── project-detail-page.component.html
 │   │   │   │   ├── project-detail-page.component.scss
 │   │   │   │   └── project-detail-page.component.ts
+│   │   │   ├── services-page/
+│   │   │   │   ├── services-page.component.html
+│   │   │   │   ├── services-page.component.scss
+│   │   │   │   └── services-page.component.ts
 │   │   │   └── thank-you-page/
 │   │   │       ├── thank-you-page.component.html
 │   │   │       ├── thank-you-page.component.scss

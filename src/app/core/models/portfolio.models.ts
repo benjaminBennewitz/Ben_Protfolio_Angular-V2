@@ -257,25 +257,62 @@ export interface SkillLevel {
 }
 
 
+
+/** Inhalt der kompakten Leistungs-Bridge auf der Startseite. */
+export interface ServicesTeaserContent {
+  /** Kleine technische Beschriftung oberhalb der Bridge. */
+  readonly eyebrow: string;
+  /** Hauptaussage der kompakten Leistungs-Bridge. */
+  readonly title: string;
+  /** Kurze Verbindung zwischen Techstack und Leistungsroute. */
+  readonly subtitle: string;
+  /** Beschriftung des Links zur vollständigen Leistungsseite. */
+  readonly ctaLabel: string;
+  /** Zugängliche Beschriftung der drei Lösungsbereiche. */
+  readonly ariaLabel: string;
+  /** Drei bewusst reduzierte Lösungsbereiche. */
+  readonly items: readonly ServicesTeaserItem[];
+}
+
+/** Einzelner Lösungsbereich der Leistungs-Bridge. */
+export interface ServicesTeaserItem {
+  /** Kurzes Systemlabel wie WEB, APP oder SYSTEM. */
+  readonly label: string;
+  /** Business-orientierte Kurzbeschreibung. */
+  readonly text: string;
+}
+
 /** Inhalt der Angebots- und Preiskarten-Section. */
 export interface PricingContent {
-  /** Kleine technische Beschriftung oberhalb der Überschrift. */
+  /** SEO-Titel der eigenständigen Leistungsroute. */
+  readonly metaTitle: string;
+  /** SEO-Beschreibung der eigenständigen Leistungsroute. */
+  readonly metaDescription: string;
+  /** Kleine technische Beschriftung des Leistungs-Heros. */
   readonly eyebrow: string;
-  /** Hauptüberschrift der Angebotssection. */
+  /** Hauptüberschrift des Leistungs-Heros. */
   readonly title: string;
-  /** Einleitung unter der Überschrift. */
+  /** Einleitung unter der Hero-Überschrift. */
   readonly subtitle: string;
+  /** Kleine Beschriftung oberhalb der Angebotsübersicht. */
+  readonly offersEyebrow: string;
+  /** Überschrift oberhalb der drei Angebotsstufen. */
+  readonly offersTitle: string;
+  /** Kurze Einleitung in die drei Angebotsstufen. */
+  readonly offersSubtitle: string;
   /** Hinweistext zu Einstiegspreisen und Aufwandsschätzung. */
   readonly note: string;
+  /** Qualitätsstandard, der für jede Angebotskarte gilt. */
+  readonly qualityBaseline: string;
   /** ARIA-Label der Angebotskartenliste. */
   readonly ariaLabel: string;
-  /** Aufklappbarer Support-Titel. */
+  /** Technisches Label des Maintenance-Bereichs. */
   readonly supportTitle: string;
-  /** Aufklappbarer Supporttext. */
+  /** Aussagekräftige Überschrift des Maintenance-Bereichs. */
+  readonly supportHeadline: string;
+  /** Einleitungstext des Maintenance-Bereichs. */
   readonly supportText: string;
-  /** Kompakte Support-Zeile innerhalb jeder Angebotskarte. */
-  readonly supportCardLabel: string;
-  /** Sichtbare Abo-Preise im aufklappbaren Supportbereich. */
+  /** Sichtbare Abo-Preise im Maintenance-Bereich. */
   readonly supportPlans: readonly PricingSupportPlan[];
   /** Sichtbare Angebotskarten. */
   readonly cards: readonly PricingCard[];
@@ -297,12 +334,16 @@ export interface PricingCard {
   readonly title: string;
   /** Einstiegspreis als kompakte UI-Zeile. */
   readonly price: string;
+  /** Kurzer Claim der Angebotsstufe. */
+  readonly claim: string;
   /** Kurze Positionierung des Angebots. */
   readonly description: string;
   /** Kurzer Badge, zum Beispiel Empfehlung. */
   readonly badge?: string;
   /** Gibt an, ob die Karte visuell hervorgehoben wird. */
   readonly featured?: boolean;
+  /** Kleine Terminal-Zeile als technischer Schnellscan. */
+  readonly command: string;
   /** Enthaltene Leistungsbausteine. */
   readonly features: readonly string[];
   /** Buttontext der Karte. */
@@ -1171,7 +1212,9 @@ export interface PortfolioContent {
   readonly about: AboutContent;
   readonly experience: ExperienceContent;
   readonly skills: SkillsContent;
-  /** Inhalte der Angebots- und Preiskarten-Section. */
+  /** Kompakte Bridge von der Startseite zur Leistungsroute. */
+  readonly servicesTeaser: ServicesTeaserContent;
+  /** Inhalte der eigenständigen Leistungs- und Preisseite. */
   readonly pricing: PricingContent;
   readonly projectsIntro: ProjectsContent;
   readonly projects: readonly PortfolioProject[];

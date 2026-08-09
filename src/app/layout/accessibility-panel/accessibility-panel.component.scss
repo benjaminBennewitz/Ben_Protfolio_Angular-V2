@@ -192,13 +192,13 @@
   height: 34px;
   border: 1px solid var(--bp-color-border);
   background: var(--bp-color-surface-strong);
-  color: var(--bp-color-text);
+  color: var(--bp-color-on-surface-strong);
   cursor: pointer;
 }
 
 .access-panel__head button:hover {
   background: var(--bp-color-danger);
-  color: #ffffff;
+  color: var(--bp-color-on-danger);
 }
 
 .access-panel__intro {

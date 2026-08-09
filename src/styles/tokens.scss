@@ -75,6 +75,18 @@
    --bp-z-nav: 60;
    --bp-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
    --bp-ease-pop: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+
+   --bp-color-contrast-dark: #000000;
+   --bp-color-contrast-light: #ffffff;
+   --bp-color-accent-hover: color-mix(in srgb, var(--bp-color-accent) 88%, var(--bp-color-text) 12%);
+   --bp-color-control-hover: color-mix(in srgb, var(--bp-color-accent) 15%, var(--bp-color-surface-solid));
+   --bp-color-on-accent-2: var(--bp-color-text);
+   --bp-color-on-accent-3: var(--bp-color-text);
+   --bp-color-on-warning: var(--bp-color-text);
+   --bp-color-on-danger: var(--bp-color-contrast-light);
+   --bp-color-on-info: var(--bp-color-text);
+   --bp-color-on-surface-strong: var(--bp-color-text);
+   --bp-color-on-control-hover: var(--bp-color-text);
 }
 
 /* ==========================================================================

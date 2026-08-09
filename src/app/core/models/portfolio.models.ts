@@ -55,13 +55,25 @@ export interface NavigationContent {
 export interface HeroContent {
   readonly eyebrow: string;
   readonly title: string;
+  /** Business-orientierter Hero-Hook. */
+  readonly hook: string;
   readonly subtitle: string;
   readonly primaryCta: string;
   readonly secondaryCta: string;
   readonly consoleLines: readonly string[];
   readonly dialogLabel: string;
+  /** Übersetzter Text des interaktiven Mixed-Reactions-Dialogs. */
+  readonly dialogText: string;
   readonly statusLabel: string;
+  /** Übersetzte Systemstatus-Zeilen im Hero. */
+  readonly statusItems: readonly HeroStatusItem[];
   readonly stats: readonly StatItem[];
+}
+
+/** Einzelne übersetzbare Zeile im Hero-Systemstatus. */
+export interface HeroStatusItem {
+  readonly label: string;
+  readonly value: string;
 }
 
 /** Kurzer Kennzahlenblock. */

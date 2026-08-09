@@ -62,14 +62,14 @@
 
 .scroll-top:hover {
   background: var(--bp-color-accent);
-  color: #101010;
+  color: var(--bp-color-on-accent);
   transform: translate3d(0, 0, 0) rotate(-1deg);
 }
 
 :root[data-theme='light'] .scroll-top:hover,
 :host-context(:root[data-theme='light']) .scroll-top:hover,
 :host-context([data-theme='light']) .scroll-top:hover {
-  color: #ffffff;
+  color: var(--bp-color-on-accent);
 }
 
 /* ==========================================================================

@@ -1,4 +1,4 @@
-ben-portfolio-angular-v2/
+Ben_Protfolio_Angular-V2/
 ├── .angular/
 │   └── ...
 ├── node_modules/
@@ -18,7 +18,8 @@ ben-portfolio-angular-v2/
 │   │   │       ├── seo.service.ts
 │   │   │       ├── system-toast.service.ts
 │   │   │       ├── tab-title.service.ts
-│   │   │       └── theme.service.ts
+│   │   │       ├── theme.service.ts
+│   │   │       └── theme-contrast.service.ts
 │   │   ├── layout/
 │   │   │   ├── accessibility-panel/
 │   │   │   │   ├── accessibility-panel.component.html

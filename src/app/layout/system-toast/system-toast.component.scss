@@ -118,7 +118,7 @@
 .system-toast button:focus-visible {
   border-color: var(--bp-color-danger);
   background: var(--bp-color-danger);
-  color: #ffffff;
+  color: var(--bp-color-on-danger);
 }
 
 /* ===========================================================================

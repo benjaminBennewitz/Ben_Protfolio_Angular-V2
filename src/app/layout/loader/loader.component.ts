@@ -2,7 +2,7 @@
 
 /**
  * @file Start-Loader des Portfolios.
- * @description Zeigt eine stoppende MS-DOS-Bootsequenz mit manueller Freigabe oder eine ruhige Alternative für Neuro-/Calm-Mode.
+ * @description Zeigt die Bootsequenz einmal pro Browser-Tab mit vorgeschaltetem B²-Init und ruhiger Alternative für Neuro-/Calm-Mode.
  */
 
 import { DOCUMENT } from '@angular/common';
@@ -83,7 +83,10 @@ interface LoaderTranslation {
   readonly logLines: readonly string[];
 }
 
-/** Animierter Intro-Loader mit manueller Freigabe nach Abschluss der Bootsequenz. */
+/** Runtime-Fallback für Umgebungen ohne verfügbaren SessionStorage. */
+let loaderStartedInCurrentRuntime = false;
+
+/** Animierter Intro-Loader mit einmaliger Bootsequenz und manueller Freigabe nach Abschluss. */
 @Component({
   selector: 'bp-loader',
   standalone: true,
@@ -106,11 +109,17 @@ export class LoaderComponent implements OnInit, OnDestroy {
   /** CSS-Klasse, die Hero-Reveals bis zum Loader-Ende sperrt. */
   private readonly loaderActiveClass = 'bp-loader-active';
 
+  /** Session-Key, der einen erneuten Boot innerhalb desselben Browser-Tabs verhindert. */
+  private readonly sessionStorageKey = 'bp.boot-sequence.played.v1';
+
   /** Sichtbarkeit des Loaders. */
-  readonly visible = signal<boolean>(true);
+  readonly visible = signal<boolean>(false);
 
   /** Aktiviert die Ausblendanimation nach der manuellen Freigabe. */
   readonly leaving = signal<boolean>(false);
+
+  /** Markiert das Ende des vorgeschalteten B²-Init-Intros und startet anschließend den eigentlichen Dialog-Flow. */
+  readonly brandIntroComplete = signal<boolean>(false);
 
   /** Markiert, dass die simulierte Bootsequenz bei 100 Prozent pausiert. */
   readonly completed = signal<boolean>(false);
@@ -136,7 +145,10 @@ export class LoaderComponent implements OnInit, OnDestroy {
   /** Segmentanzahl der simulierten Ladeleiste. */
   readonly progressCells = Array.from({ length: 26 }, (_, index) => index);
 
-  /** Mindestzeit bis zur manuellen Freigabe bei 100 Prozent. */
+  /** Dauer des zentralen B²-Init-Intros inklusive Flug in die linke obere Ecke. */
+  private readonly brandIntroDurationMs = 1750;
+
+  /** Mindestzeit des Dialog-Flows bis zur manuellen Freigabe bei 100 Prozent. */
   private readonly sequenceDurationMs = 7300;
 
   /** Kürzere Sequenz des ruhigen Accessibility-Loaders. */
@@ -147,6 +159,9 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
   /** Wartezeit nach dem Asset-Einflug bis zum Öffnen der Startseite. */
   private readonly launchDelayMs = 2000;
+
+  /** Timer für den Übergang vom zentralen B²-Init in den Dialog-Flow. */
+  private brandIntroTimer?: number;
 
   /** Timer für den Abschluss der Bootsequenz. */
   private completionTimer?: number;
@@ -160,18 +175,29 @@ export class LoaderComponent implements OnInit, OnDestroy {
   /** Intervall des ruhigen Fortschrittszählers. */
   private calmProgressTimer?: number;
 
-  /** Setzt den globalen Loader-Zustand, bevor die Startseite ihre Reveal-Animationen starten kann. */
-  constructor() {
-    this.document.documentElement.classList.add(this.loaderActiveClass);
-  }
-
-  /** Startet die passende Loader-Variante. */
+  /** Startet die passende Loader-Variante genau einmal pro Browser-Tab. */
   ngOnInit(): void {
+    if (this.hasBootSequencePlayed()) {
+      this.document.documentElement.classList.remove(this.loaderActiveClass);
+      return;
+    }
+
+    this.markBootSequenceAsPlayed();
+    this.visible.set(true);
+    this.document.documentElement.classList.add(this.loaderActiveClass);
+
     if (this.useCalmLoader()) {
+      this.brandIntroComplete.set(true);
       this.startCalmLoader();
       return;
     }
 
+    this.brandIntroTimer = window.setTimeout(() => this.startDialogFlow(), this.brandIntroDurationMs);
+  }
+
+  /** Startet nach dem B²-Init den bisherigen DOS-Dialog- und Terminal-Flow. */
+  private startDialogFlow(): void {
+    this.brandIntroComplete.set(true);
     this.completionTimer = window.setTimeout(() => this.completed.set(true), this.sequenceDurationMs);
   }
 
@@ -189,6 +215,30 @@ export class LoaderComponent implements OnInit, OnDestroy {
     }, this.launchDelayMs);
   }
 
+
+  /** Prüft Session- und Runtime-Zustand, damit interne Navigationen den Loader niemals neu starten. */
+  private hasBootSequencePlayed(): boolean {
+    if (loaderStartedInCurrentRuntime) {
+      return true;
+    }
+
+    try {
+      return this.document.defaultView?.sessionStorage.getItem(this.sessionStorageKey) === '1';
+    } catch {
+      return false;
+    }
+  }
+
+  /** Markiert die Bootsequenz sofort beim Start als abgespielt. */
+  private markBootSequenceAsPlayed(): void {
+    loaderStartedInCurrentRuntime = true;
+
+    try {
+      this.document.defaultView?.sessionStorage.setItem(this.sessionStorageKey, '1');
+    } catch {
+      loaderStartedInCurrentRuntime = true;
+    }
+  }
 
   /** Entfernt den Loader und gibt die Hero-Animationen frei. */
   private finishExit(): void {
@@ -227,6 +277,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
   /** Räumt offene Timer beim Zerstören der Komponente auf. */
   ngOnDestroy(): void {
+    window.clearTimeout(this.brandIntroTimer);
     window.clearTimeout(this.completionTimer);
     window.clearTimeout(this.launchTimer);
     window.clearTimeout(this.removeTimer);

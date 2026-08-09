@@ -242,8 +242,8 @@ html[data-motion='reduced']::before {
 .bp-button:hover,
 .bp-button:focus-visible {
   border-color: var(--bp-color-accent);
-  background: color-mix(in srgb, var(--bp-color-accent) 15%, var(--bp-color-surface));
-  color: var(--bp-color-text);
+  background: var(--bp-color-control-hover);
+  color: var(--bp-color-on-control-hover);
   box-shadow: 8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 72%, transparent);
   transform: translate(-2px, -2px) rotate(-1.2deg);
 }
@@ -262,7 +262,7 @@ html[data-motion='reduced']::before {
 .bp-button--accent:hover,
 .bp-button--accent:focus-visible {
   border-color: color-mix(in srgb, var(--bp-color-text) 84%, var(--bp-color-accent) 16%);
-  background: color-mix(in srgb, var(--bp-color-accent) 88%, var(--bp-color-text) 12%);
+  background: var(--bp-color-accent-hover);
   color: var(--bp-color-on-accent);
   box-shadow: 10px 10px 0 color-mix(in srgb, var(--bp-color-accent) 56%, #000000 36%), 0 0 0 3px color-mix(in srgb, var(--bp-color-accent) 28%, transparent), 0 24px 64px var(--bp-color-shadow);
   transform: translate(-3px, -3px) rotate(-1.2deg);
@@ -271,18 +271,6 @@ html[data-motion='reduced']::before {
 .bp-button--accent:hover > *,
 .bp-button--accent:focus-visible > * {
   color: var(--bp-color-on-accent);
-}
-
-:root[data-color-vision='achromatopsia'] .bp-button--accent,
-:root[data-color-vision='achromatopsia'] .bp-button:hover {
-  border-color: #f6f0e8;
-  background: #111111;
-  color: #f6f0e8;
-}
-
-:root[data-color-vision='achromatopsia'] .bp-button--accent:hover > *,
-:root[data-color-vision='achromatopsia'] .bp-button:hover > * {
-  color: #f6f0e8;
 }
 
 /* ==========================================================================

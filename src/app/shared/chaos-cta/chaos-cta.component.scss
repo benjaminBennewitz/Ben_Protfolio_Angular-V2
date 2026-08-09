@@ -248,7 +248,7 @@
 .chaos-cta__dialog > button:hover,
 .chaos-cta__dialog > button:focus-visible {
   background: var(--bp-color-accent);
-  color: #111111;
+  color: var(--bp-color-on-accent);
   box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.36);
   transform: translate(-1px, -1px);
 }
@@ -257,7 +257,7 @@
 :root[data-theme='light'] .chaos-cta__dialog > button:focus-visible,
 :host-context(:root[data-theme='light']) .chaos-cta__dialog > button:hover,
 :host-context(:root[data-theme='light']) .chaos-cta__dialog > button:focus-visible {
-  color: #f6f0e8;
+  color: var(--bp-color-on-accent);
 }
 
 .chaos-cta__dialog-bar button:hover,

@@ -175,7 +175,7 @@
 
 .contact-form__topic.is-active {
   background: var(--bp-color-accent);
-  color: #ffffff;
+  color: var(--bp-color-on-accent);
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent);
 }
 

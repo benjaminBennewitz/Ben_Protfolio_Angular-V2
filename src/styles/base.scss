@@ -173,11 +173,7 @@ button {
 
 ::selection {
   background: var(--bp-color-accent);
-  color: #111111;
-}
-
-:root[data-theme='light'] ::selection {
-  color: #f6f0e8;
+  color: var(--bp-color-on-accent);
 }
 
 /* ==========================================================================

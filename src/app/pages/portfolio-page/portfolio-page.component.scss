@@ -301,7 +301,7 @@
 .projects-kickoff__portrait-action:hover,
 .projects-kickoff__portrait-action:focus-visible {
   background: var(--bp-color-accent);
-  color: #111111;
+  color: var(--bp-color-on-accent);
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 #111111;
 }

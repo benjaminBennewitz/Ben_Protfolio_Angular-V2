@@ -265,7 +265,7 @@
 .footer__social a:focus-visible {
   border-color: var(--bp-color-accent);
   background: var(--bp-color-accent);
-  color: #111111;
+  color: var(--bp-color-on-accent);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--bp-color-accent) 34%, transparent), 6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 22%, transparent);
   transform: translate3d(-2px, -2px, 0);
 }

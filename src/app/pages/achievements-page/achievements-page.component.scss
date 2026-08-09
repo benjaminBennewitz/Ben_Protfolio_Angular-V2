@@ -262,7 +262,7 @@
   border: 1px solid var(--bp-color-border-strong);
   padding: 0.55rem 0.72rem;
   background: var(--bp-color-surface-strong);
-  color: var(--bp-color-text);
+  color: var(--bp-color-on-surface-strong);
   font-family: var(--bp-font-mono);
   font-size: 0.76rem;
   font-weight: 900;
@@ -272,7 +272,7 @@
 .achievement-card__copy button:hover {
   border-color: var(--bp-color-accent);
   background: var(--bp-color-accent);
-  color: #111111;
+  color: var(--bp-color-on-accent);
 }
 
 /* ========================================================================== 

@@ -326,11 +326,20 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     hero: {
       eyebrow: 'Webdesign · Full Stack · digitale Interfaces',
       title: 'design.code.repeat.',
-      subtitle: 'Ich entwickle Websites, Interfaces und digitale Tools, die auffallen, schnell laden und technisch sauber funktionieren – für Menschen, Marken und Unternehmen, die nicht nach Baukasten aussehen wollen.',
+      hook: 'Aufmerksamkeit ist schnell gewonnen. Sie zu halten ist die eigentliche Aufgabe.',
+      subtitle: 'Gutes digitales Design verbindet Ästhetik mit einem klaren Ziel: Nutzer führen, Interaktion fördern und Interesse in Handlung verwandeln. Design schafft Identität, Code schafft Geschwindigkeit und Interaktion schafft Erlebnisse, die im Kopf bleiben.',
       primaryCta: 'Kontakt öffnen',
       secondaryCta: 'About B²',
       dialogLabel: 'Interaktives Hero-Dialogfenster im Poster-Stil',
+      dialogText: 'Sicher, dass dir gefällt, was dir gefällt?',
       statusLabel: 'B² Systemstatus',
+      statusItems: [
+        { label: 'User', value: 'B²' },
+        { label: 'Rolle', value: 'Designer / Entwickler' },
+        { label: 'Standort', value: 'REMOTE, NRW, MG/D/K' },
+        { label: 'Fokus', value: 'Nutzererfahrung' },
+        { label: 'Level', value: 'Level 4 Laser Lotus' },
+      ],
       consoleLines: [
         'boot b2_portfolio.exe --mode=poster-ui',
         'load ms-dos dialogs, halftone grids, glitch layers',
@@ -1149,11 +1158,20 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     hero: {
       eyebrow: 'Web design · full stack · digital interfaces',
       title: 'design.code.repeat.',
-      subtitle: 'I build websites, interfaces and digital tools that stand out, load fast and work cleanly – for people, brands and businesses that do not want to look like a template.',
+      hook: 'Winning attention is the easy part. Keeping it is the real challenge.',
+      subtitle: 'Good digital design connects aesthetics with a clear goal: guide users, encourage interaction and turn interest into action. Design creates identity, code creates speed and interaction creates experiences people remember.',
       primaryCta: 'Open contact',
       secondaryCta: 'About B²',
       dialogLabel: 'Interactive hero dialog window in poster style',
+      dialogText: 'Are you sure you like what you like?',
       statusLabel: 'B² system status',
+      statusItems: [
+        { label: 'User', value: 'B²' },
+        { label: 'Role', value: 'Designer / Developer' },
+        { label: 'Location', value: 'REMOTE, NRW, MG/D/K' },
+        { label: 'Focus', value: 'User Experience' },
+        { label: 'Level', value: 'Level 4 Laser Lotus' },
+      ],
       consoleLines: [
         'boot b2_portfolio.exe --mode=poster-ui',
         'load ms-dos dialogs, halftone grids, glitch layers',

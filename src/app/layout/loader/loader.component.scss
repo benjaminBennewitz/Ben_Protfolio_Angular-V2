@@ -38,6 +38,8 @@
 
 .loader {
   --loader-stage-max: 1500px;
+  --loader-brand-top: clamp(1.2rem, 3vw, 2.4rem);
+  --loader-brand-left: clamp(1rem, 3vw, 2.4rem);
 
   position: fixed;
   z-index: var(--bp-z-loader);
@@ -102,14 +104,17 @@
 
 .loader__brand {
   position: absolute;
-  top: clamp(1.2rem, 3vw, 2.4rem);
-  left: clamp(1rem, 3vw, 2.4rem);
+  top: var(--loader-brand-top);
+  left: var(--loader-brand-left);
   z-index: 30;
-  display: grid;
-  gap: 0.35rem;
   color: #f8f4ea;
   font-family: var(--bp-font-mono);
   text-transform: uppercase;
+}
+
+.loader__brand--intro {
+  will-change: top, left, opacity, filter, transform;
+  animation: loader-brand-intro 1750ms cubic-bezier(0.2, 0.78, 0.18, 1) both;
 }
 
 .loader__brand > span {
@@ -122,7 +127,14 @@
   animation: loader-brand-glitch 720ms steps(2, end) infinite;
 }
 
+.loader__brand--intro > span {
+  animation-delay: 1750ms;
+}
+
 .loader__brand strong {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 0;
   width: fit-content;
   border: 1px solid rgba(167, 255, 25, 0.5);
   padding: 0.26rem 0.5rem;
@@ -132,6 +144,11 @@
   letter-spacing: 0.16em;
 }
 
+.loader__brand--intro strong {
+  opacity: 0;
+  transform: translate3d(-0.45rem, 0, 0);
+  animation: loader-brand-label-in 260ms steps(3, end) 1540ms forwards;
+}
 
 
 /* ==========================================================================
@@ -535,6 +552,54 @@
    08   Animationen
    ========================================================================== */
 
+@keyframes loader-brand-intro {
+  0% {
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    filter: blur(0.7rem) contrast(1.7);
+    transform: translate3d(-50%, -50%, 0) scale(0.08) rotate(-8deg);
+  }
+
+  18% {
+    top: 50%;
+    left: 50%;
+    opacity: 1;
+    filter: blur(0) contrast(1.08);
+    transform: translate3d(-50%, -50%, 0) scale(1.18) rotate(2deg);
+  }
+
+  31% {
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0) scale(0.96) rotate(-1deg);
+  }
+
+  45%,
+  54% {
+    top: 50%;
+    left: 50%;
+    opacity: 1;
+    filter: none;
+    transform: translate3d(-50%, -50%, 0) scale(1) rotate(0deg);
+  }
+
+  100% {
+    top: var(--loader-brand-top);
+    left: var(--loader-brand-left);
+    opacity: 1;
+    filter: none;
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes loader-brand-label-in {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
 @keyframes loader-dialog-open {
   0% {
     opacity: 0;
@@ -687,7 +752,10 @@
    ========================================================================== */
 
 @media (min-width: 1921px) {
-  .loader__brand,
+  .loader {
+    --loader-brand-left: calc((100vw - var(--loader-stage-max)) / 2 + 2rem);
+  }
+
   .loader__terminal {
     left: calc((100vw - var(--loader-stage-max)) / 2 + 2rem);
   }
@@ -768,6 +836,7 @@
 
   .loader,
   .loader__noise,
+  .loader__brand,
   .loader__brand > span,
   .loader-dialog,
   .loader__terminal li,
@@ -778,9 +847,11 @@
     animation: none;
   }
 
+  .loader__brand--intro strong,
   .loader-dialog,
   .loader__terminal li {
     opacity: 1;
+    transform: none;
   }
 
   .loader__ready {

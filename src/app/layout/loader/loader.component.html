@@ -8,7 +8,7 @@
     <span class="loader__noise"></span>
   </div>
 
-  <div class="loader__brand">
+  <div class="loader__brand" [class.loader__brand--intro]="!useCalmLoader()">
     <span aria-hidden="true">B²</span>
     <strong aria-hidden="true">BOOT_SEQUENCE</strong>
   </div>
@@ -25,7 +25,7 @@
       <p>{{ loaderContent().calmText }}</p>
     </div>
   </aside>
-  } @else {
+  } @else if (brandIntroComplete()) {
   <div class="loader__dialog-stack">
     @for (dialog of dialogs(); track dialog.percent) {
     <article class="loader-dialog" [style.--dialog-delay]="dialog.delay" [style.--dialog-left]="dialog.left"

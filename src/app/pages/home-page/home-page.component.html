@@ -30,6 +30,7 @@
           <span class="hero__headline-line hero__headline-line--accent"><span>repeat.</span></span>
         </h1>
 
+        <p class="hero__hook">{{ content().hero.hook }}</p>
         <p class="hero__subtitle">{{ content().hero.subtitle }}</p>
 
         <div class="hero__actions">
@@ -53,7 +54,7 @@
         </div>
         <div class="bp-dos-window__body">
           <div class="hero__dialog-icon" aria-hidden="true"><span>!</span></div>
-          <p>Are you sure you like<br />what you like?</p>
+          <p>{{ content().hero.dialogText }}</p>
           <div class="hero__dialog-actions">
             <button type="button" [class.is-active]="activeHeroHead() === 'lol'"
               (click)="setHeroHead('lol')">#LOL</button>
@@ -75,26 +76,12 @@
 
         <div class="hero__status-body">
           <dl class="hero__status-list">
+            @for (item of content().hero.statusItems; track item.label) {
             <div>
-              <dt>User</dt>
-              <dd>B²</dd>
+              <dt>{{ item.label }}</dt>
+              <dd>{{ item.value }}</dd>
             </div>
-            <div>
-              <dt>Role</dt>
-              <dd>Designer / Developer</dd>
-            </div>
-            <div>
-              <dt>Location</dt>
-              <dd>REMOTE, NRW, MG/D/K</dd>
-            </div>
-            <div>
-              <dt>Focus</dt>
-              <dd>UX, Frontend, Systems</dd>
-            </div>
-            <div>
-              <dt>Level</dt>
-              <dd>Level 4 Laser Lotus</dd>
-            </div>
+            }
           </dl>
 
           <figure class="hero__status-visual" aria-hidden="true">

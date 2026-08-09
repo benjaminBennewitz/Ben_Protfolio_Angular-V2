@@ -132,7 +132,7 @@
   place-items: center;
   border: 1px solid var(--bp-color-border);
   background: var(--bp-color-surface-strong);
-  color: var(--bp-color-text-muted);
+  color: var(--bp-color-on-surface-strong);
   cursor: pointer;
   transition: transform 180ms var(--bp-ease-out), background-color 180ms ease, color 180ms ease;
 }
@@ -140,7 +140,7 @@
 .platinum-modal__bar button:hover,
 .platinum-modal__bar button:focus-visible {
   background: var(--bp-color-danger);
-  color: #ffffff;
+  color: var(--bp-color-on-danger);
   transform: translate3d(-1px, -1px, 0);
 }
 

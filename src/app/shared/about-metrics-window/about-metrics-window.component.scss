@@ -187,7 +187,7 @@
 .about-metrics__switch button.is-active {
   border-color: #111111;
   background: var(--bp-color-accent);
-  color: #111111;
+  color: var(--bp-color-on-accent);
   transform: translateY(-1px);
 }
 
@@ -546,7 +546,7 @@
 :host-context(:root[data-theme='light']) .about-metrics__switch button:hover,
 :host-context(:root[data-theme='light']) .about-metrics__switch button:focus-visible,
 :host-context(:root[data-theme='light']) .about-metrics__switch button.is-active {
-  color: #ffffff;
+  color: var(--bp-color-on-accent);
   text-shadow: 0 1px 0 rgba(17, 17, 17, 0.36);
 }
 

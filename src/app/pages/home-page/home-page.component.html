@@ -20,6 +20,12 @@
       <span class="hero__trace hero__trace--three"></span>
     </div>
 
+    <div class="hero__pixel-birds" aria-hidden="true">
+      <bp-pixel-sprite class="hero__pixel-bird hero__pixel-bird--one" kind="bird" />
+      <bp-pixel-sprite class="hero__pixel-bird hero__pixel-bird--two" kind="bird" />
+      <bp-pixel-sprite class="hero__pixel-bird hero__pixel-bird--three" kind="bird" />
+    </div>
+
     <div class="hero__layout bp-container">
       <div class="hero__content" bpReveal>
         <span class="hero__brand" aria-hidden="true">B²</span>
@@ -138,6 +144,14 @@
   </section>
 
   <section class="experience bp-section" id="experience" bpViewportActivity>
+    <div class="experience__pixel-sky" aria-hidden="true">
+            <bp-pixel-sprite class="experience__cloud experience__cloud--one" kind="cloud-a" />
+      <bp-pixel-sprite class="experience__cloud experience__cloud--two" kind="cloud-b" />
+      <bp-pixel-sprite class="experience__cloud experience__cloud--three" kind="cloud-c" />
+      <bp-pixel-sprite class="experience__cloud experience__cloud--four" kind="cloud-a" />
+      <bp-pixel-sprite class="experience__cloud experience__cloud--five" kind="cloud-b" />
+    </div>
+
     <div class="experience__layout bp-container">
       <div class="experience__copy bp-motion-copy" bpReveal>
         <bp-reveal-text class="experience__title-reveal" [eyebrow]="content().experience.eyebrow" [text]="content().experience.title" headingClass="experience__title" />
@@ -218,6 +232,13 @@
           </article>
           }
         </div>
+
+        <div class="skills__pixel-yard" aria-hidden="true">
+          <span class="skills__pixel-ground"></span>
+          <bp-pixel-sprite class="skills__trex" kind="trex" />
+          <bp-pixel-sprite class="skills__cactus skills__cactus--one" kind="cactus" />
+          <bp-pixel-sprite class="skills__cactus skills__cactus--two" kind="cactus" />
+        </div>
       </div>
     </div>
 
@@ -246,6 +267,8 @@
         }
       </div>
     </div>
+
+    <bp-pixel-firework class="services-bridge__firework" />
   </section>
 
   <bp-process-lock bpViewportActivity [eyebrow]="content().process.eyebrow" [title]="content().process.title"
@@ -254,6 +277,11 @@
   <section class="clients bp-section" id="clients" bpViewportActivity>
     <div class="clients__layout bp-container">
       <div class="clients__copy bp-motion-copy" bpReveal>
+        <div class="clients__pixel-birds" aria-hidden="true">
+          <bp-pixel-sprite class="clients__pixel-bird clients__pixel-bird--one" kind="bird" />
+          <bp-pixel-sprite class="clients__pixel-bird clients__pixel-bird--two" kind="bird" />
+          <bp-pixel-sprite class="clients__pixel-bird clients__pixel-bird--three" kind="bird" />
+        </div>
         <bp-reveal-text class="clients__title-reveal" [eyebrow]="content().clients.eyebrow" [text]="content().clients.title" headingClass="clients__title" />
         @if (content().clients.subtitle) {
         <p class="bp-subtitle">{{ content().clients.subtitle }}</p>
@@ -292,6 +320,8 @@
   <bp-chaos-cta bpViewportActivity [eyebrow]="content().cta.eyebrow" [title]="content().cta.title" [hint]="content().cta.hint"
     [words]="content().cta.words" />
 
+  <bp-pixel-transition tone="dark-to-base" />
+
   <section class="faq bp-section" id="faq" bpViewportActivity>
     <div class="bp-container bp-grid-two">
       <div class="bp-motion-copy" bpReveal>
@@ -308,6 +338,8 @@
       </div>
     </div>
   </section>
+
+  <bp-pixel-transition tone="base-to-contact" />
 
   <section class="contact bp-section" id="contact" bpViewportActivity>
     <div class="bp-container contact__layout">

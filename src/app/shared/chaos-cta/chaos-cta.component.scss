@@ -341,3 +341,96 @@
     display: none;
   }
 }
+
+/* ========================================================================== 
+   07   Pixelauto und Crash
+   ========================================================================== */
+
+.chaos-cta__car {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  aspect-ratio: 16 / 10;
+  color: var(--bp-color-accent);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.chaos-cta__car bp-pixel-sprite {
+  width: 100%;
+  filter: drop-shadow(5px 7px 0 color-mix(in srgb, #000000 44%, transparent));
+  transform-origin: 26% 76%;
+}
+
+.chaos-cta__car--driving bp-pixel-sprite {
+  animation: chaos-car-suspension 300ms steps(2, end) infinite;
+}
+
+.chaos-cta__car--crashed bp-pixel-sprite {
+  animation: chaos-car-crash 820ms var(--bp-ease-out) both;
+}
+
+.chaos-cta__crash-pixel {
+  position: absolute;
+  top: 48%;
+  left: 8%;
+  width: 6px;
+  height: 6px;
+  opacity: 0;
+  background: currentColor;
+}
+
+.chaos-cta__car--crashed .chaos-cta__crash-pixel--one {
+  animation: chaos-car-pixel-one 720ms steps(6, end) both;
+}
+
+.chaos-cta__car--crashed .chaos-cta__crash-pixel--two {
+  animation: chaos-car-pixel-two 760ms steps(6, end) 40ms both;
+}
+
+.chaos-cta__car--crashed .chaos-cta__crash-pixel--three {
+  animation: chaos-car-pixel-three 680ms steps(6, end) 90ms both;
+}
+
+.chaos-cta__car--crashed .chaos-cta__crash-pixel--four {
+  animation: chaos-car-pixel-four 800ms steps(6, end) 120ms both;
+}
+
+@keyframes chaos-car-suspension {
+  0%, 48% { transform: translateY(0); }
+  49%, 100% { transform: translateY(-2px); }
+}
+
+@keyframes chaos-car-crash {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg) scaleX(1); }
+  26% { transform: translate3d(-7px, 5px, 0) rotate(-12deg) scaleX(0.9); }
+  58% { transform: translate3d(-12px, 9px, 0) rotate(-20deg) scaleX(0.84); }
+  100% { opacity: 0; transform: translate3d(-20px, 18px, 0) rotate(-28deg) scale(0.68, 0.78); }
+}
+
+@keyframes chaos-car-pixel-one {
+  0% { opacity: 1; transform: translate3d(0, 0, 0); }
+  100% { opacity: 0; transform: translate3d(-42px, -34px, 0); }
+}
+
+@keyframes chaos-car-pixel-two {
+  0% { opacity: 1; transform: translate3d(0, 0, 0); }
+  100% { opacity: 0; transform: translate3d(-58px, 10px, 0); }
+}
+
+@keyframes chaos-car-pixel-three {
+  0% { opacity: 1; transform: translate3d(0, 0, 0); }
+  100% { opacity: 0; transform: translate3d(-28px, 38px, 0); }
+}
+
+@keyframes chaos-car-pixel-four {
+  0% { opacity: 1; transform: translate3d(0, 0, 0); }
+  100% { opacity: 0; transform: translate3d(-70px, -8px, 0); }
+}
+
+:host-context(:root[data-motion='reduced']) .chaos-cta__car,
+:host-context(:root[data-motion='off']) .chaos-cta__car,
+:host-context(:root[data-comfort='simple']) .chaos-cta__car {
+  display: none;
+}

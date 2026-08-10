@@ -1,0 +1,28 @@
+<!-- src/app/shared/pixel-transition/pixel-transition.component.html -->
+<section #sectionRef class="pixel-transition" [attr.data-tone]="tone">
+  <div class="pixel-transition__backdrop"></div>
+
+  <div class="pixel-transition__grid pixel-transition__grid--coarse">
+    @for (cell of coarseCells; track $index) {
+      <span class="pixel-transition__cell pixel-transition__cell--coarse"
+        [class.pixel-transition__cell--accent]="cell.accent"
+        [style.opacity]="coarseOpacity(cell.threshold)"
+        [style.transform]="'scale(' + coarseScale(cell.threshold) + ')'">
+      </span>
+    }
+  </div>
+
+  <div class="pixel-transition__grid pixel-transition__grid--fine">
+    @for (cell of fineCells; track $index) {
+      <span class="pixel-transition__cell pixel-transition__cell--fine"
+        [class.pixel-transition__cell--accent]="cell.accent"
+        [style.opacity]="fineOpacity(cell.threshold)"
+        [style.transform]="'scale(' + fineScale(cell.threshold) + ')'">
+      </span>
+    }
+  </div>
+
+  <div class="pixel-transition__veil" [style.opacity]="veilOpacity()"></div>
+  <span class="pixel-transition__scan pixel-transition__scan--coarse" [style.top.%]="progress() * 74"></span>
+  <span class="pixel-transition__scan pixel-transition__scan--fine" [style.top.%]="progress() * 100"></span>
+</section>

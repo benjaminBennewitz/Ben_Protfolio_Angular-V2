@@ -1,0 +1,17 @@
+<!-- src/app/shared/pixel-firework/pixel-firework.component.html -->
+<div #stageRef class="pixel-firework" [class.pixel-firework--active]="isActive()">
+  <span class="pixel-firework__rocket pixel-firework__rocket--one"></span>
+  <span class="pixel-firework__rocket pixel-firework__rocket--two"></span>
+
+  <div class="pixel-firework__burst pixel-firework__burst--one">
+    @for (particle of particles; track particle) {
+      <span class="pixel-firework__particle"></span>
+    }
+  </div>
+
+  <div class="pixel-firework__burst pixel-firework__burst--two">
+    @for (particle of particles; track particle) {
+      <span class="pixel-firework__particle"></span>
+    }
+  </div>
+</div>

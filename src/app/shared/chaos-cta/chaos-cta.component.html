@@ -23,6 +23,21 @@
     }
   </div>
 
+  <div class="chaos-cta__car"
+    [class.chaos-cta__car--driving]="carPhase() === 'driving'"
+    [class.chaos-cta__car--crashed]="carPhase() === 'crashed'"
+    [class.chaos-cta__car--gone]="carPhase() === 'gone'"
+    [style.opacity]="carStyle().opacity"
+    [style.transform]="carStyle().transform"
+    [style.width]="carStyle().width"
+    aria-hidden="true">
+    <bp-pixel-sprite kind="car" direction="left" />
+    <span class="chaos-cta__crash-pixel chaos-cta__crash-pixel--one"></span>
+    <span class="chaos-cta__crash-pixel chaos-cta__crash-pixel--two"></span>
+    <span class="chaos-cta__crash-pixel chaos-cta__crash-pixel--three"></span>
+    <span class="chaos-cta__crash-pixel chaos-cta__crash-pixel--four"></span>
+  </div>
+
   @if (isDialogVisible()) {
   <aside class="chaos-cta__dialog" aria-label="HEY_THERE.DLL Dialog">
     <div class="chaos-cta__dialog-bar">

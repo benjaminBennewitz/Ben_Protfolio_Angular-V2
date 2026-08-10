@@ -9,9 +9,30 @@ import { AchievementService } from '../../core/services/achievement.service';
 import { AccessibilityPreferenceService } from '../../core/services/accessibility-preference.service';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 import { RevealTextComponent } from '../reveal-text/reveal-text.component';
+import { PixelSpriteComponent } from '../pixel-sprite/pixel-sprite.component';
 import { AfterViewInit, Component, ElementRef, HostListener, Input, NgZone, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 
 /** Bewegungszustand eines CTA-Bausteins. */
+type CtaCarPhase = 'waiting' | 'driving' | 'crashed' | 'gone';
+
+/** Bewegungszustand des einmalig durchfahrenden Pixelautos. */
+interface CtaCarState {
+  /** Horizontale Position des Autos. */
+  x: number;
+  /** Vertikale Position des Autos. */
+  y: number;
+  /** Kollisionsbreite des Autos. */
+  width: number;
+  /** Kollisionshöhe des Autos. */
+  height: number;
+  /** Aktuelle Phase der Auto-Sequenz. */
+  phase: CtaCarPhase;
+  /** Zeitpunkt, ab dem das Auto losfahren darf. */
+  launchAt: number;
+  /** Zeitpunkt der letzten Kollision. */
+  crashedAt: number;
+}
+
 interface CtaBlockState {
   /** Sichtbarer Text des Bausteins. */
   readonly label: string;
@@ -41,7 +62,7 @@ interface CtaBlockState {
 @Component({
   selector: 'bp-chaos-cta',
   standalone: true,
-  imports: [RevealOnScrollDirective, RevealTextComponent],
+  imports: [RevealOnScrollDirective, RevealTextComponent, PixelSpriteComponent],
   templateUrl: './chaos-cta.component.html',
   styleUrl: './chaos-cta.component.scss',
 })
@@ -94,11 +115,24 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   /** Markiert, ob die CTA-Schwerkraft-Trophäe bereits ausgelöst wurde. */
   private gravityAchievementUnlocked = false;
 
+  /** Physikzustand des einmalig durchfahrenden Pixelautos. */
+  private car: CtaCarState = { x: 0, y: 0, width: 92, height: 50, phase: 'waiting', launchAt: 0, crashedAt: 0 };
+
   /** Sichtbarkeit des kleinen CTA-Dialogfensters. */
   readonly isDialogVisible = signal<boolean>(true);
 
   /** Sichtbare Styles für das Template. */
   readonly blockStyles = signal<readonly Record<string, string>[]>([]);
+
+  /** Sichtbare Transformationswerte des Pixelautos. */
+  readonly carStyle = signal<Record<'opacity' | 'transform' | 'width', string>>({
+    opacity: '0',
+    transform: 'translate3d(0, 0, 0)',
+    width: '92px',
+  });
+
+  /** Aktuelle sichtbare Phase des Pixelautos. */
+  readonly carPhase = signal<CtaCarPhase>('waiting');
 
   /** Aktiviert die Simulation, sobald die Section sichtbar wird. */
   ngAfterViewInit(): void {
@@ -202,6 +236,7 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     }));
 
     this.gravityAchievementUnlocked = false;
+    this.resetCar(width);
 
     this.publishStyles();
   }
@@ -298,6 +333,10 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
+    if (this.car.phase === 'waiting' && this.car.launchAt === 0) {
+      this.car.launchAt = performance.now() + 1200;
+    }
+
     this.zone.runOutsideAngular(() => this.tick());
   }
 
@@ -354,6 +393,7 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     }
 
     this.resolveCollisions();
+    this.updateCar(performance.now(), width, floor);
     this.zone.run(() => this.publishStyles());
     this.frameId = requestAnimationFrame(() => this.tick());
   }
@@ -445,6 +485,8 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     const columns = compact ? 2 : this.blocks.length;
     const startX = compact ? Math.max(14, (width - 2 * compactColumnWidth - gap) / 2) : 72;
 
+    this.car.phase = 'gone';
+
     this.blocks.forEach((block, index) => {
       const column = compact ? index % columns : index;
       const row = compact ? Math.floor(index / columns) : 0;
@@ -467,6 +509,89 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     return window.innerWidth <= 720 || window.matchMedia('(pointer: coarse)').matches;
   }
 
+  /** Setzt das Pixelauto rechts außerhalb der Bühne auf seine Startposition. */
+  private resetCar(stageWidth: number): void {
+    const compact = this.usesCompactMobilePhysics();
+    const stageHeight = this.stageRef?.nativeElement.clientHeight ?? 620;
+    const floor = Math.max(180, stageHeight - 96);
+    const width = compact ? 70 : 92;
+    const height = compact ? 39 : 50;
+
+    this.car = {
+      x: stageWidth + width + 24,
+      y: floor - height + 4,
+      width,
+      height,
+      phase: 'waiting',
+      launchAt: 0,
+      crashedAt: 0,
+    };
+  }
+
+  /** Bewegt das Auto nach links und löst bei Berührung eine echte Blockkollision aus. */
+  private updateCar(now: number, stageWidth: number, floor: number): void {
+    if (this.car.phase === 'gone') {
+      return;
+    }
+
+    this.car.y = floor - this.car.height + 4;
+
+    if (this.car.phase === 'waiting') {
+      if (this.car.launchAt > 0 && now >= this.car.launchAt) {
+        this.car.phase = 'driving';
+      }
+      return;
+    }
+
+    if (this.car.phase === 'driving') {
+      this.car.x -= this.car.width < 80 ? 3.2 : 4.8;
+
+      if (this.resolveCarCollision(now)) {
+        return;
+      }
+
+      if (this.car.x + this.car.width < -24 || this.car.x > stageWidth + this.car.width * 2) {
+        this.car.phase = 'gone';
+      }
+      return;
+    }
+
+    if (this.car.phase === 'crashed' && now - this.car.crashedAt >= 860) {
+      this.car.phase = 'gone';
+    }
+  }
+
+  /** Prüft das Auto gegen alle Wortbausteine und überträgt den Crash-Impuls auf die Szene. */
+  private resolveCarCollision(now: number): boolean {
+    for (const block of this.blocks) {
+      const overlapX = Math.min(this.car.x + this.car.width - block.x, block.x + block.width - this.car.x);
+      const overlapY = Math.min(this.car.y + this.car.height - block.y, block.y + block.height - this.car.y);
+
+      if (overlapX <= 0 || overlapY <= 0) {
+        continue;
+      }
+
+      this.car.phase = 'crashed';
+      this.car.crashedAt = now;
+      this.car.x += 5;
+
+      for (const target of this.blocks) {
+        const targetCenter = target.x + target.width / 2;
+        const impactCenter = block.x + block.width / 2;
+        const distance = Math.abs(targetCenter - impactCenter);
+        const impulse = Math.max(0, 1 - distance / 220);
+
+        target.vx -= 4.5 + impulse * 6.5;
+        target.vy -= 2.5 + impulse * 5.5;
+        target.angularVelocity -= 0.7 + impulse * 1.6;
+      }
+
+      return true;
+    }
+
+    return false;
+  }
+
   /** Überträgt den Simulationszustand in CSS-Styles. */
   private publishStyles(): void {
     this.blockStyles.set(this.blocks.map((block) => ({
@@ -474,5 +599,12 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
       height: `${block.height}px`,
       transform: `translate3d(${block.x}px, ${block.y}px, 0) rotate(${block.rotation}deg)`,
     })));
+
+    this.carPhase.set(this.car.phase);
+    this.carStyle.set({
+      opacity: this.car.phase === 'waiting' || this.car.phase === 'gone' ? '0' : '1',
+      transform: `translate3d(${this.car.x}px, ${this.car.y}px, 0)`,
+      width: `${this.car.width}px`,
+    });
   }
 }

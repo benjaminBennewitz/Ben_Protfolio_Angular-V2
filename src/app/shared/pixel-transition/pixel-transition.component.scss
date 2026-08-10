@@ -1,0 +1,120 @@
+/* src/app/shared/pixel-transition/pixel-transition.component.scss */
+
+:host {
+  display: block;
+  position: relative;
+  z-index: 5;
+  scroll-snap-align: none;
+}
+
+.pixel-transition {
+  --pixel-transition-from: color-mix(in srgb, var(--bp-color-bg) 80%, black 20%);
+  --pixel-transition-to: var(--bp-color-bg);
+  --pixel-transition-accent: color-mix(in srgb, var(--bp-color-accent) 42%, var(--pixel-transition-from) 58%);
+  position: relative;
+  height: clamp(22rem, 58svh, 42rem);
+  overflow: hidden;
+  background: var(--pixel-transition-to);
+  pointer-events: none;
+  isolation: isolate;
+}
+
+.pixel-transition[data-tone='base-to-contact'] {
+  --pixel-transition-from: color-mix(in srgb, var(--bp-color-bg) 88%, black 12%);
+  --pixel-transition-to: color-mix(in srgb, var(--bp-color-bg) 90%, var(--bp-color-accent) 6%);
+  --pixel-transition-accent: color-mix(in srgb, var(--bp-color-accent) 34%, var(--pixel-transition-from) 66%);
+}
+
+.pixel-transition__backdrop,
+.pixel-transition__veil,
+.pixel-transition__grid,
+.pixel-transition__scan {
+  position: absolute;
+  inset: 0;
+}
+
+.pixel-transition__backdrop {
+  background:
+    radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--bp-color-accent) 9%, transparent), transparent 28%),
+    radial-gradient(circle at 78% 72%, color-mix(in srgb, var(--bp-color-text) 8%, transparent), transparent 26%),
+    linear-gradient(180deg, var(--pixel-transition-from) 0%, color-mix(in srgb, var(--pixel-transition-from) 74%, var(--pixel-transition-to) 26%) 36%, color-mix(in srgb, var(--pixel-transition-to) 80%, var(--pixel-transition-from) 20%) 72%, var(--pixel-transition-to) 100%);
+}
+
+.pixel-transition__grid {
+  display: grid;
+  gap: 1px;
+}
+
+.pixel-transition__grid--coarse {
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  inset: 0;
+  opacity: 0.96;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0 42%, rgba(0, 0, 0, 0.8) 58%, rgba(0, 0, 0, 0) 100%);
+}
+
+.pixel-transition__grid--fine {
+  grid-template-columns: repeat(28, 1fr);
+  grid-template-rows: repeat(16, 1fr);
+  inset: 0;
+  opacity: 0.9;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 0, rgba(0, 0, 0, 0.8) 30%, rgba(0, 0, 0, 1) 100%);
+}
+
+.pixel-transition__cell {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--pixel-transition-from);
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.pixel-transition__cell--accent {
+  background: var(--pixel-transition-accent);
+}
+
+.pixel-transition__cell--fine:nth-child(6n) {
+  background: color-mix(in srgb, var(--pixel-transition-from) 82%, white 18%);
+}
+
+.pixel-transition__veil {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--pixel-transition-from) 24%, transparent) 0%, transparent 26%, transparent 74%, color-mix(in srgb, var(--pixel-transition-to) 28%, transparent) 100%),
+    repeating-linear-gradient(180deg, transparent 0 9px, color-mix(in srgb, white 7%, transparent) 9px 10px, transparent 10px 19px);
+  mix-blend-mode: screen;
+}
+
+.pixel-transition__scan {
+  inset-inline: 0;
+  height: 2px;
+  opacity: 0.42;
+  background: linear-gradient(90deg, transparent, var(--bp-color-accent), transparent);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--bp-color-accent) 50%, transparent);
+  transition: top 80ms linear;
+}
+
+.pixel-transition__scan--coarse {
+  z-index: 3;
+  opacity: 0.28;
+}
+
+.pixel-transition__scan--fine {
+  z-index: 4;
+}
+
+:host-context(:root[data-motion='reduced']) .pixel-transition,
+:host-context(:root[data-motion='off']) .pixel-transition {
+  height: 1px;
+}
+
+:host-context(:root[data-motion='reduced']) .pixel-transition__backdrop,
+:host-context(:root[data-motion='off']) .pixel-transition__backdrop,
+:host-context(:root[data-motion='reduced']) .pixel-transition__grid,
+:host-context(:root[data-motion='off']) .pixel-transition__grid,
+:host-context(:root[data-motion='reduced']) .pixel-transition__scan,
+:host-context(:root[data-motion='off']) .pixel-transition__scan,
+:host-context(:root[data-motion='reduced']) .pixel-transition__veil,
+:host-context(:root[data-motion='off']) .pixel-transition__veil {
+  display: none;
+}

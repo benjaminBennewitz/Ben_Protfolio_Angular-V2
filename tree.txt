@@ -116,6 +116,18 @@ ben-portfolio-angular-v2/
 │   │   │   │   ├── contact-form.component.html
 │   │   │   │   ├── contact-form.component.scss
 │   │   │   │   └── contact-form.component.ts
+│   │   │   ├── pixel-firework/
+│   │   │   │   ├── pixel-firework.component.html
+│   │   │   │   ├── pixel-firework.component.scss
+│   │   │   │   └── pixel-firework.component.ts
+│   │   │   ├── pixel-sprite/
+│   │   │   │   ├── pixel-sprite.component.html
+│   │   │   │   ├── pixel-sprite.component.scss
+│   │   │   │   └── pixel-sprite.component.ts
+│   │   │   ├── pixel-transition/
+│   │   │   │   ├── pixel-transition.component.html
+│   │   │   │   ├── pixel-transition.component.scss
+│   │   │   │   └── pixel-transition.component.ts
 │   │   │   ├── process-lock/
 │   │   │   │   ├── process-lock.component.html
 │   │   │   │   ├── process-lock.component.scss

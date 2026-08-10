@@ -22,7 +22,7 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(content.about.title.trim()).not.toBe('');
     expect(content.about.text.length).toBeGreaterThan(0);
     expect(content.about.metrics.facts.length).toBeGreaterThan(0);
-    expect(content.servicesTeaser.items).toHaveLength(3);
+    expect(content.servicesTeaser.items).toHaveLength(5);
     expect(content.pricing.cards).toHaveLength(3);
     expect(content.pricing.metaTitle.trim()).not.toBe('');
     expect(content.projects.length).toBeGreaterThan(0);

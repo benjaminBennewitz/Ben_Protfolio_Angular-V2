@@ -294,12 +294,20 @@ export interface PricingContent {
   readonly title: string;
   /** Einleitung unter der Hero-Überschrift. */
   readonly subtitle: string;
+  /** Primärer CTA zur Angebotsübersicht. */
+  readonly heroPrimaryCtaLabel: string;
+  /** Sekundärer CTA zum Kontaktbereich. */
+  readonly heroSecondaryCtaLabel: string;
+  /** Zugängliche Beschriftung des Scope-Dialog-Schließen-Buttons. */
+  readonly heroDialogCloseLabel: string;
   /** Kleine Beschriftung oberhalb der Angebotsübersicht. */
   readonly offersEyebrow: string;
   /** Überschrift oberhalb der drei Angebotsstufen. */
   readonly offersTitle: string;
   /** Kurze Einleitung in die drei Angebotsstufen. */
   readonly offersSubtitle: string;
+  /** Allgemeiner CTA unterhalb der Angebotsübersicht. */
+  readonly offersCtaLabel: string;
   /** Hinweistext zu Einstiegspreisen und Aufwandsschätzung. */
   readonly note: string;
   /** Qualitätsstandard, der für jede Angebotskarte gilt. */
@@ -312,6 +320,20 @@ export interface PricingContent {
   readonly supportHeadline: string;
   /** Einleitungstext des Maintenance-Bereichs. */
   readonly supportText: string;
+  /** CTA am Ende des Maintenance-Bereichs. */
+  readonly supportCtaLabel: string;
+  /** Technisches Label der abschließenden Kontakt-Section. */
+  readonly outroEyebrow: string;
+  /** Persönliche Abschlussüberschrift vor dem Footer. */
+  readonly outroTitle: string;
+  /** Kurzer persönlicher Abschluss- und Kontakttext. */
+  readonly outroText: string;
+  /** Primärer CTA der Abschluss-Section. */
+  readonly outroPrimaryCtaLabel: string;
+  /** Sekundärer CTA der Abschluss-Section. */
+  readonly outroSecondaryCtaLabel: string;
+  /** Kleine Terminal-Statuszeile der Abschluss-Section. */
+  readonly outroStatus: string;
   /** Sichtbare Abo-Preise im Maintenance-Bereich. */
   readonly supportPlans: readonly PricingSupportPlan[];
   /** Sichtbare Angebotskarten. */

@@ -1029,12 +1029,13 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     ],
     clients: {
       eyebrow: 'Realisiert',
-      title: 'Von Business-App bis Webauftritt.',
-      subtitle: 'Neben komplexen Webanwendungen entstehen auch schlanke Websites, Landingpages und WordPress-Projekte – sauber umgesetzt, verständlich aufgebaut und optimiert für Performance, SEO und Alltagstauglichkeit.',
+      title: 'Gebaut. Veröffentlicht. Im Einsatz.',
+      subtitle: 'Der passende Umfang richtet sich nach Ziel, Inhalt und Pflegebedarf: von klassischen Unternehmensseiten und Shops bis zu individuellen Websystemen.',
       items: [
         { name: 'glashelden24.de', url: 'https://glashelden24.de', label: 'Website / Direkt, schlank, schnell', stack: ['HTML', 'JavaScript', 'CSS'] },
-        { name: 'Sk-uvgele.de', url: 'https://sk-uvgele.de', label: 'Verein / Klarer Auftritt', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
-        { name: 'beautynailresort.de', url: 'https://beautynailresort.de', label: 'Service / Buchbar und präsent', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
+        { name: 'Sk-uvgele.de', url: 'https://sk-uvgele.de', label: 'Unternehmen / WordPress-Präsenz', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
+        { name: 'beautynailresort.de', url: 'https://beautynailresort.de', label: 'Wellness & Spa / Website + Shop', stack: ['WordPress', 'WooCommerce', 'Elementor', 'HTML', 'CSS'] },
+        { name: 'KGV1925', url: '/angular-projects/1925/', label: 'Kleingartenverein / Angular + Mini-CMS', stack: ['Angular', 'Django', 'REST API', 'PostgreSQL'] },
       ],
     },
     builtWithout: {
@@ -1896,12 +1897,13 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     ],
     clients: {
       eyebrow: 'Delivered',
-      title: 'From business app to web presence.',
-      subtitle: 'Alongside complex web applications, I also build lean websites, landing pages and WordPress projects – cleanly implemented, easy to understand and optimized for performance, SEO and everyday use.',
+      title: 'Built. Shipped. In use.',
+      subtitle: 'Scope follows the goal, content and maintenance needs: from classic company websites and shops to individual web systems.',
       items: [
         { name: 'glashelden24.de', url: 'https://glashelden24.de', label: 'Website / Direct, lean, fast', stack: ['HTML', 'JavaScript', 'CSS'] },
-        { name: 'Sk-uvgele.de', url: 'https://sk-uvgele.de', label: 'Association / Clear presence', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
-        { name: 'beautynailresort.de', url: 'https://beautynailresort.de', label: 'Service / Bookable and visible', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
+        { name: 'Sk-uvgele.de', url: 'https://sk-uvgele.de', label: 'Company / WordPress presence', stack: ['WordPress', 'Elementor', 'HTML', 'CSS'] },
+        { name: 'beautynailresort.de', url: 'https://beautynailresort.de', label: 'Wellness & Spa / Website + shop', stack: ['WordPress', 'WooCommerce', 'Elementor', 'HTML', 'CSS'] },
+        { name: 'KGV1925', url: '/angular-projects/1925/', label: 'Allotment association / Angular + mini CMS', stack: ['Angular', 'Django', 'REST API', 'PostgreSQL'] },
       ],
     },
     builtWithout: {

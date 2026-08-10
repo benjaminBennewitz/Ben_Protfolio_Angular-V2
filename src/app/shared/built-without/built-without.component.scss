@@ -24,8 +24,8 @@
   --built-strip-card-bg: var(--bp-color-surface-solid);
   --built-strip-item-bg: var(--bp-color-surface-strong);
   --built-strip-item-text: var(--bp-color-text-muted);
-  --built-strip-icon-cross: var(--bp-color-danger);
-  --built-strip-icon-check: var(--bp-color-accent);
+  --built-strip-icon-primary: var(--bp-color-accent);
+  --built-strip-icon-secondary: var(--bp-color-text-muted);
   position: relative;
   min-height: auto;
   padding: clamp(2.5rem, 5vw, 4.5rem) var(--bp-stage-gutter);
@@ -147,12 +147,12 @@
 }
 
 .built-strip__group li .material-symbols-outlined {
-  color: var(--built-strip-icon-check);
+  color: var(--built-strip-icon-secondary);
   font-size: 1rem;
 }
 
 .built-strip__group--without li .material-symbols-outlined {
-  color: var(--built-strip-icon-cross);
+  color: var(--built-strip-icon-primary);
 }
 
 :root[data-theme='light'] .built-strip,
@@ -160,8 +160,8 @@
   --built-strip-card-bg: color-mix(in srgb, var(--bp-color-surface-solid) 92%, var(--bp-color-bg) 8%);
   --built-strip-item-bg: color-mix(in srgb, var(--bp-color-surface-solid) 84%, var(--bp-color-bg) 16%);
   --built-strip-item-text: color-mix(in srgb, var(--bp-color-text) 82%, var(--bp-color-bg) 18%);
-  --built-strip-icon-cross: color-mix(in srgb, var(--bp-color-text) 74%, var(--bp-color-danger) 26%);
-  --built-strip-icon-check: color-mix(in srgb, var(--bp-color-text) 68%, var(--bp-color-accent) 32%);
+  --built-strip-icon-primary: color-mix(in srgb, var(--bp-color-text) 68%, var(--bp-color-accent) 32%);
+  --built-strip-icon-secondary: color-mix(in srgb, var(--bp-color-text) 72%, var(--bp-color-bg) 28%);
   background: color-mix(in srgb, var(--bp-color-surface-solid) 82%, var(--bp-color-accent) 6%);
 }
 

@@ -11,7 +11,7 @@
         <h3>{{ content().withoutLabel }}</h3>
         <ul>
           @for (item of content().withoutItems; track $index) {
-          <li><span class="material-symbols-outlined" aria-hidden="true">close</span>{{ item }}</li>
+          <li><span class="material-symbols-outlined" aria-hidden="true">verified</span>{{ item }}</li>
           }
         </ul>
       </article>
@@ -20,7 +20,7 @@
         <h3>{{ content().capabilityLabel }}</h3>
         <ul>
           @for (item of content().capabilityItems; track $index) {
-          <li><span class="material-symbols-outlined" aria-hidden="true">check</span>{{ item }}</li>
+          <li><span class="material-symbols-outlined" aria-hidden="true">tune</span>{{ item }}</li>
           }
         </ul>
       </article>

@@ -13,13 +13,32 @@
       }
     </div>
 
-    <div class="process-lock__object" [style.transform]="objectTransform()" aria-hidden="true">
-      <div class="process-lock__cube">
-        <i></i>
-        <i></i>
-        <i></i>
+    <div class="process-lock__object" [attr.data-step]="activeIndex()" [style.--process-progress]="progress()" [style.transform]="objectTransform()" aria-hidden="true">
+      <div class="process-lock__core">
+        <div class="process-lock__core-grid"></div>
+        <span class="process-lock__fragment process-lock__fragment--1"></span>
+        <span class="process-lock__fragment process-lock__fragment--2"></span>
+        <span class="process-lock__fragment process-lock__fragment--3"></span>
+        <span class="process-lock__fragment process-lock__fragment--4"></span>
+        <span class="process-lock__fragment process-lock__fragment--5"></span>
+        <span class="process-lock__fragment process-lock__fragment--6"></span>
+        <span class="process-lock__fragment process-lock__fragment--7"></span>
+        <span class="process-lock__core-crosshair"></span>
+        <span class="process-lock__core-scan"></span>
+        <span class="process-lock__core-id">SYS/CORE</span>
       </div>
-      <div class="process-lock__orbit"></div>
+
+      <div class="process-lock__orbit">
+        <span class="process-lock__orbit-node process-lock__orbit-node--1" [class.process-lock__orbit-node--active]="activeIndex() === 0">01</span>
+        <span class="process-lock__orbit-node process-lock__orbit-node--2" [class.process-lock__orbit-node--active]="activeIndex() === 1">02</span>
+        <span class="process-lock__orbit-node process-lock__orbit-node--3" [class.process-lock__orbit-node--active]="activeIndex() === 2">03</span>
+        <span class="process-lock__orbit-node process-lock__orbit-node--4" [class.process-lock__orbit-node--active]="activeIndex() === 3">04</span>
+      </div>
+
+      <span class="process-lock__meta process-lock__meta--input" [class.process-lock__meta--active]="activeIndex() === 0">INPUT</span>
+      <span class="process-lock__meta process-lock__meta--map" [class.process-lock__meta--active]="activeIndex() === 1">MAP</span>
+      <span class="process-lock__meta process-lock__meta--render" [class.process-lock__meta--active]="activeIndex() === 2">RENDER</span>
+      <span class="process-lock__meta process-lock__meta--ship" [class.process-lock__meta--active]="activeIndex() === 3">SHIP</span>
     </div>
 
     <div class="process-lock__steps" aria-label="Prozessschritte">

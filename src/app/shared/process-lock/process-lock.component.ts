@@ -43,12 +43,16 @@ export class ProcessLockComponent {
   /** Aktiver Prozessschritt anhand des Scrollfortschritts. */
   readonly activeIndex = computed<number>(() => Math.min(this.steps.length - 1, Math.floor(this.progress() * this.steps.length)));
 
-  /** CSS-Transform für das interaktive Objekt. */
+  /**
+   * CSS-Transform für den zentralen System-Core.
+   * Der Orbit rotiert unabhängig; der Core selbst bleibt bewusst kontrolliert und verändert
+   * nur leicht Position, Drehung und Größe entlang des Prozesses.
+   */
   readonly objectTransform = computed<string>(() => {
     const progress = this.progress();
-    const rotation = progress * 540;
-    const scale = 0.84 + Math.sin(progress * Math.PI) * 0.34;
-    const y = (progress - 0.5) * 34;
+    const rotation = -4 + progress * 8;
+    const scale = 0.96 + Math.sin(progress * Math.PI) * 0.06;
+    const y = (progress - 0.5) * 18;
 
     return `translate3d(0, ${y}px, 0) rotate(${rotation}deg) scale(${scale})`;
   });

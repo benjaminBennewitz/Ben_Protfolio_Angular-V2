@@ -1,0 +1,40 @@
+/* src/app/shared/pixel-flora/pixel-flora.component.scss */
+
+:host {
+  --pixel-flora-wind-duration: 4.8s;
+  --pixel-flora-wind-delay: 0s;
+  display: block;
+  width: 2rem;
+  color: currentColor;
+  pointer-events: none;
+  transform-origin: 50% 100%;
+  animation: pixel-flora-wind var(--pixel-flora-wind-duration) steps(6, end) var(--pixel-flora-wind-delay) infinite alternate;
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  fill: currentColor;
+  shape-rendering: crispEdges;
+  image-rendering: pixelated;
+}
+
+@keyframes pixel-flora-wind {
+  0% { transform: translate3d(0, 0, 0) skewX(-0.8deg) rotate(-0.45deg); }
+  38% { transform: translate3d(0.35px, 0, 0) skewX(0.7deg) rotate(0.35deg); }
+  72% { transform: translate3d(-0.25px, 0, 0) skewX(-0.35deg) rotate(-0.2deg); }
+  100% { transform: translate3d(0.45px, 0, 0) skewX(1deg) rotate(0.55deg); }
+}
+
+:host-context(:root[data-motion='reduced']),
+:host-context(:root[data-motion='off']) {
+  animation: none;
+}
+
+:host([data-variant='flora-14']),
+:host([data-variant='flora-15']),
+:host([data-variant='flora-16']) {
+  animation: none;
+}

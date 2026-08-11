@@ -1,120 +1,159 @@
 /* src/app/shared/pixel-transition/pixel-transition.component.scss */
 
 :host {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
   display: block;
-  position: relative;
-  z-index: 5;
-  scroll-snap-align: none;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .pixel-transition {
-  --pixel-transition-from: color-mix(in srgb, var(--bp-color-bg) 80%, black 20%);
-  --pixel-transition-to: var(--bp-color-bg);
-  --pixel-transition-accent: color-mix(in srgb, var(--bp-color-accent) 42%, var(--pixel-transition-from) 58%);
-  position: relative;
-  height: clamp(22rem, 58svh, 42rem);
+  --pixel-reveal-fill: color-mix(in srgb, var(--bp-color-bg) 88%, var(--bp-color-text) 12%);
+  --pixel-reveal-accent: color-mix(in srgb, var(--bp-color-accent) 54%, var(--pixel-reveal-fill) 46%);
+  position: absolute;
+  inset: 0;
   overflow: hidden;
-  background: var(--pixel-transition-to);
-  pointer-events: none;
   isolation: isolate;
 }
 
-.pixel-transition[data-tone='base-to-contact'] {
-  --pixel-transition-from: color-mix(in srgb, var(--bp-color-bg) 88%, black 12%);
-  --pixel-transition-to: color-mix(in srgb, var(--bp-color-bg) 90%, var(--bp-color-accent) 6%);
-  --pixel-transition-accent: color-mix(in srgb, var(--bp-color-accent) 34%, var(--pixel-transition-from) 66%);
+.pixel-transition[data-tone='surface'] {
+  --pixel-reveal-fill: color-mix(in srgb, var(--bp-color-surface-solid) 86%, var(--bp-color-bg) 14%);
 }
 
-.pixel-transition__backdrop,
+.pixel-transition[data-tone='dark'] {
+  --pixel-reveal-fill: color-mix(in srgb, var(--bp-color-bg) 68%, black 32%);
+  --pixel-reveal-accent: color-mix(in srgb, var(--bp-color-accent) 48%, var(--pixel-reveal-fill) 52%);
+}
+
+.pixel-transition[data-tone='accented'] {
+  --pixel-reveal-fill: color-mix(in srgb, var(--bp-color-bg) 78%, var(--bp-color-accent) 22%);
+}
+
+.pixel-transition--done {
+  visibility: hidden;
+}
+
 .pixel-transition__veil,
 .pixel-transition__grid,
+.pixel-transition__glitch,
 .pixel-transition__scan {
   position: absolute;
   inset: 0;
 }
 
-.pixel-transition__backdrop {
+.pixel-transition__veil {
+  z-index: 1;
   background:
-    radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--bp-color-accent) 9%, transparent), transparent 28%),
-    radial-gradient(circle at 78% 72%, color-mix(in srgb, var(--bp-color-text) 8%, transparent), transparent 26%),
-    linear-gradient(180deg, var(--pixel-transition-from) 0%, color-mix(in srgb, var(--pixel-transition-from) 74%, var(--pixel-transition-to) 26%) 36%, color-mix(in srgb, var(--pixel-transition-to) 80%, var(--pixel-transition-from) 20%) 72%, var(--pixel-transition-to) 100%);
+    linear-gradient(180deg, color-mix(in srgb, var(--pixel-reveal-fill) 96%, transparent), var(--pixel-reveal-fill)),
+    repeating-linear-gradient(180deg, transparent 0 7px, color-mix(in srgb, white 4%, transparent) 7px 8px, transparent 8px 15px);
+  will-change: opacity;
 }
 
 .pixel-transition__grid {
   display: grid;
   gap: 1px;
+  inset: -2%;
 }
 
 .pixel-transition__grid--coarse {
+  z-index: 2;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  inset: 0;
-  opacity: 0.96;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0 42%, rgba(0, 0, 0, 0.8) 58%, rgba(0, 0, 0, 0) 100%);
+  grid-template-rows: repeat(7, 1fr);
+}
+
+.pixel-transition__grid--medium {
+  z-index: 3;
+  grid-template-columns: repeat(20, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  mix-blend-mode: plus-lighter;
 }
 
 .pixel-transition__grid--fine {
-  grid-template-columns: repeat(28, 1fr);
-  grid-template-rows: repeat(16, 1fr);
-  inset: 0;
-  opacity: 0.9;
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 0, rgba(0, 0, 0, 0.8) 30%, rgba(0, 0, 0, 1) 100%);
+  z-index: 4;
+  grid-template-columns: repeat(34, 1fr);
+  grid-template-rows: repeat(18, 1fr);
 }
 
 .pixel-transition__cell {
   display: block;
   width: 100%;
   height: 100%;
-  background: var(--pixel-transition-from);
   transform-origin: center;
   will-change: transform, opacity;
 }
 
+.pixel-transition__cell--coarse {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--pixel-reveal-fill) 94%, black 6%) 0%, var(--pixel-reveal-fill) 58%, color-mix(in srgb, var(--pixel-reveal-accent) 14%, var(--pixel-reveal-fill) 86%) 100%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, black 15%, transparent);
+}
+
+.pixel-transition__cell--medium {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--pixel-reveal-fill) 92%, white 8%) 0%, var(--pixel-reveal-fill) 100%);
+}
+
+.pixel-transition__cell--fine {
+  background: color-mix(in srgb, var(--pixel-reveal-fill) 88%, var(--bp-color-text) 12%);
+}
+
 .pixel-transition__cell--accent {
-  background: var(--pixel-transition-accent);
+  background: var(--pixel-reveal-accent);
 }
 
-.pixel-transition__cell--fine:nth-child(6n) {
-  background: color-mix(in srgb, var(--pixel-transition-from) 82%, white 18%);
-}
-
-.pixel-transition__veil {
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--pixel-transition-from) 24%, transparent) 0%, transparent 26%, transparent 74%, color-mix(in srgb, var(--pixel-transition-to) 28%, transparent) 100%),
-    repeating-linear-gradient(180deg, transparent 0 9px, color-mix(in srgb, white 7%, transparent) 9px 10px, transparent 10px 19px);
+.pixel-transition__glitch {
+  z-index: 5;
+  inset-inline: -4%;
+  opacity: 0.22;
   mix-blend-mode: screen;
+  will-change: transform, opacity;
+}
+
+.pixel-transition__glitch--primary {
+  background:
+    linear-gradient(180deg,
+      transparent 0 14%,
+      color-mix(in srgb, var(--bp-color-accent) 34%, transparent) 14% 18%,
+      transparent 18% 38%,
+      color-mix(in srgb, var(--bp-color-text) 12%, transparent) 38% 40%,
+      transparent 40% 100%),
+    repeating-linear-gradient(90deg,
+      transparent 0 4%,
+      color-mix(in srgb, var(--bp-color-accent) 18%, transparent) 4% 8%,
+      transparent 8% 12%);
+}
+
+.pixel-transition__glitch--secondary {
+  opacity: 0.12;
+  background:
+    linear-gradient(180deg,
+      transparent 0 54%,
+      color-mix(in srgb, var(--bp-color-text) 10%, transparent) 54% 60%,
+      transparent 60% 100%),
+    repeating-linear-gradient(90deg,
+      transparent 0 6%,
+      color-mix(in srgb, var(--bp-color-accent) 16%, transparent) 6% 9%,
+      transparent 9% 14%);
 }
 
 .pixel-transition__scan {
-  inset-inline: 0;
+  right: -4%;
+  left: -4%;
+  z-index: 6;
   height: 2px;
-  opacity: 0.42;
-  background: linear-gradient(90deg, transparent, var(--bp-color-accent), transparent);
-  box-shadow: 0 0 22px color-mix(in srgb, var(--bp-color-accent) 50%, transparent);
-  transition: top 80ms linear;
+  background: linear-gradient(90deg, transparent 0 8%, var(--bp-color-accent) 32% 68%, transparent 92%);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--bp-color-accent) 46%, transparent);
+  opacity: 0.34;
+  will-change: top;
 }
 
-.pixel-transition__scan--coarse {
-  z-index: 3;
-  opacity: 0.28;
-}
-
-.pixel-transition__scan--fine {
-  z-index: 4;
-}
-
-:host-context(:root[data-motion='reduced']) .pixel-transition,
-:host-context(:root[data-motion='off']) .pixel-transition {
+.pixel-transition__scan--echo {
   height: 1px;
+  opacity: 0.16;
 }
 
-:host-context(:root[data-motion='reduced']) .pixel-transition__backdrop,
-:host-context(:root[data-motion='off']) .pixel-transition__backdrop,
-:host-context(:root[data-motion='reduced']) .pixel-transition__grid,
-:host-context(:root[data-motion='off']) .pixel-transition__grid,
-:host-context(:root[data-motion='reduced']) .pixel-transition__scan,
-:host-context(:root[data-motion='off']) .pixel-transition__scan,
-:host-context(:root[data-motion='reduced']) .pixel-transition__veil,
-:host-context(:root[data-motion='off']) .pixel-transition__veil {
+:host-context(:root[data-motion='reduced']),
+:host-context(:root[data-motion='off']),
+:host-context(:root[data-comfort='simple']) {
   display: none;
 }

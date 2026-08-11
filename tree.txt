@@ -120,6 +120,11 @@ ben-portfolio-angular-v2/
 │   │   │   │   ├── pixel-firework.component.html
 │   │   │   │   ├── pixel-firework.component.scss
 │   │   │   │   └── pixel-firework.component.ts
+│   │   │   ├── pixel-flora/
+│   │   │   │   ├── pixel-flora.component.html
+│   │   │   │   ├── pixel-flora.component.scss
+│   │   │   │   ├── pixel-flora.component.ts
+│   │   │   │   └── pixel-flora.data.ts
 │   │   │   ├── pixel-sprite/
 │   │   │   │   ├── pixel-sprite.component.html
 │   │   │   │   ├── pixel-sprite.component.scss

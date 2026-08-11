@@ -17,8 +17,8 @@ import { ChaosCtaComponent } from '../../shared/chaos-cta/chaos-cta.component';
 import { ContactFormComponent } from '../../shared/contact-form/contact-form.component';
 import { ProcessLockComponent } from '../../shared/process-lock/process-lock.component';
 import { PixelFireworkComponent } from '../../shared/pixel-firework/pixel-firework.component';
+import { PixelFloraComponent } from '../../shared/pixel-flora/pixel-flora.component';
 import { PixelSpriteComponent } from '../../shared/pixel-sprite/pixel-sprite.component';
-import { PixelTransitionComponent } from '../../shared/pixel-transition/pixel-transition.component';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { RevealTextComponent } from '../../shared/reveal-text/reveal-text.component';
 import { TechMarqueeComponent } from '../../shared/tech-marquee/tech-marquee.component';
@@ -64,7 +64,7 @@ interface ProjectsChocolateEgg {
 @Component({
   selector: 'bp-home-page',
   standalone: true,
-  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProcessLockComponent, AboutMetricsWindowComponent, BuiltWithoutComponent, ChaosCtaComponent, ContactFormComponent, ViewportActivityDirective, PixelSpriteComponent, PixelFireworkComponent, PixelTransitionComponent],
+  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProcessLockComponent, AboutMetricsWindowComponent, BuiltWithoutComponent, ChaosCtaComponent, ContactFormComponent, ViewportActivityDirective, PixelSpriteComponent, PixelFireworkComponent, PixelFloraComponent],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })

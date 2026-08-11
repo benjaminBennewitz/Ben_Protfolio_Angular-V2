@@ -115,6 +115,12 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   /** Markiert, ob die CTA-Schwerkraft-Trophäe bereits ausgelöst wurde. */
   private gravityAchievementUnlocked = false;
 
+  /** Merkt, ob das Pixelauto in der aktuellen Fahrt einen Unfall hatte. */
+  private carHadAccident = false;
+
+  /** Verhindert doppelte Freischaltungen der Fahrer-Trophäe innerhalb derselben CTA-Session. */
+  private driverAchievementUnlocked = false;
+
   /** Physikzustand des einmalig durchfahrenden Pixelautos. */
   private car: CtaCarState = { x: 0, y: 0, width: 92, height: 50, phase: 'waiting', launchAt: 0, crashedAt: 0 };
 
@@ -236,6 +242,8 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     }));
 
     this.gravityAchievementUnlocked = false;
+    this.carHadAccident = false;
+    this.driverAchievementUnlocked = false;
     this.resetCar(width);
 
     this.publishStyles();
@@ -550,7 +558,13 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
         return;
       }
 
-      if (this.car.x + this.car.width < -24 || this.car.x > stageWidth + this.car.width * 2) {
+      if (this.car.x + this.car.width < -24) {
+        this.car.phase = 'gone';
+        this.unlockDriverAchievement();
+        return;
+      }
+
+      if (this.car.x > stageWidth + this.car.width * 2) {
         this.car.phase = 'gone';
       }
       return;
@@ -572,6 +586,7 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
       }
 
       this.car.phase = 'crashed';
+      this.carHadAccident = true;
       this.car.crashedAt = now;
       this.car.x += 5;
 
@@ -590,6 +605,16 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     }
 
     return false;
+  }
+
+  /** Schaltet die Fahrer-Trophäe frei, wenn das Auto die CTA-Bühne ohne Kollision verlässt. */
+  private unlockDriverAchievement(): void {
+    if (this.carHadAccident || this.driverAchievementUnlocked || this.accessibility.reducesMotion()) {
+      return;
+    }
+
+    this.driverAchievementUnlocked = true;
+    this.zone.run(() => this.achievementService.unlock('skilled-driver'));
   }
 
   /** Überträgt den Simulationszustand in CSS-Styles. */

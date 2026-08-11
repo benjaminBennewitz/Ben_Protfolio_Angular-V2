@@ -2,8 +2,8 @@
 
 :host {
   display: block;
-  width: min(20rem, 34vw);
-  aspect-ratio: 1.25;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 
@@ -30,27 +30,55 @@
 }
 
 .pixel-firework__rocket {
-  bottom: 8%;
+  --rocket-x: 0rem;
+  --rocket-y: -58svh;
+  --rocket-delay: 180ms;
+  --rocket-duration: 780ms;
+  bottom: 2%;
+  left: 50%;
   opacity: 0;
 }
 
 .pixel-firework__rocket--one {
-  left: 34%;
+  --rocket-x: -5.2rem;
+  --rocket-y: -57svh;
+  --rocket-delay: 180ms;
 }
 
 .pixel-firework__rocket--two {
-  left: 68%;
+  --rocket-x: 4.8rem;
+  --rocket-y: -61svh;
+  --rocket-delay: 420ms;
+  --rocket-duration: 820ms;
 }
 
-.pixel-firework--active .pixel-firework__rocket--one {
-  animation: pixel-firework-launch 620ms steps(8, end) 120ms both;
+.pixel-firework__rocket--three {
+  --rocket-x: -1rem;
+  --rocket-y: -66svh;
+  --rocket-delay: 680ms;
+  --rocket-duration: 860ms;
 }
 
-.pixel-firework--active .pixel-firework__rocket--two {
-  animation: pixel-firework-launch-two 680ms steps(8, end) 520ms both;
+.pixel-firework__rocket--four {
+  --rocket-x: 8rem;
+  --rocket-y: -54svh;
+  --rocket-delay: 940ms;
+  --rocket-duration: 790ms;
+}
+
+.pixel-firework__rocket--five {
+  --rocket-x: -8.4rem;
+  --rocket-y: -63svh;
+  --rocket-delay: 1.18s;
+  --rocket-duration: 850ms;
+}
+
+.pixel-firework--active .pixel-firework__rocket {
+  animation: pixel-firework-launch var(--rocket-duration) steps(11, end) var(--rocket-delay) both;
 }
 
 .pixel-firework__burst {
+  --burst-delay: 920ms;
   position: absolute;
   width: 1px;
   height: 1px;
@@ -58,14 +86,37 @@
 }
 
 .pixel-firework__burst--one {
-  top: 28%;
-  left: 34%;
+  top: 27%;
+  left: 42%;
+  --burst-delay: 900ms;
 }
 
 .pixel-firework__burst--two {
   top: 20%;
-  left: 68%;
+  left: 57%;
   color: var(--bp-color-info);
+  --burst-delay: 1.18s;
+}
+
+.pixel-firework__burst--three {
+  top: 14%;
+  left: 49%;
+  color: var(--bp-color-accent);
+  --burst-delay: 1.48s;
+}
+
+.pixel-firework__burst--four {
+  top: 31%;
+  left: 63%;
+  color: var(--bp-color-info);
+  --burst-delay: 1.72s;
+}
+
+.pixel-firework__burst--five {
+  top: 18%;
+  left: 36%;
+  color: color-mix(in srgb, var(--bp-color-accent) 68%, var(--bp-color-text) 32%);
+  --burst-delay: 1.98s;
 }
 
 .pixel-firework__particle {
@@ -85,33 +136,49 @@
 .pixel-firework__particle:nth-child(7) { --px: -56px; --py: 0px; }
 .pixel-firework__particle:nth-child(8) { --px: -40px; --py: -38px; }
 
-.pixel-firework--active .pixel-firework__burst--one .pixel-firework__particle {
-  animation: pixel-firework-burst 760ms steps(7, end) 700ms both;
-}
-
-.pixel-firework--active .pixel-firework__burst--two .pixel-firework__particle {
-  animation: pixel-firework-burst 760ms steps(7, end) 1.12s both;
+.pixel-firework--active .pixel-firework__burst .pixel-firework__particle {
+  animation: pixel-firework-burst 820ms steps(8, end) var(--burst-delay) both;
 }
 
 @keyframes pixel-firework-launch {
-  0% { opacity: 0; transform: translate3d(0, 0, 0); }
-  12% { opacity: 1; }
-  88% { opacity: 1; transform: translate3d(0, -118px, 0); }
-  100% { opacity: 0; transform: translate3d(0, -126px, 0); }
-}
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
 
-@keyframes pixel-firework-launch-two {
-  0% { opacity: 0; transform: translate3d(0, 0, 0); }
-  12% { opacity: 1; }
-  88% { opacity: 1; transform: translate3d(-8px, -138px, 0); }
-  100% { opacity: 0; transform: translate3d(-10px, -146px, 0); }
+  10% {
+    opacity: 1;
+  }
+
+  88% {
+    opacity: 1;
+    transform: translate3d(var(--rocket-x), var(--rocket-y), 0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--rocket-x), var(--rocket-y), 0);
+  }
 }
 
 @keyframes pixel-firework-burst {
-  0% { opacity: 0; transform: translate3d(0, 0, 0) scale(1); }
-  12% { opacity: 1; }
-  72% { opacity: 1; }
-  100% { opacity: 0; transform: translate3d(var(--px), var(--py), 0) scale(0.65); }
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  72% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--px), var(--py), 0) scale(0.65);
+  }
 }
 
 :host-context(:root[data-motion='reduced']),

@@ -2,10 +2,10 @@
 
 /**
  * @file Einmalige Pixel-Feuerwerk-Animation.
- * @description Startet beim ersten sichtbaren Eintritt und wiederholt sich innerhalb der laufenden SPA-Session nicht.
+ * @description Startet erst nach einem erfolgreich abgeschlossenen Scroll-Snap der Services-Section und wiederholt sich innerhalb der laufenden SPA-Session nicht.
  */
 
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild, signal } from '@angular/core';
 
 /** Merkt sich modulweit, ob das Feuerwerk in dieser SPA-Session bereits abgespielt wurde. */
 let hasPlayedPixelFirework = false;
@@ -24,8 +24,11 @@ export class PixelFireworkComponent implements AfterViewInit, OnDestroy {
   /** Referenz auf die sichtbare Feuerwerk-Bühne. */
   @ViewChild('stageRef') private readonly stageRef?: ElementRef<HTMLElement>;
 
-  /** Sichtbarkeitsobserver für den einmaligen Start. */
-  private observer: IntersectionObserver | null = null;
+  /** Services-Section, die den einmaligen Startzeitpunkt bestimmt. */
+  private triggerSection?: HTMLElement;
+
+  /** Timer für die Prüfung nach abgeschlossener Scrollbewegung. */
+  private snapCheckTimer = 0;
 
   /** Aktiviert die CSS-Sequenz genau einmal. */
   readonly isActive = signal(false);
@@ -33,37 +36,70 @@ export class PixelFireworkComponent implements AfterViewInit, OnDestroy {
   /** Acht Partikelpositionen pro Feuerwerksburst. */
   readonly particles: readonly number[] = [0, 1, 2, 3, 4, 5, 6, 7];
 
-  /** Startet die Animation beim ersten sinnvollen Sichtkontakt. */
+  /** Merkt sich die Parent-Section und prüft nach einer kurzen Ruhephase den Snap-Zustand. */
   ngAfterViewInit(): void {
     const stage = this.stageRef?.nativeElement;
-
-    if (!stage || hasPlayedPixelFirework) {
-      return;
-    }
-
-    if (!('IntersectionObserver' in window)) {
-      this.play();
-      return;
-    }
-
-    this.observer = new IntersectionObserver(
-      ([entry]) => {
-        if ((entry?.intersectionRatio ?? 0) < 0.55) {
-          return;
-        }
-
-        this.play();
-        this.observer?.disconnect();
-      },
-      { threshold: [0.55] },
-    );
-
-    this.observer.observe(stage);
+    this.triggerSection = stage?.closest<HTMLElement>('.services-bridge') ?? undefined;
+    this.scheduleSnapCheck();
   }
 
-  /** Stoppt den Observer beim Verlassen der Seite. */
+  /** Entfernt Timer und Section-Referenz beim Verlassen der Seite. */
   ngOnDestroy(): void {
-    this.observer?.disconnect();
+    window.clearTimeout(this.snapCheckTimer);
+    this.snapCheckTimer = 0;
+    this.triggerSection = undefined;
+  }
+
+  /** Plant nach dem Scrollen eine Prüfung ein, sobald die Scrollbewegung zur Ruhe gekommen ist. */
+  @HostListener('window:scroll')
+  onWindowScroll(): void {
+    this.scheduleSnapCheck();
+  }
+
+  /** Prüft bei Browsern mit Scroll-End-Event unmittelbar den finalen Snap-Zustand. */
+  @HostListener('window:scrollend')
+  onWindowScrollEnd(): void {
+    this.scheduleSnapCheck();
+  }
+
+  /** Wartet kurz auf das native Scroll-Snap, bevor der exakte Endzustand geprüft wird. */
+  private scheduleSnapCheck(): void {
+    if (hasPlayedPixelFirework) {
+      return;
+    }
+
+    window.clearTimeout(this.snapCheckTimer);
+    this.snapCheckTimer = window.setTimeout(() => {
+      this.snapCheckTimer = 0;
+      this.tryPlayAfterSnap();
+    }, 260);
+  }
+
+  /** Startet ausschließlich, wenn die Services-Section tatsächlich am Viewport-Anfang eingerastet ist. */
+  private tryPlayAfterSnap(): void {
+    const section = this.triggerSection;
+
+    if (!section || hasPlayedPixelFirework) {
+      return;
+    }
+
+    const rect = section.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const viewportCenter = viewportHeight / 2;
+    const sectionCenter = rect.top + rect.height / 2;
+    const centerTolerance = Math.max(18, viewportHeight * 0.025);
+    const visibleTop = Math.max(0, rect.top);
+    const visibleBottom = Math.min(viewportHeight, rect.bottom);
+    const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+    const visibleRatio = visibleHeight / Math.max(1, Math.min(rect.height, viewportHeight));
+    const isCenteredAfterSnap = Math.abs(sectionCenter - viewportCenter) <= centerTolerance;
+    const isAlmostFullyVisible = visibleRatio >= 0.97;
+
+    if (!isCenteredAfterSnap || !isAlmostFullyVisible) {
+      return;
+    }
+
+    this.play();
   }
 
   /** Schaltet die CSS-Sequenz frei und sperrt weitere Starts in derselben SPA-Session. */

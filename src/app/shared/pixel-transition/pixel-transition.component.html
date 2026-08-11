@@ -1,13 +1,23 @@
 <!-- src/app/shared/pixel-transition/pixel-transition.component.html -->
-<section #sectionRef class="pixel-transition" [attr.data-tone]="tone">
-  <div class="pixel-transition__backdrop"></div>
+<div class="pixel-transition" [attr.data-tone]="tone" [class.pixel-transition--done]="progress() >= 0.995">
+  <div class="pixel-transition__veil" [style.opacity]="veilOpacity()"></div>
 
   <div class="pixel-transition__grid pixel-transition__grid--coarse">
     @for (cell of coarseCells; track $index) {
       <span class="pixel-transition__cell pixel-transition__cell--coarse"
         [class.pixel-transition__cell--accent]="cell.accent"
-        [style.opacity]="coarseOpacity(cell.threshold)"
-        [style.transform]="'scale(' + coarseScale(cell.threshold) + ')'">
+        [style.opacity]="coarseOpacity(cell)"
+        [style.transform]="'scale(' + coarseScale(cell) + ')'">
+      </span>
+    }
+  </div>
+
+  <div class="pixel-transition__grid pixel-transition__grid--medium">
+    @for (cell of mediumCells; track $index) {
+      <span class="pixel-transition__cell pixel-transition__cell--medium"
+        [class.pixel-transition__cell--accent]="cell.accent"
+        [style.opacity]="mediumOpacity(cell)"
+        [style.transform]="'scale(' + mediumScale(cell) + ')'">
       </span>
     }
   </div>
@@ -16,13 +26,15 @@
     @for (cell of fineCells; track $index) {
       <span class="pixel-transition__cell pixel-transition__cell--fine"
         [class.pixel-transition__cell--accent]="cell.accent"
-        [style.opacity]="fineOpacity(cell.threshold)"
-        [style.transform]="'scale(' + fineScale(cell.threshold) + ')'">
+        [style.opacity]="fineOpacity(cell)"
+        [style.transform]="'scale(' + fineScale(cell) + ')'">
       </span>
     }
   </div>
 
-  <div class="pixel-transition__veil" [style.opacity]="veilOpacity()"></div>
-  <span class="pixel-transition__scan pixel-transition__scan--coarse" [style.top.%]="progress() * 74"></span>
-  <span class="pixel-transition__scan pixel-transition__scan--fine" [style.top.%]="progress() * 100"></span>
-</section>
+  <span class="pixel-transition__glitch pixel-transition__glitch--primary" [style.transform]="'translate3d(' + glitchShiftPrimary() + ', 0, 0)'"></span>
+  <span class="pixel-transition__glitch pixel-transition__glitch--secondary" [style.transform]="'translate3d(' + glitchShiftSecondary() + ', 0, 0)'"></span>
+
+  <span class="pixel-transition__scan pixel-transition__scan--primary" [style.top.%]="scanPosition()"></span>
+  <span class="pixel-transition__scan pixel-transition__scan--echo" [style.top.%]="echoScanPosition()"></span>
+</div>

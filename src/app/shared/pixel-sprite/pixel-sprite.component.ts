@@ -8,7 +8,7 @@
 import { Component, HostBinding, Input } from '@angular/core';
 
 /** Unterstützte Motive der dekorativen Pixelwelt. */
-export type PixelSpriteKind = 'bird' | 'tree' | 'flower' | 'cloud-a' | 'cloud-b' | 'cloud-c' | 'sun' | 'trex' | 'cactus' | 'car' | 'diskette';
+export type PixelSpriteKind = 'bird' | 'tree' | 'flower' | 'cloud-a' | 'cloud-b' | 'cloud-c' | 'sun' | 'car' | 'diskette';
 
 /** Richtung für asymmetrische Motive wie Autos. */
 export type PixelSpriteDirection = 'left' | 'right';

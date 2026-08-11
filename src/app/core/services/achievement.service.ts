@@ -23,6 +23,7 @@ export type AchievementId =
   | 'trash-dunk'
   | 'blood-complete'
   | 'cta-contact'
+  | 'skilled-driver'
   | 'world-upside-down'
   | 'loyal-companion'
   | 'platinum-discount';
@@ -86,6 +87,7 @@ export class AchievementService {
     { id: 'trash-dunk', icon: 'delete', category: 'project' },
     { id: 'blood-complete', icon: 'hematology', category: 'project' },
     { id: 'cta-contact', icon: 'arrow_outward', category: 'contact' },
+    { id: 'skilled-driver', icon: 'directions_car', category: 'cta' },
     { id: 'world-upside-down', icon: 'accessibility_new', category: 'access' },
     { id: 'loyal-companion', icon: 'music_note', category: 'footer' },
     { id: 'platinum-discount', icon: 'workspace_premium', category: 'platin' },
@@ -230,9 +232,16 @@ export class AchievementService {
       const value = localStorage.getItem(this.storageKey);
       const parsed = value ? JSON.parse(value) as Partial<StoredAchievementState> : null;
 
+      const unlocked = this.validIds(parsed?.unlocked);
+      const hints = this.validIds(parsed?.hints);
+      const regularIds = this.definitions.filter((definition) => definition.id !== 'platinum-discount').map((definition) => definition.id);
+      const normalizedUnlocked = unlocked.includes('platinum-discount') && !regularIds.every((id) => unlocked.includes(id))
+        ? unlocked.filter((id) => id !== 'platinum-discount')
+        : unlocked;
+
       return {
-        unlocked: this.validIds(parsed?.unlocked),
-        hints: this.validIds(parsed?.hints),
+        unlocked: normalizedUnlocked,
+        hints,
       };
     } catch {
       return { unlocked: [], hints: [] };
@@ -364,6 +373,11 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       description: 'you can touch this und jonglieren - cool',
       hint: 'Besiege die Schwerkraft.',
     },
+    'skilled-driver': {
+      title: 'Versierter Fahrer',
+      description: 'Zuverlässiger als die Deutsche Bahn.',
+      hint: 'Stelle deine Fahrkünste unter Beweis.',
+    },
     'world-upside-down': {
       title: 'Verkehrte Welt',
       description: 'Sieh die Welt aus anderen Augen.',
@@ -440,6 +454,11 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       title: 'Gravity Defeated',
       description: 'you can touch this and juggle - cool',
       hint: 'Defeat gravity.',
+    },
+    'skilled-driver': {
+      title: 'Skilled Driver',
+      description: 'More reliable than Deutsche Bahn.',
+      hint: 'Put your driving skills to the test.',
     },
     'world-upside-down': {
       title: 'Upside Down',

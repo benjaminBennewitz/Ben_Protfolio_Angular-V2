@@ -455,7 +455,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     servicesTeaser: {
       eyebrow: 'services.available',
       title: 'Von der Idee zum funktionierenden System.',
-      subtitle: 'Webauftritt, individuelle Anwendung oder Automatisierung – Umfang und Technologie richten sich nach dem Problem, das gelöst werden soll.',
+      subtitle: 'Webauftritt, individuelle Anwendung oder Automatisierung – Umfang und Technologie richten sich nach Ziel, Bedarf und dem, was das Projekt wirklich leisten soll.',
       ctaLabel: 'Leistungen & Preise ansehen',
       ariaLabel: 'Digitale Lösungsbereiche',
       items: [
@@ -1014,18 +1014,18 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     cta: {
       eyebrow: 'cta_physics.exe',
       title: 'Bauen wir etwas Eigenes.',
-      hint: 'Kurzer Austausch, klarer Plan, saubere Umsetzung.',
+      hint: 'Kurzer Austausch. Klarer Plan. Saubere Umsetzung.',
       words: ['get', 'in', 'touch', 'icon:arrow_forward'],
     },
-    faqTitle: 'Fragen, die vor einem Projekt fast immer auftauchen.',
+    faqTitle: 'Fragen, die vor dem Start meistens auftauchen.',
     faqSubtitle: '',
     faqs: [
-      { question: 'Welche Projekte passen gut zu dir?', answer: 'Gut passen Projekte, bei denen etwas Sinnvolles entstehen soll: von kreativen, interaktiven Websites bis zu sachlichen Business-Anwendungen. Dashboards, Formulare, Shops, interne Tools, Automatisierung, Datenlogik und klare Workflows sind genauso willkommen wie visuelle Experimente.' },
-      { question: 'Kannst du mit bestehenden Designs, Vorlagen oder Systemen arbeiten?', answer: 'Ja. Nicht jedes Projekt muss bei null starten. Bestehende Designs, Layouts, WordPress-Seiten oder technische Strukturen können übernommen, verbessert oder sauber neu aufgebaut werden. Wichtig sind ein klares Briefing, gute Assets und eine gemeinsame Entscheidung, was erhalten, angepasst oder ersetzt werden soll.' },
-      { question: 'Wie wichtig sind Struktur und Dokumentation?', answer: 'Sehr wichtig. Komponenten, Styles, Datenflüsse und zentrale Logik sollen nachvollziehbar bleiben, damit Projekte später erweitert, geprüft und gepflegt werden können. Gute Dokumentation sorgt dafür, dass ein Projekt nicht nur funktioniert, sondern langfristig wartbar bleibt.' },
-      { question: 'Kann ein bestehendes Projekt modernisiert werden?', answer: 'Ja. Bestehende Websites, Web-Apps oder interne Tools können Schritt für Schritt modernisiert werden. Sinnvoll ist ein gezieltes Vorgehen: erst den Ist-Stand prüfen, dann Struktur, Design, Performance, SEO, Accessibility und Wartbarkeit sauber verbessern.' },
-      { question: 'Wie gehst du mit Animationen um?', answer: 'Animationen sollen nicht einfach nur dekorieren, sondern Orientierung, Feedback oder Markenwirkung verbessern. Effekte werden bewusst eingesetzt, technisch gekapselt und so umgesetzt, dass Performance, Bedienbarkeit und Barrierearmut erhalten bleiben.' },
-      { question: 'Werden SEO, Accessibility und WCAG berücksichtigt?', answer: 'Ja. Semantisches HTML, Meta-Daten, klare Überschriften, Fokuszustände, Kontraste, Tastaturbedienung und ARIA-Labels werden von Anfang an mitgedacht. Bei stark animierten Projekten kann zusätzlich ein reduzierter Motion-Modus oder ein ruhigerer Accessibility-Modus vorgesehen werden.' },
+      { question: 'Welche Projekte passen gut zu dir?', answer: 'Am besten passen Projekte, bei denen Gestaltung und Technik gemeinsam etwas verbessern sollen: von interaktiven Websites bis zu sachlichen Business-Anwendungen. Dashboards, Shops, interne Tools, Automatisierung und Datenlogik sind genauso willkommen wie visuelle Experimente.' },
+      { question: 'Kannst du mit bestehenden Designs, Vorlagen oder Systemen arbeiten?', answer: 'Ja. Nicht jedes Projekt muss bei null starten. Bestehende Designs, WordPress-Seiten oder technische Strukturen können übernommen, verbessert oder neu aufgebaut werden. Entscheidend ist ein gemeinsames Verständnis dafür, was bleiben soll und wo eine neue Lösung sinnvoller ist.' },
+      { question: 'Wie läuft ein Projekt ab?', answer: 'Am Anfang stehen Ziel, Rahmen und Prioritäten. Danach folgen Struktur, Gestaltung und technische Umsetzung in sinnvollen Schritten. Entscheidungen werden früh sichtbar gemacht, damit am Ende kein überraschendes System entsteht, sondern eines, das nachvollziehbar gewachsen ist.' },
+      { question: 'Kann ein bestehendes Projekt modernisiert werden?', answer: 'Ja. Websites, Web-Apps und interne Tools können schrittweise modernisiert werden. Zuerst wird der Ist-Stand geprüft, danach werden Struktur, Design, Performance, SEO, Accessibility und Wartbarkeit dort verbessert, wo es tatsächlich Nutzen bringt.' },
+      { question: 'Wie gehst du mit Animationen um?', answer: 'Motion soll Orientierung, Feedback oder Markenwirkung verbessern und nicht einfach nur Fläche beschäftigen. Effekte werden bewusst eingesetzt, technisch gekapselt und so umgesetzt, dass Performance, Bedienbarkeit und Barrierefreiheit erhalten bleiben.' },
+      { question: 'Sind SEO, Accessibility und WCAG immer dabei?', answer: 'Ja. Semantisches HTML, Meta-Daten, saubere Überschriften, sichtbare Fokuszustände, Kontraste, Tastaturbedienung und passende ARIA-Attribute werden von Anfang an mitgedacht. Bei stark animierten Projekten gehören reduzierte Motion-Varianten ebenfalls dazu.' },
     ],
     clients: {
       eyebrow: 'Realisiert',
@@ -1323,7 +1323,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     servicesTeaser: {
       eyebrow: 'services.available',
       title: 'From idea to a working system.',
-      subtitle: 'Web presence, custom application or automation – scope and technology follow the problem that actually needs solving.',
+      subtitle: 'Web presence, custom application or automation – scope and technology follow the goal, the actual need and what the project really has to achieve.',
       ctaLabel: 'Explore services & pricing',
       ariaLabel: 'Digital solution areas',
       items: [
@@ -1882,18 +1882,18 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     cta: {
       eyebrow: 'cta_physics.exe',
       title: 'Let’s build something of our own.',
-      hint: 'Quick exchange, clear plan, clean implementation.',
+      hint: 'Quick exchange. Clear plan. Clean implementation.',
       words: ['get', 'in', 'touch', 'icon:arrow_forward'],
     },
-    faqTitle: 'Questions that almost always appear before a project.',
+    faqTitle: 'Questions that usually come up before a project starts.',
     faqSubtitle: '',
     faqs: [
-      { question: 'Which projects are a good fit?', answer: 'Projects are a good fit when something meaningful should be created: from creative, interactive websites to practical business applications. Dashboards, forms, shops, internal tools, automation, data logic and clear workflows are just as welcome as visual experiments.' },
-      { question: 'Can you work with existing designs, templates or systems?', answer: 'Yes. Not every project has to start from scratch. Existing designs, layouts, WordPress pages or technical structures can be reused, improved or rebuilt cleanly. What matters is a clear briefing, good assets and a shared decision on what stays, changes or gets replaced.' },
-      { question: 'How important are structure and documentation?', answer: 'Very important. Components, styles, data flows and central logic should stay understandable so projects can be extended, reviewed and maintained later. Good documentation makes sure a project not only works, but remains maintainable over time.' },
-      { question: 'Can an existing project be modernized?', answer: 'Yes. Existing websites, web apps or internal tools can be modernized step by step. A targeted approach works best: first review the current state, then improve structure, design, performance, SEO, accessibility and maintainability cleanly.' },
-      { question: 'How do you approach animation?', answer: 'Motion should not just decorate, but improve orientation, feedback or brand impact. Effects are used intentionally, encapsulated technically and implemented so that performance, usability and accessibility remain intact.' },
-      { question: 'Are SEO, accessibility and WCAG considered?', answer: 'Yes. Semantic HTML, metadata, clear headings, focus states, contrast, keyboard support and ARIA labels are considered from the beginning. For heavily animated projects, a reduced-motion mode or calmer accessibility mode can also be planned.' },
+      { question: 'Which projects are a good fit?', answer: 'The best fit is a project where design and technology should improve something together: from interactive websites to practical business applications. Dashboards, shops, internal tools, automation and data logic are just as welcome as visual experiments.' },
+      { question: 'Can you work with existing designs, templates or systems?', answer: 'Yes. Not every project has to start from scratch. Existing designs, WordPress sites or technical structures can be reused, improved or rebuilt. What matters is a shared understanding of what should stay and where a new solution creates more value.' },
+      { question: 'How does a project usually run?', answer: 'It starts with the goal, constraints and priorities. Structure, design and technical implementation then follow in sensible steps. Decisions are made visible early so the final system does not come as a surprise, but grows in a way that stays understandable.' },
+      { question: 'Can an existing project be modernized?', answer: 'Yes. Websites, web apps and internal tools can be modernized step by step. The current state is reviewed first, then structure, design, performance, SEO, accessibility and maintainability are improved where they create real value.' },
+      { question: 'How do you approach animation?', answer: 'Motion should improve orientation, feedback or brand impact rather than simply fill space. Effects are used deliberately, encapsulated technically and implemented so performance, usability and accessibility remain intact.' },
+      { question: 'Are SEO, accessibility and WCAG always included?', answer: 'Yes. Semantic HTML, metadata, clean heading structures, visible focus states, contrast, keyboard support and appropriate ARIA attributes are considered from the start. Reduced-motion variants are part of the plan for heavily animated projects as well.' },
     ],
     clients: {
       eyebrow: 'Delivered',

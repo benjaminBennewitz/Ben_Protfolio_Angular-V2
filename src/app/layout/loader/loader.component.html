@@ -1,85 +1,99 @@
 <!-- src/app/layout/loader/loader.component.html -->
 @if (visible()) {
-<section class="loader" [class.loader--leaving]="leaving()" [class.loader--completed]="completed()"
+<section class="loader" [class.loader--leaving]="leaving()" [class.loader--launching]="launching()"
   [attr.aria-label]="loaderContent().ariaLabel" aria-live="polite">
-  <div class="loader__backdrop" aria-hidden="true">
-    <span class="loader__skull"></span>
-    <span class="loader__grid"></span>
-    <span class="loader__noise"></span>
-  </div>
-
-  <div class="loader__brand" [class.loader__brand--intro]="!useCalmLoader()">
-    <span aria-hidden="true">B²</span>
-    <strong aria-hidden="true">BOOT_SEQUENCE</strong>
-  </div>
+  <div class="loader__scanlines" aria-hidden="true"></div>
+  <div class="loader__scanner" aria-hidden="true"></div>
 
   @if (useCalmLoader()) {
   <aside class="loader__simple" role="status" aria-live="assertive">
-    <div class="loader__simple-panel bp-card">
-      <p class="loader__simple-eyebrow">{{ loaderContent().calmEyebrow }}</p>
-      <strong class="loader__simple-number">{{ calmProgress() }}%</strong>
-      <div class="loader__simple-track" aria-hidden="true">
-        <span [style.width.%]="calmProgress()"></span>
-      </div>
+    <div class="loader__simple-panel">
+      <p>{{ loaderContent().calmEyebrow }}</p>
+      <strong>{{ calmProgress() }}%</strong>
+      <div class="loader__simple-track" aria-hidden="true"><span [style.width.%]="calmProgress()"></span></div>
       <h2>{{ loaderContent().calmTitle }}</h2>
       <p>{{ loaderContent().calmText }}</p>
     </div>
   </aside>
-  } @else if (brandIntroComplete()) {
-  <div class="loader__dialog-stack">
-    @for (dialog of dialogs(); track dialog.percent) {
-    <article class="loader-dialog" [style.--dialog-delay]="dialog.delay" [style.--dialog-left]="dialog.left"
-      [style.--dialog-top]="dialog.top" [style.--dialog-rotate]="dialog.rotate" [style.--dialog-z]="dialog.z"
-      [attr.aria-label]="dialog.percent + ' ' + loaderContent().loadedAriaLabel + ': ' + dialog.message">
-      <header class="loader-dialog__head">
-        <span>{{ dialog.title }}</span>
-        <span class="loader-dialog__controls" aria-hidden="true">
-          <i></i>
-          <i></i>
-          <i></i>
-        </span>
-      </header>
+  } @else {
+  <div class="loader__grid" aria-hidden="true"></div>
 
-      <div class="loader-dialog__body">
-        <span class="loader-dialog__icon" aria-hidden="true">i</span>
-        <div>
-          <strong>{{ dialog.percent }} % {{ loaderContent().loadedLabel }}</strong>
-          <p>{{ dialog.message }}</p>
-        </div>
-      </div>
+  <div class="loader__brand">
+    <span aria-hidden="true">B²</span>
+    <strong aria-hidden="true">{{ loaderContent().bootLabel }}</strong>
+  </div>
 
-      <footer class="loader-dialog__foot" aria-hidden="true">
-        <button type="button" tabindex="-1">{{ dialog.action }}</button>
-      </footer>
-    </article>
+  <button class="loader__skip" type="button" (click)="skip()">{{ loaderContent().skipLabel }}</button>
+
+  @if (phase() === 'boot') {
+  <div class="loader__boot">
+    <strong class="loader__boot-logo" aria-hidden="true">B²</strong>
+    <p>{{ typed() }}<span aria-hidden="true"></span></p>
+  </div>
+  }
+
+  @if (phase() === 'storm') {
+  <div class="loader__storm" aria-hidden="true">
+    @for (slice of stormSlices; track slice.left) {
+    <span class="loader__slice" [style.left]="slice.left" [style.width]="slice.width" [style.background]="slice.fill"
+      [style.animation-delay]="slice.delay"></span>
     }
   </div>
 
-  <aside class="loader__terminal" aria-hidden="true">
-    <p class="loader__terminal-title">{{ loaderContent().terminalTitle }}</p>
-    <ul>
-      @for (line of logLines(); track $index) {
-      <li>{{ line }}</li>
-      }
-    </ul>
-    <div class="loader__progress" [class.loader__progress--complete]="completed()">
-      @for (cell of progressCells; track cell) {
-      <span></span>
-      }
-    </div>
-  </aside>
+  <div class="loader__dialogs">
+    @for (dialog of openDialogs(); track dialog.percent) {
+    <article class="loader-dialog" [style.left]="dialog.left" [style.top]="dialog.top" [style.--dialog-rotate]="dialog.rotate"
+      [style.z-index]="dialog.z" [attr.aria-label]="dialog.percent + '%: ' + dialog.message">
+      <header>
+        <span>{{ dialog.title }}</span>
+        <span class="loader-dialog__controls" aria-hidden="true"><i></i><i></i><i></i></span>
+      </header>
+      <div class="loader-dialog__body">
+        <span class="loader-dialog__icon" aria-hidden="true">i</span>
+        <div>
+          <strong>{{ dialog.percent }}% {{ loaderContent().decryptedLabel }}</strong>
+          <p>{{ dialog.message }}</p>
+        </div>
+      </div>
+      <footer aria-hidden="true"><span>{{ dialog.action }}</span></footer>
+    </article>
+    }
+  </div>
+  }
 
-  @if (completed()) {
-  <div class="loader__ready" [class.loader__ready--launching]="launching()" role="status" aria-live="assertive">
+  @if (phase() === 'ready') {
+  <div class="loader__ready-slices" aria-hidden="true">
+    <span class="loader__ready-slice loader__ready-slice--lime"></span>
+    <span class="loader__ready-slice loader__ready-slice--pink"></span>
+    <span class="loader__ready-slice loader__ready-slice--dots"></span>
+  </div>
+
+  <div class="loader__ready">
+    <div class="loader__ready-title">
+      <strong>{{ loaderContent().readyTop }}</strong>
+      <strong><span>{{ loaderContent().readyAccent }}</span></strong>
+    </div>
     <p>{{ loaderContent().readyText }}</p>
     <button type="button" (click)="dismiss()" [disabled]="launching()" [attr.aria-label]="loaderContent().openLabel">
-      <span>{{ loaderContent().buttonLabel }}</span>
-      @if (launching()) {
-      <img class="loader__button-asset" src="assets/images/nice-head-loader.webp" [attr.alt]="loaderContent().launchImageAlt" width="460" height="720" decoding="async">
-      }
+      {{ loaderContent().buttonLabel }}
     </button>
   </div>
   }
+
+  @if (launching()) {
+  <img class="loader__launch-head" src="assets/images/nice-head-loader.webp" [attr.alt]="loaderContent().launchImageAlt"
+    width="460" height="720" decoding="async">
+  }
+
+  <div class="loader__progress" aria-hidden="true">
+    <span class="loader__terminal">{{ loaderContent().terminalTitle }}</span>
+    <div class="loader__cells">
+      @for (filled of progressCells(); track $index) {
+      <i [class.is-filled]="filled"></i>
+      }
+    </div>
+    <strong>{{ percent() }}%</strong>
+  </div>
   }
 </section>
 }

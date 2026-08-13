@@ -24,6 +24,7 @@ export type AchievementId =
   | 'blood-complete'
   | 'cta-contact'
   | 'skilled-driver'
+  | 'rescue-lane-404'
   | 'world-upside-down'
   | 'loyal-companion'
   | 'platinum-discount';
@@ -88,6 +89,7 @@ export class AchievementService {
     { id: 'blood-complete', icon: 'hematology', category: 'project' },
     { id: 'cta-contact', icon: 'arrow_outward', category: 'contact' },
     { id: 'skilled-driver', icon: 'directions_car', category: 'cta' },
+    { id: 'rescue-lane-404', icon: 'emergency', category: 'cta' },
     { id: 'world-upside-down', icon: 'accessibility_new', category: 'access' },
     { id: 'loyal-companion', icon: 'music_note', category: 'footer' },
     { id: 'platinum-discount', icon: 'workspace_premium', category: 'platin' },
@@ -378,6 +380,11 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       description: 'Zuverlässiger als die Deutsche Bahn.',
       hint: 'Stelle deine Fahrkünste unter Beweis.',
     },
+    'rescue-lane-404': {
+      title: '404 Rettungsgasse not found',
+      description: 'Denk daran: immer eine Rettungsgasse bilden!',
+      hint: 'Jeden Morgen Stau auf der CTA.',
+    },
     'world-upside-down': {
       title: 'Verkehrte Welt',
       description: 'Sieh die Welt aus anderen Augen.',
@@ -459,6 +466,11 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       title: 'Skilled Driver',
       description: 'More reliable than Deutsche Bahn.',
       hint: 'Put your driving skills to the test.',
+    },
+    'rescue-lane-404': {
+      title: '404 Rescue lane not found',
+      description: 'Remember: always leave an emergency corridor!',
+      hint: 'Traffic jam on the CTA every morning.',
     },
     'world-upside-down': {
       title: 'Upside Down',

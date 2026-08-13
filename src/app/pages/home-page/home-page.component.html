@@ -73,28 +73,20 @@
       </aside>
       }
 
-      <aside class="hero__status" [attr.aria-label]="content().hero.statusLabel" bpReveal>
-        <div class="hero__status-bar">
-          <span>// status.exe</span>
-          <span class="hero__status-pill"><span class="hero__status-led"
-              aria-hidden="true"></span><span>live</span></span>
-        </div>
-
-        <div class="hero__status-body">
-          <dl class="hero__status-list">
-            @for (item of content().hero.statusItems; track item.label) {
-            <div>
-              <dt>{{ item.label }}</dt>
-              <dd>{{ item.value }}</dd>
-            </div>
+      <dl class="hero__kpis" [attr.aria-label]="content().hero.statusLabel">
+        @for (item of content().hero.statusItems; track item.label; let index = $index) {
+        <div class="hero__kpi" [class.hero__kpi--user]="index === 0">
+          <dt>{{ item.label }}</dt>
+          <dd>
+            @if (index === 0) {
+            <img class="hero__kpi-brain" src="assets/images/brain_rotation.gif" alt="" width="64" height="64"
+              decoding="async" aria-hidden="true" />
             }
-          </dl>
-
-          <figure class="hero__status-visual" aria-hidden="true">
-            <img src="assets/images/brain_rotation.gif" alt="" width="300" height="300" decoding="async" />
-          </figure>
+            <span>{{ item.value }}</span>
+          </dd>
         </div>
-      </aside>
+        }
+      </dl>
     </div>
   </section>
 
@@ -234,28 +226,6 @@
           }
         </div>
 
-    <div class="skills__flora-strip" aria-hidden="true">
-      <div class="skills__flora-meadow skills__flora-meadow--left">
-        <bp-pixel-flora class="skills__flora skills__flora--01" variant="flora-02" windDuration="4.8s" windDelay="-3.1s" />
-        <bp-pixel-flora class="skills__flora skills__flora--02" variant="flora-01" windDuration="5.4s" windDelay="-1.4s" />
-        <bp-pixel-flora class="skills__flora skills__flora--03" variant="flora-13" windDuration="4.2s" windDelay="-2.5s" />
-        <bp-pixel-flora class="skills__flora skills__flora--04" variant="flora-14" windDuration="5.8s" windDelay="-3.7s" />
-      </div>
-
-      <div class="skills__flora-meadow skills__flora-meadow--center">
-        <bp-pixel-flora class="skills__flora skills__flora--05" variant="flora-05" windDuration="5.7s" windDelay="-4.6s" />
-        <bp-pixel-flora class="skills__flora skills__flora--06" variant="flora-08" windDuration="6.4s" windDelay="-5.2s" />
-        <bp-pixel-flora class="skills__flora skills__flora--07" variant="flora-12" windDuration="6s" windDelay="-4s" />
-        <bp-pixel-flora class="skills__flora skills__flora--08" variant="flora-16" windDuration="4.4s" windDelay="-3.4s" />
-      </div>
-
-      <div class="skills__flora-meadow skills__flora-meadow--right">
-        <bp-pixel-flora class="skills__flora skills__flora--09" variant="flora-10" windDuration="5.1s" windDelay="-2.8s" />
-        <bp-pixel-flora class="skills__flora skills__flora--10" variant="flora-11" windDuration="4.7s" windDelay="-1.9s" />
-        <bp-pixel-flora class="skills__flora skills__flora--11" variant="flora-07" windDuration="4.5s" windDelay="-0.8s" />
-        <bp-pixel-flora class="skills__flora skills__flora--12" variant="flora-15" windDuration="5.2s" windDelay="-1.1s" />
-      </div>
-    </div>
       </div>
     </div>
 
@@ -346,7 +316,7 @@
 
       <div class="faq__list bp-stagger-list bp-stagger-list--soft" bpReveal>
         @for (faq of content().faqs; track $index; let index = $index) {
-        <details class="faq__item bp-card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 90 + 110">
+        <details class="faq__item bp-card bp-stagger-item" name="portfolio-faq" [style.--bp-stagger-delay.ms]="index * 90 + 110">
           <summary>{{ faq.question }}</summary>
           <p>{{ faq.answer }}</p>
         </details>

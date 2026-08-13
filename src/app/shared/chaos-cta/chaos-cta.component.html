@@ -2,7 +2,7 @@
 <section #stageRef class="chaos-cta" id="cta" role="link" tabindex="0" data-cursor="chaos"
   aria-label="Zur Kontaktsection springen" (click)="goToContact()" (keydown)="onKeyDown($event)"
   (pointermove)="onPointerMove($event)" (pointerleave)="onPointerLeave()">
-<div class="chaos-cta__copy bp-motion-copy" bpReveal>
+  <div class="chaos-cta__copy bp-motion-copy" bpReveal>
     <bp-reveal-text class="chaos-cta__title-reveal" [eyebrow]="eyebrow" [text]="title" />
     <p>{{ hint }}</p>
   </div>
@@ -38,14 +38,35 @@
     <span class="chaos-cta__crash-pixel chaos-cta__crash-pixel--four"></span>
   </div>
 
+  <div class="chaos-cta__traffic" aria-hidden="true">
+    @for (kind of trafficVehicleKinds; track $index; let index = $index) {
+    <div class="chaos-cta__queue-vehicle"
+      [class.chaos-cta__queue-vehicle--ambulance]="kind === 'ambulance'"
+      [class.chaos-cta__queue-vehicle--driving]="trafficPhaseAt(index) === 'driving'"
+      [class.chaos-cta__queue-vehicle--stopped]="trafficPhaseAt(index) === 'stopped'"
+      [style.opacity]="trafficStyleAt(index, 'opacity')"
+      [style.transform]="trafficStyleAt(index, 'transform')"
+      [style.width]="trafficStyleAt(index, 'width')">
+      <bp-pixel-sprite [kind]="kind" direction="left" />
+      @if (kind === 'ambulance') {
+      <span class="chaos-cta__ambulance-siren" aria-hidden="true">
+        <i></i><i></i>
+      </span>
+      }
+    </div>
+    }
+  </div>
+
   @if (isDialogVisible()) {
-  <aside class="chaos-cta__dialog" aria-label="HEY_THERE.DLL Dialog">
-    <div class="chaos-cta__dialog-bar">
-      <strong>HEY_THERE.DLL</strong>
+  <aside class="chaos-cta__dialog bp-dos-window" aria-label="HEY_THERE.DLL Dialog">
+    <div class="bp-dos-window__bar">
+      <span>HEY_THERE.DLL</span>
       <button type="button" aria-label="HEY_THERE.DLL schließen" (click)="closeDialog($event)">×</button>
     </div>
-    <span>move cursor</span>
-    <button type="button" (click)="closeDialog($event)">OK</button>
+    <div class="bp-dos-window__body chaos-cta__dialog-body">
+      <span>move cursor</span>
+      <button class="chaos-cta__dialog-action" type="button" (click)="closeDialog($event)">OK</button>
+    </div>
   </aside>
   }
 </section>

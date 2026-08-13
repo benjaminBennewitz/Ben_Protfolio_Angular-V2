@@ -2,7 +2,7 @@
 
 /**
  * @file Physikähnliche CTA-Section.
- * @description Lässt CTA-Wortbausteine beim Erreichen der Section fallen und auf Cursor-Nähe reagieren.
+ * @description Lässt CTA-Wortbausteine fallen, reagiert auf Cursor-Nähe und inszeniert einen Pixel-Verkehrsstau nach einem Unfall.
  */
 
 import { AchievementService } from '../../core/services/achievement.service';
@@ -12,8 +12,14 @@ import { RevealTextComponent } from '../reveal-text/reveal-text.component';
 import { PixelSpriteComponent } from '../pixel-sprite/pixel-sprite.component';
 import { AfterViewInit, Component, ElementRef, HostListener, Input, NgZone, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 
-/** Bewegungszustand eines CTA-Bausteins. */
+/** Bewegungszustand des primären Pixelautos. */
 type CtaCarPhase = 'waiting' | 'driving' | 'crashed' | 'gone';
+
+/** Fahrzeugtyp für den nach einem Crash entstehenden Stau. */
+type CtaTrafficVehicleKind = 'car' | 'ambulance';
+
+/** Bewegungszustand eines Fahrzeugs innerhalb des Staus. */
+type CtaTrafficVehiclePhase = 'waiting' | 'driving' | 'stopped';
 
 /** Bewegungszustand des einmalig durchfahrenden Pixelautos. */
 interface CtaCarState {
@@ -33,6 +39,27 @@ interface CtaCarState {
   crashedAt: number;
 }
 
+/** Simulationszustand eines nachfolgenden Fahrzeugs. */
+interface CtaTrafficVehicleState {
+  /** Fahrzeugtyp für Sprite und Sirene. */
+  readonly kind: CtaTrafficVehicleKind;
+  /** Horizontale Position des Fahrzeugs. */
+  x: number;
+  /** Vertikale Position des Fahrzeugs. */
+  y: number;
+  /** Darstellungsbreite des Fahrzeugs. */
+  width: number;
+  /** Darstellunghöhe des Fahrzeugs. */
+  height: number;
+  /** Aktueller Bewegungszustand. */
+  phase: CtaTrafficVehiclePhase;
+  /** Zeitpunkt, ab dem das Fahrzeug in die Bühne einfährt. */
+  launchAt: number;
+  /** Zielposition innerhalb der Warteschlange. */
+  stopX: number;
+}
+
+/** Physikzustand eines fallenden CTA-Bausteins. */
 interface CtaBlockState {
   /** Sichtbarer Text des Bausteins. */
   readonly label: string;
@@ -88,11 +115,14 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   /** Accessibility-Service für reduzierte oder deaktivierte Bewegung. */
   private readonly accessibility = inject(AccessibilityPreferenceService);
 
-  /** Achievement-Service für die Kontakt-CTA-Trophäe. */
+  /** Achievement-Service für CTA-Trophäen. */
   private readonly achievementService = inject(AchievementService);
 
   /** Interner Bewegungszustand aller Bausteine. */
   private blocks: CtaBlockState[] = [];
+
+  /** Nach einem Unfall einfahrende Fahrzeuge inklusive Krankenwagen. */
+  private trafficVehicles: CtaTrafficVehicleState[] = [];
 
   /** Aktive AnimationFrame-ID. */
   private frameId = 0;
@@ -121,8 +151,14 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   /** Verhindert doppelte Freischaltungen der Fahrer-Trophäe innerhalb derselben CTA-Session. */
   private driverAchievementUnlocked = false;
 
+  /** Verhindert doppelte Freischaltungen der Rettungsgassen-Trophäe innerhalb derselben CTA-Session. */
+  private rescueAchievementUnlocked = false;
+
   /** Physikzustand des einmalig durchfahrenden Pixelautos. */
   private car: CtaCarState = { x: 0, y: 0, width: 92, height: 50, phase: 'waiting', launchAt: 0, crashedAt: 0 };
+
+  /** Reihenfolge der nach einem Crash einfahrenden Fahrzeuge. Sieben Fahrzeuge plus Unfallauto ergeben acht. */
+  readonly trafficVehicleKinds: readonly CtaTrafficVehicleKind[] = ['car', 'car', 'car', 'car', 'car', 'car', 'ambulance'];
 
   /** Sichtbarkeit des kleinen CTA-Dialogfensters. */
   readonly isDialogVisible = signal<boolean>(true);
@@ -139,6 +175,12 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
 
   /** Aktuelle sichtbare Phase des Pixelautos. */
   readonly carPhase = signal<CtaCarPhase>('waiting');
+
+  /** Sichtbare Styles der Fahrzeuge im Stau. */
+  readonly trafficVehicleStyles = signal<readonly Record<'opacity' | 'transform' | 'width', string>[]>([]);
+
+  /** Sichtbare Phasen der Fahrzeuge im Stau. */
+  readonly trafficVehiclePhases = signal<readonly CtaTrafficVehiclePhase[]>([]);
 
   /** Aktiviert die Simulation, sobald die Section sichtbar wird. */
   ngAfterViewInit(): void {
@@ -202,6 +244,16 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     return this.blockStyles()[index]?.[property] ?? '';
   }
 
+  /** Liefert einen CSS-Style-Wert eines Fahrzeugs im Stau. */
+  trafficStyleAt(index: number, property: 'opacity' | 'transform' | 'width'): string {
+    return this.trafficVehicleStyles()[index]?.[property] ?? (property === 'opacity' ? '0' : '');
+  }
+
+  /** Liefert die aktuelle Phase eines Fahrzeugs im Stau. */
+  trafficPhaseAt(index: number): CtaTrafficVehiclePhase {
+    return this.trafficVehiclePhases()[index] ?? 'waiting';
+  }
+
   /** Erkennt einen CTA-Baustein, der als Material Symbol gerendert wird. */
   isIconBlock(word: string): boolean {
     return word.startsWith('icon:');
@@ -244,6 +296,8 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     this.gravityAchievementUnlocked = false;
     this.carHadAccident = false;
     this.driverAchievementUnlocked = false;
+    this.rescueAchievementUnlocked = false;
+    this.trafficVehicles = [];
     this.resetCar(width);
 
     this.publishStyles();
@@ -354,7 +408,7 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     this.frameId = 0;
   }
 
-  /** Simuliert Gravitation, Grenzen, Cursor-Abstoßung und einfache Kollisionen. */
+  /** Simuliert Gravitation, Grenzen, Cursor-Abstoßung, Blockkollisionen und den CTA-Verkehr. */
   private tick(): void {
     const stage = this.stageRef?.nativeElement;
 
@@ -367,6 +421,7 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     const width = stage.clientWidth;
     const height = stage.clientHeight;
     const floor = Math.max(180, height - 96);
+    const now = performance.now();
 
     for (const block of this.blocks) {
       this.applyPointerForce(block);
@@ -401,7 +456,8 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     }
 
     this.resolveCollisions();
-    this.updateCar(performance.now(), width, floor);
+    this.updateCar(now, width, floor);
+    this.updateTraffic(now, width, floor);
     this.zone.run(() => this.publishStyles());
     this.frameId = requestAnimationFrame(() => this.tick());
   }
@@ -494,6 +550,7 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     const startX = compact ? Math.max(14, (width - 2 * compactColumnWidth - gap) / 2) : 72;
 
     this.car.phase = 'gone';
+    this.trafficVehicles = [];
 
     this.blocks.forEach((block, index) => {
       const column = compact ? index % columns : index;
@@ -554,7 +611,7 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     if (this.car.phase === 'driving') {
       this.car.x -= this.car.width < 80 ? 3.2 : 4.8;
 
-      if (this.resolveCarCollision(now)) {
+      if (this.resolveCarCollision(now, stageWidth, floor)) {
         return;
       }
 
@@ -567,16 +624,11 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
       if (this.car.x > stageWidth + this.car.width * 2) {
         this.car.phase = 'gone';
       }
-      return;
-    }
-
-    if (this.car.phase === 'crashed' && now - this.car.crashedAt >= 860) {
-      this.car.phase = 'gone';
     }
   }
 
   /** Prüft das Auto gegen alle Wortbausteine und überträgt den Crash-Impuls auf die Szene. */
-  private resolveCarCollision(now: number): boolean {
+  private resolveCarCollision(now: number, stageWidth: number, floor: number): boolean {
     for (const block of this.blocks) {
       const overlapX = Math.min(this.car.x + this.car.width - block.x, block.x + block.width - this.car.x);
       const overlapY = Math.min(this.car.y + this.car.height - block.y, block.y + block.height - this.car.y);
@@ -588,7 +640,7 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
       this.car.phase = 'crashed';
       this.carHadAccident = true;
       this.car.crashedAt = now;
-      this.car.x += 5;
+      this.createTrafficQueue(now, stageWidth, floor);
 
       for (const target of this.blocks) {
         const targetCenter = target.x + target.width / 2;
@@ -607,6 +659,72 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     return false;
   }
 
+  /** Baut drei Sekunden nach dem Unfall eine sieben Fahrzeuge lange Warteschlange auf. */
+  private createTrafficQueue(crashedAt: number, stageWidth: number, floor: number): void {
+    if (this.trafficVehicles.length > 0) {
+      return;
+    }
+
+    const compact = stageWidth <= 900 || this.usesCompactMobilePhysics();
+    const width = compact ? 40 : 58;
+    const height = compact ? 24 : 36;
+    const queueStart = this.car.x + this.car.width + (compact ? 6 : 10);
+    const usableWidth = Math.max(width, stageWidth - queueStart - 12);
+    const spacing = Math.max(compact ? 27 : 42, Math.min(width + (compact ? 3 : 8), usableWidth / this.trafficVehicleKinds.length));
+
+    this.trafficVehicles = this.trafficVehicleKinds.map((kind, index) => ({
+      kind,
+      x: stageWidth + width + 24 + index * 8,
+      y: floor - height + 4,
+      width,
+      height,
+      phase: 'waiting',
+      launchAt: crashedAt + 3000 + index * (compact ? 520 : 620),
+      stopX: Math.min(stageWidth - width - 10, queueStart + index * spacing),
+    }));
+  }
+
+  /** Lässt die nachfolgenden Autos bis zur Warteschlange vor dem Unfall fahren. */
+  private updateTraffic(now: number, stageWidth: number, floor: number): void {
+    if (this.car.phase !== 'crashed' || this.trafficVehicles.length === 0) {
+      return;
+    }
+
+    const compact = stageWidth <= 900 || this.usesCompactMobilePhysics();
+
+    this.trafficVehicles.forEach((vehicle, index) => {
+      vehicle.y = floor - vehicle.height + 4;
+
+      const queueStart = this.car.x + this.car.width + (compact ? 6 : 10);
+      const usableWidth = Math.max(vehicle.width, stageWidth - queueStart - 12);
+      const spacing = Math.max(compact ? 27 : 42, Math.min(vehicle.width + (compact ? 3 : 8), usableWidth / this.trafficVehicles.length));
+      vehicle.stopX = Math.min(stageWidth - vehicle.width - 10, queueStart + index * spacing);
+
+      if (vehicle.phase === 'waiting') {
+        if (now >= vehicle.launchAt) {
+          vehicle.phase = 'driving';
+        }
+        return;
+      }
+
+      if (vehicle.phase !== 'driving') {
+        return;
+      }
+
+      vehicle.x -= vehicle.kind === 'ambulance' ? (compact ? 3.5 : 5.2) : (compact ? 2.9 : 4.2);
+
+      if (vehicle.x > vehicle.stopX) {
+        return;
+      }
+
+      vehicle.x = vehicle.stopX;
+      vehicle.phase = 'stopped';
+
+    });
+
+    this.unlockRescueAchievement();
+  }
+
   /** Schaltet die Fahrer-Trophäe frei, wenn das Auto die CTA-Bühne ohne Kollision verlässt. */
   private unlockDriverAchievement(): void {
     if (this.carHadAccident || this.driverAchievementUnlocked || this.accessibility.reducesMotion()) {
@@ -615,6 +733,24 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
 
     this.driverAchievementUnlocked = true;
     this.zone.run(() => this.achievementService.unlock('skilled-driver'));
+  }
+
+  /** Schaltet die Rettungsgassen-Trophäe frei, sobald der Krankenwagen am Ende des Staus steht. */
+  private unlockRescueAchievement(): void {
+    if (this.rescueAchievementUnlocked || this.accessibility.reducesMotion()) {
+      return;
+    }
+
+    const ambulanceIndex = this.trafficVehicles.findIndex((vehicle) => vehicle.kind === 'ambulance');
+    const ambulance = this.trafficVehicles[ambulanceIndex];
+    const queueAheadStopped = ambulanceIndex > 0 && this.trafficVehicles.slice(0, ambulanceIndex).every((vehicle) => vehicle.phase === 'stopped');
+
+    if (!ambulance || ambulance.phase !== 'stopped' || !queueAheadStopped) {
+      return;
+    }
+
+    this.rescueAchievementUnlocked = true;
+    this.zone.run(() => this.achievementService.unlock('rescue-lane-404'));
   }
 
   /** Überträgt den Simulationszustand in CSS-Styles. */
@@ -631,5 +767,12 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
       transform: `translate3d(${this.car.x}px, ${this.car.y}px, 0)`,
       width: `${this.car.width}px`,
     });
+
+    this.trafficVehiclePhases.set(this.trafficVehicles.map((vehicle) => vehicle.phase));
+    this.trafficVehicleStyles.set(this.trafficVehicles.map((vehicle) => ({
+      opacity: vehicle.phase === 'waiting' ? '0' : '1',
+      transform: `translate3d(${vehicle.x}px, ${vehicle.y}px, 0)`,
+      width: `${vehicle.width}px`,
+    })));
   }
 }

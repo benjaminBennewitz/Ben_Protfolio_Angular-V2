@@ -42,7 +42,7 @@
   </section>
 
   <section class="services-offers bp-section" id="solutions" bpViewportActivity>
-<div class="services-offers__layout bp-container">
+    <div class="services-offers__layout bp-container">
       <div class="services-offers__head bp-motion-copy" bpReveal>
         <bp-reveal-text class="services-offers__title-reveal" [eyebrow]="content().offersEyebrow"
           [text]="content().offersTitle" headingClass="services-offers__title" />
@@ -51,23 +51,19 @@
 
       <div class="services-offers__list" [attr.aria-label]="content().ariaLabel">
         @for (card of content().cards; track card.title; let index = $index) {
-        <article class="service-offer bp-card" [class.service-offer--featured]="card.featured" bpReveal>
+        <article class="service-offer" [class.service-offer--featured]="card.featured" bpReveal>
           <div class="service-offer__index" aria-hidden="true">0{{ index + 1 }}</div>
 
-          <div class="service-offer__main">
-            <div class="service-offer__heading">
-              <div>
-                @if (card.badge) {
-                <span class="service-offer__badge">{{ card.badge }}</span>
-                }
-                <h3>{{ card.title }}</h3>
-              </div>
-              <strong class="service-offer__price">{{ card.price }}</strong>
-            </div>
+          @if (card.badge) {
+          <span class="service-offer__badge">{{ card.badge }}</span>
+          }
 
+          <div class="service-offer__main">
+            <h3>{{ card.title }}</h3>
+            <strong class="service-offer__price">{{ card.price }}</strong>
             <p class="service-offer__claim">{{ card.claim }}</p>
             <p class="service-offer__description">{{ card.description }}</p>
-            <p class="service-offer__command">{{ card.command }}</p>
+            <code class="service-offer__command">{{ card.command }}</code>
           </div>
 
           <div class="service-offer__details">
@@ -77,7 +73,7 @@
               }
             </ul>
             <p class="service-offer__quality">{{ content().qualityBaseline }}</p>
-            <a class="bp-button service-offer__cta" routerLink="/" fragment="contact">
+            <a class="service-offer__cta" routerLink="/" fragment="contact">
               <span>{{ card.ctaLabel }}</span>
               <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
             </a>
@@ -88,7 +84,7 @@
 
       <div class="services-offers__footer" bpReveal>
         <p class="services-offers__note">{{ content().note }}</p>
-        <a class="bp-button bp-button--ghost" routerLink="/" fragment="contact">
+        <a class="bp-button services-offers__footer-cta" routerLink="/" fragment="contact">
           <span>{{ content().offersCtaLabel }}</span>
           <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
         </a>
@@ -97,7 +93,7 @@
   </section>
 
   <section class="maintenance bp-section" bpViewportActivity>
-<div class="maintenance__layout bp-container">
+    <div class="maintenance__layout bp-container">
       <div class="maintenance__head bp-motion-copy" bpReveal>
         <p class="bp-eyebrow">{{ content().supportTitle }}</p>
         <h2>{{ content().supportHeadline }}</h2>
@@ -110,7 +106,7 @@
 
       <div class="maintenance__plans bp-stagger-list bp-stagger-list--soft" bpReveal>
         @for (plan of content().supportPlans; track plan.name; let index = $index) {
-        <article class="maintenance-card bp-card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 110 + 120">
+        <article class="maintenance-card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 110 + 120">
           <span class="maintenance-card__index">0{{ index + 1 }}</span>
           <h3>{{ plan.name }}</h3>
           <strong>{{ plan.price }}</strong>
@@ -122,11 +118,9 @@
   </section>
 
   <section class="services-outro bp-section" bpViewportActivity>
-<div class="services-outro__visual" aria-hidden="true">
-      <span class="services-outro__orbit services-outro__orbit--one"></span>
-      <span class="services-outro__orbit services-outro__orbit--two"></span>
-      <span class="services-outro__signal"></span>
-    </div>
+    <div class="services-outro__slice" aria-hidden="true"></div>
+    <img class="services-outro__thumb" src="assets/images/project-stack/thumb-lime.webp" alt="" aria-hidden="true"
+      width="512" height="512" loading="lazy" decoding="async">
 
     <div class="services-outro__content bp-container bp-motion-copy" bpReveal>
       <p class="bp-eyebrow">{{ content().outroEyebrow }}</p>
@@ -134,11 +128,11 @@
       <p class="services-outro__text">{{ content().outroText }}</p>
 
       <div class="services-outro__actions">
-        <a class="bp-button bp-button--accent" routerLink="/" fragment="contact">
+        <a class="services-outro__primary" routerLink="/" fragment="contact">
           <span>{{ content().outroPrimaryCtaLabel }}</span>
           <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
         </a>
-        <a class="bp-button bp-button--ghost" routerLink="/portfolio">
+        <a class="services-outro__secondary" routerLink="/portfolio">
           <span>{{ content().outroSecondaryCtaLabel }}</span>
           <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
         </a>

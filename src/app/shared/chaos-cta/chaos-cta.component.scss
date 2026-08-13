@@ -163,6 +163,7 @@
 
 .chaos-cta__block:nth-child(2) {
   background: var(--bp-color-accent);
+  color: var(--bp-color-on-accent);
 }
 
 .chaos-cta__block:nth-child(3) {
@@ -173,6 +174,7 @@
 
 .chaos-cta__block:nth-child(4) {
   background: var(--bp-color-info);
+  color: var(--bp-color-on-info);
 }
 
 .chaos-cta__block--icon {
@@ -406,7 +408,7 @@
   0% { transform: translate3d(0, 0, 0) rotate(0deg) scaleX(1); }
   26% { transform: translate3d(-7px, 5px, 0) rotate(-12deg) scaleX(0.9); }
   58% { transform: translate3d(-12px, 9px, 0) rotate(-20deg) scaleX(0.84); }
-  100% { opacity: 0; transform: translate3d(-20px, 18px, 0) rotate(-28deg) scale(0.68, 0.78); }
+  100% { opacity: 1; transform: translate3d(-4px, 10px, 0) rotate(-78deg) scale(0.82, 0.9); }
 }
 
 @keyframes chaos-car-pixel-one {
@@ -432,5 +434,188 @@
 :host-context(:root[data-motion='reduced']) .chaos-cta__car,
 :host-context(:root[data-motion='off']) .chaos-cta__car,
 :host-context(:root[data-comfort='simple']) .chaos-cta__car {
+  display: none;
+}
+
+
+/* ==========================================================================
+   08   Stau, Krankenwagen und DOS-Dialog Refinement 2026-08-12
+   ========================================================================== */
+
+.chaos-cta__car--crashed {
+  color: color-mix(in srgb, var(--bp-color-accent) 70%, #111111 30%);
+}
+
+.chaos-cta__car--crashed::after {
+  display: none;
+  content: none;
+}
+
+.chaos-cta__traffic {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.chaos-cta__queue-vehicle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  aspect-ratio: 16 / 10;
+  color: color-mix(in srgb, var(--bp-color-info) 72%, var(--bp-color-text) 28%);
+  filter: drop-shadow(4px 6px 0 color-mix(in srgb, #000000 36%, transparent));
+  pointer-events: none;
+  transition: opacity 120ms linear;
+  will-change: transform, opacity;
+}
+
+.chaos-cta__queue-vehicle:nth-child(3n + 2) {
+  color: color-mix(in srgb, var(--bp-color-accent) 72%, var(--bp-color-text) 28%);
+}
+
+.chaos-cta__queue-vehicle:nth-child(3n + 3) {
+  color: color-mix(in srgb, var(--bp-color-accent-2) 58%, var(--bp-color-text) 42%);
+}
+
+.chaos-cta__queue-vehicle bp-pixel-sprite {
+  width: 100%;
+}
+
+.chaos-cta__queue-vehicle--driving bp-pixel-sprite {
+  animation: chaos-car-suspension 320ms steps(2, end) infinite;
+}
+
+.chaos-cta__queue-vehicle--stopped bp-pixel-sprite {
+  animation: chaos-traffic-idle 1.4s steps(2, end) infinite;
+}
+
+.chaos-cta__queue-vehicle--ambulance {
+  z-index: 4;
+  color: #f2f2f2;
+  filter: drop-shadow(4px 6px 0 color-mix(in srgb, #000000 48%, transparent));
+}
+
+.chaos-cta__ambulance-siren {
+  position: absolute;
+  top: 12%;
+  left: 43%;
+  display: flex;
+  gap: 2px;
+  width: 22%;
+  height: 12%;
+  transform: translateX(-50%);
+}
+
+.chaos-cta__ambulance-siren i {
+  display: block;
+  flex: 1 1 50%;
+  min-width: 3px;
+  border: 1px solid #111111;
+}
+
+.chaos-cta__ambulance-siren i:first-child {
+  background: #ff2b2b;
+  animation: chaos-siren-red 520ms steps(1, end) infinite;
+}
+
+.chaos-cta__ambulance-siren i:last-child {
+  background: #23a8ff;
+  animation: chaos-siren-blue 520ms steps(1, end) infinite;
+}
+
+.chaos-cta__dialog.bp-dos-window {
+  display: block;
+  width: min(286px, calc(100% - 2rem));
+  border: 2px solid #101010;
+  padding: 0;
+  background: #d6d6d6;
+  color: #101010;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.72);
+  transform: rotate(1.5deg);
+}
+
+.chaos-cta__dialog .bp-dos-window__bar {
+  border-bottom: 2px solid #101010;
+  padding: 0.42rem 0.58rem;
+  background: #101010;
+  color: #f2f2f2;
+}
+
+.chaos-cta__dialog .bp-dos-window__bar button {
+  border: 1px solid #f2f2f2;
+  background: transparent;
+  color: #f2f2f2;
+}
+
+.chaos-cta__dialog .bp-dos-window__bar button:hover,
+.chaos-cta__dialog .bp-dos-window__bar button:focus-visible {
+  border-color: #ff2b2b;
+  background: #ff2b2b;
+  color: #ffffff;
+}
+
+.chaos-cta__dialog-body.bp-dos-window__body {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+  background: #d6d6d6;
+  color: #101010;
+}
+
+.chaos-cta__dialog-body > span {
+  color: #101010;
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.chaos-cta__dialog-action {
+  justify-self: start;
+  border: 2px solid #101010;
+  padding: 0.38rem 1.15rem;
+  background: #c2c2c2;
+  color: #101010;
+  font-family: var(--bp-font-mono);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
+}
+
+.chaos-cta__dialog-action:hover,
+.chaos-cta__dialog-action:focus-visible {
+  background: #101010;
+  color: #f2f2f2;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.32);
+  transform: translate(-1px, -1px);
+}
+
+@keyframes chaos-traffic-idle {
+  0%, 48% { transform: translateY(0); }
+  49%, 100% { transform: translateY(-1px); }
+}
+
+@keyframes chaos-siren-red {
+  0%, 48% { opacity: 1; box-shadow: 0 0 10px 3px rgba(255, 43, 43, 0.58); }
+  49%, 100% { opacity: 0.22; box-shadow: none; }
+}
+
+@keyframes chaos-siren-blue {
+  0%, 48% { opacity: 0.22; box-shadow: none; }
+  49%, 100% { opacity: 1; box-shadow: 0 0 10px 3px rgba(35, 168, 255, 0.58); }
+}
+
+@media (max-width: 720px) {
+  .chaos-cta__dialog.bp-dos-window {
+    display: none;
+  }
+}
+
+:host-context(:root[data-motion='reduced']) .chaos-cta__traffic,
+:host-context(:root[data-motion='off']) .chaos-cta__traffic,
+:host-context(:root[data-comfort='simple']) .chaos-cta__traffic {
   display: none;
 }

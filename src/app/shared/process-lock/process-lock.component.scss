@@ -987,3 +987,140 @@
     min-width: 0;
   }
 }
+
+
+/* ========================================================================== 
+   09   Referenz-Farbset für Scales und Prozesszustände
+   ========================================================================== */
+
+/* Die Geometrie bleibt unverändert; nur die Scale-Farben stammen aus der Referenz. */
+.process-lock__fragment--2,
+.process-lock__fragment--5 {
+  border-color: color-mix(in srgb, var(--bp-color-accent-lime) 74%, var(--bp-color-text) 26%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bp-color-accent-lime) 58%, transparent), color-mix(in srgb, var(--bp-color-accent-lime) 18%, transparent));
+}
+
+.process-lock__fragment--4 {
+  border-color: color-mix(in srgb, var(--bp-color-accent-pink) 74%, var(--bp-color-text) 26%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bp-color-accent-pink) 58%, transparent), color-mix(in srgb, var(--bp-color-accent-pink) 18%, transparent));
+}
+
+.process-lock__fragment--7 {
+  border-color: color-mix(in srgb, var(--bp-color-accent-violet) 74%, var(--bp-color-text) 26%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bp-color-accent-violet) 58%, transparent), color-mix(in srgb, var(--bp-color-accent-violet) 20%, transparent));
+}
+
+.process-lock__object[data-step='2'] .process-lock__fragment--2,
+.process-lock__object[data-step='2'] .process-lock__fragment--5 {
+  border-color: color-mix(in srgb, var(--bp-color-accent-lime) 82%, var(--bp-color-text) 18%);
+  background: color-mix(in srgb, var(--bp-color-accent-lime) 72%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--bp-color-accent-lime) 24%, transparent), 0 0 24px color-mix(in srgb, var(--bp-color-accent-lime) 28%, transparent);
+}
+
+.process-lock__object[data-step='2'] .process-lock__fragment--4 {
+  border-color: color-mix(in srgb, var(--bp-color-accent-pink) 82%, var(--bp-color-text) 18%);
+  background: color-mix(in srgb, var(--bp-color-accent-pink) 72%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--bp-color-accent-pink) 24%, transparent), 0 0 24px color-mix(in srgb, var(--bp-color-accent-pink) 28%, transparent);
+}
+
+.process-lock__object[data-step='2'] .process-lock__fragment--7,
+.process-lock__object[data-step='3'] .process-lock__fragment--7 {
+  border-color: color-mix(in srgb, var(--bp-color-accent-violet) 82%, var(--bp-color-text) 18%);
+  background: color-mix(in srgb, var(--bp-color-accent-violet) 76%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--bp-color-accent-violet) 24%, transparent), 0 0 28px color-mix(in srgb, var(--bp-color-accent-violet) 34%, transparent);
+}
+
+/* Light Mode: deckende Signalflächen mit den Farbkonturen der Referenz. */
+:root[data-theme='light'] .process-lock__fragment--2,
+:root[data-theme='light'] .process-lock__fragment--5,
+:host-context(:root[data-theme='light']) .process-lock__fragment--2,
+:host-context(:root[data-theme='light']) .process-lock__fragment--5 {
+  border-color: #f6f0e8;
+  background: var(--bp-color-accent-lime);
+  box-shadow:
+    0 0 0 1px #f6f0e8,
+    0 14px 30px rgba(3, 18, 54, 0.42),
+    0 0 20px color-mix(in srgb, var(--bp-color-accent-lime) 64%, transparent);
+}
+
+:root[data-theme='light'] .process-lock__fragment--4,
+:host-context(:root[data-theme='light']) .process-lock__fragment--4 {
+  border-color: #f6f0e8;
+  background: var(--bp-color-accent-pink);
+  box-shadow:
+    0 0 0 1px #f6f0e8,
+    0 14px 30px rgba(3, 18, 54, 0.42),
+    0 0 20px color-mix(in srgb, var(--bp-color-accent-pink) 56%, transparent);
+}
+
+:root[data-theme='light'] .process-lock__fragment--7,
+:host-context(:root[data-theme='light']) .process-lock__fragment--7 {
+  border-color: #f6f0e8;
+  background: var(--bp-color-accent-violet);
+  box-shadow:
+    0 0 0 1px #f6f0e8,
+    0 14px 30px rgba(3, 18, 54, 0.44),
+    0 0 20px color-mix(in srgb, var(--bp-color-accent-violet) 58%, transparent);
+}
+
+/* Färbung der sichtbaren Prozesszustände, ohne deren Layout oder Bewegungslogik anzutasten. */
+.process-lock__step {
+  border-color: rgba(5, 5, 5, 0.32);
+  background: rgba(242, 242, 242, 0.9);
+  color: #050505;
+}
+
+.process-lock__step--active {
+  border-color: #050505;
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--bp-color-accent-lime) 36%, transparent);
+}
+
+.process-lock__step--current {
+  background: #050505;
+  color: #f2f2f2;
+  box-shadow: 6px 6px 0 var(--bp-color-accent-pink);
+}
+
+.process-lock__step span {
+  color: #050505;
+}
+
+.process-lock__step--current span {
+  color: var(--bp-color-accent-lime);
+}
+
+.process-lock__step p {
+  color: #3a3a3a;
+}
+
+.process-lock__step--current p {
+  color: #cfcfcf;
+}
+
+.process-lock__step code {
+  color: var(--bp-color-accent-violet);
+}
+
+.process-lock__step--current code {
+  color: var(--bp-color-accent-pink);
+}
+
+@media (max-width: 980px) {
+  .process-lock__step {
+    border-color: rgba(242, 242, 242, 0.32);
+    background: #101010;
+    color: #f2f2f2;
+  }
+
+  .process-lock__step p {
+    color: #a8a8a8;
+  }
+
+  .process-lock__step span {
+    color: var(--bp-color-accent-lime);
+  }
+
+  .process-lock__step code {
+    color: var(--bp-color-accent-violet);
+  }
+}

@@ -107,6 +107,7 @@ svg {
 }
 
 
-:host([data-kind='car']) {
+:host([data-kind='car']),
+:host([data-kind='ambulance']) {
   aspect-ratio: 16 / 10;
 }

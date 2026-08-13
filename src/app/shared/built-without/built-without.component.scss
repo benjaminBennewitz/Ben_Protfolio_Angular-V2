@@ -195,3 +195,205 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ==========================================================================
+   05   Light-Mode Farbigkeit 2026-08-12
+   ========================================================================== */
+
+:root[data-theme='light'] .built-strip,
+:host-context(:root[data-theme='light']) .built-strip {
+  --integrity-blue: #7188a6;
+  --integrity-yellow: #d1b354;
+  --integrity-berry: #a96886;
+  background:
+    linear-gradient(118deg, color-mix(in srgb, var(--integrity-blue) 20%, transparent) 0 24%, transparent 24% 66%, color-mix(in srgb, var(--integrity-yellow) 22%, transparent) 66% 100%),
+    color-mix(in srgb, var(--bp-color-surface-solid) 92%, var(--bp-color-bg) 8%);
+}
+
+:root[data-theme='light'] .built-strip::before,
+:host-context(:root[data-theme='light']) .built-strip::before {
+  opacity: 0.22;
+  background-image:
+    linear-gradient(90deg, transparent 0 47%, var(--integrity-yellow) 47% 48%, transparent 48% 100%),
+    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--integrity-blue) 52%, transparent) 1px, transparent 0);
+}
+
+:root[data-theme='light'] .built-strip__group,
+:host-context(:root[data-theme='light']) .built-strip__group {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #101010;
+  box-shadow: 7px 7px 0 rgba(16, 16, 16, 0.18);
+}
+
+:root[data-theme='light'] .built-strip__group--without,
+:host-context(:root[data-theme='light']) .built-strip__group--without {
+  background: color-mix(in srgb, var(--integrity-blue) 18%, #f2f2f2 82%);
+}
+
+:root[data-theme='light'] .built-strip__group--capabilities,
+:host-context(:root[data-theme='light']) .built-strip__group--capabilities {
+  background: color-mix(in srgb, var(--integrity-yellow) 22%, #f2f2f2 78%);
+}
+
+:root[data-theme='light'] .built-strip__group::after,
+:host-context(:root[data-theme='light']) .built-strip__group::after {
+  position: absolute;
+  top: -18%;
+  right: -8%;
+  width: 28%;
+  height: 140%;
+  background: color-mix(in srgb, var(--integrity-berry) 22%, transparent);
+  transform: skewX(-14deg);
+  pointer-events: none;
+  content: '';
+}
+
+:root[data-theme='light'] .built-strip__group h3,
+:host-context(:root[data-theme='light']) .built-strip__group h3 {
+  position: relative;
+  z-index: 1;
+  color: #101010;
+}
+
+:root[data-theme='light'] .built-strip__group li,
+:host-context(:root[data-theme='light']) .built-strip__group li {
+  position: relative;
+  z-index: 1;
+  border: 1px solid #101010;
+  background: rgba(242, 242, 242, 0.78);
+  color: #101010;
+  box-shadow: 3px 3px 0 rgba(16, 16, 16, 0.11);
+  transition: transform 180ms var(--bp-ease-out), box-shadow 180ms ease, background-color 180ms ease;
+}
+
+:root[data-theme='light'] .built-strip__group li:nth-child(3n + 1),
+:host-context(:root[data-theme='light']) .built-strip__group li:nth-child(3n + 1) {
+  border-left: 5px solid var(--integrity-blue);
+}
+
+:root[data-theme='light'] .built-strip__group li:nth-child(3n + 2),
+:host-context(:root[data-theme='light']) .built-strip__group li:nth-child(3n + 2) {
+  border-left: 5px solid var(--integrity-yellow);
+}
+
+:root[data-theme='light'] .built-strip__group li:nth-child(3n + 3),
+:host-context(:root[data-theme='light']) .built-strip__group li:nth-child(3n + 3) {
+  border-left: 5px solid var(--integrity-berry);
+}
+
+:root[data-theme='light'] .built-strip__group li:hover,
+:host-context(:root[data-theme='light']) .built-strip__group li:hover {
+  background: #ffffff;
+  box-shadow: 5px 5px 0 rgba(16, 16, 16, 0.18);
+  transform: translate(-2px, -2px);
+}
+
+:root[data-theme='light'] .built-strip__group li .material-symbols-outlined,
+:host-context(:root[data-theme='light']) .built-strip__group li .material-symbols-outlined {
+  color: #101010;
+}
+
+/* ========================================================================== 
+   06   Dark-Mode System-Integrity Posterdesign 2026-08-12
+   ========================================================================== */
+
+:root[data-theme='dark'] .built-strip,
+:host-context(:root[data-theme='dark']) .built-strip {
+  --integrity-primary: var(--bp-color-accent);
+  --integrity-secondary: var(--bp-color-accent-2);
+  --integrity-tertiary: var(--bp-color-accent-3);
+  background:
+    linear-gradient(118deg, color-mix(in srgb, var(--integrity-primary) 8%, transparent) 0 24%, transparent 24% 66%, color-mix(in srgb, var(--integrity-secondary) 9%, transparent) 66% 100%),
+    color-mix(in srgb, var(--bp-color-surface-solid) 76%, var(--bp-color-bg) 24%);
+}
+
+:root[data-theme='dark'] .built-strip::before,
+:host-context(:root[data-theme='dark']) .built-strip::before {
+  opacity: 0.24;
+  background-image:
+    linear-gradient(90deg, transparent 0 47%, var(--integrity-primary) 47% 48%, transparent 48% 100%),
+    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--integrity-secondary) 70%, transparent) 1px, transparent 0);
+}
+
+:root[data-theme='dark'] .built-strip__group,
+:host-context(:root[data-theme='dark']) .built-strip__group {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid var(--bp-color-border-strong);
+  box-shadow: 7px 7px 0 color-mix(in srgb, var(--integrity-primary) 18%, transparent);
+}
+
+:root[data-theme='dark'] .built-strip__group--without,
+:host-context(:root[data-theme='dark']) .built-strip__group--without {
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 88%, var(--integrity-primary) 12%);
+}
+
+:root[data-theme='dark'] .built-strip__group--capabilities,
+:host-context(:root[data-theme='dark']) .built-strip__group--capabilities {
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 88%, var(--integrity-secondary) 12%);
+}
+
+:root[data-theme='dark'] .built-strip__group::after,
+:host-context(:root[data-theme='dark']) .built-strip__group::after {
+  position: absolute;
+  top: -18%;
+  right: -8%;
+  width: 28%;
+  height: 140%;
+  background: color-mix(in srgb, var(--integrity-tertiary) 18%, transparent);
+  transform: skewX(-14deg);
+  pointer-events: none;
+  content: '';
+}
+
+:root[data-theme='dark'] .built-strip__group h3,
+:host-context(:root[data-theme='dark']) .built-strip__group h3 {
+  position: relative;
+  z-index: 1;
+  color: var(--bp-color-text);
+}
+
+:root[data-theme='dark'] .built-strip__group li,
+:host-context(:root[data-theme='dark']) .built-strip__group li {
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--bp-color-border-strong);
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 92%, var(--bp-color-bg) 8%);
+  color: var(--bp-color-text);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.34);
+  transition: transform 180ms var(--bp-ease-out), box-shadow 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+
+:root[data-theme='dark'] .built-strip__group li:nth-child(3n + 1),
+:host-context(:root[data-theme='dark']) .built-strip__group li:nth-child(3n + 1) {
+  border-left: 5px solid var(--integrity-primary);
+}
+
+:root[data-theme='dark'] .built-strip__group li:nth-child(3n + 2),
+:host-context(:root[data-theme='dark']) .built-strip__group li:nth-child(3n + 2) {
+  border-left: 5px solid var(--integrity-secondary);
+}
+
+:root[data-theme='dark'] .built-strip__group li:nth-child(3n + 3),
+:host-context(:root[data-theme='dark']) .built-strip__group li:nth-child(3n + 3) {
+  border-left: 5px solid var(--integrity-tertiary);
+}
+
+:root[data-theme='dark'] .built-strip__group li:hover,
+:root[data-theme='dark'] .built-strip__group li:focus-visible,
+:host-context(:root[data-theme='dark']) .built-strip__group li:hover,
+:host-context(:root[data-theme='dark']) .built-strip__group li:focus-visible {
+  border-color: color-mix(in srgb, var(--integrity-primary) 58%, var(--bp-color-border-strong));
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 78%, var(--integrity-primary) 22%);
+  box-shadow:
+    5px 5px 0 color-mix(in srgb, var(--integrity-primary) 46%, transparent),
+    0 0 20px color-mix(in srgb, var(--integrity-primary) 18%, transparent);
+  transform: translate(-2px, -2px);
+}
+
+:root[data-theme='dark'] .built-strip__group li .material-symbols-outlined,
+:host-context(:root[data-theme='dark']) .built-strip__group li .material-symbols-outlined {
+  color: var(--bp-color-text);
+}

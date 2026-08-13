@@ -1,4 +1,4 @@
-ben-portfolio-angular-v2/
+Portfolio/
 ├── .angular/
 │   └── ...
 ├── node_modules/

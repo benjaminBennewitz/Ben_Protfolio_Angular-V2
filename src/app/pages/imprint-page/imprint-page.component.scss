@@ -128,10 +128,10 @@
   place-items: center;
   width: 1.35rem;
   height: 1.35rem;
-  border: 1px solid rgba(255, 255, 255, 0.52);
+  border: 1px solid #f2f2f2;
   cursor: pointer;
-  background: #3b3b3b;
-  color: #f6f0e8;
+  background: transparent;
+  color: #f2f2f2;
   font: inherit;
   line-height: 1;
   transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;

@@ -87,6 +87,14 @@
    --bp-color-on-info: var(--bp-color-text);
    --bp-color-on-surface-strong: var(--bp-color-text);
    --bp-color-on-control-hover: var(--bp-color-text);
+
+   /* Zusätzliche Signal-Akzente für Process, Poster und interaktive Systemzustände. */
+   --bp-color-accent-lime: var(--bp-color-accent);
+   --bp-color-on-accent-lime: var(--bp-color-on-accent);
+   --bp-color-accent-pink: var(--bp-color-accent-2);
+   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
+   --bp-color-accent-violet: var(--bp-color-accent-3);
+   --bp-color-on-accent-violet: var(--bp-color-on-accent-3);
 }
 
 /* ==========================================================================
@@ -119,6 +127,12 @@
    --bp-color-on-accent: #101010;
    --bp-color-accent-2: #ff3ea5;
    --bp-color-accent-3: #8d5cff;
+   --bp-color-accent-lime: #a7ff19;
+   --bp-color-on-accent-lime: #101010;
+   --bp-color-accent-pink: #ff3ea5;
+   --bp-color-on-accent-pink: #101010;
+   --bp-color-accent-violet: #8d5cff;
+   --bp-color-on-accent-violet: #ffffff;
    --bp-color-warning: #ff8c1a;
    --bp-color-danger: #ff2d55;
    --bp-color-info: #23c7ff;
@@ -145,6 +159,12 @@
    --bp-color-on-accent: #ffffff;
    --bp-color-accent-2: #b000ff;
    --bp-color-accent-3: #d0005f;
+   --bp-color-accent-lime: #b8ff2e;
+   --bp-color-on-accent-lime: #101010;
+   --bp-color-accent-pink: #ff2e88;
+   --bp-color-on-accent-pink: #101010;
+   --bp-color-accent-violet: #9d2eff;
+   --bp-color-on-accent-violet: #ffffff;
    --bp-color-warning: #9b5200;
    --bp-color-danger: #bd1238;
    --bp-color-info: #006d7f;
@@ -178,6 +198,12 @@
    --bp-color-accent-2: #e69f00;
    --bp-color-accent-3: #cc79a7;
    --bp-color-info: #0072b2;
+   --bp-color-accent-lime: var(--bp-color-accent);
+   --bp-color-on-accent-lime: var(--bp-color-on-accent);
+   --bp-color-accent-pink: var(--bp-color-accent-2);
+   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
+   --bp-color-accent-violet: var(--bp-color-accent-3);
+   --bp-color-on-accent-violet: var(--bp-color-on-accent-3);
 }
 
 :root[data-color-vision='protanopia'] {
@@ -186,6 +212,12 @@
    --bp-color-accent-2: #f0e442;
    --bp-color-accent-3: #56b4e9;
    --bp-color-info: #009e73;
+   --bp-color-accent-lime: var(--bp-color-accent);
+   --bp-color-on-accent-lime: var(--bp-color-on-accent);
+   --bp-color-accent-pink: var(--bp-color-accent-2);
+   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
+   --bp-color-accent-violet: var(--bp-color-accent-3);
+   --bp-color-on-accent-violet: var(--bp-color-on-accent-3);
 }
 
 :root[data-color-vision='tritanopia'] {
@@ -194,6 +226,12 @@
    --bp-color-accent-2: #0072b2;
    --bp-color-accent-3: #cc79a7;
    --bp-color-info: #d55e00;
+   --bp-color-accent-lime: var(--bp-color-accent);
+   --bp-color-on-accent-lime: var(--bp-color-on-accent);
+   --bp-color-accent-pink: var(--bp-color-accent-2);
+   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
+   --bp-color-accent-violet: var(--bp-color-accent-3);
+   --bp-color-on-accent-violet: var(--bp-color-on-accent-3);
 }
 
 :root[data-color-vision='achromatopsia'] {
@@ -204,6 +242,12 @@
    --bp-color-warning: #d9d9d9;
    --bp-color-danger: #7f7f7f;
    --bp-color-info: #f0f0f0;
+   --bp-color-accent-lime: var(--bp-color-accent);
+   --bp-color-on-accent-lime: var(--bp-color-on-accent);
+   --bp-color-accent-pink: var(--bp-color-accent-2);
+   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
+   --bp-color-accent-violet: var(--bp-color-accent-3);
+   --bp-color-on-accent-violet: var(--bp-color-on-accent-3);
 }
 
 :root[data-theme='light'][data-color-vision='achromatopsia'] {

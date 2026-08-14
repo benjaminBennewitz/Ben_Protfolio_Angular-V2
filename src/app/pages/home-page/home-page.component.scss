@@ -2350,8 +2350,8 @@
 
 :root[data-theme='light'] .faq__background,
 :host-context(:root[data-theme='light']) .faq__background {
-  opacity: 0.24;
-  mix-blend-mode: multiply;
+  opacity: 0.32;
+  mix-blend-mode: screen;
 }
 
 :host-context(:root[data-motion='reduced']) .faq__background,

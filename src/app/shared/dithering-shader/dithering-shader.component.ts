@@ -2,13 +2,16 @@
 
 /**
  * @file Animierter Dithering-Shader als wiederverwendbare WebGL2-Komponente.
- * @description Rendert den pixeligen Swirl GPU-beschleunigt, übernimmt CSS-Design-Tokens und pausiert außerhalb des Viewports.
+ * @description Rendert pixelige Swirl- und Wave-Muster GPU-beschleunigt, übernimmt CSS-Design-Tokens und pausiert außerhalb des Viewports.
  */
 
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, HostBinding, Input, NgZone, OnDestroy, ViewChild, inject } from '@angular/core';
 
 /** Unterstützte Dithering-Matrizen. */
 type DitheringMatrixType = '2x2' | '4x4' | '8x8';
+
+/** Unterstützte prozedurale Shader-Muster. */
+type DitheringShape = 'swirl' | 'wave';
 
 /** RGBA-Farbwert mit normalisierten Kanälen von 0 bis 1. */
 type RgbaColor = readonly [number, number, number, number];
@@ -23,6 +26,7 @@ interface ShaderUniforms {
   readonly frontColor: WebGLUniformLocation;
   readonly backColor: WebGLUniformLocation;
   readonly ditherSize: WebGLUniformLocation;
+  readonly shape: WebGLUniformLocation;
 }
 
 /** Dekorativer GPU-Shader für animierte Dithering-Hintergründe. */
@@ -85,6 +89,9 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
 
   /** CSS-Farbe für die sichtbaren Dither-Pixel. */
   @Input() colorFront = 'var(--bp-color-accent)';
+
+  /** Prozedurale Form des Dithering-Musters. */
+  @Input() shape: DitheringShape = 'swirl';
 
   /** Bayer-Matrix für das Dithering. */
   @Input() type: DitheringMatrixType = '4x4';
@@ -279,12 +286,13 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
     const frontColor = gl.getUniformLocation(program, 'u_front_color');
     const backColor = gl.getUniformLocation(program, 'u_back_color');
     const ditherSize = gl.getUniformLocation(program, 'u_dither_size');
+    const shape = gl.getUniformLocation(program, 'u_shape');
 
-    if (!resolution || !time || !speed || !intensity || !zoom || !frontColor || !backColor || !ditherSize) {
+    if (!resolution || !time || !speed || !intensity || !zoom || !frontColor || !backColor || !ditherSize || !shape) {
       return undefined;
     }
 
-    return { resolution, time, speed, intensity, zoom, frontColor, backColor, ditherSize };
+    return { resolution, time, speed, intensity, zoom, frontColor, backColor, ditherSize, shape };
   }
 
   /** Skaliert die interne Renderauflösung passend zur gewünschten Pixelgröße. */
@@ -386,6 +394,7 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
     gl.uniform4f(uniforms.frontColor, ...this.frontColor);
     gl.uniform4f(uniforms.backColor, ...this.backColor);
     gl.uniform1i(uniforms.ditherSize, this.getDitherSize());
+    gl.uniform1i(uniforms.shape, this.shape === 'wave' ? 1 : 0);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 
@@ -464,12 +473,23 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
       for (let x = 0; x < width; x += 1) {
         const nx = ((x + 0.5 - width / 2) / radiusBase) * zoom;
         const ny = ((y + 0.5 - height / 2) / radiusBase) * zoom;
-        const distance = Math.hypot(nx, ny);
-        const angle = Math.atan2(ny, nx);
-        const spiral = Math.sin(distance * 17.5 - angle * 5.8);
-        const ring = Math.sin(distance * 23.5);
-        const arm = Math.cos(angle * 2.6 + distance * 8.2);
-        const energy = (spiral * 0.58 + ring * 0.24 + arm * 0.18) * 0.5 + 0.5;
+        let energy = 0;
+
+        if (this.shape === 'wave') {
+          const uvX = x / Math.max(1, width);
+          const uvY = 1 - y / Math.max(1, height);
+          const waveX = uvX * 8 - 4;
+          const wave = Math.cos(0.5 * waveX) * Math.sin(1.5 * waveX) * 0.88;
+          energy = 1 - this.smoothStep(-0.95, 0.95, (uvY - 0.48) * 4.2 + wave);
+        } else {
+          const distance = Math.hypot(nx, ny);
+          const angle = Math.atan2(ny, nx);
+          const spiral = Math.sin(distance * 17.5 - angle * 5.8);
+          const ring = Math.sin(distance * 23.5);
+          const arm = Math.cos(angle * 2.6 + distance * 8.2);
+          energy = (spiral * 0.58 + ring * 0.24 + arm * 0.18) * 0.5 + 0.5;
+        }
+
         const threshold = ((y & 3) * 4 + (x & 3)) / 16;
         const color = energy > threshold ? front : back;
         const offset = (y * width + x) * 4;
@@ -482,6 +502,12 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
     }
 
     context.putImageData(imageData, 0, 0);
+  }
+
+  /** Interpoliert weich zwischen zwei Grenzwerten für den statischen Canvas-Fallback. */
+  private smoothStep(edge0: number, edge1: number, value: number): number {
+    const t = Math.min(1, Math.max(0, (value - edge0) / Math.max(0.0001, edge1 - edge0)));
+    return t * t * (3 - 2 * t);
   }
 
   /** Vertex-Shader für ein einzelnes bildschirmfüllendes Dreieck ohne Vertex-Buffer. */
@@ -512,6 +538,7 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
     uniform vec4 u_front_color;
     uniform vec4 u_back_color;
     uniform int u_dither_size;
+    uniform int u_shape;
 
     out vec4 out_color;
 
@@ -568,17 +595,31 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
       float radius_base = max(1.0, min(u_resolution.x, u_resolution.y) * 0.5);
       vec2 top_left_space = vec2(gl_FragCoord.x, u_resolution.y - gl_FragCoord.y);
       vec2 normalized = ((top_left_space - u_resolution * 0.5) / radius_base) * u_zoom;
-      float distance_from_center = length(normalized);
-      float angle = atan(normalized.y, normalized.x);
       float time = u_time * u_speed;
+      float field = 0.0;
 
-      float spiral = sin(distance_from_center * 17.5 - angle * 5.8 + time * 2.15);
-      float ring = sin(distance_from_center * 23.5 - time * 1.05);
-      float arm = cos(angle * 2.6 + distance_from_center * 8.2 - time * 1.55);
-      float outer_fade = 1.0 - smooth_step(0.82, 1.72, distance_from_center);
-      float center_hole = smooth_step(0.16, 0.34, distance_from_center);
-      float energy = (spiral * 0.58 + ring * 0.24 + arm * 0.18) * 0.5 + 0.5;
-      float field = clamp((energy - 0.14) * (0.96 + u_intensity * 0.34) * outer_fade * center_hole, 0.0, 1.0);
+      if (u_shape == 1) {
+        // Sine-Wave nach dem Dithering-Prinzip der Referenzkomponente.
+        vec2 uv = gl_FragCoord.xy / max(u_resolution, vec2(1.0));
+        float aspect = u_resolution.x / max(1.0, u_resolution.y);
+        float wave_x = (uv.x - 0.5) * 8.0 * max(1.0, aspect * 0.62);
+        float wave = cos(0.5 * wave_x - 2.0 * time)
+          * sin(1.5 * wave_x + time)
+          * (0.75 + 0.25 * cos(3.0 * time));
+        float wave_y = (uv.y - 0.48) * 4.2;
+        field = 1.0 - smooth_step(-0.95, 0.95, wave_y + wave);
+        field = clamp((field - 0.08) * (0.94 + u_intensity * 0.28), 0.0, 1.0);
+      } else {
+        float distance_from_center = length(normalized);
+        float angle = atan(normalized.y, normalized.x);
+        float spiral = sin(distance_from_center * 17.5 - angle * 5.8 + time * 2.15);
+        float ring = sin(distance_from_center * 23.5 - time * 1.05);
+        float arm = cos(angle * 2.6 + distance_from_center * 8.2 - time * 1.55);
+        float outer_fade = 1.0 - smooth_step(0.82, 1.72, distance_from_center);
+        float center_hole = smooth_step(0.16, 0.34, distance_from_center);
+        float energy = (spiral * 0.58 + ring * 0.24 + arm * 0.18) * 0.5 + 0.5;
+        field = clamp((energy - 0.14) * (0.96 + u_intensity * 0.34) * outer_fade * center_hole, 0.0, 1.0);
+      }
 
       ivec2 dither_point = ivec2(floor(top_left_space));
       float threshold = dither_threshold(dither_point);

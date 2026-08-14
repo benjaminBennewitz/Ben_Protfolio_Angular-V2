@@ -10,6 +10,7 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
+import { DitheringShaderComponent } from '../../shared/dithering-shader/dithering-shader.component';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { RevealTextComponent } from '../../shared/reveal-text/reveal-text.component';
 import { ViewportActivityDirective } from '../../shared/viewport-activity.directive';
@@ -18,7 +19,7 @@ import { ViewportActivityDirective } from '../../shared/viewport-activity.direct
 @Component({
   selector: 'bp-services-page',
   standalone: true,
-  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, ViewportActivityDirective],
+  imports: [RouterLink, DitheringShaderComponent, RevealTextComponent, RevealOnScrollDirective, ViewportActivityDirective],
   templateUrl: './services-page.component.html',
   styleUrl: './services-page.component.scss',
 })

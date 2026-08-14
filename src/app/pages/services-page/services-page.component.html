@@ -97,28 +97,45 @@
       <div class="maintenance__head bp-motion-copy" bpReveal>
         <p class="bp-eyebrow">{{ content().supportTitle }}</p>
         <h2>{{ content().supportHeadline }}</h2>
-        <p class="bp-subtitle">{{ content().supportText }}</p>
-        <a class="bp-button maintenance__cta" routerLink="/" fragment="contact">
-          <span>{{ content().supportCtaLabel }}</span>
-          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
-        </a>
       </div>
 
-      <div class="maintenance__plans bp-stagger-list bp-stagger-list--soft" bpReveal>
-        @for (plan of content().supportPlans; track plan.name; let index = $index) {
-        <article class="maintenance-card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 110 + 120">
-          <span class="maintenance-card__index">0{{ index + 1 }}</span>
-          <h3>{{ plan.name }}</h3>
-          <strong>{{ plan.price }}</strong>
-          <p>{{ plan.text }}</p>
-        </article>
-        }
+      <div class="maintenance__wave-stage">
+        <bp-dithering-shader
+          class="maintenance__wave"
+          shape="wave"
+          type="8x8"
+          colorBack="transparent"
+          colorFront="var(--maintenance-wave-color)"
+          [pxSize]="3"
+          [speed]="0.6"
+          [intensity]="1.18">
+        </bp-dithering-shader>
+
+        <div class="maintenance__wave-content">
+          <div class="maintenance__support-copy bp-motion-copy" bpReveal>
+            <p class="bp-subtitle">{{ content().supportText }}</p>
+            <a class="bp-button maintenance__cta" routerLink="/" fragment="contact">
+              <span>{{ content().supportCtaLabel }}</span>
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+            </a>
+          </div>
+
+          <div class="maintenance__plans bp-stagger-list bp-stagger-list--soft" bpReveal>
+            @for (plan of content().supportPlans; track plan.name; let index = $index) {
+            <article class="maintenance-card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 110 + 120">
+              <span class="maintenance-card__index">0{{ index + 1 }}</span>
+              <h3>{{ plan.name }}</h3>
+              <strong>{{ plan.price }}</strong>
+              <p>{{ plan.text }}</p>
+            </article>
+            }
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="services-outro bp-section" bpViewportActivity>
-    <div class="services-outro__slice" aria-hidden="true"></div>
     <img class="services-outro__thumb" src="assets/images/project-stack/thumb-lime.webp" alt="" aria-hidden="true"
       width="512" height="512" loading="lazy" decoding="async">
 

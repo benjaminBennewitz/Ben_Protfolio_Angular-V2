@@ -116,6 +116,10 @@ Portfolio/
 │   │   │   │   ├── contact-form.component.html
 │   │   │   │   ├── contact-form.component.scss
 │   │   │   │   └── contact-form.component.ts
+│   │   │   ├── dithering-shader/
+│   │   │   │   ├── dithering-shader.component.html
+│   │   │   │   ├── dithering-shader.component.scss
+│   │   │   │   └── dithering-shader.component.ts
 │   │   │   ├── pixel-firework/
 │   │   │   │   ├── pixel-firework.component.html
 │   │   │   │   ├── pixel-firework.component.scss

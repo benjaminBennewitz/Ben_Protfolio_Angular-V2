@@ -1,0 +1,16 @@
+/* src/app/shared/dithering-shader/dithering-shader.component.scss */
+
+:host {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dithering-shader__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}

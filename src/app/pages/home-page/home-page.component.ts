@@ -15,6 +15,7 @@ import { AboutMetricsWindowComponent } from '../../shared/about-metrics-window/a
 import { BuiltWithoutComponent } from '../../shared/built-without/built-without.component';
 import { ChaosCtaComponent } from '../../shared/chaos-cta/chaos-cta.component';
 import { ContactFormComponent } from '../../shared/contact-form/contact-form.component';
+import { DitheringShaderComponent } from '../../shared/dithering-shader/dithering-shader.component';
 import { ProcessLockComponent } from '../../shared/process-lock/process-lock.component';
 import { PixelFireworkComponent } from '../../shared/pixel-firework/pixel-firework.component';
 import { PixelSpriteComponent } from '../../shared/pixel-sprite/pixel-sprite.component';
@@ -63,7 +64,7 @@ interface ProjectsChocolateEgg {
 @Component({
   selector: 'bp-home-page',
   standalone: true,
-  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProcessLockComponent, AboutMetricsWindowComponent, BuiltWithoutComponent, ChaosCtaComponent, ContactFormComponent, ViewportActivityDirective, PixelSpriteComponent, PixelFireworkComponent],
+  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProcessLockComponent, AboutMetricsWindowComponent, BuiltWithoutComponent, ChaosCtaComponent, ContactFormComponent, DitheringShaderComponent, ViewportActivityDirective, PixelSpriteComponent, PixelFireworkComponent],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })

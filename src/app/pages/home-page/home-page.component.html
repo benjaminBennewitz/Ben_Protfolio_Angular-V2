@@ -309,7 +309,18 @@
 
 
   <section class="faq bp-section" id="faq" bpViewportActivity>
-<div class="bp-container bp-grid-two">
+    <bp-dithering-shader
+      class="faq__background"
+      colorBack="transparent"
+      colorFront="var(--bp-color-accent)"
+      type="4x4"
+      [pxSize]="4"
+      [speed]="0.75"
+      [intensity]="1.12"
+      [zoom]="0.4">
+    </bp-dithering-shader>
+
+    <div class="bp-container bp-grid-two">
       <div class="bp-motion-copy" bpReveal>
         <bp-reveal-text class="faq__title-reveal" eyebrow="FAQ" [text]="content().faqTitle" headingClass="faq__title" />
       </div>

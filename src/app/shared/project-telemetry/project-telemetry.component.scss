@@ -1,0 +1,270 @@
+/* src/app/shared/project-telemetry/project-telemetry.component.scss */
+
+:host {
+  display: block;
+}
+
+.project-telemetry {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background:
+    radial-gradient(circle at 18% 15%, color-mix(in srgb, var(--bp-color-accent) 18%, transparent), transparent 27%),
+    linear-gradient(90deg, color-mix(in srgb, var(--bp-color-border) 28%, transparent) 1px, transparent 1px),
+    linear-gradient(0deg, color-mix(in srgb, var(--bp-color-border) 22%, transparent) 1px, transparent 1px),
+    var(--bp-color-bg);
+  background-size: auto, 32px 32px, 32px 32px, auto;
+}
+
+.project-telemetry::before {
+  content: 'PROJECT // TELEMETRY // LIVE';
+  position: absolute;
+  top: clamp(0.8rem, 2vw, 1.5rem);
+  right: clamp(1rem, 3vw, 3rem);
+  color: color-mix(in srgb, var(--bp-color-accent) 74%, var(--bp-color-text));
+  font-family: var(--bp-font-tech, Consolas, monospace);
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  pointer-events: none;
+}
+
+.project-telemetry__shell {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: clamp(0.55rem, 1.1vh, 0.95rem);
+  width: min(100%, 1680px);
+  height: 100%;
+  margin: 0 auto;
+  padding: calc(var(--bp-header-height) + clamp(0.55rem, 1.2vh, 0.9rem)) clamp(1rem, 3vw, 3rem) clamp(0.65rem, 1.4vh, 1rem);
+}
+
+.project-telemetry__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) auto minmax(240px, 0.7fr);
+  gap: clamp(0.75rem, 1.5vw, 1.35rem);
+  align-items: end;
+}
+
+.project-telemetry__head h2 {
+  margin: 0;
+  max-width: 15ch;
+  font-size: clamp(1.8rem, 3.4vw, 3.7rem);
+  line-height: 0.92;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+}
+
+.project-telemetry__head > p {
+  margin: 0;
+  max-width: 50ch;
+  color: var(--bp-color-text-muted);
+  font-family: var(--bp-font-tech, Consolas, monospace);
+  font-size: clamp(0.78rem, 0.9vw, 0.92rem);
+  line-height: 1.5;
+}
+
+.project-telemetry__status {
+  display: grid;
+  min-width: 180px;
+  border: 2px solid var(--bp-color-border-strong);
+  padding: 0.72rem 0.85rem;
+  background: var(--bp-color-surface-solid);
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--bp-color-accent) 50%, var(--bp-color-border-strong));
+  font-family: var(--bp-font-tech, Consolas, monospace);
+  text-transform: uppercase;
+}
+
+.project-telemetry__status span,
+.project-telemetry__status small {
+  color: var(--bp-color-text-muted);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+}
+
+.project-telemetry__status strong {
+  margin: 0.14rem 0 0.34rem;
+  color: var(--bp-color-accent);
+  font-size: 1rem;
+}
+
+.project-telemetry__kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.project-telemetry__kpi {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    'index value'
+    'index copy';
+  gap: 0.16rem 0.8rem;
+  min-height: clamp(86px, 10.5vh, 104px);
+  border: 2px solid var(--bp-color-border-strong);
+  padding: 0.8rem;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 92%, var(--bp-color-accent) 8%);
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--bp-color-accent) 38%, var(--bp-color-border-strong));
+}
+
+.project-telemetry__kpi > span {
+  grid-area: index;
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  background: var(--bp-color-accent);
+  color: var(--bp-color-on-accent);
+  font-family: var(--bp-font-tech, Consolas, monospace);
+  font-size: 0.68rem;
+  font-weight: 900;
+  writing-mode: vertical-rl;
+}
+
+.project-telemetry__kpi > strong {
+  grid-area: value;
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-tech, Consolas, monospace);
+  font-size: clamp(1.35rem, 2.2vw, 2.35rem);
+  line-height: 1;
+}
+
+.project-telemetry__kpi > div {
+  grid-area: copy;
+  min-width: 0;
+}
+
+.project-telemetry__kpi h3,
+.project-telemetry__kpi p {
+  margin: 0;
+}
+
+.project-telemetry__kpi h3 {
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-tech, Consolas, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.project-telemetry__kpi p {
+  display: -webkit-box;
+  margin-top: 0.24rem;
+  overflow: hidden;
+  color: var(--bp-color-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.project-telemetry__charts {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.35fr) minmax(0, 1.35fr);
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.project-telemetry__charts > * {
+  --telemetry-chart-gap: clamp(0.42rem, 0.8vh, 0.7rem);
+  --telemetry-chart-padding: clamp(0.62rem, 1.05vw, 0.9rem);
+  --telemetry-area-max-height: min(23vh, 230px);
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (min-width: 1181px) and (max-height: 820px) {
+  .project-telemetry__shell {
+    gap: 0.5rem;
+    padding-top: calc(var(--bp-header-height) + 0.4rem);
+    padding-bottom: 0.5rem;
+  }
+
+  .project-telemetry__head h2 {
+    font-size: clamp(1.65rem, 3vw, 3rem);
+  }
+
+  .project-telemetry__head > p {
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+
+  .project-telemetry__status {
+    padding: 0.52rem 0.68rem;
+  }
+
+  .project-telemetry__kpi {
+    min-height: 78px;
+    padding: 0.62rem;
+  }
+
+  .project-telemetry__kpi p {
+    -webkit-line-clamp: 1;
+  }
+}
+
+@media (max-width: 1180px) {
+  .project-telemetry {
+    height: auto;
+    min-height: 100svh;
+    min-height: 100dvh;
+    overflow: visible;
+    scroll-snap-stop: normal;
+  }
+
+  .project-telemetry__shell {
+    height: auto;
+    min-height: 100svh;
+    min-height: 100dvh;
+    grid-template-rows: auto auto auto;
+  }
+
+  .project-telemetry__head {
+    grid-template-columns: 1fr auto;
+  }
+
+  .project-telemetry__head > p {
+    grid-column: 1 / -1;
+  }
+
+  .project-telemetry__kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-telemetry__charts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-telemetry__charts > :first-child {
+    grid-row: span 2;
+  }
+}
+
+@media (max-width: 760px) {
+  .project-telemetry__shell {
+    padding-top: 4.4rem;
+  }
+
+  .project-telemetry__head,
+  .project-telemetry__kpis,
+  .project-telemetry__charts {
+    grid-template-columns: 1fr;
+  }
+
+  .project-telemetry__head > p,
+  .project-telemetry__charts > :first-child {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .project-telemetry__status {
+    width: 100%;
+  }
+}

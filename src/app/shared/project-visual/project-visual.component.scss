@@ -224,35 +224,6 @@
   transform: rotate(4deg);
 }
 
-.visual__window-close {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 4;
-  display: none;
-  place-items: center;
-  width: 1.25rem;
-  height: 1.25rem;
-  border: 1px solid #f2f2f2;
-  border-radius: 0;
-  padding: 0;
-  background: transparent;
-  color: #f2f2f2;
-  font: inherit;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: none;
-  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
-}
-
-.visual__window-close:hover,
-.visual__window-close:focus-visible {
-  background: #ff2b2b;
-  color: #ffffff;
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.42);
-  transform: translate(-1px, -1px);
-}
-
 /* ==========================================================================
    04   Assets und Hover
    ========================================================================== */
@@ -382,8 +353,115 @@
   width: clamp(88px, 12.8vw, 144px);
 }
 
-.visual[data-project='html5-browser-game'] .visual__asset {
-  display: none;
+.visual[data-project='dein-fussabdruck'] {
+  background:
+    radial-gradient(circle at 22% 20%, color-mix(in srgb, var(--visual-accent) 22%, transparent) 0 18%, transparent 19%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
+    #08110f;
+}
+
+.visual__ecosystem {
+  position: absolute;
+  inset: 14% 8% 15%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.visual__ecosystem::before,
+.visual__ecosystem::after {
+  position: absolute;
+  content: '';
+  border: 2px solid color-mix(in srgb, var(--visual-accent) 58%, transparent);
+}
+
+.visual__ecosystem::before {
+  inset: 7% 14%;
+  background:
+    linear-gradient(90deg, transparent 49.5%, color-mix(in srgb, var(--visual-accent) 26%, transparent) 50%, transparent 50.5%),
+    linear-gradient(0deg, transparent 49.5%, color-mix(in srgb, var(--visual-accent) 26%, transparent) 50%, transparent 50.5%);
+}
+
+.visual__ecosystem::after {
+  width: 34%;
+  aspect-ratio: 1;
+  transform: rotate(45deg);
+  background: color-mix(in srgb, var(--visual-accent) 8%, transparent);
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--visual-accent) 20%, transparent);
+}
+
+.visual__ecosystem-orbit {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--visual-accent);
+  border-radius: 50%;
+  background: color-mix(in srgb, #08110f 80%, var(--visual-accent) 20%);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.34), 0 0 22px color-mix(in srgb, var(--visual-accent) 24%, transparent);
+  animation: footprint-orbit-float 5.6s ease-in-out infinite;
+}
+
+.visual__ecosystem-orbit i {
+  color: var(--visual-accent);
+  font-family: var(--bp-font-tech, Consolas, monospace);
+  font-size: clamp(0.58rem, 0.9vw, 0.76rem);
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.visual__ecosystem-orbit--lake {
+  top: 3%;
+  left: 8%;
+  width: clamp(76px, 11vw, 128px);
+  aspect-ratio: 1;
+}
+
+.visual__ecosystem-orbit--bog {
+  top: 17%;
+  right: 5%;
+  width: clamp(92px, 13vw, 148px);
+  aspect-ratio: 1;
+  animation-delay: -1.8s;
+}
+
+.visual__ecosystem-orbit--forest {
+  right: 31%;
+  bottom: 2%;
+  width: clamp(104px, 15vw, 168px);
+  aspect-ratio: 1;
+  animation-delay: -3.4s;
+}
+
+.visual__ecosystem-node {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--visual-accent);
+  box-shadow: 12px 0 0 color-mix(in srgb, var(--visual-accent) 54%, transparent), 0 12px 0 color-mix(in srgb, var(--visual-accent) 30%, transparent);
+}
+
+.visual__ecosystem-node--one { top: 26%; left: 42%; }
+.visual__ecosystem-node--two { top: 49%; right: 26%; }
+.visual__ecosystem-node--three { bottom: 18%; left: 28%; }
+
+.visual__ecosystem > strong {
+  position: absolute;
+  left: 0;
+  bottom: -0.35rem;
+  border-left: 5px solid var(--visual-accent);
+  padding: 0.35rem 0.55rem;
+  background: rgba(0, 0, 0, 0.68);
+  color: #f4fff7;
+  font-family: var(--bp-font-tech, Consolas, monospace);
+  font-size: clamp(0.58rem, 0.82vw, 0.72rem);
+  letter-spacing: 0.1em;
+}
+
+@keyframes footprint-orbit-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -8px, 0); }
 }
 
 .visual[data-project='kanban-klon'] .visual__asset--primary {
@@ -1135,7 +1213,8 @@
   .visual__blood-drop,
   .visual__task-status,
   .visual__task-status.is-saved,
-  .visual__blood-analysis {
+  .visual__blood-analysis,
+  .visual__ecosystem-orbit {
     animation: none;
     transition: none;
   }
@@ -1145,17 +1224,6 @@
    13   Responsive
    ========================================================================== */
 
-
-@media (max-width: 760px) {
-  .visual[data-project='html5-browser-game'] .visual__window--closable {
-    min-width: min(188px, calc(100% - 1.5rem));
-    padding-right: 2rem;
-  }
-
-  .visual[data-project='html5-browser-game'] .visual__window-close {
-    display: grid;
-  }
-}
 
 @media (max-width: 1080px) {
   .visual-shell[data-project='blutanalyse'] {

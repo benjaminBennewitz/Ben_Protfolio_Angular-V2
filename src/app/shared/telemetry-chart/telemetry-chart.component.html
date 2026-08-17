@@ -1,0 +1,90 @@
+<!-- src/app/shared/telemetry-chart/telemetry-chart.component.html -->
+<figure class="telemetry-chart" [class.telemetry-chart--sync-parent-reveal]="syncParentReveal" [attr.data-variant]="variant" bpReveal>
+  <figcaption class="telemetry-chart__head">
+    <div>
+      <span>{{ eyebrow }}</span>
+      <h3 [id]="chartId + '-title'">{{ title }}</h3>
+    </div>
+    @if (description) {
+    <p [id]="chartId + '-description'">{{ description }}</p>
+    }
+  </figcaption>
+
+  <div class="telemetry-chart__viewport">
+    @if (variant === 'radial') {
+    <svg class="telemetry-chart__radial" viewBox="0 0 360 280" role="img"
+      [attr.aria-labelledby]="description ? chartId + '-title ' + chartId + '-description' : chartId + '-title'">
+      <g transform="translate(154 140) rotate(-90)">
+        @for (item of data; track item.label; let index = $index) {
+        <circle class="telemetry-chart__radial-track" cx="0" cy="0" [attr.r]="radialRadius(index)" pathLength="100"></circle>
+        <circle class="telemetry-chart__radial-value" cx="0" cy="0" [attr.r]="radialRadius(index)" pathLength="100"
+          [class.telemetry-chart__radial-value--1]="index === 1"
+          [class.telemetry-chart__radial-value--2]="index === 2"
+          [class.telemetry-chart__radial-value--3]="index === 3"
+          [class.telemetry-chart__radial-value--4]="index === 4"
+          [style.--chart-index]="index" [attr.stroke-dasharray]="radialDasharray(item)"
+          [attr.stroke-dashoffset]="0">
+          <title>{{ item.label }}: {{ formattedValue(item) }}</title>
+        </circle>
+        }
+      </g>
+      <g class="telemetry-chart__radial-core" transform="translate(154 140)">
+        <text y="-5" text-anchor="middle">{{ data.length }}</text>
+        <text y="17" text-anchor="middle">SIGNALS</text>
+      </g>
+    </svg>
+    } @else {
+    <svg class="telemetry-chart__area" viewBox="0 0 660 270" role="img"
+      [attr.aria-labelledby]="description ? chartId + '-title ' + chartId + '-description' : chartId + '-title'">
+      <defs>
+        <linearGradient [id]="chartId + '-fill'" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="currentColor" stop-opacity="0.34"></stop>
+          <stop offset="100%" stop-color="currentColor" stop-opacity="0.02"></stop>
+        </linearGradient>
+      </defs>
+
+      <g class="telemetry-chart__grid" aria-hidden="true">
+        <line x1="44" y1="24" x2="620" y2="24"></line>
+        <line x1="44" y1="75" x2="620" y2="75"></line>
+        <line x1="44" y1="126" x2="620" y2="126"></line>
+        <line x1="44" y1="177" x2="620" y2="177"></line>
+        <line x1="44" y1="228" x2="620" y2="228"></line>
+      </g>
+
+      @if (variant === 'step') {
+      <path class="telemetry-chart__fill telemetry-chart__fill--step" [attr.d]="stepFillPath()"
+        [attr.fill]="'url(#' + chartId + '-fill)'" aria-hidden="true"></path>
+      <path class="telemetry-chart__line telemetry-chart__line--step" [attr.d]="stepLinePath()" pathLength="1" aria-hidden="true"></path>
+      } @else {
+      <path class="telemetry-chart__fill" [attr.d]="areaFillPath()" [attr.fill]="'url(#' + chartId + '-fill)'"
+        aria-hidden="true"></path>
+      <path class="telemetry-chart__line" [attr.d]="areaLinePath()" pathLength="1" aria-hidden="true"></path>
+      }
+
+      @for (point of chartPoints(); track point.source.label; let index = $index) {
+      @if (variant === 'step') {
+      <rect class="telemetry-chart__point telemetry-chart__point--step" [style.--chart-index]="index" [attr.x]="point.x - 5" [attr.y]="point.y - 5"
+        width="10" height="10" tabindex="0">
+        <title>{{ point.source.label }}: {{ formattedValue(point.source) }}</title>
+      </rect>
+      } @else {
+      <circle class="telemetry-chart__point" [style.--chart-index]="index" [attr.cx]="point.x" [attr.cy]="point.y" r="5" tabindex="0">
+        <title>{{ point.source.label }}: {{ formattedValue(point.source) }}</title>
+      </circle>
+      }
+      <text class="telemetry-chart__x-label" [attr.x]="point.x" y="254" text-anchor="middle">{{ point.source.label }}</text>
+      }
+    </svg>
+    }
+  </div>
+
+  <ul class="telemetry-chart__legend" [attr.aria-label]="title">
+    @for (item of data; track item.label; let index = $index) {
+    <li [style.--chart-index]="index">
+      <span aria-hidden="true"></span>
+      <strong>{{ item.label }}</strong>
+      <b>{{ formattedValue(item) }}</b>
+    </li>
+    }
+  </ul>
+</figure>

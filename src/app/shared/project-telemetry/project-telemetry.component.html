@@ -1,0 +1,48 @@
+<!-- src/app/shared/project-telemetry/project-telemetry.component.html -->
+@if (project.telemetry; as telemetry) {
+<section id="project-telemetry" class="project-telemetry" [attr.data-accent]="project.accent" bpReveal>
+  <div class="project-telemetry__shell">
+    <header class="project-telemetry__head">
+      <div>
+        <p class="bp-eyebrow">{{ telemetry.eyebrow }}</p>
+        <h2>{{ telemetry.title }}</h2>
+      </div>
+      <div class="project-telemetry__status">
+        <span>{{ telemetry.statusLabel }}</span>
+        <strong>{{ telemetry.statusValue }}</strong>
+        <small>{{ telemetry.source }}</small>
+      </div>
+      <p>{{ telemetry.subtitle }}</p>
+    </header>
+
+    <div class="project-telemetry__kpis" [attr.aria-label]="telemetry.kpiAriaLabel">
+      @for (metric of project.metrics.slice(0, 4); track metric.label; let index = $index) {
+      <article class="project-telemetry__kpi" [style.--telemetry-index]="index">
+        <span>0{{ index + 1 }}</span>
+        <strong>{{ metric.value }}</strong>
+        <div>
+          <h3>{{ metric.label }}</h3>
+          <p>{{ metric.text }}</p>
+        </div>
+      </article>
+      }
+    </div>
+
+    <div class="project-telemetry__charts">
+      @for (chart of telemetry.charts; track chart.id; let index = $index) {
+      <bp-telemetry-chart
+        [class.project-telemetry__chart--radial]="chart.variant === 'radial'"
+        [class.project-telemetry__chart--wide]="chart.variant !== 'radial'"
+        [eyebrow]="chart.eyebrow"
+        [title]="chart.title"
+        [description]="chart.description"
+        [variant]="chart.variant"
+        [data]="chart.data"
+        [maxValue]="chart.maxValue"
+        [valueSuffix]="chart.valueSuffix ?? ''"
+        [chartId]="project.slug + '-telemetry-' + index" />
+      }
+    </div>
+  </div>
+</section>
+}

@@ -19,7 +19,6 @@ export type AchievementId =
   | 'sugar-covered'
   | 'eye-poke'
   | 'bomb-defused'
-  | 'game-oneup'
   | 'trash-dunk'
   | 'blood-complete'
   | 'cta-contact'
@@ -84,7 +83,6 @@ export class AchievementService {
     { id: 'sugar-covered', icon: 'cookie', category: 'project' },
     { id: 'eye-poke', icon: 'visibility', category: 'project' },
     { id: 'bomb-defused', icon: 'explosion', category: 'project' },
-    { id: 'game-oneup', icon: 'sports_esports', category: 'project' },
     { id: 'trash-dunk', icon: 'delete', category: 'project' },
     { id: 'blood-complete', icon: 'hematology', category: 'project' },
     { id: 'cta-contact', icon: 'arrow_outward', category: 'contact' },
@@ -355,11 +353,6 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       description: '"Kabuuum" <- Onomatopoesie.',
       hint: 'Ich glaube, du hast den Knall nicht gehört.',
     },
-    'game-oneup': {
-      title: 'Unsterblich',
-      description: 'Alle Game-Assets haben den Boden erreicht und dich unsterblich gemacht.',
-      hint: 'Die Schwerkraft zieht alles zu Boden.',
-    },
     'trash-dunk': {
       title: 'Papierkorb-Korb',
       description: 'Willkommen in der Digitalisierung. Reduziere Papiermüll!',
@@ -441,11 +434,6 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       title: 'Boom Management',
       description: '"Kaboom" <- onomatopoeia.',
       hint: 'I think you did not hear the bang.',
-    },
-    'game-oneup': {
-      title: 'Immortal',
-      description: 'All game assets reached the ground and made you immortal.',
-      hint: 'Gravity pulls everything to the ground.',
     },
     'trash-dunk': {
       title: 'Trash Dunk',

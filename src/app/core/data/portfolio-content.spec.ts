@@ -46,4 +46,22 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(english.faqs).toHaveLength(german.faqs.length);
     expect(english.notFoundPage.sitemapGroups).toHaveLength(german.notFoundPage.sitemapGroups.length);
   });
+
+  it.each(SUPPORTED_LANGUAGES)('führt Dein Fußabdruck statt des alten Browsergames für %s', (language) => {
+    const projects = PORTFOLIO_TRANSLATIONS[language].projects;
+    const slugs = projects.map((project) => project.slug);
+
+    expect(slugs).toContain('dein-fussabdruck');
+    expect(slugs).not.toContain('html5-browser-game');
+  });
+
+  it.each(SUPPORTED_LANGUAGES)('liefert drei Telemetry-Charts pro Case Study für %s', (language) => {
+    const projects = PORTFOLIO_TRANSLATIONS[language].projects;
+
+    for (const project of projects) {
+      expect(project.telemetry?.charts).toHaveLength(3);
+      expect(project.metrics.length).toBeGreaterThanOrEqual(4);
+    }
+  });
+
 });

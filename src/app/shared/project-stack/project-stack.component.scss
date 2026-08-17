@@ -24,15 +24,13 @@
    03   Dekoration
    04   Inhalt
    05   Visual
-   06   HTML5 Game Szene
-   07   Game Animationen
-   08   Carly Papierkorb-Szene
-   09   Papierkorb Animationen
-   10   Previews
-   11   Typewriter
-   12   Typewriter Animationen
-   13   Intro Variante
-   14   Responsive
+   06   Carly Papierkorb-Szene
+   07   Papierkorb Animationen
+   08   Previews
+   09   Typewriter
+   10   Typewriter Animationen
+   11   Intro Variante
+   12   Responsive
    ========================================================================== */
 
 /* ==========================================================================
@@ -332,11 +330,6 @@
 
 
 
-.project-stack__panel--game .project-stack__title-reveal {
-  --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
-  --bp-reveal-title-line-height: 0.82;
-  --bp-reveal-title-letter-spacing: -0.08em;
-}
 
 .project-stack__copy h3 {
   width: min-content;
@@ -346,133 +339,7 @@
 }
 
 /* ==========================================================================
-   06   HTML5 Game Szene
-   ========================================================================== */
-
-.project-stack__game-layer {
-  position: absolute;
-  inset-block: 0;
-  inset-inline: 0;
-  z-index: 3;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.project-stack__game-layer--panel {
-  inset-inline: var(--bp-viewport-gutter);
-}
-
-.project-stack__game-layer--visual {
-  display: none;
-}
-
-.project-stack__game-body {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: grid;
-  place-items: center;
-  pointer-events: auto;
-  will-change: transform;
-}
-
-.project-stack__game-item {
-  display: block;
-  max-width: 45px;
-  max-height: 45px;
-  object-fit: contain;
-  image-rendering: pixelated;
-  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.52));
-  transition: filter 160ms ease, scale 160ms var(--bp-ease-out);
-}
-
-.project-stack__game-body:hover .project-stack__game-item {
-  scale: 1.22;
-  filter: drop-shadow(0 16px 20px rgba(0, 0, 0, 0.58)) drop-shadow(0 0 16px color-mix(in srgb, var(--stack-accent) 58%, transparent));
-}
-
-
-.project-stack__oneup-layer {
-  position: absolute;
-  inset-block: 0;
-  inset-inline: 0;
-  z-index: 6;
-  pointer-events: none;
-}
-
-.project-stack__oneup-layer--panel {
-  inset-inline: var(--bp-viewport-gutter);
-}
-
-.project-stack__oneup-layer--visual {
-  display: none;
-}
-
-.project-stack__oneup {
-  position: absolute;
-  left: 50%;
-  bottom: 31%;
-  display: block;
-  width: clamp(54px, 5vw, 76px);
-  image-rendering: pixelated;
-  filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.52)) drop-shadow(0 0 18px color-mix(in srgb, var(--stack-accent) 68%, transparent));
-  transform: translate3d(-50%, 0, 0) scale(0.82);
-  animation: project-game-oneup-rise 980ms cubic-bezier(0.12, 0.78, 0.24, 1) forwards;
-}
-
-/* ==========================================================================
-   07   Game Animationen
-   ========================================================================== */
-
-@keyframes project-game-oneup-rise {
-  0% {
-    opacity: 0;
-    transform: translate3d(-50%, 20px, 0) scale(0.78);
-  }
-
-  18% {
-    opacity: 1;
-  }
-
-  68% {
-    opacity: 1;
-    transform: translate3d(-50%, -44px, 0) scale(1);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translate3d(-50%, -74px, 0) scale(1.08);
-  }
-}
-
-
-.project-stack__game-thumb {
-  position: absolute;
-  left: clamp(-4.8rem, -5vw, -2.9rem);
-  bottom: clamp(-1.55rem, -1.6vw, -0.95rem);
-  z-index: 5;
-  display: block;
-  width: clamp(112px, 10.5vw, 162px);
-  pointer-events: none;
-  filter: drop-shadow(0 20px 26px rgba(0, 0, 0, 0.58));
-  animation: project-game-thumb-float 4.8s ease-in-out infinite;
-}
-
-@keyframes project-game-thumb-float {
-
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) rotate(-6deg);
-  }
-
-  50% {
-    transform: translate3d(0, -8px, 0) rotate(-3deg);
-  }
-}
-
-
-/* ==========================================================================
-   08   Carly Papierkorb-Szene
+   06   Carly Papierkorb-Szene
    ========================================================================== */
 
 .project-stack__trash-scene {
@@ -560,7 +427,7 @@
 }
 
 /* ==========================================================================
-   09   Papierkorb Animationen
+   07   Papierkorb Animationen
    ========================================================================== */
 
 @keyframes project-trash-bin-float {
@@ -651,7 +518,7 @@
 
 
 /* ==========================================================================
-   10   Previews
+   08   Previews
    ========================================================================== */
 
 .project-stack__previews {
@@ -704,7 +571,7 @@
 }
 
 /* ==========================================================================
-   11   Typewriter
+   09   Typewriter
    ========================================================================== */
 
 .project-stack__typewriter {
@@ -748,7 +615,7 @@
 }
 
 /* ==========================================================================
-   12   Typewriter Animationen
+   10   Typewriter Animationen
    ========================================================================== */
 
 @keyframes project-stack-typewriter-cursor {
@@ -767,7 +634,7 @@
 
 
 /* ==========================================================================
-   13   Intro Variante
+   11   Intro Variante
    ========================================================================== */
 
 .project-stack__panel--intro {
@@ -779,7 +646,7 @@
 }
 
 /* ==========================================================================
-   14   Responsive
+   12   Responsive
    ========================================================================== */
 
 @media (max-width: 1120px) {
@@ -856,11 +723,6 @@
     font-size: clamp(2.6rem, 16vw, 4.4rem);
   }
 
-  .project-stack__panel--game .project-stack__title-reveal {
-  --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
-  --bp-reveal-title-line-height: 0.82;
-  --bp-reveal-title-letter-spacing: -0.08em;
-}
 
 .project-stack__copy h3 {
     width: min-content;
@@ -992,92 +854,18 @@
 }
 
 /* ==========================================================================
-   15   Mobile Game Bühne
+   13   Mobile Feinschliff
    ========================================================================== */
 
-@media (max-width: 760px) {
-  .project-stack__panel--game {
-    min-height: 100svh;
-  }
-
-  .project-stack__panel--game .project-stack__copy .bp-button {
-    width: fit-content;
-    max-width: 100%;
-    min-width: 0;
-    justify-self: start;
-  }
-
-  .project-stack__game-layer--panel,
-  .project-stack__oneup-layer--panel {
-    display: none;
-  }
-
-  .project-stack__game-layer--visual,
-  .project-stack__oneup-layer--visual {
-    display: block;
-    z-index: 8;
-    opacity: 0.92;
-  }
-
-  .project-stack__oneup-layer--visual {
-    z-index: 10;
-    opacity: 1;
-  }
-
-  .project-stack__oneup-layer--visual .project-stack__oneup {
-    bottom: 19%;
-    width: clamp(46px, 15vw, 62px);
-  }
-
-  .project-stack__game-body {
-    pointer-events: none;
-  }
-
-  .project-stack__game-item {
-    max-width: 34px;
-    max-height: 34px;
-  }
-
-  .project-stack__panel--game .project-stack__copy {
-    z-index: 4;
-  }
-
-  .project-stack__panel--game .project-stack__visual {
-    z-index: 3;
-    overflow: hidden;
-  }
-}
-
 @media (max-width: 420px) {
-  .project-stack__panel--game {
-    min-height: 100svh;
-    overflow: hidden;
-  }
-
-  .project-stack__panel--game .project-stack__title-reveal {
-  --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
-  --bp-reveal-title-line-height: 0.82;
-  --bp-reveal-title-letter-spacing: -0.08em;
-}
-
-.project-stack__copy h3 {
+  .project-stack__copy h3 {
     width: min-content;
     max-width: 9ch;
-  }
-
-  .project-stack__game-layer--visual {
-    inset: 0;
-    opacity: 0.86;
-  }
-
-  .project-stack__game-item {
-    max-width: 30px;
-    max-height: 30px;
   }
 }
 
 /* ==========================================================================
-   16   Responsive Projekt-Navi Korrektur
+   14   Responsive Projekt-Navi Korrektur
    ========================================================================== */
 
 @media (min-width: 1121px) and (max-width: 1500px) {
@@ -1124,7 +912,7 @@
 
 
 /* ==========================================================================
-   17   Wide Screen Bühne
+   15   Wide Screen Bühne
    ========================================================================== */
 
 @media (min-width: 1921px) {
@@ -1139,9 +927,7 @@
     inset-inline: 0;
   }
 
-  .project-stack__decor,
-  .project-stack__game-layer--panel,
-  .project-stack__oneup-layer--panel {
+.project-stack__decor {
     inset-inline: var(--bp-viewport-gutter);
   }
 
@@ -1153,7 +939,7 @@
 }
 
 /* ========================================================================== 
-   18   Wide Screen Projekt-Bühne
+   16   Wide Screen Projekt-Bühne
    ========================================================================== */
 
 @media (min-width: 1921px) {
@@ -1182,11 +968,6 @@
     max-width: 100%;
   }
 
-  .project-stack__panel--game .project-stack__title-reveal {
-  --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
-  --bp-reveal-title-line-height: 0.82;
-  --bp-reveal-title-letter-spacing: -0.08em;
-}
 
 .project-stack__copy h3 {
     width: auto;
@@ -1209,16 +990,6 @@
     margin-right: 0;
   }
 
-  .project-stack__game-layer--panel,
-  .project-stack__oneup-layer--panel {
-    left: 50%;
-    right: auto;
-    width: var(--bp-viewport-max);
-    max-width: var(--bp-viewport-max);
-    transform: translateX(-50%);
-  }
 
-  .project-stack__oneup-layer--panel .project-stack__oneup {
-    bottom: 26%;
-  }
+
 }

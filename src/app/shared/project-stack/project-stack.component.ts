@@ -2,10 +2,10 @@
 
 /**
  * @file Fullscreen-Projekt-Stack.
- * @description Rendert sticky Projekt-Panels und simuliert Projekt-2-Game-Assets mit Gravitation.
+ * @description Rendert sticky Projekt-Panels mit kontrolliertem Scroll-Snapping und projektspezifischen Interaktionen.
  */
 
-import { AfterViewInit, Component, ElementRef, HostListener, Input, NgZone, OnDestroy, QueryList, ViewChildren, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnDestroy, QueryList, ViewChildren, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PortfolioProject, ProjectsContent } from '../../core/models/portfolio.models';
 import { AccessibilityPreferenceService } from '../../core/services/accessibility-preference.service';
@@ -13,54 +13,6 @@ import { AchievementService } from '../../core/services/achievement.service';
 import { ProjectVisualComponent } from '../project-visual/project-visual.component';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 import { RevealTextComponent } from '../reveal-text/reveal-text.component';
-
-/** Dekoratives Game-Asset mit Bildquelle und nativer Bildgröße. */
-interface Project2PhysicsItem {
-  /** Pfad zum 1-Bit-/8-Bit-Asset. */
-  readonly src: string;
-
-  /** Native Bildbreite für stabile Seitenverhältnisse. */
-  readonly naturalWidth: number;
-
-  /** Native Bildhöhe für stabile Seitenverhältnisse. */
-  readonly naturalHeight: number;
-}
-
-/** Bewegungszustand eines fallenden Game-Assets. */
-interface Project2PhysicsState extends Project2PhysicsItem {
-  /** Horizontale Position in Pixel. */
-  x: number;
-  /** Vertikale Position in Pixel. */
-  y: number;
-  /** Horizontale Geschwindigkeit. */
-  vx: number;
-  /** Vertikale Geschwindigkeit. */
-  vy: number;
-  /** Rotation in Grad. */
-  rotation: number;
-  /** Rotationsgeschwindigkeit. */
-  angularVelocity: number;
-  /** Kollisionsbreite. */
-  width: number;
-  /** Kollisionshöhe. */
-  height: number;
-  /** Merkt, ob das Objekt aktuell auf dem Boden ruht. */
-  resting: boolean;
-  /** Merkt, ob das Objekt den Boden mindestens einmal berührt hat. */
-  touchedFloor: boolean;
-}
-
-/** Einfache statische Kollisionsfläche innerhalb des Projektpanels. */
-interface Project2Obstacle {
-  /** Horizontale Position der Kollisionsfläche. */
-  readonly x: number;
-  /** Vertikale Position der Kollisionsfläche. */
-  readonly y: number;
-  /** Breite der Kollisionsfläche. */
-  readonly width: number;
-  /** Höhe der Kollisionsfläche. */
-  readonly height: number;
-}
 
 /** Scroll-Messwerte für das kontrollierte Panel-Snapping. */
 interface ProjectSnapMetrics {
@@ -89,9 +41,6 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   /** Projektpanels für passive Sichtbarkeitsmessung und Kollisionsflächen. */
   @ViewChildren('projectPanel') private readonly projectPanels!: QueryList<ElementRef<HTMLElement>>;
 
-  /** Angular-Zone für performante requestAnimationFrame-Updates. */
-  private readonly zone = inject(NgZone);
-
   /** Accessibility-Service für reduzierte oder deaktivierte Bewegung. */
   private readonly accessibility = inject(AccessibilityPreferenceService);
 
@@ -119,12 +68,6 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   /** Übersetzte Labels für Projektsteuerung und ARIA-Texte. */
   @Input({ required: true }) labels!: ProjectsContent;
 
-  /** Sichtbare Styles für die Game-Assets. */
-  readonly project2ItemStyles = signal<readonly Record<string, string>[]>([]);
-
-  /** Sichtbare 1UP-Effekte nach erfolgreicher Bodenberührung aller Assets. */
-  readonly project2OneUps = signal<readonly number[]>([]);
-
   /** Merkt, ob das Projekt-3-Papier bereits auf dem Papierkorb gelandet ist. */
   readonly project3PaperLanded = signal(false);
 
@@ -133,52 +76,6 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Aktueller Schreibstand des Projekt-5-Dateinamens. */
   readonly project5TypewriterText = signal('');
-
-  /** Fallende Projekt-2-Assets. */
-  readonly project2PhysicsItems: readonly Project2PhysicsItem[] = [
-    { src: 'assets/images/project-stack/project_2/pj2_coin.webp', naturalWidth: 816, naturalHeight: 799 },
-    { src: 'assets/images/project-stack/project_2/pj2_ring.webp', naturalWidth: 638, naturalHeight: 798 },
-    { src: 'assets/images/project-stack/project_2/pj2_star.webp', naturalWidth: 953, naturalHeight: 941 },
-    { src: 'assets/images/project-stack/project_2/pj2_key.webp', naturalWidth: 947, naturalHeight: 555 },
-    { src: 'assets/images/project-stack/project_2/pj2_heart.webp', naturalWidth: 921, naturalHeight: 863 },
-    { src: 'assets/images/project-stack/project_2/pj2_triangle.webp', naturalWidth: 908, naturalHeight: 719 },
-    { src: 'assets/images/project-stack/project_2/pj2_square.webp', naturalWidth: 677, naturalHeight: 694 },
-    { src: 'assets/images/project-stack/project_2/pj2_x.webp', naturalWidth: 882, naturalHeight: 882 },
-    { src: 'assets/images/project-stack/project_2/pj2_potion.webp', naturalWidth: 560, naturalHeight: 866 },
-    { src: 'assets/images/project-stack/project_2/pj2_spring.webp', naturalWidth: 605, naturalHeight: 704 },
-    { src: 'assets/images/project-stack/project_2/pj2_spikes.webp', naturalWidth: 965, naturalHeight: 429 },
-    { src: 'assets/images/project-stack/project_2/pj2_chest.webp', naturalWidth: 996, naturalHeight: 834 },
-    { src: 'assets/images/project-stack/project_2/pj2_lock.webp', naturalWidth: 656, naturalHeight: 878 },
-    { src: 'assets/images/project-stack/project_2/pj2_door.webp', naturalWidth: 692, naturalHeight: 830 },
-    { src: 'assets/images/project-stack/project_2/pj2_flag.webp', naturalWidth: 716, naturalHeight: 1013 },
-  ];
-
-  /** Auf Mobile reduzierte und sonst vollständige Projekt-2-Assetliste. */
-  readonly project2ActivePhysicsItems = signal<readonly Project2PhysicsItem[]>(this.project2PhysicsItems);
-
-  /** Simulationszustand der Projekt-2-Assets. */
-  private project2Items: Project2PhysicsState[] = [];
-
-  /** Aktuelle Pointer-X-Position relativ zu Projekt 2. */
-  private project2PointerX = -10000;
-
-  /** Aktuelle Pointer-Y-Position relativ zu Projekt 2. */
-  private project2PointerY = -10000;
-
-  /** Aktive requestAnimationFrame-ID. */
-  private project2FrameId = 0;
-
-  /** Markiert, ob die Projekt-2-Simulation bereits läuft. */
-  private project2Started = false;
-
-  /** Markiert, ob die 1UP-Sequenz bereits ausgelöst wurde. */
-  private project2OneUpStarted = false;
-
-  /** Timer der 1UP-Sequenz. */
-  private readonly project2OneUpTimers: ReturnType<typeof setTimeout>[] = [];
-
-  /** Passive Sichtbarkeitsmessung für Projekt 2. */
-  private project2Observer: IntersectionObserver | null = null;
 
   /** Passive Sichtbarkeitsmessung für den Projekt-5-Typewriter. */
   private project5Observer: IntersectionObserver | null = null;
@@ -222,33 +119,19 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     { mode: 'pause', delayMs: 1400 },
   ];
 
-  /** Startet die passive Projekt-2-Erkennung und den Projekt-Wheel-Guard. */
+  /** Startet den Projekt-Wheel-Guard und sichtbarkeitsabhängige Interaktionen. */
   ngAfterViewInit(): void {
-    this.resetProject2Items();
     this.hostRef.nativeElement.addEventListener('wheel', this.projectWheelHandler, { passive: false });
-    queueMicrotask(() => {
-      this.observeProject2Panel();
-      this.observeProject5Typewriter();
-    });
+    queueMicrotask(() => this.observeProject5Typewriter());
   }
 
   /** Stoppt Animation, Beobachter und Wheel-Guard. */
   ngOnDestroy(): void {
     this.hostRef.nativeElement.removeEventListener('wheel', this.projectWheelHandler);
-    this.pauseProject2Physics();
-    this.clearProject2OneUpTimers();
     this.clearProject3SuccessTimer();
     this.clearProject5TypewriterTimers();
-    this.project2Observer?.disconnect();
-    this.project2Observer = null;
     this.project5Observer?.disconnect();
     this.project5Observer = null;
-  }
-
-  /** Baut die Assets bei Größenänderung passend neu auf. */
-  @HostListener('window:resize')
-  onResize(): void {
-    this.resetProject2Items();
   }
 
   /** Normalisiert große Mausrad-Sprünge innerhalb der Fullscreen-Projekte. */
@@ -355,38 +238,6 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   /** Gibt an, ob es sich um das Grafikdesign-Katalog-Projekt handelt. */
   isGraphicCatalogProject(project: PortfolioProject): boolean {
     return project.slug === 'grafikdesign-katalog';
-  }
-
-  /** Merkt sich die Pointerposition für die Abstoßungslogik. */
-  onProjectPanelPointerMove(index: number, event: PointerEvent): void {
-    if (index !== 1) {
-      return;
-    }
-
-    const panel = event.currentTarget as HTMLElement | null;
-    const rect = this.project2StageElement()?.getBoundingClientRect() ?? panel?.getBoundingClientRect();
-
-    if (!rect) {
-      return;
-    }
-
-    this.project2PointerX = event.clientX - rect.left;
-    this.project2PointerY = event.clientY - rect.top;
-  }
-
-  /** Setzt die Pointerposition außerhalb der Bühne. */
-  resetProjectPanelPointer(index: number): void {
-    if (index !== 1) {
-      return;
-    }
-
-    this.project2PointerX = -10000;
-    this.project2PointerY = -10000;
-  }
-
-  /** Liefert einen CSS-Style-Wert eines Game-Assets. */
-  project2ItemStyleAt(index: number, property: 'width' | 'height' | 'transform'): string {
-    return this.project2ItemStyles()[index]?.[property] ?? '';
   }
 
   /** Startet den Bogenflug des Projekt-3-Papiers in Richtung Papierkorb. */
@@ -521,64 +372,6 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  /** Beobachtet ausschließlich Projekt 2, ohne Body-Scroll oder Snap zu verändern. */
-  private observeProject2Panel(): void {
-    const project2Panel = this.project2PanelElement();
-
-    if (!project2Panel || !('IntersectionObserver' in window)) {
-      this.startProject2Physics();
-      return;
-    }
-
-    this.project2Observer?.disconnect();
-    this.project2Observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting && entry.intersectionRatio >= this.project2VisibilityThreshold()) {
-          this.startProject2Physics();
-          return;
-        }
-
-        this.pauseProject2Physics();
-      },
-      { threshold: [0, 0.14, 0.42], rootMargin: '-4% 0px -4% 0px' },
-    );
-
-    this.project2Observer.observe(project2Panel);
-  }
-
-
-  /** Liefert den Start-Schwellwert für die Game-Physics je Viewport. */
-  private project2VisibilityThreshold(): number {
-    return window.matchMedia('(max-width: 760px)').matches ? 0.14 : 0.42;
-  }
-
-  /** Liefert eine kompaktere Kollisionsgröße für kleine Projektbühnen. */
-  private project2ItemSize(panelWidth: number): number {
-    return panelWidth <= 420 ? 30 : panelWidth <= 760 ? 34 : 45;
-  }
-
-  /** Gibt an, ob Projekt 2 die mobile Preview-Bühne als Spielfeld nutzt. */
-  private project2UsesCompactMobileSet(): boolean {
-    return window.matchMedia('(max-width: 760px)').matches;
-  }
-
-  /** Liefert die aktive Assetliste und entfernt mobil sechs Objekte aus der Simulation. */
-  private activeProject2PhysicsItems(): readonly Project2PhysicsItem[] {
-    if (!this.project2UsesCompactMobileSet()) {
-      return this.project2PhysicsItems;
-    }
-
-    return this.project2PhysicsItems.slice(0, Math.max(1, this.project2PhysicsItems.length - 6));
-  }
-
-  /** Aktualisiert die sichtbare Assetliste für Template und Simulationszustand. */
-  private updateProject2ActivePhysicsItems(): readonly Project2PhysicsItem[] {
-    const items = this.activeProject2PhysicsItems();
-
-    this.project2ActivePhysicsItems.set(items);
-    return items;
-  }
-
   /** Beobachtet Projekt 5 und startet den Typewriter nur bei Sichtbarkeit. */
   private observeProject5Typewriter(): void {
     const project5Panel = this.projectPanelElement('grafikdesign-katalog');
@@ -602,375 +395,6 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     );
 
     this.project5Observer.observe(project5Panel);
-  }
-
-  /** Startet oder setzt die echte Gravity-Simulation fort. */
-  private startProject2Physics(): void {
-    if (this.accessibility.reducesMotion() || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      this.pauseProject2Physics();
-      this.project2Started = true;
-      this.snapProject2ItemsToFloor();
-      this.triggerProject2OneUpsWhenReady();
-      return;
-    }
-
-    if (!this.project2Started) {
-      this.project2Started = true;
-      this.resetProject2Items();
-    }
-
-    if (this.project2FrameId) {
-      return;
-    }
-
-    this.zone.runOutsideAngular(() => this.tickProject2Physics());
-  }
-
-  /** Pausiert die Projekt-2-Physics-Schleife. */
-  private pauseProject2Physics(): void {
-    cancelAnimationFrame(this.project2FrameId);
-    this.project2FrameId = 0;
-  }
-
-  /** Erstellt Startwerte oberhalb der Projektbühne. */
-  private resetProject2Items(): void {
-    const stage = this.project2StageElement();
-    const width = stage?.clientWidth ?? window.innerWidth;
-    const centerX = width * 0.5;
-    const itemSize = this.project2ItemSize(width);
-    const physicsItems = this.updateProject2ActivePhysicsItems();
-    const spread = Math.min(width <= 640 ? width * 0.62 : 300, width * 0.34);
-
-    this.project2Items = physicsItems.map((item, index) => {
-      const slot = index - (physicsItems.length - 1) / 2;
-      const normalizedSlot = slot / Math.max(1, physicsItems.length / 2);
-      const wobble = [0, -18, 12, -7, 22, -14, 9, -21][index % 8] ?? 0;
-
-      return {
-        ...item,
-        x: centerX + normalizedSlot * spread + wobble,
-        y: -90 - (index % 4) * 14,
-        vx: normalizedSlot * 1.25 + ((index % 3) - 1) * 0.55,
-        vy: 0,
-        rotation: [-10, 8, -16, 14, -6, 18][index % 6] ?? 0,
-        angularVelocity: [-0.12, 0.1, -0.08, 0.14, -0.1, 0.09][index % 6] ?? 0.08,
-        width: itemSize,
-        height: itemSize,
-        resting: false,
-        touchedFloor: false,
-      };
-    });
-
-    this.publishProject2Styles();
-  }
-
-  /** Simuliert Gravitation, Cursor-Abstoßung, Grenzen, Objekt- und UI-Kollisionen. */
-  private tickProject2Physics(): void {
-    const panel = this.project2PanelElement();
-    const stage = this.project2StageElement();
-
-    if (!panel || !stage || this.accessibility.reducesMotion()) {
-      this.pauseProject2Physics();
-      return;
-    }
-
-    const width = stage.clientWidth;
-    const height = stage.clientHeight;
-    const floorOffset = this.project2UsesVisualStage() ? 24 : 50;
-    const floor = Math.max(160, height - floorOffset);
-    const obstacles = this.project2Obstacles(panel, stage);
-
-    for (const item of this.project2Items) {
-      this.applyProject2PointerForce(item);
-      item.vy += item.resting ? 0 : 0.54;
-      item.vx *= item.resting ? 0.82 : 0.988;
-      item.vy *= item.resting ? 0.76 : 0.992;
-      item.angularVelocity *= item.resting ? 0.72 : 0.955;
-      item.angularVelocity = this.clampProject2Spin(item.angularVelocity);
-      item.x += item.vx;
-      item.y += item.vy;
-      item.rotation += item.angularVelocity;
-
-      this.resolveProject2Bounds(item, width, floor);
-      this.resolveProject2ObstacleCollisions(item, obstacles);
-      this.resolveProject2Bounds(item, width, floor);
-      this.settleProject2Item(item);
-    }
-
-    this.resolveProject2ItemCollisions();
-    this.triggerProject2OneUpsWhenReady();
-    this.zone.run(() => this.publishProject2Styles());
-    this.project2FrameId = requestAnimationFrame(() => this.tickProject2Physics());
-  }
-
-  /** Schiebt Game-Assets vom Cursor weg. */
-  private applyProject2PointerForce(item: Project2PhysicsState): void {
-    const centerX = item.x + item.width / 2;
-    const centerY = item.y + item.height / 2;
-    const dx = centerX - this.project2PointerX;
-    const dy = centerY - this.project2PointerY;
-    const distance = Math.max(1, Math.hypot(dx, dy));
-
-    if (distance > 160) {
-      return;
-    }
-
-    const force = (160 - distance) / 160;
-    item.vx += (dx / distance) * force * 6.8;
-    item.vy += (dy / distance) * force * 5.9;
-    item.angularVelocity += force * (dx > 0 ? 1 : -1) * 0.28;
-  }
-
-  /** Begrenzt Assets an Seitenrändern und Boden. */
-  private resolveProject2Bounds(item: Project2PhysicsState, width: number, floor: number): void {
-    if (item.x < 12) {
-      item.x = 12;
-      item.vx *= -0.72;
-      item.angularVelocity *= -0.55;
-    }
-
-    if (item.x + item.width > width - 12) {
-      item.x = width - item.width - 12;
-      item.vx *= -0.72;
-      item.angularVelocity *= -0.55;
-    }
-
-    if (item.y + item.height > floor) {
-      item.y = floor - item.height;
-      item.vy *= Math.abs(item.vy) > 2.2 ? -0.3 : -0.12;
-      item.vx *= 0.72;
-      item.angularVelocity *= 0.48;
-      item.resting = true;
-      item.touchedFloor = true;
-
-      if (Math.abs(item.vy) < 1.15) {
-        item.vy = 0;
-      }
-
-      if (Math.abs(item.vx) < 0.16) {
-        item.vx = 0;
-      }
-
-      if (Math.abs(item.angularVelocity) < 0.05) {
-        item.angularVelocity = 0;
-      }
-    } else {
-      item.resting = false;
-    }
-  }
-
-  /** Löst Kollisionen mit Text, Vorschau, Navigation und Thumb-Asset. */
-  private resolveProject2ObstacleCollisions(item: Project2PhysicsState, obstacles: readonly Project2Obstacle[]): void {
-    for (const obstacle of obstacles) {
-      const overlapX = Math.min(item.x + item.width - obstacle.x, obstacle.x + obstacle.width - item.x);
-      const overlapY = Math.min(item.y + item.height - obstacle.y, obstacle.y + obstacle.height - item.y);
-
-      if (overlapX <= 0 || overlapY <= 0) {
-        continue;
-      }
-
-      if (overlapX < overlapY) {
-        const fromLeft = item.x < obstacle.x;
-        item.x += fromLeft ? -overlapX : overlapX;
-        item.vx *= -0.48;
-        item.angularVelocity += fromLeft ? -0.1 : 0.1;
-        continue;
-      }
-
-      const fromTop = item.y < obstacle.y;
-      item.y += fromTop ? -overlapY : overlapY;
-      item.vy = fromTop ? -Math.abs(item.vy) * 0.38 : Math.abs(item.vy) * 0.24;
-      item.vx += fromTop ? 0.14 : -0.1;
-      item.angularVelocity += fromTop ? 0.08 : -0.08;
-    }
-  }
-
-  /** Trennt überlappende Game-Assets voneinander. */
-  private resolveProject2ItemCollisions(): void {
-    for (let i = 0; i < this.project2Items.length; i += 1) {
-      for (let j = i + 1; j < this.project2Items.length; j += 1) {
-        const a = this.project2Items[i];
-        const b = this.project2Items[j];
-        const overlapX = Math.min(a.x + a.width - b.x, b.x + b.width - a.x);
-        const overlapY = Math.min(a.y + a.height - b.y, b.y + b.height - a.y);
-
-        if (overlapX <= 0 || overlapY <= 0) {
-          continue;
-        }
-
-        const pushX = overlapX < overlapY;
-        const direction = pushX ? (a.x < b.x ? -1 : 1) : (a.y < b.y ? -1 : 1);
-        const push = (pushX ? overlapX : overlapY) / 2;
-
-        if (pushX) {
-          a.x += direction * push;
-          b.x -= direction * push;
-          a.vx *= -0.42;
-          b.vx *= -0.42;
-        } else {
-          a.y += direction * push;
-          b.y -= direction * push;
-          a.vy *= -0.32;
-          b.vy *= -0.32;
-        }
-
-        a.angularVelocity += direction * 0.055;
-        b.angularVelocity -= direction * 0.055;
-        a.angularVelocity = this.clampProject2Spin(a.angularVelocity);
-        b.angularVelocity = this.clampProject2Spin(b.angularVelocity);
-      }
-    }
-  }
-
-  /** Ermittelt statische UI-Flächen, mit denen die Assets kollidieren sollen. */
-  private project2Obstacles(panel: HTMLElement, stage: HTMLElement): readonly Project2Obstacle[] {
-    const selectors = this.project2UsesVisualStage()
-      ? ['.visual__window--one', '.visual__window--two']
-      : ['.project-stack__copy', '.project-stack__visual', '.project-stack__previews', '.project-stack__game-thumb'];
-
-    return selectors
-      .map((selector) => this.project2ObstacleFromSelector(panel, stage, selector))
-      .filter((obstacle): obstacle is Project2Obstacle => Boolean(obstacle));
-  }
-
-  /** Wandelt ein Element in eine relative Kollisionsfläche um. */
-  private project2ObstacleFromSelector(panel: HTMLElement, stage: HTMLElement, selector: string): Project2Obstacle | null {
-    const element = panel.querySelector<HTMLElement>(selector);
-
-    if (!element) {
-      return null;
-    }
-
-    const stageRect = stage.getBoundingClientRect();
-    const rect = element.getBoundingClientRect();
-    const inset = selector.includes('visual__window') ? 2 : selector === '.project-stack__visual' ? 10 : 4;
-
-    return {
-      x: rect.left - stageRect.left + inset,
-      y: rect.top - stageRect.top + inset,
-      width: Math.max(0, rect.width - inset * 2),
-      height: Math.max(0, rect.height - inset * 2),
-    };
-  }
-
-  /** Setzt die Assets bei reduzierter Bewegung direkt auf den Boden. */
-  private snapProject2ItemsToFloor(): void {
-    const stage = this.project2StageElement();
-    const width = stage?.clientWidth ?? window.innerWidth;
-    const floorOffset = this.project2UsesVisualStage() ? 24 : 50;
-    const floor = Math.max(160, (stage?.clientHeight ?? window.innerHeight) - floorOffset);
-
-    this.project2Items.forEach((item, index) => {
-      item.x = Math.min(width - item.width - 12, 80 + index * 54);
-      item.y = floor - item.height;
-      item.vx = 0;
-      item.vy = 0;
-      item.angularVelocity = 0;
-      item.resting = true;
-      item.touchedFloor = true;
-    });
-
-    this.publishProject2Styles();
-  }
-
-  /** Publiziert den aktuellen Simulationszustand ins Template. */
-  private publishProject2Styles(): void {
-    this.project2ItemStyles.set(this.project2Items.map((item) => ({
-      width: `${item.width}px`,
-      height: `${item.height}px`,
-      transform: `translate3d(${item.x.toFixed(1)}px, ${item.y.toFixed(1)}px, 0) rotate(${item.rotation.toFixed(1)}deg)`,
-    })));
-  }
-
-
-
-  /** Startet die 1UP-Sequenz, sobald alle Game-Assets den Boden berührt haben. */
-  private triggerProject2OneUpsWhenReady(): void {
-    if (this.project2OneUpStarted || !this.project2Items.length) {
-      return;
-    }
-
-    if (!this.project2Items.every((item) => item.touchedFloor)) {
-      return;
-    }
-
-    this.project2OneUpStarted = true;
-    this.achievementService.unlock('game-oneup');
-    this.scheduleProject2OneUp(0, 0);
-    this.scheduleProject2OneUp(1, 760);
-    this.scheduleProject2OneUp(2, 1520);
-  }
-
-  /** Plant einen einzelnen 1UP-Aufstieg. */
-  private scheduleProject2OneUp(id: number, delayMs: number): void {
-    const showTimer = setTimeout(() => {
-      this.zone.run(() => this.project2OneUps.update((items) => [...items, id]));
-      const hideTimer = setTimeout(() => {
-        this.zone.run(() => this.project2OneUps.update((items) => items.filter((item) => item !== id)));
-      }, 980);
-
-      this.project2OneUpTimers.push(hideTimer);
-    }, delayMs);
-
-    this.project2OneUpTimers.push(showTimer);
-  }
-
-  /** Entfernt laufende 1UP-Timer. */
-  private clearProject2OneUpTimers(): void {
-    for (const timer of this.project2OneUpTimers) {
-      clearTimeout(timer);
-    }
-
-    this.project2OneUpTimers.length = 0;
-  }
-
-  /** Begrenzt die Rotationsgeschwindigkeit, damit Objekte nicht endlos eskalieren. */
-  private clampProject2Spin(value: number): number {
-    return Math.min(Math.max(value, -1.15), 1.15);
-  }
-
-  /** Beruhigt Objekte, sobald sie fast stillliegen. */
-  private settleProject2Item(item: Project2PhysicsState): void {
-    if (!item.resting) {
-      return;
-    }
-
-    if (Math.abs(item.vx) < 0.08) {
-      item.vx = 0;
-    }
-
-    if (Math.abs(item.vy) < 0.08) {
-      item.vy = 0;
-    }
-
-    if (Math.abs(item.angularVelocity) < 0.04) {
-      item.angularVelocity = 0;
-    }
-  }
-
-  /** Prüft, ob die Game-Assets auf der mobilen Preview-Bühne laufen. */
-  private project2UsesVisualStage(): boolean {
-    return window.matchMedia('(max-width: 760px)').matches;
-  }
-
-  /** Liefert die aktive Game-Bühne für Desktop, Wide-Screen oder Mobile. */
-  private project2StageElement(): HTMLElement | null {
-    const panel = this.project2PanelElement();
-
-    if (!panel) {
-      return null;
-    }
-
-    if (this.project2UsesVisualStage()) {
-      return panel.querySelector<HTMLElement>('.project-stack__game-layer--visual') ?? panel;
-    }
-
-    return panel.querySelector<HTMLElement>('.project-stack__game-layer--panel') ?? panel;
-  }
-
-  /** Liefert das Projekt-2-Panel. */
-  private project2PanelElement(): HTMLElement | null {
-    return this.projectPanelElement('html5-browser-game');
   }
 
   /** Liefert ein Projektpanel anhand seines Slugs. */

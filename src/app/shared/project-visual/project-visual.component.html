@@ -8,13 +8,20 @@
       <span>{{ project.kicker }}</span>
       <strong>{{ project.name }}</strong>
     </div>
-    @if (!onlineWindowClosed()) {
-    <div class="visual__window visual__window--two" [class.visual__window--closable]="isOnlineWindowClosable()">
-      @if (isOnlineWindowClosable()) {
-      <button class="visual__window-close" type="button" (click)="closeOnlineWindow($event)" aria-label="Online-Statusfenster schließen">×</button>
-      }
+    <div class="visual__window visual__window--two">
       <span>system.status</span>
       <strong>online</strong>
+    </div>
+
+    @if (isFootprintProject()) {
+    <div class="visual__ecosystem" aria-hidden="true">
+      <span class="visual__ecosystem-orbit visual__ecosystem-orbit--lake"><i>SEE</i></span>
+      <span class="visual__ecosystem-orbit visual__ecosystem-orbit--bog"><i>MOOR</i></span>
+      <span class="visual__ecosystem-orbit visual__ecosystem-orbit--forest"><i>WALD</i></span>
+      <span class="visual__ecosystem-node visual__ecosystem-node--one"></span>
+      <span class="visual__ecosystem-node visual__ecosystem-node--two"></span>
+      <span class="visual__ecosystem-node visual__ecosystem-node--three"></span>
+      <strong>CAUSE → TIME → EFFECT</strong>
     </div>
     }
 

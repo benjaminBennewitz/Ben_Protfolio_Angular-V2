@@ -2,7 +2,7 @@
 <main class="project-detail bp-scroll-main" [attr.data-project]="project()?.slug ?? null">
   @if (project(); as activeProject) {
   <article>
-    <header class="project-detail__hero bp-section" [style.--project-detail-game-landscape]="activeProject.gameShowcase?.heroBackdropAsset ? 'url(' + activeProject.gameShowcase?.heroBackdropAsset + ')' : null">
+    <header class="project-detail__hero bp-section">
       @if (activeProject.catalogShowcase) {
       <div class="project-detail__catalog-flow" [class.is-paused]="!isCatalogFlowHeroVisible()" aria-hidden="true">
         <canvas #catalogFlowCanvas class="project-detail__catalog-flow-canvas"></canvas>
@@ -40,7 +40,7 @@
 
           <div class="project-detail__hero-actions">
             <a class="bp-button bp-button--accent" [routerLink]="['/projects', activeProject.slug]" [fragment]="primaryDetailFragment()">
-              <span>{{ activeProject.boardShowcase?.ctaLabel ?? activeProject.gameShowcase?.ctaLabel ?? activeProject.bloodShowcase?.ctaLabel ?? activeProject.catalogShowcase?.ctaLabel ?? content().projectsIntro.caseStudyLabel }}</span>
+              <span>{{ activeProject.boardShowcase?.ctaLabel ?? activeProject.bloodShowcase?.ctaLabel ?? activeProject.catalogShowcase?.ctaLabel ?? content().projectsIntro.caseStudyLabel }}</span>
               <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
             </a>
             @if (!activeProject.catalogShowcase) {
@@ -91,39 +91,6 @@
             </article>
             }
           </div>
-          } @else if (activeProject.gameShowcase; as gameShowcase) {
-          <aside class="project-detail__game-showcase" [attr.aria-label]="gameShowcase.videoLabel">
-            <div class="project-detail__game-video">
-              <div class="project-detail__game-video-bar">
-                <span></span>
-                <strong>{{ gameShowcase.eyebrow }}</strong>
-                <small>{{ gameShowcase.status }}</small>
-              </div>
-
-              <div class="project-detail__game-video-viewport">
-                @if (gameShowcase.videoSrc) {
-                <video controls playsinline preload="metadata" [attr.poster]="gameShowcase.videoPoster ?? null" [attr.aria-label]="gameShowcase.videoLabel">
-                  <source [src]="gameShowcase.videoSrc" type="video/webm" />
-                </video>
-                } @else {
-                <div class="project-detail__game-video-placeholder">
-                  <span class="material-symbols-outlined" aria-hidden="true">movie</span>
-                  <strong>{{ gameShowcase.videoFallbackText }}</strong>
-                  <small>{{ gameShowcase.videoFileHint }}</small>
-                </div>
-                }
-              </div>
-
-              <div class="project-detail__game-video-footer">
-                <p>{{ gameShowcase.title }}</p>
-                <ul class="project-detail__game-chips">
-                  @for (chip of gameShowcase.chips; track chip) {
-                  <li>{{ chip }}</li>
-                  }
-                </ul>
-              </div>
-            </div>
-          </aside>
           } @else if (activeProject.bloodShowcase; as bloodShowcase) {
           <aside class="project-detail__blood-showcase project-detail__blood-showcase--objects" [attr.aria-label]="bloodShowcase.previewLabel">
             <div class="project-detail__blood-hero-objects">
@@ -257,6 +224,10 @@
       </div>
     </header>
 
+    @if (activeProject.telemetry) {
+    <bp-project-telemetry [project]="activeProject" />
+    }
+
     <section class="project-detail__highlights bp-section" aria-labelledby="project-highlights-title" bpReveal>
       <div class="bp-container project-detail__signals">
         <p class="bp-eyebrow">{{ content().projectsIntro.highlightsEyebrow }}</p>
@@ -283,7 +254,7 @@
         </div>
         }
 
-        @if (activeProject.metrics.length) {
+        @if (!activeProject.telemetry && activeProject.metrics.length) {
         <div class="project-detail__metric-strip" [attr.aria-label]="content().projectsIntro.metricsLabel" bpReveal>
           @for (metric of activeProject.metrics; track metric.label; let index = $index) {
           <article class="project-detail__metric project-detail__animated-item" [style.--reveal-index]="index" bpReveal>
@@ -657,60 +628,6 @@
     </section>
     }
 
-    @if (activeProject.gameShowcase; as gameShowcase) {
-    <section id="project-game-making" class="project-detail__runner-section bp-section" bpReveal>
-      <div class="bp-container project-detail__runner-panel">
-        <div>
-          <p class="bp-eyebrow">{{ gameShowcase.runner.eyebrow }}</p>
-          <h2>{{ gameShowcase.runner.title }}</h2>
-          <p>{{ gameShowcase.runner.text }}</p>
-        </div>
-
-        <div class="project-detail__runner-track" [attr.aria-label]="gameShowcase.runner.trackLabel">
-          <span class="project-detail__runner-track-label">{{ gameShowcase.runner.trackLabel }}</span>
-          <div class="project-detail__runner-character">
-            @if (gameShowcase.runner.asset) {
-            <img [src]="gameShowcase.runner.asset" [alt]="gameShowcase.runner.assetAlt" loading="lazy" decoding="async" />
-            } @else {
-            <span class="project-detail__runner-fallback" aria-hidden="true"></span>
-            <small>{{ gameShowcase.runner.assetHint }}</small>
-            }
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="project-detail__character-section bp-section" bpReveal>
-      <div class="bp-container project-detail__character-card bp-card">
-        <div class="project-detail__character-visual">
-          @if (gameShowcase.character.asset) {
-          <img [src]="gameShowcase.character.asset" [alt]="gameShowcase.character.assetAlt" loading="lazy" decoding="async" />
-          } @else {
-          <span class="project-detail__character-fallback" aria-hidden="true"></span>
-          <small>{{ gameShowcase.character.assetHint }}</small>
-          }
-        </div>
-
-        <div class="project-detail__character-copy">
-          <p class="bp-eyebrow">{{ gameShowcase.character.eyebrow }}</p>
-          <h2>{{ gameShowcase.character.title }}</h2>
-          <strong>{{ gameShowcase.character.name }} · {{ gameShowcase.character.role }}</strong>
-          <p>{{ gameShowcase.character.text }}</p>
-
-          <div class="project-detail__character-facts">
-            @for (fact of gameShowcase.character.facts; track fact.label) {
-            <article>
-              <span>{{ fact.value }}</span>
-              <h3>{{ fact.label }}</h3>
-              <p>{{ fact.text }}</p>
-            </article>
-            }
-          </div>
-        </div>
-      </div>
-    </section>
-    }
-
     @if (activeProject.catalogShowcase; as catalogShowcase) {
     <section class="project-detail__catalog-reader-intro" bpReveal>
       <div class="bp-container project-detail__catalog-reader-head">
@@ -807,8 +724,8 @@
     <section class="project-detail__chapters-section bp-section" bpReveal>
       <div class="bp-container">
         <div class="project-detail__section-head" bpReveal>
-          <p class="bp-eyebrow">{{ activeProject.gameShowcase?.chaptersEyebrow ?? content().projectsIntro.caseStudyLabel }}</p>
-          <h2>{{ activeProject.gameShowcase?.chaptersTitle ?? content().projectsIntro.detailLayerLabel }}</h2>
+          <p class="bp-eyebrow">{{ content().projectsIntro.caseStudyLabel }}</p>
+          <h2>{{ content().projectsIntro.detailLayerLabel }}</h2>
         </div>
 
         <div class="project-detail__chapter-grid">
@@ -905,8 +822,8 @@
     <section class="project-detail__gallery bp-section" bpReveal>
       <div class="bp-container">
         <div class="project-detail__section-head">
-          <p class="bp-eyebrow">{{ activeProject.boardShowcase?.galleryEyebrow ?? activeProject.gameShowcase?.galleryEyebrow ?? activeProject.bloodShowcase?.galleryEyebrow ?? content().projectsIntro.galleryLabel }}</p>
-          <h2>{{ activeProject.boardShowcase?.galleryTitle ?? activeProject.gameShowcase?.galleryTitle ?? activeProject.bloodShowcase?.galleryTitle ?? activeProject.name }}</h2>
+          <p class="bp-eyebrow">{{ activeProject.boardShowcase?.galleryEyebrow ?? activeProject.bloodShowcase?.galleryEyebrow ?? content().projectsIntro.galleryLabel }}</p>
+          <h2>{{ activeProject.boardShowcase?.galleryTitle ?? activeProject.bloodShowcase?.galleryTitle ?? activeProject.name }}</h2>
         </div>
 
         <div class="project-detail__evidence-grid">

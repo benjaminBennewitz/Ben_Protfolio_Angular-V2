@@ -2,29 +2,9 @@
 <section class="project-stack" [style.--project-total]="projects.length">
   @for (project of projects; track project.slug; let index = $index) {
   <article #projectPanel class="project-stack__panel" [class.project-stack__panel--intro]="index === 0"
-    [class.project-stack__panel--game]="project.slug === 'html5-browser-game'" [attr.data-accent]="project.accent"
-    [attr.data-project]="project.slug" [style.--panel-index]="index"
-    (pointermove)="onProjectPanelPointerMove(index, $event)" (pointerleave)="resetProjectPanelPointer(index)">
+    [attr.data-accent]="project.accent" [attr.data-project]="project.slug" [style.--panel-index]="index">
     <div class="project-stack__noise" aria-hidden="true"></div>
 
-    @if (project.slug === 'html5-browser-game') {
-    <div class="project-stack__game-layer project-stack__game-layer--panel" aria-hidden="true">
-      @for (item of project2ActivePhysicsItems(); track item.src; let itemIndex = $index) {
-      <span class="project-stack__game-body" [style.width]="project2ItemStyleAt(itemIndex, 'width')"
-        [style.height]="project2ItemStyleAt(itemIndex, 'height')"
-        [style.transform]="project2ItemStyleAt(itemIndex, 'transform')">
-        <img class="project-stack__game-item" [src]="item.src" alt="" [attr.width]="item.naturalWidth"
-          [attr.height]="item.naturalHeight" loading="lazy" decoding="async" />
-      </span>
-      }
-    </div>
-
-    <div class="project-stack__oneup-layer project-stack__oneup-layer--panel" aria-hidden="true">
-      @for (oneUp of project2OneUps(); track oneUp) {
-      <img class="project-stack__oneup" src="assets/images/project-stack/project_2/pj2_1up.webp" alt="" width="910" height="466" loading="lazy" decoding="async" />
-      }
-    </div>
-    }
 
     @if (project.slug === 'kanban-klon') {
     <div class="project-stack__trash-scene" [class.is-landed]="project3PaperLanded()">
@@ -74,25 +54,7 @@
       <bp-project-visual [project]="project" [large]="true" [hideAssets]="project.slug === 'kanban-klon'"
         [showTaskStatus]="project.slug === 'kanban-klon'" [taskStatusSaved]="project3SuccessVisible()" [labels]="labels" />
 
-      @if (project.slug === 'html5-browser-game') {
-      <div class="project-stack__game-layer project-stack__game-layer--visual" aria-hidden="true">
-        @for (item of project2ActivePhysicsItems(); track item.src; let itemIndex = $index) {
-        <span class="project-stack__game-body" [style.width]="project2ItemStyleAt(itemIndex, 'width')"
-          [style.height]="project2ItemStyleAt(itemIndex, 'height')"
-          [style.transform]="project2ItemStyleAt(itemIndex, 'transform')">
-          <img class="project-stack__game-item" [src]="item.src" alt="" [attr.width]="item.naturalWidth"
-            [attr.height]="item.naturalHeight" loading="lazy" decoding="async" />
-        </span>
-        }
       </div>
-
-      <div class="project-stack__oneup-layer project-stack__oneup-layer--visual" aria-hidden="true">
-        @for (oneUp of project2OneUps(); track oneUp) {
-        <img class="project-stack__oneup" src="assets/images/project-stack/project_2/pj2_1up.webp" alt="" width="910" height="466" loading="lazy" decoding="async" />
-        }
-      </div>
-      }
-    </div>
 
     <aside class="project-stack__previews" [attr.aria-label]="labels.previewAriaLabel">
       @for (preview of previewsFor(project); track preview.slug; let previewIndex = $index) {

@@ -459,6 +459,49 @@ export interface ProjectsContent {
 /** Layout-Variante für projektspezifische Detailmodule. */
 export type ProjectDetailMode = 'case-study' | 'demo' | 'productivity' | 'data' | 'editorial';
 
+/** Unterstützte Diagrammvarianten der Arcade-Tech-Telemetrie. */
+export type TelemetryChartVariant = 'radial' | 'area' | 'step';
+
+/** Einzelner numerischer Datenpunkt für wiederverwendbare SVG-Charts. */
+export interface TelemetryChartDataPoint {
+  /** Kurze Achsen- oder Legendenbeschriftung. */
+  readonly label: string;
+  /** Numerischer Mess- oder Indexwert. */
+  readonly value: number;
+}
+
+/** Konfiguration eines einzelnen Telemetrie-Charts. */
+export interface ProjectTelemetryChart {
+  /** Stabile ID für SVG-IDs und Tracking. */
+  readonly id: string;
+  /** Kleine technische Beschriftung. */
+  readonly eyebrow: string;
+  /** Sichtbarer Chart-Titel. */
+  readonly title: string;
+  /** Kurze Einordnung der Datenquelle oder Skala. */
+  readonly description: string;
+  /** Chart-Typ innerhalb des gemeinsamen Visualisierungssystems. */
+  readonly variant: TelemetryChartVariant;
+  /** Numerische Datenpunkte. */
+  readonly data: readonly TelemetryChartDataPoint[];
+  /** Optionales Suffix für Messwerte. */
+  readonly valueSuffix?: string;
+  /** Optional fest definierter Maximalwert der Skala. */
+  readonly maxValue?: number;
+}
+
+/** Vollbild-Telemetrie einer Projekt-Detailseite. */
+export interface ProjectTelemetryContent {
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly subtitle: string;
+  readonly statusLabel: string;
+  readonly statusValue: string;
+  readonly source: string;
+  readonly kpiAriaLabel: string;
+  readonly charts: readonly ProjectTelemetryChart[];
+}
+
 /** Kleine Projektkennzahl für Detailseiten. */
 export interface ProjectMetric {
   /** Kompakter Wert oder Status der Kennzahl. */
@@ -764,92 +807,6 @@ export interface ProjectBoardShowcase {
   readonly galleryTitle: string;
 }
 
-/** Schmaler Lauf-Showcase für ein spielbares Webprojekt. */
-export interface ProjectGameRunner {
-  /** Kleine Beschriftung über dem Laufband. */
-  readonly eyebrow: string;
-  /** Überschrift der Laufband-Section. */
-  readonly title: string;
-  /** Kurzer erklärender Text zum animierten Asset. */
-  readonly text: string;
-  /** Optionaler Bildpfad für ein echtes Character- oder Sprite-Asset. */
-  readonly asset?: string;
-  /** Alternativtext für das Character- oder Sprite-Asset. */
-  readonly assetAlt: string;
-  /** Geplanter Dateipfad, wenn das Asset später ergänzt wird. */
-  readonly assetHint: string;
-  /** Kurzes Label für die dekorative Laufspur. */
-  readonly trackLabel: string;
-}
-
-/** Steckbrief des Hauptcharakters eines Webspiels. */
-export interface ProjectGameCharacterProfile {
-  /** Kleine Beschriftung über dem Charakterprofil. */
-  readonly eyebrow: string;
-  /** Überschrift der Charakterprofil-Section. */
-  readonly title: string;
-  /** Name des Characters. */
-  readonly name: string;
-  /** Kurze Rollenbeschreibung des Characters. */
-  readonly role: string;
-  /** Story- und Profiltext des Characters. */
-  readonly text: string;
-  /** Optionaler Bildpfad für ein echtes Character-Asset. */
-  readonly asset?: string;
-  /** Alternativtext für das Character-Asset. */
-  readonly assetAlt: string;
-  /** Geplanter Dateipfad, wenn das Character-Bild später ergänzt wird. */
-  readonly assetHint: string;
-  /** Kompakte Steckbriefdaten. */
-  readonly facts: readonly ProjectMetric[];
-}
-
-/** Projektspezifischer Hero- und Abschnittsinhalt für spielbare Webprojekte. */
-export interface ProjectGameShowcase {
-  /** Kleine technische Beschriftung im Hero-Showcase. */
-  readonly eyebrow: string;
-  /** Titel des schrägen Video-Frames. */
-  readonly title: string;
-  /** Kurzer Status- oder Build-Hinweis im Video-Frame. */
-  readonly status: string;
-  /** Erklärender Text zum Video-Frame. */
-  readonly lead: string;
-  /** Beschriftung des primären Hero-Links. */
-  readonly ctaLabel: string;
-  /** Kleine technische Tags im Game-Showcase. */
-  readonly chips: readonly string[];
-  /** Optionaler Pfad für ein echtes Gameplay-Video. */
-  readonly videoSrc?: string;
-  /** Optionales Posterbild für das Gameplay-Video. */
-  readonly videoPoster?: string;
-  /** Zugängliche Beschriftung des Video-Containers. */
-  readonly videoLabel: string;
-  /** Fallback-Text, solange kein Gameplay-Video eingebunden ist. */
-  readonly videoFallbackText: string;
-  /** Geplanter Dateipfad für das Gameplay-Video. */
-  readonly videoFileHint: string;
-  /** Optionaler Pfad für das Hero-Wüstenbild. */
-  readonly heroBackdropAsset?: string;
-  /** Geplanter Dateipfad für das Hero-Wüstenbild. */
-  readonly heroBackdropHint: string;
-  /** Kompakte Fakten für Kunden und Recruiter. */
-  readonly facts: readonly ProjectMetric[];
-  /** Eyebrow für die Umsetzungskapitel. */
-  readonly chaptersEyebrow: string;
-  /** Überschrift für die Umsetzungskapitel. */
-  readonly chaptersTitle: string;
-  /** Eyebrow für die Galerie. */
-  readonly galleryEyebrow: string;
-  /** Überschrift für die Galerie. */
-  readonly galleryTitle: string;
-  /** Animiertes Laufband für ein Character-Asset. */
-  readonly runner: ProjectGameRunner;
-  /** Charakterprofil des Webspiels. */
-  readonly character: ProjectGameCharacterProfile;
-}
-
-
-
 /** Beispielwert im Blutanalyse-Hero und im Werte-Guide. */
 export interface ProjectBloodValuePreview {
   /** Abkürzung oder Laborwert-Name. */
@@ -986,8 +943,6 @@ export interface PortfolioProject {
   readonly terminalLines?: readonly string[];
   /** Optionale technische Highlight-Karten für den oberen Detailbereich. */
   readonly technicalHighlights?: readonly HighlightItem[];
-  /** Optionaler Game-Showcase für spielbare Webprojekte. */
-  readonly gameShowcase?: ProjectGameShowcase;
   /** Optionaler Board-Showcase für Kanban- und Gamification-Projekte. */
   readonly boardShowcase?: ProjectBoardShowcase;
   /** Optionaler Blood-Showcase für Dokumentenimport und Laborwert-Auswertung. */
@@ -1002,6 +957,8 @@ export interface PortfolioProject {
   readonly detailMode: ProjectDetailMode;
   /** Kompakte Projektkennzahlen für den oberen Detailbereich. */
   readonly metrics: readonly ProjectMetric[];
+  /** Vollflächiges KPI- und Chart-Dashboard der Projektseite. */
+  readonly telemetry?: ProjectTelemetryContent;
   /** Tiefere Inhaltsabschnitte für Projektstory, Workflow oder Learnings. */
   readonly chapters: readonly ProjectDetailChapter[];
   /** Optionale Architekturkarte für komplexe Systemprojekte. */
@@ -1081,6 +1038,20 @@ export interface BuiltWithoutContent {
   readonly withoutItems: readonly string[];
   /** Ergänzende, nachgefragte Arbeitsweisen und Qualitätsmerkmale. */
   readonly capabilityItems: readonly string[];
+  /** Eyebrow der automatisch aus den Case Studies abgeleiteten Telemetrie. */
+  readonly telemetryEyebrow: string;
+  /** Titel der globalen Portfolio-Telemetrie. */
+  readonly telemetryTitle: string;
+  /** Erklärung zur Datenquelle der Portfolio-Telemetrie. */
+  readonly telemetryText: string;
+  /** Titel des Technologie-Wiederholungs-Charts. */
+  readonly recurrenceTitle: string;
+  /** Erklärung des Technologie-Wiederholungs-Charts. */
+  readonly recurrenceText: string;
+  /** Titel des Stack-Breiten-Charts. */
+  readonly breadthTitle: string;
+  /** Erklärung des Stack-Breiten-Charts. */
+  readonly breadthText: string;
 }
 
 /** Thema im Kontaktformular. */

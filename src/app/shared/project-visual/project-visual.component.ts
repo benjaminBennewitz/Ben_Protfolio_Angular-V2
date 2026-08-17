@@ -89,9 +89,6 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
   /** Aktueller Gesamtzustand der Blutanalyse. */
   private readonly bloodState = signal<BloodAnalysisState>('idle');
 
-  /** Merkt, ob das mobile Online-Fenster geschlossen wurde. */
-  readonly onlineWindowClosed = signal(false);
-
   /** Sichtbarkeit des Arms der Blutanalyse-Szene. */
   private readonly bloodArmVisible = signal(false);
 
@@ -125,7 +122,6 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
   /** Zuordnung dekorativer Halftone-Assets zu den Projekt-Slugs. */
   private readonly visualAssetMap: Readonly<Record<string, readonly string[]>> = {
     intranet: ['assets/images/project-stack/eyeball-green.webp', 'assets/images/project-stack/bomb.webp'],
-    'html5-browser-game': [],
     'kanban-klon': ['assets/images/project-stack/trash-red.webp', 'assets/images/project-stack/paper-crumpled-pink.webp'],
     'grafikdesign-katalog': ['assets/images/project-stack/thumb-lime.webp'],
   };
@@ -194,7 +190,7 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
 
   /** Gibt an, ob die Preview interaktive Assets enthält. */
   hasInteractiveAssets(): boolean {
-    return this.isIntranetProject() || this.isBloodAnalysisProject() || this.isOnlineWindowClosable();
+    return this.isIntranetProject() || this.isBloodAnalysisProject();
   }
 
   /** Liefert das Status-Asset für die Carly-Preview. */
@@ -237,14 +233,14 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
     return this.bombState() === 'boom';
   }
 
+  /** Gibt an, ob die Ökosystem-Simulation gerendert wird. */
+  isFootprintProject(): boolean {
+    return this.project.slug === 'dein-fussabdruck';
+  }
+
   /** Gibt an, ob die Blutanalyse-Variante gerendert wird. */
   isBloodAnalysisProject(): boolean {
     return this.project.slug === 'blutanalyse';
-  }
-
-  /** Gibt an, ob das Online-Fenster geschlossen werden darf. */
-  isOnlineWindowClosable(): boolean {
-    return this.project.slug === 'html5-browser-game';
   }
 
   /** Liefert den linken Viewport-Abstand als CSS-Wert. */
@@ -331,18 +327,6 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
   /** Gibt an, ob ein Statusschritt bereits aktiv ist. */
   bloodStatusIsActive(index: number): boolean {
     return this.bloodStatusIndex() >= index;
-  }
-
-  /** Schließt das mobile Online-Fenster der Game-Preview. */
-  closeOnlineWindow(event: MouseEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (!this.isOnlineWindowClosable()) {
-      return;
-    }
-
-    this.onlineWindowClosed.set(true);
   }
 
   /** Aktiviert kurz das verletzte Auge und lässt die Träne laufen. */

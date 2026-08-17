@@ -153,6 +153,10 @@ Portfolio/
 │   │   │   │   ├── project-stack.component.html
 │   │   │   │   ├── project-stack.component.scss
 │   │   │   │   └── project-stack.component.ts
+│   │   │   ├── project-telemetry/
+│   │   │   │   ├── project-telemetry.component.html
+│   │   │   │   ├── project-telemetry.component.scss
+│   │   │   │   └── project-telemetry.component.ts
 │   │   │   ├── project-visual/
 │   │   │   │   ├── project-visual.component.html
 │   │   │   │   ├── project-visual.component.scss
@@ -169,6 +173,10 @@ Portfolio/
 │   │   │   │   ├── tech-marquee.component.html
 │   │   │   │   ├── tech-marquee.component.scss
 │   │   │   │   └── tech-marquee.component.ts
+│   │   │   ├── telemetry-chart/
+│   │   │   │   ├── telemetry-chart.component.html
+│   │   │   │   ├── telemetry-chart.component.scss
+│   │   │   │   └── telemetry-chart.component.ts
 │   │   │   ├── reveal-on-scroll.directive.ts
 │   │   │   └── viewport-activity.directive.ts
 │   │   ├── app.component.html

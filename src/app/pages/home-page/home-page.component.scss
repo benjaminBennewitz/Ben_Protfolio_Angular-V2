@@ -1427,6 +1427,14 @@
   word-break: normal;
 }
 
+.experience__data {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: clamp(0.7rem, 1.2vh, 1rem);
+  min-width: 0;
+}
+
 .experience__cards {
   position: relative;
   z-index: 1;

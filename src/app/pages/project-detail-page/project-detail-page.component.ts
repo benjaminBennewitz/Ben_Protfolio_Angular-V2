@@ -11,6 +11,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProjectAppModule, ProjectBloodGuideModeKey, ProjectCatalogPage, ProjectCatalogSpread, ProjectGalleryItem } from '../../core/models/portfolio.models';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
+import { ProjectTelemetryComponent } from '../../shared/project-telemetry/project-telemetry.component';
 import { LanguageService } from '../../core/services/language.service';
 import { AchievementService } from '../../core/services/achievement.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -66,7 +67,7 @@ interface CatalogLoupeState {
 @Component({
   selector: 'bp-project-detail-page',
   standalone: true,
-  imports: [RouterLink, RevealOnScrollDirective, SystemDialogComponent],
+  imports: [RouterLink, RevealOnScrollDirective, SystemDialogComponent, ProjectTelemetryComponent],
   templateUrl: './project-detail-page.component.html',
   styleUrl: './project-detail-page.component.scss',
 })
@@ -253,16 +254,16 @@ export class ProjectDetailPageComponent implements OnDestroy {
       return 'project-board-workflow';
     }
 
-    if (project?.gameShowcase) {
-      return 'project-game-making';
-    }
-
     if (project?.bloodShowcase) {
       return 'project-blood-workflow';
     }
 
     if (project?.catalogShowcase) {
       return 'project-catalog-spread';
+    }
+
+    if (project?.telemetry) {
+      return 'project-telemetry';
     }
 
     return 'project-deep-dive';

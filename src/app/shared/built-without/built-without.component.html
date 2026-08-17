@@ -1,6 +1,6 @@
 <!-- src/app/shared/built-without/built-without.component.html -->
 <section class="built-strip" id="quality" bpViewportActivity>
-<div class="built-strip__layout bp-container">
+  <div class="built-strip__layout bp-container">
     <div class="built-strip__copy bp-motion-copy" bpReveal>
       <bp-reveal-text class="built-strip__title-reveal" [eyebrow]="content().eyebrow" [text]="content().title" />
       <p>{{ content().text }}</p>
@@ -25,5 +25,35 @@
         </ul>
       </article>
     </div>
+
+    <section class="built-strip__telemetry" aria-labelledby="portfolio-telemetry-title" bpReveal>
+      <header class="built-strip__telemetry-head">
+        <p class="bp-eyebrow">{{ content().telemetryEyebrow }}</p>
+        <h3 id="portfolio-telemetry-title">{{ content().telemetryTitle }}</h3>
+        <p>{{ content().telemetryText }}</p>
+      </header>
+
+      <div class="built-strip__charts">
+        <bp-telemetry-chart
+          eyebrow="stack_frequency.radial"
+          [title]="content().recurrenceTitle"
+          [description]="content().recurrenceText"
+          variant="radial"
+          [data]="recurringTechData()"
+          [maxValue]="5"
+          valueSuffix="×"
+          chartId="portfolio-tech-frequency"
+          [syncParentReveal]="true" />
+
+        <bp-telemetry-chart
+          eyebrow="stack_breadth.area"
+          [title]="content().breadthTitle"
+          [description]="content().breadthText"
+          variant="area"
+          [data]="stackBreadthData()"
+          chartId="portfolio-stack-breadth"
+          [syncParentReveal]="true" />
+      </div>
+    </section>
   </div>
 </section>

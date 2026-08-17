@@ -11,4 +11,6 @@
 <div class="app-shell">
   <router-outlet />
 </div>
-<bp-footer />
+@if (showFooter()) {
+  <bp-footer />
+}

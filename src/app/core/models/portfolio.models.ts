@@ -1162,6 +1162,42 @@ export interface ThankYouContent {
   readonly dialogLines: readonly string[];
 }
 
+/** Inhalt der eigenständigen 404-Fehlerseite. */
+export interface NotFoundPageContent {
+  /** Meta-Titel der Fehlerseite. */
+  readonly metaTitle: string;
+  /** Meta-Description der Fehlerseite. */
+  readonly metaDescription: string;
+  /** Kleine technische Beschriftung oberhalb des Fehlers. */
+  readonly eyebrow: string;
+  /** Technische Hauptüberschrift der Fehlerseite. */
+  readonly title: string;
+  /** Kurzer erklärender Fehlertext. */
+  readonly text: string;
+  /** Zugängliche Beschriftung der primären Recovery-Aktionen. */
+  readonly actionsAriaLabel: string;
+  /** Label des Links zur Startseite. */
+  readonly homeLabel: string;
+  /** Label des Links zum Kontaktbereich. */
+  readonly contactLabel: string;
+  /** Titel des Recovery-Terminals. */
+  readonly terminalTitle: string;
+  /** Zugängliche Beschriftung zum Schließen des Recovery-Terminals. */
+  readonly terminalCloseLabel: string;
+  /** Label für die angeforderte Route. */
+  readonly requestedPathLabel: string;
+  /** Statische Terminal-Zeilen unterhalb der angeforderten Route. */
+  readonly terminalLines: readonly string[];
+  /** Zugängliche Beschriftung der Mini-Sitemap. */
+  readonly sitemapAriaLabel: string;
+  /** Überschrift der Mini-Sitemap. */
+  readonly sitemapTitle: string;
+  /** Kurzer Hinweis oberhalb der Sitemap-Links. */
+  readonly sitemapText: string;
+  /** Gruppierte interne Recovery-Links. */
+  readonly sitemapGroups: readonly FooterColumn[];
+}
+
 /** Inhalt der Impressumsseite. */
 export interface ImprintContent {
   /** Meta-Titel der Impressumsseite. */
@@ -1251,6 +1287,8 @@ export interface PortfolioContent {
   readonly contact: ContactContent;
   /** Inhalte der Dankeseite. */
   readonly thankYou: ThankYouContent;
+  /** Inhalte der eigenständigen 404-Seite. */
+  readonly notFoundPage: NotFoundPageContent;
   /** Inhalte der Impressumsseite. */
   readonly imprint: ImprintContent;
   readonly footer: FooterContent;

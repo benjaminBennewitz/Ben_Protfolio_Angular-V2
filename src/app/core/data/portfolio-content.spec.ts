@@ -28,6 +28,8 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(content.projects.length).toBeGreaterThan(0);
     expect(content.faqs.length).toBeGreaterThan(0);
     expect(content.contact.title.trim()).not.toBe('');
+    expect(content.notFoundPage.title.trim()).not.toBe('');
+    expect(content.notFoundPage.sitemapGroups.length).toBeGreaterThan(0);
   });
 
   it('hält die Anzahl zentraler Inhalte zwischen DE und EN synchron', () => {
@@ -42,5 +44,6 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(english.pricing.supportPlans).toHaveLength(german.pricing.supportPlans.length);
     expect(english.projects).toHaveLength(german.projects.length);
     expect(english.faqs).toHaveLength(german.faqs.length);
+    expect(english.notFoundPage.sitemapGroups).toHaveLength(german.notFoundPage.sitemapGroups.length);
   });
 });

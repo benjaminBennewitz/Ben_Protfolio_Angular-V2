@@ -51,6 +51,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '',
+    loadComponent: () => import('./pages/not-found-page/not-found-page.component').then((component) => component.NotFoundPageComponent),
+    title: '404 | Benjamin Bennewitz Portfolio',
   },
 ];

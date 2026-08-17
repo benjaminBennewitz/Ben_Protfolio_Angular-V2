@@ -1,0 +1,86 @@
+<main class="not-found bp-section">
+  <div class="not-found__noise" aria-hidden="true"></div>
+  <div class="not-found__crosshair not-found__crosshair--one" aria-hidden="true"></div>
+
+  <div class="not-found__layout bp-container">
+    <section class="not-found__hero" aria-labelledby="not-found-title">
+      <p class="bp-eyebrow">{{ content().eyebrow }}</p>
+
+      <div class="not-found__code" aria-hidden="true" data-cursor="brand">
+        <span class="not-found__code-ghost not-found__code-ghost--pink">{{ counterLabel() }}</span>
+        <span class="not-found__code-ghost not-found__code-ghost--info">{{ counterLabel() }}</span>
+        <span class="not-found__code-main">{{ counterLabel() }}</span>
+        <span class="not-found__code-status">ERR_NOT_FOUND</span>
+      </div>
+
+      <div class="not-found__copy">
+        <h1 id="not-found-title">{{ content().title }}</h1>
+        <p>{{ content().text }}</p>
+      </div>
+
+      <div class="not-found__actions" [attr.aria-label]="content().actionsAriaLabel">
+        <a class="bp-button bp-button--accent" routerLink="/" fragment="hero">
+          <span class="material-symbols-outlined" aria-hidden="true">home</span>
+          <span>{{ content().homeLabel }}</span>
+        </a>
+        <a class="bp-button" routerLink="/" fragment="contact">
+          <span class="material-symbols-outlined" aria-hidden="true">terminal</span>
+          <span>{{ content().contactLabel }}</span>
+        </a>
+      </div>
+    </section>
+
+    <div class="not-found__recovery">
+      @if (isTerminalVisible()) {
+      <aside class="not-found__terminal bp-dos-window" role="dialog" [attr.aria-label]="content().terminalTitle">
+        <div class="bp-dos-window__bar">
+          <span>{{ content().terminalTitle }}</span>
+          <button class="not-found__terminal-close" type="button" [attr.aria-label]="content().terminalCloseLabel"
+            (click)="closeTerminal()">×</button>
+        </div>
+        <div class="bp-dos-window__body not-found__terminal-body">
+          <p class="not-found__request">
+            <span>{{ content().requestedPathLabel }} &gt;</span>
+            <strong>{{ requestedPath() }}</strong>
+          </p>
+          @for (line of content().terminalLines; track line) {
+          <p class="not-found__terminal-line">{{ line }}</p>
+          }
+          <p class="not-found__prompt" aria-hidden="true">C:\PORTFOLIO\RECOVERY&gt;<span></span></p>
+        </div>
+      </aside>
+      }
+
+      <nav class="not-found__sitemap" [attr.aria-label]="content().sitemapAriaLabel">
+        <div class="not-found__sitemap-head">
+          <span class="material-symbols-outlined" aria-hidden="true">account_tree</span>
+          <div>
+            <h2>{{ content().sitemapTitle }}</h2>
+            <p>{{ content().sitemapText }}</p>
+          </div>
+        </div>
+
+        <div class="not-found__sitemap-grid">
+          @for (group of content().sitemapGroups; track group.title) {
+          <section class="not-found__sitemap-group" [attr.aria-labelledby]="'not-found-group-' + $index">
+            <h3 [id]="'not-found-group-' + $index">{{ group.title }}</h3>
+            <ul>
+              @for (link of group.links; track link.href) {
+              <li>
+                @if (isRouteLink(link.href)) {
+                <a [routerLink]="routePath(link.href)" [fragment]="routeFragment(link.href)">
+                  <span aria-hidden="true">./</span>{{ link.label }}
+                </a>
+                } @else {
+                <a [href]="link.href"><span aria-hidden="true">./</span>{{ link.label }}</a>
+                }
+              </li>
+              }
+            </ul>
+          </section>
+          }
+        </div>
+      </nav>
+    </div>
+  </div>
+</main>

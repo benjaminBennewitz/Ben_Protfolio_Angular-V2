@@ -83,6 +83,10 @@ Portfolio/
 │   │   │   │   ├── imprint-page.component.html
 │   │   │   │   ├── imprint-page.component.scss
 │   │   │   │   └── imprint-page.component.ts
+│   │   │   ├── not-found-page/
+│   │   │   │   ├── not-found-page.component.html
+│   │   │   │   ├── not-found-page.component.scss
+│   │   │   │   └── not-found-page.component.ts
 │   │   │   ├── portfolio-page/
 │   │   │   │   ├── portfolio-page.component.html
 │   │   │   │   ├── portfolio-page.component.scss

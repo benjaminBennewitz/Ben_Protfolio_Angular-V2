@@ -5,8 +5,10 @@
  * @description Stellt Layout-Komponenten wie Navigation, Loader und Custom Cursor bereit.
  */
 
-import { Component, effect, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 import { LanguageService } from './core/services/language.service';
 import { TabTitleService } from './core/services/tab-title.service';
 import { AccessibilityPanelComponent } from './layout/accessibility-panel/accessibility-panel.component';
@@ -29,6 +31,15 @@ import { SystemToastComponent } from './layout/system-toast/system-toast.compone
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
+  /** Router zur Auswertung route-spezifischer Layoutoptionen. */
+  private readonly router = inject(Router);
+
+  /** Destroy-Referenz für die automatische Bereinigung der Router-Subscription. */
+  private readonly destroyRef = inject(DestroyRef);
+
+  /** Steuert, ob der globale Footer für die aktive Route gerendert wird. */
+  readonly showFooter = signal(true);
+
   /** Sprachservice für den inaktiven Tab-Titel. */
   private readonly languageService = inject(LanguageService);
 
@@ -37,10 +48,30 @@ export class AppComponent {
 
   /** Synchronisiert den Hidden-Tab-Titel mit der aktiven Sprache. */
   constructor() {
+    this.syncRouteLayout();
+
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.syncRouteLayout());
+
     effect(() => {
       const content = this.languageService.content();
 
       this.tabTitleService.setHiddenTitle(content.meta.hiddenTitle);
     });
+  }
+
+  /** Liest Layoutoptionen aus der tiefsten aktiven Route und blendet den Footer bei Bedarf aus. */
+  private syncRouteLayout(): void {
+    let route = this.router.routerState.snapshot.root;
+
+    while (route.firstChild) {
+      route = route.firstChild;
+    }
+
+    this.showFooter.set(route.data['hideFooter'] !== true);
   }
 }

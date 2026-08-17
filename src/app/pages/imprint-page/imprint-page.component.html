@@ -12,15 +12,12 @@
       <p class="bp-subtitle">{{ imprint().intro }}</p>
 
       @if (isLegalDialogVisible()) {
-      <aside class="bp-dos-window imprint__dialog" aria-label="Legal Check">
-        <div class="bp-dos-window__bar">
-          <span>{{ imprint().dialogTitle }}</span>
-          <button type="button" aria-label="Legal-Check schließen" (click)="closeLegalDialog()">×</button>
-        </div>
+      <bp-system-dialog class="imprint__dialog" [title]="imprint().dialogTitle" ariaLabel="Legal Check"
+        closeLabel="Legal-Check schließen" (closed)="closeLegalDialog()">
         <div class="bp-dos-window__body">
           <p>{{ imprint().dialogText }}</p>
         </div>
-      </aside>
+      </bp-system-dialog>
       }
     </section>
 

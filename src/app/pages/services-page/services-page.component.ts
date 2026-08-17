@@ -13,13 +13,14 @@ import { SeoService } from '../../core/services/seo.service';
 import { DitheringShaderComponent } from '../../shared/dithering-shader/dithering-shader.component';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { RevealTextComponent } from '../../shared/reveal-text/reveal-text.component';
+import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
 import { ViewportActivityDirective } from '../../shared/viewport-activity.directive';
 
 /** Leistungsseite mit drei Lösungsstufen und optionalen Maintenance-Modellen. */
 @Component({
   selector: 'bp-services-page',
   standalone: true,
-  imports: [RouterLink, DitheringShaderComponent, RevealTextComponent, RevealOnScrollDirective, ViewportActivityDirective],
+  imports: [RouterLink, DitheringShaderComponent, RevealTextComponent, RevealOnScrollDirective, SystemDialogComponent, ViewportActivityDirective],
   templateUrl: './services-page.component.html',
   styleUrl: './services-page.component.scss',
 })

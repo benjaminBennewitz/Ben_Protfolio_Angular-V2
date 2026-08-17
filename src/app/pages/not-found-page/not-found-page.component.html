@@ -32,23 +32,19 @@
 
     <div class="not-found__recovery">
       @if (isTerminalVisible()) {
-      <aside class="not-found__terminal bp-dos-window" role="dialog" [attr.aria-label]="content().terminalTitle">
-        <div class="bp-dos-window__bar">
-          <span>{{ content().terminalTitle }}</span>
-          <button class="not-found__terminal-close" type="button" [attr.aria-label]="content().terminalCloseLabel"
-            (click)="closeTerminal()">×</button>
-        </div>
+      <bp-system-dialog class="not-found__terminal" [title]="content().terminalTitle"
+        [closeLabel]="content().terminalCloseLabel" (closed)="closeTerminal()">
         <div class="bp-dos-window__body not-found__terminal-body">
           <p class="not-found__request">
-            <span>{{ content().requestedPathLabel }} &gt;</span>
-            <strong>{{ requestedPath() }}</strong>
-          </p>
-          @for (line of content().terminalLines; track line) {
-          <p class="not-found__terminal-line">{{ line }}</p>
-          }
+          <span>{{ content().requestedPathLabel }} &gt;</span>
+          <strong>{{ requestedPath() }}</strong>
+        </p>
+        @for (line of content().terminalLines; track line) {
+        <p class="not-found__terminal-line">{{ line }}</p>
+        }
           <p class="not-found__prompt" aria-hidden="true">C:\PORTFOLIO\RECOVERY&gt;<span></span></p>
         </div>
-      </aside>
+      </bp-system-dialog>
       }
 
       <nav class="not-found__sitemap" [attr.aria-label]="content().sitemapAriaLabel">

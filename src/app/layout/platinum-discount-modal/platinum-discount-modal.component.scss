@@ -275,3 +275,43 @@
     animation-duration: 0.001ms;
   }
 }
+
+/* ========================================================================== 
+   06   Arcade-Tech
+   ========================================================================== */
+
+.platinum-modal__window,
+.platinum-modal__bar,
+.platinum-modal__bar button,
+.platinum-modal__trophy,
+.platinum-modal__code {
+  border-width: 2px;
+}
+
+.platinum-modal__window {
+  box-shadow:
+    10px 10px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent),
+    14px 14px 0 color-mix(in srgb, #000000 16%, transparent),
+    0 28px 90px color-mix(in srgb, var(--bp-color-accent) 18%, var(--bp-color-shadow));
+  animation-timing-function: steps(7, end);
+}
+
+.platinum-modal__bar,
+.platinum-modal__code span,
+.platinum-modal__code code {
+  font-family: var(--bp-font-system);
+}
+
+.platinum-modal__bar {
+  background-image: repeating-linear-gradient(90deg, transparent 0 16px, color-mix(in srgb, var(--bp-color-text) 4%, transparent) 16px 20px);
+}
+
+.platinum-modal__bar button {
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--bp-color-border-strong) 38%, transparent);
+  transition-timing-function: var(--bp-ease-step);
+}
+
+.platinum-modal__trophy,
+.platinum-modal__code {
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 22%, transparent);
+}

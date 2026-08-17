@@ -10,12 +10,13 @@ import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 import { AchievementService } from '../../core/services/achievement.service';
 import { SeoService } from '../../core/services/seo.service';
+import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
 
 /** Statische Impressumsseite mit übersetzbaren Pflichtangaben. */
 @Component({
   selector: 'bp-imprint-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, SystemDialogComponent],
   templateUrl: './imprint-page.component.html',
   styleUrl: './imprint-page.component.scss',
 })

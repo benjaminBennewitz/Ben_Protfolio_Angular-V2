@@ -13,18 +13,14 @@
     </section>
 
     @if (isDialogVisible()) {
-    <aside class="thank-you__dialog bp-dos-window" [attr.aria-label]="content().dialogTitle">
-      <div class="bp-dos-window__bar">
-        <span>{{ content().dialogTitle }}</span>
-        <button class="thank-you__dialog-close" type="button" [attr.aria-label]="content().dialogCloseLabel"
-          (click)="closeDialog()">×</button>
-      </div>
+    <bp-system-dialog class="thank-you__dialog" [title]="content().dialogTitle"
+      [closeLabel]="content().dialogCloseLabel" (closed)="closeDialog()">
       <div class="bp-dos-window__body">
         @for (line of content().dialogLines; track $index) {
         <p>{{ line }}</p>
         }
       </div>
-    </aside>
+    </bp-system-dialog>
     }
   </div>
 </main>

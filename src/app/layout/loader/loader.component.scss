@@ -686,3 +686,50 @@
     animation: none;
   }
 }
+
+/* ========================================================================== 
+   09   Arcade-Tech
+   ========================================================================== */
+
+.loader,
+.loader-dialog,
+.loader-dialog header,
+.loader-dialog__body,
+.loader-dialog footer {
+  font-family: var(--bp-font-system);
+}
+
+.loader__skip {
+  border-width: 2px;
+  box-shadow: 4px 4px 0 rgba(184, 255, 46, 0.2);
+  transition-timing-function: steps(3, end);
+}
+
+.loader__skip:hover,
+.loader__skip:focus-visible {
+  box-shadow: 6px 6px 0 rgba(255, 46, 136, 0.24);
+  transform: translate(-2px, -2px);
+}
+
+.loader-dialog {
+  box-shadow:
+    8px 8px 0 rgba(0, 0, 0, 0.85),
+    12px 12px 0 rgba(184, 255, 46, 0.16);
+  animation-timing-function: steps(6, end);
+}
+
+.loader-dialog header {
+  background-image: repeating-linear-gradient(90deg, #101010 0 16px, #181818 16px 20px);
+}
+
+.loader-dialog__controls i {
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+.loader-dialog__icon {
+  border-radius: 0;
+}
+
+.loader-dialog footer span {
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.24);
+}

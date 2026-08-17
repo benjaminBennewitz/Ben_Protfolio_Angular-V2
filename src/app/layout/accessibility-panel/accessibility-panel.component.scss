@@ -448,3 +448,46 @@
     width: 100%;
   }
 }
+
+/* ===========================================================================
+   08   Arcade-Tech
+   ========================================================================== */
+
+.access-panel__toggle,
+.access-panel__status,
+.access-panel__window,
+.access-panel__head button,
+.access-panel__quick-actions button {
+  border-width: 2px;
+}
+
+.access-panel__toggle,
+.access-panel__status,
+.access-panel__window {
+  box-shadow:
+    6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 18%, transparent),
+    0 18px 48px var(--bp-color-shadow);
+}
+
+.access-panel__status p,
+.access-panel__head p,
+.access-panel__quick-actions button,
+.access-panel__group legend,
+.access-panel__option,
+.access-panel__storage {
+  font-family: var(--bp-font-system);
+}
+
+.access-panel__toggle,
+.access-panel__head button,
+.access-panel__quick-actions button,
+.access-panel__option {
+  transition-timing-function: var(--bp-ease-step);
+}
+
+.access-panel__window {
+  background-image:
+    linear-gradient(var(--bp-arcade-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bp-arcade-grid) 1px, transparent 1px);
+  background-size: 8px 8px;
+}

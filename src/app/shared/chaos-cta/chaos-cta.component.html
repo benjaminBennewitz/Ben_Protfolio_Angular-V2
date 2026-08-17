@@ -58,15 +58,12 @@
   </div>
 
   @if (isDialogVisible()) {
-  <aside class="chaos-cta__dialog bp-dos-window" aria-label="HEY_THERE.DLL Dialog">
-    <div class="bp-dos-window__bar">
-      <span>HEY_THERE.DLL</span>
-      <button type="button" aria-label="HEY_THERE.DLL schließen" (click)="closeDialog($event)">×</button>
-    </div>
+  <bp-system-dialog class="chaos-cta__dialog" title="HEY_THERE.DLL" ariaLabel="HEY_THERE.DLL Dialog"
+    closeLabel="HEY_THERE.DLL schließen" (closed)="closeDialog()">
     <div class="bp-dos-window__body chaos-cta__dialog-body">
       <span>move cursor</span>
       <button class="chaos-cta__dialog-action" type="button" (click)="closeDialog($event)">OK</button>
     </div>
-  </aside>
+  </bp-system-dialog>
   }
 </section>

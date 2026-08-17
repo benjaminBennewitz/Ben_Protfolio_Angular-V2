@@ -195,78 +195,37 @@
   right: var(--bp-stage-gutter);
   bottom: clamp(1.2rem, 6vw, 5rem);
   z-index: 3;
-  display: grid;
-  gap: 0.55rem;
   width: min(260px, calc(100% - 2rem));
-  border: 2px solid #111111;
-  padding: 0.85rem;
-  background: #d6d6d6;
-  color: #111111;
-  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.62);
-  font-family: var(--bp-font-mono);
   transform: rotate(1.5deg);
 }
 
-.chaos-cta__dialog-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  border-bottom: 1px solid #111111;
-  padding-bottom: 0.4rem;
+.chaos-cta__dialog-body {
+  gap: 0.7rem;
 }
 
-.chaos-cta__dialog strong {
-  display: block;
-  font-size: 0.74rem;
-}
-
-.chaos-cta__dialog span {
+.chaos-cta__dialog-body > span {
   font-size: 0.82rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
-.chaos-cta__dialog button {
+.chaos-cta__dialog-action {
   justify-self: start;
-  border: 1px solid #111111;
+  border: 2px solid #111111;
   padding: 0.35rem 1.1rem;
   background: #f4efe5;
   color: #111111;
-  font-family: var(--bp-font-mono);
+  font-family: var(--bp-font-system);
   font-weight: 900;
   cursor: pointer;
-  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
+  transition: background-color 160ms var(--bp-ease-step), color 160ms var(--bp-ease-step), transform 160ms var(--bp-ease-step), box-shadow 160ms var(--bp-ease-step);
 }
 
-.chaos-cta__dialog-bar button {
-  display: grid;
-  place-items: center;
-  width: 22px;
-  height: 22px;
-  padding: 0;
-}
-
-.chaos-cta__dialog > button:hover,
-.chaos-cta__dialog > button:focus-visible {
+.chaos-cta__dialog-action:hover,
+.chaos-cta__dialog-action:focus-visible {
   background: var(--bp-color-accent);
   color: var(--bp-color-on-accent);
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.36);
-  transform: translate(-1px, -1px);
-}
-
-:root[data-theme='light'] .chaos-cta__dialog > button:hover,
-:root[data-theme='light'] .chaos-cta__dialog > button:focus-visible,
-:host-context(:root[data-theme='light']) .chaos-cta__dialog > button:hover,
-:host-context(:root[data-theme='light']) .chaos-cta__dialog > button:focus-visible {
-  color: var(--bp-color-on-accent);
-}
-
-.chaos-cta__dialog-bar button:hover,
-.chaos-cta__dialog-bar button:focus-visible {
-  background: #ff2b2b;
-  color: #ffffff;
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.36);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.36);
   transform: translate(-1px, -1px);
 }
 

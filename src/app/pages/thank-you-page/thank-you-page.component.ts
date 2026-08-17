@@ -10,12 +10,13 @@ import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 import { AchievementService } from '../../core/services/achievement.service';
 import { SeoService } from '../../core/services/seo.service';
+import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
 
 /** Dankeseite nach erfolgreichem Kontaktformular-Submit. */
 @Component({
   selector: 'bp-thank-you-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, SystemDialogComponent],
   templateUrl: './thank-you-page.component.html',
   styleUrl: './thank-you-page.component.scss',
 })

@@ -351,3 +351,70 @@
     font-size: 0.92rem;
   }
 }
+
+/* ========================================================================== 
+   05   Arcade-Tech
+   ========================================================================== */
+
+.achievements__back,
+.achievements__progress span,
+.achievements__reset,
+.achievement-card__copy span,
+.achievement-card__copy button {
+  font-family: var(--bp-font-system);
+}
+
+.achievements__progress,
+.achievements__reset,
+.achievement-card,
+.achievement-card__visual,
+.achievement-card__copy button {
+  border-width: 2px;
+}
+
+.achievements__progress,
+.achievement-card {
+  box-shadow:
+    6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 14%, transparent),
+    0 24px 70px var(--bp-color-shadow);
+}
+
+.achievements__reset,
+.achievement-card,
+.achievement-card__copy button {
+  transition-timing-function: var(--bp-ease-step);
+}
+
+.achievements__reset:hover,
+.achievements__reset:focus-visible {
+  transform: translate(-2px, -2px);
+}
+
+.achievement-card::before {
+  opacity: 0.12;
+  background-image:
+    linear-gradient(var(--bp-arcade-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bp-arcade-grid) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+.achievement-card:hover,
+.achievement-card:focus-within {
+  box-shadow:
+    10px 10px 0 color-mix(in srgb, var(--bp-color-accent) 26%, transparent),
+    0 28px 80px var(--bp-color-shadow);
+  transform: translate(-2px, -4px);
+}
+
+.achievement-card__visual {
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 18%, transparent);
+}
+
+.achievement-card__copy span::before {
+  margin-right: 0.45rem;
+  content: '>_';
+}
+
+.achievement-card__copy button {
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--bp-color-border-strong) 34%, transparent);
+}

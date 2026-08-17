@@ -98,3 +98,24 @@
     max-width: 68vw;
   }
 }
+
+/* ========================================================================== 
+   03   Arcade-Tech
+   ========================================================================== */
+
+.access-status {
+  border-width: 2px;
+  box-shadow:
+    6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 20%, transparent),
+    0 16px 42px var(--bp-color-shadow);
+  backdrop-filter: blur(8px) saturate(1.04);
+}
+
+.access-status__icon {
+  border-width: 2px;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--bp-color-accent) 20%, transparent);
+}
+
+.access-status__copy p {
+  font-family: var(--bp-font-system);
+}

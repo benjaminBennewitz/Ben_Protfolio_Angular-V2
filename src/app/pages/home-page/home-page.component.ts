@@ -22,6 +22,7 @@ import { PixelSpriteComponent } from '../../shared/pixel-sprite/pixel-sprite.com
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { RevealTextComponent } from '../../shared/reveal-text/reveal-text.component';
 import { TechMarqueeComponent } from '../../shared/tech-marquee/tech-marquee.component';
+import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
 import { ViewportActivityDirective } from '../../shared/viewport-activity.directive';
 
 /** Zustände für die auswählbaren Hero-Köpfe. */
@@ -64,7 +65,7 @@ interface ProjectsChocolateEgg {
 @Component({
   selector: 'bp-home-page',
   standalone: true,
-  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, ProcessLockComponent, AboutMetricsWindowComponent, BuiltWithoutComponent, ChaosCtaComponent, ContactFormComponent, DitheringShaderComponent, ViewportActivityDirective, PixelSpriteComponent, PixelFireworkComponent],
+  imports: [RouterLink, RevealTextComponent, RevealOnScrollDirective, TechMarqueeComponent, SystemDialogComponent, ProcessLockComponent, AboutMetricsWindowComponent, BuiltWithoutComponent, ChaosCtaComponent, ContactFormComponent, DitheringShaderComponent, ViewportActivityDirective, PixelSpriteComponent, PixelFireworkComponent],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss',
 })

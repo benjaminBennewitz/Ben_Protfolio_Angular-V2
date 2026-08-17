@@ -52,25 +52,21 @@
       </div>
 
       @if (isHeroDialogVisible()) {
-      <aside class="hero__dos bp-dos-window" role="dialog" [attr.aria-label]="content().hero.dialogLabel" bpReveal>
-        <div class="bp-dos-window__bar">
-          <span>mixed_reactions.exe</span>
-          <button type="button" (click)="closeHeroDialog()"
-            [attr.aria-label]="content().about.dialogCloseLabel">×</button>
-        </div>
+      <bp-system-dialog class="hero__dos" title="mixed_reactions.exe" [ariaLabel]="content().hero.dialogLabel"
+        [closeLabel]="content().about.dialogCloseLabel" (closed)="closeHeroDialog()" bpReveal>
         <div class="bp-dos-window__body">
           <div class="hero__dialog-icon" aria-hidden="true"><span>!</span></div>
           <p>{{ content().hero.dialogText }}</p>
           <div class="hero__dialog-actions">
-            <button type="button" [class.is-active]="activeHeroHead() === 'lol'"
-              (click)="setHeroHead('lol')">#LOL</button>
-            <button type="button" [class.is-active]="activeHeroHead() === 'insane'"
-              (click)="setHeroHead('insane')">YES</button>
-            <button type="button" [class.is-active]="activeHeroHead() === 'fck'"
-              (click)="setHeroHead('fck')">F*CK</button>
+          <button type="button" [class.is-active]="activeHeroHead() === 'lol'"
+            (click)="setHeroHead('lol')">#LOL</button>
+          <button type="button" [class.is-active]="activeHeroHead() === 'insane'"
+            (click)="setHeroHead('insane')">YES</button>
+          <button type="button" [class.is-active]="activeHeroHead() === 'fck'"
+            (click)="setHeroHead('fck')">F*CK</button>
           </div>
         </div>
-      </aside>
+      </bp-system-dialog>
       }
 
       <dl class="hero__kpis" [attr.aria-label]="content().hero.statusLabel">
@@ -99,18 +95,14 @@
         </figure>
 
         @if (isAboutDialogVisible()) {
-        <div class="bp-dos-window about__popup" role="dialog" [attr.aria-label]="content().about.dialogLabel">
-          <div class="bp-dos-window__bar">
-            <span>about_b2.exe</span>
-            <button class="about__popup-close" type="button" [attr.aria-label]="content().about.dialogCloseLabel"
-              (click)="closeAboutDialog()">×</button>
-          </div>
+        <bp-system-dialog class="about__popup" title="about_b2.exe" [ariaLabel]="content().about.dialogLabel"
+          [closeLabel]="content().about.dialogCloseLabel" (closed)="closeAboutDialog()">
           <div class="bp-dos-window__body">
             <p>{{ content().about.dialogText }}</p>
             <button class="about__popup-action" type="button" (click)="showAboutCoffeeError()">{{
               aboutDialogActionLabel() }}</button>
           </div>
-        </div>
+        </bp-system-dialog>
         }
       </div>
 
@@ -198,15 +190,12 @@
         </div>
 
         @if (isSkillsDialogVisible()) {
-        <div class="bp-dos-window skills__dos" role="dialog" [attr.aria-label]="content().skills.levelsDialogTitle">
-          <div class="bp-dos-window__bar">
-            <span>{{ content().skills.levelsDialogTitle }}</span>
-            <button type="button" [attr.aria-label]="content().skills.levelsDialogCloseLabel" (click)="closeSkillsDialog()">×</button>
-          </div>
+        <bp-system-dialog class="skills__dos" [title]="content().skills.levelsDialogTitle"
+          [closeLabel]="content().skills.levelsDialogCloseLabel" (closed)="closeSkillsDialog()">
           <div class="bp-dos-window__body">
             <p>{{ content().skills.levelsDialogText }}</p>
           </div>
-        </div>
+        </bp-system-dialog>
         }
 
         <div class="skills__levels">
@@ -278,12 +267,12 @@
       <div class="clients__grid bp-stagger-list bp-stagger-list--right" bpReveal>
         @for (client of content().clients.items; track client.name; let index = $index) {
         <a class="clients__card bp-card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 120 + 120" [href]="client.url" target="_blank" rel="noopener noreferrer">
-          <span>{{ client.label }}</span>
+          <span class="clients__label">{{ client.label }}</span>
           <strong>{{ client.name }}</strong>
           <div class="bp-dos-window clients__stack" aria-hidden="true">
             <div class="bp-dos-window__bar">
               <span>stack_info.exe</span>
-              <span class="clients__fake-close" aria-hidden="true">×</span>
+              <span class="clients__fake-close material-symbols-outlined" aria-hidden="true">close</span>
             </div>
             <div class="bp-dos-window__body">
               <p>Techstack:</p>

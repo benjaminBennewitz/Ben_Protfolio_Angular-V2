@@ -11,6 +11,7 @@ import { filter } from 'rxjs';
 import { AccessibilityPreferenceService } from '../../core/services/accessibility-preference.service';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
+import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
 
 /** Zielwert der schnellen Counter-Phase vor dem sichtbaren Auslaufen. */
 const COUNTER_FAST_TARGET = 400;
@@ -34,7 +35,7 @@ const NOT_FOUND_CODE = 404;
 @Component({
   selector: 'bp-not-found-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, SystemDialogComponent],
   templateUrl: './not-found-page.component.html',
   styleUrl: './not-found-page.component.scss',
 })

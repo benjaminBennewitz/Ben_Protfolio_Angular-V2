@@ -409,3 +409,41 @@
     padding: var(--bp-space-3);
   }
 }
+
+/* ========================================================================== 
+   08   Arcade-Tech
+   ========================================================================== */
+
+.nav__brand-text,
+.nav__links,
+.nav__language,
+.nav__contact {
+  font-family: var(--bp-font-system);
+}
+
+.nav__action,
+.nav__burger,
+.nav__contact {
+  border-width: 2px;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--bp-color-border-strong) 28%, transparent);
+  transition-timing-function: var(--bp-ease-step);
+}
+
+.nav__action:hover,
+.nav__action:focus-visible,
+.nav__burger:hover,
+.nav__burger:focus-visible,
+.nav__contact:hover,
+.nav__contact:focus-visible {
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 34%, transparent);
+  transform: translate(-1px, -1px);
+}
+
+.nav__links a::after {
+  height: 4px;
+  transition-timing-function: var(--bp-ease-step);
+}
+
+.nav__theme.is-flipping .nav__theme-icon {
+  animation-timing-function: steps(6, end);
+}

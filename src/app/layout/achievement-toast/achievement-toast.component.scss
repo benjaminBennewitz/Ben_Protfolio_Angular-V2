@@ -160,3 +160,75 @@
     animation-duration: 0.001ms;
   }
 }
+
+/* ========================================================================== 
+   04   Arcade-Tech
+   ========================================================================== */
+
+.achievement-toast {
+  position: relative;
+  border-width: 2px;
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 96%, transparent);
+  box-shadow:
+    8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 28%, transparent),
+    12px 12px 0 color-mix(in srgb, #000000 18%, transparent),
+    0 18px 54px var(--bp-color-shadow);
+  backdrop-filter: blur(8px);
+  animation: achievement-toast-in 300ms steps(5, end) both;
+}
+
+.achievement-toast::before {
+  position: absolute;
+  top: -2px;
+  left: 58px;
+  width: 28%;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--bp-color-accent) 0 8px, transparent 8px 12px);
+  pointer-events: none;
+  content: '';
+}
+
+.achievement-toast::after {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background-image:
+    linear-gradient(var(--bp-arcade-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bp-arcade-grid) 1px, transparent 1px);
+  background-size: 8px 8px;
+  pointer-events: none;
+  content: '';
+}
+
+.achievement-toast__icon,
+.achievement-toast__copy,
+.achievement-toast button {
+  position: relative;
+  z-index: 1;
+}
+
+.achievement-toast__icon {
+  border-width: 2px;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--bp-color-accent) 30%, transparent);
+}
+
+.achievement-toast__copy p,
+.achievement-toast__copy h2 {
+  font-family: var(--bp-font-system);
+}
+
+.achievement-toast__copy h2 {
+  letter-spacing: 0.025em;
+}
+
+.achievement-toast button {
+  border-width: 2px;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--bp-color-border-strong) 46%, transparent);
+  transition: transform 120ms var(--bp-ease-step), background-color 120ms var(--bp-ease-step), color 120ms var(--bp-ease-step), box-shadow 120ms var(--bp-ease-step);
+}
+
+.achievement-toast button:hover,
+.achievement-toast button:focus-visible {
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-danger) 32%, transparent);
+  transform: translate(-1px, -1px);
+}

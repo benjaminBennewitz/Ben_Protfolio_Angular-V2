@@ -2193,7 +2193,7 @@
   transition: transform 220ms var(--bp-ease-out);
 }
 
-.clients__card span,
+.clients__card > .clients__label,
 .clients__card strong,
 .clients__card i,
 .clients__touch-hint,
@@ -2202,7 +2202,7 @@
   z-index: 1;
 }
 
-.clients__card span {
+.clients__card > .clients__label {
   color: var(--bp-color-text-muted);
   font-family: var(--bp-font-mono);
   font-size: 0.72rem;
@@ -2276,16 +2276,23 @@
   list-style: none;
 }
 
-.clients__fake-close {
+.clients__stack .clients__fake-close.material-symbols-outlined {
   display: inline-grid;
   place-items: center;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #f2f2f2;
-  background: transparent;
-  color: #f2f2f2;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #ff2b2b;
+  background: #ff2b2b;
+  color: #ffffff;
+  font-family: 'Material Symbols Outlined';
+  font-feature-settings: 'liga';
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: normal;
   line-height: 1;
-  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.34);
+  text-transform: none;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.38);
+  font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 20;
 }
 
 .clients__stack li {
@@ -4071,4 +4078,103 @@
   border-color: var(--bp-color-accent);
   background: color-mix(in srgb, var(--bp-color-surface-solid) 86%, var(--bp-color-accent) 8%);
   box-shadow: 7px 7px 0 color-mix(in srgb, var(--bp-color-accent) 28%, transparent);
+}
+
+/* ============================================================================
+   25   Arcade-Tech / Skills
+   ============================================================================ */
+
+.skills__group {
+  border-width: 2px;
+  box-shadow:
+    4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 12%, transparent),
+    0 24px 80px var(--bp-color-shadow);
+}
+
+.skills__group h3 {
+  font-family: var(--bp-font-system);
+  font-size: clamp(1rem, 1.45vw, 1.45rem);
+  line-height: 1.05;
+  letter-spacing: 0.035em;
+}
+
+.skills__group:hover,
+.skills__group:focus-within {
+  box-shadow:
+    8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 28%, transparent),
+    0 28px 90px var(--bp-color-shadow);
+  transform: translate3d(-2px, -4px, 0);
+  transition-timing-function: var(--bp-ease-step);
+}
+
+.skills__level-panel {
+  border-width: 2px;
+  box-shadow:
+    8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 14%, transparent),
+    0 24px 80px var(--bp-color-shadow);
+}
+
+.skills__level-head h3,
+.skills__level-meta strong,
+.skills__level-meta span,
+.skills__level-meta b {
+  font-family: var(--bp-font-system);
+}
+
+.skills__level-head h3 {
+  letter-spacing: 0.02em;
+}
+
+.skills__level {
+  border-width: 2px;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--bp-color-border-strong) 34%, transparent);
+  transition-timing-function: var(--bp-ease-step);
+}
+
+.skills__level:hover {
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent);
+  transform: translate(-2px, -2px);
+}
+
+.skills__level-meta b::before {
+  content: '[';
+}
+
+.skills__level-meta b::after {
+  content: ']';
+}
+
+.skills__level-track {
+  height: 0.8rem;
+  border-width: 2px;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--bp-color-text) 5%, transparent) 1px, transparent 1px),
+    color-mix(in srgb, var(--bp-color-bg) 82%, black 14%);
+  background-size: 10px 100%;
+}
+
+.skills__level-track span {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--bp-color-accent) 0 8px,
+    color-mix(in srgb, var(--bp-color-info) 88%, var(--bp-color-accent) 12%) 8px 10px,
+    transparent 10px 12px
+  );
+}
+
+.skills__level-panel.bp-reveal--visible .skills__level-track span {
+  animation-timing-function: steps(14, end);
+}
+
+.skills__dos {
+  box-shadow:
+    8px 8px 0 rgba(0, 0, 0, 0.72),
+    12px 12px 0 color-mix(in srgb, var(--bp-color-accent) 20%, transparent);
+}
+
+:host-context(:root[data-motion='reduced']) .skills__group,
+:host-context(:root[data-motion='off']) .skills__group,
+:host-context(:root[data-motion='reduced']) .skills__level,
+:host-context(:root[data-motion='off']) .skills__level {
+  transform: none;
 }

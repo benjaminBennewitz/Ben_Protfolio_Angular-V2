@@ -161,6 +161,10 @@ Portfolio/
 │   │   │   │   ├── reveal-text.component.html
 │   │   │   │   ├── reveal-text.component.scss
 │   │   │   │   └── reveal-text.component.ts
+│   │   │   ├── system-dialog/
+│   │   │   │   ├── system-dialog.component.html
+│   │   │   │   ├── system-dialog.component.scss
+│   │   │   │   └── system-dialog.component.ts
 │   │   │   ├── tech-marquee/
 │   │   │   │   ├── tech-marquee.component.html
 │   │   │   │   ├── tech-marquee.component.scss
@@ -371,6 +375,7 @@ Portfolio/
 │   │   │   └── og-portfolio-preview.svg
 │   │   └── favicon.svg
 │   ├── styles/
+│   │   ├── arcade-tech.scss
 │   │   ├── base.scss
 │   │   ├── project-detail-blood.scss
 │   │   ├── project-detail-carly.scss

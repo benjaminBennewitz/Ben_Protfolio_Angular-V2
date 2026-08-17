@@ -25,18 +25,15 @@
       </div>
 
       @if (isScopeDialogVisible()) {
-      <aside class="services-hero__terminal bp-dos-window" role="dialog" aria-label="scope_check.exe" bpReveal>
-        <div class="bp-dos-window__bar">
-          <span>scope_check.exe</span>
-          <button type="button" [attr.aria-label]="content().heroDialogCloseLabel" (click)="closeScopeDialog()">×</button>
-        </div>
+      <bp-system-dialog class="services-hero__terminal" title="scope_check.exe"
+        [closeLabel]="content().heroDialogCloseLabel" (closed)="closeScopeDialog()" bpReveal>
         <div class="bp-dos-window__body">
           <p>&gt; problem first</p>
           <p>&gt; stack second</p>
           <p>&gt; outcome always</p>
           <p class="services-hero__terminal-status">STATUS: READY</p>
         </div>
-      </aside>
+      </bp-system-dialog>
       }
     </div>
   </section>

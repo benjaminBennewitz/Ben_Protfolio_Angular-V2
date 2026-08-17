@@ -22,18 +22,14 @@
 
       <div class="projects-kickoff__side" bpReveal>
         @if (isProjectsDialogVisible()) {
-        <aside class="projects-kickoff__window bp-dos-window" role="dialog" [attr.aria-label]="content().projectsIntro.dialogTitle">
-          <div class="bp-dos-window__bar">
-            <span>{{ content().projectsIntro.dialogTitle }}</span>
-            <button class="projects-kickoff__window-close" type="button"
-              [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeProjectsDialog()">×</button>
-          </div>
+        <bp-system-dialog class="projects-kickoff__window" [title]="content().projectsIntro.dialogTitle"
+          [closeLabel]="content().projectsIntro.dialogCloseLabel" (closed)="closeProjectsDialog()">
           <div class="bp-dos-window__body">
             @for (line of content().projectsIntro.dialogLines; track $index) {
             <p>{{ line }}</p>
             }
           </div>
-        </aside>
+        </bp-system-dialog>
         }
 
         <figure class="projects-kickoff__portrait" [class.is-eaten]="isPortfolioChocolateEaten()" [attr.aria-label]="content().projectsIntro.imageLabel">

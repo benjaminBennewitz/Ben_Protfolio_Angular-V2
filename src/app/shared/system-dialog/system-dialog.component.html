@@ -1,0 +1,8 @@
+<!-- src/app/shared/system-dialog/system-dialog.component.html -->
+<div class="bp-dos-window__bar bp-system-dialog__bar">
+  <span>{{ title }}</span>
+  <button class="bp-system-dialog__close" type="button" [attr.aria-label]="closeLabel" (click)="requestClose($event)">
+    <span class="material-symbols-outlined" aria-hidden="true">close</span>
+  </button>
+</div>
+<ng-content></ng-content>

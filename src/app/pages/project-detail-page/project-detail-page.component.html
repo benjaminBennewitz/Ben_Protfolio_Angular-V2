@@ -220,34 +220,34 @@
             </div>
           </div>
           } @else if ((activeProject.terminalLines?.length ?? 0) > 0 && isTerminalVisible()) {
-          <aside class="project-detail__terminal bp-dos-window" role="dialog" [attr.aria-label]="activeProject.terminalTitle ?? activeProject.name">
-            <div class="bp-dos-window__bar">
-              <span>{{ activeProject.terminalTitle ?? 'project.inspect.exe' }}</span>
-              <button class="project-detail__window-close" type="button" [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeTerminal()">×</button>
-            </div>
+          <bp-system-dialog class="project-detail__terminal" [title]="activeProject.terminalTitle ?? 'project.inspect.exe'"
+            [ariaLabel]="activeProject.terminalTitle ?? activeProject.name" [closeLabel]="content().projectsIntro.dialogCloseLabel"
+            (closed)="closeTerminal()">
             <div class="bp-dos-window__body project-detail__terminal-body">
               @for (line of activeProject.terminalLines ?? []; track $index) {
               <p>{{ line }}</p>
               }
             </div>
-          </aside>
+          </bp-system-dialog>
           }
 
           @if ((activeProject.terminalWidgets?.length ?? 0) > 0) {
           <div class="project-detail__floating-windows" aria-label="Technische Statusfenster">
             @for (widget of activeProject.terminalWidgets ?? []; track widget.id) {
             @if (isTerminalWidgetVisible(widget.id)) {
-            <aside [class]="'project-detail__floating-window project-detail__floating-window--' + widget.position + ' bp-dos-window'" role="dialog" [attr.aria-label]="widget.title">
-              <div class="bp-dos-window__bar">
-                <span>{{ widget.title }}</span>
-                <button class="project-detail__window-close" type="button" [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeTerminalWidget(widget.id)">×</button>
-              </div>
+            <bp-system-dialog class="project-detail__floating-window"
+              [class.project-detail__floating-window--status]="widget.position === 'status'"
+              [class.project-detail__floating-window--events]="widget.position === 'events'"
+              [class.project-detail__floating-window--auth]="widget.position === 'auth'"
+              [class.project-detail__floating-window--queue]="widget.position === 'queue'"
+              [title]="widget.title" [closeLabel]="content().projectsIntro.dialogCloseLabel"
+              (closed)="closeTerminalWidget(widget.id)">
               <div class="bp-dos-window__body project-detail__floating-window-body">
                 @for (line of widget.lines; track line) {
                 <p>{{ line }}</p>
                 }
               </div>
-            </aside>
+            </bp-system-dialog>
             }
             }
           </div>
@@ -497,17 +497,15 @@
         }
 
         @if (isCaseNoteVisible()) {
-        <aside class="project-detail__case-note bp-dos-window" role="dialog" [attr.aria-label]="content().projectsIntro.caseStudyLabel" bpReveal>
-          <div class="bp-dos-window__bar">
-            <span>case_note.sys</span>
-            <button class="project-detail__window-close" type="button" [attr.aria-label]="content().projectsIntro.dialogCloseLabel" (click)="closeCaseNote()">×</button>
-          </div>
+        <bp-system-dialog class="project-detail__case-note" title="case_note.sys"
+          [ariaLabel]="content().projectsIntro.caseStudyLabel" [closeLabel]="content().projectsIntro.dialogCloseLabel"
+          (closed)="closeCaseNote()" bpReveal>
           <div class="bp-dos-window__body project-detail__case-note-body">
             <p>mode={{ activeProject.detailMode }}</p>
             <p>stack={{ activeProject.techStack.join(' / ') }}</p>
             <p>next=erm_layer + sequence_flow + rights_matrix</p>
           </div>
-        </aside>
+        </bp-system-dialog>
         }
 
       </div>

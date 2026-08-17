@@ -1,0 +1,300 @@
+/*###############################
+###
+###     arcade-tech.scss
+###     Portfolio App
+###     BASED ON: Angular 21.02.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+#################################*/
+
+/* ===========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Arcade UI Tokens
+   02   Buttons und Controls
+   03   Labels und Tags
+   04   Systemfenster
+   05   System-Popups
+   06   Navigation
+   07   Accessibility
+   ========================================================================== */
+
+/* ===========================================================================
+   01   Arcade UI Tokens
+   ========================================================================== */
+
+:root {
+  --bp-arcade-grid: color-mix(in srgb, var(--bp-color-text) 8%, transparent);
+  --bp-arcade-shadow: color-mix(in srgb, var(--bp-color-accent) 42%, transparent);
+  --bp-arcade-shadow-soft: color-mix(in srgb, var(--bp-color-accent) 18%, transparent);
+}
+
+/* ===========================================================================
+   02   Buttons und Controls
+   ========================================================================== */
+
+.bp-button {
+  border-width: 2px;
+  font-family: var(--bp-font-system);
+  letter-spacing: 0.075em;
+  box-shadow: var(--bp-arcade-unit) var(--bp-arcade-unit) 0 var(--bp-arcade-shadow);
+  transition-timing-function: var(--bp-ease-step);
+}
+
+.bp-button::before,
+.bp-button::after {
+  position: absolute;
+  z-index: 0;
+  width: var(--bp-arcade-unit);
+  height: var(--bp-arcade-unit);
+  background: currentColor;
+  opacity: 0.32;
+  pointer-events: none;
+  content: '';
+}
+
+.bp-button::before {
+  top: 3px;
+  left: 3px;
+}
+
+.bp-button::after {
+  right: 3px;
+  bottom: 3px;
+}
+
+.bp-button > * {
+  position: relative;
+  z-index: 1;
+}
+
+.bp-button:hover,
+.bp-button:focus-visible {
+  box-shadow: var(--bp-arcade-unit-lg) var(--bp-arcade-unit-lg) 0 color-mix(in srgb, var(--bp-color-accent) 68%, transparent);
+  transform: translate(-2px, -2px);
+}
+
+.bp-button--accent {
+  box-shadow:
+    var(--bp-arcade-unit) var(--bp-arcade-unit) 0 color-mix(in srgb, var(--bp-color-accent) 62%, #000000 28%),
+    0 14px 34px var(--bp-color-shadow);
+}
+
+.bp-button--accent:hover,
+.bp-button--accent:focus-visible {
+  box-shadow:
+    var(--bp-arcade-unit-lg) var(--bp-arcade-unit-lg) 0 color-mix(in srgb, var(--bp-color-accent) 54%, #000000 38%),
+    0 0 0 3px color-mix(in srgb, var(--bp-color-accent) 28%, transparent),
+    0 24px 64px var(--bp-color-shadow);
+  transform: translate(-3px, -3px);
+}
+
+/* ===========================================================================
+   03   Labels und Tags
+   ========================================================================== */
+
+.bp-eyebrow,
+.bp-tag {
+  font-family: var(--bp-font-system);
+}
+
+.bp-eyebrow {
+  border-width: 2px;
+  box-shadow: var(--bp-arcade-unit) var(--bp-arcade-unit) 0 var(--bp-arcade-shadow-soft);
+}
+
+.bp-eyebrow::before {
+  width: 0.46rem;
+  height: 0.46rem;
+  flex: 0 0 auto;
+  background: currentColor;
+  box-shadow: 3px 3px 0 color-mix(in srgb, currentColor 34%, transparent);
+  content: '';
+}
+
+.bp-tag {
+  border-width: 2px;
+  padding: 0.46rem 0.68rem;
+  letter-spacing: 0.055em;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--bp-color-border-strong) 58%, transparent);
+  transition: border-color 140ms var(--bp-ease-step), background-color 140ms var(--bp-ease-step), color 140ms var(--bp-ease-step), transform 140ms var(--bp-ease-step), box-shadow 140ms var(--bp-ease-step);
+}
+
+.bp-tag:hover,
+.bp-tag:focus-within {
+  box-shadow: var(--bp-arcade-unit) var(--bp-arcade-unit) 0 var(--bp-arcade-shadow-soft);
+  transform: translate(-1px, -1px);
+}
+
+/* ===========================================================================
+   04   Systemfenster
+   ========================================================================== */
+
+.bp-terminal,
+.bp-dos-window {
+  font-family: var(--bp-font-system);
+}
+
+.bp-terminal {
+  border-width: 2px;
+  box-shadow:
+    var(--bp-arcade-unit-lg) var(--bp-arcade-unit-lg) 0 var(--bp-arcade-shadow-soft),
+    0 24px 80px var(--bp-color-shadow);
+}
+
+.bp-terminal__bar {
+  border-bottom-width: 2px;
+  font-family: var(--bp-font-system);
+  letter-spacing: 0.06em;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 16px,
+    color-mix(in srgb, var(--bp-color-text) 4%, transparent) 16px 24px
+  );
+}
+
+.bp-terminal__dots i {
+  width: 0.62rem;
+  height: 0.62rem;
+  box-shadow: 2px 2px 0 color-mix(in srgb, #000000 34%, transparent);
+}
+
+.bp-dos-window {
+  border-width: 2px;
+  box-shadow:
+    var(--bp-arcade-unit-lg) var(--bp-arcade-unit-lg) 0 rgba(0, 0, 0, 0.72),
+    calc(var(--bp-arcade-unit-lg) + 2px) calc(var(--bp-arcade-unit-lg) + 2px) 0 color-mix(in srgb, var(--bp-color-accent) 16%, transparent);
+}
+
+.bp-dos-window__bar,
+.bp-dos-window__body {
+  font-family: var(--bp-font-system);
+}
+
+.bp-dos-window__bar {
+  min-height: 32px;
+  padding: 0.38rem 0.52rem;
+  background-image: repeating-linear-gradient(90deg, #101010 0 16px, #171717 16px 20px);
+  letter-spacing: 0.065em;
+}
+
+.bp-dos-window__bar button {
+  border-width: 2px;
+  box-shadow: 2px 2px 0 rgba(255, 255, 255, 0.16);
+  transition-timing-function: var(--bp-ease-step);
+}
+
+.bp-dos-window__body {
+  background-image:
+    linear-gradient(rgba(16, 16, 16, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 16, 16, 0.045) 1px, transparent 1px);
+  background-size: var(--bp-arcade-unit-lg) var(--bp-arcade-unit-lg);
+  letter-spacing: 0.025em;
+}
+
+/* ===========================================================================
+   05   System-Popups
+   ========================================================================== */
+
+.cookie-banner,
+.access-status,
+.access-panel__status,
+.access-panel__window,
+.platinum-modal__window {
+  border-width: 2px;
+}
+
+.cookie-banner,
+.access-status,
+.access-panel__status {
+  box-shadow:
+    var(--bp-arcade-unit-lg) var(--bp-arcade-unit-lg) 0 var(--bp-arcade-shadow-soft),
+    0 22px 58px var(--bp-color-shadow);
+}
+
+.cookie-banner__head p,
+.cookie-banner__chips li,
+.cookie-banner__control h3,
+.cookie-banner__control b,
+.cookie-banner__details,
+.cookie-banner__submit,
+.access-status__copy p,
+.access-panel__status p,
+.access-panel__head p,
+.access-panel__quick-actions button,
+.platinum-modal__bar,
+.platinum-modal__code span,
+.platinum-modal__code code {
+  font-family: var(--bp-font-system);
+}
+
+.cookie-banner__chips li,
+.cookie-banner__control,
+.cookie-banner__details,
+.cookie-banner__submit,
+.access-panel__quick-actions button,
+.platinum-modal__code,
+.platinum-modal__trophy {
+  border-width: 2px;
+}
+
+.cookie-banner__details,
+.cookie-banner__submit,
+.access-panel__quick-actions button,
+.access-panel__toggle,
+.cookie-consent-toggle,
+.platinum-modal__bar button {
+  transition-timing-function: var(--bp-ease-step);
+}
+
+/* ===========================================================================
+   06   Navigation
+   ========================================================================== */
+
+.nav__brand-text,
+.nav__links,
+.nav__language,
+.nav__contact {
+  font-family: var(--bp-font-system);
+}
+
+.nav__action,
+.nav__burger,
+.nav__contact {
+  border-width: 2px;
+  transition-timing-function: var(--bp-ease-step);
+}
+
+.nav__action:hover,
+.nav__action:focus-visible,
+.nav__burger:hover,
+.nav__burger:focus-visible,
+.nav__contact:hover,
+.nav__contact:focus-visible {
+  box-shadow: var(--bp-arcade-unit) var(--bp-arcade-unit) 0 var(--bp-arcade-shadow);
+  transform: translate(-1px, -1px);
+}
+
+.nav__links a::after {
+  height: var(--bp-arcade-unit);
+  transition-timing-function: var(--bp-ease-step);
+}
+
+/* ===========================================================================
+   07   Accessibility
+   ========================================================================== */
+
+:root[data-comfort='simple'] .bp-dos-window,
+:root[data-comfort='simple'] .bp-terminal,
+:root[data-comfort='simple'] .cookie-banner,
+:root[data-comfort='simple'] .access-panel__window,
+:root[data-comfort='simple'] .access-status {
+  box-shadow: 0 18px 44px var(--bp-color-shadow) !important;
+}
+
+:root[data-motion='reduced'] .bp-button,
+:root[data-motion='off'] .bp-button,
+:root[data-motion='reduced'] .bp-tag,
+:root[data-motion='off'] .bp-tag {
+  transform: none;
+}

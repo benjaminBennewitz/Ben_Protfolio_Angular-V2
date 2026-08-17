@@ -1,0 +1,33 @@
+/*###############################
+###
+###     system-dialog.component.scss
+###     Portfolio App
+###     BASED ON: Angular 21.02.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+#################################*/
+
+:host {
+  display: block;
+}
+
+.bp-system-dialog__close {
+  border-color: #ff2b2b;
+  background: #ff2b2b;
+  color: #ffffff;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.38);
+}
+
+.bp-system-dialog__close .material-symbols-outlined {
+  font-size: 1rem;
+  font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 20;
+  line-height: 1;
+}
+
+.bp-system-dialog__close:hover,
+.bp-system-dialog__close:focus-visible {
+  border-color: #ffffff;
+  background: #c91515;
+  color: #ffffff;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+}

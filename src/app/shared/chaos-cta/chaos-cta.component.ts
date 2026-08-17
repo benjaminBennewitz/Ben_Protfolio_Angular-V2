@@ -10,6 +10,7 @@ import { AccessibilityPreferenceService } from '../../core/services/accessibilit
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 import { RevealTextComponent } from '../reveal-text/reveal-text.component';
 import { PixelSpriteComponent } from '../pixel-sprite/pixel-sprite.component';
+import { SystemDialogComponent } from '../system-dialog/system-dialog.component';
 import { AfterViewInit, Component, ElementRef, HostListener, Input, NgZone, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 
 /** Bewegungszustand des primären Pixelautos. */
@@ -89,7 +90,7 @@ interface CtaBlockState {
 @Component({
   selector: 'bp-chaos-cta',
   standalone: true,
-  imports: [RevealOnScrollDirective, RevealTextComponent, PixelSpriteComponent],
+  imports: [RevealOnScrollDirective, RevealTextComponent, PixelSpriteComponent, SystemDialogComponent],
   templateUrl: './chaos-cta.component.html',
   styleUrl: './chaos-cta.component.scss',
 })
@@ -227,9 +228,9 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   }
 
   /** Entfernt das kleine CTA-Dialogfenster ohne die Section-Navigation auszulösen. */
-  closeDialog(event: MouseEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
+  closeDialog(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
     this.achievementService.unlock('nostalgia-hater');
     this.isDialogVisible.set(false);
   }

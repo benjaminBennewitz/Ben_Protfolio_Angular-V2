@@ -13,6 +13,7 @@ import { AchievementService } from '../../core/services/achievement.service';
 import { ProjectStackComponent } from '../../shared/project-stack/project-stack.component';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { RevealTextComponent } from '../../shared/reveal-text/reveal-text.component';
+import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
 import { ViewportActivityDirective } from '../../shared/viewport-activity.directive';
 
 /** Zustände für das Schoko-Bild im Portfolio-Einstieg. */
@@ -49,7 +50,7 @@ interface PortfolioChocolateEgg {
 @Component({
   selector: 'bp-portfolio-page',
   standalone: true,
-  imports: [RouterLink, ProjectStackComponent, RevealOnScrollDirective, RevealTextComponent, ViewportActivityDirective],
+  imports: [RouterLink, ProjectStackComponent, RevealOnScrollDirective, RevealTextComponent, SystemDialogComponent, ViewportActivityDirective],
   templateUrl: './portfolio-page.component.html',
   styleUrl: './portfolio-page.component.scss',
 })

@@ -356,23 +356,29 @@ html[data-motion='reduced']::before {
   place-items: center;
   width: 22px;
   height: 22px;
-  border: 1px solid #f2f2f2;
+  border: 1px solid #ff2b2b;
   padding: 0;
-  background: transparent;
-  color: #f2f2f2;
+  background: #ff2b2b;
+  color: #ffffff;
   font: inherit;
   line-height: 1;
   cursor: pointer;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.36);
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
 }
 
 .bp-dos-window__bar button:hover,
 .bp-dos-window__bar button:focus-visible {
-  border-color: #ff2b2b;
-  background: #ff2b2b;
+  border-color: #ffffff;
+  background: #c91515;
   color: #ffffff;
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.36);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
   transform: translate(-1px, -1px);
+}
+
+.bp-dos-window__bar .material-symbols-outlined {
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 .bp-dos-window__body {

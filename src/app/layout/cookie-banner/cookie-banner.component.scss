@@ -384,3 +384,57 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ===========================================================================
+   09   Arcade-Tech
+   ========================================================================== */
+
+.cookie-banner,
+.cookie-banner__head > .material-symbols-outlined,
+.cookie-banner__chips li,
+.cookie-banner__control,
+.cookie-banner__control > .material-symbols-outlined,
+.cookie-banner__details,
+.cookie-banner__submit,
+.cookie-consent-toggle {
+  border-width: 2px;
+}
+
+.cookie-banner {
+  box-shadow:
+    8px 8px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent),
+    12px 12px 0 color-mix(in srgb, #000000 14%, transparent),
+    0 26px 72px var(--bp-color-shadow);
+  backdrop-filter: blur(9px) saturate(1.08);
+  animation-timing-function: steps(6, end);
+}
+
+.cookie-banner::before {
+  opacity: 0.12;
+  background-image:
+    linear-gradient(var(--bp-arcade-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bp-arcade-grid) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+.cookie-banner__head p,
+.cookie-banner__chips li,
+.cookie-banner__control h3,
+.cookie-banner__control b,
+.cookie-banner__details,
+.cookie-banner__submit {
+  font-family: var(--bp-font-system);
+}
+
+.cookie-banner__chips li,
+.cookie-banner__control,
+.cookie-banner__details,
+.cookie-banner__submit {
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--bp-color-border-strong) 26%, transparent);
+}
+
+.cookie-banner__details,
+.cookie-banner__submit,
+.cookie-consent-toggle {
+  transition-timing-function: var(--bp-ease-step);
+}

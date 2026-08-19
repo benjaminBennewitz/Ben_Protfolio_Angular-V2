@@ -304,17 +304,19 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     this.publishStyles();
   }
 
-  /** Berechnet die passende Breite für Text- und Icon-Bausteine. */
+  /** Berechnet die Bausteinbreite aus Inhalt und Eingabemodus, damit Beschriftungen vollständig im Block bleiben. */
   private blockWidth(word: string): number {
-    if (this.usesCompactMobilePhysics()) {
-      return this.isIconBlock(word) ? 54 : word === 'touch' ? 84 : 64;
-    }
-
     if (this.isIconBlock(word)) {
-      return 74;
+      return this.usesCompactMobilePhysics() ? 54 : 74;
     }
 
-    return word === 'touch' ? 130 : 94;
+    const characterCount = Math.max(2, word.trim().length);
+
+    if (this.usesCompactMobilePhysics()) {
+      return Math.min(116, Math.max(62, 30 + characterCount * 12));
+    }
+
+    return Math.min(188, Math.max(92, 42 + characterCount * 22));
   }
 
   /** Berechnet die Höhe eines Bausteins passend zur aktuellen Eingabeart. */
@@ -545,10 +547,11 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
     const width = stage?.clientWidth ?? 1000;
     const floor = Math.max(180, (stage?.clientHeight ?? 360) - 96);
     const compact = this.usesCompactMobilePhysics();
-    const gap = compact ? 10 : 0;
-    const compactColumnWidth = 84;
+    const gap = compact ? 10 : 12;
+    const compactColumnWidth = compact ? Math.max(84, ...this.blocks.map((block) => block.width)) : 0;
     const columns = compact ? 2 : this.blocks.length;
     const startX = compact ? Math.max(14, (width - 2 * compactColumnWidth - gap) / 2) : 72;
+    let desktopCursorX = startX;
 
     this.car.phase = 'gone';
     this.trafficVehicles = [];
@@ -557,7 +560,10 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
       const column = compact ? index % columns : index;
       const row = compact ? Math.floor(index / columns) : 0;
 
-      block.x = compact ? startX + column * (compactColumnWidth + gap) : Math.min(width - block.width - 16, startX + index * 134);
+      block.x = compact
+        ? startX + column * (compactColumnWidth + gap)
+        : Math.min(width - block.width - 16, desktopCursorX);
+      desktopCursorX += block.width + gap;
       block.y = compact ? floor - block.height - row * (block.height + gap) : floor - block.height;
       block.vx = 0;
       block.vy = 0;

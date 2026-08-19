@@ -15,6 +15,7 @@ import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive
 import { RevealTextComponent } from '../../shared/reveal-text/reveal-text.component';
 import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
 import { ViewportActivityDirective } from '../../shared/viewport-activity.directive';
+import { SERVICES_TRANSLATIONS } from './services-content';
 
 /** Leistungsseite mit drei Lösungsstufen und optionalen Maintenance-Modellen. */
 @Component({
@@ -34,8 +35,8 @@ export class ServicesPageComponent {
   /** SEO-Service für routen- und sprachabhängige Meta-Daten. */
   private readonly seoService = inject(SeoService);
 
-  /** Vollständiger Leistungsinhalt der aktiven Sprache. */
-  readonly content = computed(() => this.languageService.content().pricing);
+  /** Isolierter Phase-2-Leistungsinhalt der aktiven Sprache. */
+  readonly content = computed(() => SERVICES_TRANSLATIONS[this.languageService.language()]);
 
   /** Übersetztes Label für den Rücklink zur Startseite. */
   readonly backLabel = computed(() => this.languageService.language() === 'de' ? 'Zurück zur Experience' : 'Back to the experience');
@@ -69,5 +70,6 @@ export class ServicesPageComponent {
   /** Synchronisiert die Leistungsroute mit den Meta-Daten der aktuellen Sprache. */
   constructor() {
     effect(() => this.seoService.setPageSeo(this.content().metaTitle, this.content().metaDescription, '/leistungen'));
+    // Diese Komponente bleibt als Phase-2-Handoff erhalten, ist im Portfolio-Routing jedoch nicht mehr registriert.
   }
 }

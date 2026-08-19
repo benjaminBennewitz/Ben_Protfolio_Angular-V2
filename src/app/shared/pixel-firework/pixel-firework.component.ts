@@ -2,7 +2,7 @@
 
 /**
  * @file Einmalige Pixel-Feuerwerk-Animation.
- * @description Startet erst nach einem erfolgreich abgeschlossenen Scroll-Snap der Services-Section und wiederholt sich innerhalb der laufenden SPA-Session nicht.
+ * @description Startet erst nach einem erfolgreich abgeschlossenen Scroll-Snap der Kompetenz-Section und wiederholt sich innerhalb der laufenden SPA-Session nicht.
  */
 
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild, signal } from '@angular/core';
@@ -24,7 +24,7 @@ export class PixelFireworkComponent implements AfterViewInit, OnDestroy {
   /** Referenz auf die sichtbare Feuerwerk-Bühne. */
   @ViewChild('stageRef') private readonly stageRef?: ElementRef<HTMLElement>;
 
-  /** Services-Section, die den einmaligen Startzeitpunkt bestimmt. */
+  /** Kompetenz-Section, die den einmaligen Startzeitpunkt bestimmt. */
   private triggerSection?: HTMLElement;
 
   /** Timer für die Prüfung nach abgeschlossener Scrollbewegung. */
@@ -39,7 +39,7 @@ export class PixelFireworkComponent implements AfterViewInit, OnDestroy {
   /** Merkt sich die Parent-Section und prüft nach einer kurzen Ruhephase den Snap-Zustand. */
   ngAfterViewInit(): void {
     const stage = this.stageRef?.nativeElement;
-    this.triggerSection = stage?.closest<HTMLElement>('.services-bridge') ?? undefined;
+    this.triggerSection = stage?.closest<HTMLElement>('.capabilities') ?? undefined;
     this.scheduleSnapCheck();
   }
 
@@ -75,7 +75,7 @@ export class PixelFireworkComponent implements AfterViewInit, OnDestroy {
     }, 260);
   }
 
-  /** Startet ausschließlich, wenn die Services-Section tatsächlich am Viewport-Anfang eingerastet ist. */
+  /** Startet ausschließlich, wenn die Kompetenz-Section tatsächlich am Viewport-Anfang eingerastet ist. */
   private tryPlayAfterSnap(): void {
     const section = this.triggerSection;
 

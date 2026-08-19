@@ -31,8 +31,6 @@ export interface NavigationContent {
   readonly about: string;
   readonly skills: string;
   readonly projects: string;
-  /** Navigationslabel für die Angebots- und Preissektion. */
-  readonly services: string;
   /** Navigationslabel für die ausgelagerte Portfolio-Route. */
   readonly portfolio: string;
   readonly blog: string;
@@ -55,7 +53,7 @@ export interface NavigationContent {
 export interface HeroContent {
   readonly eyebrow: string;
   readonly title: string;
-  /** Business-orientierter Hero-Hook. */
+  /** Prägnanter Hero-Hook für die persönliche Portfolio-Positionierung. */
   readonly hook: string;
   readonly subtitle: string;
   readonly primaryCta: string;
@@ -258,27 +256,27 @@ export interface SkillLevel {
 
 
 
-/** Inhalt der kompakten Leistungs-Bridge auf der Startseite. */
-export interface ServicesTeaserContent {
-  /** Kleine technische Beschriftung oberhalb der Bridge. */
+/** Inhalt des kompakten Kompetenzprofils auf der Startseite. */
+export interface CapabilityShowcaseContent {
+  /** Kleine technische Beschriftung oberhalb des Kompetenzprofils. */
   readonly eyebrow: string;
-  /** Hauptaussage der kompakten Leistungs-Bridge. */
+  /** Hauptaussage des kompakten Kompetenzprofils. */
   readonly title: string;
-  /** Kurze Verbindung zwischen Techstack und Leistungsroute. */
+  /** Kurze Verbindung zwischen Techstack und Case Studies. */
   readonly subtitle: string;
-  /** Beschriftung des Links zur vollständigen Leistungsseite. */
+  /** Beschriftung des Links zu den Case Studies. */
   readonly ctaLabel: string;
-  /** Zugängliche Beschriftung der drei Lösungsbereiche. */
+  /** Zugängliche Beschriftung der Kompetenzfelder. */
   readonly ariaLabel: string;
-  /** Drei bewusst reduzierte Lösungsbereiche. */
-  readonly items: readonly ServicesTeaserItem[];
+  /** Bewusst reduzierte Kompetenzfelder. */
+  readonly items: readonly CapabilityShowcaseItem[];
 }
 
-/** Einzelner Lösungsbereich der Leistungs-Bridge. */
-export interface ServicesTeaserItem {
+/** Einzelnes Kompetenzfeld des Portfolio-Profils. */
+export interface CapabilityShowcaseItem {
   /** Kurzes Systemlabel wie WEB, APP oder SYSTEM. */
   readonly label: string;
-  /** Business-orientierte Kurzbeschreibung. */
+  /** Technisch-neutrale Kurzbeschreibung. */
   readonly text: string;
 }
 
@@ -379,8 +377,8 @@ export interface ProjectsContent {
   readonly subtitle: string;
   /** Ergänzende Einleitungstexte vor dem Projekt-Stack. */
   readonly introText: readonly string[];
-  /** Beschriftung des Rücklinks von der Portfolio-Seite zu den Leistungen. */
-  readonly servicesBackLabel: string;
+  /** Beschriftung des Rücklinks von der Portfolio-Seite zur Experience. */
+  readonly homeBackLabel: string;
   /** Titel des dekorativen Projekt-Terminalfensters. */
   readonly dialogTitle: string;
   /** ARIA-Label zum Schließen des Projekt-Terminalfensters. */
@@ -1079,10 +1077,6 @@ export interface ContactContent {
   readonly nameLabel: string;
   readonly emailLabel: string;
   readonly messageLabel: string;
-  /** Label für das optionale Gutscheincode-Feld. */
-  readonly couponCodeLabel: string;
-  /** Platzhalter für das optionale Gutscheincode-Feld. */
-  readonly couponCodePlaceholder: string;
   /** Hinweis auf Pflichtfelder im Formular. */
   readonly requiredHint: string;
   /** Zugängliches Label für den Pflichtstern. */
@@ -1241,10 +1235,8 @@ export interface PortfolioContent {
   readonly about: AboutContent;
   readonly experience: ExperienceContent;
   readonly skills: SkillsContent;
-  /** Kompakte Bridge von der Startseite zur Leistungsroute. */
-  readonly servicesTeaser: ServicesTeaserContent;
-  /** Inhalte der eigenständigen Leistungs- und Preisseite. */
-  readonly pricing: PricingContent;
+  /** Kompaktes Kompetenzprofil als Brücke zwischen Stack und Case Studies. */
+  readonly capabilities: CapabilityShowcaseContent;
   readonly projectsIntro: ProjectsContent;
   readonly projects: readonly PortfolioProject[];
   readonly process: ProcessContent;

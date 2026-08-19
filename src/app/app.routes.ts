@@ -15,11 +15,6 @@ export const routes: Routes = [
     title: 'Benjamin Bennewitz | Portfolio',
   },
   {
-    path: 'leistungen',
-    loadComponent: () => import('./pages/services-page/services-page.component').then((component) => component.ServicesPageComponent),
-    title: 'Leistungen & Preise | Design. Code. Repeat.',
-  },
-  {
     path: 'portfolio',
     loadComponent: () => import('./pages/portfolio-page/portfolio-page.component').then((component) => component.PortfolioPageComponent),
     title: 'Case Studies | Design. Code. Repeat.',

@@ -21,15 +21,15 @@
       <p>{{ texts().intro }}<br>{{ texts().blink }}</p>
       <p><strong>{{ texts().reward }}</strong></p>
 
-      <div class="platinum-modal__code" aria-label="REPEAT10">
-        <span>{{ texts().codeLabel }}</span>
-        <code>REPEAT10</code>
+      <div class="platinum-modal__code" [attr.aria-label]="texts().status">
+        <span>{{ texts().statusLabel }}</span>
+        <code>{{ texts().status }}</code>
       </div>
 
-      <p class="platinum-modal__note">{{ texts().validity }} {{ texts().note }}</p>
+      <p class="platinum-modal__note">{{ texts().note }}</p>
 
       <div class="platinum-modal__actions">
-        <button class="bp-button bp-button--accent" type="button" (click)="startDiscountInquiry()">
+        <button class="bp-button bp-button--accent" type="button" (click)="openCaseStudies()">
           <span>{{ texts().ctaLabel }}</span>
           <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
         </button>

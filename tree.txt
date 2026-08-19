@@ -1,6 +1,8 @@
 Portfolio/
 ├── .angular/
 │   └── ...
+├── dist/
+│   └── ...
 ├── node_modules/
 │   └── ...
 ├── src/
@@ -96,6 +98,8 @@ Portfolio/
 │   │   │   │   ├── project-detail-page.component.scss
 │   │   │   │   └── project-detail-page.component.ts
 │   │   │   ├── services-page/
+│   │   │   │   ├── services-content.spec.ts
+│   │   │   │   ├── services-content.ts
 │   │   │   │   ├── services-page.component.html
 │   │   │   │   ├── services-page.component.scss
 │   │   │   │   └── services-page.component.ts

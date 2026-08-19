@@ -40,12 +40,6 @@
         }
       </label>
 
-      <label class="contact-form__coupon" [attr.for]="couponCodeId">
-        <span>{{ content().couponCodeLabel }}</span>
-        <input [id]="couponCodeId" type="text" autocomplete="off" [value]="couponCode()"
-          (input)="updateField('couponCode', $event)">
-      </label>
-
       <p class="contact-form__privacy">{{ content().privacy }}</p>
 
       <button class="bp-button bp-button--accent" type="submit" [disabled]="isSubmitting()">

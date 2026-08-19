@@ -84,6 +84,10 @@
   --visual-accent: var(--bp-color-warning);
 }
 
+.visual[data-accent='lime'] {
+  --visual-accent: var(--bp-color-accent-lime);
+}
+
 .visual[data-project='blutanalyse'],
 .visual-shell[data-project='blutanalyse'] {
   --visual-accent: #ff4d63;

@@ -61,6 +61,11 @@ const CONTRAST_CONFIGURATIONS: readonly ContrastTokenConfiguration[] = [
     foregroundTokens: DEFAULT_FOREGROUND_TOKENS,
   },
   {
+    backgroundToken: '--bp-color-accent-lime',
+    outputToken: '--bp-color-on-accent-lime',
+    foregroundTokens: DEFAULT_FOREGROUND_TOKENS,
+  },
+  {
     backgroundToken: '--bp-color-warning',
     outputToken: '--bp-color-on-warning',
     foregroundTokens: DEFAULT_FOREGROUND_TOKENS,

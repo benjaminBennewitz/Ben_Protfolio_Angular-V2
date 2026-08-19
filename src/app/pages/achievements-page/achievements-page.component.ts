@@ -66,7 +66,7 @@ export class AchievementsPageComponent {
 
   /** Öffnet besondere Aktionen für freigeschaltete Achievement-Karten. */
   openAchievement(achievement: AchievementView): void {
-    if (achievement.id !== 'platinum-discount' || !achievement.unlocked) {
+    if (achievement.id !== 'platinum-complete' || !achievement.unlocked) {
       return;
     }
 
@@ -75,7 +75,7 @@ export class AchievementsPageComponent {
 
   /** Gibt zurück, ob eine Achievement-Karte direkt interaktiv ist. */
   achievementIsInteractive(achievement: AchievementView): boolean {
-    return achievement.id === 'platinum-discount' && achievement.unlocked;
+    return achievement.id === 'platinum-complete' && achievement.unlocked;
   }
 
   /** Blendet einen Hinweis für eine gesperrte Trophäe ein. */

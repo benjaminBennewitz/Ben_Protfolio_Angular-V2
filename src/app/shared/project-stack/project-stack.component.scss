@@ -53,6 +53,7 @@
 
 .project-stack__panel {
   --stack-accent: var(--bp-color-accent);
+  --stack-on-accent: var(--bp-color-on-accent);
   position: sticky;
   top: 0;
   display: grid;
@@ -77,23 +78,32 @@
 
 .project-stack__panel[data-accent='pink'] {
   --stack-accent: var(--bp-color-accent-2);
+  --stack-on-accent: var(--bp-color-on-accent-2);
 }
 
 .project-stack__panel[data-accent='violet'] {
   --stack-accent: var(--bp-color-accent-3);
+  --stack-on-accent: var(--bp-color-on-accent-3);
 }
 
 .project-stack__panel[data-accent='blue'] {
   --stack-accent: var(--bp-color-info);
+  --stack-on-accent: var(--bp-color-on-info);
 }
 
 .project-stack__panel[data-accent='orange'] {
   --stack-accent: var(--bp-color-warning);
+  --stack-on-accent: var(--bp-color-on-warning);
 }
 
+.project-stack__panel[data-accent='lime'] {
+  --stack-accent: var(--bp-color-accent-lime);
+  --stack-on-accent: var(--bp-color-on-accent-lime);
+}
 
 .project-stack__panel[data-project='blutanalyse'] {
   --stack-accent: #ff4d63;
+  --stack-on-accent: #101010;
   --bp-color-accent: #ff4d63;
 }
 
@@ -101,6 +111,7 @@
 :host-context(:root[data-color-vision='achromatopsia']) .project-stack__panel[data-project='blutanalyse'],
 :host-context([data-color-vision='achromatopsia']) .project-stack__panel[data-project='blutanalyse'] {
   --stack-accent: var(--bp-color-accent);
+  --stack-on-accent: var(--bp-color-on-accent);
 }
 
 :root[data-color-vision='achromatopsia'] .project-stack__panel[data-project='blutanalyse'],
@@ -224,8 +235,8 @@
   min-height: 38px;
   margin-bottom: var(--bp-space-2);
   border: 1px solid var(--stack-accent);
-  background: color-mix(in srgb, var(--stack-accent) 16%, transparent);
-  color: var(--stack-accent);
+  background: var(--stack-accent);
+  color: var(--stack-on-accent);
   font-family: var(--bp-font-mono);
   font-size: 1.05rem;
   font-weight: 900;
@@ -292,10 +303,10 @@
 }
 
 .project-stack__tags li {
-  border: 1px solid var(--bp-color-border-strong);
+  border: 1px solid var(--stack-accent);
   padding: 0.36rem 0.56rem;
-  background: var(--bp-color-bg);
-  color: var(--stack-accent);
+  background: var(--stack-accent);
+  color: var(--stack-on-accent);
   font-family: var(--bp-font-mono);
   font-size: 0.68rem;
   font-weight: 900;
@@ -556,8 +567,9 @@
   place-items: center;
   width: 32px;
   height: 32px;
-  border: 1px solid var(--bp-color-border-strong);
-  color: var(--stack-accent);
+  border: 1px solid var(--stack-accent);
+  background: var(--stack-accent);
+  color: var(--stack-on-accent);
   font-family: var(--bp-font-mono);
   font-weight: 900;
 }

@@ -3,9 +3,9 @@
   <section class="projects-kickoff bp-section" id="portfolio" bpViewportActivity>
     <div class="bp-container projects-kickoff__layout">
       <div class="projects-kickoff__copy bp-motion-copy" bpReveal>
-        <a class="portfolio-page__back" routerLink="/leistungen">
+        <a class="portfolio-page__back" routerLink="/" fragment="hero">
           <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-          {{ content().projectsIntro.servicesBackLabel }}
+          {{ content().projectsIntro.homeBackLabel }}
         </a>
 
         <bp-reveal-text class="projects-kickoff__title-reveal" [eyebrow]="content().projectsIntro.eyebrow" [text]="content().projectsIntro.title" headingClass="projects-kickoff__title" />

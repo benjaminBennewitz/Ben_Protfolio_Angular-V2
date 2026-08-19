@@ -40,10 +40,10 @@
         <p class="hero__subtitle">{{ content().hero.subtitle }}</p>
 
         <div class="hero__actions">
-          <button class="bp-button bp-button--accent" type="button" aria-haspopup="dialog" aria-controls="contact-modal" [attr.aria-expanded]="isContactModalVisible()" (click)="openContactModal()">
+          <a class="bp-button bp-button--accent" routerLink="/portfolio">
             <span>{{ content().hero.primaryCta }}</span>
-            <span class="material-symbols-outlined" aria-hidden="true">mail</span>
-          </button>
+            <span class="material-symbols-outlined" aria-hidden="true">grid_view</span>
+          </a>
           <a class="bp-button" routerLink="/" fragment="about">
             <span>{{ content().hero.secondaryCta }}</span>
             <span class="material-symbols-outlined" aria-hidden="true">terminal</span>
@@ -223,22 +223,22 @@
     <bp-tech-marquee bpViewportActivity bpReveal [items]="content().skills.marquee" />
   </section>
 
-  <section class="services-bridge bp-section" id="services" bpViewportActivity>
-<div class="services-bridge__layout bp-container">
-      <div class="services-bridge__copy bp-motion-copy" bpReveal>
-        <bp-reveal-text class="services-bridge__title-reveal" [eyebrow]="content().servicesTeaser.eyebrow"
-          [text]="content().servicesTeaser.title" headingClass="services-bridge__title" />
-        <p class="bp-subtitle">{{ content().servicesTeaser.subtitle }}</p>
-        <a class="bp-button services-bridge__cta" routerLink="/leistungen">
-          <span>{{ content().servicesTeaser.ctaLabel }}</span>
+  <section class="capabilities bp-section" id="capabilities" bpViewportActivity>
+<div class="capabilities__layout bp-container">
+      <div class="capabilities__copy bp-motion-copy" bpReveal>
+        <bp-reveal-text class="capabilities__title-reveal" [eyebrow]="content().capabilities.eyebrow"
+          [text]="content().capabilities.title" headingClass="capabilities__title" />
+        <p class="bp-subtitle">{{ content().capabilities.subtitle }}</p>
+        <a class="bp-button capabilities__cta" routerLink="/portfolio">
+          <span>{{ content().capabilities.ctaLabel }}</span>
           <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
         </a>
       </div>
 
-      <div class="services-bridge__signals bp-stagger-list bp-stagger-list--soft"
-        [attr.aria-label]="content().servicesTeaser.ariaLabel" bpReveal>
-        @for (item of content().servicesTeaser.items; track item.label; let index = $index) {
-        <article class="services-bridge__signal bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 110 + 120">
+      <div class="capabilities__signals bp-stagger-list bp-stagger-list--soft"
+        [attr.aria-label]="content().capabilities.ariaLabel" bpReveal>
+        @for (item of content().capabilities.items; track item.label; let index = $index) {
+        <article class="capabilities__signal bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 110 + 120">
           <strong>{{ item.label }}</strong>
           <span>{{ item.text }}</span>
         </article>
@@ -246,7 +246,7 @@
       </div>
     </div>
 
-    <bp-pixel-firework class="services-bridge__firework" />
+    <bp-pixel-firework class="capabilities__firework" />
   </section>
 
   <bp-process-lock bpViewportActivity [eyebrow]="content().process.eyebrow" [title]="content().process.title"
@@ -308,7 +308,7 @@
       [pxSize]="4"
       [speed]="0.75"
       [intensity]="1.12"
-      [zoom]="0.4">
+      [zoom]="0.58">
     </bp-dithering-shader>
 
     <div class="bp-container bp-grid-two">
@@ -341,20 +341,4 @@
     </div>
   </section>
 
-  @if (isContactModalVisible()) {
-  <div id="contact-modal" class="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contact-modal-title" (keydown)="onContactModalKeydown($event)">
-    <button class="contact-modal__backdrop" type="button" [attr.aria-label]="content().contact.modalCloseLabel"
-      (click)="closeContactModal()"></button>
-    <div #contactModalWindow class="contact-modal__window bp-dos-window" tabindex="-1">
-      <div class="bp-dos-window__bar">
-        <span id="contact-modal-title">{{ content().contact.modalTitle }}</span>
-        <button type="button" [attr.aria-label]="content().contact.modalCloseLabel"
-          (click)="closeContactModal()">×</button>
-      </div>
-      <div class="contact-modal__body">
-        <bp-contact-form />
-      </div>
-    </div>
-  </div>
-  }
 </main>

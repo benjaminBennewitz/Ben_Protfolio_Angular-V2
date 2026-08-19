@@ -26,7 +26,7 @@ export type AchievementId =
   | 'rescue-lane-404'
   | 'world-upside-down'
   | 'loyal-companion'
-  | 'platinum-discount';
+  | 'platinum-complete';
 
 /** Technische Definition einer Trophäe. */
 interface AchievementDefinition {
@@ -90,7 +90,7 @@ export class AchievementService {
     { id: 'rescue-lane-404', icon: 'emergency', category: 'cta' },
     { id: 'world-upside-down', icon: 'accessibility_new', category: 'access' },
     { id: 'loyal-companion', icon: 'music_note', category: 'footer' },
-    { id: 'platinum-discount', icon: 'workspace_premium', category: 'platin' },
+    { id: 'platinum-complete', icon: 'workspace_premium', category: 'platin' },
   ];
 
   /** Interner Fortschrittszustand. */
@@ -99,7 +99,7 @@ export class AchievementService {
   /** Aktuell sichtbare Trophy-Notification. */
   private readonly activeUnlockIdSignal = signal<AchievementId | null>(null);
 
-  /** Sichtbarkeit des großen Platin-Rabatt-Popups. */
+  /** Sichtbarkeit des großen Platin-Abschluss-Popups. */
   private readonly platinumModalVisibleSignal = signal<boolean>(false);
 
   /** Warteschlange für mehrere direkte Unlocks nacheinander. */
@@ -130,7 +130,7 @@ export class AchievementService {
     return activeId ? this.achievements().find((achievement) => achievement.id === activeId) ?? null : null;
   });
 
-  /** Sichtbarkeit des großen Platin-Rabatt-Popups. */
+  /** Sichtbarkeit des großen Platin-Abschluss-Popups. */
   readonly isPlatinumModalVisible = computed<boolean>(() => this.platinumModalVisibleSignal());
 
   /** Anzahl freigeschalteter Trophäen. */
@@ -154,17 +154,17 @@ export class AchievementService {
 
     if (unlockedNow) {
       this.enqueueUnlockToast(id);
-      this.unlockPlatinumDiscount(id);
+      this.unlockPlatinumCompletion(id);
     }
   }
 
-  /** Öffnet das große Platin-Rabatt-Popup manuell. */
+  /** Öffnet das große Platin-Abschluss-Popup manuell. */
   showPlatinumModal(): void {
     this.clearPlatinumModalTimeout();
     this.platinumModalVisibleSignal.set(true);
   }
 
-  /** Schließt das große Platin-Rabatt-Popup. */
+  /** Schließt das große Platin-Abschluss-Popup. */
   dismissPlatinumModal(): void {
     this.clearPlatinumModalTimeout();
     this.platinumModalVisibleSignal.set(false);
@@ -209,21 +209,21 @@ export class AchievementService {
 
 
   /** Schaltet die Platin-Trophäe frei, sobald alle anderen Trophäen aktiv sind. */
-  private unlockPlatinumDiscount(lastUnlockedId: AchievementId): void {
-    if (lastUnlockedId === 'platinum-discount') {
+  private unlockPlatinumCompletion(lastUnlockedId: AchievementId): void {
+    if (lastUnlockedId === 'platinum-complete') {
       return;
     }
 
     const state = this.stateSignal();
-    const regularIds = this.definitions.filter((definition) => definition.id !== 'platinum-discount').map((definition) => definition.id);
+    const regularIds = this.definitions.filter((definition) => definition.id !== 'platinum-complete').map((definition) => definition.id);
     const allRegularUnlocked = regularIds.every((id) => state.unlocked.includes(id));
 
-    if (!allRegularUnlocked || state.unlocked.includes('platinum-discount')) {
+    if (!allRegularUnlocked || state.unlocked.includes('platinum-complete')) {
       return;
     }
 
-    this.stateSignal.set(this.persistState({ ...state, unlocked: [...state.unlocked, 'platinum-discount'] }));
-    this.enqueueUnlockToast('platinum-discount');
+    this.stateSignal.set(this.persistState({ ...state, unlocked: [...state.unlocked, 'platinum-complete'] }));
+    this.enqueueUnlockToast('platinum-complete');
   }
 
   /** Liest den Fortschritt aus LocalStorage. */
@@ -232,11 +232,11 @@ export class AchievementService {
       const value = localStorage.getItem(this.storageKey);
       const parsed = value ? JSON.parse(value) as Partial<StoredAchievementState> : null;
 
-      const unlocked = this.validIds(parsed?.unlocked);
-      const hints = this.validIds(parsed?.hints);
-      const regularIds = this.definitions.filter((definition) => definition.id !== 'platinum-discount').map((definition) => definition.id);
-      const normalizedUnlocked = unlocked.includes('platinum-discount') && !regularIds.every((id) => unlocked.includes(id))
-        ? unlocked.filter((id) => id !== 'platinum-discount')
+      const unlocked = this.validIds(this.migrateLegacyAchievementIds(parsed?.unlocked));
+      const hints = this.validIds(this.migrateLegacyAchievementIds(parsed?.hints));
+      const regularIds = this.definitions.filter((definition) => definition.id !== 'platinum-complete').map((definition) => definition.id);
+      const normalizedUnlocked = unlocked.includes('platinum-complete') && !regularIds.every((id) => unlocked.includes(id))
+        ? unlocked.filter((id) => id !== 'platinum-complete')
         : unlocked;
 
       return {
@@ -274,7 +274,7 @@ export class AchievementService {
 
     this.activeUnlockIdSignal.set(nextId);
 
-    if (nextId === 'platinum-discount') {
+    if (nextId === 'platinum-complete') {
       this.schedulePlatinumModal();
     }
 
@@ -298,6 +298,15 @@ export class AchievementService {
 
     window.clearTimeout(this.platinumModalTimeoutId);
     this.platinumModalTimeoutId = null;
+  }
+
+  /** Migriert den früheren kommerziellen Platin-Identifier, ohne bestehenden lokalen Fortschritt zu verlieren. */
+  private migrateLegacyAchievementIds(values: unknown): unknown {
+    if (!Array.isArray(values)) {
+      return values;
+    }
+
+    return values.map((value) => value === 'platinum-discount' ? 'platinum-complete' : value);
   }
 
   /** Filtert gespeicherte IDs auf bekannte Achievement-IDs. */
@@ -388,10 +397,10 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       description: 'Sie wird dort, immer auf dich warten.',
       hint: 'Finde einen treuen Begleiter.',
     },
-    'platinum-discount': {
+    'platinum-complete': {
       title: 'Platin freigeschaltet',
-      description: 'Du hast alle versteckten Details gefunden. Code REPEAT10 gibt dir 10 % Rabatt auf ein Angebot deiner Wahl.',
-      hint: 'Schalte alle anderen Trophäen frei und finde den Rabattcode.',
+      description: 'Du hast alle versteckten Details gefunden. 100 % Portfolio erkundet – Ruhm freigeschaltet.',
+      hint: 'Schalte alle anderen Trophäen frei und vervollständige die Experience.',
     },
   },
   en: {
@@ -470,10 +479,10 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
       description: 'She will always be waiting for you there.',
       hint: 'Find a loyal companion.',
     },
-    'platinum-discount': {
+    'platinum-complete': {
       title: 'Platinum Unlocked',
-      description: 'You found every hidden detail. Code REPEAT10 gives you 10% off one offer of your choice.',
-      hint: 'Unlock every other trophy and reveal the discount code.',
+      description: 'You found every hidden detail. 100% of the portfolio explored – glory unlocked.',
+      hint: 'Unlock every other trophy and complete the experience.',
     },
   },
 };

@@ -2,10 +2,9 @@
 
 /**
  * @file Startseite des Portfolios.
- * @description Kombiniert Hero, Über-mich, Techstack, Leistungen, Process-Lock, Chaos-CTA, FAQ und Kontakt.
+ * @description Kombiniert Hero, Über-mich, Techstack, Kompetenzprofil, Process-Lock, Chaos-CTA, FAQ und Kontakt.
  */
 
-import { DOCUMENT } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AchievementService } from '../../core/services/achievement.service';
@@ -70,9 +69,6 @@ interface ProjectsChocolateEgg {
   styleUrl: './home-page.component.scss',
 })
 export class HomePageComponent implements AfterViewInit, OnDestroy {
-  /** Dokumentreferenz für Fokus- und Modalsteuerung. */
-  private readonly document = inject(DOCUMENT);
-
   /** Sprachservice für alle sichtbaren Inhalte. */
   private readonly languageService = inject(LanguageService);
 
@@ -98,12 +94,6 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   @ViewChild('skillLevelPanel')
   private readonly skillLevelPanel?: ElementRef<HTMLElement>;
 
-  /** Fenster-Referenz des Kontaktmodals für Fokussteuerung. */
-  @ViewChild('contactModalWindow')
-  private readonly contactModalWindow?: ElementRef<HTMLElement>;
-
-  /** Element, das vor dem Öffnen des Modals fokussiert war. */
-  private contactModalTrigger?: HTMLElement;
 
   /** Aktuell ausgewählter Hero-Kopf. */
   readonly activeHeroHead = signal<HeroHeadKey>('default');
@@ -126,8 +116,6 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   /** Aktuell sichtbarer Zustand des Schoko-Bildes im Projekt-Einstieg. */
   readonly activeProjectsChocolateImage = signal<ProjectsChocolateKey>('default');
 
-  /** Sichtbarkeit des Kontaktformular-Modals. */
-  readonly isContactModalVisible = signal<boolean>(false);
 
   /** Aktiviert die Wachstumsanimation der Skill-Level-Balken. */
   readonly areSkillLevelsLoaded = signal<boolean>(false);
@@ -243,10 +231,9 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     this.observeSkillLevels();
   }
 
-  /** Räumt Scroll-Observer und globale Modalzustände beim Entfernen der Seite auf. */
+  /** Räumt den Skill-Observer beim Entfernen der Seite auf. */
   ngOnDestroy(): void {
     this.skillLevelsObserver?.disconnect();
-    this.document.documentElement.classList.remove('bp-modal-open');
   }
 
   /**
@@ -338,67 +325,6 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     this.isProjectsDialogVisible.set(false);
   }
 
-  /** Öffnet das Kontaktformular als fokussiertes Modal über der Startseite. */
-  openContactModal(): void {
-    this.contactModalTrigger = this.document.activeElement instanceof HTMLElement ? this.document.activeElement : undefined;
-    this.isContactModalVisible.set(true);
-    this.document.documentElement.classList.add('bp-modal-open');
-    window.requestAnimationFrame(() => this.focusContactModal());
-  }
-
-  /** Schließt das Kontaktformular-Modal und stellt den Auslösefokus wieder her. */
-  closeContactModal(): void {
-    if (!this.isContactModalVisible()) {
-      return;
-    }
-
-    this.achievementService.unlock('nostalgia-hater');
-    this.isContactModalVisible.set(false);
-    this.document.documentElement.classList.remove('bp-modal-open');
-    this.contactModalTrigger?.focus();
-    this.contactModalTrigger = undefined;
-  }
-
-  /** Schließt das Kontaktformular-Modal über Escape. */
-  @HostListener('window:keydown.escape')
-  closeContactModalByKeyboard(): void {
-    this.closeContactModal();
-  }
-
-  /** Hält den Tastaturfokus innerhalb des sichtbaren Kontaktmodals. */
-  onContactModalKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Tab') {
-      return;
-    }
-
-    const modal = this.contactModalWindow?.nativeElement;
-
-    if (!modal) {
-      return;
-    }
-
-    const focusableElements = this.focusableModalElements(modal);
-
-    if (!focusableElements.length) {
-      event.preventDefault();
-      modal.focus();
-      return;
-    }
-
-    const first = focusableElements[0];
-    const last = focusableElements[focusableElements.length - 1];
-
-    if (event.shiftKey && this.document.activeElement === first) {
-      event.preventDefault();
-      last.focus();
-    }
-
-    if (!event.shiftKey && this.document.activeElement === last) {
-      event.preventDefault();
-      first.focus();
-    }
-  }
-
   /** Schaltet die Metrics-Trophäe frei, sobald der absurde Rechner genutzt wird. */
   unlockMetricsAchievement(): void {
     this.achievementService.unlock('weird-units');
@@ -409,25 +335,6 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   updateHeroScrollOffset(): void {
     const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
     this.heroScrollOffset.set(Math.min(scrollY * 0.18, 140));
-  }
-
-  /** Setzt den Initialfokus auf den ersten sinnvollen Fokuspunkt im Kontaktmodal. */
-  private focusContactModal(): void {
-    const modal = this.contactModalWindow?.nativeElement;
-
-    if (!modal) {
-      return;
-    }
-
-    const firstFocusable = this.focusableModalElements(modal)[0];
-    (firstFocusable ?? modal).focus();
-  }
-
-  /** Sammelt sichtbare, bedienbare Fokusziele innerhalb eines Modals. */
-  private focusableModalElements(root: HTMLElement): HTMLElement[] {
-    const selector = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
-
-    return Array.from(root.querySelectorAll<HTMLElement>(selector)).filter((element) => element.offsetParent !== null);
   }
 
   /** Beobachtet das Skill-Level-Panel und startet Balken erst bei nahezu voller Sichtbarkeit. */

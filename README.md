@@ -5,7 +5,7 @@
 <h1 align="center">B² Portfolio Experience</h1>
 
 <p align="center">
-  <strong>Design. Code. Break the Grid.</strong><br />
+  <strong>Design. Code. Repeat.</strong><br />
   Ein interaktives Angular-Portfolio zwischen Terminal-UI, Glitch-Art, Motion Design und sauberer Full-Stack-Präsentation.
 </p>
 
@@ -95,7 +95,7 @@ Der Fokus liegt auf einer Seite, die auffällt, aber trotzdem sauber gebaut blei
 | Projekt | Fokus |
 | --- | --- |
 | **Intranet** | Modulares Angular-/Django-System mit Apps, Rollen, Rechten, Kommunikation und Automatisierung |
-| **HTML5 Browser Game** | Interaktives Web-/Game-Projekt mit Animationen und Spiellogik |
+| **Dein Fußabdruck** | Interaktives Web-/Game-Projekt mit Animationen und Spiellogik |
 | **Carly Managed** | Projektmanagement-Tool und Kanban-Klon mit Gamification, Boards, Tasks, Nutzern und Live-Sync |
 | **Globi Flow** | Lokales Laborwerte-Assistenzsystem mit OCR, Review, Wissensbasis und Patientenbericht |
 | **Grafikdesign-Katalog** | Editorialer, visueller Designkatalog mit kreativer Projektinszenierung |

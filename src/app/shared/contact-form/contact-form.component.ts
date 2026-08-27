@@ -6,7 +6,7 @@
  */
 
 import { Component, computed, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ContactTopic } from '../../core/models/portfolio.models';
 import { LanguageService } from '../../core/services/language.service';
@@ -31,7 +31,7 @@ interface ContactPayload {
 @Component({
   selector: 'bp-contact-form',
   standalone: true,
-  imports: [FormsModule, RevealOnScrollDirective],
+  imports: [FormsModule, RouterLink, RevealOnScrollDirective],
   templateUrl: './contact-form.component.html',
   styleUrl: './contact-form.component.scss',
 })
@@ -57,6 +57,9 @@ export class ContactFormComponent {
   /** ID des Nachrichtenfelds. */
   readonly messageId = `${this.formId}-message`;
 
+  /** ID der Datenschutz-Checkbox. */
+  readonly privacyId = `${this.formId}-privacy`;
+
   /** ID der Namen-Fehlermeldung. */
   readonly nameErrorId = `${this.nameId}-error`;
 
@@ -65,6 +68,9 @@ export class ContactFormComponent {
 
   /** ID der Nachrichten-Fehlermeldung. */
   readonly messageErrorId = `${this.messageId}-error`;
+
+  /** ID der Datenschutz-Fehlermeldung. */
+  readonly privacyErrorId = `${this.privacyId}-error`;
 
   /** Übersetzter Kontaktinhalt. */
   readonly content = computed(() => this.languageService.content().contact);
@@ -83,6 +89,9 @@ export class ContactFormComponent {
 
   /** Gewählte Themen aus der Custom-Mehrfachauswahl. */
   readonly selectedTopics = signal<readonly string[]>([]);
+
+  /** Kenntnisnahme der Datenschutzhinweise. */
+  readonly privacyAccepted = signal<boolean>(false);
 
   /** Statusmeldung nach Submit. */
   readonly status = signal<string>('');
@@ -130,6 +139,17 @@ export class ContactFormComponent {
   /** Prüft, ob ein Kontakt-Thema aktuell gewählt ist. */
   topicIsSelected(topic: ContactTopic): boolean {
     return this.selectedTopics().includes(topic.value);
+  }
+
+  /** Aktualisiert die Datenschutz-Kenntnisnahme anhand der nativen Checkbox. */
+  updatePrivacyConsent(event: Event): void {
+    const checked = event.target instanceof HTMLInputElement ? event.target.checked : false;
+    this.privacyAccepted.set(checked);
+  }
+
+  /** Gibt zurück, ob die erforderliche Datenschutz-Kenntnisnahme fehlt. */
+  privacyHasError(): boolean {
+    return this.hasSubmitted() && !this.privacyAccepted();
   }
 
   /** Gibt zurück, ob ein Feld nach dem Submit markiert werden muss. */
@@ -226,7 +246,7 @@ export class ContactFormComponent {
 
   /** Prüft Mindestfelder und einfache E-Mail-Syntax. */
   private isValid(): boolean {
-    return !this.nameError() && !this.emailError() && !this.messageError();
+    return !this.nameError() && !this.emailError() && !this.messageError() && this.privacyAccepted();
   }
 
   /** Ermittelt den Fehlertext für den Namen. */

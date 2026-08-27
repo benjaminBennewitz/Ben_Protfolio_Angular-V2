@@ -69,16 +69,19 @@
           <h2>{{ texts().emptyTitle }}</h2>
           <p>{{ texts().emptyText }}</p>
         </div>
+
       </article>
       }
 
       @for (item of visibleWindows(); track trackWindow(item)) {
-      <article class="blog-window" [class.blog-window--stable]="item.entry.supportTone === 'stable'"
+      <article class="blog-window" [attr.data-window-slug]="item.entry.slug" [class.blog-window--stable]="item.entry.supportTone === 'stable'"
         [class.blog-window--experimental]="item.entry.supportTone === 'experimental'"
         [class.blog-window--workflow]="item.entry.supportTone === 'workflow'"
         [style.--blog-window-x]="item.window.x + 'px'" [style.--blog-window-y]="item.window.y + 'px'"
+        [style.width.px]="item.window.width ?? null" [style.height.px]="item.window.height ?? null"
         [style.z-index]="item.window.zIndex" (pointerdown)="focusWindow(item.entry.slug)">
-        <div class="blog-window__bar">
+        <div class="blog-window__bar" [attr.title]="texts().dragLabel"
+          (pointerdown)="startWindowDrag(item.entry.slug, $event)">
           <span>{{ item.entry.slug }}.exe</span>
           <button type="button" [attr.aria-label]="item.entry.title + ' schließen'"
             (click)="closeEntry(item.entry.slug, $event)">×</button>
@@ -239,6 +242,12 @@
             </ul>
           </section>
         </div>
+
+        <button class="blog-window__resize" type="button" [attr.aria-label]="texts().resizeLabel + ': ' + item.entry.title"
+          [attr.title]="texts().resizeLabel" (pointerdown)="startWindowResize(item.entry.slug, $event)"
+          (keydown)="resizeWindowWithKeyboard(item.entry.slug, $event)">
+          <span aria-hidden="true">↘</span>
+        </button>
       </article>
       }
     </section>

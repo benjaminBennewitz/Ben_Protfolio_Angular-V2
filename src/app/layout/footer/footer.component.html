@@ -80,6 +80,8 @@
     <nav class="footer__legal" [attr.aria-label]="legalLabels().ariaLabel">
       <a class="footer__legal-link" routerLink="/impressum">{{ legalLabels().imprint }}</a>
       <span aria-hidden="true">·</span>
+      <a class="footer__legal-link" routerLink="/datenschutz">{{ legalLabels().privacy }}</a>
+      <span aria-hidden="true">·</span>
       <button class="footer__legal-action" type="button" (click)="openPrivacyControls()">
         {{ privacyControlLabel() }}
       </button>

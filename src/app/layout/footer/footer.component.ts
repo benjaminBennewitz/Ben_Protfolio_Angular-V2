@@ -38,8 +38,8 @@ export class FooterComponent {
 
   /** Rechtliche Footer-Labels für dezente Meta-Navigation. */
   readonly legalLabels = computed(() => this.languageService.language() === 'de'
-    ? { ariaLabel: 'Rechtliche Hinweise', imprint: 'Impressum' }
-    : { ariaLabel: 'Legal information', imprint: 'Legal notice' });
+    ? { ariaLabel: 'Rechtliche Hinweise', imprint: 'Impressum', privacy: 'Datenschutz' }
+    : { ariaLabel: 'Legal information', imprint: 'Legal notice', privacy: 'Privacy' });
 
   /** Aktuelles Jahr für Copyright-Ausgabe. */
   readonly year = new Date().getFullYear();

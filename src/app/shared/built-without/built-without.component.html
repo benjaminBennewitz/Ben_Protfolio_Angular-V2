@@ -1,58 +1,85 @@
 <!-- src/app/shared/built-without/built-without.component.html -->
-<section class="built-strip" id="quality" bpViewportActivity>
-  <div class="built-strip__layout bp-container">
-    <div class="built-strip__copy bp-motion-copy" bpReveal>
-      <bp-reveal-text class="built-strip__title-reveal" [eyebrow]="content().eyebrow" [text]="content().title" />
-      <p>{{ content().text }}</p>
+<section class="built-strip" id="quality" bpViewportActivity
+  [class.built-strip--telemetry-active]="telemetryStageActive()" [attr.data-stage]="telemetryStageActive() ? 'telemetry' : 'integrity'">
+  <div class="built-strip__stage bp-container">
+    <div class="built-strip__panel built-strip__panel--integrity">
+      <div class="built-strip__overview">
+        <div class="built-strip__copy bp-motion-copy" bpReveal>
+          <bp-reveal-text class="built-strip__title-reveal" [eyebrow]="content().eyebrow" [text]="content().title" />
+          <p>{{ content().text }}</p>
+        </div>
+
+        <div class="built-strip__groups bp-stagger-list bp-stagger-list--right" bpReveal>
+          <article class="built-strip__group built-strip__group--without bp-stagger-item" [style.--bp-stagger-delay.ms]="120">
+            <h3>{{ content().withoutLabel }}</h3>
+            <ul>
+              @for (item of content().withoutItems; track $index) {
+              <li>
+                <span class="built-strip__item-index" aria-hidden="true">0{{ $index + 1 }}</span>
+                <span class="material-symbols-outlined" aria-hidden="true">verified</span>
+                <span>{{ item }}</span>
+              </li>
+              }
+            </ul>
+          </article>
+
+          <article class="built-strip__group built-strip__group--capabilities bp-stagger-item" [style.--bp-stagger-delay.ms]="240">
+            <h3>{{ content().capabilityLabel }}</h3>
+            <ul>
+              @for (item of content().capabilityItems; track $index) {
+              <li>
+                <span class="built-strip__item-index" aria-hidden="true">0{{ $index + 1 }}</span>
+                <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+                <span>{{ item }}</span>
+              </li>
+              }
+            </ul>
+          </article>
+        </div>
+      </div>
+
+      <div class="built-strip__stage-cue" aria-hidden="true">
+        <span>01</span>
+        <i></i>
+        <strong>{{ stageCueLabels().telemetry }}</strong>
+      </div>
     </div>
 
-    <div class="built-strip__groups bp-stagger-list bp-stagger-list--right" bpReveal>
-      <article class="built-strip__group built-strip__group--without bp-stagger-item" [style.--bp-stagger-delay.ms]="120">
-        <h3>{{ content().withoutLabel }}</h3>
-        <ul>
-          @for (item of content().withoutItems; track $index) {
-          <li><span class="material-symbols-outlined" aria-hidden="true">verified</span>{{ item }}</li>
-          }
-        </ul>
-      </article>
+    <section class="built-strip__panel built-strip__panel--telemetry" aria-labelledby="portfolio-telemetry-title">
+      <div class="built-strip__telemetry" [class.bp-reveal--visible]="telemetryStageActive()">
+        <header class="built-strip__telemetry-head">
+          <p class="bp-eyebrow">{{ content().telemetryEyebrow }}</p>
+          <h3 id="portfolio-telemetry-title">{{ content().telemetryTitle }}</h3>
+          <p>{{ content().telemetryText }}</p>
+        </header>
 
-      <article class="built-strip__group built-strip__group--capabilities bp-stagger-item" [style.--bp-stagger-delay.ms]="240">
-        <h3>{{ content().capabilityLabel }}</h3>
-        <ul>
-          @for (item of content().capabilityItems; track $index) {
-          <li><span class="material-symbols-outlined" aria-hidden="true">tune</span>{{ item }}</li>
-          }
-        </ul>
-      </article>
-    </div>
+        <div class="built-strip__charts">
+          <bp-telemetry-chart
+            eyebrow="stack_frequency.radial"
+            [title]="content().recurrenceTitle"
+            [description]="content().recurrenceText"
+            variant="radial"
+            [data]="recurringTechData()"
+            [maxValue]="5"
+            valueSuffix="×"
+            chartId="portfolio-tech-frequency"
+            [syncParentReveal]="true" />
 
-    <section class="built-strip__telemetry" aria-labelledby="portfolio-telemetry-title" bpReveal>
-      <header class="built-strip__telemetry-head">
-        <p class="bp-eyebrow">{{ content().telemetryEyebrow }}</p>
-        <h3 id="portfolio-telemetry-title">{{ content().telemetryTitle }}</h3>
-        <p>{{ content().telemetryText }}</p>
-      </header>
+          <bp-telemetry-chart
+            eyebrow="stack_breadth.area"
+            [title]="content().breadthTitle"
+            [description]="content().breadthText"
+            variant="area"
+            [data]="stackBreadthData()"
+            chartId="portfolio-stack-breadth"
+            [syncParentReveal]="true" />
+        </div>
+      </div>
 
-      <div class="built-strip__charts">
-        <bp-telemetry-chart
-          eyebrow="stack_frequency.radial"
-          [title]="content().recurrenceTitle"
-          [description]="content().recurrenceText"
-          variant="radial"
-          [data]="recurringTechData()"
-          [maxValue]="5"
-          valueSuffix="×"
-          chartId="portfolio-tech-frequency"
-          [syncParentReveal]="true" />
-
-        <bp-telemetry-chart
-          eyebrow="stack_breadth.area"
-          [title]="content().breadthTitle"
-          [description]="content().breadthText"
-          variant="area"
-          [data]="stackBreadthData()"
-          chartId="portfolio-stack-breadth"
-          [syncParentReveal]="true" />
+      <div class="built-strip__stage-cue built-strip__stage-cue--telemetry" aria-hidden="true">
+        <span>02</span>
+        <i></i>
+        <strong>{{ stageCueLabels().continue }}</strong>
       </div>
     </section>
   </div>

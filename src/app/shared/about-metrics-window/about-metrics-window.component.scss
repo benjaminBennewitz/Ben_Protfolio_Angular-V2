@@ -448,6 +448,13 @@
 .about-metrics__input-with-unit input {
   width: 100%;
   padding-right: 3.25rem;
+  appearance: textfield;
+}
+
+.about-metrics__input-with-unit input::-webkit-inner-spin-button,
+.about-metrics__input-with-unit input::-webkit-outer-spin-button {
+  margin: 0;
+  appearance: none;
 }
 
 .about-metrics__input-unit {

@@ -40,7 +40,24 @@
         }
       </label>
 
-      <p class="contact-form__privacy">{{ content().privacy }}</p>
+      <div class="contact-form__privacy" [class.has-error]="privacyHasError()">
+        <label class="contact-form__consent" [attr.for]="privacyId">
+          <input [id]="privacyId" type="checkbox" [checked]="privacyAccepted()"
+            (change)="updatePrivacyConsent($event)" [attr.aria-invalid]="privacyHasError()"
+            [attr.aria-describedby]="privacyHasError() ? privacyErrorId : null" aria-required="true" required>
+          <span class="contact-form__checkbox" aria-hidden="true"></span>
+          <span class="contact-form__consent-copy">{{ content().privacy }}</span>
+        </label>
+
+        <a class="contact-form__privacy-link" routerLink="/datenschutz">
+          <span>{{ content().privacyLinkLabel }}</span>
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+        </a>
+
+        @if (privacyHasError()) {
+        <small [id]="privacyErrorId" class="contact-form__error">{{ content().privacyRequiredError }}</small>
+        }
+      </div>
 
       <button class="bp-button bp-button--accent" type="submit" [disabled]="isSubmitting()">
         <span>{{ isSubmitting() ? content().sendingLabel : content().submitLabel }}</span>

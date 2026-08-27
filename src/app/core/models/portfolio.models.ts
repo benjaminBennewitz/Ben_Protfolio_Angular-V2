@@ -1102,7 +1102,12 @@ export interface ContactContent {
   readonly messageLengthError: string;
   /** Beschriftung des unsichtbaren Honeypot-Felds. */
   readonly honeypotLabel: string;
+  /** Hinweistext zur Kenntnisnahme der Datenschutzerklärung. */
   readonly privacy: string;
+  /** Linktext zur Datenschutzerklärung. */
+  readonly privacyLinkLabel: string;
+  /** Fehlermeldung für eine nicht bestätigte Datenschutz-Kenntnisnahme. */
+  readonly privacyRequiredError: string;
 }
 
 /** Inhalt der Dankeseite nach erfolgreichem Kontaktformular-Versand. */

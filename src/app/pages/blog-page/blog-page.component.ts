@@ -5,7 +5,7 @@
  * @description Rendert kurze CSS-, Angular- und DevTools-Snippets als stapelbare MS-DOS-/Win95-Fenster.
  */
 
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, HostListener, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -39,6 +39,10 @@ interface BlogPageTexts {
   readonly openAllLabel: string;
   /** Label für den Button, der alle Fenster schließt. */
   readonly closeAllLabel: string;
+  /** Hinweis für verschiebbare Fenstertitelleisten. */
+  readonly dragLabel: string;
+  /** Label für den Resize-Handle eines Fensters. */
+  readonly resizeLabel: string;
   /** Label für das Kopieren eines Code-Snippets. */
   readonly copyLabel: string;
   /** Meldung nach erfolgreichem Kopieren. */
@@ -133,7 +137,40 @@ interface BlogWindowState {
   readonly x: number;
   /** Vertikale Offset-Position im Board. */
   readonly y: number;
+  /** Optional manuell gesetzte Fensterbreite. */
+  readonly width?: number;
+  /** Optional manuell gesetzte Fensterhöhe. */
+  readonly height?: number;
 }
+
+/** Laufende Pointer-Interaktion eines Blog-Fensters. */
+interface BlogWindowInteraction {
+  /** Betroffenes Fenster. */
+  readonly slug: string;
+  /** Art der Interaktion. */
+  readonly mode: 'drag' | 'resize';
+  /** Pointer-ID für stabile Maus-/Stiftinteraktion. */
+  readonly pointerId: number;
+  /** Pointer-X beim Start. */
+  readonly startPointerX: number;
+  /** Pointer-Y beim Start. */
+  readonly startPointerY: number;
+  /** Fenster-X beim Start. */
+  readonly startX: number;
+  /** Fenster-Y beim Start. */
+  readonly startY: number;
+  /** Tatsächliche Fensterbreite beim Start. */
+  readonly startWidth: number;
+  /** Tatsächliche Fensterhöhe beim Start. */
+  readonly startHeight: number;
+  /** Fester Abstand der Fensterposition zur Desktop-Titelleiste. */
+  readonly topOffset: number;
+  /** Verfügbare Desktop-Breite. */
+  readonly desktopWidth: number;
+  /** Verfügbare Desktop-Höhe. */
+  readonly desktopHeight: number;
+}
+
 
 /** Gerendertes Fenster mit aufgelöstem Eintrag. */
 interface RenderedBlogWindow {
@@ -163,6 +200,9 @@ export class BlogPageComponent {
 
   /** Laufender Z-Index-Zähler für aktive Fenster. */
   private readonly zCounter = signal<number>(24);
+
+  /** Aktuell laufende Drag- oder Resize-Interaktion. */
+  private readonly windowInteraction = signal<BlogWindowInteraction | null>(null);
 
   /** Aktuelle Suchanfrage der Blog-Navigation. */
   readonly searchQuery = signal<string>('');
@@ -270,6 +310,109 @@ export class BlogPageComponent {
       : window));
   }
 
+  /** Startet das freie Verschieben eines Blog-Fensters über seine Titelleiste. */
+  startWindowDrag(slug: string, event: PointerEvent): void {
+    if (window.innerWidth <= 720 || event.button !== 0 || this.pointerStartedOnControl(event.target)) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    this.startWindowInteraction(slug, 'drag', event);
+  }
+
+  /** Startet das manuelle Skalieren eines Blog-Fensters am unteren rechten Griff. */
+  startWindowResize(slug: string, event: PointerEvent): void {
+    if (window.innerWidth <= 720 || event.button !== 0) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    this.startWindowInteraction(slug, 'resize', event);
+  }
+
+  /** Führt Drag und Resize während einer aktiven Pointer-Interaktion fort. */
+  @HostListener('document:pointermove', ['$event'])
+  updateWindowInteraction(event: PointerEvent): void {
+    const interaction = this.windowInteraction();
+
+    if (!interaction || interaction.pointerId !== event.pointerId) {
+      return;
+    }
+
+    event.preventDefault();
+    const deltaX = event.clientX - interaction.startPointerX;
+    const deltaY = event.clientY - interaction.startPointerY;
+
+    if (interaction.mode === 'drag') {
+      const maxX = Math.max(0, interaction.desktopWidth - interaction.startWidth - 8);
+      const maxY = Math.max(0, interaction.desktopHeight - interaction.topOffset - interaction.startHeight - 8);
+      const x = this.clamp(interaction.startX + deltaX, 0, maxX);
+      const y = this.clamp(interaction.startY + deltaY, 0, maxY);
+
+      this.updateWindow(interaction.slug, (windowState) => ({ ...windowState, x, y }));
+      return;
+    }
+
+    const maxWidth = Math.max(280, interaction.desktopWidth - interaction.startX - 8);
+    const maxHeight = Math.max(260, interaction.desktopHeight - interaction.topOffset - interaction.startY - 8);
+    const minWidth = Math.min(420, maxWidth);
+    const minHeight = Math.min(320, maxHeight);
+    const width = this.clamp(interaction.startWidth + deltaX, minWidth, maxWidth);
+    const height = this.clamp(interaction.startHeight + deltaY, minHeight, maxHeight);
+
+    this.updateWindow(interaction.slug, (windowState) => ({ ...windowState, width, height }));
+  }
+
+  /** Beendet eine laufende Pointer-Interaktion. */
+  @HostListener('document:pointerup', ['$event'])
+  @HostListener('document:pointercancel', ['$event'])
+  endWindowInteraction(event: PointerEvent): void {
+    if (this.windowInteraction()?.pointerId === event.pointerId) {
+      this.windowInteraction.set(null);
+    }
+  }
+
+  /** Ermöglicht feines Resizing des fokussierbaren Handles per Pfeiltasten. */
+  resizeWindowWithKeyboard(slug: string, event: KeyboardEvent): void {
+    const horizontal = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+    const vertical = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0;
+
+    if (!horizontal && !vertical) {
+      return;
+    }
+
+    const element = this.blogWindowElement(slug);
+    const desktop = element?.closest<HTMLElement>('.blog-page__desktop');
+
+    if (!element || !desktop) {
+      return;
+    }
+
+    event.preventDefault();
+    this.focusWindow(slug);
+
+    const step = event.shiftKey ? 32 : 12;
+    const state = this.openWindows().find((windowState) => windowState.slug === slug);
+
+    if (!state) {
+      return;
+    }
+
+    const elementRect = element.getBoundingClientRect();
+    const desktopRect = desktop.getBoundingClientRect();
+    const topOffset = elementRect.top - desktopRect.top - state.y;
+    const maxWidth = Math.max(280, desktopRect.width - state.x - 8);
+    const maxHeight = Math.max(260, desktopRect.height - topOffset - state.y - 8);
+    const minWidth = Math.min(420, maxWidth);
+    const minHeight = Math.min(320, maxHeight);
+    const width = this.clamp((state.width ?? elementRect.width) + horizontal * step, minWidth, maxWidth);
+    const height = this.clamp((state.height ?? elementRect.height) + vertical * step, minHeight, maxHeight);
+
+    this.updateWindow(slug, (windowState) => ({ ...windowState, width, height }));
+  }
+
   /** Übernimmt den Suchbegriff aus dem Eingabefeld. */
   setSearchQuery(event: Event): void {
     const input = event.target instanceof HTMLInputElement ? event.target : null;
@@ -309,6 +452,60 @@ export class BlogPageComponent {
   /** Liefert einen eindeutigen TrackBy-Wert für Fenster. */
   trackWindow(item: RenderedBlogWindow): string {
     return item.entry.slug;
+  }
+
+  /** Initialisiert gemeinsame Messwerte für Drag- und Resize-Interaktionen. */
+  private startWindowInteraction(slug: string, mode: 'drag' | 'resize', event: PointerEvent): void {
+    const element = this.blogWindowElement(slug);
+    const desktop = element?.closest<HTMLElement>('.blog-page__desktop');
+    const state = this.openWindows().find((windowState) => windowState.slug === slug);
+
+    if (!element || !desktop || !state) {
+      return;
+    }
+
+    this.focusWindow(slug);
+
+    const elementRect = element.getBoundingClientRect();
+    const desktopRect = desktop.getBoundingClientRect();
+
+    this.windowInteraction.set({
+      slug,
+      mode,
+      pointerId: event.pointerId,
+      startPointerX: event.clientX,
+      startPointerY: event.clientY,
+      startX: state.x,
+      startY: state.y,
+      startWidth: elementRect.width,
+      startHeight: elementRect.height,
+      topOffset: elementRect.top - desktopRect.top - state.y,
+      desktopWidth: desktopRect.width,
+      desktopHeight: desktopRect.height,
+    });
+  }
+
+  /** Aktualisiert genau ein Fenster, ohne Zustände der übrigen Fenster anzufassen. */
+  private updateWindow(slug: string, updater: (windowState: BlogWindowState) => BlogWindowState): void {
+    this.openWindows.update((windows) => windows.map((windowState) => windowState.slug === slug
+      ? updater(windowState)
+      : windowState));
+  }
+
+  /** Liefert das gerenderte Fenster anhand seines stabilen Slugs. */
+  private blogWindowElement(slug: string): HTMLElement | null {
+    const escapedSlug = typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(slug) : slug;
+    return document.querySelector<HTMLElement>(`.blog-window[data-window-slug="${escapedSlug}"]`);
+  }
+
+  /** Erkennt Controls in der Titelleiste, die kein Drag starten dürfen. */
+  private pointerStartedOnControl(target: EventTarget | null): boolean {
+    return target instanceof HTMLElement && Boolean(target.closest('button, a, input, select, textarea'));
+  }
+
+  /** Begrenzt Positions- und Größenwerte auf einen sicheren Bereich. */
+  private clamp(value: number, min: number, max: number): number {
+    return Math.min(max, Math.max(min, value));
   }
 
   /** Sucht einen Eintrag in der aktiven Sprache. */
@@ -351,6 +548,8 @@ const BLOG_PAGE_TEXTS: Record<'de' | 'en', BlogPageTexts> = {
     emptySearchText: 'Keine passenden Einträge gefunden.',
     openAllLabel: 'Alle Fenster öffnen',
     closeAllLabel: 'Alles schließen',
+    dragLabel: 'Fenster verschieben',
+    resizeLabel: 'Fenster skalieren',
     copyLabel: 'Code kopieren',
     copySuccess: 'Alt- und Neu-Beispiel wurden kopiert.',
     emptyTitle: 'Kein Fenster aktiv.',
@@ -582,6 +781,8 @@ select.custom-select:open {
     emptySearchText: 'No matching entries found.',
     openAllLabel: 'Open all windows',
     closeAllLabel: 'Close all',
+    dragLabel: 'Move window',
+    resizeLabel: 'Resize window',
     copyLabel: 'Copy code',
     copySuccess: 'Old and new example copied.',
     emptyTitle: 'No active window.',

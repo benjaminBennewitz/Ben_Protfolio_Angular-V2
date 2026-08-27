@@ -248,7 +248,108 @@
    05   Status
    ========================================================================== */
 
-.contact-form__privacy,
+.contact-form__privacy {
+  display: grid;
+  gap: 0.38rem;
+}
+
+.contact-form__consent {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.35rem 1fr;
+  gap: 0.55rem;
+  align-items: start;
+  cursor: pointer;
+}
+
+.contact-form__consent input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.contact-form__checkbox {
+  display: grid;
+  width: 1.3rem;
+  height: 1.3rem;
+  place-items: center;
+  border: 2px solid var(--bp-color-border-strong);
+  background: color-mix(in srgb, var(--bp-color-bg) 82%, transparent);
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--bp-color-border-strong) 28%, transparent);
+  transition: border-color 140ms var(--bp-ease-step), background-color 140ms var(--bp-ease-step), box-shadow 140ms var(--bp-ease-step), transform 140ms var(--bp-ease-step);
+}
+
+.contact-form__checkbox::after {
+  width: 0.34rem;
+  height: 0.66rem;
+  border-right: 2px solid var(--bp-color-on-accent);
+  border-bottom: 2px solid var(--bp-color-on-accent);
+  content: '';
+  opacity: 0;
+  transform: translateY(-0.06rem) rotate(45deg) scale(0.45);
+  transition: opacity 120ms var(--bp-ease-step), transform 120ms var(--bp-ease-step);
+}
+
+.contact-form__consent input:checked + .contact-form__checkbox {
+  border-color: var(--bp-color-accent);
+  background: var(--bp-color-accent);
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--bp-color-accent) 30%, transparent);
+}
+
+.contact-form__consent input:checked + .contact-form__checkbox::after {
+  opacity: 1;
+  transform: translateY(-0.06rem) rotate(45deg) scale(1);
+}
+
+.contact-form__consent input:focus-visible + .contact-form__checkbox {
+  border-color: var(--bp-color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bp-color-accent) 28%, transparent), 3px 3px 0 color-mix(in srgb, var(--bp-color-accent) 34%, transparent);
+  transform: translate(-1px, -1px);
+}
+
+.contact-form__privacy.has-error .contact-form__checkbox {
+  border-color: var(--bp-color-danger);
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--bp-color-danger) 24%, transparent);
+}
+
+.contact-form__consent-copy {
+  color: var(--bp-color-text-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.contact-form__privacy-link {
+  display: inline-flex;
+  gap: 0.3rem;
+  align-items: center;
+  width: fit-content;
+  margin-left: 1.9rem;
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-system);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.contact-form__privacy-link .material-symbols-outlined {
+  font-size: 0.92rem;
+}
+
+.contact-form__privacy-link:hover,
+.contact-form__privacy-link:focus-visible {
+  color: var(--bp-color-text);
+}
+
 .contact-form__status {
   margin: 0;
   color: var(--bp-color-text-muted);

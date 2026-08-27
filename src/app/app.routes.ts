@@ -45,6 +45,12 @@ export const routes: Routes = [
     title: 'Impressum | Benjamin Bennewitz',
   },
   {
+    path: 'datenschutz',
+    loadComponent: () => import('./pages/privacy-page/privacy-page.component').then((component) => component.PrivacyPageComponent),
+    title: 'Datenschutz | Benjamin Bennewitz',
+    data: { hideFooter: true },
+  },
+  {
     path: '**',
     loadComponent: () => import('./pages/not-found-page/not-found-page.component').then((component) => component.NotFoundPageComponent),
     title: '404 | Benjamin Bennewitz Portfolio',

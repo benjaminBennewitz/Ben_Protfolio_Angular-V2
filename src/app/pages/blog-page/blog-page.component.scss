@@ -1226,3 +1226,73 @@
     overflow-wrap: anywhere;
   }
 }
+
+/* ========================================================================== 
+   12   Manuelle Fensterinteraktion
+   ========================================================================== */
+
+@media (min-width: 721px) {
+  .blog-window:not(.blog-window--empty) {
+    min-width: min(420px, calc(100% - 1rem));
+    min-height: min(320px, calc(100% - 4rem));
+  }
+
+  .blog-window__bar {
+    cursor: move;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .blog-window__bar:active {
+    cursor: grabbing;
+  }
+
+  .blog-window__bar button {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .blog-window__resize {
+    position: absolute;
+    z-index: 6;
+    right: -2px;
+    bottom: -2px;
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border: 2px outset #ffffff;
+    padding: 0;
+    background:
+      linear-gradient(135deg, transparent 0 48%, #101010 48% 55%, transparent 55% 63%, #101010 63% 70%, transparent 70%),
+      #c7c7c7;
+    color: #101010;
+    cursor: nwse-resize;
+    touch-action: none;
+  }
+
+  .blog-window__resize span {
+    opacity: 0;
+  }
+
+  .blog-window__resize:hover,
+  .blog-window__resize:focus-visible {
+    border-color: #a7ff19;
+    background:
+      linear-gradient(135deg, transparent 0 48%, #101010 48% 55%, transparent 55% 63%, #101010 63% 70%, transparent 70%),
+      #a7ff19;
+    outline: 2px solid #101010;
+    outline-offset: 2px;
+  }
+
+  .blog-window__resize:active {
+    border-style: inset;
+  }
+}
+
+@media (max-width: 720px) {
+  .blog-window__resize {
+    display: none;
+  }
+}

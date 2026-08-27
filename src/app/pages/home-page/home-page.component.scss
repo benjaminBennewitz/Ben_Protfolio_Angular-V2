@@ -2374,12 +2374,18 @@
   opacity: 0.2;
 }
 
-.faq__title-reveal,
-.contact__title-reveal {
+.faq__title-reveal {
   --bp-reveal-title-max-width: 12ch;
   --bp-reveal-title-size: clamp(2.1rem, 4.8vw, 5.2rem);
   --bp-reveal-title-line-height: 0.9;
   --bp-reveal-title-letter-spacing: -0.07em;
+}
+
+.contact__title-reveal {
+  --bp-reveal-title-max-width: 16ch;
+  --bp-reveal-title-size: clamp(1.9rem, 3.3vw, 4rem);
+  --bp-reveal-title-line-height: 0.92;
+  --bp-reveal-title-letter-spacing: -0.06em;
 }
 
 .faq__title,
@@ -2512,7 +2518,7 @@
 
 .contact__layout {
   display: grid;
-  grid-template-columns: minmax(220px, 0.46fr) minmax(620px, 1fr);
+  grid-template-columns: minmax(300px, 0.56fr) minmax(620px, 1fr);
   gap: clamp(1.4rem, 4vw, 3.4rem);
   align-items: center;
 }

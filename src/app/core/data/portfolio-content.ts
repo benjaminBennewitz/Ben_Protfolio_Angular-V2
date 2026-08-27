@@ -467,7 +467,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     },
     projectsIntro: {
       eyebrow: 'Case Studies',
-      title: 'Ausgewählte Arbeiten mit Spannung, Spiel und Schokolade.',
+      title: 'Experimente, Systeme und echte Lösungen.',
       subtitle: '',
       introText: [
         'Die Projekte zeigen unterschiedliche Seiten meiner Arbeit: produktive Business-Apps, interaktive Simulationen, Datenoberflächen, Automatisierung und Gestaltungssysteme.',
@@ -1053,7 +1053,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     },
     contact: {
       eyebrow: 'Contact',
-      title: 'Bewerbung, Austausch, Feedback oder einfach nur Schnacken?',
+      title: 'Projektanfrage, Austausch, Feedback oder einfach nur Schnacken?',
       subtitle: '',
       modalTitle: 'Kontakt aufnehmen',
       modalCloseLabel: 'Kontaktformular schließen',
@@ -1085,7 +1085,9 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       messageRequiredError: 'Bitte schreib eine kurze Nachricht.',
       messageLengthError: 'Die Nachricht sollte mindestens 10 Zeichen enthalten.',
       honeypotLabel: 'Website nicht ausfüllen',
-      privacy: 'Deine Nachricht wird später direkt über den Server versendet. Solange der Backend-Endpunkt noch nicht aktiv ist, wird keine Nachricht übertragen.',
+      privacy: 'Ich habe die Datenschutzhinweise zur Verarbeitung meiner Angaben zur Kenntnis genommen.',
+      privacyLinkLabel: 'Datenschutzerklärung öffnen',
+      privacyRequiredError: 'Bitte bestätige, dass du die Datenschutzhinweise zur Kenntnis genommen hast.',
     },
     thankYou: {
       metaTitle: 'Danke für deine Nachricht | Benjamin Bennewitz',
@@ -1207,6 +1209,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
             { label: 'E-Mail vorbereiten', href: 'mailto:kontakt@bennewitz.de' },
             { label: 'Kontaktformular', href: '#contact' },
             { label: 'Impressum', href: '/impressum' },
+            { label: 'Datenschutz', href: '/datenschutz' },
           ]
         },
       ],
@@ -1385,7 +1388,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     },
     projectsIntro: {
       eyebrow: 'Case Studies',
-      title: 'Selected work with suspense, play and chocolate.',
+      title: 'Experiments, systems and real solutions.',
       subtitle: '',
       introText: [
         'The projects show different sides of my work: productive business apps, interactive simulations, data interfaces, automation and design systems.',
@@ -1971,7 +1974,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     },
     contact: {
       eyebrow: 'Contact',
-      title: 'Recruiting, feedback, tech talk or just a quick chat?',
+      title: 'Project inquiry, feedback, tech talk or just a quick chat?',
       subtitle: '',
       modalTitle: 'Get in touch',
       modalCloseLabel: 'Close contact form',
@@ -2003,7 +2006,9 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       messageRequiredError: 'Please write a short message.',
       messageLengthError: 'The message should have at least 10 characters.',
       honeypotLabel: 'Website do not fill in',
-      privacy: 'Your message will later be sent directly through the server. Until the backend endpoint is active, no message is sent.',
+      privacy: 'I have read the privacy information regarding the processing of my details.',
+      privacyLinkLabel: 'Open privacy policy',
+      privacyRequiredError: 'Please confirm that you have read the privacy information.',
     },
     thankYou: {
       metaTitle: 'Thank you for your message | Benjamin Bennewitz',
@@ -2125,6 +2130,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
             { label: 'Prepare email', href: 'mailto:contact@bennewitz.de' },
             { label: 'Contact form', href: '#contact' },
             { label: 'Legal notice', href: '/impressum' },
+            { label: 'Privacy', href: '/datenschutz' },
           ]
         },
       ],

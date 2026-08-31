@@ -60,14 +60,17 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
   /** Registriert eine richtungsunabhängige Sichtbarkeitsprüfung. */
   private bindVisibilityCheck(element: HTMLElement): void {
     const requestImmediateCheck = (): void => this.requestVisibilityFrame(element);
-    const requestSettledCheck = (): void => this.queueSettledVisibilityChecks(element);
+    const requestScrollCheck = (): void => {
+      this.requestVisibilityFrame(element);
+      this.queueSettledVisibilityChecks(element);
+    };
 
-    window.addEventListener('scroll', requestSettledCheck, { passive: true });
+    window.addEventListener('scroll', requestScrollCheck, { passive: true });
     window.addEventListener('resize', requestImmediateCheck, { passive: true });
     window.addEventListener('scrollend', requestImmediateCheck, { passive: true });
 
     this.cleanupListeners = () => {
-      window.removeEventListener('scroll', requestSettledCheck);
+      window.removeEventListener('scroll', requestScrollCheck);
       window.removeEventListener('resize', requestImmediateCheck);
       window.removeEventListener('scrollend', requestImmediateCheck);
     };

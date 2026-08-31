@@ -58,15 +58,6 @@
         <small [id]="privacyErrorId" class="contact-form__error">{{ content().privacyRequiredError }}</small>
         }
       </div>
-
-      <button class="bp-button bp-button--accent" type="submit" [disabled]="isSubmitting()">
-        <span>{{ isSubmitting() ? content().sendingLabel : content().submitLabel }}</span>
-        <span class="material-symbols-outlined" aria-hidden="true">send</span>
-      </button>
-
-      @if (status()) {
-      <p class="contact-form__status" role="status" aria-live="polite" aria-atomic="true">{{ status() }}</p>
-      }
     </div>
 
     <fieldset class="contact-form__topics">
@@ -83,5 +74,16 @@
         }
       </div>
     </fieldset>
+
+    <div class="contact-form__actions">
+      <button class="bp-button bp-button--accent" type="submit" [disabled]="isSubmitting()">
+        <span>{{ isSubmitting() ? content().sendingLabel : content().submitLabel }}</span>
+        <span class="material-symbols-outlined" aria-hidden="true">send</span>
+      </button>
+
+      @if (status()) {
+      <p class="contact-form__status" role="status" aria-live="polite" aria-atomic="true">{{ status() }}</p>
+      }
+    </div>
   </div>
 </form>

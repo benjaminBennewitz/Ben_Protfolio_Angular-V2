@@ -47,6 +47,9 @@
 
 .contact-form__layout {
   display: grid;
+  grid-template-areas:
+    'fields topics'
+    'actions topics';
   grid-template-columns: minmax(300px, 0.9fr) minmax(240px, 0.55fr);
   gap: clamp(0.75rem, 1.25vw, 1rem);
   align-items: start;
@@ -54,8 +57,16 @@
 }
 
 .contact-form__fields {
+  grid-area: fields;
   display: grid;
   gap: 0.58rem;
+}
+
+.contact-form__actions {
+  grid-area: actions;
+  display: grid;
+  gap: 0.58rem;
+  justify-items: start;
 }
 
 .contact-form__required-hint {
@@ -111,6 +122,7 @@
    ========================================================================== */
 
 .contact-form__topics {
+  grid-area: topics;
   display: grid;
   gap: 0.5rem;
   margin: 0;
@@ -390,9 +402,24 @@
 }
 
 @media (max-width: 780px) {
-  .contact-form__layout,
+  .contact-form__layout {
+    grid-template-areas:
+      'fields'
+      'topics'
+      'actions';
+    grid-template-columns: 1fr;
+  }
+
   .contact-form__field-row {
     grid-template-columns: 1fr;
+  }
+
+  .contact-form__actions {
+    justify-items: stretch;
+  }
+
+  .contact-form__actions .bp-button {
+    width: 100%;
   }
 }
 

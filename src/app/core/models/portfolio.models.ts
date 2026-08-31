@@ -33,7 +33,7 @@ export interface NavigationContent {
   readonly projects: string;
   /** Navigationslabel für die ausgelagerte Portfolio-Route. */
   readonly portfolio: string;
-  readonly blog: string;
+  readonly snippets: string;
   readonly process: string;
   readonly faq: string;
   readonly contact: string;

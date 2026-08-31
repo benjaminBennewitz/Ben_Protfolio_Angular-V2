@@ -57,6 +57,7 @@
 }
 
 .bp-container {
+  min-width: 0;
   width: min(100%, var(--bp-content-max-width));
   max-width: var(--bp-content-max-width);
   margin: 0 auto;
@@ -69,8 +70,14 @@
   align-items: center;
 }
 
+.bp-grid-two > * {
+  min-width: 0;
+}
+
 .bp-eyebrow {
   display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
   align-items: center;
   gap: 0.55rem;
   width: fit-content;
@@ -85,6 +92,7 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 24%, transparent);
+  overflow-wrap: anywhere;
 }
 
 /* ==========================================================================
@@ -206,11 +214,13 @@ html[data-motion='reduced']::before {
 }
 
 .bp-subtitle {
+  min-width: 0;
   max-width: 760px;
   margin: var(--bp-space-4) 0 0;
   color: var(--bp-color-text-muted);
   font-size: clamp(1rem, 1.4vw, 1.25rem);
   line-height: 1.72;
+  overflow-wrap: anywhere;
 }
 
 /* ==========================================================================
@@ -220,6 +230,8 @@ html[data-motion='reduced']::before {
 .bp-button {
   position: relative;
   display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
   align-items: center;
   justify-content: center;
   gap: 0.55rem;
@@ -236,7 +248,12 @@ html[data-motion='reduced']::before {
   text-transform: uppercase;
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 62%, transparent);
   cursor: pointer;
+  overflow-wrap: anywhere;
   transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.bp-button > * {
+  min-width: 0;
 }
 
 .bp-button:hover,
@@ -279,6 +296,9 @@ html[data-motion='reduced']::before {
 
 .bp-card {
   position: relative;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
   border: 1px solid var(--bp-color-border);
   background: var(--bp-color-surface);
   box-shadow: 0 24px 80px var(--bp-color-shadow);
@@ -286,6 +306,8 @@ html[data-motion='reduced']::before {
 }
 
 .bp-terminal {
+  min-width: 0;
+  max-width: 100%;
   border: 1px solid var(--bp-color-border);
   overflow: hidden;
   background: color-mix(in srgb, var(--bp-color-bg) 78%, black 18%);
@@ -294,6 +316,7 @@ html[data-motion='reduced']::before {
 
 .bp-terminal__bar {
   display: flex;
+  min-width: 0;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
@@ -303,6 +326,10 @@ html[data-motion='reduced']::before {
   color: var(--bp-color-text-muted);
   font-family: var(--bp-font-mono);
   font-size: 0.78rem;
+}
+
+.bp-terminal__bar > * {
+  min-width: 0;
 }
 
 .bp-terminal__dots {
@@ -413,6 +440,8 @@ html[data-motion='reduced']::before {
 
 .bp-tag {
   display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
   align-items: center;
   gap: 0.45rem;
   border: 1px solid var(--bp-color-border);
@@ -422,6 +451,7 @@ html[data-motion='reduced']::before {
   font-family: var(--bp-font-mono);
   font-size: 0.78rem;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 /* ==========================================================================

@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CSS Spinner Demo</title>
+  <title>DevMode Console Demo</title>
   <style>
 /*###############################
 ###
-###     blog-demo.css
-###     Portfolio Blog Demo
+###     snippet-demo.css
+###     Portfolio Snippet Demo
 ###     BASED ON: HTML, CSS, Browser APIs
 ###     AUTHOR: Benjamin Bennewitz
 ###
@@ -45,12 +45,9 @@
 
     .demo-shell {
       display: grid;
-      place-items: center;
       gap: 1rem;
-      min-height: 100svh;
       max-width: 760px;
       margin: auto;
-      text-align: center;
     }
 
 
@@ -97,32 +94,9 @@
       line-height: 1.55;
     }
 
-    .spinner {
-      width: clamp(2.25rem, 12vw, 3.5rem);
-      aspect-ratio: 1;
-      border: 3px solid var(--accent);
-      border-right-color: transparent;
-      border-radius: 50%;
-      animation: spin 720ms linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(1turn);
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .spinner {
-        animation: none;
-        border-right-color: currentColor;
-      }
-    }
-
     @media (max-width: 520px) {
       .demo-shell {
-        min-height: auto;
-        text-align: left;
+        gap: .75rem;
       }
     }
   </style>
@@ -131,13 +105,24 @@
   <main class="demo-shell">
     <header class="demo-header">
       <span class="demo-brand" aria-hidden="true">B²</span>
-      <span class="demo-tag">Loader Demo</span>
+      <span class="demo-tag">DevTools Demo</span>
     </header>
-    <div class="spinner" aria-label="Lädt"></div>
     <article class="demo-note">
-      <strong>Merken:</strong>
-      <p>Ein kleiner Spinner braucht oft keine Library. Wichtig ist ein Reduced-Motion-Fallback und ein lesbarer Status für Screenreader.</p>
+      <strong>Konsole öffnen:</strong>
+      <p>In Chrome DevTools erscheint eine gestaltete Debug-Meldung. Das ist nützlich für lokale Feature-Flags und Entwicklungsmarker.</p>
     </article>
   </main>
+
+  <script>
+    const style = [
+      'background:#101010',
+      'color:#a7ff19',
+      'border:2px solid #a7ff19',
+      'padding:8px 12px',
+      'font-weight:900'
+    ].join(';');
+
+    console.log('%cDEVMODE ACTIVATED', style);
+  </script>
 </body>
 </html>

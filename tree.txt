@@ -73,10 +73,6 @@ Portfolio/
 │   │   │   │   ├── achievements-page.component.html
 │   │   │   │   ├── achievements-page.component.scss
 │   │   │   │   └── achievements-page.component.ts
-│   │   │   ├── blog-page/
-│   │   │   │   ├── blog-page.component.html
-│   │   │   │   ├── blog-page.component.scss
-│   │   │   │   └── blog-page.component.ts
 │   │   │   ├── home-page/
 │   │   │   │   ├── home-page.component.html
 │   │   │   │   ├── home-page.component.scss
@@ -93,16 +89,18 @@ Portfolio/
 │   │   │   │   ├── portfolio-page.component.html
 │   │   │   │   ├── portfolio-page.component.scss
 │   │   │   │   └── portfolio-page.component.ts
+│   │   │   ├── privacy-page/
+│   │   │   │   ├── privacy-page.component.html
+│   │   │   │   ├── privacy-page.component.scss
+│   │   │   │   └── privacy-page.component.ts
 │   │   │   ├── project-detail-page/
 │   │   │   │   ├── project-detail-page.component.html
 │   │   │   │   ├── project-detail-page.component.scss
 │   │   │   │   └── project-detail-page.component.ts
-│   │   │   ├── services-page/
-│   │   │   │   ├── services-content.spec.ts
-│   │   │   │   ├── services-content.ts
-│   │   │   │   ├── services-page.component.html
-│   │   │   │   ├── services-page.component.scss
-│   │   │   │   └── services-page.component.ts
+│   │   │   ├── snippets-page/
+│   │   │   │   ├── snippets-page.component.html
+│   │   │   │   ├── snippets-page.component.scss
+│   │   │   │   └── snippets-page.component.ts
 │   │   │   └── thank-you-page/
 │   │   │       ├── thank-you-page.component.html
 │   │   │       ├── thank-you-page.component.scss
@@ -188,13 +186,6 @@ Portfolio/
 │   │   ├── app.component.ts
 │   │   └── app.routes.ts
 │   ├── assets/
-│   │   ├── blog-demos/
-│   │   │   ├── angular-signals-workflow.ts
-│   │   │   ├── css-can-count-elements.html
-│   │   │   ├── devmode-console-style.html
-│   │   │   ├── flex-vs-grid.html
-│   │   │   ├── native-select.html
-│   │   │   └── simple-css-spinner.html
 │   │   ├── fonts/
 │   │   │   ├── inter-variable.ttf
 │   │   │   ├── jetbrains-mono-variable.ttf
@@ -383,6 +374,13 @@ Portfolio/
 │   │   │   ├── me-and-coffee-error.webp
 │   │   │   ├── me-with-chocolate.webp
 │   │   │   └── nice-head-loader.webp
+│   │   ├── snippet-demos/
+│   │   │   ├── angular-signals-workflow.ts
+│   │   │   ├── css-can-count-elements.html
+│   │   │   ├── devmode-console-style.html
+│   │   │   ├── flex-vs-grid.html
+│   │   │   ├── native-select.html
+│   │   │   └── simple-css-spinner.html
 │   │   ├── social/
 │   │   │   └── og-portfolio-preview.svg
 │   │   └── favicon.svg

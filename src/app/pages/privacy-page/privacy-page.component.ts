@@ -238,7 +238,7 @@ const PRIVACY_CONTENT: Record<'de' | 'en', PrivacyPageContent> = {
         size: 'side',
         tone: 'accent',
         text: [
-          'Verantwortlich für dieses Portfolio ist Benjamin Bennewitz. Die vollständige ladungsfähige Anschrift wird vor dem Produktivgang im Impressum ergänzt.',
+          'Verantwortlich für dieses Portfolio ist Benjamin Bennewitz, c/o Linzer Straße 45, 53604 Bad Honnef, Deutschland.',
           'Kontakt: kontakt@bennewitz.de. Weitere Anbieterangaben findest du im Impressum.',
         ],
       },
@@ -354,7 +354,7 @@ const PRIVACY_CONTENT: Record<'de' | 'en', PrivacyPageContent> = {
         size: 'wide',
         tone: 'success',
         text: [
-          'Diese Datenschutzerklärung bildet den aktuellen Entwicklungsstand des Portfolios ab. Vor dem Produktivgang werden insbesondere Anbieteranschrift, Hostinganbieter, produktive Löschfristen und der reale Mailversand final geprüft und ergänzt.',
+          'Diese Datenschutzerklärung bildet den aktuellen Entwicklungsstand des Portfolios ab. Vor dem Produktivgang werden insbesondere Hostinganbieter, produktive Löschfristen und der reale Mailversand final geprüft und ergänzt.',
           'Bei neuen Diensten oder einer geänderten Datenverarbeitung wird die Erklärung entsprechend aktualisiert.',
         ],
       },
@@ -381,7 +381,7 @@ const PRIVACY_CONTENT: Record<'de' | 'en', PrivacyPageContent> = {
     chapters: [
       {
         number: '01', title: 'Controller', icon: 'badge', size: 'side', tone: 'accent',
-        text: ['Benjamin Bennewitz is responsible for this portfolio. The complete service address will be added to the legal notice before production launch.', 'Contact: kontakt@bennewitz.de. Further provider information is available in the legal notice.'],
+        text: ['Benjamin Bennewitz, c/o Linzer Straße 45, 53604 Bad Honnef, Germany, is responsible for this portfolio.', 'Contact: kontakt@bennewitz.de. Further provider information is available in the legal notice.'],
       },
       {
         number: '02', title: 'Hosting & server logs', icon: 'dns', size: 'wide',
@@ -425,7 +425,7 @@ const PRIVACY_CONTENT: Record<'de' | 'en', PrivacyPageContent> = {
       },
       {
         number: '12', title: 'Changes & launch', icon: 'deployed_code_update', size: 'wide', tone: 'success',
-        text: ['This policy reflects the current development state of the portfolio. Before production launch, the service address, hosting provider, production retention periods and actual email delivery will be reviewed and completed.', 'If new services or processing activities are introduced, the policy will be updated accordingly.'],
+        text: ['This policy reflects the current development state of the portfolio. Before production launch, the hosting provider, production retention periods and actual email delivery will be reviewed and completed.', 'If new services or processing activities are introduced, the policy will be updated accordingly.'],
       },
     ],
   },

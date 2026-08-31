@@ -104,6 +104,9 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   /** Bedienhinweis für Cursor-Interaktion. */
   @Input() hint = '';
 
+  /** Zugängliche Beschriftung des Kontaktlinks. */
+  @Input() contactLabel = '';
+
   /** Sichtbare Wortbausteine. */
   @Input() words: readonly string[] = [];
 
@@ -236,7 +239,8 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   }
 
   /** Scrollt barrierearm zum Kontaktbereich. */
-  goToContact(): void {
+  goToContact(event?: Event): void {
+    event?.preventDefault();
     document.getElementById('contact')?.scrollIntoView({ behavior: this.accessibility.reducesMotion() ? 'auto' : 'smooth', block: 'start' });
   }
 
@@ -263,16 +267,6 @@ export class ChaosCtaComponent implements AfterViewInit, OnDestroy {
   /** Extrahiert den Material-Symbol-Namen aus einem Icon-Baustein. */
   iconName(word: string): string {
     return word.replace('icon:', '');
-  }
-
-  /** Unterstützt Tastaturaktivierung der gesamten CTA-Section. */
-  onKeyDown(event: KeyboardEvent): void {
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return;
-    }
-
-    event.preventDefault();
-    this.goToContact();
   }
 
   /** Erzeugt Startpositionen oberhalb des Bodens. */

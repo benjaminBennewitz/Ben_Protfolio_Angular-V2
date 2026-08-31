@@ -42,15 +42,26 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bennewitz.de/blog</loc>
-    <lastmod>2026-05-19</lastmod>
+    <loc>https://bennewitz.de/snippets</loc>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://bennewitz.de/achievements</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://bennewitz.de/impressum</loc>
-    <lastmod>2026-05-19</lastmod>
+    <lastmod>2026-08-31</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bennewitz.de/datenschutz</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
 </urlset>

@@ -3,7 +3,7 @@
 <div class="platinum-modal" role="presentation">
   <button class="platinum-modal__backdrop" type="button" [attr.aria-label]="texts().closeLabel" (click)="achievementService.dismissPlatinumModal()"></button>
 
-  <section class="platinum-modal__window bp-card" role="dialog" aria-modal="true" aria-labelledby="platinum-modal-title">
+  <section #modalWindow class="platinum-modal__window bp-card" role="dialog" aria-modal="true" tabindex="-1" aria-labelledby="platinum-modal-title" (keydown)="handleModalKeydown($event)">
     <span class="platinum-modal__shape platinum-modal__shape--one" aria-hidden="true"></span>
     <span class="platinum-modal__shape platinum-modal__shape--two" aria-hidden="true"></span>
     <div class="platinum-modal__bar">

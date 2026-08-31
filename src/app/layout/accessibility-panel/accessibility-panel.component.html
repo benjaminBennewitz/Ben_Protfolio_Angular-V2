@@ -1,7 +1,7 @@
 <!-- src/app/layout/accessibility-panel/accessibility-panel.component.html -->
-<aside class="access-panel" [class.access-panel--open]="open()" aria-label="Accessibility Einstellungen">
+<aside class="access-panel" [class.access-panel--open]="open()" [attr.aria-label]="texts().landmarkLabel">
   @if (open()) {
-  <button class="access-panel__backdrop" type="button" aria-label="Accessibility-Panel schließen" (click)="close()"></button>
+  <button class="access-panel__backdrop" type="button" [attr.aria-label]="texts().closeLabel" (click)="close()"></button>
   }
 
   @if (!open()) {
@@ -19,13 +19,13 @@
   }
 
   @if (open()) {
-  <section class="access-panel__window bp-card" role="dialog" aria-modal="true" [attr.aria-label]="texts().title">
+  <section #panelWindow class="access-panel__window bp-card" role="dialog" aria-modal="true" tabindex="-1" [attr.aria-label]="texts().title" (keydown)="handlePanelKeydown($event)">
     <header class="access-panel__head">
       <div>
         <p>accessibility.exe</p>
         <h2>{{ texts().title }}</h2>
       </div>
-      <button type="button" aria-label="Panel schließen" (click)="close()">×</button>
+      <button type="button" [attr.aria-label]="texts().closeLabel" (click)="close()">×</button>
     </header>
 
     <p class="access-panel__intro">{{ texts().intro }}</p>

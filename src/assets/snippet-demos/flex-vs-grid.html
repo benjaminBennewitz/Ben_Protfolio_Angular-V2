@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CSS sibling-index Demo</title>
+  <title>Flex vs Grid Demo</title>
   <style>
 /*###############################
 ###
-###     blog-demo.css
-###     Portfolio Blog Demo
+###     snippet-demo.css
+###     Portfolio Snippet Demo
 ###     BASED ON: HTML, CSS, Browser APIs
 ###     AUTHOR: Benjamin Bennewitz
 ###
@@ -46,7 +46,7 @@
     .demo-shell {
       display: grid;
       gap: 1rem;
-      max-width: 900px;
+      max-width: 920px;
       margin: auto;
     }
 
@@ -83,7 +83,7 @@
     }
 
     .demo-note,
-    .demo-panel {
+    section {
       border: 2px solid var(--accent);
       padding: 1rem;
       background: rgba(167, 255, 25, .06);
@@ -96,46 +96,72 @@
       line-height: 1.55;
     }
 
-    .compare {
+    .layout-compare {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 1rem;
     }
 
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: .8rem;
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .75rem;
     }
 
-    .metric-grid > * {
-      min-height: 6.5rem;
+    .toolbar__spacer {
+      margin-left: auto;
+    }
+
+    .chip,
+    .card,
+    .aside {
       border: 1px solid var(--accent);
-      padding: 1rem;
-      background: rgba(167, 255, 25, .09);
-      color: var(--text);
-      transition: background-color .2s ease, color .2s ease, transform .2s ease;
+      padding: .75rem;
     }
 
-    .metric-grid--fallback > *:nth-child(1) { background: rgba(167, 255, 25, .24); color: #101010; }
-    .metric-grid--fallback > *:nth-child(2) { background: rgba(167, 255, 25, .42); color: #101010; }
-    .metric-grid--fallback > *:nth-child(3) { background: rgba(167, 255, 25, .62); color: #101010; }
-    .metric-grid--fallback > *:nth-child(4) { background: rgba(167, 255, 25, .82); color: #101010; }
+    .cards {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      grid-template-areas:
+        "hero hero"
+        "card-a aside"
+        "card-b aside";
+      gap: 1rem;
+    }
 
-    @supports (background: rgba(167, 255, 25, calc(sibling-index() / sibling-count()))) {
-      .metric-grid--dynamic > * {
-        --i: sibling-index();
-        --count: sibling-count();
-        background: rgba(167, 255, 25, calc(.20 + var(--i) / var(--count) * .70));
-        color: #101010;
-        transform: translateY(calc(var(--i) * -2px));
-      }
+    .card--hero {
+      grid-area: hero;
+    }
+
+    .card--a {
+      grid-area: card-a;
+    }
+
+    .card--b {
+      grid-area: card-b;
+    }
+
+    .aside {
+      grid-area: aside;
     }
 
     @media (max-width: 720px) {
-      .compare,
-      .metric-grid {
+      .layout-compare,
+      .cards {
         grid-template-columns: 1fr;
+      }
+
+      .cards {
+        grid-template-areas:
+          "hero"
+          "card-a"
+          "card-b"
+          "aside";
+      }
+
+      .toolbar__spacer {
+        display: none;
       }
     }
   </style>
@@ -144,31 +170,31 @@
   <main class="demo-shell">
     <header class="demo-header">
       <span class="demo-brand" aria-hidden="true">B²</span>
-      <span class="demo-tag">CSS Values Demo</span>
+      <span class="demo-tag">Layout Demo</span>
     </header>
     <article class="demo-note">
-      <strong>Use-Case:</strong>
-      <p>Ein Kartenraster kann Staffelung oder visuelle Gewichtung aus seiner eigenen Position ableiten, ohne jede Karte manuell per nth-child zu pflegen.</p>
+      <strong>Merken:</strong>
+      <p>Flex verteilt Inhalte auf einer Achse. Grid plant eine Fläche mit Reihen, Spalten und Bereichen.</p>
     </article>
 
-    <div class="compare">
-      <section class="demo-panel">
-        <h1>Fallback: nth-child</h1>
-        <div class="metric-grid metric-grid--fallback">
-          <article>01 Analyse</article>
-          <article>02 Daten</article>
-          <article>03 UI</article>
-          <article>04 Release</article>
+    <div class="layout-compare">
+      <section>
+        <h1>Flex: eine Achse</h1>
+        <div class="toolbar">
+          <span class="chip">Logo</span>
+          <span class="chip">Navigation</span>
+          <span class="toolbar__spacer"></span>
+          <span class="chip">Kontakt</span>
         </div>
       </section>
 
-      <section class="demo-panel">
-        <h1>Dynamisch: sibling()</h1>
-        <div class="metric-grid metric-grid--dynamic">
-          <article>01 Analyse</article>
-          <article>02 Daten</article>
-          <article>03 UI</article>
-          <article>04 Release</article>
+      <section>
+        <h1>Grid: Fläche</h1>
+        <div class="cards">
+          <article class="card card--hero">Hero</article>
+          <article class="card card--a">Card A</article>
+          <article class="card card--b">Card B</article>
+          <aside class="aside">Aside</aside>
         </div>
       </section>
     </div>

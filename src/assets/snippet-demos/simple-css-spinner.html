@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Flex vs Grid Demo</title>
+  <title>CSS Spinner Demo</title>
   <style>
 /*###############################
 ###
-###     blog-demo.css
-###     Portfolio Blog Demo
+###     snippet-demo.css
+###     Portfolio Snippet Demo
 ###     BASED ON: HTML, CSS, Browser APIs
 ###     AUTHOR: Benjamin Bennewitz
 ###
@@ -45,9 +45,12 @@
 
     .demo-shell {
       display: grid;
+      place-items: center;
       gap: 1rem;
-      max-width: 920px;
+      min-height: 100svh;
+      max-width: 760px;
       margin: auto;
+      text-align: center;
     }
 
 
@@ -82,86 +85,44 @@
       text-transform: uppercase;
     }
 
-    .demo-note,
-    section {
+    .demo-note {
       border: 2px solid var(--accent);
       padding: 1rem;
       background: rgba(167, 255, 25, .06);
     }
 
     .demo-note p {
-      max-width: 68ch;
       margin: .35rem 0 0;
       color: var(--muted);
       line-height: 1.55;
     }
 
-    .layout-compare {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1rem;
+    .spinner {
+      width: clamp(2.25rem, 12vw, 3.5rem);
+      aspect-ratio: 1;
+      border: 3px solid var(--accent);
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: spin 720ms linear infinite;
     }
 
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: .75rem;
-    }
-
-    .toolbar__spacer {
-      margin-left: auto;
-    }
-
-    .chip,
-    .card,
-    .aside {
-      border: 1px solid var(--accent);
-      padding: .75rem;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      grid-template-areas:
-        "hero hero"
-        "card-a aside"
-        "card-b aside";
-      gap: 1rem;
-    }
-
-    .card--hero {
-      grid-area: hero;
-    }
-
-    .card--a {
-      grid-area: card-a;
-    }
-
-    .card--b {
-      grid-area: card-b;
-    }
-
-    .aside {
-      grid-area: aside;
-    }
-
-    @media (max-width: 720px) {
-      .layout-compare,
-      .cards {
-        grid-template-columns: 1fr;
+    @keyframes spin {
+      to {
+        transform: rotate(1turn);
       }
+    }
 
-      .cards {
-        grid-template-areas:
-          "hero"
-          "card-a"
-          "card-b"
-          "aside";
+    @media (prefers-reduced-motion: reduce) {
+      .spinner {
+        animation: none;
+        border-right-color: currentColor;
       }
+    }
 
-      .toolbar__spacer {
-        display: none;
+    @media (max-width: 520px) {
+      .demo-shell {
+        min-height: auto;
+        text-align: left;
       }
     }
   </style>
@@ -170,34 +131,13 @@
   <main class="demo-shell">
     <header class="demo-header">
       <span class="demo-brand" aria-hidden="true">B²</span>
-      <span class="demo-tag">Layout Demo</span>
+      <span class="demo-tag">Loader Demo</span>
     </header>
+    <div class="spinner" aria-label="Lädt"></div>
     <article class="demo-note">
       <strong>Merken:</strong>
-      <p>Flex verteilt Inhalte auf einer Achse. Grid plant eine Fläche mit Reihen, Spalten und Bereichen.</p>
+      <p>Ein kleiner Spinner braucht oft keine Library. Wichtig ist ein Reduced-Motion-Fallback und ein lesbarer Status für Screenreader.</p>
     </article>
-
-    <div class="layout-compare">
-      <section>
-        <h1>Flex: eine Achse</h1>
-        <div class="toolbar">
-          <span class="chip">Logo</span>
-          <span class="chip">Navigation</span>
-          <span class="toolbar__spacer"></span>
-          <span class="chip">Kontakt</span>
-        </div>
-      </section>
-
-      <section>
-        <h1>Grid: Fläche</h1>
-        <div class="cards">
-          <article class="card card--hero">Hero</article>
-          <article class="card card--a">Card A</article>
-          <article class="card card--b">Card B</article>
-          <aside class="aside">Aside</aside>
-        </div>
-      </section>
-    </div>
   </main>
 </body>
 </html>

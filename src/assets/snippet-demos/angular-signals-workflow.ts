@@ -1,7 +1,7 @@
 /*###############################
 ###
-###     blog-demo.ts
-###     Portfolio Blog Demo
+###     snippet-demo.ts
+###     Portfolio Snippet Demo
 ###     BASED ON: Angular Signals, TypeScript
 ###     AUTHOR: Benjamin Bennewitz
 ###

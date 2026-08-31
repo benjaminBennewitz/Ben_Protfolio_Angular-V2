@@ -1,7 +1,7 @@
-/* src/app/pages/blog-page/blog-page.component.ts */
+/* src/app/pages/snippets-page/snippets-page.component.ts */
 
 /**
- * @file Blog-Seite mit überlagernden Retro-Fenstern.
+ * @file Snippet-Seite mit überlagernden Retro-Fenstern.
  * @description Rendert kurze CSS-, Angular- und DevTools-Snippets als stapelbare MS-DOS-/Win95-Fenster.
  */
 
@@ -11,11 +11,11 @@ import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
 import { SystemToastService } from '../../core/services/system-toast.service';
 
-/** Übersetzte Blog-Seitentexte. */
-interface BlogPageTexts {
-  /** Meta-Titel der Blog-Route. */
+/** Übersetzte Snippet-Seitentexte. */
+interface SnippetPageTexts {
+  /** Meta-Titel der Snippet-Route. */
   readonly metaTitle: string;
-  /** Meta-Description der Blog-Route. */
+  /** Meta-Description der Snippet-Route. */
   readonly metaDescription: string;
   /** Linklabel zurück zur Startseite. */
   readonly backLabel: string;
@@ -33,6 +33,12 @@ interface BlogPageTexts {
   readonly searchPlaceholder: string;
   /** Label für die Ergebnisanzahl. */
   readonly searchResultLabel: string;
+  /** Zugängliche Beschriftung zum Leeren der Suche. */
+  readonly clearSearchLabel: string;
+  /** Zugängliche Beschriftung des Fensterbereichs. */
+  readonly desktopLabel: string;
+  /** Zugängliche Beschriftung zum Schließen eines Fensters. */
+  readonly closeWindowLabel: string;
   /** Text, wenn keine Suche treffer liefert. */
   readonly emptySearchText: string;
   /** Label für den Button, der alle Fenster öffnet. */
@@ -43,6 +49,8 @@ interface BlogPageTexts {
   readonly dragLabel: string;
   /** Label für den Resize-Handle eines Fensters. */
   readonly resizeLabel: string;
+  /** Zugängliches Label für einen Code-Beispielbereich. */
+  readonly codeExampleLabel: string;
   /** Label für das Kopieren eines Code-Snippets. */
   readonly copyLabel: string;
   /** Meldung nach erfolgreichem Kopieren. */
@@ -65,8 +73,12 @@ interface BlogPageTexts {
   readonly previewSiblingText: string;
   /** Erklärung für normales Native-Select als Ausgangszustand. */
   readonly previewDefaultSelectText: string;
+  /** Zugängliche Beschriftung der klassischen Select-Vorschau. */
+  readonly previewDefaultSelectLabel: string;
   /** Erklärung für native Select-Vorschau. */
   readonly previewNativeSelectText: string;
+  /** Zugängliche Beschriftung der modernen Select-Vorschau. */
+  readonly previewNativeSelectLabel: string;
   /** Label für alte Code-Variante. */
   readonly oldCodeLabel: string;
   /** Label für neue Code-Variante. */
@@ -75,12 +87,12 @@ interface BlogPageTexts {
   readonly demoLabel: string;
   /** Label für den Notizbereich. */
   readonly notesLabel: string;
-  /** Blogeinträge der aktuellen Sprache. */
-  readonly entries: readonly BlogEntry[];
+  /** Snippeteinträge der aktuellen Sprache. */
+  readonly entries: readonly SnippetEntry[];
 }
 
-/** Einzelner kurzer Blog- oder Snippet-Eintrag. */
-interface BlogEntry {
+/** Einzelner kurzer Snippet- oder Snippet-Eintrag. */
+interface SnippetEntry {
   /** Stabiler technischer Schlüssel. */
   readonly slug: string;
   /** Nummer zur visuellen Sortierung. */
@@ -119,16 +131,16 @@ interface BlogEntry {
   readonly notes: readonly string[];
 }
 
-/** Indexierter Blogeintrag für die performante Frontend-Suche. */
-interface IndexedBlogEntry {
-  /** Originaler Blogeintrag. */
-  readonly entry: BlogEntry;
+/** Indexierter Snippeteintrag für die performante Frontend-Suche. */
+interface IndexedSnippetEntry {
+  /** Originaler Snippeteintrag. */
+  readonly entry: SnippetEntry;
   /** Normalisierter Suchtext über Titel, Kategorie, Tags und Inhalt. */
   readonly searchText: string;
 }
 
-/** Zustandsdaten eines geöffneten Blog-Fensters. */
-interface BlogWindowState {
+/** Zustandsdaten eines geöffneten Snippet-Fensters. */
+interface SnippetWindowState {
   /** Slug des gerenderten Eintrags. */
   readonly slug: string;
   /** Layer-Reihenfolge des Fensters. */
@@ -143,8 +155,8 @@ interface BlogWindowState {
   readonly height?: number;
 }
 
-/** Laufende Pointer-Interaktion eines Blog-Fensters. */
-interface BlogWindowInteraction {
+/** Laufende Pointer-Interaktion eines Snippet-Fensters. */
+interface SnippetWindowInteraction {
   /** Betroffenes Fenster. */
   readonly slug: string;
   /** Art der Interaktion. */
@@ -173,22 +185,22 @@ interface BlogWindowInteraction {
 
 
 /** Gerendertes Fenster mit aufgelöstem Eintrag. */
-interface RenderedBlogWindow {
+interface RenderedSnippetWindow {
   /** Fensterzustand. */
-  readonly window: BlogWindowState;
-  /** Zugehöriger Blogeintrag. */
-  readonly entry: BlogEntry;
+  readonly window: SnippetWindowState;
+  /** Zugehöriger Snippeteintrag. */
+  readonly entry: SnippetEntry;
 }
 
-/** Blog-Ansicht mit stapelbaren Snippet-Fenstern. */
+/** Snippet-Ansicht mit stapelbaren Snippet-Fenstern. */
 @Component({
-  selector: 'bp-blog-page',
+  selector: 'bp-snippets-page',
   standalone: true,
   imports: [RouterLink],
-  templateUrl: './blog-page.component.html',
-  styleUrl: './blog-page.component.scss',
+  templateUrl: './snippets-page.component.html',
+  styleUrl: './snippets-page.component.scss',
 })
-export class BlogPageComponent {
+export class SnippetsPageComponent {
   /** Sprachservice für übersetzte Seitentexte. */
   private readonly languageService = inject(LanguageService);
 
@@ -202,23 +214,23 @@ export class BlogPageComponent {
   private readonly zCounter = signal<number>(24);
 
   /** Aktuell laufende Drag- oder Resize-Interaktion. */
-  private readonly windowInteraction = signal<BlogWindowInteraction | null>(null);
+  private readonly windowInteraction = signal<SnippetWindowInteraction | null>(null);
 
-  /** Aktuelle Suchanfrage der Blog-Navigation. */
+  /** Aktuelle Suchanfrage der Snippet-Navigation. */
   readonly searchQuery = signal<string>('');
 
-  /** Aktuell geöffnete Blog-Fenster. */
-  readonly openWindows = signal<readonly BlogWindowState[]>([
+  /** Aktuell geöffnete Snippet-Fenster. */
+  readonly openWindows = signal<readonly SnippetWindowState[]>([
     { slug: 'flex-vs-grid', zIndex: 21, x: 18, y: 18 },
     { slug: 'css-can-count-elements', zIndex: 22, x: 62, y: 62 },
     { slug: 'native-select', zIndex: 23, x: 106, y: 106 },
   ]);
 
   /** Übersetzte Texte der aktuellen Sprache. */
-  readonly texts = computed<BlogPageTexts>(() => BLOG_PAGE_TEXTS[this.languageService.language()]);
+  readonly texts = computed<SnippetPageTexts>(() => SNIPPET_PAGE_TEXTS[this.languageService.language()]);
 
   /** Vorberechneter Suchindex für schnelle Filterung auch bei deutlich mehr Einträgen. */
-  readonly searchIndex = computed<readonly IndexedBlogEntry[]>(() => this.texts().entries.map((entry) => ({
+  readonly searchIndex = computed<readonly IndexedSnippetEntry[]>(() => this.texts().entries.map((entry) => ({
     entry,
     searchText: this.normalizeSearchText([
       entry.index,
@@ -234,7 +246,7 @@ export class BlogPageComponent {
   })));
 
   /** Gefilterte Einträge der Sidebar. */
-  readonly filteredEntries = computed<readonly BlogEntry[]>(() => {
+  readonly filteredEntries = computed<readonly SnippetEntry[]>(() => {
     const queryParts = this.normalizeSearchText(this.searchQuery()).split(' ').filter(Boolean);
 
     if (!queryParts.length) {
@@ -247,19 +259,19 @@ export class BlogPageComponent {
   });
 
   /** Sichtbare Fenster mit zugehörigem Eintrag. */
-  readonly visibleWindows = computed<readonly RenderedBlogWindow[]>(() => this.openWindows()
+  readonly visibleWindows = computed<readonly RenderedSnippetWindow[]>(() => this.openWindows()
     .map((window) => {
       const entry = this.findEntry(window.slug);
       return entry ? { window, entry } : null;
     })
-    .filter((item): item is RenderedBlogWindow => item !== null));
+    .filter((item): item is RenderedSnippetWindow => item !== null));
 
   /** Synchronisiert Meta-Daten mit der aktuellen Sprache. */
   constructor() {
-    effect(() => this.seoService.setPageSeo(this.texts().metaTitle, this.texts().metaDescription, '/blog'));
+    effect(() => this.seoService.setPageSeo(this.texts().metaTitle, this.texts().metaDescription, '/snippets'));
   }
 
-  /** Öffnet ein Blog-Fenster oder bringt es nach vorne. */
+  /** Öffnet ein Snippet-Fenster oder bringt es nach vorne. */
   openEntry(slug: string): void {
     if (this.isEntryOpen(slug)) {
       this.focusWindow(slug);
@@ -310,7 +322,7 @@ export class BlogPageComponent {
       : window));
   }
 
-  /** Startet das freie Verschieben eines Blog-Fensters über seine Titelleiste. */
+  /** Startet das freie Verschieben eines Snippet-Fensters über seine Titelleiste. */
   startWindowDrag(slug: string, event: PointerEvent): void {
     if (window.innerWidth <= 720 || event.button !== 0 || this.pointerStartedOnControl(event.target)) {
       return;
@@ -321,7 +333,7 @@ export class BlogPageComponent {
     this.startWindowInteraction(slug, 'drag', event);
   }
 
-  /** Startet das manuelle Skalieren eines Blog-Fensters am unteren rechten Griff. */
+  /** Startet das manuelle Skalieren eines Snippet-Fensters am unteren rechten Griff. */
   startWindowResize(slug: string, event: PointerEvent): void {
     if (window.innerWidth <= 720 || event.button !== 0) {
       return;
@@ -383,8 +395,8 @@ export class BlogPageComponent {
       return;
     }
 
-    const element = this.blogWindowElement(slug);
-    const desktop = element?.closest<HTMLElement>('.blog-page__desktop');
+    const element = this.snippetWindowElement(slug);
+    const desktop = element?.closest<HTMLElement>('.snippet-page__desktop');
 
     if (!element || !desktop) {
       return;
@@ -419,13 +431,13 @@ export class BlogPageComponent {
     this.searchQuery.set(input?.value ?? '');
   }
 
-  /** Leert die Blog-Suche. */
+  /** Leert die Snippet-Suche. */
   clearSearch(): void {
     this.searchQuery.set('');
   }
 
   /** Kopiert das Code-Beispiel eines Eintrags in die Zwischenablage. */
-  async copyCode(entry: BlogEntry, event: Event): Promise<void> {
+  async copyCode(entry: SnippetEntry, event: Event): Promise<void> {
     event.stopPropagation();
 
     if (!navigator.clipboard) {
@@ -450,14 +462,14 @@ export class BlogPageComponent {
   }
 
   /** Liefert einen eindeutigen TrackBy-Wert für Fenster. */
-  trackWindow(item: RenderedBlogWindow): string {
+  trackWindow(item: RenderedSnippetWindow): string {
     return item.entry.slug;
   }
 
   /** Initialisiert gemeinsame Messwerte für Drag- und Resize-Interaktionen. */
   private startWindowInteraction(slug: string, mode: 'drag' | 'resize', event: PointerEvent): void {
-    const element = this.blogWindowElement(slug);
-    const desktop = element?.closest<HTMLElement>('.blog-page__desktop');
+    const element = this.snippetWindowElement(slug);
+    const desktop = element?.closest<HTMLElement>('.snippet-page__desktop');
     const state = this.openWindows().find((windowState) => windowState.slug === slug);
 
     if (!element || !desktop || !state) {
@@ -486,16 +498,16 @@ export class BlogPageComponent {
   }
 
   /** Aktualisiert genau ein Fenster, ohne Zustände der übrigen Fenster anzufassen. */
-  private updateWindow(slug: string, updater: (windowState: BlogWindowState) => BlogWindowState): void {
+  private updateWindow(slug: string, updater: (windowState: SnippetWindowState) => SnippetWindowState): void {
     this.openWindows.update((windows) => windows.map((windowState) => windowState.slug === slug
       ? updater(windowState)
       : windowState));
   }
 
   /** Liefert das gerenderte Fenster anhand seines stabilen Slugs. */
-  private blogWindowElement(slug: string): HTMLElement | null {
+  private snippetWindowElement(slug: string): HTMLElement | null {
     const escapedSlug = typeof CSS !== 'undefined' && CSS.escape ? CSS.escape(slug) : slug;
-    return document.querySelector<HTMLElement>(`.blog-window[data-window-slug="${escapedSlug}"]`);
+    return document.querySelector<HTMLElement>(`.snippet-window[data-window-slug="${escapedSlug}"]`);
   }
 
   /** Erkennt Controls in der Titelleiste, die kein Drag starten dürfen. */
@@ -509,7 +521,7 @@ export class BlogPageComponent {
   }
 
   /** Sucht einen Eintrag in der aktiven Sprache. */
-  private findEntry(slug: string): BlogEntry | undefined {
+  private findEntry(slug: string): SnippetEntry | undefined {
     return this.texts().entries.find((entry) => entry.slug === slug);
   }
 
@@ -532,28 +544,32 @@ export class BlogPageComponent {
   }
 }
 
-/** Übersetzte Blog-Inhalte. */
-const BLOG_PAGE_TEXTS: Record<'de' | 'en', BlogPageTexts> = {
+/** Übersetzte Snippet-Inhalte. */
+const SNIPPET_PAGE_TEXTS: Record<'de' | 'en', SnippetPageTexts> = {
   de: {
-    metaTitle: 'Blog | CSS, Angular und Web-Snippets | Benjamin Bennewitz',
-    metaDescription: 'Kleine visuelle Blogeinträge mit CSS-, SCSS-, Angular-, Django- und DevTools-Snippets im überlagernden Retro-Fenster-Look.',
+    metaTitle: 'Snippets | CSS, Angular und Web-Snippets | Benjamin Bennewitz',
+    metaDescription: 'Kurze visuelle Code-Snippets zu CSS, SCSS, Angular und DevTools mit Beispielen, Vorschau und Support-Hinweisen.',
     backLabel: 'Zurück zur Experience',
-    eyebrow: 'blog_index.exe',
-    title: 'Code-Blog.',
+    eyebrow: 'snippet_index.exe',
+    title: 'Code-Snippets.',
     intro: 'Kurze Web-Notes, CSS-Neuerungen und kleine Workflow-Fenster mit Code, Vorschau und Support-Hinweis.',
-    listTitle: 'Blog-Index',
-    searchLabel: 'Blog durchsuchen',
+    listTitle: 'Snippets-Index',
+    searchLabel: 'Snippets durchsuchen',
     searchPlaceholder: 'Suche nach CSS, Angular, Spinner ...',
     searchResultLabel: 'Treffer',
+    clearSearchLabel: 'Suche leeren',
+    desktopLabel: 'Snippet-Fensterbereich',
+    closeWindowLabel: 'Fenster schließen',
     emptySearchText: 'Keine passenden Einträge gefunden.',
     openAllLabel: 'Alle Fenster öffnen',
     closeAllLabel: 'Alles schließen',
     dragLabel: 'Fenster verschieben',
     resizeLabel: 'Fenster skalieren',
+    codeExampleLabel: 'Code-Beispiel',
     copyLabel: 'Code kopieren',
     copySuccess: 'Alt- und Neu-Beispiel wurden kopiert.',
     emptyTitle: 'Kein Fenster aktiv.',
-    emptyText: 'Wähle links einen Blogeintrag aus.',
+    emptyText: 'Wähle links ein Snippet aus.',
     supportLabel: 'Support',
     previewLabel: 'Vorschau',
     previewFlexText: 'Eine Linie, flexible Verteilung.',
@@ -561,7 +577,9 @@ const BLOG_PAGE_TEXTS: Record<'de' | 'en', BlogPageTexts> = {
     previewNthChildText: 'Jede Position muss manuell definiert werden.',
     previewSiblingText: 'Index und Anzahl kommen aus dem DOM.',
     previewDefaultSelectText: 'Funktioniert zuverlässig, bleibt aber visuell stark vom Browser und Betriebssystem geprägt.',
+    previewDefaultSelectLabel: 'Klassische Select-Vorschau',
     previewNativeSelectText: 'Mehr Gestaltungsspielraum, ohne das Element komplett selbst nachzubauen.',
+    previewNativeSelectLabel: 'Moderne Select-Vorschau',
     oldCodeLabel: 'Alt / klassisch',
     newCodeLabel: 'Neu / besser',
     demoLabel: 'Demo-Datei',
@@ -602,7 +620,7 @@ const BLOG_PAGE_TEXTS: Record<'de' | 'en', BlogPageTexts> = {
   grid-auto-rows: minmax(7rem, auto);
   gap: 1rem;
 }`,
-        demoHref: 'assets/blog-demos/flex-vs-grid.html',
+        demoHref: 'assets/snippet-demos/flex-vs-grid.html',
         notes: [
           'Flexbox ist ideal, wenn Inhalte auf einer Hauptachse verteilt werden müssen.',
           'Grid ist ideal, wenn die Gesamtfläche geplant wird und Spalten sowie Reihen zusammenarbeiten.',
@@ -636,7 +654,7 @@ const BLOG_PAGE_TEXTS: Record<'de' | 'en', BlogPageTexts> = {
   background: rgba(167, 255, 25, calc(.20 + var(--i) / var(--count) * .70));
   transition-delay: calc(var(--i) * 70ms);
 }`,
-        demoHref: 'assets/blog-demos/css-can-count-elements.html',
+        demoHref: 'assets/snippet-demos/css-can-count-elements.html',
         notes: [
           'sibling-index() liefert die Position des aktuellen Elements und startet bei 1.',
           'sibling-count() liefert die Anzahl der Geschwisterelemente inklusive aktuellem Element.',
@@ -692,7 +710,7 @@ select.custom-select:open {
   background: #a7ff19;
   color: #101010;
 }`,
-        demoHref: 'assets/blog-demos/native-select.html',
+        demoHref: 'assets/snippet-demos/native-select.html',
         notes: [
           'Spannend für eigene Form-Designs ohne komplett selbst gebautes Dropdown.',
           'Der Picker landet im Top Layer und verhält sich eher wie ein Popover.',
@@ -714,7 +732,7 @@ select.custom-select:open {
         code: `.spinner {\n  width: 2.5rem;\n  aspect-ratio: 1;\n  border: 3px solid currentColor;\n  border-right-color: transparent;\n  border-radius: 50%;\n  animation: spin 720ms linear infinite;\n}`,
         oldCode: `import Spinner from 'some-loader-package';\n\nexport function Loader() {\n  return <Spinner />;\n}`,
         newCode: `.spinner {\n  width: 2.5rem;\n  aspect-ratio: 1;\n  border: 3px solid currentColor;\n  border-right-color: transparent;\n  border-radius: 50%;\n  animation: spin 720ms linear infinite;\n}`,
-        demoHref: 'assets/blog-demos/simple-css-spinner.html',
+        demoHref: 'assets/snippet-demos/simple-css-spinner.html',
         notes: [
           'Für echte Statusmeldungen zusätzlich Text oder aria-live nutzen.',
           'Reduced Motion nicht vergessen.',
@@ -736,7 +754,7 @@ select.custom-select:open {
         code: `readonly count = signal<number>(0);\nreadonly doubled = computed<number>(() => this.count() * 2);`,
         oldCode: `readonly count$ = new BehaviorSubject(0);\nreadonly doubled$ = this.count$.pipe(\n  map((value) => value * 2),\n);`,
         newCode: `readonly count = signal<number>(0);\nreadonly doubled = computed<number>(() => this.count() * 2);\n\nincrement(): void {\n  this.count.update((value) => value + 1);\n}`,
-        demoHref: 'assets/blog-demos/angular-signals-workflow.ts',
+        demoHref: 'assets/snippet-demos/angular-signals-workflow.ts',
         notes: [
           'State wird dort gelesen, wo Angular ihn tracken kann.',
           'computed() eignet sich für reine Ableitungen.',
@@ -758,7 +776,7 @@ select.custom-select:open {
         code: `console.log('%cDEVMODE ACTIVATED', style);`,
         oldCode: `console.log('devmode activated');\nconsole.log('feature flag enabled');`,
         newCode: `const style = [\n  'background:#101010',\n  'color:#a7ff19',\n  'border:2px solid #a7ff19',\n  'padding:8px 12px'\n].join(';');\n\nconsole.log('%cDEVMODE ACTIVATED', style);`,
-        demoHref: 'assets/blog-demos/devmode-console-style.html',
+        demoHref: 'assets/snippet-demos/devmode-console-style.html',
         notes: [
           'Gut für lokale Debug-Hinweise, aber kein Ersatz für Logging-Konzept.',
           'Keine sensiblen Daten in die Konsole schreiben.',
@@ -768,25 +786,29 @@ select.custom-select:open {
     ],
   },
   en: {
-    metaTitle: 'Blog | CSS, Angular and Web Snippets | Benjamin Bennewitz',
-    metaDescription: 'Small visual blog entries with CSS, SCSS, Angular, Django and DevTools snippets in an overloaded retro window interface.',
+    metaTitle: 'Snippets | CSS, Angular and Web Snippets | Benjamin Bennewitz',
+    metaDescription: 'Short visual code snippets for CSS, SCSS, Angular and DevTools with examples, previews and support notes.',
     backLabel: 'Back to the experience',
-    eyebrow: 'blog_index.exe',
-    title: 'Code Blog.',
+    eyebrow: 'snippet_index.exe',
+    title: 'Code Snippets.',
     intro: 'Short web notes, CSS updates and workflow windows with code, preview and support hints.',
-    listTitle: 'Blog index',
-    searchLabel: 'Search blog',
+    listTitle: 'Snippets index',
+    searchLabel: 'Search snippets',
     searchPlaceholder: 'Search for CSS, Angular, spinner ...',
     searchResultLabel: 'Results',
+    clearSearchLabel: 'Clear search',
+    desktopLabel: 'Snippet window area',
+    closeWindowLabel: 'Close window',
     emptySearchText: 'No matching entries found.',
     openAllLabel: 'Open all windows',
     closeAllLabel: 'Close all',
     dragLabel: 'Move window',
     resizeLabel: 'Resize window',
+    codeExampleLabel: 'Code example',
     copyLabel: 'Copy code',
     copySuccess: 'Old and new example copied.',
     emptyTitle: 'No active window.',
-    emptyText: 'Pick a blog entry on the left.',
+    emptyText: 'Pick a snippet on the left.',
     supportLabel: 'Support',
     previewLabel: 'Preview',
     previewFlexText: 'One line, flexible distribution.',
@@ -794,7 +816,9 @@ select.custom-select:open {
     previewNthChildText: 'Every position has to be defined manually.',
     previewSiblingText: 'Index and count come from the DOM.',
     previewDefaultSelectText: 'Reliable functionality, but the visual result is still strongly shaped by the browser and operating system.',
+    previewDefaultSelectLabel: 'Classic select preview',
     previewNativeSelectText: 'More visual control without rebuilding the entire dropdown yourself.',
+    previewNativeSelectLabel: 'Modern select preview',
     oldCodeLabel: 'Old / classic',
     newCodeLabel: 'New / better',
     demoLabel: 'Demo file',
@@ -835,7 +859,7 @@ select.custom-select:open {
   grid-auto-rows: minmax(7rem, auto);
   gap: 1rem;
 }`,
-        demoHref: 'assets/blog-demos/flex-vs-grid.html',
+        demoHref: 'assets/snippet-demos/flex-vs-grid.html',
         notes: ['Flexbox is ideal when content is distributed on one main axis.', 'Grid is ideal when the whole area is planned and columns plus rows work together.', 'In real interfaces, combining both is strong: Grid for the layout, Flex for content inside areas.'],
       },
       {
@@ -865,7 +889,7 @@ select.custom-select:open {
   background: rgba(167, 255, 25, calc(.20 + var(--i) / var(--count) * .70));
   transition-delay: calc(var(--i) * 70ms);
 }`,
-        demoHref: 'assets/blog-demos/css-can-count-elements.html',
+        demoHref: 'assets/snippet-demos/css-can-count-elements.html',
         notes: ['sibling-index() returns the current element position and starts at 1.', 'sibling-count() returns the number of sibling elements including the current one.', 'Good use case: card grids, staggered reveals, dynamic gradients or weighting without JavaScript.', 'For production work, keep an @supports fallback for now.'],
       },
       {
@@ -916,7 +940,7 @@ select.custom-select:open {
   background: #a7ff19;
   color: #101010;
 }`,
-        demoHref: 'assets/blog-demos/native-select.html',
+        demoHref: 'assets/snippet-demos/native-select.html',
         notes: ['Interesting for custom form design without a fully custom dropdown.', 'The picker is rendered in the top layer and behaves more like a popover.', 'Use it as progressive enhancement instead of blindly relying on it everywhere.'],
       },
       {
@@ -934,7 +958,7 @@ select.custom-select:open {
         code: `.spinner {\n  width: 2.5rem;\n  aspect-ratio: 1;\n  border: 3px solid currentColor;\n  border-right-color: transparent;\n  border-radius: 50%;\n  animation: spin 720ms linear infinite;\n}`,
         oldCode: `import Spinner from 'some-loader-package';\n\nexport function Loader() {\n  return <Spinner />;\n}`,
         newCode: `.spinner {\n  width: 2.5rem;\n  aspect-ratio: 1;\n  border: 3px solid currentColor;\n  border-right-color: transparent;\n  border-radius: 50%;\n  animation: spin 720ms linear infinite;\n}`,
-        demoHref: 'assets/blog-demos/simple-css-spinner.html',
+        demoHref: 'assets/snippet-demos/simple-css-spinner.html',
         notes: ['For real status feedback, add text or aria-live.', 'Do not forget reduced motion.', 'For skeletons or progress states, smaller movement is often enough.'],
       },
       {
@@ -952,7 +976,7 @@ select.custom-select:open {
         code: `readonly count = signal<number>(0);\nreadonly doubled = computed<number>(() => this.count() * 2);`,
         oldCode: `readonly count$ = new BehaviorSubject(0);\nreadonly doubled$ = this.count$.pipe(\n  map((value) => value * 2),\n);`,
         newCode: `readonly count = signal<number>(0);\nreadonly doubled = computed<number>(() => this.count() * 2);\n\nincrement(): void {\n  this.count.update((value) => value + 1);\n}`,
-        demoHref: 'assets/blog-demos/angular-signals-workflow.ts',
+        demoHref: 'assets/snippet-demos/angular-signals-workflow.ts',
         notes: ['State is read where Angular can track it.', 'computed() is ideal for pure derived values.', 'Use effect() carefully: for localStorage, titles or external APIs.'],
       },
       {
@@ -970,7 +994,7 @@ select.custom-select:open {
         code: `console.log('%cDEVMODE ACTIVATED', style);`,
         oldCode: `console.log('devmode activated');\nconsole.log('feature flag enabled');`,
         newCode: `const style = [\n  'background:#101010',\n  'color:#a7ff19',\n  'border:2px solid #a7ff19',\n  'padding:8px 12px'\n].join(';');\n\nconsole.log('%cDEVMODE ACTIVATED', style);`,
-        demoHref: 'assets/blog-demos/devmode-console-style.html',
+        demoHref: 'assets/snippet-demos/devmode-console-style.html',
         notes: ['Good for local debug hints, but not a replacement for logging architecture.', 'Do not write sensitive data into the console.', 'Visual console markers help a lot in complex frontends.'],
       },
     ],

@@ -47,7 +47,7 @@ export class LanguageService {
     this.languageSignal.set(language);
   }
 
-  /** Liest die initiale Sprache aus LocalStorage, Browserliste oder Deutsch als Fallback. */
+  /** Liest die initiale Sprache aus LocalStorage oder verwendet Deutsch als Standardsprache. */
   private readInitialLanguage(): PortfolioLanguage {
     const savedLanguage = localStorage.getItem(this.storageKey);
 
@@ -55,13 +55,6 @@ export class LanguageService {
       return savedLanguage;
     }
 
-    return this.browserPrefersEnglish() ? 'en' : 'de';
-  }
-
-  /** Prüft, ob die Browser- oder Systemsprache Englisch bevorzugt. */
-  private browserPrefersEnglish(): boolean {
-    const languages = navigator.languages?.length ? navigator.languages : [navigator.language];
-
-    return languages.some((language) => language.toLowerCase().startsWith('en'));
+    return 'de';
   }
 }

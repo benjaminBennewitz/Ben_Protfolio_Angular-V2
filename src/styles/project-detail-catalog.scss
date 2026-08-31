@@ -429,9 +429,7 @@ body.bp-lightbox-open {
 
 .project-detail__catalog-reader-intro {
   position: relative;
-  left: 50%;
-  width: 100vw;
-  margin-left: -50vw;
+  width: 100%;
   padding: clamp(4.2rem, 8vw, 7rem) var(--bp-stage-gutter) clamp(1.4rem, 3vw, 2.4rem);
   overflow-x: clip;
   background:
@@ -469,10 +467,8 @@ body.bp-lightbox-open {
 
 .project-detail__catalog-reader-section {
   position: relative;
-  left: 50%;
-  width: 100vw;
+  width: 100%;
   min-height: 100svh;
-  margin-left: -50vw;
   padding: calc(var(--bp-header-height) + clamp(0.5rem, 1.4vh, 1rem)) clamp(0.75rem, 2vw, 2rem) clamp(0.75rem, 2.4vh, 1.5rem);
   overflow: hidden;
   background:
@@ -1134,10 +1130,6 @@ body.bp-lightbox-open {
   z-index: 10000;
   inset: 0;
   display: grid;
-  width: 100vw;
-  height: 100vh;
-  width: 100svw;
-  height: 100svh;
   place-items: center;
   overflow: hidden;
   padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));

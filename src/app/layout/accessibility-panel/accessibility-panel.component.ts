@@ -5,7 +5,7 @@
  * @description Bietet Motion-, Comfort-, Kontrast- und Farbseh-Modi als direkte Seitenmodifikation an.
  */
 
-import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, ElementRef, ViewChild, computed, inject, signal } from '@angular/core';
 import { AccessibilityPreferenceService, ColorVisionMode, ComfortMode, ContrastMode, MotionMode } from '../../core/services/accessibility-preference.service';
 import { LanguageService } from '../../core/services/language.service';
 import { SystemToastService } from '../../core/services/system-toast.service';
@@ -17,8 +17,12 @@ import { AchievementService } from '../../core/services/achievement.service';
 interface AccessibilityPanelTexts {
   /** Aria-Label des Öffnen-Buttons. */
   readonly toggleLabel: string;
+  /** Label des globalen Accessibility-Bereichs. */
+  readonly landmarkLabel: string;
   /** Fenstertitel. */
   readonly title: string;
+  /** Zugängliche Beschriftung zum Schließen des Panels. */
+  readonly closeLabel: string;
   /** Kurzbeschreibung. */
   readonly intro: string;
   /** Titel des Hover-Status am globalen Button. */
@@ -59,6 +63,14 @@ interface AccessibilityPanelTexts {
   styleUrl: './accessibility-panel.component.scss',
 })
 export class AccessibilityPanelComponent {
+  /** Dialogelement für initialen Fokus und Fokusfalle. */
+  @ViewChild('panelWindow') private panelWindow?: ElementRef<HTMLElement>;
+
+  /** Element, das das Panel geöffnet hat. */
+  private panelReturnFocus: HTMLElement | null = null;
+
+  /** Geplanter Frame für Fokuswechsel beim Öffnen und Schließen. */
+  private panelFocusFrameId = 0;
   /** Accessibility-Service mit persistierten Modi. */
   readonly accessibility = inject(AccessibilityPreferenceService);
 
@@ -112,17 +124,46 @@ export class AccessibilityPanelComponent {
   constructor() {
     this.overlayService.accessibilityPanelRequested$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.open.set(true));
+      .subscribe(() => this.openPanel());
   }
 
   /** Öffnet oder schließt das Panel. */
   toggleOpen(): void {
-    this.open.update((isOpen) => !isOpen);
+    if (this.open()) {
+      this.close();
+      return;
+    }
+
+    this.openPanel();
   }
 
-  /** Schließt das Panel. */
+  /** Schließt das Panel und stellt den vorherigen Tastaturfokus wieder her. */
   close(): void {
+    if (!this.open()) {
+      return;
+    }
+
+    const returnFocus = this.panelReturnFocus;
     this.open.set(false);
+    this.panelReturnFocus = null;
+    this.schedulePanelFocusReturn(returnFocus);
+  }
+
+  /** Hält Tastaturbedienung innerhalb des modalen Panels und unterstützt Escape. */
+  handlePanelKeydown(event: KeyboardEvent): void {
+    if (!this.open()) {
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.close();
+      return;
+    }
+
+    if (event.key === 'Tab') {
+      this.trapPanelFocus(event);
+    }
   }
 
   /** Aktiviert den neuro-sensitiven Modus und zeigt einen kurzen Statushinweis. */
@@ -166,6 +207,74 @@ export class AccessibilityPanelComponent {
     this.showAccessibilityToast();
   }
 
+  /** Öffnet das Panel und setzt den Fokus auf die erste Bedienaktion. */
+  private openPanel(): void {
+    if (this.open()) {
+      return;
+    }
+
+    this.panelReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    this.open.set(true);
+    this.cancelPanelFocusFrame();
+    this.panelFocusFrameId = window.requestAnimationFrame(() => {
+      this.panelFocusFrameId = 0;
+      this.panelWindow?.nativeElement.querySelector<HTMLElement>('button:not([disabled])')?.focus({ preventScroll: true });
+    });
+  }
+
+  /** Begrenzt die Tab-Reihenfolge auf die Bedienelemente des geöffneten Panels. */
+  private trapPanelFocus(event: KeyboardEvent): void {
+    const panel = this.panelWindow?.nativeElement;
+
+    if (!panel) {
+      return;
+    }
+
+    const focusableElements = Array.from(panel.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')) as HTMLElement[];
+
+    if (!focusableElements.length) {
+      event.preventDefault();
+      panel.focus({ preventScroll: true });
+      return;
+    }
+
+    const first = focusableElements[0];
+    const last = focusableElements[focusableElements.length - 1];
+    const activeElement = document.activeElement;
+
+    if (event.shiftKey && (activeElement === first || !panel.contains(activeElement))) {
+      event.preventDefault();
+      last.focus({ preventScroll: true });
+      return;
+    }
+
+    if (!event.shiftKey && (activeElement === last || !panel.contains(activeElement))) {
+      event.preventDefault();
+      first.focus({ preventScroll: true });
+    }
+  }
+
+  /** Stellt nach dem Schließen den Fokus auf Auslöser oder globalen Trigger zurück. */
+  private schedulePanelFocusReturn(target: HTMLElement | null): void {
+    this.cancelPanelFocusFrame();
+    this.panelFocusFrameId = window.requestAnimationFrame(() => {
+      this.panelFocusFrameId = 0;
+      const fallback = document.querySelector<HTMLElement>('.access-panel__toggle');
+      const focusTarget = target?.isConnected ? target : fallback;
+      focusTarget?.focus({ preventScroll: true });
+    });
+  }
+
+  /** Bricht einen noch offenen Fokus-Frame des Panels ab. */
+  private cancelPanelFocusFrame(): void {
+    if (!this.panelFocusFrameId) {
+      return;
+    }
+
+    window.cancelAnimationFrame(this.panelFocusFrameId);
+    this.panelFocusFrameId = 0;
+  }
+
   /** Schaltet die Access-Mode-Trophäe frei. */
   private unlockAccessAchievement(): void {
     this.achievementService.unlock('world-upside-down');
@@ -181,7 +290,9 @@ export class AccessibilityPanelComponent {
 const PANEL_TEXTS: Record<'de' | 'en', AccessibilityPanelTexts> = {
   de: {
     toggleLabel: 'Accessibility-Modi öffnen',
+    landmarkLabel: 'Accessibility-Einstellungen',
     title: 'Access-Modus',
+    closeLabel: 'Accessibility-Panel schließen',
     intro: 'Passe Bewegung, Komplexität, Kontrast und Akzentfarben direkt an.',
     statusTitle: 'Barrierefreiheit',
     calmMode: 'Neuro-sensitiven Modus aktivieren',
@@ -216,7 +327,9 @@ const PANEL_TEXTS: Record<'de' | 'en', AccessibilityPanelTexts> = {
   },
   en: {
     toggleLabel: 'Open accessibility modes',
+    landmarkLabel: 'Accessibility settings',
     title: 'Access Mode',
+    closeLabel: 'Close accessibility panel',
     intro: 'Adjust motion, complexity, contrast and accent colors directly.',
     statusTitle: 'Accessibility',
     calmMode: 'Enable neuro-sensitive mode',

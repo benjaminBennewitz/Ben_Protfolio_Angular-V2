@@ -52,6 +52,18 @@
   scroll-snap-stop: always;
 }
 
+.chaos-cta__contact-link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+}
+
+.chaos-cta__contact-link:focus-visible {
+  outline: 3px solid var(--bp-color-accent);
+  outline-offset: -6px;
+}
+
 /* ==========================================================================
    02   Hintergrund
    ========================================================================== */
@@ -83,6 +95,7 @@
 .chaos-cta__copy {
   position: relative;
   z-index: 3;
+  pointer-events: none;
   width: min(100%, var(--bp-content-max-width));
   max-width: var(--bp-content-max-width);
   margin-inline: auto;

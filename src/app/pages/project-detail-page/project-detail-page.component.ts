@@ -111,6 +111,21 @@ export class ProjectDetailPageComponent implements OnDestroy {
   /** Scrollposition vor dem Öffnen der Lightbox. */
   private lightboxScrollTop = 0;
 
+  /** Element, das vor dem Öffnen der Lightbox fokussiert war. */
+  private galleryLightboxReturnFocus: HTMLElement | null = null;
+
+  /** Geplanter Fokus-Frame für Öffnen und Schließen der Lightbox. */
+  private galleryLightboxFocusFrameId = 0;
+
+  /** Trigger des Katalog-Inhaltsverzeichnisses für den Fokus-Rücksprung. */
+  @ViewChild('catalogMenuTrigger') private catalogMenuTrigger?: ElementRef<HTMLButtonElement>;
+
+  /** Modales Inhaltsverzeichnis des Designkatalogs. */
+  @ViewChild('catalogMenuDialog') private catalogMenuDialog?: ElementRef<HTMLElement>;
+
+  /** Geplanter Fokus-Frame für das Katalog-Inhaltsverzeichnis. */
+  private catalogMenuFocusFrameId = 0;
+
   /** Gibt an, ob der Body-Scroll wegen einer offenen Lightbox gesperrt ist. */
   private isLightboxScrollLocked = false;
 
@@ -298,6 +313,9 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.galleryLightboxSwitchToken += 1;
     this.resetGalleryLightboxSwitch();
     this.unlockGalleryLightboxScroll();
+    this.cancelGalleryLightboxFocusFrame();
+    this.galleryLightboxReturnFocus = null;
+    this.cancelCatalogMenuFocusFrame();
     this.clearProjectScrollResetFrames();
   }
 
@@ -339,12 +357,24 @@ export class ProjectDetailPageComponent implements OnDestroy {
   /** Öffnet oder schließt das Inhaltsverzeichnis des Designkatalogs. */
   toggleCatalogMenu(): void {
     this.hideCatalogLoupe();
-    this.isCatalogMenuOpen.update((isOpen) => !isOpen);
+
+    if (this.isCatalogMenuOpen()) {
+      this.closeCatalogMenu();
+      return;
+    }
+
+    this.isCatalogMenuOpen.set(true);
+    this.scheduleCatalogMenuInitialFocus();
   }
 
-  /** Schließt das Inhaltsverzeichnis des Designkatalogs. */
+  /** Schließt das Inhaltsverzeichnis des Designkatalogs und setzt den Fokus zurück. */
   closeCatalogMenu(): void {
+    if (!this.isCatalogMenuOpen()) {
+      return;
+    }
+
     this.isCatalogMenuOpen.set(false);
+    this.scheduleCatalogMenuFocusReturn();
   }
 
   /** Wechselt zur vorherigen oder nächsten Katalog-Doppelseite. */
@@ -388,10 +418,28 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.catalogLoupe.set({ isVisible: false, pageNumber: '', x: 0, y: 0, width: 0, height: 0, asset: '', backgroundSize: '', backgroundPosition: '' });
   }
 
-  /** Reagiert auf Tastaturbefehle innerhalb der gemeinsamen Projekt-Lightbox. */
+  /** Reagiert auf Tastaturbefehle innerhalb der modalen Projekt-Overlays. */
   @HostListener('window:keydown', ['$event'])
   handleWindowKeydown(event: KeyboardEvent): void {
+    if (this.isCatalogMenuOpen()) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        this.closeCatalogMenu();
+        return;
+      }
+
+      if (event.key === 'Tab') {
+        this.trapCatalogMenuFocus(event);
+        return;
+      }
+    }
+
     if (this.activeGalleryLightboxIndex() === null) {
+      return;
+    }
+
+    if (event.key === 'Tab') {
+      this.trapGalleryLightboxFocus(event);
       return;
     }
 
@@ -423,15 +471,148 @@ export class ProjectDetailPageComponent implements OnDestroy {
 
     this.resetGalleryLightboxSwitch();
     this.pendingGalleryLightboxIndex = index;
+    this.galleryLightboxReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     this.galleryLightboxBackground.set(items[index].backgroundColor ?? '#0a070d');
     this.activeGalleryLightboxIndex.set(index);
+    this.scheduleGalleryLightboxInitialFocus();
   }
 
   /** Schließt die gemeinsame Projekt-Lightbox. */
   closeGalleryLightbox(): void {
+    const returnFocus = this.galleryLightboxReturnFocus;
+
     this.galleryLightboxSwitchToken += 1;
     this.resetGalleryLightboxSwitch();
     this.activeGalleryLightboxIndex.set(null);
+    this.galleryLightboxReturnFocus = null;
+    this.scheduleGalleryLightboxReturnFocus(returnFocus);
+  }
+
+  /** Setzt den Fokus nach dem Öffnen auf den Schließen-Button des Katalogmenüs. */
+  private scheduleCatalogMenuInitialFocus(): void {
+    this.cancelCatalogMenuFocusFrame();
+    this.catalogMenuFocusFrameId = window.requestAnimationFrame(() => {
+      this.catalogMenuFocusFrameId = 0;
+      this.catalogMenuDialog?.nativeElement.querySelector<HTMLElement>('button:not([disabled])')?.focus({ preventScroll: true });
+    });
+  }
+
+  /** Gibt den Fokus nach dem Schließen an den stabilen Katalogmenü-Trigger zurück. */
+  private scheduleCatalogMenuFocusReturn(): void {
+    this.cancelCatalogMenuFocusFrame();
+    this.catalogMenuFocusFrameId = window.requestAnimationFrame(() => {
+      this.catalogMenuFocusFrameId = 0;
+      this.catalogMenuTrigger?.nativeElement.focus({ preventScroll: true });
+    });
+  }
+
+  /** Hält Tab-Navigation innerhalb des geöffneten Katalog-Inhaltsverzeichnisses. */
+  private trapCatalogMenuFocus(event: KeyboardEvent): void {
+    const panel = this.catalogMenuDialog?.nativeElement;
+
+    if (!panel) {
+      return;
+    }
+
+    const focusableElements = Array.from(panel.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')) as HTMLElement[];
+
+    if (!focusableElements.length) {
+      event.preventDefault();
+      panel.focus({ preventScroll: true });
+      return;
+    }
+
+    const first = focusableElements[0];
+    const last = focusableElements[focusableElements.length - 1];
+    const activeElement = document.activeElement;
+
+    if (event.shiftKey && (activeElement === first || !panel.contains(activeElement))) {
+      event.preventDefault();
+      last.focus({ preventScroll: true });
+      return;
+    }
+
+    if (!event.shiftKey && (activeElement === last || !panel.contains(activeElement))) {
+      event.preventDefault();
+      first.focus({ preventScroll: true });
+    }
+  }
+
+  /** Bricht einen noch offenen Fokus-Frame des Katalogmenüs ab. */
+  private cancelCatalogMenuFocusFrame(): void {
+    if (!this.catalogMenuFocusFrameId) {
+      return;
+    }
+
+    window.cancelAnimationFrame(this.catalogMenuFocusFrameId);
+    this.catalogMenuFocusFrameId = 0;
+  }
+
+  /** Setzt den Tastaturfokus nach dem Öffnen auf den Schließen-Button der Lightbox. */
+  private scheduleGalleryLightboxInitialFocus(): void {
+    this.cancelGalleryLightboxFocusFrame();
+    this.galleryLightboxFocusFrameId = window.requestAnimationFrame(() => {
+      this.galleryLightboxFocusFrameId = 0;
+      document.querySelector<HTMLButtonElement>('.project-detail__lightbox-close')?.focus({ preventScroll: true });
+    });
+  }
+
+  /** Gibt den Fokus nach dem Schließen an den auslösenden Button zurück. */
+  private scheduleGalleryLightboxReturnFocus(target: HTMLElement | null): void {
+    this.cancelGalleryLightboxFocusFrame();
+
+    if (!target) {
+      return;
+    }
+
+    this.galleryLightboxFocusFrameId = window.requestAnimationFrame(() => {
+      this.galleryLightboxFocusFrameId = 0;
+
+      if (target.isConnected) {
+        target.focus({ preventScroll: true });
+      }
+    });
+  }
+
+  /** Hält Tab-Navigation innerhalb der geöffneten Lightbox. */
+  private trapGalleryLightboxFocus(event: KeyboardEvent): void {
+    const panel = document.querySelector<HTMLElement>('.project-detail__lightbox-panel');
+
+    if (!panel) {
+      return;
+    }
+
+    const focusableElements = Array.from(panel.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'));
+
+    if (!focusableElements.length) {
+      event.preventDefault();
+      return;
+    }
+
+    const first = focusableElements[0];
+    const last = focusableElements[focusableElements.length - 1];
+    const activeElement = document.activeElement;
+
+    if (event.shiftKey && (activeElement === first || !panel.contains(activeElement))) {
+      event.preventDefault();
+      last.focus({ preventScroll: true });
+      return;
+    }
+
+    if (!event.shiftKey && (activeElement === last || !panel.contains(activeElement))) {
+      event.preventDefault();
+      first.focus({ preventScroll: true });
+    }
+  }
+
+  /** Bricht einen noch offenen Fokus-Frame der Lightbox ab. */
+  private cancelGalleryLightboxFocusFrame(): void {
+    if (!this.galleryLightboxFocusFrameId) {
+      return;
+    }
+
+    window.cancelAnimationFrame(this.galleryLightboxFocusFrameId);
+    this.galleryLightboxFocusFrameId = 0;
   }
 
   /** Wechselt in der gemeinsamen Projekt-Lightbox zum vorherigen oder nächsten Bild. */
@@ -886,6 +1067,7 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.resetGalleryLightboxSwitch();
     this.activeGalleryLightboxIndex.set(null);
     this.isCatalogMenuOpen.set(false);
+    this.cancelCatalogMenuFocusFrame();
     this.hideCatalogLoupe();
     this.isTerminalVisible.set(true);
     this.isCaseNoteVisible.set(true);

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSS sibling-index Demo</title>
+  <style>
+/*###############################
+###
+###     snippet-demo.css
+###     Portfolio Snippet Demo
+###     BASED ON: HTML, CSS, Browser APIs
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+    :root {
+      color-scheme: dark;
+      --bg: #101010;
+      --text: #f6f0e8;
+      --accent: #a7ff19;
+      --muted: rgba(246, 240, 232, .72);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: clamp(1rem, 4vw, 2rem);
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, sans-serif;
+    }
+
+    .demo-shell {
+      display: grid;
+      gap: 1rem;
+      max-width: 900px;
+      margin: auto;
+    }
+
+
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+    }
+
+    .demo-brand {
+      display: inline-grid;
+      place-items: center;
+      width: 2.35rem;
+      height: 2.35rem;
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #101010;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: -.08em;
+    }
+
+    .demo-tag {
+      width: fit-content;
+      border: 1px solid var(--accent);
+      padding: .25rem .55rem;
+      color: var(--accent);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .demo-note,
+    .demo-panel {
+      border: 2px solid var(--accent);
+      padding: 1rem;
+      background: rgba(167, 255, 25, .06);
+    }
+
+    .demo-note p {
+      max-width: 68ch;
+      margin: .35rem 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .8rem;
+    }
+
+    .metric-grid > * {
+      min-height: 6.5rem;
+      border: 1px solid var(--accent);
+      padding: 1rem;
+      background: rgba(167, 255, 25, .09);
+      color: var(--text);
+      transition: background-color .2s ease, color .2s ease, transform .2s ease;
+    }
+
+    .metric-grid--fallback > *:nth-child(1) { background: rgba(167, 255, 25, .24); color: #101010; }
+    .metric-grid--fallback > *:nth-child(2) { background: rgba(167, 255, 25, .42); color: #101010; }
+    .metric-grid--fallback > *:nth-child(3) { background: rgba(167, 255, 25, .62); color: #101010; }
+    .metric-grid--fallback > *:nth-child(4) { background: rgba(167, 255, 25, .82); color: #101010; }
+
+    @supports (background: rgba(167, 255, 25, calc(sibling-index() / sibling-count()))) {
+      .metric-grid--dynamic > * {
+        --i: sibling-index();
+        --count: sibling-count();
+        background: rgba(167, 255, 25, calc(.20 + var(--i) / var(--count) * .70));
+        color: #101010;
+        transform: translateY(calc(var(--i) * -2px));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .compare,
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="demo-shell">
+    <header class="demo-header">
+      <span class="demo-brand" aria-hidden="true">B²</span>
+      <span class="demo-tag">CSS Values Demo</span>
+    </header>
+    <article class="demo-note">
+      <strong>Use-Case:</strong>
+      <p>Ein Kartenraster kann Staffelung oder visuelle Gewichtung aus seiner eigenen Position ableiten, ohne jede Karte manuell per nth-child zu pflegen.</p>
+    </article>
+
+    <div class="compare">
+      <section class="demo-panel">
+        <h1>Fallback: nth-child</h1>
+        <div class="metric-grid metric-grid--fallback">
+          <article>01 Analyse</article>
+          <article>02 Daten</article>
+          <article>03 UI</article>
+          <article>04 Release</article>
+        </div>
+      </section>
+
+      <section class="demo-panel">
+        <h1>Dynamisch: sibling()</h1>
+        <div class="metric-grid metric-grid--dynamic">
+          <article>01 Analyse</article>
+          <article>02 Daten</article>
+          <article>03 UI</article>
+          <article>04 Release</article>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,8 +1,8 @@
-<!-- src/app/pages/blog-page/blog-page.component.html -->
-<main class="blog-page bp-section">
-  <div class="blog-page__shell bp-container">
-    <aside class="blog-page__sidebar bp-card" aria-labelledby="blog-list-title">
-      <a class="blog-page__back" routerLink="/" fragment="hero">
+<!-- src/app/pages/snippets-page/snippets-page.component.html -->
+<main class="snippet-page bp-section">
+  <div class="snippet-page__shell bp-container">
+    <aside class="snippet-page__sidebar bp-card" aria-labelledby="snippet-list-title">
+      <a class="snippet-page__back" routerLink="/" fragment="hero">
         <span class="material-symbols-outlined" aria-hidden="true">keyboard_backspace</span>
         <span>{{ texts().backLabel }}</span>
       </a>
@@ -11,7 +11,7 @@
       <h1>{{ texts().title }}</h1>
       <p>{{ texts().intro }}</p>
 
-      <div class="blog-page__actions">
+      <div class="snippet-page__actions">
         <button type="button" (click)="openAllEntries()">
           <span class="material-symbols-outlined" aria-hidden="true">select_all</span>
           <span>{{ texts().openAllLabel }}</span>
@@ -22,14 +22,14 @@
         </button>
       </div>
 
-      <label class="blog-page__search" for="blog-search">
+      <label class="snippet-page__search" for="snippet-search">
         <span>{{ texts().searchLabel }}</span>
-        <span class="blog-page__search-field">
+        <span class="snippet-page__search-field">
           <span class="material-symbols-outlined" aria-hidden="true">manage_search</span>
-          <input id="blog-search" type="search" [value]="searchQuery()" [placeholder]="texts().searchPlaceholder"
+          <input id="snippet-search" type="search" [value]="searchQuery()" [placeholder]="texts().searchPlaceholder"
             (input)="setSearchQuery($event)" autocomplete="off">
           @if (searchQuery()) {
-          <button type="button" aria-label="Suche leeren" (click)="clearSearch()">
+          <button type="button" [attr.aria-label]="texts().clearSearchLabel" (click)="clearSearch()">
             <span class="material-symbols-outlined" aria-hidden="true">close</span>
           </button>
           }
@@ -37,9 +37,9 @@
         <small>{{ filteredEntries().length }} / {{ texts().entries.length }} {{ texts().searchResultLabel }}</small>
       </label>
 
-      <nav class="blog-page__nav" [attr.aria-labelledby]="'blog-list-title'">
-        <h2 id="blog-list-title">{{ texts().listTitle }}</h2>
-        <div class="blog-page__nav-list">
+      <nav class="snippet-page__nav" [attr.aria-labelledby]="'snippet-list-title'">
+        <h2 id="snippet-list-title">{{ texts().listTitle }}</h2>
+        <div class="snippet-page__nav-list">
           @for (entry of filteredEntries(); track entry.slug) {
           <button type="button" [class.is-open]="isEntryOpen(entry.slug)" (click)="openEntry(entry.slug)">
             <span>{{ entry.index }}</span>
@@ -47,25 +47,25 @@
             <small>{{ entry.category }}</small>
           </button>
           } @empty {
-          <p class="blog-page__empty-search">{{ texts().emptySearchText }}</p>
+          <p class="snippet-page__empty-search">{{ texts().emptySearchText }}</p>
           }
         </div>
       </nav>
     </aside>
 
-    <section class="blog-page__desktop" aria-label="Blog Fensterbereich">
-      <div class="blog-page__desktop-head" aria-hidden="true">
+    <section class="snippet-page__desktop" [attr.aria-label]="texts().desktopLabel">
+      <div class="snippet-page__desktop-head" aria-hidden="true">
         <span>desktop://snippet_stack</span>
         <span>{{ visibleWindows().length }} windows open</span>
       </div>
 
       @if (!visibleWindows().length) {
-      <article class="blog-window blog-window--empty">
-        <div class="blog-window__bar">
+      <article class="snippet-window snippet-window--empty">
+        <div class="snippet-window__bar">
           <span>empty_state.exe</span>
           <span aria-hidden="true">×</span>
         </div>
-        <div class="blog-window__body">
+        <div class="snippet-window__body">
           <h2>{{ texts().emptyTitle }}</h2>
           <p>{{ texts().emptyText }}</p>
         </div>
@@ -74,30 +74,30 @@
       }
 
       @for (item of visibleWindows(); track trackWindow(item)) {
-      <article class="blog-window" [attr.data-window-slug]="item.entry.slug" [class.blog-window--stable]="item.entry.supportTone === 'stable'"
-        [class.blog-window--experimental]="item.entry.supportTone === 'experimental'"
-        [class.blog-window--workflow]="item.entry.supportTone === 'workflow'"
-        [style.--blog-window-x]="item.window.x + 'px'" [style.--blog-window-y]="item.window.y + 'px'"
+      <article class="snippet-window" [attr.data-window-slug]="item.entry.slug" [class.snippet-window--stable]="item.entry.supportTone === 'stable'"
+        [class.snippet-window--experimental]="item.entry.supportTone === 'experimental'"
+        [class.snippet-window--workflow]="item.entry.supportTone === 'workflow'"
+        [style.--snippet-window-x]="item.window.x + 'px'" [style.--snippet-window-y]="item.window.y + 'px'"
         [style.width.px]="item.window.width ?? null" [style.height.px]="item.window.height ?? null"
         [style.z-index]="item.window.zIndex" (pointerdown)="focusWindow(item.entry.slug)">
-        <div class="blog-window__bar" [attr.title]="texts().dragLabel"
+        <div class="snippet-window__bar" [attr.title]="texts().dragLabel"
           (pointerdown)="startWindowDrag(item.entry.slug, $event)">
           <span>{{ item.entry.slug }}.exe</span>
-          <button type="button" [attr.aria-label]="item.entry.title + ' schließen'"
+          <button type="button" [attr.aria-label]="texts().closeWindowLabel + ': ' + item.entry.title"
             (click)="closeEntry(item.entry.slug, $event)">×</button>
         </div>
 
-        <div class="blog-window__body">
-          <header class="blog-window__header">
+        <div class="snippet-window__body">
+          <header class="snippet-window__header">
             <span>{{ item.entry.index }} / {{ item.entry.category }}</span>
             <h2>{{ item.entry.title }}</h2>
             <p>{{ item.entry.subtitle }}</p>
           </header>
 
-          <p class="blog-window__summary">{{ item.entry.summary }}</p>
+          <p class="snippet-window__summary">{{ item.entry.summary }}</p>
 
-          <div class="blog-window__meta">
-            <span class="blog-window__support">
+          <div class="snippet-window__meta">
+            <span class="snippet-window__support">
               <b>{{ texts().supportLabel }}</b>
               {{ item.entry.support }}
             </span>
@@ -106,21 +106,21 @@
             }
           </div>
 
-          <section class="blog-preview" [class.blog-preview--layout]="item.entry.previewType === 'layout'"
-            [class.blog-preview--count]="item.entry.previewType === 'count'"
-            [class.blog-preview--select]="item.entry.previewType === 'select'"
-            [class.blog-preview--spinner]="item.entry.previewType === 'spinner'"
-            [class.blog-preview--signals]="item.entry.previewType === 'signals'"
-            [class.blog-preview--console]="item.entry.previewType === 'console'"
+          <section class="snippet-preview" [class.snippet-preview--layout]="item.entry.previewType === 'layout'"
+            [class.snippet-preview--count]="item.entry.previewType === 'count'"
+            [class.snippet-preview--select]="item.entry.previewType === 'select'"
+            [class.snippet-preview--spinner]="item.entry.previewType === 'spinner'"
+            [class.snippet-preview--signals]="item.entry.previewType === 'signals'"
+            [class.snippet-preview--console]="item.entry.previewType === 'console'"
             [attr.aria-label]="texts().previewLabel + ': ' + item.entry.title">
-            <div class="blog-preview__head">{{ texts().previewLabel }}</div>
+            <div class="snippet-preview__head">{{ texts().previewLabel }}</div>
 
             @switch (item.entry.previewType) {
             @case ('layout') {
-            <div class="blog-preview__layout-compare">
+            <div class="snippet-preview__layout-compare">
               <article>
                 <strong>Flex</strong>
-                <div class="blog-preview__flex-row">
+                <div class="snippet-preview__flex-row">
                   <span>Logo</span>
                   <span>Nav</span>
                   <span>CTA</span>
@@ -129,7 +129,7 @@
               </article>
               <article>
                 <strong>Grid</strong>
-                <div class="blog-preview__grid-area">
+                <div class="snippet-preview__grid-area">
                   <span>Hero</span>
                   <span>Card</span>
                   <span>Card</span>
@@ -140,10 +140,10 @@
             </div>
             }
             @case ('count') {
-            <div class="blog-preview__count-compare">
+            <div class="snippet-preview__count-compare">
               <article>
                 <strong>nth-child</strong>
-                <div class="blog-preview__count-row blog-preview__count-row--old">
+                <div class="snippet-preview__count-row snippet-preview__count-row--old">
                   <span style="--preview-index: 1">1</span>
                   <span style="--preview-index: 2">2</span>
                   <span style="--preview-index: 3">3</span>
@@ -153,7 +153,7 @@
               </article>
               <article>
                 <strong>sibling()</strong>
-                <div class="blog-preview__count-grid">
+                <div class="snippet-preview__count-grid">
                   <span style="--preview-index: 1">01</span>
                   <span style="--preview-index: 2">02</span>
                   <span style="--preview-index: 3">03</span>
@@ -164,10 +164,10 @@
             </div>
             }
             @case ('select') {
-            <div class="blog-preview__select-compare">
+            <div class="snippet-preview__select-compare">
               <article>
                 <strong>{{ item.entry.oldCodeLabel || texts().oldCodeLabel }}</strong>
-                <select class="blog-preview__default-select" aria-label="Normale Select Vorschau">
+                <select class="snippet-preview__default-select" [attr.aria-label]="texts().previewDefaultSelectLabel">
                   <option>Website</option>
                   <option>Web-App</option>
                 </select>
@@ -175,7 +175,7 @@
               </article>
               <article>
                 <strong>{{ item.entry.newCodeLabel || texts().newCodeLabel }}</strong>
-                <select class="blog-preview__native-select" aria-label="Base Select Vorschau">
+                <select class="snippet-preview__native-select" [attr.aria-label]="texts().previewNativeSelectLabel">
                   <option>Website</option>
                   <option>Web-App</option>
                   <option>SEO</option>
@@ -185,17 +185,17 @@
             </div>
             }
             @case ('spinner') {
-            <div class="blog-preview__spinner" aria-hidden="true"></div>
+            <div class="snippet-preview__spinner" aria-hidden="true"></div>
             }
             @case ('signals') {
-            <div class="blog-preview__signals">
+            <div class="snippet-preview__signals">
               <span>signal: 3</span>
               <span>computed: 6</span>
               <span>effect: synced</span>
             </div>
             }
             @case ('console') {
-            <div class="blog-preview__console">
+            <div class="snippet-preview__console">
               <span>&gt; %cDEVMODE ACTIVATED</span>
               <strong>debug styles loaded</strong>
             </div>
@@ -203,9 +203,9 @@
             }
           </section>
 
-          <section class="blog-window__code blog-window__code--compare"
-            [attr.aria-label]="item.entry.title + ' Code-Beispiel'">
-            <div class="blog-window__code-head">
+          <section class="snippet-window__code snippet-window__code--compare"
+            [attr.aria-label]="item.entry.title + ': ' + texts().codeExampleLabel">
+            <div class="snippet-window__code-head">
               <span>{{ item.entry.codeLanguage }}</span>
               <button type="button" (click)="copyCode(item.entry, $event)">
                 <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
@@ -213,7 +213,7 @@
               </button>
             </div>
 
-            <div class="blog-window__compare">
+            <div class="snippet-window__compare">
               <article>
                 <h3>{{ item.entry.oldCodeLabel || texts().oldCodeLabel }}</h3>
                 <pre><code>{{ item.entry.oldCode }}</code></pre>
@@ -226,14 +226,14 @@
           </section>
 
           @if (item.entry.demoHref) {
-          <a class="blog-window__demo-link" [href]="item.entry.demoHref" download target="_blank" rel="noopener noreferrer"
+          <a class="snippet-window__demo-link" [href]="item.entry.demoHref" download target="_blank" rel="noopener noreferrer"
             (click)="$event.stopPropagation()">
             <span class="material-symbols-outlined" aria-hidden="true">download</span>
             <span>{{ texts().demoLabel }}</span>
           </a>
           }
 
-          <section class="blog-window__notes" [attr.aria-label]="texts().notesLabel">
+          <section class="snippet-window__notes" [attr.aria-label]="texts().notesLabel">
             <h3>{{ texts().notesLabel }}</h3>
             <ul>
               @for (note of item.entry.notes; track $index) {
@@ -243,7 +243,7 @@
           </section>
         </div>
 
-        <button class="blog-window__resize" type="button" [attr.aria-label]="texts().resizeLabel + ': ' + item.entry.title"
+        <button class="snippet-window__resize" type="button" [attr.aria-label]="texts().resizeLabel + ': ' + item.entry.title"
           [attr.title]="texts().resizeLabel" (pointerdown)="startWindowResize(item.entry.slug, $event)"
           (keydown)="resizeWindowWithKeyboard(item.entry.slug, $event)">
           <span aria-hidden="true">↘</span>

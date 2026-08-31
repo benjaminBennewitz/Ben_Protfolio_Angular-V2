@@ -1,7 +1,9 @@
 <!-- src/app/shared/chaos-cta/chaos-cta.component.html -->
-<section #stageRef class="chaos-cta" id="cta" role="link" tabindex="0" data-cursor="chaos"
-  aria-label="Zur Kontaktsection springen" (click)="goToContact()" (keydown)="onKeyDown($event)"
+<section #stageRef class="chaos-cta" id="cta" data-cursor="chaos"
   (pointermove)="onPointerMove($event)" (pointerleave)="onPointerLeave()">
+  <a class="chaos-cta__contact-link" href="#contact" (click)="goToContact($event)">
+    <span class="bp-sr-only">{{ contactLabel }}</span>
+  </a>
   <div class="chaos-cta__copy bp-motion-copy" bpReveal>
     <bp-reveal-text class="chaos-cta__title-reveal" [eyebrow]="eyebrow" [text]="title" />
     <p>{{ hint }}</p>

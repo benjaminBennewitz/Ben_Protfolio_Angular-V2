@@ -371,7 +371,7 @@
                       <text class="project-detail__svg-label project-detail__svg-label--monitor" x="698" y="512">OBSERVABILITY</text>
                     </g>
 
-                    <g class="project-detail__svg-card project-detail__svg-card--frontends" [class.is-active]="activeArchitectureNode().id === 'frontends'" role="button" tabindex="0" aria-label="Angular Frontends" (click)="selectArchitectureNode('frontends')" (keydown.enter)="selectArchitectureNode('frontends')" (keydown.space)="selectArchitectureNode('frontends')">
+                    <g class="project-detail__svg-card project-detail__svg-card--frontends" [class.is-active]="activeArchitectureNode().id === 'frontends'" role="button" tabindex="0" aria-label="Angular Frontends" (click)="selectArchitectureNode('frontends')" (keydown.enter)="selectArchitectureNode('frontends')" (keydown.space)="$event.preventDefault(); selectArchitectureNode('frontends')">
                       <rect class="project-detail__svg-card-bg" x="42" y="36" width="208" height="168" rx="18"></rect>
                       <rect class="project-detail__svg-icon-bg" x="64" y="82" width="52" height="52" rx="14"></rect>
                       <text class="project-detail__svg-icon" x="90" y="116" text-anchor="middle">deployed_code</text>
@@ -380,7 +380,7 @@
                       <text class="project-detail__svg-title" x="64" y="186">FRONTENDS</text>
                     </g>
 
-                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'auth'" role="button" tabindex="0" aria-label="Auth und Rights" (click)="selectArchitectureNode('auth')" (keydown.enter)="selectArchitectureNode('auth')" (keydown.space)="selectArchitectureNode('auth')">
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'auth'" role="button" tabindex="0" aria-label="Auth und Rights" (click)="selectArchitectureNode('auth')" (keydown.enter)="selectArchitectureNode('auth')" (keydown.space)="$event.preventDefault(); selectArchitectureNode('auth')">
                       <rect class="project-detail__svg-card-bg" x="324" y="42" width="196" height="168" rx="18"></rect>
                       <rect class="project-detail__svg-icon-bg" x="346" y="88" width="52" height="52" rx="14"></rect>
                       <text class="project-detail__svg-icon" x="372" y="122" text-anchor="middle">admin_panel_settings</text>
@@ -389,7 +389,7 @@
                       <text class="project-detail__svg-title project-detail__svg-title--compact" x="346" y="192">RIGHTS</text>
                     </g>
 
-                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'api'" role="button" tabindex="0" aria-label="Django API" (click)="selectArchitectureNode('api')" (keydown.enter)="selectArchitectureNode('api')" (keydown.space)="selectArchitectureNode('api')">
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'api'" role="button" tabindex="0" aria-label="Django API" (click)="selectArchitectureNode('api')" (keydown.enter)="selectArchitectureNode('api')" (keydown.space)="$event.preventDefault(); selectArchitectureNode('api')">
                       <rect class="project-detail__svg-card-bg" x="594" y="42" width="196" height="168" rx="18"></rect>
                       <rect class="project-detail__svg-icon-bg" x="616" y="88" width="52" height="52" rx="14"></rect>
                       <text class="project-detail__svg-icon" x="642" y="122" text-anchor="middle">hub</text>
@@ -397,7 +397,7 @@
                       <text class="project-detail__svg-title project-detail__svg-title--compact" x="616" y="176">DJANGO API</text>
                     </g>
 
-                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'database'" role="button" tabindex="0" aria-label="PostgreSQL Models" (click)="selectArchitectureNode('database')" (keydown.enter)="selectArchitectureNode('database')" (keydown.space)="selectArchitectureNode('database')">
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'database'" role="button" tabindex="0" aria-label="PostgreSQL Models" (click)="selectArchitectureNode('database')" (keydown.enter)="selectArchitectureNode('database')" (keydown.space)="$event.preventDefault(); selectArchitectureNode('database')">
                       <rect class="project-detail__svg-card-bg" x="864" y="42" width="214" height="168" rx="18"></rect>
                       <rect class="project-detail__svg-icon-bg" x="886" y="88" width="52" height="52" rx="14"></rect>
                       <text class="project-detail__svg-icon" x="912" y="122" text-anchor="middle">database</text>
@@ -406,7 +406,7 @@
                       <text class="project-detail__svg-title" x="886" y="190">MODELS</text>
                     </g>
 
-                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'realtime'" role="button" tabindex="0" aria-label="Channels Redis" (click)="selectArchitectureNode('realtime')" (keydown.enter)="selectArchitectureNode('realtime')" (keydown.space)="selectArchitectureNode('realtime')">
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'realtime'" role="button" tabindex="0" aria-label="Channels Redis" (click)="selectArchitectureNode('realtime')" (keydown.enter)="selectArchitectureNode('realtime')" (keydown.space)="$event.preventDefault(); selectArchitectureNode('realtime')">
                       <rect class="project-detail__svg-card-bg" x="324" y="316" width="196" height="168" rx="18"></rect>
                       <rect class="project-detail__svg-icon-bg" x="346" y="362" width="52" height="52" rx="14"></rect>
                       <text class="project-detail__svg-icon" x="372" y="396" text-anchor="middle">stream</text>
@@ -415,7 +415,7 @@
                       <text class="project-detail__svg-title project-detail__svg-title--compact" x="346" y="466">REDIS</text>
                     </g>
 
-                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'workers'" role="button" tabindex="0" aria-label="Celery Jobs" (click)="selectArchitectureNode('workers')" (keydown.enter)="selectArchitectureNode('workers')" (keydown.space)="selectArchitectureNode('workers')">
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'workers'" role="button" tabindex="0" aria-label="Celery Jobs" (click)="selectArchitectureNode('workers')" (keydown.enter)="selectArchitectureNode('workers')" (keydown.space)="$event.preventDefault(); selectArchitectureNode('workers')">
                       <rect class="project-detail__svg-card-bg" x="594" y="316" width="196" height="168" rx="18"></rect>
                       <rect class="project-detail__svg-icon-bg" x="616" y="362" width="52" height="52" rx="14"></rect>
                       <text class="project-detail__svg-icon" x="642" y="396" text-anchor="middle">settings_suggest</text>
@@ -424,7 +424,7 @@
                       <text class="project-detail__svg-title project-detail__svg-title--compact" x="616" y="466">JOBS</text>
                     </g>
 
-                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'ops'" role="button" tabindex="0" aria-label="System Health" (click)="selectArchitectureNode('ops')" (keydown.enter)="selectArchitectureNode('ops')" (keydown.space)="selectArchitectureNode('ops')">
+                    <g class="project-detail__svg-card" [class.is-active]="activeArchitectureNode().id === 'ops'" role="button" tabindex="0" aria-label="System Health" (click)="selectArchitectureNode('ops')" (keydown.enter)="selectArchitectureNode('ops')" (keydown.space)="$event.preventDefault(); selectArchitectureNode('ops')">
                       <rect class="project-detail__svg-card-bg" x="864" y="430" width="214" height="184" rx="18"></rect>
                       <rect class="project-detail__svg-icon-bg" x="886" y="476" width="52" height="52" rx="14"></rect>
                       <text class="project-detail__svg-icon" x="912" y="510" text-anchor="middle">monitor_heart</text>
@@ -643,7 +643,7 @@
       <div class="project-detail__catalog-reader">
         @if (activeCatalogSpread(); as spread) {
         <div class="project-detail__catalog-reader-frame" [attr.aria-label]="catalogShowcase.readerLabel">
-          <button type="button" class="project-detail__catalog-menu-button" [attr.aria-label]="catalogShowcase.tocOpenLabel" [attr.aria-expanded]="isCatalogMenuOpen()" (pointerenter)="hideCatalogLoupe()" (focusin)="hideCatalogLoupe()" (click)="toggleCatalogMenu()">
+          <button #catalogMenuTrigger type="button" class="project-detail__catalog-menu-button" [attr.aria-label]="catalogShowcase.tocOpenLabel" [attr.aria-expanded]="isCatalogMenuOpen()" (pointerenter)="hideCatalogLoupe()" (focusin)="hideCatalogLoupe()" (click)="toggleCatalogMenu()">
             <span class="material-symbols-outlined" aria-hidden="true">menu</span>
             <strong>{{ catalogShowcase.tocTitle }}</strong>
           </button>
@@ -684,7 +684,7 @@
 
         @if (isCatalogMenuOpen()) {
         <div class="project-detail__catalog-toc-backdrop" aria-hidden="true" (click)="closeCatalogMenu()"></div>
-        <aside class="project-detail__catalog-reader-meta bp-card" role="dialog" aria-modal="true" [attr.aria-label]="catalogShowcase.tocTitle" (pointerenter)="hideCatalogLoupe()" (focusin)="hideCatalogLoupe()">
+        <aside #catalogMenuDialog class="project-detail__catalog-reader-meta bp-card" role="dialog" aria-modal="true" tabindex="-1" [attr.aria-label]="catalogShowcase.tocTitle" (pointerenter)="hideCatalogLoupe()" (focusin)="hideCatalogLoupe()">
           <button type="button" class="project-detail__catalog-toc-close" [attr.aria-label]="catalogShowcase.tocCloseLabel" (click)="closeCatalogMenu()">
             <span class="material-symbols-outlined" aria-hidden="true">close</span>
           </button>
@@ -836,7 +836,9 @@
                 <span></span>
               </div>
               @if (item.image) {
-              <img class="project-detail__evidence-image-trigger" [src]="item.image" [alt]="item.alt ?? item.title" loading="lazy" decoding="async" role="button" tabindex="0" [attr.aria-label]="content().projectsIntro.zoomLabel + ': ' + item.title" (click)="openGalleryLightbox(index)" (keydown.enter)="openGalleryLightbox(index)" (keydown.space)="$event.preventDefault(); openGalleryLightbox(index)" />
+              <button type="button" class="project-detail__evidence-image-trigger" [attr.aria-label]="content().projectsIntro.zoomLabel + ': ' + item.title" (click)="openGalleryLightbox(index)">
+                <img [src]="item.image" [alt]="item.alt ?? item.title" loading="lazy" decoding="async" />
+              </button>
               } @else {
               <div class="project-detail__evidence-screen" aria-hidden="true">
                 <span class="material-symbols-outlined">{{ item.icon ?? 'web_asset' }}</span>

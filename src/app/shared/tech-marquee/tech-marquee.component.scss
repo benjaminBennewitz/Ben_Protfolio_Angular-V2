@@ -30,8 +30,8 @@
 
 .marquee {
   position: relative;
-  width: 100vw;
-  margin-inline: calc(50% - 50vw);
+  width: auto;
+  margin-inline: calc(var(--bp-stage-gutter) * -1);
   overflow: hidden;
   border-block: 2px solid var(--bp-color-border-strong);
   background: color-mix(in srgb, var(--bp-color-surface-solid) 84%, transparent);

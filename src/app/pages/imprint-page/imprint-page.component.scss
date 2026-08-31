@@ -4,7 +4,7 @@
    INHALTSVERZEICHNIS
 
    01   Seitenlayout
-   02   Hero und Dialog
+   02   Hero
    03   Karten
    04   Responsive
    ================================================================================================= */
@@ -61,7 +61,7 @@
 }
 
 /* =================================================================================================
-   02   Hero und Dialog
+   02   Hero
    ================================================================================================= */
 
 .imprint__hero {
@@ -115,42 +115,6 @@
 .imprint__hero .bp-subtitle {
   max-width: 32rem;
   font-size: clamp(0.94rem, 1.15vw, 1.08rem);
-}
-
-.imprint__dialog {
-  width: min(320px, 100%);
-  margin-top: var(--bp-space-2);
-  transform: rotate(-1.2deg);
-}
-
-.imprint__dialog .bp-dos-window__bar button {
-  display: grid;
-  place-items: center;
-  width: 1.35rem;
-  height: 1.35rem;
-  border: 1px solid #f2f2f2;
-  cursor: pointer;
-  background: transparent;
-  color: #f2f2f2;
-  font: inherit;
-  line-height: 1;
-  transition: background-color 160ms ease, color 160ms ease, transform 160ms var(--bp-ease-out), box-shadow 160ms ease;
-}
-
-.imprint__dialog .bp-dos-window__bar button:hover,
-.imprint__dialog .bp-dos-window__bar button:focus-visible {
-  background: #ff2b2b;
-  color: #ffffff;
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.36);
-  transform: translate(-1px, -1px);
-}
-
-.imprint__dialog .bp-dos-window__body {
-  min-height: auto;
-}
-
-.imprint__dialog .bp-dos-window__body p {
-  white-space: pre-line;
 }
 
 /* =================================================================================================

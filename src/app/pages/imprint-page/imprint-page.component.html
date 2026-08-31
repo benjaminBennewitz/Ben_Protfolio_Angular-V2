@@ -10,15 +10,6 @@
       <p class="bp-eyebrow">{{ imprint().eyebrow }}</p>
       <h1 id="imprint-title">{{ imprint().title }}</h1>
       <p class="bp-subtitle">{{ imprint().intro }}</p>
-
-      @if (isLegalDialogVisible()) {
-      <bp-system-dialog class="imprint__dialog" [title]="imprint().dialogTitle" ariaLabel="Legal Check"
-        closeLabel="Legal-Check schließen" (closed)="closeLegalDialog()">
-        <div class="bp-dos-window__body">
-          <p>{{ imprint().dialogText }}</p>
-        </div>
-      </bp-system-dialog>
-      }
     </section>
 
     <section class="imprint__cards" aria-label="Impressumsangaben">

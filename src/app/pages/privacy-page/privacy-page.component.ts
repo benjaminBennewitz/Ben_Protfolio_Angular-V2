@@ -239,7 +239,7 @@ const PRIVACY_CONTENT: Record<'de' | 'en', PrivacyPageContent> = {
         tone: 'accent',
         text: [
           'Verantwortlich für dieses Portfolio ist Benjamin Bennewitz, c/o Linzer Straße 45, 53604 Bad Honnef, Deutschland.',
-          'Kontakt: kontakt@bennewitz.de. Weitere Anbieterangaben findest du im Impressum.',
+          'Kontakt: kontakt@b2folio.de · Telefon: +49 162 9038166. Weitere Anbieterangaben findest du im Impressum.',
         ],
       },
       {
@@ -335,7 +335,7 @@ const PRIVACY_CONTENT: Record<'de' | 'en', PrivacyPageContent> = {
         tone: 'accent',
         text: [
           'Du hast im Rahmen der gesetzlichen Voraussetzungen insbesondere Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch.',
-          'Soweit eine Verarbeitung auf einer Einwilligung beruht, kannst du diese mit Wirkung für die Zukunft widerrufen. Zur Ausübung deiner Rechte genügt eine Nachricht an kontakt@bennewitz.de.',
+          'Soweit eine Verarbeitung auf einer Einwilligung beruht, kannst du diese mit Wirkung für die Zukunft widerrufen. Zur Ausübung deiner Rechte genügt eine Nachricht an kontakt@b2folio.de.',
         ],
       },
       {
@@ -381,7 +381,7 @@ const PRIVACY_CONTENT: Record<'de' | 'en', PrivacyPageContent> = {
     chapters: [
       {
         number: '01', title: 'Controller', icon: 'badge', size: 'side', tone: 'accent',
-        text: ['Benjamin Bennewitz, c/o Linzer Straße 45, 53604 Bad Honnef, Germany, is responsible for this portfolio.', 'Contact: kontakt@bennewitz.de. Further provider information is available in the legal notice.'],
+        text: ['Benjamin Bennewitz, c/o Linzer Straße 45, 53604 Bad Honnef, Germany, is responsible for this portfolio.', 'Contact: kontakt@b2folio.de · Phone: +49 162 9038166. Further provider information is available in the legal notice.'],
       },
       {
         number: '02', title: 'Hosting & server logs', icon: 'dns', size: 'wide',
@@ -417,7 +417,7 @@ const PRIVACY_CONTENT: Record<'de' | 'en', PrivacyPageContent> = {
       },
       {
         number: '10', title: 'Your rights', icon: 'verified_user', size: 'full', tone: 'accent',
-        text: ['Subject to the statutory requirements, you have rights including access, rectification, erasure, restriction of processing, data portability and objection.', 'Where processing relies on consent, you may withdraw it for the future. To exercise your rights, send a message to kontakt@bennewitz.de.'],
+        text: ['Subject to the statutory requirements, you have rights including access, rectification, erasure, restriction of processing, data portability and objection.', 'Where processing relies on consent, you may withdraw it for the future. To exercise your rights, send a message to kontakt@b2folio.de.'],
       },
       {
         number: '11', title: 'Right to complain', icon: 'gavel', size: 'side',

@@ -1217,6 +1217,11 @@
   width: min(100%, var(--bp-max-width));
 }
 
+.about__cards.bp-stagger-list--right {
+  --bp-stagger-x: 0px;
+  --bp-stagger-y: 44px;
+}
+
 .about__comic {
   position: relative;
   width: 100%;
@@ -2133,8 +2138,10 @@
 
 .clients__layout {
   display: grid;
-  grid-template-columns: minmax(360px, 0.56fr) minmax(430px, 0.72fr);
-  gap: clamp(3rem, 6vw, 7rem);
+  position: relative;
+  z-index: 1;
+  grid-template-columns: minmax(360px, 0.72fr) minmax(360px, 0.58fr);
+  gap: clamp(1.5rem, 3vw, 3.6rem);
   align-items: center;
 }
 
@@ -2163,6 +2170,8 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: clamp(1.35rem, 2vw, 2rem);
+  width: min(100%, 520px);
+  justify-self: start;
 }
 
 .clients__card {
@@ -3169,16 +3178,6 @@
   animation: clients-bird-cross 12.5s linear 1.15s infinite;
 }
 
-.clients__layout {
-  grid-template-columns: minmax(360px, 0.72fr) minmax(320px, 0.48fr);
-  gap: clamp(5rem, 9vw, 11rem);
-}
-
-.clients__grid {
-  width: min(100%, 440px);
-  justify-self: end;
-}
-
 @keyframes hero-pixel-bird-one {
   0% { transform: translate3d(0, 0, 0); }
   22% { transform: translate3d(28vw, -2.5vh, 0); }
@@ -3970,18 +3969,6 @@
     linear-gradient(90deg, color-mix(in srgb, var(--bp-color-text) 6%, transparent) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
-}
-
-.clients__layout {
-  position: relative;
-  z-index: 1;
-  grid-template-columns: minmax(360px, 0.72fr) minmax(360px, 0.58fr);
-  gap: clamp(1.5rem, 3vw, 3.6rem);
-}
-
-.clients__grid {
-  width: min(100%, 520px);
-  justify-self: start;
 }
 
 .clients__card {

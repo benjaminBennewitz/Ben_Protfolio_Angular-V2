@@ -223,6 +223,11 @@
   min-width: 0;
 }
 
+.built-strip__groups.bp-stagger-list--right {
+  --bp-stagger-x: 0px;
+  --bp-stagger-y: 44px;
+}
+
 .built-strip__group {
   position: relative;
   min-width: 0;

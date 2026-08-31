@@ -1156,15 +1156,11 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       metaDescription: 'Impressum und Anbieterkennzeichnung von Benjamin Bennewitz für bennewitz.de.',
       eyebrow: 'legal_notice.exe',
       title: 'Impressum',
-      intro: 'Direkt erreichbar, sauber sortiert und ohne Versteckspiel: Anbieterkennzeichnung, Kontakt und Verantwortlichkeit.',
+      intro: 'Direkt erreichbar, sauber sortiert und ohne Versteckspiel: Anbieterkennzeichnung und Kontakt.',
       backLabel: 'Zurück zur Startseite',
-      dialogTitle: 'legal_check.exe',
-      dialogText: 'STATUS: Pflichtangaben prüfen.\nTelefon und steuerliche Angaben vor dem Livegang final ergänzen.',
       sections: [
         { title: 'Angaben gemäß § 5 DDG', lines: ['Benjamin Bennewitz', 'c/o', 'Linzer Straße 45', '53604 Bad Honnef', 'Deutschland'] },
-        { title: 'Kontakt', lines: ['E-Mail: kontakt@bennewitz.de', 'Weitere schnelle Kontaktaufnahme: Kontaktformular im Bereich Kontakt', 'Telefon: [Telefonnummer ergänzen]'] },
-        { title: 'Umsatzsteuer', lines: ['Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: [falls vorhanden ergänzen]'] },
-        { title: 'Verantwortlich für den Inhalt', lines: ['Verantwortlich i.S.d. § 18 Abs. 2 MStV: Benjamin Bennewitz', 'c/o', 'Linzer Straße 45', '53604 Bad Honnef'] },
+        { title: 'Kontakt', lines: ['E-Mail: kontakt@b2folio.de', 'Telefon: +49 162 9038166', 'Weitere schnelle Kontaktaufnahme: Kontaktformular im Bereich Kontakt'] },
         { title: 'Haftung für Inhalte und Links', lines: ['Die Inhalte dieser Website werden mit Sorgfalt erstellt. Für externe Links wird keine Haftung übernommen; für deren Inhalte sind ausschließlich die jeweiligen Betreiber verantwortlich.'] },
       ],
     },
@@ -1206,7 +1202,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         },
         {
           title: 'Kontakt', links: [
-            { label: 'E-Mail vorbereiten', href: 'mailto:kontakt@bennewitz.de' },
+            { label: 'E-Mail vorbereiten', href: 'mailto:kontakt@b2folio.de' },
             { label: 'Kontaktformular', href: '#contact' },
             { label: 'Impressum', href: '/impressum' },
             { label: 'Datenschutz', href: '/datenschutz' },
@@ -2077,15 +2073,11 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       metaDescription: 'Legal notice and provider information for Benjamin Bennewitz and bennewitz.de.',
       eyebrow: 'legal_notice.exe',
       title: 'Legal Notice',
-      intro: 'Direct, tidy and easy to find: provider information, contact details and responsibility.',
+      intro: 'Direct, tidy and easy to find: provider information and contact details.',
       backLabel: 'Back to homepage',
-      dialogTitle: 'legal_check.exe',
-      dialogText: 'STATUS: Check required details.\nAdd phone number and tax details before going live.',
       sections: [
         { title: 'Information according to § 5 DDG', lines: ['Benjamin Bennewitz', 'c/o', 'Linzer Straße 45', '53604 Bad Honnef', 'Germany'] },
-        { title: 'Contact', lines: ['Email: contact@bennewitz.de', 'Additional fast contact option: contact form in the contact section', 'Phone: [add phone number]'] },
-        { title: 'VAT', lines: ['VAT identification number according to § 27a UStG: [add if available]'] },
-        { title: 'Responsible for content', lines: ['Responsible according to § 18 para. 2 MStV: Benjamin Bennewitz', 'c/o', 'Linzer Straße 45', '53604 Bad Honnef'] },
+        { title: 'Contact', lines: ['Email: kontakt@b2folio.de', 'Phone: +49 162 9038166', 'Additional fast contact option: contact form in the contact section'] },
         { title: 'Liability for content and links', lines: ['The content of this website is created with care. No liability is assumed for external links; their respective operators are solely responsible for their content.'] },
       ],
     },
@@ -2127,7 +2119,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
         },
         {
           title: 'Contact', links: [
-            { label: 'Prepare email', href: 'mailto:contact@bennewitz.de' },
+            { label: 'Prepare email', href: 'mailto:kontakt@b2folio.de' },
             { label: 'Contact form', href: '#contact' },
             { label: 'Legal notice', href: '/impressum' },
             { label: 'Privacy', href: '/datenschutz' },

@@ -1182,10 +1182,6 @@ export interface ImprintContent {
   readonly intro: string;
   /** Beschriftung des Zurück-Links. */
   readonly backLabel: string;
-  /** Titel des dekorativen Hinweisfensters. */
-  readonly dialogTitle: string;
-  /** Text des dekorativen Hinweisfensters. */
-  readonly dialogText: string;
   /** Inhaltliche Blöcke der Impressumsseite. */
   readonly sections: readonly ImprintSection[];
 }

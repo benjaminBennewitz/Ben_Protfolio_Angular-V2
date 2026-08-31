@@ -62,7 +62,11 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
     const requestImmediateCheck = (): void => this.requestVisibilityFrame(element);
     const requestSettledCheck = (): void => this.queueSettledVisibilityChecks(element);
     const handleScroll = (): void => {
-      requestImmediateCheck();
+      if (this.belongsToSkillsSection(element)) {
+        requestImmediateCheck();
+        return;
+      }
+
       requestSettledCheck();
     };
 
@@ -77,7 +81,10 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
     };
 
     this.requestVisibilityFrame(element);
-    this.queueSettledVisibilityChecks(element);
+
+    if (!this.belongsToSkillsSection(element)) {
+      this.queueSettledVisibilityChecks(element);
+    }
   }
 
   /** Plant eine gedrosselte Messung im nächsten Browser-Frame. */
@@ -131,11 +138,27 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
     const section = this.closestScrollableSection(element);
 
+    if (section?.id === 'skills') {
+      return this.elementIsVisibleInSkillsViewport(element, viewportHeight);
+    }
+
     if (section && this.sectionIsViewportSized(section, viewportHeight)) {
       return this.sectionIsReadable(section, element, viewportHeight);
     }
 
     return this.elementIsReadable(element, viewportHeight);
+  }
+
+  /** Prüft, ob ein Reveal-Element zum langen Techstack-Bereich gehört. */
+  private belongsToSkillsSection(element: HTMLElement): boolean {
+    return element.closest<HTMLElement>('#skills') !== null;
+  }
+
+  /** Hält Skills-Reveals bei kontinuierlichem Scrollen in einer großzügigen Leseband-Zone erreichbar. */
+  private elementIsVisibleInSkillsViewport(element: HTMLElement, viewportHeight: number): boolean {
+    const rect = element.getBoundingClientRect();
+
+    return rect.bottom >= viewportHeight * 0.08 && rect.top <= viewportHeight * 0.9;
   }
 
   /** Sucht den nächstgelegenen visuellen Snap-Kontext. */
@@ -204,9 +227,10 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
     const activationOffset = Math.min(Math.max(rect.height * 0.28, 58), 180);
     const activationPoint = rect.top + activationOffset;
     const lowerRevealLine = viewportHeight * 0.72;
+    const upperRevealLine = viewportHeight * -0.08;
     const hasReadableOverlap = rect.bottom >= viewportHeight * 0.12 && rect.top <= viewportHeight * 0.82;
 
-    return hasReadableOverlap && activationPoint <= lowerRevealLine;
+    return hasReadableOverlap && activationPoint <= lowerRevealLine && activationPoint >= upperRevealLine;
   }
 
   /** Schaltet ein Element sichtbar und entfernt danach alle Listener. */

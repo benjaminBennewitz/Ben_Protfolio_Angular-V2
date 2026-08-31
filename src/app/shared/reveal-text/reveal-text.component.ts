@@ -113,13 +113,17 @@ export class RevealTextComponent implements AfterViewInit, OnDestroy {
   private bindVisibilityCheck(element: HTMLElement): void {
     const requestImmediateCheck = (): void => this.requestVisibilityFrame(element);
     const requestSettledCheck = (): void => this.queueSettledVisibilityChecks(element);
+    const handleScroll = (): void => {
+      requestImmediateCheck();
+      requestSettledCheck();
+    };
 
-    window.addEventListener('scroll', requestSettledCheck, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', requestImmediateCheck, { passive: true });
     window.addEventListener('scrollend', requestImmediateCheck, { passive: true });
 
     this.cleanupListeners = () => {
-      window.removeEventListener('scroll', requestSettledCheck);
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', requestImmediateCheck);
       window.removeEventListener('scrollend', requestImmediateCheck);
     };
@@ -250,10 +254,9 @@ export class RevealTextComponent implements AfterViewInit, OnDestroy {
     const activationOffset = Math.min(Math.max(rect.height * 0.3, 54), 170);
     const activationPoint = rect.top + activationOffset;
     const lowerRevealLine = viewportHeight * 0.7;
-    const upperRevealLine = viewportHeight * -0.08;
     const hasReadableOverlap = rect.bottom >= viewportHeight * 0.1 && rect.top <= viewportHeight * 0.8;
 
-    return hasReadableOverlap && activationPoint <= lowerRevealLine && activationPoint >= upperRevealLine;
+    return hasReadableOverlap && activationPoint <= lowerRevealLine;
   }
 
   /** Schaltet die Textanimation sichtbar und beendet alle Listener. */

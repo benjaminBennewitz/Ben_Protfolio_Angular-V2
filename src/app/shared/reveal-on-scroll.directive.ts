@@ -60,17 +60,18 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
   /** Registriert eine richtungsunabhängige Sichtbarkeitsprüfung. */
   private bindVisibilityCheck(element: HTMLElement): void {
     const requestImmediateCheck = (): void => this.requestVisibilityFrame(element);
-    const requestScrollCheck = (): void => {
-      this.requestVisibilityFrame(element);
-      this.queueSettledVisibilityChecks(element);
+    const requestSettledCheck = (): void => this.queueSettledVisibilityChecks(element);
+    const handleScroll = (): void => {
+      requestImmediateCheck();
+      requestSettledCheck();
     };
 
-    window.addEventListener('scroll', requestScrollCheck, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', requestImmediateCheck, { passive: true });
     window.addEventListener('scrollend', requestImmediateCheck, { passive: true });
 
     this.cleanupListeners = () => {
-      window.removeEventListener('scroll', requestScrollCheck);
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', requestImmediateCheck);
       window.removeEventListener('scrollend', requestImmediateCheck);
     };
@@ -203,10 +204,9 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
     const activationOffset = Math.min(Math.max(rect.height * 0.28, 58), 180);
     const activationPoint = rect.top + activationOffset;
     const lowerRevealLine = viewportHeight * 0.72;
-    const upperRevealLine = viewportHeight * -0.08;
     const hasReadableOverlap = rect.bottom >= viewportHeight * 0.12 && rect.top <= viewportHeight * 0.82;
 
-    return hasReadableOverlap && activationPoint <= lowerRevealLine && activationPoint >= upperRevealLine;
+    return hasReadableOverlap && activationPoint <= lowerRevealLine;
   }
 
   /** Schaltet ein Element sichtbar und entfernt danach alle Listener. */

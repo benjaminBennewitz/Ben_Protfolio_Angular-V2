@@ -1,16 +1,21 @@
 <!-- src/app/app.component.html -->
-<bp-loader />
-<bp-custom-cursor />
-<bp-scroll-to-top />
-<bp-navigation />
-<bp-accessibility-panel />
-<bp-achievement-toast />
-<bp-platinum-completion-modal />
-<bp-cookie-banner />
-<bp-system-toast />
+<bp-loader (shellRequested)="prepareShell()" />
+
 <div class="app-shell">
   <router-outlet />
 </div>
-@if (showFooter()) {
-  <bp-footer />
+
+@defer (when shellReady()) {
+  <bp-custom-cursor />
+  <bp-scroll-to-top />
+  <bp-navigation />
+  <bp-accessibility-panel />
+  <bp-achievement-toast />
+  <bp-platinum-completion-modal />
+  <bp-cookie-banner />
+  <bp-system-toast />
+
+  @if (showFooter()) {
+    <bp-footer />
+  }
 }

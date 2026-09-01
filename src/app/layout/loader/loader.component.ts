@@ -6,7 +6,7 @@
  */
 
 import { DOCUMENT } from '@angular/common';
-import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, inject, output, signal } from '@angular/core';
 import { AccessibilityPreferenceService } from '../../core/services/accessibility-preference.service';
 import { AchievementService } from '../../core/services/achievement.service';
 import { LanguageService } from '../../core/services/language.service';
@@ -83,6 +83,9 @@ export class LoaderComponent implements OnInit, OnDestroy {
   /** Session-Key gegen erneutes Abspielen bei interner Navigation. */
   private readonly sessionStorageKey = 'bp.boot-sequence.played.v2';
 
+  /** Fordert das Nachladen der nicht kritischen App-Shell an. */
+  readonly shellRequested = output<void>();
+
   /** Sichtbarkeit des Loaders. */
   readonly visible = signal(false);
 
@@ -146,14 +149,17 @@ export class LoaderComponent implements OnInit, OnDestroy {
     { left: '92%', width: '5%', fill: '#b8ff2e', delay: '220ms' },
   ];
 
+  /** Erkennt die kompakte mobile Loader-Variante für eine schnellere First-Visit-Experience. */
+  private readonly compactSequence = this.document.defaultView?.matchMedia('(max-width: 760px)').matches ?? false;
+
   /** Dauer bis zum Wechsel von Typewriter zur Dialogphase. */
-  private readonly bootDurationMs = 1900;
+  private readonly bootDurationMs = this.compactSequence ? 560 : 1900;
 
   /** Abstand zwischen zwei Dialogfenstern. */
-  private readonly dialogIntervalMs = 620;
+  private readonly dialogIntervalMs = this.compactSequence ? 140 : 620;
 
   /** Pause nach dem letzten Dialog vor der Freigabe. */
-  private readonly readyDelayMs = 900;
+  private readonly readyDelayMs = this.compactSequence ? 120 : 900;
 
   /** Mindestdauer der ruhigen Alternative. */
   private readonly calmSequenceDurationMs = 3200;
@@ -189,6 +195,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.hasBootSequencePlayed()) {
       this.document.documentElement.classList.remove(this.loaderActiveClass);
+      this.shellRequested.emit();
       return;
     }
 
@@ -212,6 +219,9 @@ export class LoaderComponent implements OnInit, OnDestroy {
     this.openDialogCount.set(0);
 
     const line = this.loaderContent().typeLine;
+    const typeStepMs = this.compactSequence
+      ? Math.max(16, Math.floor((this.bootDurationMs - 80) / Math.max(1, line.length)))
+      : 55;
     let index = 0;
 
     this.typeTimer = window.setInterval(() => {
@@ -222,7 +232,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
         window.clearInterval(this.typeTimer);
         this.typeTimer = undefined;
       }
-    }, 55);
+    }, typeStepMs);
 
     this.bootTimer = window.setTimeout(() => this.startStorm(), this.bootDurationMs);
   }
@@ -271,6 +281,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
     this.phase.set('ready');
     this.openDialogCount.set(this.loaderContent().dialogs.length);
     this.launching.set(true);
+    this.shellRequested.emit();
 
     this.launchTimer = window.setTimeout(() => {
       this.leaving.set(true);
@@ -294,6 +305,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
       window.clearInterval(this.calmProgressTimer);
       this.calmProgressTimer = undefined;
+      this.shellRequested.emit();
       this.leaving.set(true);
       this.removeTimer = window.setTimeout(() => this.finishExit(), 220);
     };

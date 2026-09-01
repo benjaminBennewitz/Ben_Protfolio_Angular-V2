@@ -37,6 +37,9 @@ export class AppComponent {
   /** Destroy-Referenz für die automatische Bereinigung der Router-Subscription. */
   private readonly destroyRef = inject(DestroyRef);
 
+  /** Steuert, ob die nicht kritische App-Shell nach dem Loader geladen werden darf. */
+  readonly shellReady = signal(false);
+
   /** Steuert, ob der globale Footer für die aktive Route gerendert wird. */
   readonly showFooter = signal(true);
 
@@ -62,6 +65,12 @@ export class AppComponent {
 
       this.tabTitleService.setHiddenTitle(content.meta.hiddenTitle);
     });
+  }
+
+
+  /** Gibt Navigation, Overlays und Footer frei, sobald der Loader in die Launch-Phase wechselt. */
+  prepareShell(): void {
+    this.shellReady.set(true);
   }
 
   /** Liest Layoutoptionen aus der tiefsten aktiven Route und blendet den Footer bei Bedarf aus. */

@@ -4212,3 +4212,18 @@
 .home__defer-placeholder--contact {
   min-height: min(34rem, 70svh);
 }
+
+/* ========================================================================== 
+   22   Initial Rendering Performance
+   ========================================================================== */
+
+.home > section:not(.hero) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
+@media (max-width: 720px) {
+  .home > section:not(.hero) {
+    contain-intrinsic-size: auto 1100px;
+  }
+}

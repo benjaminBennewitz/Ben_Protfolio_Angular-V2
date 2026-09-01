@@ -291,3 +291,9 @@ button {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Verhindert unnötiges Painten der globalen Hintergrundeffekte unter dem Fullscreen-Loader. */
+html.bp-loader-active body::before,
+html.bp-loader-active body::after {
+  display: none;
+}

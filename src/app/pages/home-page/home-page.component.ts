@@ -128,6 +128,13 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     fck: 'assets/images/hero-head-fck.webp',
   };
 
+  /** Responsive Varianten des Standard-Hero-Kopfes für kleine Viewports. */
+  readonly currentHeroHeadSrcSet = computed(() =>
+    this.activeHeroHead() === 'default'
+      ? 'assets/images/default-hero-head-360.webp 360w, assets/images/default-hero-head-480.webp 480w, assets/images/default-hero-head-560.webp 560w, assets/images/default-hero-head.webp 720w'
+      : undefined,
+  );
+
   /** Asset-Zuordnung für das About-Kaffeebild. */
   private readonly aboutCoffeeAssetMap: Record<AboutCoffeeKey, string> = {
     default: 'assets/images/me-and-coffee.webp',
@@ -204,6 +211,13 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
 
   /** Pfad des aktuell sichtbaren About-Kaffeebildes. */
   readonly currentAboutCoffeeSrc = computed(() => this.aboutCoffeeAssetMap[this.activeAboutCoffeeImage()]);
+
+  /** Responsive Varianten des About-Portraits. */
+  readonly currentAboutCoffeeSrcSet = computed(() =>
+    this.activeAboutCoffeeImage() === 'default'
+      ? 'assets/images/me-and-coffee-480.webp 480w, assets/images/me-and-coffee-720.webp 720w, assets/images/me-and-coffee.webp 1122w'
+      : 'assets/images/me-and-coffee-error-480.webp 480w, assets/images/me-and-coffee-error.webp 655w',
+  );
 
   /** Beschriftung des About-Buttons passend zum aktuellen Bildzustand. */
   readonly aboutDialogActionLabel = computed(() => this.activeAboutCoffeeImage() === 'error' ? this.content().about.dialogActionAfterClick : this.content().about.dialogAction);

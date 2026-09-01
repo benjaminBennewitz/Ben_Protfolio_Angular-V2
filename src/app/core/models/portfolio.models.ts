@@ -1257,3 +1257,6 @@ export interface PortfolioContent {
   readonly notFoundTitle: string;
   readonly notFoundText: string;
 }
+
+/** Portfolio-Inhalte ohne die umfangreichen, lazy geladenen Case-Study-Daten. */
+export type PortfolioBaseContent = Omit<PortfolioContent, 'projects'>;

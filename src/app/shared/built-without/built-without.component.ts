@@ -4,6 +4,7 @@
  */
 
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, computed, inject, signal } from '@angular/core';
+import { PORTFOLIO_PROJECTS } from '../../core/data/portfolio-projects';
 import { TelemetryChartDataPoint } from '../../core/models/portfolio.models';
 import { LanguageService } from '../../core/services/language.service';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
@@ -30,7 +31,7 @@ export class BuiltWithoutComponent implements AfterViewInit, OnDestroy {
   readonly content = computed(() => this.languageService.content().builtWithout);
 
   /** Aktuelle Case Studies als Quelle der automatisch abgeleiteten Chart-Werte. */
-  private readonly projects = computed(() => this.languageService.content().projects);
+  private readonly projects = computed(() => PORTFOLIO_PROJECTS[this.languageService.language()]);
 
   /** Aktiviert die zweite, über die erste Bühne fahrende Telemetrie-Ebene. */
   readonly telemetryStageActive = signal(false);

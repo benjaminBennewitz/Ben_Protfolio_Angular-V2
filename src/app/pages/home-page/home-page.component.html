@@ -75,8 +75,8 @@
           <dt>{{ item.label }}</dt>
           <dd>
             @if (index === 0) {
-            <img class="hero__kpi-brain" src="assets/images/brain_rotation.gif" alt="" width="64" height="64"
-              decoding="async" aria-hidden="true" />
+            <img class="hero__kpi-brain" src="assets/images/brain_rotation.webp" alt="" width="64" height="64"
+              decoding="async" fetchpriority="low" aria-hidden="true" />
             }
             <span>{{ item.value }}</span>
           </dd>
@@ -111,8 +111,12 @@
         @for (paragraph of content().about.text; track $index) {
         <p class="bp-subtitle">{{ paragraph }}</p>
         }
+        @defer (on viewport) {
         <bp-about-metrics-window [content]="content().about.metrics"
           (weirdModeSelected)="unlockMetricsAchievement()" />
+        } @placeholder {
+        <div class="home__defer-placeholder home__defer-placeholder--metrics" aria-hidden="true"></div>
+        }
       </div>
 
       <div class="about__cards bp-stagger-list bp-stagger-list--right" bpReveal>
@@ -220,7 +224,11 @@
       </div>
     </div>
 
+    @defer (on viewport) {
     <bp-tech-marquee bpViewportActivity bpReveal [items]="content().skills.marquee" />
+    } @placeholder {
+    <div class="home__defer-placeholder home__defer-placeholder--marquee" aria-hidden="true"></div>
+    }
   </section>
 
   <section class="capabilities bp-section" id="capabilities" bpViewportActivity>
@@ -249,8 +257,12 @@
     <bp-pixel-firework class="capabilities__firework" />
   </section>
 
+  @defer (on viewport) {
   <bp-process-lock bpViewportActivity [eyebrow]="content().process.eyebrow" [title]="content().process.title"
     [subtitle]="content().process.subtitle" [hint]="content().process.hint" [steps]="content().process.steps" />
+  } @placeholder {
+  <div id="process" class="home__defer-placeholder home__defer-placeholder--process" aria-hidden="true"></div>
+  }
 
   <section class="clients bp-section" id="clients" bpViewportActivity>
 <div class="clients__layout bp-container">
@@ -293,13 +305,22 @@
     </div>
   </section>
 
+  @defer (on viewport) {
   <bp-built-without />
+  } @placeholder {
+  <div class="home__defer-placeholder home__defer-placeholder--built" aria-hidden="true"></div>
+  }
 
+  @defer (on viewport) {
   <bp-chaos-cta bpViewportActivity [eyebrow]="content().cta.eyebrow" [title]="content().cta.title" [hint]="content().cta.hint" [contactLabel]="content().nav.contactAccessLabel"
     [words]="content().cta.words" />
+  } @placeholder {
+  <div class="home__defer-placeholder home__defer-placeholder--chaos" aria-hidden="true"></div>
+  }
 
 
   <section class="faq bp-section" id="faq" bpViewportActivity>
+    @defer (on viewport) {
     <bp-dithering-shader
       class="faq__background"
       colorBack="transparent"
@@ -310,6 +331,9 @@
       [intensity]="1.12"
       [zoom]="0.58">
     </bp-dithering-shader>
+    } @placeholder {
+    <div class="faq__background" aria-hidden="true"></div>
+    }
 
     <div class="bp-container bp-grid-two">
       <div class="bp-motion-copy" bpReveal>
@@ -337,7 +361,11 @@
         }
       </div>
 
+      @defer (on viewport) {
       <bp-contact-form />
+      } @placeholder {
+      <div class="home__defer-placeholder home__defer-placeholder--contact" aria-hidden="true"></div>
+      }
     </div>
   </section>
 

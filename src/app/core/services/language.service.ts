@@ -8,7 +8,7 @@
 import { DOCUMENT } from '@angular/common';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { PORTFOLIO_TRANSLATIONS } from '../data/portfolio-content';
-import { PortfolioContent, PortfolioLanguage } from '../models/portfolio.models';
+import { PortfolioBaseContent, PortfolioLanguage } from '../models/portfolio.models';
 
 /** Verwaltet Sprache, Persistenz und HTML-Lang-Attribut. */
 @Injectable({ providedIn: 'root' })
@@ -26,7 +26,7 @@ export class LanguageService {
   readonly language = computed<PortfolioLanguage>(() => this.languageSignal());
 
   /** Übersetzter Inhalt der aktuell ausgewählten Sprache. */
-  readonly content = computed<PortfolioContent>(() => PORTFOLIO_TRANSLATIONS[this.language()]);
+  readonly content = computed<PortfolioBaseContent>(() => PORTFOLIO_TRANSLATIONS[this.language()]);
 
   /** Initialisiert die Synchronisierung von Sprache und Dokument. */
   constructor() {

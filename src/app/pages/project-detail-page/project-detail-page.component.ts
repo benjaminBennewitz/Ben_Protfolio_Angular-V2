@@ -8,6 +8,7 @@
 import { Component, ElementRef, HostListener, NgZone, OnDestroy, ViewChild, computed, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { PORTFOLIO_PROJECTS } from '../../core/data/portfolio-projects';
 import { ProjectAppModule, ProjectBloodGuideModeKey, ProjectCatalogPage, ProjectCatalogSpread, ProjectGalleryItem } from '../../core/models/portfolio.models';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
@@ -69,7 +70,12 @@ interface CatalogLoupeState {
   standalone: true,
   imports: [RouterLink, RevealOnScrollDirective, SystemDialogComponent, ProjectTelemetryComponent],
   templateUrl: './project-detail-page.component.html',
-  styleUrl: './project-detail-page.component.scss',
+  styleUrls: [
+    './project-detail-page.component.scss',
+    '../../../styles/project-detail-blood.scss',
+    '../../../styles/project-detail-carly.scss',
+    '../../../styles/project-detail-catalog.scss',
+  ],
 })
 export class ProjectDetailPageComponent implements OnDestroy {
   /** Angular-Zone für performante Canvas-Animationen außerhalb der Change Detection. */
@@ -224,7 +230,7 @@ export class ProjectDetailPageComponent implements OnDestroy {
   readonly content = computed(() => this.languageService.content());
 
   /** Ausgewähltes Projekt passend zum Route-Slug. */
-  readonly project = computed(() => this.content().projects.find((project) => project.slug === this.slug()));
+  readonly project = computed(() => PORTFOLIO_PROJECTS[this.languageService.language()].find((project) => project.slug === this.slug()));
 
   /** Aktiver Architektur-Knoten mit Fallback auf den ersten Eintrag. */
   readonly activeArchitectureNode = computed(() => {

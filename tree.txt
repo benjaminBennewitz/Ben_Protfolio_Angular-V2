@@ -13,7 +13,8 @@ Portfolio/
 │   │   ├── core/
 │   │   │   ├── data/
 │   │   │   │   ├── portfolio-content.spec.ts
-│   │   │   │   └── portfolio-content.ts
+│   │   │   │   ├── portfolio-content.ts
+│   │   │   │   └── portfolio-projects.ts
 │   │   │   ├── models/
 │   │   │   │   └── portfolio.models.ts
 │   │   │   └── services/
@@ -191,8 +192,11 @@ Portfolio/
 │   ├── assets/
 │   │   ├── fonts/
 │   │   │   ├── inter-variable.ttf
+│   │   │   ├── inter-variable.woff2
 │   │   │   ├── jetbrains-mono-variable.ttf
-│   │   │   └── material-symbols-outlined-latin-fill-normal.woff2
+│   │   │   ├── jetbrains-mono-variable.woff2
+│   │   │   ├── material-symbols-outlined-latin-fill-normal.woff2
+│   │   │   └── material-symbols-portfolio.woff2
 │   │   ├── images/
 │   │   │   ├── projects/
 │   │   │   │   ├── design-catalog/
@@ -365,6 +369,7 @@ Portfolio/
 │   │   │   │   ├── trash-red.webp
 │   │   │   │   └── trust-not-found.webp
 │   │   │   ├── brain_rotation.gif
+│   │   │   ├── brain_rotation.webp
 │   │   │   ├── chocolate-egg.webp
 │   │   │   ├── default-hero-head.webp
 │   │   │   ├── fuelli.webp
@@ -406,6 +411,8 @@ Portfolio/
 │   ├── robots.txt
 │   ├── sitemap.xml
 │   └── styles.scss
+├── tools/
+│   └── subset-material-symbols.py
 ├── .editorconfig
 ├── .gitignore
 ├── angular.json

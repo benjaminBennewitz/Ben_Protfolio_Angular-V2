@@ -2362,7 +2362,9 @@
 }
 
 .faq__background {
+  position: absolute;
   z-index: 0;
+  inset: 0;
   opacity: 0.36;
   mix-blend-mode: screen;
 }
@@ -4179,4 +4181,34 @@
 :host-context(:root[data-motion='reduced']) .skills__level,
 :host-context(:root[data-motion='off']) .skills__level {
   transform: none;
+}
+
+/* ==========================================================================
+   21   Deferred Content
+   ========================================================================== */
+
+.home__defer-placeholder {
+  width: 100%;
+  pointer-events: none;
+}
+
+.home__defer-placeholder--metrics {
+  min-height: 18rem;
+}
+
+.home__defer-placeholder--marquee {
+  min-height: 9rem;
+}
+
+.home__defer-placeholder--process,
+.home__defer-placeholder--chaos {
+  min-height: 100svh;
+}
+
+.home__defer-placeholder--built {
+  min-height: 28rem;
+}
+
+.home__defer-placeholder--contact {
+  min-height: min(34rem, 70svh);
 }

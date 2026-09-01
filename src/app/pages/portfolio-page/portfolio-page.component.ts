@@ -6,6 +6,7 @@
  */
 
 import { Component, computed, inject, signal } from '@angular/core';
+import { PORTFOLIO_PROJECTS } from '../../core/data/portfolio-projects';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -114,6 +115,9 @@ export class PortfolioPageComponent {
 
   /** Übersetzter Inhalt der aktuellen Sprache. */
   readonly content = computed(() => this.languageService.content());
+
+  /** Case Studies der aktuell ausgewählten Sprache. */
+  readonly projects = computed(() => PORTFOLIO_PROJECTS[this.languageService.language()]);
 
   /** Pfad des Standardportraits im Portfolio-Einstieg. */
   readonly portfolioChocolateDefaultSrc = 'assets/images/me-with-chocolate.webp';

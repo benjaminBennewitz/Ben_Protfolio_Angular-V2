@@ -85,7 +85,7 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
       },
       {
         root: null,
-        rootMargin: '0px 0px -8% 0px',
+        rootMargin: '0px 0px -30% 0px',
         threshold: 0.01,
       },
     );

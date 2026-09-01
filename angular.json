@@ -47,13 +47,12 @@
                 "output": "."
               }
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": [],
             "scripts": []
           },
           "configurations": {
             "production": {
+              "optimization": true,
               "budgets": [
                 {
                   "type": "initial",

@@ -1,0 +1,11 @@
+/* src/app/pages/home-entry-page/home-entry-page.component.scss */
+
+:host {
+  display: block;
+  min-height: 100svh;
+}
+
+.home-entry__placeholder {
+  min-height: 100svh;
+  background: var(--bp-color-bg);
+}

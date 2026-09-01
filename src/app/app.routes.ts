@@ -6,12 +6,13 @@
  */
 
 import { Routes } from '@angular/router';
+import { HomeEntryPageComponent } from './pages/home-entry-page/home-entry-page.component';
 
 /** Routen der Portfolio-Anwendung. */
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./pages/home-page/home-page.component').then((component) => component.HomePageComponent),
+    component: HomeEntryPageComponent,
     title: 'Benjamin Bennewitz | Portfolio',
   },
   {

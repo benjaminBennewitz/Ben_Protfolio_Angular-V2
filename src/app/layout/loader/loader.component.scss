@@ -619,6 +619,32 @@
   }
 }
 
+
+@media (max-width: 760px) {
+  .loader__slice {
+    animation-duration: 360ms;
+  }
+
+  .loader-dialog {
+    animation-duration: 280ms;
+  }
+
+  .loader__ready-title {
+    animation-duration: 340ms;
+    animation-delay: 80ms;
+  }
+
+  .loader__ready > p {
+    animation-duration: 340ms;
+    animation-delay: 130ms;
+  }
+
+  .loader__ready > button {
+    animation-duration: 340ms;
+    animation-delay: 180ms;
+  }
+}
+
 @media (max-width: 620px) {
   .loader__brand strong {
     display: none;
@@ -696,7 +722,7 @@
 .loader-dialog header,
 .loader-dialog__body,
 .loader-dialog footer {
-  font-family: var(--bp-font-system);
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
 .loader__skip {

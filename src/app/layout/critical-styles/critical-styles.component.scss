@@ -1,0 +1,31 @@
+/* src/app/layout/critical-styles/critical-styles.component.scss */
+
+:root {
+  --bp-color-bg: #0b0b0d;
+  --bp-font-display: 'Arial Black', 'Impact', system-ui, sans-serif;
+  --bp-font-mono: ui-monospace, 'Cascadia Mono', Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --bp-z-loader: 100;
+  --bp-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-width: 300px;
+  min-height: 100%;
+  margin: 0;
+  background: #050505;
+}
+
+button {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid #b8ff2e;
+  outline-offset: 4px;
+}

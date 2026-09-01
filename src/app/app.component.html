@@ -1,11 +1,13 @@
 <!-- src/app/app.component.html -->
-<bp-loader (shellRequested)="prepareShell()" />
+<bp-critical-styles />
+<bp-loader (shellRequested)="prepareShell()" (humanConfirmed)="markLoaderHumanConfirmed()" />
 
 <div class="app-shell">
   <router-outlet />
 </div>
 
 @defer (when shellReady()) {
+  <bp-app-runtime [loaderHumanConfirmed]="loaderHumanConfirmed()" />
   <bp-custom-cursor />
   <bp-scroll-to-top />
   <bp-navigation />

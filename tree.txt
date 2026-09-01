@@ -20,6 +20,7 @@ Portfolio/
 │   │   │   └── services/
 │   │   │       ├── accessibility-preference.service.ts
 │   │   │       ├── achievement.service.ts
+│   │   │       ├── experience-gate.service.ts
 │   │   │       ├── global-overlay.service.ts
 │   │   │       ├── language.service.ts
 │   │   │       ├── seo.service.ts
@@ -40,10 +41,16 @@ Portfolio/
 │   │   │   │   ├── achievement-toast.component.html
 │   │   │   │   ├── achievement-toast.component.scss
 │   │   │   │   └── achievement-toast.component.ts
+│   │   │   ├── app-runtime/
+│   │   │   │   ├── app-runtime.component.scss
+│   │   │   │   └── app-runtime.component.ts
 │   │   │   ├── cookie-banner/
 │   │   │   │   ├── cookie-banner.component.html
 │   │   │   │   ├── cookie-banner.component.scss
 │   │   │   │   └── cookie-banner.component.ts
+│   │   │   ├── critical-styles/
+│   │   │   │   ├── critical-styles.component.scss
+│   │   │   │   └── critical-styles.component.ts
 │   │   │   ├── custom-cursor/
 │   │   │   │   ├── custom-cursor.component.html
 │   │   │   │   ├── custom-cursor.component.scss
@@ -77,6 +84,10 @@ Portfolio/
 │   │   │   │   ├── achievements-page.component.html
 │   │   │   │   ├── achievements-page.component.scss
 │   │   │   │   └── achievements-page.component.ts
+│   │   │   ├── home-entry-page/
+│   │   │   │   ├── home-entry-page.component.html
+│   │   │   │   ├── home-entry-page.component.scss
+│   │   │   │   └── home-entry-page.component.ts
 │   │   │   ├── home-page/
 │   │   │   │   ├── home-page.component.html
 │   │   │   │   ├── home-page.component.scss
@@ -372,6 +383,9 @@ Portfolio/
 │   │   │   ├── brain_rotation.webp
 │   │   │   ├── chocolate-egg.webp
 │   │   │   ├── default-hero-head.webp
+│   │   │   ├── default-hero-head-360.webp
+│   │   │   ├── default-hero-head-480.webp
+│   │   │   ├── default-hero-head-560.webp
 │   │   │   ├── fuelli.webp
 │   │   │   ├── hero-brain-halftone.webp
 │   │   │   ├── hero-head-fck.webp
@@ -379,7 +393,10 @@ Portfolio/
 │   │   │   ├── hero-head-lol.webp
 │   │   │   ├── me-after-chocolate.webp
 │   │   │   ├── me-and-coffee.webp
+│   │   │   ├── me-and-coffee-480.webp
+│   │   │   ├── me-and-coffee-720.webp
 │   │   │   ├── me-and-coffee-error.webp
+│   │   │   ├── me-and-coffee-error-480.webp
 │   │   │   ├── me-with-chocolate.webp
 │   │   │   └── nice-head-loader.webp
 │   │   ├── scripts/

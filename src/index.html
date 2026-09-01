@@ -1,16 +1,39 @@
 <!doctype html>
-<html lang="de" class="bp-initial-scroll-reset bp-initial-scroll-pending">
+<html lang="de" class="bp-initial-scroll-reset bp-initial-scroll-pending bp-loader-active">
 
 <head>
   <meta charset="utf-8">
   <title>B² Portfolio | Full Stack Webentwicklung & Grafikdesign</title>
   <base href="/">
   <style>
-    html.bp-initial-scroll-pending bp-root {
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+      background: #050505;
+    }
+
+    html.bp-initial-scroll-pending bp-root .app-shell {
       visibility: hidden;
     }
   </style>
-  <script src="assets/scripts/scroll-restoration.js"></script>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const hasFragment = window.location.hash.length > 1;
+
+      if ('scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual';
+      }
+
+      if (hasFragment) {
+        root.classList.remove('bp-initial-scroll-reset', 'bp-initial-scroll-pending');
+        return;
+      }
+
+      window.scrollTo(0, 0);
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description"
     content="B² Portfolio von Benjamin Bennewitz: interaktive Angular-Experience mit MS-DOS-Look, Full Stack Webentwicklung, UI/UX, Intranet-Systemen und Grafikdesign.">
@@ -22,7 +45,6 @@
     content="Benjamin Bennewitz, B² Portfolio, Full Stack Webentwicklung, Angular, Django, UI UX Design, Grafikdesign, Web Apps, Intranet, SEO, Accessibility, Web Vitals">
   <meta name="theme-color" content="#0b0b0d">
   <link rel="canonical" href="https://b2folio.de/">
-  <link rel="preload" href="assets/fonts/jetbrains-mono-variable.woff2" as="font" type="font/woff2" crossorigin>
   <meta property="og:site_name" content="B² Portfolio">
   <meta property="og:locale" content="de_DE">
   <meta property="og:type" content="website">

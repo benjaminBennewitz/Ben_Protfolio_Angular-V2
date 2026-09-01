@@ -7,12 +7,12 @@
 
 import { DOCUMENT } from '@angular/common';
 import { Component, OnDestroy, OnInit, computed, inject, output, signal } from '@angular/core';
-import { AccessibilityPreferenceService } from '../../core/services/accessibility-preference.service';
-import { AchievementService } from '../../core/services/achievement.service';
-import { LanguageService } from '../../core/services/language.service';
 
 /** Phasen der vollständigen Bootsequenz. */
 type LoaderPhase = 'boot' | 'storm' | 'ready';
+
+/** Unterstützte Sprache der kompakten Loader-Texte. */
+type LoaderLanguage = 'de' | 'en';
 
 /** Einzelnes DOS-Dialogfenster der Entschlüsselungsphase. */
 interface LoaderDialog {
@@ -68,15 +68,6 @@ export class LoaderComponent implements OnInit, OnDestroy {
   /** Browser-Dokument für SessionStorage und globale Loader-Klassen. */
   private readonly document = inject(DOCUMENT);
 
-  /** Sprachservice für deutsch/englische Boottexte. */
-  private readonly languageService = inject(LanguageService);
-
-  /** Accessibility-Präferenzen für eine bewegungsarme Alternative. */
-  private readonly accessibility = inject(AccessibilityPreferenceService);
-
-  /** Achievement-Service für die manuelle Portfolio-Freigabe. */
-  private readonly achievementService = inject(AchievementService);
-
   /** CSS-Klasse, die Hero-Reveals bis zum Ende der Sequenz sperrt. */
   private readonly loaderActiveClass = 'bp-loader-active';
 
@@ -85,6 +76,9 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
   /** Fordert das Nachladen der nicht kritischen App-Shell an. */
   readonly shellRequested = output<void>();
+
+  /** Meldet die manuelle Bestätigung über den regulären Loader-Button. */
+  readonly humanConfirmed = output<void>();
 
   /** Sichtbarkeit des Loaders. */
   readonly visible = signal(false);
@@ -107,11 +101,14 @@ export class LoaderComponent implements OnInit, OnDestroy {
   /** Fortschritt des ruhigen Loaders. */
   readonly calmProgress = signal(0);
 
-  /** Sprachabhängiger Loader-Inhalt. */
-  readonly loaderContent = computed<LoaderTranslation>(() => LOADER_TRANSLATIONS[this.languageService.language()]);
+  /** Einmalig gelesene Sprache ohne Abhängigkeit vom umfangreichen Portfolio-Content. */
+  private readonly loaderLanguage = this.readInitialLanguage();
 
-  /** Schaltet bei Simple-/Reduced-Motion auf die ruhige Variante. */
-  readonly useCalmLoader = computed(() => this.accessibility.usesSimpleMode() || this.accessibility.motionMode() !== 'full');
+  /** Sprachabhängiger Loader-Inhalt. */
+  readonly loaderContent = computed<LoaderTranslation>(() => LOADER_TRANSLATIONS[this.loaderLanguage]);
+
+  /** Schaltet bei gespeicherten oder systemseitigen Motion-Präferenzen auf die ruhige Variante. */
+  readonly useCalmLoader = signal(this.readCalmPreference());
 
   /** Sichtbare Dialoge der aktuellen Storm-Phase. */
   readonly openDialogs = computed(() => this.loaderContent().dialogs.slice(0, this.openDialogCount()));
@@ -153,13 +150,13 @@ export class LoaderComponent implements OnInit, OnDestroy {
   private readonly compactSequence = this.document.defaultView?.matchMedia('(max-width: 760px)').matches ?? false;
 
   /** Dauer bis zum Wechsel von Typewriter zur Dialogphase. */
-  private readonly bootDurationMs = this.compactSequence ? 560 : 1900;
+  private readonly bootDurationMs = this.compactSequence ? 420 : 1900;
 
   /** Abstand zwischen zwei Dialogfenstern. */
-  private readonly dialogIntervalMs = this.compactSequence ? 140 : 620;
+  private readonly dialogIntervalMs = this.compactSequence ? 105 : 620;
 
   /** Pause nach dem letzten Dialog vor der Freigabe. */
-  private readonly readyDelayMs = this.compactSequence ? 120 : 900;
+  private readonly readyDelayMs = this.compactSequence ? 70 : 900;
 
   /** Mindestdauer der ruhigen Alternative. */
   private readonly calmSequenceDurationMs = 3200;
@@ -271,7 +268,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.achievementService.unlock('loader-human');
+    this.humanConfirmed.emit();
     this.beginLaunch();
   }
 
@@ -312,6 +309,47 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
     updateProgress();
     this.calmProgressTimer = window.setInterval(updateProgress, stepMs);
+  }
+
+
+  /** Liest die Loader-Sprache direkt aus der bestehenden Persistenz, ohne den Content-Service zu initialisieren. */
+  private readInitialLanguage(): LoaderLanguage {
+    try {
+      const savedLanguage = this.document.defaultView?.localStorage.getItem('bp-language');
+
+      if (savedLanguage === 'de' || savedLanguage === 'en') {
+        return savedLanguage;
+      }
+    } catch {
+      return this.document.documentElement.lang === 'en' ? 'en' : 'de';
+    }
+
+    return this.document.documentElement.lang === 'en' ? 'en' : 'de';
+  }
+
+  /** Liest nur die für den Loader relevanten Accessibility-Werte aus der bestehenden Persistenz. */
+  private readCalmPreference(): boolean {
+    const prefersReducedMotion = this.document.defaultView?.matchMedia('(prefers-reduced-motion: reduce)').matches ?? false;
+
+    try {
+      const storedValue = this.document.defaultView?.localStorage.getItem('bp-accessibility-preferences-v1');
+
+      if (!storedValue) {
+        return prefersReducedMotion;
+      }
+
+      const preferences = JSON.parse(storedValue) as { motion?: unknown; comfort?: unknown };
+      const motion = preferences.motion === 'full' || preferences.motion === 'reduced' || preferences.motion === 'off'
+        ? preferences.motion
+        : prefersReducedMotion ? 'reduced' : 'full';
+      const comfort = preferences.comfort === 'simple' || preferences.comfort === 'expressive'
+        ? preferences.comfort
+        : 'expressive';
+
+      return comfort === 'simple' || motion !== 'full';
+    } catch {
+      return prefersReducedMotion;
+    }
   }
 
   /** Prüft Session- und Runtime-Zustand gegen mehrfaches Abspielen. */

@@ -2,45 +2,50 @@
 
 /**
  * @file Startpunkt der Angular-Anwendung.
- * @description Initialisiert die Standalone-App mit Routing und Scroll-Wiederherstellung.
+ * @description Initialisiert die Standalone-App mit Routing und kontrolliertem Initial-Scroll.
  */
 
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { NavigationEnd, Router, provideRouter, withInMemoryScrolling } from '@angular/router';
+import { filter, take } from 'rxjs';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 
-/** Setzt einen echten Seitenreload vor Angular zuverlässig an den Dokumentanfang. */
-function resetInitialScrollPosition(): void {
-  if (typeof window === 'undefined') {
+/** Entfernt die Start-Sperre erst, nachdem Angular seine erste Navigation abgeschlossen hat. */
+function releaseInitialScroll(router: Router): void {
+  const release = (): void => {
+    const root = document.documentElement;
+    const hasFragment = window.location.hash.length > 1;
+
+    if (!hasFragment) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      root.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+
+    window.requestAnimationFrame(() => {
+      if (!hasFragment) {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      }
+
+      window.requestAnimationFrame(() => {
+        root.classList.remove('bp-initial-scroll-reset', 'bp-initial-scroll-pending');
+      });
+    });
+  };
+
+  if (router.navigated) {
+    release();
     return;
   }
 
-  if ('scrollRestoration' in window.history) {
-    window.history.scrollRestoration = 'manual';
-  }
-
-  if (window.location.hash) {
-    return;
-  }
-
-  const root = document.documentElement;
-  const previousScrollBehavior = root.style.scrollBehavior;
-
-  root.style.scrollBehavior = 'auto';
-  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  root.scrollTop = 0;
-
-  if (document.body) {
-    document.body.scrollTop = 0;
-  }
-
-  window.requestAnimationFrame(() => {
-    root.style.scrollBehavior = previousScrollBehavior;
-  });
+  router.events
+    .pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      take(1),
+    )
+    .subscribe(() => release());
 }
-
-resetInitialScrollPosition();
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -52,4 +57,6 @@ bootstrapApplication(AppComponent, {
       }),
     ),
   ],
-}).catch((error: unknown) => console.error(error));
+})
+  .then((appRef) => releaseInitialScroll(appRef.injector.get(Router)))
+  .catch((error: unknown) => console.error(error));

@@ -1926,7 +1926,7 @@
   transform-origin: left center;
 }
 
-.skills__level-panel.is-loaded .skills__level-track span {
+.skills__level-panel.bp-reveal--visible .skills__level-track span {
   animation: skill-bar-load 920ms var(--bp-ease-out) both;
   animation-delay: calc(var(--bp-stagger-delay, 180ms) + 280ms);
 }
@@ -4164,7 +4164,7 @@
   );
 }
 
-.skills__level-panel.is-loaded .skills__level-track span {
+.skills__level-panel.bp-reveal--visible .skills__level-track span {
   animation-timing-function: steps(14, end);
 }
 

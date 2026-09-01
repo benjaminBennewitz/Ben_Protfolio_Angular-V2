@@ -374,6 +374,8 @@ Portfolio/
 │   │   │   ├── me-and-coffee-error.webp
 │   │   │   ├── me-with-chocolate.webp
 │   │   │   └── nice-head-loader.webp
+│   │   ├── scripts/
+│   │   │   └── scroll-restoration.js
 │   │   ├── snippet-demos/
 │   │   │   ├── angular-signals-workflow.ts
 │   │   │   ├── css-can-count-elements.html

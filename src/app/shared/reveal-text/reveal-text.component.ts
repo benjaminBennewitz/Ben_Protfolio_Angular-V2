@@ -30,9 +30,6 @@ export class RevealTextComponent implements AfterViewInit, OnDestroy {
   /** Host-Element für die richtungsunabhängige Viewport-Erkennung. */
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  /** Beobachtet Reveal-Texte in langen Sections ohne Scroll-Snap-Heuristik. */
-  private intersectionObserver: IntersectionObserver | null = null;
-
   /** Merkt, ob die Textanimation bereits gestartet wurde. */
   private hasRevealed = false;
 
@@ -77,11 +74,6 @@ export class RevealTextComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    if (this.belongsToSkillsSection(element)) {
-      this.bindIntersectionCheck(element);
-      return;
-    }
-
     this.bindVisibilityCheck(element);
   }
 
@@ -91,8 +83,6 @@ export class RevealTextComponent implements AfterViewInit, OnDestroy {
       window.cancelAnimationFrame(this.frameId);
     }
 
-    this.intersectionObserver?.disconnect();
-    this.intersectionObserver = null;
     this.clearSettledCheckTimers();
     this.cleanupListeners?.();
   }
@@ -117,37 +107,6 @@ export class RevealTextComponent implements AfterViewInit, OnDestroy {
     const sizeClass = this.size === 'section' ? 'reveal__title--section' : '';
 
     return ['bp-title', 'reveal__title', sizeClass, this.headingClass].filter(Boolean).join(' ');
-  }
-
-
-  /** Beobachtet Skills-Headlines direkt, damit lange Sections nicht durch Scroll-Snap-Heuristiken fallen. */
-  private bindIntersectionCheck(element: HTMLElement): void {
-    if (!('IntersectionObserver' in window)) {
-      this.reveal();
-      return;
-    }
-
-    this.intersectionObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry?.isIntersecting) {
-          return;
-        }
-
-        this.reveal();
-      },
-      {
-        root: null,
-        rootMargin: '0px 0px -30% 0px',
-        threshold: 0.01,
-      },
-    );
-
-    this.intersectionObserver.observe(element);
-  }
-
-  /** Prüft, ob ein Reveal-Text zum langen Techstack-Bereich gehört. */
-  private belongsToSkillsSection(element: HTMLElement): boolean {
-    return element.closest<HTMLElement>('#skills') !== null;
   }
 
   /** Registriert eine richtungsunabhängige Sichtbarkeitsprüfung. */
@@ -301,8 +260,6 @@ export class RevealTextComponent implements AfterViewInit, OnDestroy {
   private reveal(): void {
     this.hasRevealed = true;
     this.isVisible.set(true);
-    this.intersectionObserver?.disconnect();
-    this.intersectionObserver = null;
     this.clearSettledCheckTimers();
     this.cleanupListeners?.();
     this.cleanupListeners = undefined;

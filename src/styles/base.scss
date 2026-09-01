@@ -61,6 +61,11 @@
    03   Dokument
    ========================================================================== */
 
+html.bp-initial-scroll-reset {
+  scroll-behavior: auto !important;
+  scroll-snap-type: none !important;
+}
+
 html {
   width: 100%;
   min-width: 300px;

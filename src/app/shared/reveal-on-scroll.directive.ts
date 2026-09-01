@@ -16,6 +16,9 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
   /** Referenz auf das hostende DOM-Element. */
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
+  /** Beobachtet Reveal-Elemente in langen Sections ohne Scroll-Snap-Heuristik. */
+  private intersectionObserver: IntersectionObserver | null = null;
+
   /** Merkt, ob die Animation bereits final gestartet wurde. */
   private hasRevealed = false;
 
@@ -44,6 +47,11 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
       return;
     }
 
+    if (this.belongsToSkillsSection(element)) {
+      this.bindIntersectionCheck(element);
+      return;
+    }
+
     this.bindVisibilityCheck(element);
   }
 
@@ -53,38 +61,60 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
       window.cancelAnimationFrame(this.frameId);
     }
 
+    this.intersectionObserver?.disconnect();
+    this.intersectionObserver = null;
     this.clearSettledCheckTimers();
     this.cleanupListeners?.();
+  }
+
+
+  /** Beobachtet Skills-Elemente direkt, damit lange Sections nicht durch Scroll-Snap-Heuristiken fallen. */
+  private bindIntersectionCheck(element: HTMLElement): void {
+    if (!('IntersectionObserver' in window)) {
+      this.reveal(element);
+      return;
+    }
+
+    this.intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) {
+          return;
+        }
+
+        this.reveal(element);
+      },
+      {
+        root: null,
+        rootMargin: '0px 0px -8% 0px',
+        threshold: 0.01,
+      },
+    );
+
+    this.intersectionObserver.observe(element);
+  }
+
+  /** Prüft, ob ein Reveal-Element zum langen Techstack-Bereich gehört. */
+  private belongsToSkillsSection(element: HTMLElement): boolean {
+    return element.closest<HTMLElement>('#skills') !== null;
   }
 
   /** Registriert eine richtungsunabhängige Sichtbarkeitsprüfung. */
   private bindVisibilityCheck(element: HTMLElement): void {
     const requestImmediateCheck = (): void => this.requestVisibilityFrame(element);
     const requestSettledCheck = (): void => this.queueSettledVisibilityChecks(element);
-    const handleScroll = (): void => {
-      if (this.belongsToSkillsSection(element)) {
-        requestImmediateCheck();
-        return;
-      }
 
-      requestSettledCheck();
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', requestSettledCheck, { passive: true });
     window.addEventListener('resize', requestImmediateCheck, { passive: true });
     window.addEventListener('scrollend', requestImmediateCheck, { passive: true });
 
     this.cleanupListeners = () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', requestSettledCheck);
       window.removeEventListener('resize', requestImmediateCheck);
       window.removeEventListener('scrollend', requestImmediateCheck);
     };
 
     this.requestVisibilityFrame(element);
-
-    if (!this.belongsToSkillsSection(element)) {
-      this.queueSettledVisibilityChecks(element);
-    }
+    this.queueSettledVisibilityChecks(element);
   }
 
   /** Plant eine gedrosselte Messung im nächsten Browser-Frame. */
@@ -138,27 +168,11 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
     const section = this.closestScrollableSection(element);
 
-    if (section?.id === 'skills') {
-      return this.elementIsVisibleInSkillsViewport(element, viewportHeight);
-    }
-
     if (section && this.sectionIsViewportSized(section, viewportHeight)) {
       return this.sectionIsReadable(section, element, viewportHeight);
     }
 
     return this.elementIsReadable(element, viewportHeight);
-  }
-
-  /** Prüft, ob ein Reveal-Element zum langen Techstack-Bereich gehört. */
-  private belongsToSkillsSection(element: HTMLElement): boolean {
-    return element.closest<HTMLElement>('#skills') !== null;
-  }
-
-  /** Hält Skills-Reveals bei kontinuierlichem Scrollen in einer großzügigen Leseband-Zone erreichbar. */
-  private elementIsVisibleInSkillsViewport(element: HTMLElement, viewportHeight: number): boolean {
-    const rect = element.getBoundingClientRect();
-
-    return rect.bottom >= viewportHeight * 0.08 && rect.top <= viewportHeight * 0.9;
   }
 
   /** Sucht den nächstgelegenen visuellen Snap-Kontext. */
@@ -237,6 +251,8 @@ export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
   private reveal(element: HTMLElement): void {
     this.hasRevealed = true;
     element.classList.add('bp-reveal--visible');
+    this.intersectionObserver?.disconnect();
+    this.intersectionObserver = null;
     this.clearSettledCheckTimers();
     this.cleanupListeners?.();
     this.cleanupListeners = undefined;

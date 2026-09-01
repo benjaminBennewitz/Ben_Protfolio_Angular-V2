@@ -1084,7 +1084,19 @@ export interface ContactContent {
   readonly sendingLabel: string;
   readonly successMessage: string;
   readonly errorMessage: string;
-  /** Fehlermeldung bei fehlendem oder nicht erreichbarem Backend. */
+  /** Fehlermeldung bei einer serverseitig abgelehnten Eingabe. */
+  readonly validationErrorMessage: string;
+  /** Fehlermeldung nach fehlgeschlagener CSRF-Erneuerung. */
+  readonly csrfErrorMessage: string;
+  /** Fehlermeldung bei einer zu großen Anfrage. */
+  readonly payloadTooLargeErrorMessage: string;
+  /** Fehlermeldung bei zu vielen Anfragen in kurzer Zeit. */
+  readonly rateLimitErrorMessage: string;
+  /** Fehlermeldung bei vorübergehend nicht verfügbarer Infrastruktur. */
+  readonly temporaryErrorMessage: string;
+  /** Fehlermeldung bei einem Netzwerkfehler. */
+  readonly networkErrorMessage: string;
+  /** Allgemeine Fehlermeldung für unerwartete Serverfehler. */
   readonly serverErrorMessage: string;
   /** Fehlermeldung für einen fehlenden Namen. */
   readonly nameRequiredError: string;

@@ -9,5 +9,6 @@
 export const environment = {
   production: true,
   siteUrl: 'https://b2folio.de',
+  csrfEndpoint: '/api/csrf/',
   contactEndpoint: '/api/contact/',
 } as const;

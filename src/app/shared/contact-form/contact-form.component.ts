@@ -2,31 +2,19 @@
 
 /**
  * @file Kontaktformular-Komponente.
- * @description Validiert Eingaben clientseitig und sendet vorbereitete Kontaktdaten an den späteren Server-Endpunkt.
+ * @description Validiert Eingaben clientseitig und sendet freigegebene Kontaktdaten über die zentrale Infrastructure API.
  */
 
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { environment } from '../../../environments/environment';
 import { ContactTopic } from '../../core/models/portfolio.models';
+import { ContactApiError, ContactApiService, ContactRequest } from '../../core/services/contact-api.service';
 import { LanguageService } from '../../core/services/language.service';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 
 /** Formularfelder mit eigener Validierung und Fehlerausgabe. */
 type ContactField = 'name' | 'email' | 'message';
-
-/** Payload für den konfigurierten serverseitigen Kontakt-Endpunkt. */
-interface ContactPayload {
-  /** Name des Absenders. */
-  readonly name: string;
-  /** E-Mail-Adresse des Absenders. */
-  readonly email: string;
-  /** Freitextnachricht des Absenders. */
-  readonly message: string;
-  /** Gewählte Themen als stabile technische Werte. */
-  readonly topics: readonly string[];
-}
 
 /** Einfaches Kontaktformular mit Server-Workflow-Vorbereitung. */
 @Component({
@@ -39,6 +27,9 @@ interface ContactPayload {
 export class ContactFormComponent {
   /** Laufender Zähler für eindeutige Formular-IDs bei mehreren Formularinstanzen. */
   private static nextInstanceId = 0;
+
+  /** API-Service für CSRF-Handshake und Contact-Request. */
+  private readonly contactApiService = inject(ContactApiService);
 
   /** Sprachservice für Labels und Meldungen. */
   private readonly languageService = inject(LanguageService);
@@ -192,56 +183,100 @@ export class ContactFormComponent {
     return this.messageError();
   }
 
-  /** Sendet valide Formulardaten an den vorbereiteten Backend-Endpunkt. */
+  /** Sendet valide Formulardaten über die zentrale Infrastructure API. */
   async submit(): Promise<void> {
-    this.hasSubmitted.set(true);
-    this.status.set('');
-
-    if (this.website().trim()) {
-      await this.router.navigate(['/danke']);
+    if (this.isSubmitting()) {
       return;
     }
+
+    this.hasSubmitted.set(true);
+    this.status.set('');
 
     if (!this.isValid()) {
       this.status.set(this.content().errorMessage);
       return;
     }
 
-    await this.sendToServer();
-  }
-
-  /** Sendet die Nachricht an den konfigurierten Server-Endpunkt. */
-  private async sendToServer(): Promise<void> {
     this.isSubmitting.set(true);
 
     try {
-      const response = await fetch(environment.contactEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'same-origin',
-        body: JSON.stringify(this.createPayload()),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Contact endpoint failed with status ${response.status}`);
-      }
-
+      await this.contactApiService.sendContactMessage(this.createPayload());
+      this.resetForm();
       await this.router.navigate(['/danke']);
-    } catch {
-      this.status.set(this.content().serverErrorMessage);
+    } catch (error: unknown) {
+      this.status.set(this.apiErrorMessage(error));
     } finally {
       this.isSubmitting.set(false);
     }
   }
 
-  /** Erzeugt den typisierten Request-Body für das Backend. */
-  private createPayload(): ContactPayload {
+  /** Erzeugt ausschließlich die vom Contact-API-Contract erlaubten Felder. */
+  private createPayload(): ContactRequest {
     return {
       name: this.name().trim(),
       email: this.email().trim(),
-      message: this.message().trim(),
-      topics: this.selectedTopics(),
+      message: this.messageWithTopics(),
+      website: this.website().trim(),
     };
+  }
+
+  /** Erhält die bestehende Themenauswahl, ohne ein zusätzliches API-Feld einzuführen. */
+  private messageWithTopics(): string {
+    const message = this.message().trim();
+    const selectedTopicLabels = this.content().topics
+      .filter((topic) => this.selectedTopics().includes(topic.value))
+      .map((topic) => topic.label);
+
+    if (!selectedTopicLabels.length) {
+      return message;
+    }
+
+    return `${this.content().topicLabel}: ${selectedTopicLabels.join(', ')}\n\n${message}`;
+  }
+
+  /** Übersetzt technische API-Fehler in vorhandene nutzerfreundliche UI-Meldungen. */
+  private apiErrorMessage(error: unknown): string {
+    if (!(error instanceof ContactApiError)) {
+      return this.content().serverErrorMessage;
+    }
+
+    if (error.kind === 'validation') {
+      return this.content().validationErrorMessage;
+    }
+
+    if (error.kind === 'csrf') {
+      return this.content().csrfErrorMessage;
+    }
+
+    if (error.kind === 'payload-too-large') {
+      return this.content().payloadTooLargeErrorMessage;
+    }
+
+    if (error.kind === 'rate-limit') {
+      return this.content().rateLimitErrorMessage;
+    }
+
+    if (error.kind === 'unavailable') {
+      return this.content().temporaryErrorMessage;
+    }
+
+    if (error.kind === 'network') {
+      return this.content().networkErrorMessage;
+    }
+
+    return this.content().serverErrorMessage;
+  }
+
+  /** Setzt nach erfolgreichem Versand alle Formularwerte inklusive Honeypot zurück. */
+  private resetForm(): void {
+    this.name.set('');
+    this.email.set('');
+    this.message.set('');
+    this.website.set('');
+    this.selectedTopics.set([]);
+    this.privacyAccepted.set(false);
+    this.hasSubmitted.set(false);
+    this.status.set('');
   }
 
 

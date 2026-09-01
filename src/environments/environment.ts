@@ -9,5 +9,6 @@
 export const environment = {
   production: false,
   siteUrl: 'http://localhost:4200',
+  csrfEndpoint: '/api/csrf/',
   contactEndpoint: '/api/contact/',
 } as const;

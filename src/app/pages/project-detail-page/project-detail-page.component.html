@@ -43,12 +43,6 @@
               <span>{{ activeProject.boardShowcase?.ctaLabel ?? activeProject.bloodShowcase?.ctaLabel ?? activeProject.catalogShowcase?.ctaLabel ?? content().projectsIntro.caseStudyLabel }}</span>
               <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
             </a>
-            @if (!activeProject.catalogShowcase) {
-            <a class="bp-button project-detail__hero-demo-link" href="#project-live-demo">
-              <span>{{ content().projectsIntro.openDemoLabel }}</span>
-              <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-            </a>
-            }
           </div>
         </div>
 
@@ -162,10 +156,6 @@
                   <h2>{{ selectedApp.title }}</h2>
                   <span>{{ selectedApp.text }}</span>
                 </div>
-                <button type="button" class="project-detail__app-action">
-                  <span>{{ selectedApp.actionLabel }}</span>
-                  <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-                </button>
               </div>
             </article>
             }
@@ -324,7 +314,9 @@
         <section class="project-detail__architecture" [attr.aria-label]="content().projectsIntro.architectureLabel">
           <div class="project-detail__architecture-head">
             <h3>{{ content().projectsIntro.architectureLabel }}</h3>
+            @if (content().projectsIntro.architectureHint) {
             <p>{{ content().projectsIntro.architectureHint }}</p>
+            }
           </div>
 
           <div class="project-detail__map">
@@ -444,39 +436,24 @@
                 </div>
               </div>
             </div>
-
-            @if (activeArchitectureNode(); as activeNode) {
-            <article class="project-detail__map-detail bp-dos-window" bpReveal>
+            <article class="project-detail__map-detail bp-dos-window" bpReveal aria-live="polite">
               <div class="bp-dos-window__bar">
                 <span>inspect_system.map</span>
                 <span class="project-detail__window-close" aria-hidden="true">×</span>
               </div>
               <div class="bp-dos-window__body project-detail__map-detail-body">
-                <p class="bp-eyebrow">{{ activeNode.role }}</p>
-                <h3>{{ activeNode.label }}</h3>
-                <p>{{ activeNode.text }}</p>
+                <p class="bp-eyebrow">{{ activeArchitectureNode().role }}</p>
+                <h3>{{ activeArchitectureNode().label }}</h3>
+                <p>{{ activeArchitectureNode().text }}</p>
                 <ul>
-                  @for (connection of activeNode.connections; track connection) {
+                  @for (connection of activeArchitectureNode().connections; track connection) {
                   <li>{{ connection }}</li>
                   }
                 </ul>
               </div>
             </article>
-            }
           </div>
         </section>
-        }
-
-        @if (isCaseNoteVisible()) {
-        <bp-system-dialog class="project-detail__case-note" title="case_note.sys"
-          [ariaLabel]="content().projectsIntro.caseStudyLabel" [closeLabel]="content().projectsIntro.dialogCloseLabel"
-          (closed)="closeCaseNote()" bpReveal>
-          <div class="bp-dos-window__body project-detail__case-note-body">
-            <p>mode={{ activeProject.detailMode }}</p>
-            <p>stack={{ activeProject.techStack.join(' / ') }}</p>
-            <p>next=erm_layer + sequence_flow + rights_matrix</p>
-          </div>
-        </bp-system-dialog>
         }
 
       </div>
@@ -747,37 +724,15 @@
     }
 
     @if (activeProject.liveDemo; as demo) {
-    <section id="project-live-demo" class="project-detail__demo bp-section" bpReveal>
-      <div class="bp-container project-detail__demo-panel bp-card">
-        <span class="project-detail__demo-icon material-symbols-outlined" aria-hidden="true">terminal</span>
-        <div>
-          <p class="bp-eyebrow">{{ content().projectsIntro.liveDemoLabel }}</p>
-          <h2>{{ demo.status === 'available' ? content().projectsIntro.openDemoLabel : content().projectsIntro.demoUnavailableLabel }}</h2>
-          <p>{{ demo.text }}</p>
-        </div>
-
-        <div class="project-detail__demo-actions">
-          @if (demo.status === 'available' && demo.url) {
-          <a class="bp-button bp-button--accent" [href]="demo.url" target="_blank" rel="noreferrer">
-            <span>{{ content().projectsIntro.openDemoLabel }}</span>
-            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-          </a>
-          } @else if (demo.status !== 'private') {
-          <span class="project-detail__demo-status">{{ demo.status }}</span>
-          }
-          @if (demo.githubUrl) {
-          <a class="bp-button bp-button--ghost project-detail__github-link" [href]="demo.githubUrl" target="_blank" rel="noreferrer">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" focusable="false">
-              <path d="M12 1.5a10.5 10.5 0 0 0-3.32 20.46c.53.1.72-.23.72-.51v-2.04c-2.95.64-3.57-1.25-3.57-1.25-.48-1.23-1.18-1.56-1.18-1.56-.96-.66.07-.65.07-.65 1.07.08 1.63 1.1 1.63 1.1.95 1.62 2.49 1.15 3.1.88.1-.69.37-1.15.68-1.42-2.35-.27-4.82-1.18-4.82-5.2 0-1.15.41-2.09 1.09-2.82-.11-.27-.47-1.34.1-2.78 0 0 .89-.29 2.89 1.07A9.98 9.98 0 0 1 12 6.43c.9 0 1.79.12 2.63.35 2-1.36 2.88-1.07 2.88-1.07.58 1.44.22 2.51.11 2.78.68.73 1.08 1.67 1.08 2.82 0 4.04-2.48 4.92-4.84 5.18.38.33.72.98.72 1.98v2.98c0 .29.19.62.73.51A10.5 10.5 0 0 0 12 1.5Z" />
-            </svg>
-            <span>{{ content().projectsIntro.githubLabel }}</span>
-          </a>
-          }
-          <a class="bp-button" routerLink="/" fragment="contact">
-            <span>{{ content().projectsIntro.demoRequestLabel }}</span>
-            <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-          </a>
-        </div>
+    <section class="project-detail__presentation-note" bpReveal>
+      <div class="bp-container">
+        <aside class="project-detail__presentation-note-inner" [attr.aria-label]="content().projectsIntro.liveDemoLabel">
+          <span class="project-detail__presentation-note-icon material-symbols-outlined" aria-hidden="true">info</span>
+          <div>
+            <p class="bp-eyebrow">{{ content().projectsIntro.liveDemoLabel }}</p>
+            <p>{{ demo.text }}</p>
+          </div>
+        </aside>
       </div>
     </section>
     }
@@ -830,11 +785,6 @@
           @for (item of activeProject.gallery; track item.title; let index = $index) {
           <article [class]="'project-detail__evidence-card project-detail__animated-item project-detail__evidence-card--' + item.size" [style.--reveal-index]="index" bpReveal>
             <div class="project-detail__browser-frame">
-              <div class="project-detail__browser-bar" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
               @if (item.image) {
               <button type="button" class="project-detail__evidence-image-trigger" [attr.aria-label]="content().projectsIntro.zoomLabel + ': ' + item.title" (click)="openGalleryLightbox(index)">
                 <img [src]="item.image" [alt]="item.alt ?? item.title" loading="lazy" decoding="async" />

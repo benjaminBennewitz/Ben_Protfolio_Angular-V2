@@ -548,8 +548,6 @@ export interface ProjectAppModule {
   readonly text: string;
   /** Material-Symbol für die App-Karte. */
   readonly icon: string;
-  /** Beschriftung der Modulaktion. */
-  readonly actionLabel: string;
   /** Optionaler Status oder Badge der Karte. */
   readonly badge?: string;
   /** Zustand des Moduls im Portfolio-Kontext. */

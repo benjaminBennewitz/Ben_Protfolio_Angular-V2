@@ -30,7 +30,7 @@
       </g>
       <g class="telemetry-chart__radial-core" transform="translate(154 140)">
         <text y="-5" text-anchor="middle">{{ data.length }}</text>
-        <text y="17" text-anchor="middle">SIGNALS</text>
+        <text y="17" text-anchor="middle">AREAS</text>
       </g>
     </svg>
     } @else {
@@ -49,6 +49,10 @@
         <line x1="44" y1="126" x2="620" y2="126"></line>
         <line x1="44" y1="177" x2="620" y2="177"></line>
         <line x1="44" y1="228" x2="620" y2="228"></line>
+      </g>
+      <g class="telemetry-chart__scale" aria-hidden="true">
+        <text x="36" y="29" text-anchor="end">{{ resolvedMax() }}</text>
+        <text x="36" y="232" text-anchor="end">0</text>
       </g>
 
       @if (variant === 'step') {

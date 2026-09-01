@@ -1152,7 +1152,7 @@ body.bp-lightbox-open {
   height: min(80vh, 880px);
   max-height: 80vh;
   min-height: 0;
-  overflow: visible;
+  overflow: hidden;
   border: 1px solid color-mix(in srgb, var(--bp-color-accent), transparent 48%);
   border-radius: 0;
   padding: clamp(0.75rem, 1.4vw, 1rem);
@@ -1164,8 +1164,8 @@ body.bp-lightbox-open {
 .project-detail__lightbox-close {
   position: absolute;
   z-index: 4;
-  top: -0.9rem;
-  right: -0.9rem;
+  top: 0.75rem;
+  right: 0.75rem;
   width: 2.55rem;
   aspect-ratio: 1;
   background: var(--bp-color-surface-solid);
@@ -1260,10 +1260,10 @@ body.bp-lightbox-open {
   min-width: 0;
   min-height: 0;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: clamp(0.65rem, 1.25vh, 0.95rem);
-  overflow: visible;
-  padding: clamp(0.75rem, 1.5vw, 1rem);
+  overflow-y: auto;
+  padding: clamp(3rem, 4vw, 3.45rem) clamp(0.75rem, 1.5vw, 1rem) clamp(0.75rem, 1.5vw, 1rem);
   transition: opacity 120ms ease, transform 120ms ease;
   will-change: opacity, transform;
 }
@@ -1273,9 +1273,15 @@ body.bp-lightbox-open {
 }
 
 .project-detail__lightbox-copy h3 {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   margin: 0;
   font-size: clamp(1.55rem, 2.6vw, 3rem);
   line-height: 0.94;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: auto;
 }
 
 .project-detail__lightbox-copy p:not(.bp-eyebrow) {
@@ -1600,13 +1606,31 @@ body.bp-lightbox-open {
   }
 
   .project-detail__lightbox {
-    padding: 0.5rem;
+    inset: var(--bp-header-height) 0 0;
+    padding: 0.5rem max(0.5rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.5rem, env(safe-area-inset-left));
   }
 
   .project-detail__lightbox-panel {
     width: calc(100svw - 1rem);
-    height: min(88svh, calc(100svh - 1rem));
-    max-height: 88svh;
+    height: min(88svh, calc(100svh - var(--bp-header-height) - 1rem - env(safe-area-inset-bottom)));
+    max-height: calc(100svh - var(--bp-header-height) - 1rem - env(safe-area-inset-bottom));
+    padding-top: 0.9rem;
+  }
+
+  .project-detail__lightbox-close {
+    top: 0.55rem;
+    right: 0.55rem;
+  }
+
+  .project-detail__lightbox-copy {
+    padding-bottom: 4.6rem;
+  }
+
+  .project-detail__lightbox-actions {
+    right: auto;
+    bottom: max(0.65rem, env(safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 

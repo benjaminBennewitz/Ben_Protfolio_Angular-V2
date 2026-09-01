@@ -1,7 +1,5 @@
-Portfolio/
+B2Folio/
 ├── .angular/
-│   └── ...
-├── dist/
 │   └── ...
 ├── node_modules/
 │   └── ...
@@ -337,6 +335,22 @@ Portfolio/
 │   │   │   │   │   ├── review.webp
 │   │   │   │   │   ├── uebersicht.webp
 │   │   │   │   │   └── wissensbasis.webp
+│   │   │   │   ├── intranet/
+│   │   │   │   │   └── screens/
+│   │   │   │   │       ├── document-share.webp
+│   │   │   │   │       ├── intranet-app-overview.webp
+│   │   │   │   │       ├── intranet-control-panel.webp
+│   │   │   │   │       ├── intranet-dashboard.webp
+│   │   │   │   │       ├── intranet-db-health.webp
+│   │   │   │   │       ├── intranet-import-inbox.webp
+│   │   │   │   │       ├── intranet-login.webp
+│   │   │   │   │       ├── intranet-maintenance-modal.webp
+│   │   │   │   │       ├── intranet-order-history-modal.webp
+│   │   │   │   │       ├── intranet-order-status.webp
+│   │   │   │   │       ├── intranet-user-rights-modal.webp
+│   │   │   │   │       ├── projects-board.webp
+│   │   │   │   │       ├── projects-inbox.webp
+│   │   │   │   │       └── projects-welcome.webp
 │   │   │   │   └── pepes-adventure/
 │   │   │   │       └── desert-hero-bg.webp
 │   │   │   ├── project-stack/

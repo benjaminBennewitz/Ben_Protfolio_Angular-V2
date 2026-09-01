@@ -376,34 +376,6 @@
   font-size: 1.05rem;
 }
 
-.project-detail__app-action,
-.project-detail__app-card-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.55rem;
-  border: 1px solid #111111;
-  border-radius: 0;
-  padding: 0.82rem 1rem;
-  background: var(--bp-color-danger);
-  color: var(--bp-color-on-danger);
-  font-family: var(--bp-font-mono);
-  font-size: 0.76rem;
-  font-weight: 950;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background-color 170ms ease, transform 170ms var(--bp-ease-out), box-shadow 170ms ease;
-}
-
-.project-detail__app-action:hover,
-.project-detail__app-action:focus-visible,
-.project-detail__app-card-action:hover,
-.project-detail__app-card-action:focus-visible {
-  background: #ff2b2b;
-  box-shadow: 0 10px 28px rgba(255, 45, 85, 0.28);
-  transform: translateY(-2px);
-}
 
 /* ========================================================================== 
    04   Terminalfenster
@@ -516,7 +488,6 @@
 
 .project-detail__copy h2,
 .project-detail__section-head h2,
-.project-detail__demo-panel h2,
 .project-detail__highlights h2 {
   max-width: 18ch;
   margin: 0;
@@ -742,8 +713,7 @@
   padding-bottom: var(--bp-space-5);
 }
 
-.project-detail__copy p,
-.project-detail__demo-panel p {
+.project-detail__copy p {
   max-width: 860px;
   margin: var(--bp-space-3) 0 0;
   color: var(--bp-color-text-muted);
@@ -1156,70 +1126,43 @@
   text-transform: uppercase;
 }
 
-.project-detail__app-card-action {
-  align-self: end;
-  margin-top: auto;
-}
 
 /* ========================================================================== 
-   14   Demo Panel
+   14   Presentation note
    ========================================================================== */
 
-.project-detail__demo {
-  background:
-    radial-gradient(circle at 16% 40%, color-mix(in srgb, var(--bp-color-danger), transparent 82%), transparent 30%),
-    linear-gradient(90deg, color-mix(in srgb, var(--bp-color-danger), transparent 93%), color-mix(in srgb, var(--bp-color-accent-3), transparent 94%));
+.project-detail__presentation-note {
+  padding: clamp(0.75rem, 1.6vw, 1.25rem) 0 clamp(1.5rem, 3vw, 2.75rem);
+  background: transparent;
 }
 
-.project-detail__demo-panel {
+.project-detail__presentation-note-inner {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: var(--bp-space-4);
-  align-items: center;
-  border-color: color-mix(in srgb, var(--bp-color-danger), transparent 44%);
-  border-radius: 0;
-  padding: var(--bp-space-5);
-  background:
-    radial-gradient(circle at 8% 50%, color-mix(in srgb, var(--bp-color-danger), transparent 72%), transparent 28%),
-    color-mix(in srgb, var(--bp-color-surface), transparent 4%);
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  width: min(100%, 690px);
+  margin-left: auto;
+  border-left: 2px solid color-mix(in srgb, var(--bp-color-accent), transparent 44%);
+  padding: 0.85rem 0 0.6rem 0.9rem;
+  background: transparent;
 }
 
-.project-detail__demo-panel .bp-eyebrow {
-  margin: 0 0 var(--bp-space-2);
+.project-detail__presentation-note-inner .bp-eyebrow {
+  margin: 0 0 0.48rem;
+  font-size: 0.62rem;
 }
 
-.project-detail__demo-icon {
-  display: grid;
-  width: clamp(4rem, 6vw, 5.5rem);
-  aspect-ratio: 1;
-  place-items: center;
-  border: 3px solid var(--bp-color-danger);
-  border-radius: 0;
-  color: var(--bp-color-danger);
-  font-size: clamp(2.1rem, 4vw, 3.4rem);
+.project-detail__presentation-note-inner p:last-child {
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  font-size: clamp(0.74rem, 0.82vw, 0.82rem);
+  line-height: 1.48;
 }
 
-.project-detail__demo-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--bp-space-2);
-  justify-content: flex-end;
-}
-
-.project-detail__demo-status {
-  display: inline-flex;
-  min-width: 132px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--bp-color-border);
-  border-radius: 999px;
-  padding: 0.8rem 1.05rem;
+.project-detail__presentation-note-icon {
+  margin-top: 0.08rem;
   color: var(--bp-color-accent);
-  font-family: var(--bp-font-mono);
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 1.05rem;
 }
 
 /* ========================================================================== 
@@ -1273,22 +1216,6 @@
   --project-detail-screen-height: 275px;
 }
 
-.project-detail__browser-bar {
-  display: flex;
-  gap: 0.36rem;
-  align-items: center;
-  min-height: 2.05rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--bp-color-accent), transparent 62%);
-  padding: 0 0.75rem;
-  background: color-mix(in srgb, var(--bp-color-accent), transparent 88%);
-}
-
-.project-detail__browser-bar span {
-  width: 0.62rem;
-  aspect-ratio: 1;
-  border: 1px solid color-mix(in srgb, var(--bp-color-text), transparent 60%);
-  border-radius: 999px;
-}
 
 .project-detail__browser-frame img {
   display: block;
@@ -1488,8 +1415,7 @@
 }
 
 @media (max-width: 920px) {
-  .project-detail__info-grid,
-  .project-detail__demo-panel {
+  .project-detail__info-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1498,9 +1424,6 @@
     top: auto;
   }
 
-  .project-detail__demo-actions {
-    justify-content: flex-start;
-  }
 
   .project-detail__blueprint {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1804,66 +1727,22 @@
   animation: project-detail-copy-in 720ms var(--bp-ease-out) 320ms both;
 }
 
-.project-detail__hero-actions .bp-button--ghost,
-.project-detail__hero-demo-link {
-  border-color: var(--bp-color-border-strong) !important;
-  background: color-mix(in srgb, var(--bp-color-surface-solid) 38%, transparent) !important;
-  color: var(--bp-color-text) !important;
-}
-
-:root[data-theme='light'] .project-detail__hero-actions .bp-button--ghost,
-:root[data-theme='light'] .project-detail__hero-demo-link,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button--ghost,
-:host-context(:root[data-theme='light']) .project-detail__hero-demo-link {
-  border-color: rgba(17, 17, 17, 0.52) !important;
-  background: rgba(255, 253, 248, 0.78) !important;
-  color: #101010 !important;
-}
-
-.project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover,
-.project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible,
-.project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover > *,
-.project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible > * {
+.project-detail__hero-actions .bp-button:hover,
+.project-detail__hero-actions .bp-button:focus-visible,
+.project-detail__hero-actions .bp-button:hover > *,
+.project-detail__hero-actions .bp-button:focus-visible > * {
   color: #111111 !important;
 }
 
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover,
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible,
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover > *,
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):hover > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:not(.project-detail__hero-demo-link):focus-visible > * {
+:root[data-theme='light'] .project-detail__hero-actions .bp-button:hover,
+:root[data-theme='light'] .project-detail__hero-actions .bp-button:focus-visible,
+:root[data-theme='light'] .project-detail__hero-actions .bp-button:hover > *,
+:root[data-theme='light'] .project-detail__hero-actions .bp-button:focus-visible > *,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:hover,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:focus-visible,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:hover > *,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:focus-visible > * {
   color: #f6f0e8 !important;
-}
-
-.project-detail__hero-actions .project-detail__hero-demo-link:hover,
-.project-detail__hero-actions .project-detail__hero-demo-link:focus-visible {
-  border-color: color-mix(in srgb, var(--bp-color-accent) 72%, var(--bp-color-border-strong) 28%) !important;
-  background: color-mix(in srgb, var(--bp-color-surface-solid) 78%, var(--bp-color-accent) 9%) !important;
-  color: var(--bp-color-text) !important;
-}
-
-.project-detail__hero-actions .project-detail__hero-demo-link:hover > *,
-.project-detail__hero-actions .project-detail__hero-demo-link:focus-visible > * {
-  color: var(--bp-color-text) !important;
-}
-
-:root[data-theme='light'] .project-detail__hero-actions .project-detail__hero-demo-link:hover,
-:root[data-theme='light'] .project-detail__hero-actions .project-detail__hero-demo-link:focus-visible,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .project-detail__hero-demo-link:hover,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .project-detail__hero-demo-link:focus-visible {
-  border-color: rgba(17, 17, 17, 0.68) !important;
-  background: rgba(255, 253, 248, 0.94) !important;
-  color: #101010 !important;
-}
-
-:root[data-theme='light'] .project-detail__hero-actions .project-detail__hero-demo-link:hover > *,
-:root[data-theme='light'] .project-detail__hero-actions .project-detail__hero-demo-link:focus-visible > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .project-detail__hero-demo-link:hover > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .project-detail__hero-demo-link:focus-visible > * {
-  color: #101010 !important;
 }
 
 .project-detail__hero-stage {
@@ -1982,62 +1861,6 @@
   overflow-wrap: break-word;
 }
 
-.project-detail__app-action {
-  justify-self: stretch;
-  min-width: 0;
-  pointer-events: auto;
-}
-
-.project-detail__app-action,
-.project-detail__app-card-action {
-  min-width: 0;
-  border-color: color-mix(in srgb, var(--project-detail-blue), black 24%);
-  padding-inline: 0.72rem;
-  background: var(--project-detail-blue);
-  color: #101010;
-  text-align: center;
-  font-size: clamp(0.62rem, 0.78vw, 0.72rem);
-}
-
-.project-detail__app-action span:not(.material-symbols-outlined),
-.project-detail__app-card-action span:not(.material-symbols-outlined) {
-  display: inline-flex;
-  justify-content: center;
-  min-width: 0;
-  margin-top: 0;
-  color: inherit;
-  line-height: 1.18;
-  overflow-wrap: break-word;
-}
-
-.project-detail__app-action .material-symbols-outlined,
-.project-detail__app-card-action .material-symbols-outlined {
-  justify-content: center;
-}
-
-.project-detail__app-action:hover,
-.project-detail__app-action:focus-visible,
-.project-detail__app-card-action:hover,
-.project-detail__app-card-action:focus-visible {
-  background: color-mix(in srgb, var(--project-detail-blue), white 14%);
-  color: #101010;
-  box-shadow: 0 12px 30px color-mix(in srgb, var(--project-detail-blue), transparent 72%);
-}
-
-:root[data-theme='light'] .project-detail__app-action,
-:root[data-theme='light'] .project-detail__app-card-action,
-:root[data-theme='light'] .project-detail__app-action:hover,
-:root[data-theme='light'] .project-detail__app-action:focus-visible,
-:root[data-theme='light'] .project-detail__app-card-action:hover,
-:root[data-theme='light'] .project-detail__app-card-action:focus-visible,
-:host-context(:root[data-theme='light']) .project-detail__app-action,
-:host-context(:root[data-theme='light']) .project-detail__app-card-action,
-:host-context(:root[data-theme='light']) .project-detail__app-action:hover,
-:host-context(:root[data-theme='light']) .project-detail__app-action:focus-visible,
-:host-context(:root[data-theme='light']) .project-detail__app-card-action:hover,
-:host-context(:root[data-theme='light']) .project-detail__app-card-action:focus-visible {
-  color: #f6f0e8;
-}
 
 .project-detail__stack-controls {
   position: absolute;
@@ -2278,37 +2101,6 @@
     linear-gradient(0deg, color-mix(in srgb, var(--bp-color-accent), transparent 98%) 1px, transparent 1px),
     linear-gradient(145deg, color-mix(in srgb, var(--bp-color-bg) 92%, black 8%), color-mix(in srgb, var(--bp-color-accent), var(--bp-color-bg) 98%));
   background-size: auto, auto, 58px 58px, 58px 58px, auto;
-}
-
-.project-detail__demo {
-  min-height: auto;
-  padding-top: clamp(3rem, 6vw, 5rem);
-  padding-bottom: clamp(3rem, 6vw, 5rem);
-  background:
-    radial-gradient(circle at 16% 40%, var(--project-detail-blue-soft), transparent 30%),
-    linear-gradient(90deg, color-mix(in srgb, var(--project-detail-blue), transparent 94%), transparent 62%);
-}
-
-.project-detail__demo-panel {
-  border-color: color-mix(in srgb, var(--project-detail-blue), transparent 42%);
-  background:
-    radial-gradient(circle at 8% 50%, color-mix(in srgb, var(--project-detail-blue), transparent 78%), transparent 28%),
-    color-mix(in srgb, var(--bp-color-surface), transparent 4%);
-}
-
-.project-detail__demo-icon {
-  border-color: var(--project-detail-blue);
-  color: var(--project-detail-blue);
-}
-
-.project-detail__demo-panel .bp-button--accent,
-.project-detail__demo-panel .bp-button--ghost {
-  border-color: var(--project-detail-blue);
-}
-
-.project-detail__demo-panel .bp-button:hover,
-.project-detail__demo-panel .bp-button:focus-visible {
-  border-color: transparent;
 }
 
 .project-detail__animated-item.bp-reveal:not(.project-detail__highlight-card) {

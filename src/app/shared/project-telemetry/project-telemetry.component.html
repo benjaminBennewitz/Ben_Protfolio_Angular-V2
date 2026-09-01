@@ -12,7 +12,9 @@
         <strong>{{ telemetry.statusValue }}</strong>
         <small>{{ telemetry.source }}</small>
       </div>
+      @if (telemetry.subtitle) {
       <p>{{ telemetry.subtitle }}</p>
+      }
     </header>
 
     <div class="project-telemetry__kpis" [attr.aria-label]="telemetry.kpiAriaLabel">

@@ -45,7 +45,7 @@
 
 .project-telemetry__head {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) auto minmax(240px, 0.7fr);
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: clamp(0.75rem, 1.5vw, 1.35rem);
   align-items: end;
 }
@@ -60,6 +60,7 @@
 }
 
 .project-telemetry__head > p {
+  grid-column: 1 / -1;
   margin: 0;
   max-width: 50ch;
   color: var(--bp-color-text-muted);
@@ -228,10 +229,6 @@
 
   .project-telemetry__head {
     grid-template-columns: 1fr auto;
-  }
-
-  .project-telemetry__head > p {
-    grid-column: 1 / -1;
   }
 
   .project-telemetry__kpis {

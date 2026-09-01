@@ -87,10 +87,23 @@
 }
 
 .telemetry-chart__head p {
+  align-self: start;
   margin: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
   color: var(--bp-color-text-muted);
   font-size: 0.72rem;
   line-height: 1.45;
+  transform: translateY(-0.2rem);
+  transition: max-height 180ms ease, opacity 160ms ease, transform 160ms ease;
+}
+
+.telemetry-chart:hover .telemetry-chart__head p,
+.telemetry-chart:focus-within .telemetry-chart__head p {
+  max-height: 5rem;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .telemetry-chart__viewport {
@@ -170,6 +183,13 @@
   stroke-dasharray: 2 8;
 }
 
+.telemetry-chart__scale text {
+  fill: var(--bp-color-text-muted);
+  font-family: var(--bp-font-tech, Consolas, monospace);
+  font-size: 9px;
+  font-weight: 800;
+}
+
 .telemetry-chart__fill {
   opacity: 0;
   pointer-events: none;
@@ -231,8 +251,9 @@
 
 .telemetry-chart__legend li {
   display: grid;
-  grid-template-columns: 8px minmax(0, 1fr) auto;
+  grid-template-columns: 8px minmax(0, max-content) auto;
   gap: 0.42rem;
+  justify-content: start;
   align-items: center;
   min-width: 0;
   color: var(--bp-color-text-muted);
@@ -327,7 +348,8 @@
   .telemetry-chart__point,
   .telemetry-chart__radial-value,
   .telemetry-chart__line,
-  .telemetry-chart__fill {
+  .telemetry-chart__fill,
+  .telemetry-chart__head p {
     animation: none;
     transition: none;
   }

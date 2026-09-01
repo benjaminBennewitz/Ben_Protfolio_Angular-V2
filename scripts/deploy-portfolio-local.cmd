@@ -16,12 +16,13 @@ if defined B2FOLIO_SSH_KEY (
 ) else if defined DCR_SSH_KEY (
   set "SSH_KEY=%DCR_SSH_KEY%"
 ) else (
-  set "SSH_KEY=%USERPROFILE%\.ssh\id_ed25519"
+  set "SSH_KEY=%USERPROFILE%\.ssh\dcr_vserver_werbung06"
 )
 
 if not exist "%SSH_KEY%" (
   echo [B2FOLIO][FEHLER] SSH-Key nicht gefunden: %SSH_KEY%
-  echo [B2FOLIO] Setze optional B2FOLIO_SSH_KEY oder DCR_SSH_KEY auf den korrekten privaten Key.
+  echo [B2FOLIO] Standard auf Werbung06: %%USERPROFILE%%\.ssh\dcr_vserver_werbung06
+  echo [B2FOLIO] Optional kann B2FOLIO_SSH_KEY oder DCR_SSH_KEY einen anderen Key vorgeben.
   exit /b 1
 )
 
@@ -102,7 +103,7 @@ echo [B2FOLIO] Build auf den Server laden...
 scp -i "%SSH_KEY%" "%ARCHIVE%" %SERVER%:%REMOTE_ARCHIVE% || exit /b 1
 
 echo [B2FOLIO] Serverseitiges Deployment starten...
-ssh -i "%SSH_KEY%" %SERVER% "sudo %REMOTE_DEPLOY% %REMOTE_ARCHIVE%" || exit /b 1
+ssh -t -i "%SSH_KEY%" %SERVER% "sudo %REMOTE_DEPLOY% %REMOTE_ARCHIVE%" || exit /b 1
 
 if exist "%ARCHIVE%" del /q "%ARCHIVE%"
 

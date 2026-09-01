@@ -4200,7 +4200,11 @@
   min-height: 9rem;
 }
 
-.home__defer-placeholder--process,
+.home__defer-placeholder--process {
+  height: calc(100svh * var(--step-total));
+  min-height: 340svh;
+}
+
 .home__defer-placeholder--chaos {
   min-height: 100svh;
 }

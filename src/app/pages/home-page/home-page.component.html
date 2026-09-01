@@ -261,7 +261,8 @@
   <bp-process-lock bpViewportActivity [eyebrow]="content().process.eyebrow" [title]="content().process.title"
     [subtitle]="content().process.subtitle" [hint]="content().process.hint" [steps]="content().process.steps" />
   } @placeholder {
-  <div id="process" class="home__defer-placeholder home__defer-placeholder--process" aria-hidden="true"></div>
+  <div id="process" class="home__defer-placeholder home__defer-placeholder--process"
+    [style.--step-total]="content().process.steps.length + 1" aria-hidden="true"></div>
   }
 
   <section class="clients bp-section" id="clients" bpViewportActivity>

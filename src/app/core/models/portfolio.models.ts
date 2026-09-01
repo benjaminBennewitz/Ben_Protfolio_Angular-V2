@@ -1069,8 +1069,6 @@ export interface ContactContent {
   readonly subtitle: string;
   readonly modalTitle: string;
   readonly modalCloseLabel: string;
-  /** Ziel-Endpunkt für den späteren serverseitigen Mailversand. */
-  readonly endpoint: string;
   readonly topicLabel: string;
   readonly topicHint: string;
   readonly topics: readonly ContactTopic[];

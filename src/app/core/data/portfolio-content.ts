@@ -1057,7 +1057,6 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       subtitle: '',
       modalTitle: 'Kontakt aufnehmen',
       modalCloseLabel: 'Kontaktformular schließen',
-      endpoint: '/api/contact/',
       topicLabel: 'Worum geht es?',
       topicHint: 'Mehrfachauswahl ist möglich. Die Auswahl hilft nur bei der Einordnung deiner Nachricht.',
       topics: [
@@ -1077,7 +1076,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       sendingLabel: 'Nachricht wird gesendet...',
       successMessage: 'Danke. Deine Nachricht wurde erfolgreich gesendet.',
       errorMessage: 'Bitte prüfe die markierten Pflichtfelder.',
-      serverErrorMessage: 'Der Mailserver ist aktuell noch nicht angebunden. Sobald der Backend-Endpunkt aktiv ist, wird die Nachricht direkt versendet.',
+      serverErrorMessage: 'Die Nachricht konnte gerade nicht gesendet werden. Bitte versuche es später erneut oder nutze die direkte E-Mail-Adresse.',
       nameRequiredError: 'Bitte gib deinen Namen ein.',
       nameLengthError: 'Der Name sollte mindestens 2 Zeichen enthalten.',
       emailRequiredError: 'Bitte gib deine E-Mail-Adresse ein.',
@@ -1153,7 +1152,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     },
     imprint: {
       metaTitle: 'Impressum | Benjamin Bennewitz',
-      metaDescription: 'Impressum und Anbieterkennzeichnung von Benjamin Bennewitz für bennewitz.de.',
+      metaDescription: 'Impressum und Anbieterkennzeichnung von Benjamin Bennewitz für b2folio.de.',
       eyebrow: 'legal_notice.exe',
       title: 'Impressum',
       intro: 'Direkt erreichbar, sauber sortiert und ohne Versteckspiel: Anbieterkennzeichnung und Kontakt.',
@@ -1974,7 +1973,6 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       subtitle: '',
       modalTitle: 'Get in touch',
       modalCloseLabel: 'Close contact form',
-      endpoint: '/api/contact/',
       topicLabel: 'What is it about?',
       topicHint: 'Multiple choices are possible. The selection only helps categorize your message.',
       topics: [
@@ -1994,7 +1992,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
       sendingLabel: 'Sending message...',
       successMessage: 'Thank you. Your message was sent successfully.',
       errorMessage: 'Please check the marked required fields.',
-      serverErrorMessage: 'The mail server is not connected yet. As soon as the backend endpoint is active, the message will be sent directly.',
+      serverErrorMessage: 'The message could not be sent right now. Please try again later or use the direct email address.',
       nameRequiredError: 'Please enter your name.',
       nameLengthError: 'The name should have at least 2 characters.',
       emailRequiredError: 'Please enter your email address.',
@@ -2070,7 +2068,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<'de' | 'en', PortfolioContent> = {
     },
     imprint: {
       metaTitle: 'Legal Notice | Benjamin Bennewitz',
-      metaDescription: 'Legal notice and provider information for Benjamin Bennewitz and bennewitz.de.',
+      metaDescription: 'Legal notice and provider information for Benjamin Bennewitz and b2folio.de.',
       eyebrow: 'legal_notice.exe',
       title: 'Legal Notice',
       intro: 'Direct, tidy and easy to find: provider information and contact details.',

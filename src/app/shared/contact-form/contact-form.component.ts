@@ -8,6 +8,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 import { ContactTopic } from '../../core/models/portfolio.models';
 import { LanguageService } from '../../core/services/language.service';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
@@ -15,7 +16,7 @@ import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 /** Formularfelder mit eigener Validierung und Fehlerausgabe. */
 type ContactField = 'name' | 'email' | 'message';
 
-/** Payload für den zukünftigen serverseitigen Kontakt-Endpunkt. */
+/** Payload für den konfigurierten serverseitigen Kontakt-Endpunkt. */
 interface ContactPayload {
   /** Name des Absenders. */
   readonly name: string;
@@ -209,12 +210,12 @@ export class ContactFormComponent {
     await this.sendToServer();
   }
 
-  /** Sendet die Nachricht an den zukünftigen Server-Endpunkt. */
+  /** Sendet die Nachricht an den konfigurierten Server-Endpunkt. */
   private async sendToServer(): Promise<void> {
     this.isSubmitting.set(true);
 
     try {
-      const response = await fetch(this.content().endpoint, {
+      const response = await fetch(environment.contactEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',

@@ -1,0 +1,17 @@
+# src/.htaccess
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # API-Anfragen werden vom Webserver/Reverse-Proxy verarbeitet und dürfen
+  # nicht auf die Angular index.html umgeschrieben werden.
+  RewriteRule ^api(?:/|$) - [L]
+
+  # Vorhandene Dateien und Verzeichnisse unverändert ausliefern.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Angular-Routen wie /portfolio oder /projects/intranet auf die SPA routen.
+  RewriteRule ^ index.html [L]
+</IfModule>

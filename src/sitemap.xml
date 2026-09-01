@@ -1,66 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://bennewitz.de/</loc>
-    <lastmod>2026-05-19</lastmod>
+    <loc>https://b2folio.de/</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://bennewitz.de/portfolio</loc>
+    <loc>https://b2folio.de/portfolio</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bennewitz.de/projects/intranet</loc>
-    <lastmod>2026-05-19</lastmod>
+    <loc>https://b2folio.de/projects/intranet</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bennewitz.de/projects/dein-fussabdruck</loc>
-    <lastmod>2026-05-19</lastmod>
+    <loc>https://b2folio.de/projects/dein-fussabdruck</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bennewitz.de/projects/kanban-klon</loc>
-    <lastmod>2026-05-19</lastmod>
+    <loc>https://b2folio.de/projects/kanban-klon</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bennewitz.de/projects/blutanalyse</loc>
-    <lastmod>2026-05-19</lastmod>
+    <loc>https://b2folio.de/projects/blutanalyse</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bennewitz.de/projects/grafikdesign-katalog</loc>
-    <lastmod>2026-05-19</lastmod>
+    <loc>https://b2folio.de/projects/grafikdesign-katalog</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bennewitz.de/snippets</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://b2folio.de/snippets</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://bennewitz.de/achievements</loc>
+    <loc>https://b2folio.de/achievements</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://bennewitz.de/impressum</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://b2folio.de/impressum</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://bennewitz.de/datenschutz</loc>
-    <lastmod>2026-08-31</lastmod>
+    <loc>https://b2folio.de/datenschutz</loc>
+    <lastmod>2026-09-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>

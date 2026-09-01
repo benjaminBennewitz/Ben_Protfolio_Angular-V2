@@ -8,6 +8,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
 import { PortfolioProject, SeoContent } from '../models/portfolio.models';
 import { TabTitleService } from './tab-title.service';
 
@@ -35,7 +36,7 @@ interface SeoApplyOptions {
 @Injectable({ providedIn: 'root' })
 export class SeoService {
   /** Primäre Domain für Canonical, OpenGraph und JSON-LD. */
-  private readonly siteUrl = 'https://bennewitz.de';
+  private readonly siteUrl: string = environment.siteUrl;
 
   /** Social-Preview-Bild für OpenGraph und Twitter Cards. */
   private readonly socialImage = '/assets/social/og-portfolio-preview.svg';

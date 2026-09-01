@@ -5,6 +5,9 @@ Portfolio/
 │   └── ...
 ├── node_modules/
 │   └── ...
+├── scripts/
+│   ├── deploy-portfolio-local.cmd
+│   └── deploy-portfolio-server.sh
 ├── src/
 │   ├── app/
 │   │   ├── core/
@@ -386,6 +389,9 @@ Portfolio/
 │   │   ├── social/
 │   │   │   └── og-portfolio-preview.svg
 │   │   └── favicon.svg
+│   ├── environments/
+│   │   ├── environment.production.ts
+│   │   └── environment.ts
 │   ├── styles/
 │   │   ├── arcade-tech.scss
 │   │   ├── base.scss
@@ -394,6 +400,7 @@ Portfolio/
 │   │   ├── project-detail-catalog.scss
 │   │   ├── tokens.scss
 │   │   └── utilities.scss
+│   ├── .htaccess
 │   ├── index.html
 │   ├── main.ts
 │   ├── robots.txt

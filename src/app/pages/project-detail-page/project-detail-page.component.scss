@@ -1312,6 +1312,122 @@
   font-size: 1.05rem;
 }
 
+.project-detail__live-access {
+  padding-block: clamp(2.5rem, 5vw, 5rem);
+  background:
+    radial-gradient(circle at 12% 12%, color-mix(in srgb, var(--bp-color-accent), transparent 84%), transparent 26%),
+    color-mix(in srgb, var(--bp-color-bg) 94%, black 6%);
+}
+
+.project-detail__live-access-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.project-detail__live-access-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  min-height: clamp(220px, 24vw, 320px);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--bp-color-border-strong), transparent 10%);
+  border-radius: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  color: var(--bp-color-text);
+  text-decoration: none;
+  transition: transform 220ms var(--bp-ease-out), border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.project-detail__live-access-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 42px 42px;
+  pointer-events: none;
+}
+
+.project-detail__live-access-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.project-detail__live-access-card--demo {
+  background:
+    radial-gradient(circle at 88% 15%, color-mix(in srgb, var(--bp-color-accent), transparent 65%), transparent 28%),
+    color-mix(in srgb, var(--bp-color-surface) 84%, var(--bp-color-accent) 16%);
+}
+
+.project-detail__live-access-card--github {
+  background:
+    radial-gradient(circle at 88% 15%, rgba(255, 255, 255, 0.09), transparent 28%),
+    color-mix(in srgb, var(--bp-color-surface) 82%, black 18%);
+}
+
+.project-detail__live-access-card:hover,
+.project-detail__live-access-card:focus-visible {
+  border-color: var(--bp-color-accent);
+  transform: translateY(-0.3rem);
+  box-shadow: 0 1.4rem 3rem color-mix(in srgb, var(--bp-color-accent), transparent 80%);
+}
+
+.project-detail__live-access-icon {
+  display: grid;
+  width: 3.6rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--bp-color-accent), transparent 48%);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--bp-color-accent), transparent 82%);
+  color: var(--bp-color-accent);
+}
+
+.project-detail__live-access-icon svg {
+  width: 1.8rem;
+  height: 1.8rem;
+  fill: currentColor;
+}
+
+.project-detail__live-access-card .bp-eyebrow {
+  margin: 0 0 0.55rem;
+}
+
+.project-detail__live-access-card h2 {
+  margin: 0 0 0.7rem;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 0.96;
+}
+
+.project-detail__live-access-card p:last-child {
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.project-detail__live-access-arrow {
+  width: 1.6rem;
+  height: 1.6rem;
+  fill: currentColor;
+  color: var(--bp-color-accent);
+}
+
+@media (max-width: 820px) {
+  .project-detail__live-access-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-detail__live-access-card {
+    min-height: 0;
+  }
+}
+
 /* ========================================================================== 
    15   Evidence Board
    ========================================================================== */

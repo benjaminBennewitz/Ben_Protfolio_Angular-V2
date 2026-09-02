@@ -495,95 +495,80 @@
           <h2>{{ boardShowcase.workflowTitle }}</h2>
         </div>
 
-        <div class="project-detail__board-flow-grid">
+        <ol class="project-detail__board-flow" [attr.aria-label]="boardShowcase.workflowTitle">
           @for (card of boardShowcase.workflowCards; track card.title; let index = $index) {
-          <article class="project-detail__board-flow-card project-detail__animated-item bp-card" [style.--reveal-index]="index" bpReveal>
-            <span class="material-symbols-outlined" aria-hidden="true">{{ card.icon }}</span>
-            <h3>{{ card.title }}</h3>
-            <p>{{ card.text }}</p>
-            <ul>
-              @for (point of card.points; track point) {
-              <li>{{ point }}</li>
-              }
-            </ul>
-          </article>
+          <li class="project-detail__board-flow-step project-detail__animated-item" [style.--reveal-index]="index" bpReveal>
+            <div class="project-detail__board-flow-node" aria-hidden="true">
+              <span>{{ index + 1 < 10 ? '0' + (index + 1) : index + 1 }}</span>
+            </div>
+            <div class="project-detail__board-flow-content">
+              <h3>{{ card.title }}</h3>
+              <p>{{ card.text }}</p>
+              <ul>
+                @for (point of card.points; track point) {
+                <li>{{ point }}</li>
+                }
+              </ul>
+            </div>
+          </li>
           }
-        </div>
+        </ol>
       </div>
     </section>
 
     <section class="project-detail__character-section bp-section" bpReveal>
-      <div class="bp-container project-detail__character-card bp-card">
-        <div class="project-detail__character-visual">
-          @if (boardShowcase.mascot.previewImage) {
-          <figure class="project-detail__character-story-frame">
-            <img [src]="boardShowcase.mascot.previewImage" [alt]="boardShowcase.mascot.previewAlt ?? boardShowcase.mascot.title" loading="lazy" decoding="async" />
-            @if (boardShowcase.mascot.previewCaption) {
-            <figcaption>{{ boardShowcase.mascot.previewCaption }}</figcaption>
-            }
-          </figure>
-          }
-
-          <div class="project-detail__character-mascot-frame">
-            @if (boardShowcase.mascot.asset) {
-            <img [src]="boardShowcase.mascot.asset" [alt]="boardShowcase.mascot.assetAlt" loading="lazy" decoding="async" />
-            } @else {
-            <div class="project-detail__carly-mascot" aria-hidden="true">
-              <div class="project-detail__carly-cat">
-                <span class="project-detail__carly-ear project-detail__carly-ear--left"></span>
-                <span class="project-detail__carly-ear project-detail__carly-ear--right"></span>
-                <div class="project-detail__carly-face">
-                  <span class="project-detail__carly-eye project-detail__carly-eye--left"><i></i></span>
-                  <span class="project-detail__carly-eye project-detail__carly-eye--right"><i></i></span>
-                  <span class="project-detail__carly-muzzle"></span>
-                </div>
+      <div class="bp-container">
+        <div class="project-detail__character-card bp-card">
+          <div class="project-detail__character-visual">
+            <div class="project-detail__character-stage">
+              <div class="project-detail__character-backdrop" aria-hidden="true">
+                <span class="project-detail__character-glow"></span>
+                <span class="project-detail__character-stars project-detail__character-stars--near"></span>
+                <span class="project-detail__character-stars project-detail__character-stars--far"></span>
               </div>
-              <span class="project-detail__carly-spark project-detail__carly-spark--one"></span>
-              <span class="project-detail__carly-spark project-detail__carly-spark--two"></span>
-              <span class="project-detail__carly-spark project-detail__carly-spark--three"></span>
+              <bp-carly-mascot-preview class="project-detail__character-asset" />
             </div>
-            }
-          </div>
-        </div>
 
-        <div class="project-detail__character-copy">
-          <p class="bp-eyebrow">{{ boardShowcase.mascot.eyebrow }}</p>
-          <h2>{{ boardShowcase.mascot.title }}</h2>
-          <strong>{{ boardShowcase.mascot.name }} · {{ boardShowcase.mascot.role }}</strong>
-          <p>{{ boardShowcase.mascot.text }}</p>
-
-          @if (boardShowcase.mascot.principles?.length) {
-          <div class="project-detail__character-principles">
-            @for (principle of boardShowcase.mascot.principles; track principle.title) {
-            <article>
-              <h3>{{ principle.title }}</h3>
-              <p>{{ principle.text }}</p>
-            </article>
-            }
-          </div>
-          }
-
-          <div class="project-detail__character-facts">
-            @for (fact of boardShowcase.mascot.facts; track fact.label) {
-            <article>
-              <span>{{ fact.value }}</span>
-              <h3>{{ fact.label }}</h3>
-              <p>{{ fact.text }}</p>
-            </article>
-            }
+            <div class="project-detail__character-visual-meta" aria-hidden="true">
+              <span>CARLY / COMPANION</span>
+              <span>IDLE · ACTIVE</span>
+            </div>
           </div>
 
-          @if (boardShowcase.mascot.storyBeats?.length) {
-          <ol class="project-detail__character-story-list">
-            @for (beat of boardShowcase.mascot.storyBeats; track beat.title) {
-            <li>
-              <small>{{ beat.label }}</small>
-              <h3>{{ beat.title }}</h3>
-              <p>{{ beat.text }}</p>
-            </li>
+          <div class="project-detail__character-copy">
+            <p class="bp-eyebrow">{{ boardShowcase.mascot.eyebrow }}</p>
+            <h2>{{ boardShowcase.mascot.title }}</h2>
+            <strong>{{ boardShowcase.mascot.name }} · {{ boardShowcase.mascot.role }}</strong>
+            <p class="project-detail__character-intro">{{ boardShowcase.mascot.text }}</p>
+
+            @if (boardShowcase.mascot.principles?.length) {
+            <ul class="project-detail__character-principle-list">
+              @for (principle of boardShowcase.mascot.principles; track principle.title; let index = $index) {
+              <li>
+                <span>{{ index + 1 < 10 ? '0' + (index + 1) : index + 1 }}</span>
+                <div>
+                  <h3>{{ principle.title }}</h3>
+                  <p>{{ principle.text }}</p>
+                </div>
+              </li>
+              }
+            </ul>
             }
-          </ol>
-          }
+
+            @if (boardShowcase.mascot.storyBeats?.length) {
+            <ol class="project-detail__character-story-list">
+              @for (beat of boardShowcase.mascot.storyBeats; track beat.title) {
+              <li>
+                <small>{{ beat.label }}</small>
+                <div>
+                  <h3>{{ beat.title }}</h3>
+                  <p>{{ beat.text }}</p>
+                </div>
+              </li>
+              }
+            </ol>
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -785,6 +770,47 @@
     }
 
     @if (activeProject.liveDemo; as demo) {
+    @if (demo.status === 'available' && demo.url) {
+    <section class="project-detail__live-access bp-section" bpReveal>
+      <div class="bp-container">
+        <div class="project-detail__live-access-grid">
+          <a class="project-detail__live-access-card project-detail__live-access-card--demo" [href]="demo.url" target="_blank" rel="noopener noreferrer">
+            <span class="project-detail__live-access-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-2 14.5v-9l6 4.5-6 4.5Z" />
+              </svg>
+            </span>
+            <div>
+              <p class="bp-eyebrow">{{ activeProject.name }}</p>
+              <h2>{{ content().projectsIntro.openDemoLabel }}</h2>
+              <p>{{ demo.text }}</p>
+            </div>
+            <svg class="project-detail__live-access-arrow" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+              <path d="M7 17 17 7H9V5h12v12h-2V9L9 19l-2-2Z" />
+            </svg>
+          </a>
+
+          @if (demo.githubUrl) {
+          <a class="project-detail__live-access-card project-detail__live-access-card--github" [href]="demo.githubUrl" target="_blank" rel="noopener noreferrer">
+            <span class="project-detail__live-access-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="m8.7 16.6-4.6-4.6 4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4Zm6.6 0 4.6-4.6-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4Z" />
+              </svg>
+            </span>
+            <div>
+              <p class="bp-eyebrow">{{ activeProject.name }}</p>
+              <h2>{{ content().projectsIntro.githubLabel }}</h2>
+              <p>{{ demo.githubUrl }}</p>
+            </div>
+            <svg class="project-detail__live-access-arrow" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+              <path d="M7 17 17 7H9V5h12v12h-2V9L9 19l-2-2Z" />
+            </svg>
+          </a>
+          }
+        </div>
+      </div>
+    </section>
+    } @else {
     <section class="project-detail__presentation-note" bpReveal>
       <div class="bp-container">
         <aside class="project-detail__presentation-note-inner" [attr.aria-label]="content().projectsIntro.liveDemoLabel">
@@ -792,16 +818,11 @@
           <div>
             <p class="bp-eyebrow">{{ content().projectsIntro.liveDemoLabel }}</p>
             <p class="project-detail__presentation-note-text">{{ demo.text }}</p>
-            @if (demo.status === 'available' && demo.url) {
-            <a class="project-detail__presentation-note-action bp-button bp-button--accent" [href]="demo.url" target="_blank" rel="noopener noreferrer">
-              {{ content().projectsIntro.openDemoLabel }}
-              <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
-            </a>
-            }
           </div>
         </aside>
       </div>
     </section>
+    }
     }
 
     @if (activeProject.gallery.length) {

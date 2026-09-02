@@ -1,4 +1,4 @@
-Portfolio/
+B2Folio/
 ├── .angular/
 │   └── ...
 ├── dist/
@@ -131,6 +131,10 @@ Portfolio/
 │   │   │   │   ├── built-without.component.html
 │   │   │   │   ├── built-without.component.scss
 │   │   │   │   └── built-without.component.ts
+│   │   │   ├── carly-mascot-preview/
+│   │   │   │   ├── carly-mascot-preview.component.html
+│   │   │   │   ├── carly-mascot-preview.component.scss
+│   │   │   │   └── carly-mascot-preview.component.ts
 │   │   │   ├── chaos-cta/
 │   │   │   │   ├── chaos-cta.component.html
 │   │   │   │   ├── chaos-cta.component.scss
@@ -216,19 +220,34 @@ Portfolio/
 │   │   │   │   │   ├── screens/
 │   │   │   │   │   │   ├── archive.webp
 │   │   │   │   │   │   ├── board.webp
+│   │   │   │   │   │   ├── board-overview.webp
+│   │   │   │   │   │   ├── board-task-detail.webp
 │   │   │   │   │   │   ├── carly.webp
 │   │   │   │   │   │   ├── dashboard.webp
+│   │   │   │   │   │   ├── dashboard-dark.webp
+│   │   │   │   │   │   ├── dashboard-light.webp
 │   │   │   │   │   │   ├── inbox.webp
 │   │   │   │   │   │   ├── members.webp
 │   │   │   │   │   │   ├── pool.webp
 │   │   │   │   │   │   ├── projects.webp
-│   │   │   │   │   │   └── settings.webp
+│   │   │   │   │   │   ├── project-settings-danger-zone.webp
+│   │   │   │   │   │   ├── project-settings-layout.webp
+│   │   │   │   │   │   ├── project-settings-masterdata.webp
+│   │   │   │   │   │   ├── project-settings-members.webp
+│   │   │   │   │   │   ├── settings.webp
+│   │   │   │   │   │   ├── settings-accessibility.webp
+│   │   │   │   │   │   ├── settings-carly.webp
+│   │   │   │   │   │   ├── settings-general.webp
+│   │   │   │   │   │   ├── settings-projects.webp
+│   │   │   │   │   │   ├── settings-themes.webp
+│   │   │   │   │   │   └── settings-tools.webp
 │   │   │   │   │   ├── storybook/
 │   │   │   │   │   │   ├── carly-story-01.webp
 │   │   │   │   │   │   ├── carly-story-02.webp
 │   │   │   │   │   │   ├── carly-story-03.webp
 │   │   │   │   │   │   └── carly-story-04.webp
-│   │   │   │   │   └── carly.svg
+│   │   │   │   │   ├── carly.svg
+│   │   │   │   │   └── carly-head.webp
 │   │   │   │   ├── design-catalog/
 │   │   │   │   │   ├── en/
 │   │   │   │   │   │   ├── catalog-page-01.webp

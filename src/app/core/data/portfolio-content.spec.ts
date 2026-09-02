@@ -73,6 +73,9 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
 
     expect(carlyManaged?.liveDemo?.status).toBe('available');
     expect(carlyManaged?.liveDemo?.url).toBe('https://cases.b2folio.de');
+    expect(carlyManaged?.liveDemo?.githubUrl).toBe('https://github.com/benjaminBennewitz/Carly-Managed_FE');
+    expect(carlyManaged?.gallery).toHaveLength(20);
+    expect(carlyManaged?.gallery.every((item) => item.image?.endsWith('.webp'))).toBe(true);
     expect(JSON.stringify(carlyManaged)).not.toContain('design-code-repeat.de');
   });
 

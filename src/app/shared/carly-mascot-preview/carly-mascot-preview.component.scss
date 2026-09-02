@@ -1,0 +1,38 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.carly-mascot-preview {
+  position: relative;
+  width: 100%;
+  filter: drop-shadow(0 0.9rem 1.8rem rgba(0, 0, 0, 0.28));
+}
+
+.carly-mascot-preview__svg {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.carly-mascot-preview__fallback {
+  display: grid;
+  min-height: 8rem;
+  place-items: center;
+  color: var(--bp-color-text-muted);
+  font-size: 4rem;
+}
+
+:host-context(:root[data-motion='off']) .carly-mascot-preview *,
+:host-context(:root[data-motion='reduced']) .carly-mascot-preview *,
+:host-context(:root[data-neuro='true']) .carly-mascot-preview * {
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carly-mascot-preview * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

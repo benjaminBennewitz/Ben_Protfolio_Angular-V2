@@ -13,6 +13,7 @@ import { ProjectAppModule, ProjectBloodGuideModeKey, ProjectCatalogPage, Project
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
 import { ProjectTelemetryComponent } from '../../shared/project-telemetry/project-telemetry.component';
+import { CarlyMascotPreviewComponent } from '../../shared/carly-mascot-preview/carly-mascot-preview.component';
 import { LanguageService } from '../../core/services/language.service';
 import { AchievementService } from '../../core/services/achievement.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -68,7 +69,7 @@ interface CatalogLoupeState {
 @Component({
   selector: 'bp-project-detail-page',
   standalone: true,
-  imports: [RouterLink, RevealOnScrollDirective, SystemDialogComponent, ProjectTelemetryComponent],
+  imports: [RouterLink, RevealOnScrollDirective, SystemDialogComponent, ProjectTelemetryComponent, CarlyMascotPreviewComponent],
   templateUrl: './project-detail-page.component.html',
   styleUrls: [
     './project-detail-page.component.scss',

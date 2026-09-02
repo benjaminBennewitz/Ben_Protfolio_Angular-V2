@@ -338,86 +338,98 @@
     linear-gradient(180deg, var(--bp-color-bg), color-mix(in srgb, var(--bp-color-bg) 90%, var(--project-detail-blue) 10%));
 }
 
-.project-detail__board-flow-grid {
+.project-detail__board-flow {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--bp-space-3);
+  gap: clamp(1.4rem, 2.8vw, 3rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.project-detail__board-flow-card {
-  display: flex;
-  min-height: 330px;
-  flex-direction: column;
-  border-color: color-mix(in srgb, var(--project-detail-blue), transparent 54%);
-  padding: clamp(1.15rem, 2vw, 1.55rem);
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--project-detail-blue), transparent 94%), transparent 54%),
-    var(--bp-color-surface);
-  overflow: hidden;
-  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
-}
-
-.project-detail__board-flow-card::before {
+.project-detail__board-flow::before {
   content: '';
   position: absolute;
-  inset: 0 0 auto;
-  height: 0.32rem;
+  top: 1.55rem;
+  right: 8%;
+  left: 8%;
+  height: 2px;
   background: linear-gradient(90deg, var(--project-detail-blue), var(--project-detail-cat));
+  opacity: 0.72;
 }
 
-.project-detail__board-flow-card:hover,
-.project-detail__board-flow-card:focus-within {
-  border-color: color-mix(in srgb, var(--project-detail-blue), transparent 24%);
-  box-shadow: 0 30px 86px color-mix(in srgb, var(--project-detail-board-shadow), transparent 8%);
-  transform: translateY(-0.35rem);
-}
-
-.project-detail__board-flow-card > .material-symbols-outlined {
+.project-detail__board-flow-step {
+  position: relative;
   display: grid;
-  width: 3.2rem;
+  min-width: 0;
+  grid-template-rows: auto 1fr;
+  gap: 1rem;
+}
+
+.project-detail__board-flow-node {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 3.1rem;
   aspect-ratio: 1;
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--project-detail-blue), transparent 48%);
-  background: color-mix(in srgb, var(--project-detail-blue), transparent 82%);
-  color: var(--project-detail-blue);
-  font-size: 1.8rem;
+  border: 2px solid color-mix(in srgb, var(--project-detail-blue), white 12%);
+  border-radius: 50%;
+  background: var(--bp-color-bg);
+  box-shadow: 0 0 0 0.45rem color-mix(in srgb, var(--bp-color-bg), transparent 8%);
 }
 
-.project-detail__board-flow-card h3 {
-  margin: 1.2rem 0 0;
+.project-detail__board-flow-node span {
+  color: var(--project-detail-cat);
+  font-family: var(--bp-font-mono);
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+}
+
+.project-detail__board-flow-content {
+  min-width: 0;
+  border-top: 1px solid color-mix(in srgb, var(--project-detail-blue), transparent 54%);
+  padding-top: 1rem;
+}
+
+.project-detail__board-flow-content h3 {
+  margin: 0;
   color: var(--bp-color-text);
   font-family: var(--bp-font-display);
-  font-size: clamp(1.35rem, 2vw, 2rem);
+  font-size: clamp(1.15rem, 1.65vw, 1.65rem);
   line-height: 0.98;
   letter-spacing: -0.045em;
   text-transform: uppercase;
 }
 
-.project-detail__board-flow-card > p {
-  margin: 0.9rem 0 0;
+.project-detail__board-flow-content > p {
+  margin: 0.75rem 0 0;
   color: var(--bp-color-text-muted);
-  line-height: 1.55;
+  font-size: 0.86rem;
+  line-height: 1.5;
 }
 
-.project-detail__board-flow-card ul {
+.project-detail__board-flow-content ul {
   display: grid;
-  gap: 0.52rem;
-  margin: auto 0 0;
-  padding: 1.2rem 0 0;
+  gap: 0.38rem;
+  margin: 0.85rem 0 0;
+  padding: 0;
   list-style: none;
 }
 
-.project-detail__board-flow-card li {
+.project-detail__board-flow-content li {
   position: relative;
-  padding-left: 1.15rem;
+  padding-left: 0.95rem;
   color: var(--bp-color-text);
   font-family: var(--bp-font-mono);
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 800;
   line-height: 1.45;
 }
 
-.project-detail__board-flow-card li::before {
+.project-detail__board-flow-content li::before {
   content: '>'; 
   position: absolute;
   left: 0;
@@ -425,197 +437,325 @@
   font-weight: 950;
 }
 
+.project-detail[data-project='kanban-klon'] .project-detail__character-section {
+  box-sizing: border-box;
+  display: grid;
+  height: 100svh;
+  min-height: 0;
+  max-height: 100svh;
+  align-items: stretch;
+  overflow: hidden;
+  padding: calc(var(--bp-header-height) + clamp(0.45rem, 1.25vh, 0.85rem)) var(--bp-stage-gutter) clamp(0.65rem, 1.6vh, 1rem);
+}
+
+.project-detail[data-project='kanban-klon'] .project-detail__character-section > .bp-container {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
 .project-detail[data-project='kanban-klon'] .project-detail__character-card {
-  grid-template-columns: minmax(320px, 0.92fr) minmax(0, 1.08fr);
-  gap: clamp(1.1rem, 2vw, 1.8rem);
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+  gap: clamp(1rem, 2.5vw, 2.5rem);
+  align-items: stretch;
+  overflow: hidden;
+  padding: clamp(0.8rem, 1.8vw, 1.5rem);
   border-color: color-mix(in srgb, var(--project-detail-blue), transparent 42%);
   background:
-    radial-gradient(circle at 88% 8%, color-mix(in srgb, var(--project-detail-cat), transparent 84%), transparent 28%),
-    color-mix(in srgb, var(--bp-color-surface) 86%, var(--project-detail-blue) 14%);
+    radial-gradient(circle at 8% 14%, rgba(139, 92, 246, 0.14), transparent 28%),
+    color-mix(in srgb, var(--bp-color-surface) 92%, var(--project-detail-blue) 8%);
 }
 
 .project-detail[data-project='kanban-klon'] .project-detail__character-visual {
-  --project-detail-cat: #ffd27f;
-  --project-detail-cat-face: #593064;
-  --project-detail-cat-soft: #fff4c9;
   position: relative;
   display: grid;
-  align-items: end;
-  min-height: clamp(360px, 38vw, 580px);
-  border: 1px solid rgba(255, 210, 127, 0.24);
-  background:
-    radial-gradient(circle at 50% 46%, rgba(255, 210, 127, 0.2), transparent 28%),
-    radial-gradient(circle at 78% 18%, rgba(255, 244, 201, 0.95) 0 2px, rgba(255, 244, 201, 0.16) 3px 9px, transparent 10px),
-    linear-gradient(180deg, #0b0920 0%, #15102f 52%, #251445 100%);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  grid-template-rows: minmax(0, 1fr) auto;
   overflow: hidden;
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  border-radius: clamp(1rem, 2vw, 1.5rem);
+  background:
+    radial-gradient(circle at 50% 36%, rgba(139, 92, 246, 0.24), transparent 28%),
+    radial-gradient(circle at 50% 78%, rgba(255, 210, 127, 0.1), transparent 28%),
+    linear-gradient(180deg, #0c091c 0%, #17102d 55%, #21123a 100%);
 }
 
 .project-detail[data-project='kanban-klon'] .project-detail__character-visual::before {
+  content: '';
+  position: absolute;
   inset: 0;
-  width: auto;
-  height: auto;
-  border-radius: 0;
-  background:
-    radial-gradient(circle at 12% 17%, rgba(255, 255, 255, 0.9) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 28% 34%, rgba(255, 244, 201, 0.78) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 44% 13%, rgba(255, 255, 255, 0.72) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 64% 31%, rgba(255, 255, 255, 0.86) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 88% 39%, rgba(255, 244, 201, 0.74) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 18% 68%, rgba(255, 255, 255, 0.72) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 73% 74%, rgba(255, 255, 255, 0.82) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 91% 84%, rgba(255, 244, 201, 0.68) 0 1px, transparent 1.5px);
-  opacity: 0.9;
-  filter: none;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(180deg, black, transparent 92%);
+}
+
+.project-detail__character-stage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+  padding: clamp(0.75rem, 2vh, 1.5rem) clamp(0.75rem, 2vw, 1.5rem) 0;
+}
+
+.project-detail__character-stage::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  width: min(78%, 22rem);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 210, 127, 0.18);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 5rem rgba(139, 92, 246, 0.18);
+}
+
+.project-detail__character-backdrop,
+.project-detail__character-glow,
+.project-detail__character-stars {
+  position: absolute;
+  inset: 0;
   pointer-events: none;
 }
 
-.project-detail__character-story-frame {
-  position: absolute;
-  inset: 1rem 1rem auto 1rem;
-  z-index: 1;
-  display: grid;
+.project-detail__character-backdrop {
+  z-index: 0;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 1rem;
-  background: rgba(8, 8, 20, 0.58);
-  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.24);
 }
 
-.project-detail__character-story-frame img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1 / 1.1;
-  object-fit: cover;
-  object-position: center top;
-  filter: saturate(0.92) contrast(1.04);
+.project-detail__character-glow {
+  inset: 18%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 210, 127, 0.3), rgba(139, 92, 246, 0.12) 46%, transparent 72%);
+  filter: blur(0.25rem);
+  animation: project-detail-carly-stage-glow 3200ms ease-in-out infinite alternate;
 }
 
-.project-detail__character-story-frame figcaption {
-  padding: 0.75rem 0.9rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(250, 247, 255, 0.82);
-  font-family: var(--bp-font-mono);
-  font-size: 0.66rem;
-  line-height: 1.5;
+.project-detail__character-stars {
+  background-repeat: repeat;
+  transform-origin: center;
 }
 
-.project-detail__character-mascot-frame {
+.project-detail__character-stars--near {
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.96) 0 0.1rem, transparent 0.13rem),
+    radial-gradient(circle, rgba(255, 224, 154, 0.9) 0 0.07rem, transparent 0.11rem),
+    radial-gradient(circle, rgba(255, 255, 255, 0.74) 0 0.055rem, transparent 0.09rem);
+  background-position: 1rem 2rem, 5rem 7rem, 9rem 3rem;
+  background-size: 8rem 9rem, 11rem 10rem, 7rem 8rem;
+  animation: project-detail-carly-stars-near 5200ms ease-in-out infinite alternate;
+}
+
+.project-detail__character-stars--far {
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.68) 0 0.05rem, transparent 0.08rem),
+    radial-gradient(circle, rgba(255, 244, 201, 0.62) 0 0.04rem, transparent 0.07rem);
+  background-position: 2rem 1rem, 7rem 4rem;
+  background-size: 5rem 6rem, 6rem 7rem;
+  animation: project-detail-carly-stars-far 8800ms linear infinite;
+}
+
+.project-detail__character-asset {
   position: relative;
   z-index: 2;
-  display: grid;
-  width: min(72%, 19rem);
-  margin: auto 1rem 1rem auto;
-  padding: clamp(1rem, 2vw, 1.4rem);
-  border: 1px solid rgba(255, 210, 127, 0.28);
-  border-radius: 1.25rem;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(16, 11, 29, 0.84));
-  box-shadow: 0 1.2rem 2.8rem rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+  display: block;
+  width: min(70%, 16.5rem, 30vh);
+  max-width: 100%;
+  max-height: 100%;
 }
 
-.project-detail__character-mascot-frame > img {
-  width: 100%;
-  max-width: 14rem;
-  margin-inline: auto;
-  filter: drop-shadow(0 1rem 2rem rgba(0, 0, 0, 0.28));
-  animation: project-detail-carly-idle 2600ms ease-in-out infinite;
+.project-detail__character-visual-meta {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  border-top: 1px solid rgba(139, 92, 246, 0.24);
+  padding: 0.8rem 1rem;
+  color: color-mix(in srgb, var(--bp-color-text-muted), white 8%);
+  font-family: var(--bp-font-mono);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .project-detail[data-project='kanban-klon'] .project-detail__character-copy {
   display: grid;
-  gap: 1.1rem;
+  min-width: 0;
+  min-height: 0;
   align-content: start;
-  justify-items: start;
+  gap: clamp(0.6rem, 1.2vh, 0.9rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(0.15rem, 0.6vh, 0.4rem) clamp(0.35rem, 0.8vw, 0.7rem) clamp(0.35rem, 1vh, 0.7rem) 0;
+  scrollbar-color: color-mix(in srgb, var(--project-detail-blue), transparent 30%) transparent;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+.project-detail[data-project='kanban-klon'] .project-detail__character-copy .bp-eyebrow {
+  margin: 0;
+}
+
+.project-detail[data-project='kanban-klon'] .project-detail__character-copy h2 {
+  display: block;
+  width: 100%;
+  max-width: 16ch;
+  margin: -0.08em 0 -0.12em;
+  padding: 0.08em 0.12em 0.12em 0;
+  overflow: visible;
+  overflow-wrap: normal;
+  word-break: normal;
+  font-size: clamp(1.75rem, 3.3vw, 3.6rem);
+  line-height: 0.96;
+}
+
+.project-detail[data-project='kanban-klon'] .project-detail__character-copy h2::after {
+  display: none;
 }
 
 .project-detail[data-project='kanban-klon'] .project-detail__character-copy > strong {
   display: inline-flex;
-  padding: 0.4rem 0.7rem;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.42rem 0.7rem;
   border: 1px solid color-mix(in srgb, var(--project-detail-blue), white 16%);
   border-radius: 999px;
   background: color-mix(in srgb, var(--project-detail-blue), transparent 78%);
   color: color-mix(in srgb, var(--bp-color-text), white 6%);
   font-family: var(--bp-font-mono);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
-.project-detail[data-project='kanban-klon'] .project-detail__character-copy .bp-eyebrow {
-  display: flex;
-  margin: 0;
-}
-
-.project-detail[data-project='kanban-klon'] .project-detail__character-copy h2 {
-  max-width: 14ch;
-}
-
-.project-detail__character-principles {
-  display: grid;
-  width: 100%;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.8rem;
-}
-
-.project-detail__character-principles article,
-.project-detail__character-story-list li {
-  border: 1px solid color-mix(in srgb, var(--bp-color-border-strong), transparent 16%);
-  border-radius: 1rem;
-  background: color-mix(in srgb, var(--bp-color-surface-alt), transparent 14%);
-}
-
-.project-detail__character-principles article {
-  display: grid;
-  gap: 0.45rem;
-  padding: 0.95rem;
-}
-
-.project-detail__character-principles h3,
-.project-detail__character-story-list h3 {
-  margin: 0;
-  color: var(--bp-color-text);
-  font-family: var(--bp-font-display);
-  font-size: 1.1rem;
-  letter-spacing: -0.03em;
-}
-
-.project-detail__character-principles p,
-.project-detail__character-story-list p {
+.project-detail__character-intro {
+  max-width: 72ch;
   margin: 0;
   color: var(--bp-color-text-muted);
-  font-size: 0.86rem;
-  line-height: 1.62;
+  font-size: clamp(0.82rem, 0.95vw, 0.94rem);
+  line-height: 1.55;
 }
 
-.project-detail[data-project='kanban-klon'] .project-detail__character-facts {
-  width: 100%;
-}
-
+.project-detail__character-principle-list,
 .project-detail__character-story-list {
-  display: grid;
   width: 100%;
-  gap: 0.8rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.project-detail__character-story-list li {
+.project-detail__character-principle-list {
   display: grid;
-  gap: 0.35rem;
-  padding: 0.95rem;
+  border-top: 1px solid color-mix(in srgb, var(--bp-color-border-strong), transparent 28%);
+}
+
+.project-detail__character-principle-list li {
+  display: grid;
+  grid-template-columns: 2.3rem minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: start;
+  padding: 0.68rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--bp-color-border-strong), transparent 28%);
+}
+
+.project-detail__character-principle-list li > span {
+  color: #ffd27f;
+  font-family: var(--bp-font-mono);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.project-detail__character-principle-list div,
+.project-detail__character-story-list div {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.project-detail__character-principle-list h3,
+.project-detail__character-story-list h3 {
+  margin: 0;
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-display);
+  font-size: clamp(1rem, 1.35vw, 1.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
+.project-detail__character-principle-list p,
+.project-detail__character-story-list p {
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.48;
+}
+
+.project-detail__character-story-list {
+  position: relative;
+  display: grid;
+  gap: 0;
+  counter-reset: carly-story;
+  border-left: 0;
+  margin-top: 0.2rem;
+  padding-left: 1.75rem;
+}
+
+.project-detail__character-story-list::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0.42rem;
+  width: 1px;
+  background: color-mix(in srgb, #ffd27f, transparent 52%);
+}
+
+.project-detail__character-story-list li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 0.68rem 0 0.72rem;
+}
+
+.project-detail__character-story-list li::before {
+  content: '';
+  position: absolute;
+  top: 1.25rem;
+  left: -1.75rem;
+  width: 0.62rem;
+  aspect-ratio: 1;
+  border: 2px solid color-mix(in srgb, #ffd27f, white 6%);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--bp-color-surface), black 14%);
+  box-shadow: 0 0 1rem rgba(255, 210, 127, 0.22);
 }
 
 .project-detail__character-story-list small {
-  color: color-mix(in srgb, var(--project-detail-cat), white 6%);
+  padding-top: 0.08rem;
+  color: #ffd27f;
   font-family: var(--bp-font-mono);
-  font-size: 0.66rem;
-  font-weight: 800;
+  font-size: 0.61rem;
+  font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
 
 .project-detail__carly-mascot {
   position: relative;
@@ -842,6 +982,17 @@
   }
 }
 
+
+@keyframes project-detail-carly-orbit-ring {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
 @keyframes project-detail-carly-orbit {
   to {
     transform: rotate(360deg);
@@ -861,9 +1012,50 @@
   }
 }
 
+@keyframes project-detail-carly-stage-glow {
+  from {
+    opacity: 0.38;
+    transform: scale(0.82);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes project-detail-carly-stars-near {
+  from {
+    opacity: 0.42;
+    transform: scale(0.96) rotate(-1deg);
+    background-position: 1rem 2rem, 5rem 7rem, 9rem 3rem;
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1.04) rotate(1deg);
+    background-position: 1.6rem 1.5rem, 4.4rem 7.7rem, 9.5rem 2.4rem;
+  }
+}
+
+@keyframes project-detail-carly-stars-far {
+  from {
+    opacity: 0.32;
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+
+  to {
+    opacity: 0.32;
+    transform: rotate(360deg) scale(1.03);
+  }
+}
+
 @media (max-width: 1180px) {
-  .project-detail[data-project='kanban-klon'] .project-detail__hero-grid,
-  .project-detail__character-card {
+  .project-detail[data-project='kanban-klon'] .project-detail__hero-grid {
     grid-template-columns: 1fr;
   }
 
@@ -871,13 +1063,40 @@
     width: min(100%, 760px);
   }
 
-  .project-detail__board-flow-grid,
-  .project-detail__character-principles {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .project-detail__character-asset {
+    width: min(68%, 15rem, 30vh);
+  }
+}
+
+@media (max-width: 960px) {
+  .project-detail__board-flow {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding-left: 0.2rem;
   }
 
-  .project-detail__character-mascot-frame {
-    width: min(52%, 18rem);
+  .project-detail__board-flow::before {
+    top: 1.55rem;
+    right: auto;
+    bottom: 1.55rem;
+    left: 1.7rem;
+    width: 2px;
+    height: auto;
+  }
+
+  .project-detail__board-flow-step {
+    grid-template-columns: 3.1rem minmax(0, 1fr);
+    grid-template-rows: auto;
+    gap: 1.1rem;
+    padding-bottom: 1.6rem;
+  }
+
+  .project-detail__board-flow-step:last-child {
+    padding-bottom: 0;
+  }
+
+  .project-detail__board-flow-content {
+    padding-top: 0.35rem;
   }
 }
 
@@ -887,20 +1106,6 @@
     min-height: 0;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
-  }
-
-  .project-detail__character-story-frame {
-    position: relative;
-    inset: auto;
-  }
-
-  .project-detail__character-mascot-frame {
-    width: min(100%, 16rem);
-    margin: -4rem 1rem 1rem auto;
-  }
-
-  .project-detail__character-principles {
-    grid-template-columns: 1fr;
   }
 
   .project-detail__floating-task,
@@ -913,14 +1118,30 @@
     animation: none;
   }
 
-  .project-detail__board-flow-grid,
-  .project-detail__character-facts {
+  .project-detail[data-project='kanban-klon'] .project-detail__character-card {
     grid-template-columns: 1fr;
+    grid-template-rows: minmax(9rem, 0.55fr) minmax(0, 1.45fr);
+    gap: 0.75rem;
+    padding: 0.75rem;
   }
 
-  .project-detail__character-mascot-frame {
-    margin: 0.75rem 0 0;
+  .project-detail[data-project='kanban-klon'] .project-detail__character-visual {
+    height: auto;
   }
+
+  .project-detail__character-stage {
+    padding: 0.5rem 0.75rem 0;
+  }
+
+  .project-detail__character-asset {
+    width: min(22vw, 7.2rem);
+  }
+
+  .project-detail__character-story-list li {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
 }
 
 @media (max-width: 560px) {
@@ -928,15 +1149,46 @@
     grid-template-columns: 1fr;
   }
 
-  .project-detail__character-story-frame {
-    margin-bottom: 0.5rem;
+
+  .project-detail[data-project='kanban-klon'] .project-detail__character-card {
+    grid-template-rows: minmax(7.5rem, 0.45fr) minmax(0, 1.55fr);
+    padding: 0.55rem;
   }
 
-  .project-detail__character-story-list li {
-    padding: 0.85rem;
+  .project-detail[data-project='kanban-klon'] .project-detail__character-section {
+    padding: calc(var(--bp-header-height) + 0.35rem) 0.65rem 0.45rem;
+  }
+
+  .project-detail__character-asset {
+    width: min(20vw, 5.4rem);
+  }
+
+  .project-detail__character-visual-meta {
+    padding: 0.45rem 0.65rem;
+    font-size: 0.52rem;
+  }
+
+  .project-detail[data-project='kanban-klon'] .project-detail__character-copy {
+    gap: 0.55rem;
+  }
+
+  .project-detail[data-project='kanban-klon'] .project-detail__character-copy h2 {
+    font-size: clamp(1.45rem, 7.2vw, 2rem);
   }
 }
 
+:root[data-motion='off'] .project-detail__character-glow,
+:root[data-motion='reduced'] .project-detail__character-glow,
+:root[data-motion='off'] .project-detail__character-stars,
+:root[data-motion='reduced'] .project-detail__character-stars,
+:host-context(:root[data-motion='off']) .project-detail__character-glow,
+:host-context(:root[data-motion='reduced']) .project-detail__character-glow,
+:host-context(:root[data-motion='off']) .project-detail__character-stars,
+:host-context(:root[data-motion='reduced']) .project-detail__character-stars,
+:root[data-motion='off'] .project-detail__character-asset,
+:root[data-motion='reduced'] .project-detail__character-asset,
+:host-context(:root[data-motion='off']) .project-detail__character-asset,
+:host-context(:root[data-motion='reduced']) .project-detail__character-asset,
 :root[data-motion='off'] .project-detail__floating-task,
 :root[data-motion='reduced'] .project-detail__floating-task,
 :root[data-motion='off'] .project-detail__carly-mascot,
@@ -962,4 +1214,11 @@
 :host-context(:root[data-motion='off']) .project-detail__carly-spark,
 :host-context(:root[data-motion='reduced']) .project-detail__carly-spark {
   animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-detail__character-glow,
+  .project-detail__character-stars {
+    animation: none;
+  }
 }

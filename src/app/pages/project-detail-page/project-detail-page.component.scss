@@ -1289,11 +1289,21 @@
   font-size: 0.62rem;
 }
 
-.project-detail__presentation-note-inner p:last-child {
+.project-detail__presentation-note-text {
   margin: 0;
   color: var(--bp-color-text-muted);
   font-size: clamp(0.74rem, 0.82vw, 0.82rem);
   line-height: 1.48;
+}
+
+.project-detail__presentation-note-action {
+  margin-top: 0.85rem;
+  padding: 0.58rem 0.78rem;
+  font-size: 0.68rem;
+}
+
+.project-detail__presentation-note-action .material-symbols-outlined {
+  font-size: 1rem;
 }
 
 .project-detail__presentation-note-icon {

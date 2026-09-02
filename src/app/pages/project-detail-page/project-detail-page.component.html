@@ -757,7 +757,13 @@
           <span class="project-detail__presentation-note-icon material-symbols-outlined" aria-hidden="true">info</span>
           <div>
             <p class="bp-eyebrow">{{ content().projectsIntro.liveDemoLabel }}</p>
-            <p>{{ demo.text }}</p>
+            <p class="project-detail__presentation-note-text">{{ demo.text }}</p>
+            @if (demo.status === 'available' && demo.url) {
+            <a class="project-detail__presentation-note-action bp-button bp-button--accent" [href]="demo.url" target="_blank" rel="noopener noreferrer">
+              {{ content().projectsIntro.openDemoLabel }}
+              <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+            </a>
+            }
           </div>
         </aside>
       </div>

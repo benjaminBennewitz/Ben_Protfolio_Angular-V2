@@ -68,4 +68,12 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(intranet?.capabilities?.title.trim()).not.toBe('');
   });
 
+  it.each(SUPPORTED_LANGUAGES)('verlinkt Carly Managed ausschließlich auf die B²Folio-Demo für %s', (language) => {
+    const carlyManaged = PORTFOLIO_PROJECTS[language].find((project) => project.slug === 'kanban-klon');
+
+    expect(carlyManaged?.liveDemo?.status).toBe('available');
+    expect(carlyManaged?.liveDemo?.url).toBe('https://cases.b2folio.de');
+    expect(JSON.stringify(carlyManaged)).not.toContain('design-code-repeat.de');
+  });
+
 });

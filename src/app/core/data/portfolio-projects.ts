@@ -7,6 +7,9 @@
 
 import { PortfolioLanguage, PortfolioProject, ProjectCatalogPage, ProjectCatalogSpread, ProjectCatalogTocItem, ProjectGalleryItem } from '../models/portfolio.models';
 
+/** Öffentliche Carly-Managed-Demo des Portfolio-Hosts. */
+const CARLY_MANAGED_DEMO_URL = 'https://cases.b2folio.de';
+
 /** Anzahl der einzeln ausgelieferten Katalogseiten inklusive Cover und Rückseite. */
 const DESIGN_CATALOG_PAGE_COUNT = 54;
 
@@ -603,7 +606,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
           { title: 'Carly Feedback', text: 'Mascot- und Motivationszustände für Fortschritt, erledigte Aufgaben und freundliche Hinweise.', size: 'md', icon: 'pets', annotations: ['Mood', 'Magic', 'Score'] },
           { title: 'Dashboard & Pool', text: 'Eigene Aufgaben, neue Zuweisungen und Pool-Aufgaben als klare Arbeitsstartpunkte.', size: 'sm', icon: 'inbox', annotations: ['My Tasks', 'Pool', 'Live'] },
         ],
-        liveDemo: { status: 'private', text: 'Eine öffentliche Demo sollte mit Dummy-Daten laufen. Sinnvoll ist ein statischer Beispiel-Workspace mit Carly-Zuständen, Beispielprojekten und ungefährlichen Testaufgaben.', githubUrl: 'https://github.com/USERNAME/carly-managed' },
+        liveDemo: { status: 'available', text: 'Die öffentliche Demo läuft als kontrollierter Beispiel-Workspace mit vorbereiteten Projekten und sicheren Testdaten. Registrierung, Passwort-Reset, Einladungen und Uploads sind in der öffentlichen Instanz bewusst deaktiviert.', url: CARLY_MANAGED_DEMO_URL },
       },
       {
         slug: 'blutanalyse',
@@ -1100,7 +1103,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
           { title: 'Carly Feedback', text: 'Mascot and motivation states for progress, completed tasks and friendly hints.', size: 'md', icon: 'pets', annotations: ['Mood', 'Magic', 'Score'] },
           { title: 'Dashboard & Pool', text: 'Own tasks, new assignments and pool tasks as clear working entry points.', size: 'sm', icon: 'inbox', annotations: ['My Tasks', 'Pool', 'Live'] },
         ],
-        liveDemo: { status: 'private', text: 'A public demo should run with dummy data. A static sample workspace with Carly states, sample projects and safe test tasks is the useful approach.', githubUrl: 'https://github.com/USERNAME/carly-managed' },
+        liveDemo: { status: 'available', text: 'The public demo runs as a controlled sample workspace with prepared projects and safe test data. Registration, password reset, invitations and uploads are deliberately disabled in the public instance.', url: CARLY_MANAGED_DEMO_URL },
       },
       {
         slug: 'blutanalyse',

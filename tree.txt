@@ -212,6 +212,23 @@ Portfolio/
 │   │   │   └── material-symbols-portfolio.woff2
 │   │   ├── images/
 │   │   │   ├── projects/
+│   │   │   │   ├── carly-managed/
+│   │   │   │   │   ├── screens/
+│   │   │   │   │   │   ├── archive.webp
+│   │   │   │   │   │   ├── board.webp
+│   │   │   │   │   │   ├── carly.webp
+│   │   │   │   │   │   ├── dashboard.webp
+│   │   │   │   │   │   ├── inbox.webp
+│   │   │   │   │   │   ├── members.webp
+│   │   │   │   │   │   ├── pool.webp
+│   │   │   │   │   │   ├── projects.webp
+│   │   │   │   │   │   └── settings.webp
+│   │   │   │   │   ├── storybook/
+│   │   │   │   │   │   ├── carly-story-01.webp
+│   │   │   │   │   │   ├── carly-story-02.webp
+│   │   │   │   │   │   ├── carly-story-03.webp
+│   │   │   │   │   │   └── carly-story-04.webp
+│   │   │   │   │   └── carly.svg
 │   │   │   │   ├── design-catalog/
 │   │   │   │   │   ├── en/
 │   │   │   │   │   │   ├── catalog-page-01.webp

@@ -426,6 +426,8 @@
 }
 
 .project-detail[data-project='kanban-klon'] .project-detail__character-card {
+  grid-template-columns: minmax(320px, 0.92fr) minmax(0, 1.08fr);
+  gap: clamp(1.1rem, 2vw, 1.8rem);
   border-color: color-mix(in srgb, var(--project-detail-blue), transparent 42%);
   background:
     radial-gradient(circle at 88% 8%, color-mix(in srgb, var(--project-detail-cat), transparent 84%), transparent 28%),
@@ -436,13 +438,17 @@
   --project-detail-cat: #ffd27f;
   --project-detail-cat-face: #593064;
   --project-detail-cat-soft: #fff4c9;
-  min-height: clamp(320px, 34vw, 500px);
-  border-color: rgba(255, 210, 127, 0.34);
+  position: relative;
+  display: grid;
+  align-items: end;
+  min-height: clamp(360px, 38vw, 580px);
+  border: 1px solid rgba(255, 210, 127, 0.24);
   background:
     radial-gradient(circle at 50% 46%, rgba(255, 210, 127, 0.2), transparent 28%),
     radial-gradient(circle at 78% 18%, rgba(255, 244, 201, 0.95) 0 2px, rgba(255, 244, 201, 0.16) 3px 9px, transparent 10px),
     linear-gradient(180deg, #0b0920 0%, #15102f 52%, #251445 100%);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  overflow: hidden;
 }
 
 .project-detail[data-project='kanban-klon'] .project-detail__character-visual::before {
@@ -464,26 +470,151 @@
   pointer-events: none;
 }
 
+.project-detail__character-story-frame {
+  position: absolute;
+  inset: 1rem 1rem auto 1rem;
+  z-index: 1;
+  display: grid;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 1rem;
+  background: rgba(8, 8, 20, 0.58);
+  box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.24);
+}
+
+.project-detail__character-story-frame img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1.1;
+  object-fit: cover;
+  object-position: center top;
+  filter: saturate(0.92) contrast(1.04);
+}
+
+.project-detail__character-story-frame figcaption {
+  padding: 0.75rem 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(250, 247, 255, 0.82);
+  font-family: var(--bp-font-mono);
+  font-size: 0.66rem;
+  line-height: 1.5;
+}
+
+.project-detail__character-mascot-frame {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: min(72%, 19rem);
+  margin: auto 1rem 1rem auto;
+  padding: clamp(1rem, 2vw, 1.4rem);
+  border: 1px solid rgba(255, 210, 127, 0.28);
+  border-radius: 1.25rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(16, 11, 29, 0.84));
+  box-shadow: 0 1.2rem 2.8rem rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+.project-detail__character-mascot-frame > img {
+  width: 100%;
+  max-width: 14rem;
+  margin-inline: auto;
+  filter: drop-shadow(0 1rem 2rem rgba(0, 0, 0, 0.28));
+  animation: project-detail-carly-idle 2600ms ease-in-out infinite;
+}
+
 .project-detail[data-project='kanban-klon'] .project-detail__character-copy {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  gap: 1.1rem;
   align-content: start;
   justify-items: start;
 }
 
+.project-detail[data-project='kanban-klon'] .project-detail__character-copy > strong {
+  display: inline-flex;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--project-detail-blue), white 16%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--project-detail-blue), transparent 78%);
+  color: color-mix(in srgb, var(--bp-color-text), white 6%);
+  font-family: var(--bp-font-mono);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .project-detail[data-project='kanban-klon'] .project-detail__character-copy .bp-eyebrow {
   display: flex;
-  grid-column: 1;
-  margin: 0 0 1.5rem;
+  margin: 0;
 }
 
 .project-detail[data-project='kanban-klon'] .project-detail__character-copy h2 {
-  grid-column: 1;
-  max-width: 15ch;
+  max-width: 14ch;
+}
+
+.project-detail__character-principles {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.project-detail__character-principles article,
+.project-detail__character-story-list li {
+  border: 1px solid color-mix(in srgb, var(--bp-color-border-strong), transparent 16%);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--bp-color-surface-alt), transparent 14%);
+}
+
+.project-detail__character-principles article {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.95rem;
+}
+
+.project-detail__character-principles h3,
+.project-detail__character-story-list h3 {
+  margin: 0;
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-display);
+  font-size: 1.1rem;
+  letter-spacing: -0.03em;
+}
+
+.project-detail__character-principles p,
+.project-detail__character-story-list p {
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  font-size: 0.86rem;
+  line-height: 1.62;
 }
 
 .project-detail[data-project='kanban-klon'] .project-detail__character-facts {
   width: 100%;
+}
+
+.project-detail__character-story-list {
+  display: grid;
+  width: 100%;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-detail__character-story-list li {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.95rem;
+}
+
+.project-detail__character-story-list small {
+  color: color-mix(in srgb, var(--project-detail-cat), white 6%);
+  font-family: var(--bp-font-mono);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .project-detail__carly-mascot {
@@ -740,8 +871,13 @@
     width: min(100%, 760px);
   }
 
-  .project-detail__board-flow-grid {
+  .project-detail__board-flow-grid,
+  .project-detail__character-principles {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-detail__character-mascot-frame {
+    width: min(52%, 18rem);
   }
 }
 
@@ -751,6 +887,20 @@
     min-height: 0;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
+  }
+
+  .project-detail__character-story-frame {
+    position: relative;
+    inset: auto;
+  }
+
+  .project-detail__character-mascot-frame {
+    width: min(100%, 16rem);
+    margin: -4rem 1rem 1rem auto;
+  }
+
+  .project-detail__character-principles {
+    grid-template-columns: 1fr;
   }
 
   .project-detail__floating-task,
@@ -767,11 +917,23 @@
   .project-detail__character-facts {
     grid-template-columns: 1fr;
   }
+
+  .project-detail__character-mascot-frame {
+    margin: 0.75rem 0 0;
+  }
 }
 
 @media (max-width: 560px) {
   .project-detail__task-cloud {
     grid-template-columns: 1fr;
+  }
+
+  .project-detail__character-story-frame {
+    margin-bottom: 0.5rem;
+  }
+
+  .project-detail__character-story-list li {
+    padding: 0.85rem;
   }
 }
 

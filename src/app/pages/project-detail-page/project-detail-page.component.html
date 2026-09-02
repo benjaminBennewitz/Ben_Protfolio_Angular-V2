@@ -515,24 +515,35 @@
     <section class="project-detail__character-section bp-section" bpReveal>
       <div class="bp-container project-detail__character-card bp-card">
         <div class="project-detail__character-visual">
-          @if (boardShowcase.mascot.asset) {
-          <img [src]="boardShowcase.mascot.asset" [alt]="boardShowcase.mascot.assetAlt" loading="lazy" decoding="async" />
-          } @else {
-          <div class="project-detail__carly-mascot" aria-hidden="true">
-            <div class="project-detail__carly-cat">
-              <span class="project-detail__carly-ear project-detail__carly-ear--left"></span>
-              <span class="project-detail__carly-ear project-detail__carly-ear--right"></span>
-              <div class="project-detail__carly-face">
-                <span class="project-detail__carly-eye project-detail__carly-eye--left"><i></i></span>
-                <span class="project-detail__carly-eye project-detail__carly-eye--right"><i></i></span>
-                <span class="project-detail__carly-muzzle"></span>
-              </div>
-            </div>
-            <span class="project-detail__carly-spark project-detail__carly-spark--one"></span>
-            <span class="project-detail__carly-spark project-detail__carly-spark--two"></span>
-            <span class="project-detail__carly-spark project-detail__carly-spark--three"></span>
-          </div>
+          @if (boardShowcase.mascot.previewImage) {
+          <figure class="project-detail__character-story-frame">
+            <img [src]="boardShowcase.mascot.previewImage" [alt]="boardShowcase.mascot.previewAlt ?? boardShowcase.mascot.title" loading="lazy" decoding="async" />
+            @if (boardShowcase.mascot.previewCaption) {
+            <figcaption>{{ boardShowcase.mascot.previewCaption }}</figcaption>
+            }
+          </figure>
           }
+
+          <div class="project-detail__character-mascot-frame">
+            @if (boardShowcase.mascot.asset) {
+            <img [src]="boardShowcase.mascot.asset" [alt]="boardShowcase.mascot.assetAlt" loading="lazy" decoding="async" />
+            } @else {
+            <div class="project-detail__carly-mascot" aria-hidden="true">
+              <div class="project-detail__carly-cat">
+                <span class="project-detail__carly-ear project-detail__carly-ear--left"></span>
+                <span class="project-detail__carly-ear project-detail__carly-ear--right"></span>
+                <div class="project-detail__carly-face">
+                  <span class="project-detail__carly-eye project-detail__carly-eye--left"><i></i></span>
+                  <span class="project-detail__carly-eye project-detail__carly-eye--right"><i></i></span>
+                  <span class="project-detail__carly-muzzle"></span>
+                </div>
+              </div>
+              <span class="project-detail__carly-spark project-detail__carly-spark--one"></span>
+              <span class="project-detail__carly-spark project-detail__carly-spark--two"></span>
+              <span class="project-detail__carly-spark project-detail__carly-spark--three"></span>
+            </div>
+            }
+          </div>
         </div>
 
         <div class="project-detail__character-copy">
@@ -540,6 +551,17 @@
           <h2>{{ boardShowcase.mascot.title }}</h2>
           <strong>{{ boardShowcase.mascot.name }} · {{ boardShowcase.mascot.role }}</strong>
           <p>{{ boardShowcase.mascot.text }}</p>
+
+          @if (boardShowcase.mascot.principles?.length) {
+          <div class="project-detail__character-principles">
+            @for (principle of boardShowcase.mascot.principles; track principle.title) {
+            <article>
+              <h3>{{ principle.title }}</h3>
+              <p>{{ principle.text }}</p>
+            </article>
+            }
+          </div>
+          }
 
           <div class="project-detail__character-facts">
             @for (fact of boardShowcase.mascot.facts; track fact.label) {
@@ -550,6 +572,18 @@
             </article>
             }
           </div>
+
+          @if (boardShowcase.mascot.storyBeats?.length) {
+          <ol class="project-detail__character-story-list">
+            @for (beat of boardShowcase.mascot.storyBeats; track beat.title) {
+            <li>
+              <small>{{ beat.label }}</small>
+              <h3>{{ beat.title }}</h3>
+              <p>{{ beat.text }}</p>
+            </li>
+            }
+          </ol>
+          }
         </div>
       </div>
     </section>

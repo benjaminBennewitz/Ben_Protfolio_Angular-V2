@@ -769,6 +769,24 @@ export interface ProjectBoardWorkflowCard {
   readonly points: readonly string[];
 }
 
+/** Kompakter UX-Grundsatz der Maskottchen-Section. */
+export interface ProjectBoardMascotPrinciple {
+  /** Kurzer Titel des UX-Grundsatzes. */
+  readonly title: string;
+  /** Erklärender Text zum Grundsatz. */
+  readonly text: string;
+}
+
+/** Story-Beat oder Lore-Karte zum Maskottchen. */
+export interface ProjectBoardMascotStoryBeat {
+  /** Kurzes Label für die Timeline oder Karte. */
+  readonly label: string;
+  /** Überschrift des Story-Beats. */
+  readonly title: string;
+  /** Erklärender Text. */
+  readonly text: string;
+}
+
 /** Profil des Maskottchens einer Projektmanagement-App. */
 export interface ProjectBoardMascotProfile {
   /** Kleine Beschriftung über dem Profil. */
@@ -787,6 +805,16 @@ export interface ProjectBoardMascotProfile {
   readonly assetAlt: string;
   /** Geplanter Dateipfad, wenn das Asset später ergänzt wird. */
   readonly assetHint: string;
+  /** Optionales Story-/Szenenbild als atmosphärischer Kontext. */
+  readonly previewImage?: string;
+  /** Alternativtext für das Story-/Szenenbild. */
+  readonly previewAlt?: string;
+  /** Kurze Bildlegende für das Story-/Szenenbild. */
+  readonly previewCaption?: string;
+  /** Kompakte UX-Grundsätze zur Rolle des Maskottchens. */
+  readonly principles?: readonly ProjectBoardMascotPrinciple[];
+  /** Verdichtete Story-Beats aus der internen Lore. */
+  readonly storyBeats?: readonly ProjectBoardMascotStoryBeat[];
   /** Kompakte Fakten zur Maskottchen-Funktion. */
   readonly facts: readonly ProjectMetric[];
 }

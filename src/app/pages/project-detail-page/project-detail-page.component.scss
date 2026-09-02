@@ -1029,6 +1029,143 @@
 }
 
 /* ========================================================================== 
+   11.5   Capability Index
+   ========================================================================== */
+
+.project-detail__capabilities {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--bp-color-accent), transparent 97%) 1px, transparent 1px),
+    color-mix(in srgb, var(--bp-color-bg-soft), var(--bp-color-bg) 72%);
+  background-size: 52px 52px, auto;
+}
+
+.project-detail__capabilities-head {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(280px, 0.55fr);
+  gap: clamp(1.5rem, 4vw, 4.5rem);
+  align-items: end;
+  margin-bottom: clamp(2rem, 4vw, 3.8rem);
+}
+
+.project-detail__capabilities-head .bp-eyebrow {
+  margin: 0 0 var(--bp-space-2);
+}
+
+.project-detail__capabilities-head h2 {
+  max-width: 15ch;
+  margin: 0;
+  font-family: var(--bp-font-display);
+  font-size: clamp(2rem, 4.4vw, 4.8rem);
+  line-height: 0.92;
+  letter-spacing: -0.07em;
+  text-transform: uppercase;
+}
+
+.project-detail__capabilities-head > p {
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  line-height: 1.65;
+}
+
+.project-detail__capability-index {
+  margin: 0;
+  border-top: 2px solid var(--bp-color-border-strong);
+  padding: 0;
+  list-style: none;
+}
+
+.project-detail__capability-row {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(180px, 0.42fr) minmax(0, 1fr);
+  gap: clamp(0.8rem, 2vw, 2rem);
+  align-items: start;
+  border-bottom: 1px solid var(--bp-color-border);
+  padding: clamp(1.15rem, 2.2vw, 1.8rem) 0;
+}
+
+.project-detail__capability-number,
+.project-detail__capability-title small {
+  font-family: var(--bp-font-mono);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.project-detail__capability-number {
+  color: var(--bp-color-accent);
+  font-size: 0.72rem;
+}
+
+.project-detail__capability-title {
+  min-width: 0;
+}
+
+.project-detail__capability-title small {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--bp-color-text-muted);
+  font-size: 0.62rem;
+}
+
+.project-detail__capability-title h3 {
+  margin: 0;
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-display);
+  font-size: clamp(1.05rem, 1.8vw, 1.65rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.project-detail__capability-row > p {
+  max-width: 86ch;
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  font-size: clamp(0.82rem, 0.92vw, 0.94rem);
+  line-height: 1.62;
+}
+
+@media (hover: hover) {
+  .project-detail__capability-row {
+    transition: border-color 160ms ease;
+  }
+
+  .project-detail__capability-row:hover {
+    border-bottom-color: color-mix(in srgb, var(--bp-color-accent), var(--bp-color-border) 48%);
+  }
+}
+
+@media (max-width: 920px) {
+  .project-detail__capabilities-head {
+    grid-template-columns: 1fr;
+  }
+
+  .project-detail__capability-row {
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+  }
+
+  .project-detail__capability-row > p {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 560px) {
+  .project-detail__capability-row {
+    grid-template-columns: 2.25rem minmax(0, 1fr);
+    gap: 0.65rem 0.8rem;
+    padding-block: 1.15rem;
+  }
+
+  .project-detail__capability-row > p {
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+}
+
+/* ========================================================================== 
    12   Kapitelkarten
    ========================================================================== */
 

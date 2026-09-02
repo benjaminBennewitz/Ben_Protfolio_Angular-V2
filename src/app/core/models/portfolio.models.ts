@@ -538,6 +538,28 @@ export interface ProjectArchitectureNode {
   readonly connections: readonly string[];
 }
 
+/** Einzelne Zeile des listenbasierten Projekt-Feature-Index. */
+export interface ProjectCapabilityItem {
+  /** Kurze fachliche oder technische Kategorie der Fähigkeit. */
+  readonly label: string;
+  /** Prägnanter Titel der Fähigkeit. */
+  readonly title: string;
+  /** Kompakte technische Beschreibung ohne Wiederholung der Modulkarte. */
+  readonly text: string;
+}
+
+/** Listenbasierter Feature-Index für zusätzliche Projektfähigkeiten. */
+export interface ProjectCapabilityIndex {
+  /** Kleine technische Kennung oberhalb der Section. */
+  readonly eyebrow: string;
+  /** Überschrift des Feature-Index. */
+  readonly title: string;
+  /** Kurze Einordnung, warum die Liste ergänzend zur sichtbaren UI existiert. */
+  readonly text: string;
+  /** Kompakte, scanbare Fähigkeiten des Systems. */
+  readonly items: readonly ProjectCapabilityItem[];
+}
+
 /** Interaktive App-Karte innerhalb einer Projekt-Detailseite. */
 export interface ProjectAppModule {
   /** Stabile ID für Hover-, Fokus- und Auswahlzustände. */
@@ -959,6 +981,8 @@ export interface PortfolioProject {
   readonly chapters: readonly ProjectDetailChapter[];
   /** Optionale Architekturkarte für komplexe Systemprojekte. */
   readonly architecture?: readonly ProjectArchitectureNode[];
+  /** Optionaler listenbasierter Index zusätzlicher Projektfähigkeiten. */
+  readonly capabilities?: ProjectCapabilityIndex;
   /** Screenshot-, Mockup- oder Platzhalter-Galerie. */
   readonly gallery: readonly ProjectGalleryItem[];
   /** Optionaler Live-Demo-Status oder externer Demo-Link. */

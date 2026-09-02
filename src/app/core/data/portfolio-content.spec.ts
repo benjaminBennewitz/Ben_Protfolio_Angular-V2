@@ -61,4 +61,11 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     }
   });
 
+  it.each(SUPPORTED_LANGUAGES)('liefert den erweiterten Intranet-Feature-Index für %s', (language) => {
+    const intranet = PORTFOLIO_PROJECTS[language].find((project) => project.slug === 'intranet');
+
+    expect(intranet?.capabilities?.items).toHaveLength(6);
+    expect(intranet?.capabilities?.title.trim()).not.toBe('');
+  });
+
 });

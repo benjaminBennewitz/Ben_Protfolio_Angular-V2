@@ -460,6 +460,33 @@
     </section>
     }
 
+    @if (activeProject.capabilities; as capabilities) {
+    <section class="project-detail__capabilities bp-section" bpReveal>
+      <div class="bp-container">
+        <header class="project-detail__capabilities-head">
+          <div>
+            <p class="bp-eyebrow">{{ capabilities.eyebrow }}</p>
+            <h2>{{ capabilities.title }}</h2>
+          </div>
+          <p>{{ capabilities.text }}</p>
+        </header>
+
+        <ol class="project-detail__capability-index">
+          @for (item of capabilities.items; track item.label; let index = $index) {
+          <li class="project-detail__capability-row project-detail__animated-item" [style.--reveal-index]="index" bpReveal>
+            <span class="project-detail__capability-number">{{ index + 1 < 10 ? '0' + (index + 1) : index + 1 }}</span>
+            <div class="project-detail__capability-title">
+              <small>{{ item.label }}</small>
+              <h3>{{ item.title }}</h3>
+            </div>
+            <p>{{ item.text }}</p>
+          </li>
+          }
+        </ol>
+      </div>
+    </section>
+    }
+
     @if (activeProject.boardShowcase; as boardShowcase) {
     <section id="project-board-workflow" class="project-detail__board-flow-section bp-section" bpReveal>
       <div class="bp-container">

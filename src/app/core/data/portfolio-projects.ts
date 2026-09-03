@@ -439,6 +439,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
         year: '2026',
         type: 'Interactive App / Simulation',
         accent: 'lime',
+        availability: 'coming-soon',
         techStack: ['Angular', 'TypeScript', 'SCSS', 'PixiJS', 'Canvas', 'Web Worker', 'Local Storage', 'JSON', 'SVG / WebP'],
         highlights: ['Drei reagierende Ökosysteme', 'Zeitraffer-Simulation', 'Verzögerte Kausalketten', 'Kausalitätsansicht', 'PixiJS / Canvas', 'Web Worker', 'Vollständig clientseitig', '2.5D Comic Look'],
         requirements: ['Drei eigenständige Szenarien: See, Moor und Wald', 'Folgen nicht sofort, sondern zeitversetzt sichtbar machen', 'Kausalität für Nutzer nachvollziehbar darstellen', 'Simulation und Rendering performant trennen', 'Ohne Backend und Login funktionieren', 'Responsive und zugänglich bedienbar bleiben'],
@@ -657,6 +658,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
         year: '2026',
         type: 'Local OCR / Health Data Workflow',
         accent: 'blue',
+        availability: 'coming-soon',
         techStack: ['Angular 21', 'TypeScript', 'Django REST', 'PostgreSQL', 'Redis', 'Celery', 'Tesseract', 'Poppler', 'Argos Translate', 'SCSS'],
         highlights: ['Lokale PDF-/OCR-Analyse', 'Confidence & Review', 'Neomorphism UI', 'Arztfreigabe', 'Patientenbericht', 'Lokale Übersetzung', 'Wissensbasis', 'Synthetische Testdaten'],
         technicalHighlights: [
@@ -964,6 +966,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
         year: '2026',
         type: 'Interactive App / Simulation',
         accent: 'lime',
+        availability: 'coming-soon',
         techStack: ['Angular', 'TypeScript', 'SCSS', 'PixiJS', 'Canvas', 'Web Worker', 'Local Storage', 'JSON', 'SVG / WebP'],
         highlights: ['Three reactive ecosystems', 'Time-lapse simulation', 'Delayed causal chains', 'Causality view', 'PixiJS / Canvas', 'Web Worker', 'Fully client-side', '2.5D comic look'],
         requirements: ['Three independent scenarios: lake, bog and forest', 'Show consequences with delay instead of instantly', 'Make causality understandable to users', 'Separate simulation and rendering for performance', 'Work without backend and login', 'Remain responsive and accessible'],
@@ -1182,6 +1185,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
         year: '2026',
         type: 'Local OCR / Health Data Workflow',
         accent: 'blue',
+        availability: 'coming-soon',
         techStack: ['Angular 21', 'TypeScript', 'Django REST', 'PostgreSQL', 'Redis', 'Celery', 'Tesseract', 'Poppler', 'Argos Translate', 'SCSS'],
         highlights: ['Local PDF/OCR analysis', 'Confidence & review', 'Neomorphism UI', 'Physician approval', 'Patient report', 'Local translation', 'Knowledge base', 'Synthetic test data'],
         technicalHighlights: [

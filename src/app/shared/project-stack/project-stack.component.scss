@@ -348,6 +348,26 @@
   text-transform: uppercase;
 }
 
+.project-stack__copy > .bp-button--accent {
+  border-color: color-mix(in srgb, var(--bp-color-text) 78%, var(--stack-accent) 22%);
+  background: var(--stack-accent);
+  color: var(--stack-on-accent);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--stack-accent) 64%, #000000 20%), 0 14px 34px var(--bp-color-shadow);
+}
+
+.project-stack__copy > .bp-button--accent:hover,
+.project-stack__copy > .bp-button--accent:focus-visible {
+  border-color: color-mix(in srgb, var(--bp-color-text) 84%, var(--stack-accent) 16%);
+  background: color-mix(in srgb, var(--stack-accent) 88%, var(--bp-color-text) 12%);
+  color: var(--stack-on-accent);
+  box-shadow: 10px 10px 0 color-mix(in srgb, var(--stack-accent) 56%, #000000 36%), 0 0 0 3px color-mix(in srgb, var(--stack-accent) 28%, transparent), 0 24px 64px var(--bp-color-shadow);
+}
+
+.project-stack__copy > .bp-button--accent:hover > *,
+.project-stack__copy > .bp-button--accent:focus-visible > * {
+  color: var(--stack-on-accent);
+}
+
 /* ==========================================================================
    05   Visual
    ========================================================================== */

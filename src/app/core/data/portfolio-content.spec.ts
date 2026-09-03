@@ -52,6 +52,15 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(slugs).not.toContain('html5-browser-game');
   });
 
+  it.each(SUPPORTED_LANGUAGES)('markiert Fußabdruck und Globi Flow als noch nicht verfügbare Case Studies für %s', (language) => {
+    const projects = PORTFOLIO_PROJECTS[language];
+    const footprint = projects.find((project) => project.slug === 'dein-fussabdruck');
+    const globiFlow = projects.find((project) => project.slug === 'blutanalyse');
+
+    expect(footprint?.availability).toBe('coming-soon');
+    expect(globiFlow?.availability).toBe('coming-soon');
+  });
+
   it.each(SUPPORTED_LANGUAGES)('liefert drei Telemetry-Charts pro Case Study für %s', (language) => {
     const projects = PORTFOLIO_PROJECTS[language];
 

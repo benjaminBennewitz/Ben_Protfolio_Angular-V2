@@ -8,7 +8,13 @@
 import { PortfolioLanguage, PortfolioProject, ProjectCatalogPage, ProjectCatalogSpread, ProjectCatalogTocItem, ProjectGalleryItem } from '../models/portfolio.models';
 
 /** Öffentliche Carly-Managed-Demo des Portfolio-Hosts. */
-const CARLY_MANAGED_DEMO_URL = 'https://cases.b2folio.de';
+const CARLY_MANAGED_DEMO_URL = 'https://carly-managed-demo.b2folio.de';
+
+/** Öffentliche Demo-Domain der interaktiven Ökosystem-Simulation. */
+const FOOTPRINT_DEMO_URL = 'https://dein-fussabdruck-demo.b2folio.de';
+
+/** Öffentliche Demo-Domain von Globi Flow. */
+const GLOBI_FLOW_DEMO_URL = 'https://globi-flow-demo.b2folio.de';
 
 /** Anzahl der einzeln ausgelieferten Katalogseiten inklusive Cover und Rückseite. */
 const DESIGN_CATALOG_PAGE_COUNT = 54;
@@ -421,7 +427,6 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
       {
         slug: 'dein-fussabdruck',
         name: 'Dein Fußabdruck – Eine Welt reagiert',
-        availability: 'coming-soon',
         titleLines: ['Dein Fußabdruck', 'Eine Welt reagiert'],
         kicker: 'Interaktive Ökosystem-Simulation',
         summary: 'Eine vollständig clientseitige Angular-Anwendung, in der Nutzer drei Ökosysteme beobachten und durch Eingriffe verändern. See, Moor und Wald reagieren zeitversetzt auf Entscheidungen – sichtbar als Simulation, Zeitraffer und nachvollziehbare Kausalketten.',
@@ -492,7 +497,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
           { title: 'Wald', text: 'Drittes Level mit eigener 2.5D-Szene, Eingriffen und nachvollziehbaren Kausalketten.', size: 'md', icon: 'forest', annotations: ['Canvas', 'Worker', 'Trace'] },
           { title: 'Kausalitätsansicht', text: 'UI-Layer für die Verbindung zwischen ausgelöster Entscheidung und später sichtbarer Folge.', size: 'sm', icon: 'hub', annotations: ['Cause', 'Effect', 'History'] },
         ],
-        liveDemo: { status: 'private', text: 'Die Anwendung ist vollständig clientseitig aufgebaut. Für das Portfolio ist eine isolierte Demo mit lokalen Beispieldaten und den drei Szenarien sinnvoll.' },
+        liveDemo: { status: 'available', text: 'Die öffentliche Demo läuft vollständig clientseitig und isoliert auf einer eigenen Demo-Domain. Die drei Szenarien arbeiten ausschließlich mit lokalen Beispieldaten und benötigen weder Backend noch Anmeldung.', url: FOOTPRINT_DEMO_URL },
       },
       {
         slug: 'kanban-klon',
@@ -640,7 +645,6 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
       {
         slug: 'blutanalyse',
         name: 'Globi Flow',
-        availability: 'coming-soon',
         titleLines: ['Globi', 'Flow'],
         kicker: 'Lokale OCR, Laborwerte und nachvollziehbare Datenaufbereitung.',
         summary: 'Ein lokales Laborwerte-Assistenzsystem, das Testdaten-PDFs per Textanalyse oder OCR verarbeitet, erkannte Werte prüfbar macht und daraus verständliche Arzt- und Patientenansichten erzeugt.',
@@ -749,7 +753,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
           { title: 'Patientenbericht', text: 'Druckoptimierter Bericht mit Zusammenfassung, Messwerten, Erklärungen und nächsten Schritten.', image: 'assets/images/projects/globi-flow/patientenbericht.webp', backgroundColor: '#eef2f9', alt: 'Globi Flow Patientenbericht mit Zusammenfassung, Laborwerten und erklärenden Abschnitten', size: 'lg', detail: 'Freigegebene Daten werden zu einer klaren Patientenansicht zusammengeführt. Der Bericht kombiniert Messwerte, Referenzen, kontrollierte Wissensinhalte und Handlungshinweise in einer responsiven sowie druckoptimierten Darstellung.', tools: ['HTML Report', 'Print CSS', 'Argos Translate'], year: '2026' },
           { title: 'Wissensbasis', text: 'Versionierte und kontrollierte Erklärtexte mit Kategorien, Freigabestatus und Bearbeitungsworkflow.', image: 'assets/images/projects/globi-flow/wissensbasis.webp', backgroundColor: '#eef2f9', alt: 'Globi Flow Wissensbasis mit Eintragsliste, Kategorien und Bearbeitungsformular', size: 'md', detail: 'Die Wissensbasis trennt medizinisch kontrollierte Inhalte von der technischen Verarbeitung. Einträge lassen sich kategorisieren, versionieren, prüfen und gezielt für Patientenberichte freigeben.', tools: ['Django REST', 'Versionierung', 'Freigaben'], year: '2026' },
         ],
-        liveDemo: { status: 'private', text: 'Globi Flow ist als lokale Demo mit synthetischen Testdaten umgesetzt. Eine öffentliche Instanz ist bewusst eingeschränkt, da das Projekt keine medizinische Anwendung, keine Sicherheitszertifizierung und kein Ersatz für ärztliche Bewertung ist.', githubUrl: 'https://github.com/USERNAME/globi-flow' },
+        liveDemo: { status: 'available', text: 'Die öffentliche Demo von Globi Flow ist als isolierte Portfolio-Instanz mit ausschließlich synthetischen Testdaten ausgelegt. Das Projekt ist keine medizinische Anwendung, besitzt keine Sicherheitszertifizierung und ersetzt keine ärztliche Bewertung.', url: GLOBI_FLOW_DEMO_URL },
       },
       {
         slug: 'grafikdesign-katalog',
@@ -948,7 +952,6 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
       {
         slug: 'dein-fussabdruck',
         name: 'Dein Fußabdruck – Eine Welt reagiert',
-        availability: 'coming-soon',
         titleLines: ['Dein Fußabdruck', 'Eine Welt reagiert'],
         kicker: 'Interactive ecosystem simulation',
         summary: 'A fully client-side Angular application in which users observe three ecosystems and change them through interventions. Lake, bog and forest react to decisions over time—visualized through simulation, time-lapse and traceable causal chains.',
@@ -1019,7 +1022,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
           { title: 'Forest', text: 'Third level with its own 2.5D scene, interventions and traceable causal chains.', size: 'md', icon: 'forest', annotations: ['Canvas', 'Worker', 'Trace'] },
           { title: 'Causality View', text: 'UI layer connecting a triggered decision with the consequence that becomes visible later.', size: 'sm', icon: 'hub', annotations: ['Cause', 'Effect', 'History'] },
         ],
-        liveDemo: { status: 'private', text: 'The application is fully client-side. An isolated portfolio demo with local sample data and the three scenarios is the useful presentation.' },
+        liveDemo: { status: 'available', text: 'The public demo runs fully client-side and isolated on its own demo domain. All three scenarios use local sample data only and require neither a backend nor authentication.', url: FOOTPRINT_DEMO_URL },
       },
       {
         slug: 'kanban-klon',
@@ -1167,7 +1170,6 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
       {
         slug: 'blutanalyse',
         name: 'Globi Flow',
-        availability: 'coming-soon',
         titleLines: ['Globi', 'Flow'],
         kicker: 'Local OCR, lab values and traceable data preparation.',
         summary: 'A local lab-value assistance system that processes synthetic PDF reports through text extraction or OCR, keeps detected values reviewable and generates clear physician and patient views.',
@@ -1276,7 +1278,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
           { title: 'Patient Report', text: 'Print-optimized report with summary, measurements, explanations and next steps.', image: 'assets/images/projects/globi-flow/patientenbericht.webp', backgroundColor: '#eef2f9', alt: 'Globi Flow patient report with summary, lab values and explanatory sections', size: 'lg', detail: 'Approved data is combined into a clear patient view. The report connects measurements, references, controlled knowledge content and next-step guidance in a responsive and print-optimized layout.', tools: ['HTML Report', 'Print CSS', 'Argos Translate'], year: '2026' },
           { title: 'Knowledge Base', text: 'Versioned and controlled explanations with categories, approval status and editing workflow.', image: 'assets/images/projects/globi-flow/wissensbasis.webp', backgroundColor: '#eef2f9', alt: 'Globi Flow knowledge base with entry list, categories and editing form', size: 'md', detail: 'The knowledge base separates medically controlled content from technical processing. Entries can be categorized, versioned, reviewed and selectively approved for patient reports.', tools: ['Django REST', 'Versioning', 'Approvals'], year: '2026' },
         ],
-        liveDemo: { status: 'private', text: 'Globi Flow is implemented as a local demo using synthetic test data. A public instance is intentionally limited because the project is not a medical product, has no security certification and does not replace professional assessment.', githubUrl: 'https://github.com/USERNAME/globi-flow' },
+        liveDemo: { status: 'available', text: 'The public Globi Flow demo is designed as an isolated portfolio instance using synthetic test data only. The project is not a medical product, has no security certification and does not replace professional assessment.', url: GLOBI_FLOW_DEMO_URL },
       },
       {
         slug: 'grafikdesign-katalog',

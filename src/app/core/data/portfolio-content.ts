@@ -191,6 +191,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
       dialogCloseLabel: 'Projekt-Terminalfenster schließen',
       dialogLines: ['5 entries loaded', 'case_study_mode: planned', 'system_map: planned for intranet', 'status: details will grow'],
       detailLabel: 'Projekt öffnen',
+      projectComingSoonLabel: 'Demnächst verfügbar',
       overviewLabel: 'Zu den Case Studies',
       typeLabel: 'Typ',
       yearLabel: 'Jahr',
@@ -415,7 +416,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
       petDialogText: '„Das ist meine Good-Mood-Supporterin: Fülli. Füles ist Ungarisch für Ohr.“',
       petDialogLabel: 'Fülli-Info anzeigen',
       socialLinks: [
-        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/benjamin-bennewitz/' },
+        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/benjamin-bennewitz-116a12306/' },
         { label: 'Xing', href: 'https://www.xing.com/profile/Benjamin_Bennewitz' },
         { label: 'GitHub', href: 'https://github.com/benjaminBennewitz' },
       ],
@@ -635,6 +636,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
       dialogCloseLabel: 'Close project terminal window',
       dialogLines: ['5 entries loaded', 'case_study_mode: planned', 'system_map: planned for intranet', 'status: details will grow'],
       detailLabel: 'Open project',
+      projectComingSoonLabel: 'Coming soon',
       overviewLabel: 'Back to case studies',
       typeLabel: 'Type',
       yearLabel: 'Year',
@@ -859,7 +861,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
       petDialogText: '“This is my good-mood supporter: Fülli. Füles means ear in Hungarian.”',
       petDialogLabel: 'Show Fülli info',
       socialLinks: [
-        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/benjamin-bennewitz/' },
+        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/benjamin-bennewitz-116a12306/' },
         { label: 'Xing', href: 'https://www.xing.com/profile/Benjamin_Bennewitz' },
         { label: 'GitHub', href: 'https://github.com/benjaminBennewitz' },
       ],

@@ -76,6 +76,10 @@
   --visual-accent: var(--bp-color-accent-3);
 }
 
+.visual[data-project='kanban-klon'] {
+  --visual-accent: var(--stack-accent, var(--bp-color-accent-3));
+}
+
 .visual[data-accent='blue'] {
   --visual-accent: var(--bp-color-info);
 }

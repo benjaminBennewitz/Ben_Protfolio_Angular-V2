@@ -43,6 +43,17 @@
               <span>{{ activeProject.boardShowcase?.ctaLabel ?? activeProject.bloodShowcase?.ctaLabel ?? activeProject.catalogShowcase?.ctaLabel ?? content().projectsIntro.caseStudyLabel }}</span>
               <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
             </a>
+
+            @if (activeProject.liveDemo; as demo) {
+            @if (demo.status === 'available' && demo.url) {
+            <a class="bp-button bp-button--ghost" [href]="demo.url" target="_blank" rel="noopener noreferrer">
+              <span>{{ content().projectsIntro.openDemoLabel }}</span>
+              <svg class="project-detail__external-link-icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                <path d="M7 17 17 7H9V5h12v12h-2V9L9 19l-2-2Z" />
+              </svg>
+            </a>
+            }
+            }
           </div>
         </div>
 
@@ -541,6 +552,17 @@
             <strong>{{ boardShowcase.mascot.name }} · {{ boardShowcase.mascot.role }}</strong>
             <p class="project-detail__character-intro">{{ boardShowcase.mascot.text }}</p>
 
+            @if (activeProject.liveDemo; as demo) {
+            @if (demo.status === 'available' && demo.url) {
+            <a class="project-detail__character-demo-link" [href]="demo.url" target="_blank" rel="noopener noreferrer">
+              <span>{{ content().projectsIntro.openDemoLabel }}</span>
+              <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                <path d="M7 17 17 7H9V5h12v12h-2V9L9 19l-2-2Z" />
+              </svg>
+            </a>
+            }
+            }
+
             @if (boardShowcase.mascot.principles?.length) {
             <ul class="project-detail__character-principle-list">
               @for (principle of boardShowcase.mascot.principles; track principle.title; let index = $index) {
@@ -773,40 +795,37 @@
     @if (demo.status === 'available' && demo.url) {
     <section class="project-detail__live-access bp-section" bpReveal>
       <div class="bp-container">
-        <div class="project-detail__live-access-grid">
-          <a class="project-detail__live-access-card project-detail__live-access-card--demo" [href]="demo.url" target="_blank" rel="noopener noreferrer">
+        <div class="project-detail__live-access-panel">
+          <div class="project-detail__live-access-copy">
             <span class="project-detail__live-access-icon" aria-hidden="true">
               <svg viewBox="0 0 24 24" focusable="false">
                 <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-2 14.5v-9l6 4.5-6 4.5Z" />
               </svg>
             </span>
             <div>
-              <p class="bp-eyebrow">{{ activeProject.name }}</p>
+              <p class="bp-eyebrow">{{ content().projectsIntro.liveDemoLabel }} · {{ activeProject.name }}</p>
               <h2>{{ content().projectsIntro.openDemoLabel }}</h2>
               <p>{{ demo.text }}</p>
             </div>
-            <svg class="project-detail__live-access-arrow" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-              <path d="M7 17 17 7H9V5h12v12h-2V9L9 19l-2-2Z" />
-            </svg>
-          </a>
+          </div>
 
-          @if (demo.githubUrl) {
-          <a class="project-detail__live-access-card project-detail__live-access-card--github" [href]="demo.githubUrl" target="_blank" rel="noopener noreferrer">
-            <span class="project-detail__live-access-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" focusable="false">
+          <div class="project-detail__live-access-actions">
+            <a class="bp-button bp-button--accent" [href]="demo.url" target="_blank" rel="noopener noreferrer">
+              <span>{{ content().projectsIntro.openDemoLabel }}</span>
+              <svg class="project-detail__external-link-icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                <path d="M7 17 17 7H9V5h12v12h-2V9L9 19l-2-2Z" />
+              </svg>
+            </a>
+
+            @if (demo.githubUrl) {
+            <a class="bp-button bp-button--ghost" [href]="demo.githubUrl" target="_blank" rel="noopener noreferrer">
+              <span>{{ content().projectsIntro.githubLabel }}</span>
+              <svg class="project-detail__external-link-icon" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
                 <path d="m8.7 16.6-4.6-4.6 4.6-4.6L7.3 6l-6 6 6 6 1.4-1.4Zm6.6 0 4.6-4.6-4.6-4.6L16.7 6l6 6-6 6-1.4-1.4Z" />
               </svg>
-            </span>
-            <div>
-              <p class="bp-eyebrow">{{ activeProject.name }}</p>
-              <h2>{{ content().projectsIntro.githubLabel }}</h2>
-              <p>{{ demo.githubUrl }}</p>
-            </div>
-            <svg class="project-detail__live-access-arrow" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-              <path d="M7 17 17 7H9V5h12v12h-2V9L9 19l-2-2Z" />
-            </svg>
-          </a>
-          }
+            </a>
+            }
+          </div>
         </div>
       </div>
     </section>

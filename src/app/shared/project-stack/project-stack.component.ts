@@ -230,6 +230,11 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
     return this.projects.filter((project) => project.slug !== activeProject.slug);
   }
 
+  /** Gibt an, ob die Projekt-Case-Study aktuell geöffnet werden kann. */
+  isProjectAvailable(project: PortfolioProject): boolean {
+    return project.availability !== 'coming-soon';
+  }
+
   /** Liefert den animierten Projekttitel mit optionalen festen Zeilenumbrüchen. */
   projectTitleText(project: PortfolioProject): string {
     return project.titleLines?.join('\n') ?? project.name;

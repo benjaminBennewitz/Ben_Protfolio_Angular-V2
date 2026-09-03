@@ -421,6 +421,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
       {
         slug: 'dein-fussabdruck',
         name: 'Dein Fußabdruck – Eine Welt reagiert',
+        availability: 'coming-soon',
         titleLines: ['Dein Fußabdruck', 'Eine Welt reagiert'],
         kicker: 'Interaktive Ökosystem-Simulation',
         summary: 'Eine vollständig clientseitige Angular-Anwendung, in der Nutzer drei Ökosysteme beobachten und durch Eingriffe verändern. See, Moor und Wald reagieren zeitversetzt auf Entscheidungen – sichtbar als Simulation, Zeitraffer und nachvollziehbare Kausalketten.',
@@ -639,6 +640,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
       {
         slug: 'blutanalyse',
         name: 'Globi Flow',
+        availability: 'coming-soon',
         titleLines: ['Globi', 'Flow'],
         kicker: 'Lokale OCR, Laborwerte und nachvollziehbare Datenaufbereitung.',
         summary: 'Ein lokales Laborwerte-Assistenzsystem, das Testdaten-PDFs per Textanalyse oder OCR verarbeitet, erkannte Werte prüfbar macht und daraus verständliche Arzt- und Patientenansichten erzeugt.',
@@ -946,6 +948,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
       {
         slug: 'dein-fussabdruck',
         name: 'Dein Fußabdruck – Eine Welt reagiert',
+        availability: 'coming-soon',
         titleLines: ['Dein Fußabdruck', 'Eine Welt reagiert'],
         kicker: 'Interactive ecosystem simulation',
         summary: 'A fully client-side Angular application in which users observe three ecosystems and change them through interventions. Lake, bog and forest react to decisions over time—visualized through simulation, time-lapse and traceable causal chains.',
@@ -1164,6 +1167,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
       {
         slug: 'blutanalyse',
         name: 'Globi Flow',
+        availability: 'coming-soon',
         titleLines: ['Globi', 'Flow'],
         kicker: 'Local OCR, lab values and traceable data preparation.',
         summary: 'A local lab-value assistance system that processes synthetic PDF reports through text extraction or OCR, keeps detected values reviewable and generates clear physician and patient views.',

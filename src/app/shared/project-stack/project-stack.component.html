@@ -2,9 +2,24 @@
 <section class="project-stack" [style.--project-total]="projects.length">
   @for (project of projects; track project.slug; let index = $index) {
   <article #projectPanel class="project-stack__panel" [class.project-stack__panel--intro]="index === 0"
-    [attr.data-accent]="project.accent" [attr.data-project]="project.slug" [style.--panel-index]="index">
+    [class.project-stack__panel--unavailable]="!isProjectAvailable(project)"
+    [attr.aria-disabled]="!isProjectAvailable(project) ? 'true' : null" [attr.data-accent]="project.accent"
+    [attr.data-project]="project.slug" [style.--panel-index]="index">
     <div class="project-stack__noise" aria-hidden="true"></div>
 
+    @if (!isProjectAvailable(project)) {
+    <div class="project-stack__availability-overlay" role="status"
+      [attr.aria-label]="project.name + ': ' + labels.projectComingSoonLabel">
+      <div class="project-stack__availability-message">
+        <span class="project-stack__availability-signal" aria-hidden="true">
+          <span></span>
+        </span>
+        <p>{{ labels.caseStudyLabel }}</p>
+        <strong>{{ labels.projectComingSoonLabel }}</strong>
+        <small>{{ project.name }}</small>
+      </div>
+    </div>
+    }
 
     @if (project.slug === 'kanban-klon') {
     <div class="project-stack__trash-scene" [class.is-landed]="project3PaperLanded()">
@@ -24,7 +39,8 @@
     </div>
     }
 
-    <div class="project-stack__copy bp-motion-copy" bpReveal>
+    <div class="project-stack__copy bp-motion-copy" bpReveal
+      [attr.inert]="!isProjectAvailable(project) ? '' : null">
       <p class="project-stack__kicker project-stack__kicker--headline">{{ project.overviewKicker ?? project.kicker }}</p>
       <div class="project-stack__number">{{ (index + 1).toString().padStart(2, '0') }}</div>
       <bp-reveal-text class="project-stack__title-reveal" level="h3" [text]="projectTitleText(project)" />
@@ -36,10 +52,17 @@
         }
       </ul>
 
+      @if (isProjectAvailable(project)) {
       <a class="bp-button bp-button--accent" [routerLink]="['/projects', project.slug]">
         <span>{{ detailLabel }}</span>
         <span class="material-symbols-outlined" aria-hidden="true">target</span>
       </a>
+      } @else {
+      <span class="bp-button bp-button--accent project-stack__disabled-action" aria-hidden="true">
+        <span>{{ labels.projectComingSoonLabel }}</span>
+        <span class="material-symbols-outlined">schedule</span>
+      </span>
+      }
 
       @if (isGraphicCatalogProject(project)) {
       <div class="project-stack__typewriter" [attr.aria-label]="labels.typewriterLabel">
@@ -50,18 +73,30 @@
       }
     </div>
 
-    <div class="project-stack__visual" bpReveal>
+    <div class="project-stack__visual" bpReveal [attr.inert]="!isProjectAvailable(project) ? '' : null">
       <bp-project-visual [project]="project" [large]="true" [hideAssets]="project.slug === 'kanban-klon'"
         [showTaskStatus]="project.slug === 'kanban-klon'" [taskStatusSaved]="project3SuccessVisible()" [labels]="labels" />
 
       </div>
 
-    <aside class="project-stack__previews" [attr.aria-label]="labels.previewAriaLabel">
+    <aside class="project-stack__previews" [attr.aria-label]="labels.previewAriaLabel"
+      [attr.inert]="!isProjectAvailable(project) ? '' : null">
       @for (preview of previewsFor(project); track preview.slug; let previewIndex = $index) {
+      @if (isProjectAvailable(preview)) {
       <a class="project-stack__preview" [routerLink]="['/projects', preview.slug]" [attr.data-accent]="preview.accent">
         <span>{{ (previewIndex + 1).toString().padStart(2, '0') }}</span>
         <strong>{{ preview.name }}</strong>
       </a>
+      } @else {
+      <div class="project-stack__preview project-stack__preview--unavailable" [attr.data-accent]="preview.accent"
+        [attr.aria-label]="preview.name + ': ' + labels.projectComingSoonLabel" aria-disabled="true">
+        <span>{{ (previewIndex + 1).toString().padStart(2, '0') }}</span>
+        <strong>
+          {{ preview.name }}
+          <small>{{ labels.projectComingSoonLabel }}</small>
+        </strong>
+      </div>
+      }
       }
     </aside>
   </article>

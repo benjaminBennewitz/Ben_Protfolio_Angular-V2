@@ -226,7 +226,7 @@ export class SeoService {
       jobTitle: 'Full Stack Web Developer und Grafikdesigner',
       knowsAbout: ['Angular', 'Django', 'UI/UX Design', 'Grafikdesign', 'SEO', 'Accessibility', 'Web Apps'],
       sameAs: [
-        'https://www.linkedin.com/in/benjamin-bennewitz/',
+        'https://www.linkedin.com/in/benjamin-bennewitz-116a12306/',
         'https://www.xing.com/profile/Benjamin_Bennewitz',
         'https://github.com/benjaminBennewitz',
       ],

@@ -386,6 +386,8 @@ export interface ProjectsContent {
   /** Zeilen im dekorativen Projekt-Terminalfenster. */
   readonly dialogLines: readonly string[];
   readonly detailLabel: string;
+  /** Hinweis für vorübergehend deaktivierte Case-Studies. */
+  readonly projectComingSoonLabel: string;
   readonly overviewLabel: string;
   readonly typeLabel: string;
   readonly yearLabel: string;
@@ -965,6 +967,8 @@ export interface ProjectLiveDemo {
 export interface PortfolioProject {
   readonly slug: string;
   readonly name: string;
+  /** Öffentlicher Status der Case-Study in der Projektübersicht. */
+  readonly availability?: 'available' | 'coming-soon';
   /** Optionale Zeilen für eine bewusst gesetzte Hero-Headline. */
   readonly titleLines?: readonly string[];
   readonly kicker: string;

@@ -12,12 +12,15 @@
    ========================================================================== */
 
 .project-detail[data-project='kanban-klon'] {
-  --bp-color-accent: var(--bp-color-accent-3);
+  --bp-color-accent: #7b4de0;
   --bp-color-on-accent: #fffdf8;
-  --project-detail-blue: var(--bp-color-accent-3);
-  --project-detail-blue-soft: color-mix(in srgb, var(--bp-color-accent-3), transparent 82%);
-  --project-detail-purple-soft: color-mix(in srgb, var(--bp-color-accent-3), transparent 86%);
-  --project-detail-red-soft: color-mix(in srgb, var(--bp-color-accent-2), transparent 88%);
+  --bp-color-accent-hover: #6736c7;
+  --bp-color-control-hover: #3a275f;
+  --bp-color-on-control-hover: #fff7ff;
+  --project-detail-blue: var(--bp-color-accent);
+  --project-detail-blue-soft: color-mix(in srgb, var(--bp-color-accent), transparent 82%);
+  --project-detail-purple-soft: color-mix(in srgb, var(--bp-color-accent), transparent 86%);
+  --project-detail-red-soft: color-mix(in srgb, var(--bp-color-accent), transparent 88%);
   --project-detail-hero-bg: #130d1f;
   --project-detail-hero-panel: rgba(21, 14, 34, 0.9);
   --project-detail-ink: #fff7ff;
@@ -26,6 +29,7 @@
   --project-detail-board-card-soft: rgba(255, 247, 255, 0.08);
   --project-detail-board-shadow: rgba(12, 7, 22, 0.58);
   --project-detail-cat: #ffc86f;
+  --project-detail-highlight: #ffd27f;
   --project-detail-cat-dark: #1a101f;
   --project-detail-cat-face: #392044;
   --project-detail-cat-soft: #fff1c6;
@@ -40,35 +44,55 @@
 :root[data-theme='light'] .project-detail[data-project='kanban-klon'],
 :host-context(:root[data-theme='light']) .project-detail[data-project='kanban-klon'],
 :host-context([data-theme='light']) .project-detail[data-project='kanban-klon'] {
-  --bp-color-accent: var(--bp-color-accent-3);
+  --bp-color-bg: #f7f4fd;
+  --bp-color-bg-soft: #eee8f8;
+  --bp-color-surface: rgba(252, 250, 255, 0.9);
+  --bp-color-surface-solid: #fcfaff;
+  --bp-color-surface-strong: #e5dcf3;
+  --bp-color-shadow: rgba(52, 31, 82, 0.18);
+  --bp-color-accent: #6d3bd1;
   --bp-color-on-accent: #fffdf8;
-  --project-detail-blue: var(--bp-color-accent-3);
-  --project-detail-blue-soft: color-mix(in srgb, var(--bp-color-accent-3), transparent 84%);
-  --project-detail-purple-soft: color-mix(in srgb, var(--bp-color-accent-3), transparent 90%);
-  --project-detail-red-soft: color-mix(in srgb, var(--bp-color-accent-2), transparent 92%);
-  --project-detail-hero-bg: #fff3fb;
-  --project-detail-hero-panel: rgba(255, 252, 247, 0.92);
+  --bp-color-accent-hover: #5929b4;
+  --bp-color-control-hover: #e5daf8;
+  --bp-color-on-control-hover: #2d174a;
+  --project-detail-blue: var(--bp-color-accent);
+  --project-detail-blue-soft: color-mix(in srgb, var(--bp-color-accent), transparent 82%);
+  --project-detail-purple-soft: color-mix(in srgb, var(--bp-color-accent), transparent 88%);
+  --project-detail-red-soft: color-mix(in srgb, var(--bp-color-accent), transparent 91%);
+  --project-detail-hero-bg: #f3effb;
+  --project-detail-hero-panel: rgba(252, 250, 255, 0.94);
   --project-detail-ink: #231225;
   --project-detail-muted: rgba(35, 18, 37, 0.74);
-  --project-detail-board-card: rgba(255, 253, 248, 0.92);
+  --project-detail-board-card: rgba(252, 250, 255, 0.94);
   --project-detail-board-card-soft: rgba(35, 18, 37, 0.06);
   --project-detail-board-shadow: rgba(79, 22, 91, 0.18);
   --project-detail-cat: #d8842d;
+  --project-detail-highlight: #925000;
   --project-detail-cat-dark: #251021;
   --project-detail-cat-face: #3b1b43;
   --project-detail-cat-soft: #fff2c8;
-  --project-detail-character-bg: #f0ddf8;
-  --project-detail-character-bg-alt: #ffe6b8;
+  --project-detail-character-bg: #e8dff5;
+  --project-detail-character-bg-alt: #f1ebfa;
   --project-detail-character-grid: rgba(60, 24, 72, 0.14);
   --project-detail-game-sand: color-mix(in srgb, var(--project-detail-cat), transparent 20%);
   --project-detail-game-sand-dark: color-mix(in srgb, var(--project-detail-blue), white 18%);
+}
+
+:root[data-color-vision]:not([data-color-vision='default']) .project-detail[data-project='kanban-klon'],
+:host-context(:root[data-color-vision]:not([data-color-vision='default'])) .project-detail[data-project='kanban-klon'],
+:host-context([data-color-vision]:not([data-color-vision='default'])) .project-detail[data-project='kanban-klon'] {
+  --bp-color-accent: var(--bp-color-accent-3);
+  --bp-color-on-accent: var(--bp-color-on-accent-3);
+  --bp-color-accent-hover: color-mix(in srgb, var(--bp-color-accent-3) 84%, var(--bp-color-text) 16%);
+  --bp-color-control-hover: color-mix(in srgb, var(--bp-color-accent-3) 16%, var(--bp-color-surface-solid));
+  --bp-color-on-control-hover: var(--bp-color-text);
 }
 
 
 .project-detail[data-project='kanban-klon'] .project-detail__hero {
   background:
     radial-gradient(circle at 82% 18%, color-mix(in srgb, var(--project-detail-blue), transparent 66%), transparent 30%),
-    radial-gradient(circle at 52% 72%, color-mix(in srgb, var(--bp-color-accent-2), transparent 80%), transparent 34%),
+    radial-gradient(circle at 52% 72%, color-mix(in srgb, var(--project-detail-blue), transparent 82%), transparent 34%),
     linear-gradient(90deg, color-mix(in srgb, var(--project-detail-blue), transparent 88%) 1px, transparent 1px),
     linear-gradient(0deg, color-mix(in srgb, var(--project-detail-blue), transparent 91%) 1px, transparent 1px),
     linear-gradient(135deg, color-mix(in srgb, var(--project-detail-hero-bg) 90%, black 10%), var(--project-detail-hero-bg));
@@ -97,6 +121,42 @@
   background: color-mix(in srgb, var(--project-detail-blue) 86%, white 14%);
   color: var(--bp-color-on-accent);
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--project-detail-blue), transparent 68%);
+}
+
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--ghost {
+  border-color: color-mix(in srgb, var(--project-detail-blue), transparent 36%);
+  background: color-mix(in srgb, var(--project-detail-hero-panel) 88%, transparent);
+  color: var(--project-detail-ink);
+}
+
+:root[data-theme='light'] .project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--ghost,
+:host-context(:root[data-theme='light']) .project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--ghost {
+  border-color: color-mix(in srgb, var(--project-detail-blue), transparent 44%);
+  background: rgba(252, 250, 255, 0.88);
+  color: var(--project-detail-ink);
+}
+
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--accent:hover,
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--accent:focus-visible {
+  background: var(--bp-color-accent-hover);
+  color: var(--bp-color-on-accent) !important;
+}
+
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--accent:hover > *,
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--accent:focus-visible > * {
+  color: var(--bp-color-on-accent) !important;
+}
+
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--ghost:hover,
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--ghost:focus-visible {
+  border-color: var(--project-detail-blue);
+  background: var(--bp-color-control-hover);
+  color: var(--bp-color-on-control-hover) !important;
+}
+
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--ghost:hover > *,
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--ghost:focus-visible > * {
+  color: var(--bp-color-on-control-hover) !important;
 }
 
 .project-detail[data-project='kanban-klon'] .project-detail__highlight-card {
@@ -381,7 +441,7 @@
 }
 
 .project-detail__board-flow-node span {
-  color: var(--project-detail-cat);
+  color: var(--project-detail-highlight);
   font-family: var(--bp-font-mono);
   font-size: 0.68rem;
   font-weight: 950;
@@ -433,7 +493,7 @@
   content: '>'; 
   position: absolute;
   left: 0;
-  color: var(--project-detail-cat);
+  color: var(--project-detail-highlight);
   font-weight: 950;
 }
 
@@ -650,6 +710,36 @@
   line-height: 1.55;
 }
 
+.project-detail__character-demo-link {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.45rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--project-detail-highlight), transparent 28%);
+  padding: 0.2rem 0;
+  color: var(--project-detail-highlight);
+  font-family: var(--bp-font-mono);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, color 180ms ease, transform 180ms var(--bp-ease-out);
+}
+
+.project-detail__character-demo-link svg {
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+}
+
+.project-detail__character-demo-link:hover,
+.project-detail__character-demo-link:focus-visible {
+  border-bottom-color: currentColor;
+  color: var(--project-detail-blue);
+  transform: translateX(0.2rem);
+}
+
 .project-detail__character-principle-list,
 .project-detail__character-story-list {
   width: 100%;
@@ -673,7 +763,7 @@
 }
 
 .project-detail__character-principle-list li > span {
-  color: #ffd27f;
+  color: var(--project-detail-highlight);
   font-family: var(--bp-font-mono);
   font-size: 0.66rem;
   font-weight: 900;
@@ -722,7 +812,7 @@
   bottom: 0;
   left: 0.42rem;
   width: 1px;
-  background: color-mix(in srgb, #ffd27f, transparent 52%);
+  background: color-mix(in srgb, var(--project-detail-highlight), transparent 38%);
 }
 
 .project-detail__character-story-list li {
@@ -740,7 +830,7 @@
   left: -1.75rem;
   width: 0.62rem;
   aspect-ratio: 1;
-  border: 2px solid color-mix(in srgb, #ffd27f, white 6%);
+  border: 2px solid var(--project-detail-highlight);
   border-radius: 50%;
   background: color-mix(in srgb, var(--bp-color-surface), black 14%);
   box-shadow: 0 0 1rem rgba(255, 210, 127, 0.22);
@@ -748,7 +838,7 @@
 
 .project-detail__character-story-list small {
   padding-top: 0.08rem;
-  color: #ffd27f;
+  color: var(--project-detail-highlight);
   font-family: var(--bp-font-mono);
   font-size: 0.61rem;
   font-weight: 900;

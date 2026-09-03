@@ -1,4 +1,4 @@
-B2Folio/
+Portfolio/
 ├── .angular/
 │   └── ...
 ├── dist/

@@ -1,15 +1,145 @@
-<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="630" fill="#101010"/>
-  <path d="M0 0h1200v630H0z" fill="url(#g)" opacity=".8"/>
-  <path d="M80 110h1040v410H80z" fill="none" stroke="#a7ff19" stroke-width="6"/>
-  <text x="120" y="250" fill="#f6f0e8" font-family="Arial Black, sans-serif" font-size="84">BEN PORTFOLIO</text>
-  <text x="120" y="340" fill="#ff3ea5" font-family="Arial, sans-serif" font-size="38">Angular · Django · UI/UX · Grafikdesign</text>
-  <text x="120" y="430" fill="#a7ff19" font-family="monospace" font-size="28">interactive fullstack experience</text>
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title description">
+  <title id="title">B2FOLIO.DE – Developer-Tag</title>
+  <desc id="description">B2FOLIO.DE Social Preview im Terminal-, Glitch- und Poster-Look mit Developer-Tag und einem Tagesablauf aus Design, Code, Debug und Deploy.</desc>
+
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#1a1a1a"/>
-      <stop offset=".55" stop-color="#232323"/>
-      <stop offset="1" stop-color="#0b0b0b"/>
+    <linearGradient id="background" x1="70" y1="22" x2="1115" y2="608" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17171C"/>
+      <stop offset="0.58" stop-color="#0B0B0D"/>
+      <stop offset="1" stop-color="#111115"/>
     </linearGradient>
+    <linearGradient id="screenGlow" x1="136" y1="290" x2="672" y2="474" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22222A"/>
+      <stop offset="1" stop-color="#111115"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" stroke="#F6F0E8" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <pattern id="halftone" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="2.2" fill="#A7FF19"/>
+    </pattern>
+    <clipPath id="cardClip">
+      <rect x="780" y="92" width="354" height="454" rx="18"/>
+    </clipPath>
   </defs>
+
+  <rect width="1200" height="630" fill="url(#background)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <path d="M0 0H454L237 630H0V0Z" fill="#A7FF19" fill-opacity="0.045"/>
+  <path d="M1030 0H1200V630H907L1030 0Z" fill="#FF3EA5" fill-opacity="0.07"/>
+  <path d="M934 0H1078L860 630H716L934 0Z" fill="url(#halftone)" opacity="0.08"/>
+
+  <g opacity="0.65">
+    <rect x="30" y="38" width="8" height="8" fill="#A7FF19"/>
+    <rect x="45" y="38" width="8" height="8" fill="#A7FF19"/>
+    <rect x="60" y="38" width="8" height="8" fill="#FF3EA5"/>
+    <path d="M975 46H1168" stroke="#F6F0E8" stroke-opacity="0.35" stroke-width="2"/>
+    <text x="975" y="34" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="13" letter-spacing="2">PORTFOLIO / BUILD 2026</text>
+  </g>
+
+  <rect x="29" y="29" width="1142" height="572" rx="24" stroke="#F6F0E8" stroke-opacity="0.28" stroke-width="2"/>
+  <path d="M29 82H1171" stroke="#F6F0E8" stroke-opacity="0.18" stroke-width="2"/>
+
+  <g transform="translate(65 102)">
+    <text x="7" y="106" fill="#23C7FF" fill-opacity="0.64" font-family="Arial Black, Impact, sans-serif" font-size="87" font-weight="900" letter-spacing="-4">B2FOLIO.DE</text>
+    <text x="-5" y="99" fill="#FF3EA5" fill-opacity="0.76" font-family="Arial Black, Impact, sans-serif" font-size="87" font-weight="900" letter-spacing="-4">B2FOLIO.DE</text>
+    <text x="0" y="102" fill="#F6F0E8" font-family="Arial Black, Impact, sans-serif" font-size="87" font-weight="900" letter-spacing="-4">B2FOLIO.DE</text>
+    <rect x="1" y="124" width="504" height="39" rx="2" fill="#A7FF19"/>
+    <text x="16" y="151" fill="#000000" font-family="Consolas, 'Courier New', monospace" font-size="19" font-weight="700" letter-spacing="1.1">FULL STACK // UI/UX // GRAFIKDESIGN</text>
+    <text x="527" y="151" fill="#A7FF19" font-family="Consolas, 'Courier New', monospace" font-size="18" font-weight="700">_</text>
+  </g>
+
+  <rect x="75" y="304" width="670" height="224" rx="14" fill="#000000" fill-opacity="0.72"/>
+  <g>
+    <rect x="65" y="292" width="670" height="224" rx="14" fill="url(#screenGlow)" stroke="#F6F0E8" stroke-opacity="0.32" stroke-width="2"/>
+    <path d="M65 334H735" stroke="#F6F0E8" stroke-opacity="0.22" stroke-width="2"/>
+    <circle cx="90" cy="313" r="6" fill="#FF3EA5"/>
+    <circle cx="110" cy="313" r="6" fill="#FF8C1A"/>
+    <circle cx="130" cy="313" r="6" fill="#A7FF19"/>
+    <text x="158" y="319" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="14" letter-spacing="1.2">workday.ts</text>
+
+    <rect x="87" y="353" width="3" height="126" fill="#F6F0E8" fill-opacity="0.13"/>
+    <text x="105" y="373" fill="#6E6E78" font-family="Consolas, 'Courier New', monospace" font-size="15">01</text>
+    <text x="105" y="403" fill="#6E6E78" font-family="Consolas, 'Courier New', monospace" font-size="15">02</text>
+    <text x="105" y="433" fill="#6E6E78" font-family="Consolas, 'Courier New', monospace" font-size="15">03</text>
+    <text x="105" y="463" fill="#6E6E78" font-family="Consolas, 'Courier New', monospace" font-size="15">04</text>
+    <text x="105" y="493" fill="#6E6E78" font-family="Consolas, 'Courier New', monospace" font-size="15">05</text>
+
+    <text x="150" y="373" fill="#FF3EA5" font-family="Consolas, 'Courier New', monospace" font-size="19">const</text>
+    <text x="215" y="373" fill="#F6F0E8" font-family="Consolas, 'Courier New', monospace" font-size="19">developerDay</text>
+    <text x="370" y="373" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="19">= [</text>
+
+    <text x="150" y="405" fill="#23C7FF" font-family="Consolas, 'Courier New', monospace" font-size="18">08:12</text>
+    <text x="222" y="405" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="18">→</text>
+    <text x="252" y="405" fill="#A7FF19" font-family="Consolas, 'Courier New', monospace" font-size="18" font-weight="700">DESIGN</text>
+    <text x="350" y="405" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="18">system.first()</text>
+
+    <text x="150" y="435" fill="#23C7FF" font-family="Consolas, 'Courier New', monospace" font-size="18">10:48</text>
+    <text x="222" y="435" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="18">→</text>
+    <text x="252" y="435" fill="#A7FF19" font-family="Consolas, 'Courier New', monospace" font-size="18" font-weight="700">CODE</text>
+    <text x="318" y="435" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="18">withSignals()</text>
+
+    <text x="150" y="465" fill="#23C7FF" font-family="Consolas, 'Courier New', monospace" font-size="18">14:32</text>
+    <text x="222" y="465" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="18">→</text>
+    <text x="252" y="465" fill="#FF3EA5" font-family="Consolas, 'Courier New', monospace" font-size="18" font-weight="700">DEBUG</text>
+    <text x="339" y="465" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="18">theRealFeature()</text>
+
+    <text x="150" y="495" fill="#23C7FF" font-family="Consolas, 'Courier New', monospace" font-size="18">18:06</text>
+    <text x="222" y="495" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="18">→</text>
+    <text x="252" y="495" fill="#8D5CFF" font-family="Consolas, 'Courier New', monospace" font-size="18" font-weight="700">DEPLOY</text>
+    <text x="339" y="495" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="18">whenReady()</text>
+
+    <text x="650" y="495" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="19">];</text>
+  </g>
+
+  <rect x="790" y="104" width="354" height="454" rx="18" fill="#000000" fill-opacity="0.72"/>
+  <g>
+    <rect x="780" y="92" width="354" height="454" rx="18" fill="#F6F0E8"/>
+    <g clip-path="url(#cardClip)">
+      <rect x="780" y="92" width="354" height="70" fill="#A7FF19"/>
+      <path d="M1063 92H1155L1081 310H989L1063 92Z" fill="url(#halftone)" opacity="0.48"/>
+      <path d="M1090 355L1175 331V546H1023L1090 355Z" fill="#FF3EA5" fill-opacity="0.12"/>
+      <rect x="780" y="466" width="354" height="80" fill="#111115"/>
+    </g>
+
+    <text x="808" y="120" fill="#000000" font-family="Consolas, 'Courier New', monospace" font-size="13" font-weight="700" letter-spacing="2.2">DEVELOPER.TAG // 01</text>
+    <text x="808" y="146" fill="#000000" font-family="Consolas, 'Courier New', monospace" font-size="13">ACCESS: CREATIVE_SYSTEMS</text>
+
+    <rect x="808" y="184" width="102" height="102" rx="8" fill="#111115"/>
+    <rect x="817" y="193" width="84" height="84" rx="4" stroke="#A7FF19" stroke-width="2" stroke-dasharray="5 5"/>
+    <text x="828" y="257" fill="#A7FF19" font-family="Arial Black, Impact, sans-serif" font-size="52" font-weight="900">B²</text>
+
+    <text x="935" y="207" fill="#111115" font-family="Consolas, 'Courier New', monospace" font-size="12" font-weight="700" letter-spacing="1.5">IDENTITY</text>
+    <text x="935" y="236" fill="#111115" font-family="Arial Black, Impact, sans-serif" font-size="24" font-weight="900">CREATIVE</text>
+    <text x="935" y="263" fill="#111115" font-family="Arial Black, Impact, sans-serif" font-size="24" font-weight="900">DEVELOPER</text>
+    <rect x="935" y="274" width="157" height="5" fill="#FF3EA5"/>
+
+    <text x="808" y="323" fill="#56515A" font-family="Consolas, 'Courier New', monospace" font-size="12" font-weight="700" letter-spacing="1.4">CORE STACK</text>
+    <text x="808" y="349" fill="#111115" font-family="Consolas, 'Courier New', monospace" font-size="17" font-weight="700">ANGULAR / DJANGO</text>
+
+    <text x="808" y="386" fill="#56515A" font-family="Consolas, 'Courier New', monospace" font-size="12" font-weight="700" letter-spacing="1.4">MODE</text>
+    <text x="808" y="412" fill="#111115" font-family="Consolas, 'Courier New', monospace" font-size="17" font-weight="700">DESIGN ↔ ENGINEERING</text>
+
+    <circle cx="818" cy="445" r="7" fill="#A7FF19" stroke="#111115" stroke-width="2"/>
+    <text x="837" y="451" fill="#111115" font-family="Consolas, 'Courier New', monospace" font-size="14" font-weight="700">STATUS: BUILDING</text>
+
+    <text x="808" y="498" fill="#A7FF19" font-family="Consolas, 'Courier New', monospace" font-size="14" font-weight="700" letter-spacing="1.2">DESIGN. CODE. REPEAT.</text>
+    <path d="M808 516H1098" stroke="#F6F0E8" stroke-opacity="0.28" stroke-width="2" stroke-dasharray="4 5"/>
+    <text x="808" y="535" fill="#F6F0E8" fill-opacity="0.72" font-family="Consolas, 'Courier New', monospace" font-size="11" letter-spacing="1">B2FOLIO.DE / MÖNCHENGLADBACH</text>
+  </g>
+
+  <g>
+    <rect x="65" y="552" width="112" height="26" rx="13" fill="#A7FF19"/>
+    <text x="81" y="570" fill="#000000" font-family="Consolas, 'Courier New', monospace" font-size="12" font-weight="700">01 DESIGN</text>
+    <path d="M183 565H207" stroke="#F6F0E8" stroke-opacity="0.38" stroke-width="2"/>
+    <rect x="213" y="552" width="98" height="26" rx="13" fill="#22222A" stroke="#F6F0E8" stroke-opacity="0.28"/>
+    <text x="229" y="570" fill="#F6F0E8" font-family="Consolas, 'Courier New', monospace" font-size="12" font-weight="700">02 CODE</text>
+    <path d="M317 565H341" stroke="#F6F0E8" stroke-opacity="0.38" stroke-width="2"/>
+    <rect x="347" y="552" width="106" height="26" rx="13" fill="#22222A" stroke="#F6F0E8" stroke-opacity="0.28"/>
+    <text x="363" y="570" fill="#F6F0E8" font-family="Consolas, 'Courier New', monospace" font-size="12" font-weight="700">03 DEBUG</text>
+    <path d="M459 565H483" stroke="#F6F0E8" stroke-opacity="0.38" stroke-width="2"/>
+    <rect x="489" y="552" width="110" height="26" rx="13" fill="#8D5CFF"/>
+    <text x="505" y="570" fill="#FFFFFF" font-family="Consolas, 'Courier New', monospace" font-size="12" font-weight="700">04 DEPLOY</text>
+    <text x="622" y="570" fill="#B8B0A7" font-family="Consolas, 'Courier New', monospace" font-size="12" letter-spacing="1.4">INTERACTIVE FULL-STACK EXPERIENCE</text>
+  </g>
 </svg>

@@ -61,13 +61,18 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(globiFlow?.availability).toBe('coming-soon');
   });
 
-  it.each(SUPPORTED_LANGUAGES)('liefert drei Telemetry-Charts pro Case Study für %s', (language) => {
+  it.each(SUPPORTED_LANGUAGES)('liefert drei Telemetry-Charts pro technischer Case Study für %s', (language) => {
     const projects = PORTFOLIO_PROJECTS[language];
+    const technicalProjects = projects.filter((project) => project.slug !== 'grafikdesign-katalog');
+    const designCatalog = projects.find((project) => project.slug === 'grafikdesign-katalog');
 
-    for (const project of projects) {
+    for (const project of technicalProjects) {
       expect(project.telemetry?.charts).toHaveLength(3);
       expect(project.metrics.length).toBeGreaterThanOrEqual(4);
     }
+
+    expect(designCatalog?.telemetry?.charts).toHaveLength(0);
+    expect(designCatalog?.metrics.length).toBeGreaterThanOrEqual(4);
   });
 
   it.each(SUPPORTED_LANGUAGES)('liefert den erweiterten Intranet-Feature-Index für %s', (language) => {
@@ -81,7 +86,7 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     const carlyManaged = PORTFOLIO_PROJECTS[language].find((project) => project.slug === 'kanban-klon');
 
     expect(carlyManaged?.liveDemo?.status).toBe('available');
-    expect(carlyManaged?.liveDemo?.url).toBe('https://cases.b2folio.de');
+    expect(carlyManaged?.liveDemo?.url).toBe('https://carly-managed-demo.b2folio.de');
     expect(carlyManaged?.liveDemo?.githubUrl).toBe('https://github.com/benjaminBennewitz/Carly-Managed_FE');
     expect(carlyManaged?.gallery).toHaveLength(20);
     expect(carlyManaged?.gallery.every((item) => item.image?.endsWith('.webp'))).toBe(true);

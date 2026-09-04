@@ -1751,6 +1751,7 @@ Portfolio/
 ├── .editorconfig
 ├── .gitignore
 ├── angular.json
+├── LICENSE
 ├── make-tree.ps1
 ├── package.json
 ├── package-lock.json

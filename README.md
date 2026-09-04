@@ -1,30 +1,33 @@
 <p align="center">
-  <img src="./src/assets/social/og-portfolio-preview.svg" alt="B² Portfolio Experience Preview" width="100%" />
+  <img src="./src/assets/social/og-portfolio-preview.svg" alt="B2FOLIO.DE Developer-Tag mit Design-, Code-, Debug- und Deploy-Workflow" width="100%" />
 </p>
 
-<h1 align="center">B² Portfolio Experience</h1>
+<h1 align="center">B2FOLIO.DE</h1>
 
 <p align="center">
   <strong>Design. Code. Repeat.</strong><br />
-  Ein interaktives Angular-Portfolio zwischen Terminal-UI, Glitch-Art, Motion Design und sauberer Full-Stack-Präsentation.
+  Eine interaktive Angular-Experience zwischen Full-Stack-Webentwicklung, UI/UX, Grafikdesign und kontrolliertem Chaos.
 </p>
 
 <p align="center">
+  <a href="https://b2folio.de/"><img alt="Live: b2folio.de" src="https://img.shields.io/badge/Live-b2folio.de-a7ff19?style=for-the-badge&labelColor=111111" /></a>
   <img alt="Angular" src="https://img.shields.io/badge/Angular-21.2-DD0031?style=for-the-badge&logo=angular&logoColor=white" />
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
   <img alt="SCSS" src="https://img.shields.io/badge/SCSS-Designsystem-C6538C?style=for-the-badge&logo=sass&logoColor=white" />
-  <img alt="No Angular Material" src="https://img.shields.io/badge/Angular_Material-no-111111?style=for-the-badge" />
 </p>
+
+> [!IMPORTANT]
+> Dieses Repository ist öffentlich einsehbar, aber **kein Open-Source-Projekt**. Gestattet ist ausschließlich die Betrachtung und Bewertung der Arbeit. Kopieren, Klonen, Verändern, Ausführen, Veröffentlichen, Weitergeben und Wiederverwenden sind ohne vorherige schriftliche Genehmigung untersagt. Maßgeblich ist die [B2FOLIO.DE Read-Only Source License](./LICENSE).
 
 ---
 
 ```txt
-┌─ status.exe ───────────────────────────────────────────────┐
-│ project     B² Portfolio Experience                        │
+┌─ b2folio.system ────────────────────────────────────────────┐
+│ project     B2FOLIO.DE                                     │
 │ stack       Angular · TypeScript · SCSS                    │
-│ style       Terminal · Glitch · Poster UI · Interactive    │
+│ craft       Full Stack · UI/UX · Grafikdesign              │
 │ focus       Performance · Accessibility · SEO · Motion     │
-│ state       break the grid                                 │
+│ state       clean structure / controlled chaos             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -32,73 +35,89 @@
 
 - [Über das Projekt](#über-das-projekt)
 - [Highlights](#highlights)
-- [Tech Stack](#tech-stack)
 - [Projektbereiche](#projektbereiche)
+- [Ausgewählte Case Studies](#ausgewählte-case-studies)
+- [Architektur](#architektur)
+- [Tech Stack](#tech-stack)
 - [Projektstruktur](#projektstruktur)
-- [Installation](#installation)
-- [Scripte](#scripte)
-- [Designsystem](#designsystem)
-- [SEO und Accessibility](#seo-und-accessibility)
-- [Lokale Assets](#lokale-assets)
-- [Build](#build)
+- [Qualität und Barrierefreiheit](#qualität-und-barrierefreiheit)
+- [Autorisierte lokale Entwicklung](#autorisierte-lokale-entwicklung)
+- [Skripte](#skripte)
+- [Build und Deployment](#build-und-deployment)
+- [Lizenz und Nutzung](#lizenz-und-nutzung)
 - [Autor](#autor)
 
 ## Über das Projekt
 
-**B² Portfolio Experience** ist kein klassisches Onepager-Portfolio, sondern eine animierte Web-Experience. Das Projekt verbindet eine professionelle Portfolio-Struktur mit einem starken visuellen System: MS-DOS-Dialoge, Terminal-Elemente, Halftone-Assets, Glitch-Layer, Scroll-Snap, Custom Cursor und interaktive Projekt-Szenen.
+**B2FOLIO.DE** ist kein klassischer Portfolio-Onepager, sondern eine animierte, bilinguale Web-Experience. Das Projekt verbindet eine professionelle Portfolio-Struktur mit einem eigenständigen visuellen System aus MS-DOS-Dialogen, Terminal-Elementen, Halftone-Assets, Glitch-Layern, Poster-UI, Scroll-Snap und interaktiven Projektszenen.
 
-Der Fokus liegt auf einer Seite, die auffällt, aber trotzdem sauber gebaut bleibt: komponentenbasiert, dokumentiert, responsiv, SEO-freundlich und ohne unnötige UI-Bibliotheken.
+Der Fokus liegt auf einer Seite, die visuell auffällt und technisch kontrolliert bleibt: komponentenbasiert, responsiv, SEO-freundlich, barrierearm und ohne eine fertige UI-Komponentenbibliothek.
+
+**Live-Version:** [https://b2folio.de/](https://b2folio.de/)
 
 ## Highlights
 
 | Bereich | Umsetzung |
 | --- | --- |
-| **Hero Experience** | Fullscreen-Hero mit Poster-UI, animierten Layern, Dialogfenstern und starkem visuellen Einstieg |
-| **Startloader** | Eigene Loading-Experience mit mindestens 3 Sekunden Sichtbarkeit und interaktiven Details |
-| **Themes** | Dark Mode und Light Mode über Theme-Service und Design Tokens |
-| **Sprache** | Deutsch als Standardsprache, Englisch per Language Switcher vorbereitet |
-| **Navigation** | Sticky Navigation, Custom Cursor, Scroll-to-top und Body-basiertes Scroll Snap |
-| **Process Section** | Scroll-Lock-Section mit schrittweisem Reveal statt klassischer Timeline |
-| **Projekt-Stack** | Fullscreen-Projektbereich mit überlagernden Panels, Szenen und spielerischen Assets |
-| **CTA** | Chaos-CTA mit beweglichen Wortbausteinen und Kontaktfokus |
-| **SEO** | Routenbezogene Meta-Titel, Descriptions, OpenGraph- und Twitter-Meta-Tags |
-| **Accessibility** | Semantische Struktur, ARIA-Labels, Fokuszustände und kontrastbewusste Themes |
-
-## Tech Stack
-
-| Layer | Technologien |
-| --- | --- |
-| **Framework** | Angular 21.2 |
-| **Sprache** | TypeScript 5.9 |
-| **Styling** | SCSS, Design Tokens, CSS Custom Properties |
-| **UI-Konzept** | Eigene Komponenten, keine Angular-Material-Abhängigkeit |
-| **Icons** | Material Symbols als lokale Font-Datei über `src/assets/fonts` |
-| **Routing** | Angular Router mit Projekt-Detailseiten |
-| **SEO** | Angular Meta-Service, dynamischer Tab-Titel, OpenGraph-Vorbereitung |
-| **Content** | Zentrale bilinguale Content-Datei für Deutsch und Englisch |
+| **Hero Experience** | Fullscreen-Hero mit Poster-UI, Halftone-Porträt, Glitch-Layern und Systemdialog |
+| **Startloader** | Eigene B²-Bootsequenz mit reduzierter Alternative für entsprechende Motion-Präferenzen |
+| **Themes** | Persistenter Dark und Light Mode über zentrale Theme-Tokens und Services |
+| **Accessibility** | Einstellbare Kontrast-, Farbseh-, Schrift-, Komfort- und Bewegungspräferenzen |
+| **Sprachen** | Vollständige deutsche und englische Inhalte mit persistentem Language Switcher |
+| **Navigation** | Sticky Navigation, Custom Cursor, Scroll-to-top und Body-basiertes Scroll-Snap |
+| **Motion** | Viewport-gesteuerte Reveals, gestaffelte Animationen und performante Deferred Sections |
+| **Case Studies** | Eigenständige Detailseiten mit Architektur, Rolle, Stack, Highlights und visuellen Szenen |
+| **SEO** | Routenbezogene Metadaten, Canonicals, strukturierte Daten, Sitemap und Social-Meta-Tags |
+| **Kontakt** | Angular-Formular mit CSRF-gestützter Anbindung an die zentrale Infrastructure API |
 
 ## Projektbereiche
 
 | Route / Bereich | Beschreibung |
 | --- | --- |
-| **Start / Hero** | Visueller Einstieg mit Terminal-, Poster- und Glitch-Ästhetik |
-| **Über mich** | Persönliche Positionierung zwischen Webentwicklung, UI/UX und Grafikdesign |
-| **Techstack** | Gruppierte Skills und Infinity Tech Stack Bar |
-| **Projekte** | Interaktiver Projekt-Stack mit fünf ausgewählten Arbeiten |
-| **Projekt-Detailseiten** | Eigene Detailseiten mit Beschreibung, Zielsetzung, Rolle, Stack und Highlights |
-| **Prozess** | Scroll-Lock-Abschnitt mit ganzheitlicher Arbeitsweise |
-| **FAQ** | Kompakte Antworten zu Arbeitsweise, Technik und Projektfokus |
-| **Kontakt** | Kontaktbereich mit Formular und großem SEO-freundlichem Footer |
+| **`/`** | Startseite mit Hero, Über-mich-Bereich, Erfahrung, Skills, Prozess, Projekten, FAQ und Kontakt |
+| **`/portfolio`** | Übersicht der ausgewählten Case Studies |
+| **`/projects/:slug`** | Dynamische, projektspezifisch inszenierte Detailseiten |
+| **`/snippets`** | Technische Kurzbeispiele mit isolierten Demo-Assets |
+| **`/achievements`** | Freischaltbare Interaktionen und Portfolio-Achievements |
+| **`/danke`** | Bestätigungsseite nach erfolgreicher Kontaktaufnahme |
+| **`/impressum`** | Anbieterkennzeichnung |
+| **`/datenschutz`** | Datenschutzerklärung |
+| **Fallback** | Eigene 404-Seite für unbekannte Routen |
 
-### Enthaltene Projekte
+## Ausgewählte Case Studies
 
 | Projekt | Fokus |
 | --- | --- |
 | **Intranet** | Modulares Angular-/Django-System mit Apps, Rollen, Rechten, Kommunikation und Automatisierung |
-| **Dein Fußabdruck** | Interaktives Web-/Game-Projekt mit Animationen und Spiellogik |
-| **Carly Managed** | Projektmanagement-Tool und Kanban-Klon mit Gamification, Boards, Tasks, Nutzern und Live-Sync |
+| **Dein Fußabdruck** | Interaktives Web-/Game-Projekt mit Simulation, Animationen und Spiellogik |
+| **Carly Managed** | Projektmanagement-Anwendung mit Boards, Tasks, Live-Sync und Gamification |
 | **Globi Flow** | Lokales Laborwerte-Assistenzsystem mit OCR, Review, Wissensbasis und Patientenbericht |
-| **Grafikdesign-Katalog** | Editorialer, visueller Designkatalog mit kreativer Projektinszenierung |
+| **Grafikdesign-Katalog** | Editorialer Designkatalog mit Reader, Galerie und kreativer Projektinszenierung |
+
+## Architektur
+
+| Schicht | Verantwortung |
+| --- | --- |
+| **Core** | Zentrale Inhalte, Datenmodelle sowie Services für SEO, Sprache, Theme, API und Anwendungszustände |
+| **Layout** | Globale App-Shell mit Navigation, Loader, Footer, Overlays, Toasts und Accessibility-Steuerung |
+| **Pages** | Lazy geladene Routenseiten und deren seitenbezogene Orchestrierung |
+| **Shared** | Wiederverwendbare Experience-, Visual-, Dialog-, Projekt- und Motion-Komponenten |
+| **Styles** | Globale Tokens, Basisregeln, Utilities und projektspezifische Case-Study-Styles |
+| **Environments** | Ausschließlich öffentliche, umgebungsabhängige Frontend-Konfiguration |
+
+## Tech Stack
+
+| Layer | Technologien |
+| --- | --- |
+| **Framework** | Angular 21.2 mit Standalone Components und Signals |
+| **Sprache** | TypeScript 5.9 im Strict Mode |
+| **Reaktivität** | Angular Signals und RxJS 7.8 |
+| **Styling** | SCSS, CSS Custom Properties und semantische Design Tokens |
+| **UI-Konzept** | Eigene Komponenten ohne Angular Material |
+| **Routing** | Angular Router mit lazy geladenen Seiten und dynamischen Projekt-Detailseiten |
+| **Testing** | Vitest 4 mit jsdom über den Angular Unit-Test-Builder |
+| **SEO** | Angular Meta-Service, Canonicals, strukturierte Daten, OpenGraph und Twitter Cards |
+| **Assets** | Lokale variable Fonts, reduzierte Material Symbols sowie WebP- und SVG-Grafiken |
 
 ## Projektstruktur
 
@@ -106,116 +125,102 @@ Der Fokus liegt auf einer Seite, die auffällt, aber trotzdem sauber gebaut blei
 src/
 ├─ app/
 │  ├─ core/
-│  │  ├─ data/                 # Zentrale Portfolio-Texte und Übersetzungen
+│  │  ├─ data/                 # Portfolio-Inhalte, Übersetzungen und Projektdaten
 │  │  ├─ models/               # Content- und Projektmodelle
-│  │  └─ services/             # Sprache, Theme, SEO und Tab-Titel
-│  ├─ layout/                  # Navigation, Loader, Footer, Cursor, Scroll-to-top
-│  ├─ pages/                   # Startseite und Projekt-Detailseiten
+│  │  └─ services/             # API, SEO, Sprache, Theme und Anwendungszustände
+│  ├─ layout/                  # Globale App-Shell und systemweite UI
+│  ├─ pages/                   # Routenseiten
 │  └─ shared/                  # Wiederverwendbare UI- und Experience-Komponenten
 ├─ assets/
-│  ├─ fonts/                   # Lokale Material-Symbols-Font
+│  ├─ fonts/                   # Lokale Fonts und reduzierter Icon-Font
 │  ├─ images/                  # Hero-, Loader- und Projektassets
-│  └─ social/                  # OpenGraph-/Social-Preview
-├─ styles/                     # Globale Tokens, Basisstyles und Utilities
-├─ styles.scss                 # Globaler SCSS-Einstieg
-├─ robots.txt                  # SEO-Crawler-Hinweise
-└─ sitemap.xml                 # Sitemap-Vorbereitung
+│  ├─ snippet-demos/           # Isolierte Beispiele für die Snippet-Seite
+│  └─ social/                  # Social- und Repository-Preview
+├─ environments/              # Öffentliche Frontend-Konfiguration je Umgebung
+├─ styles/                    # Tokens, Basisstyles, Utilities und Case-Study-Styles
+├─ styles.scss                # Globaler SCSS-Einstieg
+├─ robots.txt                 # Crawler-Konfiguration
+└─ sitemap.xml                # Öffentliche Sitemap
 ```
 
-## Installation
+## Qualität und Barrierefreiheit
+
+- strikte TypeScript- und Angular-Template-Prüfung
+- semantische HTML-Struktur und konsistente Überschriften-Hierarchie
+- sichtbare Fokuszustände und tastaturbedienbare Interaktionen
+- ARIA-Beschriftungen für interaktive und erklärungsbedürftige Elemente
+- kontrastbewusste Dark-/Light-Themes und zusätzliche Accessibility-Präferenzen
+- Berücksichtigung reduzierter oder deaktivierter Bewegung
+- responsive Layouts vom kleinen Smartphone bis zum Ultrawide-Viewport
+- lazy geladene Routenseiten sowie `@defer` für aufwendige Sektionen
+- Unit-Tests für zentrale Content-Integrität und Kontakt-API-Verhalten
+- Production-Budgets für Initial Bundle und Komponentenstyles
+
+Die Material-Symbols werden als reduzierter lokaler Font eingebunden. Dadurch benötigt das Icon-Rendering kein externes Font-CDN.
+
+## Autorisierte lokale Entwicklung
+
+> [!CAUTION]
+> Die folgenden Befehle dokumentieren den internen Entwicklungsablauf. Ihre Veröffentlichung stellt keine Erlaubnis dar, das Projekt herunterzuladen, auszuführen oder weiterzuverwenden. Sie dürfen ausschließlich vom Rechteinhaber oder ausdrücklich schriftlich autorisierten Personen verwendet werden.
+
+Vorausgesetzt wird eine von Angular 21 unterstützte Node.js-Version mit npm.
 
 ```bash
-npm install
+npm ci
 npm run start
 ```
 
-Die lokale Entwicklungsumgebung läuft danach über den Angular Dev Server.
+Der lokale Angular Dev Server läuft anschließend standardmäßig unter:
 
 ```txt
 http://localhost:4200
 ```
 
-Für eine reproduzierbare Installation auf Basis der Lockfile kann alternativ verwendet werden:
-
-```bash
-npm ci
-```
-
-## Scripte
+## Skripte
 
 | Befehl | Zweck |
 | --- | --- |
-| `npm run start` | Startet die lokale Angular-Entwicklung |
-| `npm run build` | Erstellt den Production-Build |
-| `npm run watch` | Baut im Watch-Modus mit Development-Konfiguration |
-| `npm run test` | Startet die Unit-Test-Konfiguration |
+| `npm run start` | Startet den Angular Dev Server |
+| `npm run build` | Erstellt den standardmäßig produktiven Build |
+| `npm run build:production` | Erstellt den Production-Build explizit |
+| `npm run watch` | Baut fortlaufend mit Development-Konfiguration |
+| `npm run test` | Startet die Unit-Tests |
 
-## Designsystem
-
-Das Portfolio nutzt ein eigenes Designsystem statt einer fertigen UI-Bibliothek. Farben, Abstände, Oberflächen, Kontraste, Animationen und wiederkehrende UI-Patterns sind über SCSS und CSS Custom Properties organisiert.
-
-```txt
-┌─ design.tokens ─────────────────────────────────────────────┐
-│ themes      dark · light                                    │
-│ surfaces    cards · panels · dialogs · overlays             │
-│ motion      reveal · hover · scroll · glitch                │
-│ ui          buttons · tags · cards · sections · forms       │
-│ assets      halftone · stickers · terminal · poster layers  │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Stilrichtung
-
-- Terminal- und MS-DOS-Anmutung
-- Glitch-, Poster- und Halftone-Optik
-- starke Akzentfarben
-- interaktive Fullscreen-Abschnitte
-- bewusst eingesetzte Animationen
-- klare Lesbarkeit trotz experimenteller Oberfläche
-
-## SEO und Accessibility
-
-Das Projekt ist auf eine saubere öffentliche Präsentation vorbereitet:
-
-- semantische HTML-Struktur
-- sinnvolle Überschriften-Hierarchie
-- dynamische Meta-Titel und Descriptions
-- OpenGraph- und Twitter-Meta-Tags
-- `robots.txt` und `sitemap.xml`
-- ALT-Texte für visuelle Inhalte
-- ARIA-Labels für interaktive Elemente
-- sichtbare Fokuszustände
-- kontrastbewusste Dark-/Light-Themes
-
-## Lokale Assets
-
-Die Material Symbols werden lokal eingebunden. Die Font liegt unter:
-
-```txt
-src/assets/fonts/material-symbols-outlined-latin-fill-normal.woff2
-```
-
-Dadurch bleibt das Icon-Rendering unabhängig von externen Font-CDNs und passt besser zu Performance- und Datenschutzanforderungen.
-
-## Build
+## Build und Deployment
 
 ```bash
-npm run build
+npm run build:production
 ```
 
-Der Production-Build wird gemäß Angular-Konfiguration erzeugt unter:
+Der deploybare Browser-Build wird erzeugt unter:
 
 ```txt
-dist/ben-portfolio-experience
+dist/ben-portfolio-experience/browser
 ```
 
-In der Production-Konfiguration sind Budgets für Initial Bundle und Komponentenstyles hinterlegt, damit die Experience trotz vieler visueller Elemente kontrolliert bleibt.
+Die Production-Konfiguration aktiviert Optimierung, Hashing, umgebungsbezogene Frontend-Konfiguration und Bundle-Budgets. `.htaccess`, `robots.txt`, `sitemap.xml` und die lokalen Assets werden in den Build übernommen.
 
+## Lizenz und Nutzung
+
+Dieses Projekt ist **proprietär und nicht Open Source**. Die öffentliche Sichtbarkeit dient ausschließlich der fachlichen und gestalterischen Bewertung.
+
+Ohne vorherige ausdrückliche schriftliche Genehmigung ist insbesondere nicht gestattet:
+
+- Quellcode oder Assets zu kopieren, zu klonen oder dauerhaft zu speichern,
+- das Projekt auszuführen, zu bauen, zu verändern, zu veröffentlichen oder zu hosten,
+- Code, Layouts, Texte, Grafiken, Animationen, Branding oder Case Studies zu übernehmen,
+- das Projekt ganz oder teilweise in privaten, öffentlichen oder kommerziellen Arbeiten zu verwenden,
+- Inhalte für KI-/ML-Training, Datensätze oder automatisierte Reproduktion zu verwenden,
+- persönliche Daten, Kontaktangaben oder Impressumsinformationen zu übernehmen.
+
+Aus der öffentlichen Sichtbarkeit oder einer technisch verfügbaren GitHub-Funktion folgt keine weitergehende Nutzungserlaubnis. Es gilt ausschließlich die vollständige [B2FOLIO.DE Read-Only Source License](./LICENSE). Davon ausgenommen sind eindeutig gekennzeichnete Drittanbieterbestandteile, für die deren jeweilige Lizenzbedingungen gelten.
 
 ## Autor
 
 **Benjamin Bennewitz**  
 Full Stack Webentwicklung · UI/UX · Grafikdesign
+
+[b2folio.de](https://b2folio.de/) · [GitHub](https://github.com/benjaminBennewitz) · [LinkedIn](https://www.linkedin.com/in/benjamin-bennewitz-116a12306/)
 
 ```txt
 clean structure / loud visuals / controlled chaos

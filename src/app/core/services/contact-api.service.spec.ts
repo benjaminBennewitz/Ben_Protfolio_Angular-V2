@@ -77,7 +77,7 @@ describe('ContactApiService', () => {
     const body = JSON.parse(String(postInit?.body)) as Record<string, unknown>;
 
     expect(Object.keys(body).sort()).toEqual(['email', 'message', 'name', 'website']);
-    expect(body.website).toBe('automation-test');
+    expect(body['website']).toBe('automation-test');
   });
 
   it('behandelt HTTP 202 als erfolgreichen Versand', async () => {

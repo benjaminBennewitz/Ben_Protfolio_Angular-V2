@@ -14,7 +14,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
       title: 'Benjamin Bennewitz | Full Stack Webentwicklung & Grafikdesign',
       description: 'Interaktives Portfolio von Benjamin Bennewitz mit Full-Stack-Webentwicklung, UI/UX, Grafikdesign, Web-Apps, Shopsystemen und visuellen Designsystemen.',
       keywords: 'Benjamin Bennewitz, B² Portfolio, Full Stack Webentwicklung, Angular, Django, UI UX Design, Grafikdesign, Web Apps, Intranet, Accessibility, SEO, Web Vitals',
-      imageAlt: 'B² Portfolio Preview im Terminal-, Glitch- und Poster-Look',
+      imageAlt: 'B2FOLIO.DE Developer-Tag mit Design-, Code-, Debug- und Deploy-Workflow',
       hiddenTitle: 'psst... komm zurück 👀',
     },
     nav: {
@@ -459,7 +459,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
       title: 'Benjamin Bennewitz | Full Stack Web Development & Graphic Design',
       description: 'Interactive portfolio by Benjamin Bennewitz with full-stack web development, UI/UX, graphic design, web apps, shop systems and visual design systems.',
       keywords: 'Benjamin Bennewitz, B² Portfolio, full stack web development, Angular, Django, UI UX design, graphic design, web apps, intranet, accessibility, SEO, Web Vitals',
-      imageAlt: 'B² portfolio preview in a terminal, glitch and poster look',
+      imageAlt: 'B2FOLIO.DE developer tag with a design, code, debug and deploy workflow',
       hiddenTitle: 'psst... come back 👀',
     },
     nav: {

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Animiertes Angular-Portfolio mit Designsystem, Theme-Switcher und Language-Switcher.",
   "author": "Benjamin Bennewitz",
+  "license": "UNLICENSED",
   "private": true,
   "scripts": {
     "ng": "ng",

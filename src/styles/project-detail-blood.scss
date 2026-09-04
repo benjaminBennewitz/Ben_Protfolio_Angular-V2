@@ -72,7 +72,7 @@
   text-transform: uppercase;
 }
 
-.project-detail__blood-bar > span {
+.project-detail__blood-bar>span {
   width: 0.72rem;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -177,8 +177,8 @@
     color-mix(in srgb, var(--bp-color-surface-solid) 92%, var(--project-detail-blue) 3%);
 }
 
-.project-detail__blood-document > .material-symbols-outlined,
-.project-detail__blood-step > .material-symbols-outlined {
+.project-detail__blood-document>.material-symbols-outlined,
+.project-detail__blood-step>.material-symbols-outlined {
   display: grid;
   width: 3rem;
   aspect-ratio: 1;
@@ -521,6 +521,7 @@
    ========================================================================== */
 
 @media (max-width: 1180px) {
+
   .project-detail[data-project='blutanalyse'] .project-detail__hero-grid,
   .project-detail__blood-preview,
   .project-detail__blood-guide {
@@ -537,6 +538,7 @@
 }
 
 @media (max-width: 760px) {
+
   .project-detail__blood-head,
   .project-detail__blood-guide-grid,
   .project-detail__blood-pipeline-grid {
@@ -569,8 +571,8 @@
 .project-detail__blood-value,
 .project-detail__blood-guide-card,
 .project-detail__blood-step,
-.project-detail__blood-document > .material-symbols-outlined,
-.project-detail__blood-step > .material-symbols-outlined {
+.project-detail__blood-document>.material-symbols-outlined,
+.project-detail__blood-step>.material-symbols-outlined {
   border-radius: 0;
 }
 
@@ -967,6 +969,7 @@
 }
 
 @media (max-width: 1180px) {
+
   .project-detail__blood-preview--chart,
   .project-detail__blood-guide {
     grid-template-columns: 1fr;
@@ -1304,6 +1307,7 @@
 }
 
 @media (max-width: 1180px) {
+
   .project-detail__blood-showcase--objects,
   .project-detail__blood-hero-objects {
     min-height: clamp(390px, 62vw, 560px);
@@ -1325,6 +1329,7 @@
 }
 
 @media (max-width: 760px) {
+
   .project-detail__blood-showcase--objects,
   .project-detail__blood-hero-objects {
     min-height: auto;

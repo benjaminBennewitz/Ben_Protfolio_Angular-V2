@@ -28,7 +28,7 @@
     color-mix(in srgb, var(--bp-color-surface-solid) 94%, transparent);
   background-size: 16px 16px;
   box-shadow: var(--bp-arcade-shadow-sm, 5px 5px 0 var(--bp-color-border-strong));
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
 }
 
 .telemetry-chart::before,
@@ -72,7 +72,7 @@
 .telemetry-chart__head span {
   display: block;
   margin-bottom: 0.28rem;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: 0.68rem;
   font-weight: 900;
   letter-spacing: 0.13em;
@@ -174,7 +174,7 @@
   width: 100%;
   height: var(--telemetry-area-height, auto);
   max-height: var(--telemetry-area-max-height, 270px);
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
 }
 
 .telemetry-chart__grid line {
@@ -279,7 +279,7 @@
 }
 
 .telemetry-chart__legend b {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
 }
 
 

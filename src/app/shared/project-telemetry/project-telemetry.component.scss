@@ -89,7 +89,7 @@
 
 .project-telemetry__status strong {
   margin: 0.14rem 0 0.34rem;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: 1rem;
 }
 
@@ -148,7 +148,7 @@
 }
 
 .project-telemetry__kpi h3 {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-tech, Consolas, monospace);
   font-size: 0.72rem;
   letter-spacing: 0.05em;
@@ -164,6 +164,75 @@
   line-height: 1.35;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+
+.project-telemetry__shell--archive {
+  grid-template-rows: auto auto auto;
+  align-content: center;
+  justify-content: center;
+  gap: clamp(1rem, 2vh, 1.5rem);
+  width: min(100%, 1600px);
+  padding-top: calc(var(--bp-header-height) + clamp(1.2rem, 3vh, 2.3rem));
+  padding-bottom: clamp(2rem, 4vh, 3.25rem);
+}
+
+.project-telemetry__shell--archive .project-telemetry__head {
+  margin-bottom: clamp(0.15rem, 0.6vh, 0.45rem);
+}
+
+.project-telemetry__shell--archive .project-telemetry__kpis,
+.project-telemetry__shell--archive .project-telemetry__archive-highlight-grid {
+  gap: clamp(0.95rem, 1.6vw, 1.35rem);
+}
+
+.project-telemetry__shell--archive .project-telemetry__kpi {
+  min-height: clamp(80px, 9.2vh, 92px);
+}
+
+.project-telemetry__archive-highlights {
+  min-height: 0;
+}
+
+.project-telemetry__archive-highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  min-height: 0;
+  align-items: start;
+}
+
+.project-telemetry__archive-highlight {
+  display: grid;
+  align-content: center;
+  gap: 0.8rem;
+  width: 100%;
+  height: clamp(124px, 14vh, 152px);
+  max-height: 152px;
+  min-width: 0;
+  border: 2px solid var(--bp-color-border-strong);
+  padding: clamp(0.95rem, 1.5vw, 1.35rem);
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 90%, var(--bp-color-accent) 10%);
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--bp-color-accent) 38%, var(--bp-color-border-strong));
+}
+
+.project-telemetry__archive-highlight .material-symbols-outlined {
+  display: grid;
+  width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  background: var(--bp-color-accent);
+  color: var(--bp-color-on-accent);
+  font-size: 1.25rem;
+}
+
+.project-telemetry__archive-highlight strong {
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-display);
+  font-size: clamp(1.05rem, 1.45vw, 1.5rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
 }
 
 .project-telemetry__charts {
@@ -244,7 +313,25 @@
   }
 }
 
+@media (max-width: 1180px) {
+  .project-telemetry__shell--archive {
+    align-content: start;
+    justify-content: start;
+    width: min(100%, 1680px);
+    padding-top: calc(var(--bp-header-height) + 0.9rem);
+    padding-bottom: 1.4rem;
+  }
+
+  .project-telemetry__archive-highlight-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 760px) {
+  .project-telemetry__archive-highlight-grid {
+    grid-template-columns: 1fr;
+  }
+
   .project-telemetry__shell {
     padding-top: 4.4rem;
   }

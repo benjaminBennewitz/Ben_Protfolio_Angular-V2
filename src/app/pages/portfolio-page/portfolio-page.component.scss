@@ -306,13 +306,6 @@
   box-shadow: 6px 6px 0 #111111;
 }
 
-:root[data-theme='light'] .projects-kickoff__portrait-action:hover,
-:root[data-theme='light'] .projects-kickoff__portrait-action:focus-visible,
-:host-context(:root[data-theme='light']) .projects-kickoff__portrait-action:hover,
-:host-context(:root[data-theme='light']) .projects-kickoff__portrait-action:focus-visible {
-  color: #f6f0e8;
-}
-
 /* ========================================================================
    03   Animationen
    ======================================================================== */

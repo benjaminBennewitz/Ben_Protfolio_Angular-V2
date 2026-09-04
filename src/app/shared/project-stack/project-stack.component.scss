@@ -39,6 +39,7 @@
 
 .project-stack {
   --stack-accent: var(--bp-color-accent);
+  --stack-accent-text: var(--bp-color-accent-text);
   position: relative;
   min-height: calc(100vh * var(--project-total));
   min-height: calc(100dvh * var(--project-total));
@@ -53,6 +54,7 @@
 
 .project-stack__panel {
   --stack-accent: var(--bp-color-accent);
+  --stack-accent-text: var(--bp-color-accent-text);
   --stack-on-accent: var(--bp-color-on-accent);
   --stack-secondary-accent: var(--bp-color-accent-2);
   position: sticky;
@@ -79,20 +81,26 @@
 
 .project-stack__panel[data-accent='pink'] {
   --stack-accent: var(--bp-color-accent-2);
+  --stack-accent-text: var(--bp-color-accent-2-text);
   --stack-on-accent: var(--bp-color-on-accent-2);
 }
 
 .project-stack__panel[data-accent='violet'] {
   --stack-accent: var(--bp-color-accent-3);
+  --stack-accent-text: var(--bp-color-accent-3-text);
   --stack-on-accent: var(--bp-color-on-accent-3);
 }
 
 .project-stack__panel[data-project='kanban-klon'] {
   --stack-accent: #7b4de0;
+  --stack-accent-text: #9773e7;
   --stack-on-accent: #fffdf8;
   --stack-secondary-accent: #b69be8;
   --bp-color-accent: #7b4de0;
   --bp-color-on-accent: #fffdf8;
+  --bp-color-accent-hover: #6736c7;
+  --bp-color-control-hover: #3a275f;
+  --bp-color-on-control-hover: #fff7ff;
 }
 
 :root[data-theme='light'] .project-stack__panel[data-project='kanban-klon'],
@@ -105,39 +113,51 @@
   --bp-color-surface-strong: #e5dcf3;
   --bp-color-shadow: rgba(52, 31, 82, 0.18);
   --stack-accent: #6d3bd1;
+  --stack-accent-text: #6d3bd1;
   --stack-on-accent: #fffdf8;
   --stack-secondary-accent: #9f7aea;
   --bp-color-accent: #6d3bd1;
   --bp-color-on-accent: #fffdf8;
+  --bp-color-accent-hover: #5929b4;
+  --bp-color-control-hover: #e5daf8;
+  --bp-color-on-control-hover: #2d174a;
 }
 
 :root[data-color-vision]:not([data-color-vision='default']) .project-stack__panel[data-project='kanban-klon'],
 :host-context(:root[data-color-vision]:not([data-color-vision='default'])) .project-stack__panel[data-project='kanban-klon'],
 :host-context([data-color-vision]:not([data-color-vision='default'])) .project-stack__panel[data-project='kanban-klon'] {
   --stack-accent: var(--bp-color-accent-3);
+  --stack-accent-text: var(--bp-color-accent-3-text);
   --stack-on-accent: var(--bp-color-on-accent-3);
   --stack-secondary-accent: var(--bp-color-accent-2);
   --bp-color-accent: var(--bp-color-accent-3);
   --bp-color-on-accent: var(--bp-color-on-accent-3);
+  --bp-color-accent-hover: color-mix(in srgb, var(--bp-color-accent-3) 84%, var(--bp-color-text) 16%);
+  --bp-color-control-hover: color-mix(in srgb, var(--bp-color-accent-3) 16%, var(--bp-color-surface-solid));
+  --bp-color-on-control-hover: var(--bp-color-text);
 }
 
 .project-stack__panel[data-accent='blue'] {
   --stack-accent: var(--bp-color-info);
+  --stack-accent-text: var(--bp-color-info-text);
   --stack-on-accent: var(--bp-color-on-info);
 }
 
 .project-stack__panel[data-accent='orange'] {
   --stack-accent: var(--bp-color-warning);
+  --stack-accent-text: var(--bp-color-warning-text);
   --stack-on-accent: var(--bp-color-on-warning);
 }
 
 .project-stack__panel[data-accent='lime'] {
   --stack-accent: var(--bp-color-accent-lime);
+  --stack-accent-text: var(--bp-color-accent-text);
   --stack-on-accent: var(--bp-color-on-accent-lime);
 }
 
 .project-stack__panel[data-project='blutanalyse'] {
   --stack-accent: #ff4d63;
+  --stack-accent-text: #ff4d63;
   --stack-on-accent: #101010;
   --bp-color-accent: #ff4d63;
 }
@@ -146,6 +166,7 @@
 :host-context(:root[data-color-vision='achromatopsia']) .project-stack__panel[data-project='blutanalyse'],
 :host-context([data-color-vision='achromatopsia']) .project-stack__panel[data-project='blutanalyse'] {
   --stack-accent: var(--bp-color-accent);
+  --stack-accent-text: var(--bp-color-accent-text);
   --stack-on-accent: var(--bp-color-on-accent);
 }
 
@@ -299,7 +320,7 @@
 .project-stack__kicker {
   max-width: 620px;
   margin: 0 0 var(--bp-space-2);
-  color: var(--stack-accent);
+  color: var(--stack-accent-text);
   font-family: var(--bp-font-mono);
   font-size: 0.8rem;
   font-weight: 900;
@@ -346,26 +367,6 @@
   font-size: 0.68rem;
   font-weight: 900;
   text-transform: uppercase;
-}
-
-.project-stack__copy > .bp-button--accent {
-  border-color: color-mix(in srgb, var(--bp-color-text) 78%, var(--stack-accent) 22%);
-  background: var(--stack-accent);
-  color: var(--stack-on-accent);
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--stack-accent) 64%, #000000 20%), 0 14px 34px var(--bp-color-shadow);
-}
-
-.project-stack__copy > .bp-button--accent:hover,
-.project-stack__copy > .bp-button--accent:focus-visible {
-  border-color: color-mix(in srgb, var(--bp-color-text) 84%, var(--stack-accent) 16%);
-  background: color-mix(in srgb, var(--stack-accent) 88%, var(--bp-color-text) 12%);
-  color: var(--stack-on-accent);
-  box-shadow: 10px 10px 0 color-mix(in srgb, var(--stack-accent) 56%, #000000 36%), 0 0 0 3px color-mix(in srgb, var(--stack-accent) 28%, transparent), 0 24px 64px var(--bp-color-shadow);
-}
-
-.project-stack__copy > .bp-button--accent:hover > *,
-.project-stack__copy > .bp-button--accent:focus-visible > * {
-  color: var(--stack-on-accent);
 }
 
 /* ==========================================================================
@@ -680,7 +681,7 @@
 }
 
 .project-stack__typewriter-prefix {
-  color: var(--stack-accent);
+  color: var(--stack-accent-text);
   font-weight: 900;
   letter-spacing: 0.08em;
   text-transform: uppercase;

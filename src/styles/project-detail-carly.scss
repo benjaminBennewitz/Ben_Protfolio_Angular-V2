@@ -13,7 +13,9 @@
 
 .project-detail[data-project='kanban-klon'] {
   --bp-color-accent: #7b4de0;
+  --bp-color-accent-text: #9773e7;
   --bp-color-on-accent: #fffdf8;
+  --project-detail-hero-tag-fg: #000000;
   --bp-color-accent-hover: #6736c7;
   --bp-color-control-hover: #3a275f;
   --bp-color-on-control-hover: #fff7ff;
@@ -51,7 +53,9 @@
   --bp-color-surface-strong: #e5dcf3;
   --bp-color-shadow: rgba(52, 31, 82, 0.18);
   --bp-color-accent: #6d3bd1;
+  --bp-color-accent-text: #6d3bd1;
   --bp-color-on-accent: #fffdf8;
+  --project-detail-hero-tag-fg: #ffffff;
   --bp-color-accent-hover: #5929b4;
   --bp-color-control-hover: #e5daf8;
   --bp-color-on-control-hover: #2d174a;
@@ -82,7 +86,9 @@
 :host-context(:root[data-color-vision]:not([data-color-vision='default'])) .project-detail[data-project='kanban-klon'],
 :host-context([data-color-vision]:not([data-color-vision='default'])) .project-detail[data-project='kanban-klon'] {
   --bp-color-accent: var(--bp-color-accent-3);
+  --bp-color-accent-text: var(--bp-color-accent-3-text);
   --bp-color-on-accent: var(--bp-color-on-accent-3);
+  --project-detail-hero-tag-fg: var(--bp-color-on-accent-3);
   --bp-color-accent-hover: color-mix(in srgb, var(--bp-color-accent-3) 84%, var(--bp-color-text) 16%);
   --bp-color-control-hover: color-mix(in srgb, var(--bp-color-accent-3) 16%, var(--bp-color-surface-solid));
   --bp-color-on-control-hover: var(--bp-color-text);
@@ -117,9 +123,15 @@
   white-space: normal;
 }
 
+:root[data-theme='light'] .project-detail[data-project='kanban-klon'] .project-detail__hero .bp-title,
+:host-context(:root[data-theme='light']) .project-detail[data-project='kanban-klon'] .project-detail__hero .bp-title,
+:host-context([data-theme='light']) .project-detail[data-project='kanban-klon'] .project-detail__hero .bp-title {
+  text-shadow: 0 4px 18px rgba(52, 31, 82, 0.08);
+}
+
 .project-detail[data-project='kanban-klon'] .project-detail__hero-tags li {
   background: color-mix(in srgb, var(--project-detail-blue) 86%, white 14%);
-  color: var(--bp-color-on-accent);
+  color: var(--project-detail-hero-tag-fg);
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--project-detail-blue), transparent 68%);
 }
 
@@ -142,8 +154,8 @@
   color: var(--bp-color-on-accent) !important;
 }
 
-.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--accent:hover > *,
-.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--accent:focus-visible > * {
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--accent:hover>*,
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--accent:focus-visible>* {
   color: var(--bp-color-on-accent) !important;
 }
 
@@ -154,8 +166,8 @@
   color: var(--bp-color-on-control-hover) !important;
 }
 
-.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--ghost:hover > *,
-.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--ghost:focus-visible > * {
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--ghost:hover>*,
+.project-detail[data-project='kanban-klon'] .project-detail__hero-actions .bp-button--ghost:focus-visible>* {
   color: var(--bp-color-on-control-hover) !important;
 }
 
@@ -241,7 +253,7 @@
   gap: 0.7rem;
 }
 
-.project-detail__floating-task-head > span:first-child {
+.project-detail__floating-task-head>span:first-child {
   border: 1px solid color-mix(in srgb, var(--project-detail-blue), transparent 40%);
   padding: 0.28rem 0.5rem;
   background: color-mix(in srgb, var(--project-detail-blue), transparent 82%);
@@ -253,7 +265,7 @@
   text-transform: uppercase;
 }
 
-.project-detail__floating-task-head > .material-symbols-outlined {
+.project-detail__floating-task-head>.material-symbols-outlined {
   color: var(--project-detail-muted);
   font-size: 1.15rem;
 }
@@ -266,7 +278,7 @@
   line-height: 1.24;
 }
 
-.project-detail__floating-task > p {
+.project-detail__floating-task>p {
   display: -webkit-box;
   margin: 0;
   color: var(--project-detail-muted);
@@ -357,14 +369,14 @@
 }
 
 :root[data-theme='light'] .project-detail[data-project='kanban-klon'] .project-detail__floating-task h2,
-:root[data-theme='light'] .project-detail[data-project='kanban-klon'] .project-detail__floating-task > p,
+:root[data-theme='light'] .project-detail[data-project='kanban-klon'] .project-detail__floating-task>p,
 :root[data-theme='light'] .project-detail[data-project='kanban-klon'] .project-detail__floating-task time,
 :root[data-theme='light'] .project-detail[data-project='kanban-klon'] .project-detail__floating-task-kpis li,
-:root[data-theme='light'] .project-detail[data-project='kanban-klon'] .project-detail__floating-task-head > .material-symbols-outlined {
+:root[data-theme='light'] .project-detail[data-project='kanban-klon'] .project-detail__floating-task-head>.material-symbols-outlined {
   color: #251326;
 }
 
-:root[data-theme='light'] .project-detail[data-project='kanban-klon'] .project-detail__floating-task-head > span:first-child {
+:root[data-theme='light'] .project-detail[data-project='kanban-klon'] .project-detail__floating-task-head>span:first-child {
   border-color: rgba(73, 29, 85, 0.42);
   background: rgba(93, 45, 111, 0.12);
   color: #4a2053;
@@ -382,6 +394,7 @@
 }
 
 @keyframes project-detail-task-float {
+
   0%,
   100% {
     transform: translate3d(0, 0, 0) rotate(var(--task-rotation));
@@ -464,7 +477,7 @@
   text-transform: uppercase;
 }
 
-.project-detail__board-flow-content > p {
+.project-detail__board-flow-content>p {
   margin: 0.75rem 0 0;
   color: var(--bp-color-text-muted);
   font-size: 0.86rem;
@@ -484,13 +497,13 @@
   padding-left: 0.95rem;
   color: var(--bp-color-text);
   font-family: var(--bp-font-mono);
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   font-weight: 800;
   line-height: 1.45;
 }
 
 .project-detail__board-flow-content li::before {
-  content: '>'; 
+  content: '>';
   position: absolute;
   left: 0;
   color: var(--project-detail-highlight);
@@ -508,7 +521,7 @@
   padding: calc(var(--bp-header-height) + clamp(0.45rem, 1.25vh, 0.85rem)) var(--bp-stage-gutter) clamp(0.65rem, 1.6vh, 1rem);
 }
 
-.project-detail[data-project='kanban-klon'] .project-detail__character-section > .bp-container {
+.project-detail[data-project='kanban-klon'] .project-detail__character-section>.bp-container {
   width: 100%;
   height: 100%;
   min-height: 0;
@@ -686,7 +699,7 @@
   display: none;
 }
 
-.project-detail[data-project='kanban-klon'] .project-detail__character-copy > strong {
+.project-detail[data-project='kanban-klon'] .project-detail__character-copy>strong {
   display: inline-flex;
   width: fit-content;
   max-width: 100%;
@@ -762,7 +775,7 @@
   border-bottom: 1px solid color-mix(in srgb, var(--bp-color-border-strong), transparent 28%);
 }
 
-.project-detail__character-principle-list li > span {
+.project-detail__character-principle-list li>span {
   color: var(--project-detail-highlight);
   font-family: var(--bp-font-mono);
   font-size: 0.66rem;
@@ -1031,6 +1044,7 @@
 }
 
 @keyframes project-detail-carly-idle {
+
   0%,
   100% {
     transform: translateY(0) rotate(-1deg);
@@ -1042,6 +1056,7 @@
 }
 
 @keyframes project-detail-carly-blink {
+
   0%,
   88%,
   94%,
@@ -1055,6 +1070,7 @@
 }
 
 @keyframes project-detail-carly-look {
+
   0%,
   55%,
   100% {
@@ -1090,6 +1106,7 @@
 }
 
 @keyframes project-detail-carly-spark {
+
   0%,
   100% {
     opacity: 0.32;
@@ -1307,8 +1324,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .project-detail__character-glow,
   .project-detail__character-stars {
     animation: none;
   }
+}
+
+:root[data-color-vision]:not([data-color-vision='default']) .project-detail[data-project='kanban-klon'] .project-detail__highlight-card .material-symbols-outlined,
+:host-context(:root[data-color-vision]:not([data-color-vision='default'])) .project-detail[data-project='kanban-klon'] .project-detail__highlight-card .material-symbols-outlined {
+  color: var(--bp-color-on-accent);
 }

@@ -170,8 +170,9 @@ button {
 }
 
 :focus-visible {
-  outline: 3px solid var(--bp-color-accent);
-  outline-offset: 4px;
+  --bp-focus-ring-color: var(--bp-color-accent);
+  outline: var(--bp-focus-ring-width) solid var(--bp-focus-ring-color);
+  outline-offset: var(--bp-focus-ring-offset);
 }
 
 ::selection {
@@ -209,9 +210,9 @@ button {
 :root[data-comfort='simple'] .bp-stagger-item,
 :root[data-motion='reduced'] .bp-stagger-item,
 :root[data-motion='off'] .bp-stagger-item,
-:root[data-comfort='simple'] .bp-motion-copy > *:not(bp-reveal-text),
-:root[data-motion='reduced'] .bp-motion-copy > *:not(bp-reveal-text),
-:root[data-motion='off'] .bp-motion-copy > *:not(bp-reveal-text) {
+:root[data-comfort='simple'] .bp-motion-copy>*:not(bp-reveal-text),
+:root[data-motion='reduced'] .bp-motion-copy>*:not(bp-reveal-text),
+:root[data-motion='off'] .bp-motion-copy>*:not(bp-reveal-text) {
   opacity: 1 !important;
   transform: none !important;
   filter: none !important;

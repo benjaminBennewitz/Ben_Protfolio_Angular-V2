@@ -47,7 +47,7 @@
   height: 1.95rem;
   place-items: center;
   border: 1px solid color-mix(in srgb, var(--bp-color-accent) 56%, var(--bp-color-border));
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: 1.12rem;
 }
 
@@ -63,7 +63,7 @@
 }
 
 .access-status__copy p {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-mono);
   font-size: 0.62rem;
   font-weight: 900;

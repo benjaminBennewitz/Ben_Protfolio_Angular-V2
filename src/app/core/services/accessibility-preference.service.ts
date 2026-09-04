@@ -7,7 +7,6 @@
 
 import { DOCUMENT } from '@angular/common';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
-import { ThemeContrastService } from './theme-contrast.service';
 
 /** Verfügbare Bewegungsstufen der Experience. */
 export type MotionMode = 'full' | 'reduced' | 'off';
@@ -41,9 +40,6 @@ export class AccessibilityPreferenceService {
 
   /** Dokumentreferenz für globale Data-Attribute. */
   private readonly document = inject(DOCUMENT);
-
-  /** Berechnet kontrastabhängige Vordergrund-Tokens nach Farb-/Kontrastwechseln neu. */
-  private readonly themeContrastService = inject(ThemeContrastService);
 
   /** Interner Zustand der Accessibility-Einstellungen. */
   private readonly preferencesSignal = signal<AccessibilityPreferences>(this.readInitialPreferences());
@@ -81,7 +77,6 @@ export class AccessibilityPreferenceService {
       this.document.documentElement.dataset['comfort'] = preferences.comfort;
       this.document.documentElement.dataset['contrast'] = preferences.contrast;
       this.document.documentElement.dataset['colorVision'] = preferences.colorVision;
-      this.themeContrastService.refresh();
       localStorage.setItem(this.storageKey, JSON.stringify(preferences));
     });
   }

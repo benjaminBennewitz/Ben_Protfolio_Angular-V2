@@ -362,10 +362,32 @@
 }
 
 .visual[data-project='dein-fussabdruck'] {
+  --visual-accent-text: #b8ff4f;
   background:
     radial-gradient(circle at 22% 20%, color-mix(in srgb, var(--visual-accent) 22%, transparent) 0 18%, transparent 19%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
     #08110f;
+}
+
+
+:host-context(:root[data-color-vision='deuteranopia']) .visual[data-project='dein-fussabdruck'],
+:host-context([data-color-vision='deuteranopia']) .visual[data-project='dein-fussabdruck'] {
+  --visual-accent-text: #3b93c4;
+}
+
+:host-context(:root[data-color-vision='protanopia']) .visual[data-project='dein-fussabdruck'],
+:host-context([data-color-vision='protanopia']) .visual[data-project='dein-fussabdruck'] {
+  --visual-accent-text: #18b889;
+}
+
+:host-context(:root[data-color-vision='tritanopia']) .visual[data-project='dein-fussabdruck'],
+:host-context([data-color-vision='tritanopia']) .visual[data-project='dein-fussabdruck'] {
+  --visual-accent-text: #da6f1c;
+}
+
+:host-context(:root[data-color-vision='achromatopsia']) .visual[data-project='dein-fussabdruck'],
+:host-context([data-color-vision='achromatopsia']) .visual[data-project='dein-fussabdruck'] {
+  --visual-accent-text: #f0f0f0;
 }
 
 .visual__ecosystem {
@@ -411,7 +433,7 @@
 }
 
 .visual__ecosystem-orbit i {
-  color: var(--visual-accent);
+  color: var(--visual-accent-text, var(--visual-accent));
   font-family: var(--bp-font-tech, Consolas, monospace);
   font-size: clamp(0.58rem, 0.9vw, 0.76rem);
   font-style: normal;

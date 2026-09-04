@@ -8,7 +8,6 @@
 import { DOCUMENT } from '@angular/common';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { PortfolioTheme } from '../models/portfolio.models';
-import { ThemeContrastService } from './theme-contrast.service';
 
 /** Verwaltet das visuelle Theme der Anwendung. */
 @Injectable({ providedIn: 'root' })
@@ -24,9 +23,6 @@ export class ThemeService {
 
   /** Dokumentreferenz für das data-theme-Attribut. */
   private readonly document = inject(DOCUMENT);
-
-  /** Berechnet kontrastabhängige Vordergrund-Tokens nach Theme-Wechseln neu. */
-  private readonly themeContrastService = inject(ThemeContrastService);
 
   /** Interner Theme-Zustand. */
   private readonly themeSignal = signal<PortfolioTheme>(this.readInitialTheme());
@@ -46,7 +42,6 @@ export class ThemeService {
       const theme = this.currentTheme();
       this.document.documentElement.dataset['theme'] = theme;
       this.updateThemeColor(theme);
-      this.themeContrastService.refresh();
       localStorage.setItem(this.storageKey, theme);
     });
   }

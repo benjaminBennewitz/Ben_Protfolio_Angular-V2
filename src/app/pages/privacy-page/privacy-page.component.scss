@@ -77,7 +77,7 @@
 }
 
 .privacy-page__back .material-symbols-outlined {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: 1rem;
 }
 
@@ -109,7 +109,7 @@
 }
 
 .privacy-page__progress b {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font: inherit;
   text-align: right;
 }
@@ -247,7 +247,7 @@
   height: 2.3rem;
   place-items: center;
   border: 1px solid var(--bp-color-accent);
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: 1.2rem;
 }
 
@@ -270,7 +270,7 @@
 }
 
 .privacy-deck__chapter-counter strong {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-display);
   font-size: clamp(3rem, 6vw, 6rem);
   line-height: 0.7;
@@ -289,7 +289,7 @@
   gap: 0.5rem;
   align-items: center;
   width: fit-content;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-system);
   font-size: 0.68rem;
   font-weight: 900;
@@ -410,7 +410,7 @@
 }
 
 .privacy-deck__number {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-display);
   font-size: clamp(1.55rem, 2.5vw, 2.6rem);
   line-height: 0.8;
@@ -422,7 +422,7 @@
   height: 2.3rem;
   place-items: center;
   border: 1px solid var(--bp-color-border-strong);
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: 1.15rem;
 }
 
@@ -467,7 +467,7 @@
 }
 
 .privacy-deck__end-window .bp-dos-window__body > .material-symbols-outlined {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: clamp(3rem, 7vw, 6rem);
 }
 

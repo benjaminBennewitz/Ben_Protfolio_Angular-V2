@@ -107,7 +107,7 @@
   gap: 0.45rem;
   width: fit-content;
   margin-bottom: 0.65rem;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-mono);
   font-size: 0.68rem;
   font-weight: 900;
@@ -165,7 +165,7 @@
 .snippet-page__actions button:hover,
 .snippet-page__actions button:focus-visible {
   border-color: var(--bp-color-accent);
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   transform: translateY(-1px);
   box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-accent) 28%, transparent);
 }
@@ -182,7 +182,7 @@
 }
 
 .snippet-page__search > span:first-child {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: 0.68rem;
   font-weight: 900;
   letter-spacing: 0.1em;
@@ -201,7 +201,7 @@
 
 .snippet-page__search-field > .material-symbols-outlined {
   padding-left: 0.65rem;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: 1.1rem;
 }
 
@@ -233,7 +233,7 @@
 
 .snippet-page__search-field button:hover,
 .snippet-page__search-field button:focus-visible {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
 }
 
 .snippet-page__search small {
@@ -257,7 +257,7 @@
 .snippet-page__nav h2 {
   flex: 0 0 auto;
   margin: 0 0 0.45rem;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.12em;
@@ -321,7 +321,7 @@
 
 .snippet-page__nav button > span {
   grid-row: span 2;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-display);
   font-size: 1.35rem;
   line-height: 1;
@@ -808,7 +808,7 @@
   display: grid;
   place-items: center;
   border: 1px solid #a7ff19;
-  color: #a7ff19;
+  color: #d4ff8a;
   font-family: var(--bp-font-mono);
   font-size: 0.62rem;
   font-weight: 900;
@@ -858,6 +858,10 @@
   opacity: 1;
 }
 
+.snippet-preview__count-row span:nth-child(n + 3) {
+  color: #101010;
+}
+
 .snippet-preview__count-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -868,7 +872,7 @@
   display: grid;
   place-items: center;
   min-height: 42px;
-  background: rgba(167, 255, 25, calc(0.16 + var(--preview-index) * 0.18));
+  background: rgba(190, 255, 72, calc(0.34 + var(--preview-index) * 0.14));
   color: #101010;
   font-weight: 900;
 }

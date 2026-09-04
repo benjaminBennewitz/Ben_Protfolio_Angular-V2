@@ -1,13 +1,27 @@
-/dist
-/.angular
-/node_modules
+# Dependencies
+/node_modules/
+
+# Build output & Angular cache
+/dist/
+/.angular/
+
+# Logs
 /npm-debug.log
 /yarn-error.log
-.DS_Store
+
+# Editor / IDE
 .vscode/*
 !.vscode/extensions.json
 !.vscode/launch.json
 !.vscode/tasks.json
-src/assets/images/projects/design-catalog/de/
-src/assets/images/projects/design-catalog/en/
-src/assets/images/projects/design-catalog/masonry/
+
+# Operating system
+.DS_Store
+
+# Local development tools
+/tools/color-audit/
+
+# Generated / local project assets
+/src/assets/images/projects/design-catalog/de/
+/src/assets/images/projects/design-catalog/en/
+/src/assets/images/projects/design-catalog/masonry/

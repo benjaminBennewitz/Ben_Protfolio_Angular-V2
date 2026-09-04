@@ -229,6 +229,7 @@
     <bp-project-telemetry [project]="activeProject" />
     }
 
+    @if (activeProject.slug !== 'grafikdesign-katalog') {
     <section class="project-detail__highlights bp-section" aria-labelledby="project-highlights-title" bpReveal>
       <div class="bp-container project-detail__signals">
         <p class="bp-eyebrow">{{ content().projectsIntro.highlightsEyebrow }}</p>
@@ -271,6 +272,7 @@
         }
       </div>
     </section>
+    }
 
     <section class="project-detail__info bp-section">
       <div class="bp-container project-detail__info-grid">
@@ -457,7 +459,7 @@
                 <h3>{{ activeArchitectureNode().label }}</h3>
                 <p>{{ activeArchitectureNode().text }}</p>
                 <ul>
-                  @for (connection of activeArchitectureNode().connections; track connection) {
+                  @for (connection of activeArchitectureNode().connections; track $index) {
                   <li>{{ connection }}</li>
                   }
                 </ul>

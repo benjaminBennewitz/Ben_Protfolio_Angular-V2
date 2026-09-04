@@ -40,7 +40,7 @@
   height: 52px;
   border: 1px solid var(--bp-color-accent);
   background: color-mix(in srgb, var(--bp-color-bg) 72%, black 18%);
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   box-shadow: 0 18px 44px var(--bp-color-shadow), inset 0 0 0 1px color-mix(in srgb, var(--bp-color-accent) 18%, transparent);
   opacity: 0;
   transform: translate3d(0, 18px, 0) rotate(2deg);

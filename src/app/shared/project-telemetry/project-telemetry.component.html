@@ -1,7 +1,7 @@
 <!-- src/app/shared/project-telemetry/project-telemetry.component.html -->
 @if (project.telemetry; as telemetry) {
 <section id="project-telemetry" class="project-telemetry" [attr.data-accent]="project.accent" bpReveal>
-  <div class="project-telemetry__shell">
+  <div class="project-telemetry__shell" [class.project-telemetry__shell--archive]="project.slug === 'grafikdesign-katalog'">
     <header class="project-telemetry__head">
       <div>
         <p class="bp-eyebrow">{{ telemetry.eyebrow }}</p>
@@ -30,6 +30,18 @@
       }
     </div>
 
+    @if (project.slug === 'grafikdesign-katalog') {
+    <div class="project-telemetry__archive-highlights">
+      <div class="project-telemetry__archive-highlight-grid">
+        @for (highlight of project.highlights; track $index; let index = $index) {
+        <article class="project-telemetry__archive-highlight" [style.--telemetry-index]="index">
+          <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+          <strong>{{ highlight }}</strong>
+        </article>
+        }
+      </div>
+    </div>
+    } @else if (telemetry.charts.length > 0) {
     <div class="project-telemetry__charts">
       @for (chart of telemetry.charts; track chart.id; let index = $index) {
       <bp-telemetry-chart
@@ -45,6 +57,7 @@
         [chartId]="project.slug + '-telemetry-' + index" />
       }
     </div>
+    }
   </div>
 </section>
 }

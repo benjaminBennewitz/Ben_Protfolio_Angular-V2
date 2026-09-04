@@ -784,19 +784,9 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
         telemetry: {
           eyebrow: 'archive_telemetry.exe',
           title: 'Gestaltung als System, nicht als Bilderordner.',
-          subtitle: 'Die Werte beschreiben den relativen Scope der dokumentierten Editorial-, Archiv- und Interaktionsbereiche des digitalen Katalogs.',
+          subtitle: '',
           statusLabel: 'Archive', statusValue: 'EDITORIAL / INTERACTIVE', source: 'Source: catalog structure', kpiAriaLabel: 'Grafikdesign-Katalog-Projektkennzahlen',
-          charts: [
-            { id: 'scope', eyebrow: 'design_scope.radial', title: 'Design Surface', description: 'Relative Gewichtung der zentralen Gestaltungsbereiche.', variant: 'radial', maxValue: 5, data: [
-              { label: 'Editorial', value: 5 }, { label: 'Visual', value: 5 }, { label: 'Archive', value: 4 }, { label: 'Interaction', value: 4 }, { label: 'Type', value: 4 },
-            ] },
-            { id: 'flow', eyebrow: 'reader_flow.area', title: 'Reader Interaction Flow', description: 'Relative Interaktionstiefe vom Einstieg bis zur Detailansicht.', variant: 'area', maxValue: 5, data: [
-              { label: 'Cover', value: 1 }, { label: 'TOC', value: 2 }, { label: 'Spread', value: 4 }, { label: 'Loupe', value: 5 }, { label: 'Gallery', value: 4 },
-            ] },
-            { id: 'layers', eyebrow: 'editorial.step', title: 'Editorial Layers', description: 'Digitale Ebenen des Readers von Inhalt bis Interaktion.', variant: 'step', maxValue: 5, data: [
-              { label: 'Content', value: 2 }, { label: 'Layout', value: 3 }, { label: 'Assets', value: 4 }, { label: 'Reader', value: 5 }, { label: 'Lightbox', value: 4 },
-            ] },
-          ],
+          charts: [],
         },
         catalogShowcase: {
           eyebrow: 'digital_catalog.indd',
@@ -1311,19 +1301,9 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
         telemetry: {
           eyebrow: 'archive_telemetry.exe',
           title: 'Design as a system, not an image folder.',
-          subtitle: 'The values describe the relative scope of the documented editorial, archive and interaction areas of the digital catalog.',
+          subtitle: '',
           statusLabel: 'Archive', statusValue: 'EDITORIAL / INTERACTIVE', source: 'Source: catalog structure', kpiAriaLabel: 'Graphic design catalog project metrics',
-          charts: [
-            { id: 'scope', eyebrow: 'design_scope.radial', title: 'Design Surface', description: 'Relative weighting of the central design areas.', variant: 'radial', maxValue: 5, data: [
-              { label: 'Editorial', value: 5 }, { label: 'Visual', value: 5 }, { label: 'Archive', value: 4 }, { label: 'Interaction', value: 4 }, { label: 'Type', value: 4 },
-            ] },
-            { id: 'flow', eyebrow: 'reader_flow.area', title: 'Reader Interaction Flow', description: 'Relative interaction depth from entry to detail view.', variant: 'area', maxValue: 5, data: [
-              { label: 'Cover', value: 1 }, { label: 'TOC', value: 2 }, { label: 'Spread', value: 4 }, { label: 'Loupe', value: 5 }, { label: 'Gallery', value: 4 },
-            ] },
-            { id: 'layers', eyebrow: 'editorial.step', title: 'Editorial Layers', description: 'Digital reader layers from content to interaction.', variant: 'step', maxValue: 5, data: [
-              { label: 'Content', value: 2 }, { label: 'Layout', value: 3 }, { label: 'Assets', value: 4 }, { label: 'Reader', value: 5 }, { label: 'Lightbox', value: 4 },
-            ] },
-          ],
+          charts: [],
         },
         catalogShowcase: {
           eyebrow: 'digital_catalog.indd',

@@ -63,7 +63,7 @@
   bottom: 3px;
 }
 
-.bp-button > * {
+.bp-button>* {
   position: relative;
   z-index: 1;
 }
@@ -146,11 +146,9 @@
   border-bottom-width: 2px;
   font-family: var(--bp-font-system);
   letter-spacing: 0.06em;
-  background-image: repeating-linear-gradient(
-    90deg,
-    transparent 0 16px,
-    color-mix(in srgb, var(--bp-color-text) 4%, transparent) 16px 24px
-  );
+  background-image: repeating-linear-gradient(90deg,
+      transparent 0 16px,
+      color-mix(in srgb, var(--bp-color-text) 4%, transparent) 16px 24px);
 }
 
 .bp-terminal__dots i {

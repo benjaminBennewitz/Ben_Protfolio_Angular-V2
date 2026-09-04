@@ -80,25 +80,61 @@
    --bp-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
    --bp-ease-pop: cubic-bezier(0.18, 0.89, 0.32, 1.28);
 
+   /* Semantische Farbgrundlage. Vordergrundfarben werden ausschließlich statisch über Theme-Tokens aufgelöst. */
    --bp-color-contrast-dark: #000000;
    --bp-color-contrast-light: #ffffff;
    --bp-color-accent-hover: color-mix(in srgb, var(--bp-color-accent) 88%, var(--bp-color-text) 12%);
    --bp-color-control-hover: color-mix(in srgb, var(--bp-color-accent) 15%, var(--bp-color-surface-solid));
-   --bp-color-on-accent-2: var(--bp-color-text);
-   --bp-color-on-accent-3: var(--bp-color-text);
-   --bp-color-on-warning: var(--bp-color-text);
-   --bp-color-on-danger: var(--bp-color-contrast-light);
-   --bp-color-on-info: var(--bp-color-text);
    --bp-color-on-surface-strong: var(--bp-color-text);
    --bp-color-on-control-hover: var(--bp-color-text);
 
+   /* Akzent als Fläche, als Vordergrund und als Kontrastpartner sind getrennte Rollen. */
+   --bp-color-accent-text: var(--bp-color-accent);
+   --bp-color-accent-2-text: var(--bp-color-accent-2);
+   --bp-color-accent-3-text: var(--bp-color-accent-3);
+   --bp-color-info-text: var(--bp-color-info);
+   --bp-color-warning-text: var(--bp-color-warning);
+   --bp-color-danger-text: var(--bp-color-danger);
+
    /* Zusätzliche Signal-Akzente für Process, Poster und interaktive Systemzustände. */
    --bp-color-accent-lime: var(--bp-color-accent);
-   --bp-color-on-accent-lime: var(--bp-color-on-accent);
    --bp-color-accent-pink: var(--bp-color-accent-2);
-   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
    --bp-color-accent-violet: var(--bp-color-accent-3);
+   --bp-color-on-accent-lime: var(--bp-color-on-accent);
+   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
    --bp-color-on-accent-violet: var(--bp-color-on-accent-3);
+
+   /* Globale Interaktions-Tokens: Komponenten konsumieren Zustände statt Rohfarben. */
+   --bp-action-bg: color-mix(in srgb, var(--bp-color-surface) 84%, transparent);
+   --bp-action-fg: var(--bp-color-text);
+   --bp-action-border: var(--bp-color-border-strong);
+   --bp-action-hover-bg: var(--bp-color-control-hover);
+   --bp-action-hover-fg: var(--bp-color-on-control-hover);
+   --bp-action-hover-border: var(--bp-color-accent);
+   --bp-action-focus-bg: var(--bp-action-hover-bg);
+   --bp-action-focus-fg: var(--bp-action-hover-fg);
+   --bp-action-focus-border: var(--bp-action-hover-border);
+   --bp-action-active-bg: var(--bp-color-control-hover);
+   --bp-action-active-fg: var(--bp-color-on-control-hover);
+   --bp-action-primary-bg: var(--bp-color-accent);
+   --bp-action-primary-fg: var(--bp-color-on-accent);
+   --bp-action-primary-hover-bg: var(--bp-color-accent-hover);
+   --bp-action-primary-hover-fg: var(--bp-color-on-accent);
+   --bp-action-primary-focus-bg: var(--bp-action-primary-hover-bg);
+   --bp-action-primary-focus-fg: var(--bp-action-primary-hover-fg);
+   --bp-action-primary-active-bg: var(--bp-color-accent-hover);
+   --bp-action-primary-active-fg: var(--bp-color-on-accent);
+   --bp-action-disabled-bg: var(--bp-action-bg);
+   --bp-action-disabled-fg: var(--bp-color-text-muted);
+   --bp-action-disabled-border: var(--bp-color-border);
+   --bp-action-primary-disabled-bg: color-mix(in srgb, var(--bp-color-accent) 58%, var(--bp-color-surface-solid));
+   --bp-action-primary-disabled-fg: var(--bp-color-on-accent);
+   --bp-focus-ring-color: var(--bp-color-accent);
+   --bp-focus-ring-width: 3px;
+   --bp-focus-ring-offset: 4px;
+   --bp-selection-bg: var(--bp-color-accent);
+   --bp-selection-fg: var(--bp-color-on-accent);
+   --bp-disabled-opacity: 0.5;
 }
 
 /* ==========================================================================
@@ -128,18 +164,29 @@
    --bp-color-border: rgba(246, 240, 232, 0.18);
    --bp-color-border-strong: rgba(246, 240, 232, 0.34);
    --bp-color-accent: #a7ff19;
-   --bp-color-on-accent: #101010;
+   --bp-color-accent-text: #a7ff19;
+   --bp-color-on-accent: #000000;
    --bp-color-accent-2: #ff3ea5;
+   --bp-color-accent-2-text: #ff3ea5;
+   --bp-color-on-accent-2: #000000;
    --bp-color-accent-3: #8d5cff;
+   --bp-color-accent-3-text: #9773e7;
+   --bp-color-on-accent-3: #000000;
    --bp-color-accent-lime: #a7ff19;
-   --bp-color-on-accent-lime: #101010;
+   --bp-color-on-accent-lime: #000000;
    --bp-color-accent-pink: #ff3ea5;
    --bp-color-on-accent-pink: #101010;
    --bp-color-accent-violet: #8d5cff;
    --bp-color-on-accent-violet: #ffffff;
    --bp-color-warning: #ff8c1a;
+   --bp-color-warning-text: #ff9b32;
+   --bp-color-on-warning: #000000;
    --bp-color-danger: #ff2d55;
+   --bp-color-danger-text: #ff5a76;
+   --bp-color-on-danger: #000000;
    --bp-color-info: #23c7ff;
+   --bp-color-info-text: #23c7ff;
+   --bp-color-on-info: #000000;
    --bp-color-shadow: rgba(0, 0, 0, 0.52);
    --bp-gradient-hero: radial-gradient(circle at 14% 22%, rgba(167, 255, 25, 0.25), transparent 32%), radial-gradient(circle at 82% 18%, rgba(255, 62, 165, 0.2), transparent 30%), linear-gradient(135deg, #0b0b0d 0%, #16161d 52%, #070708 100%);
 }
@@ -160,18 +207,29 @@
    --bp-color-border: rgba(17, 17, 17, 0.24);
    --bp-color-border-strong: rgba(17, 17, 17, 0.48);
    --bp-color-accent: #005cff;
+   --bp-color-accent-text: #0054e8;
    --bp-color-on-accent: #ffffff;
    --bp-color-accent-2: #b000ff;
+   --bp-color-accent-2-text: #a000e8;
+   --bp-color-on-accent-2: #ffffff;
    --bp-color-accent-3: #d0005f;
+   --bp-color-accent-3-text: #c00058;
+   --bp-color-on-accent-3: #ffffff;
    --bp-color-accent-lime: #b8ff2e;
-   --bp-color-on-accent-lime: #101010;
+   --bp-color-on-accent-lime: var(--bp-color-text);
    --bp-color-accent-pink: #ff2e88;
    --bp-color-on-accent-pink: #101010;
    --bp-color-accent-violet: #9d2eff;
    --bp-color-on-accent-violet: #ffffff;
    --bp-color-warning: #9b5200;
+   --bp-color-warning-text: #8b4900;
+   --bp-color-on-warning: #ffffff;
    --bp-color-danger: #bd1238;
+   --bp-color-danger-text: #a80f31;
+   --bp-color-on-danger: #ffffff;
    --bp-color-info: #006d7f;
+   --bp-color-info-text: #006475;
+   --bp-color-on-info: #ffffff;
    --bp-color-shadow: rgba(31, 23, 14, 0.18);
    --bp-gradient-hero: radial-gradient(circle at 14% 22%, rgba(0, 92, 255, 0.08), transparent 32%), radial-gradient(circle at 82% 18%, rgba(176, 0, 255, 0.07), transparent 30%), linear-gradient(135deg, #fffdf8 0%, #fffaf1 52%, #f3eadc 100%);
 }
@@ -198,70 +256,141 @@
 
 :root[data-color-vision='deuteranopia'] {
    --bp-color-accent: #0072b2;
-   --bp-color-on-accent: #ffffff;
    --bp-color-accent-2: #e69f00;
    --bp-color-accent-3: #cc79a7;
    --bp-color-info: #0072b2;
    --bp-color-accent-lime: var(--bp-color-accent);
-   --bp-color-on-accent-lime: var(--bp-color-on-accent);
    --bp-color-accent-pink: var(--bp-color-accent-2);
-   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
    --bp-color-accent-violet: var(--bp-color-accent-3);
+   --bp-color-on-accent-lime: var(--bp-color-on-accent);
+   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
    --bp-color-on-accent-violet: var(--bp-color-on-accent-3);
+}
+
+:root[data-theme='dark'][data-color-vision='deuteranopia'] {
+   --bp-color-accent-text: #3b93c4;
+   --bp-color-accent-2-text: #e69f00;
+   --bp-color-accent-3-text: #cc79a7;
+   --bp-color-info-text: #3b93c4;
+   --bp-color-on-accent: var(--bp-color-text);
+   --bp-color-on-info: var(--bp-color-text);
+}
+
+:root[data-theme='light'][data-color-vision='deuteranopia'] {
+   --bp-color-accent-text: #006aa5;
+   --bp-color-accent-2-text: #8b5c00;
+   --bp-color-accent-3-text: #98466f;
+   --bp-color-info-text: #006aa5;
+   --bp-color-on-accent-2: var(--bp-color-text);
+   --bp-color-on-accent-3: var(--bp-color-text);
 }
 
 :root[data-color-vision='protanopia'] {
    --bp-color-accent: #009e73;
-   --bp-color-on-accent: #101010;
    --bp-color-accent-2: #f0e442;
    --bp-color-accent-3: #56b4e9;
    --bp-color-info: #009e73;
    --bp-color-accent-lime: var(--bp-color-accent);
-   --bp-color-on-accent-lime: var(--bp-color-on-accent);
    --bp-color-accent-pink: var(--bp-color-accent-2);
-   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
    --bp-color-accent-violet: var(--bp-color-accent-3);
+   --bp-color-on-accent-lime: var(--bp-color-on-accent);
+   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
    --bp-color-on-accent-violet: var(--bp-color-on-accent-3);
+}
+
+:root[data-theme='dark'][data-color-vision='protanopia'] {
+   --bp-color-accent-text: #009e73;
+   --bp-color-accent-2-text: #f0e442;
+   --bp-color-accent-3-text: #56b4e9;
+   --bp-color-info-text: #009e73;
+}
+
+:root[data-theme='light'][data-color-vision='protanopia'] {
+   --bp-color-accent-text: #007b5a;
+   --bp-color-accent-2-text: #6c6500;
+   --bp-color-accent-3-text: #28749b;
+   --bp-color-info-text: #007b5a;
+   --bp-color-on-accent: var(--bp-color-text);
+   --bp-color-on-accent-2: var(--bp-color-text);
+   --bp-color-on-accent-3: var(--bp-color-text);
+   --bp-color-on-info: var(--bp-color-text);
 }
 
 :root[data-color-vision='tritanopia'] {
    --bp-color-accent: #d55e00;
-   --bp-color-on-accent: #101010;
    --bp-color-accent-2: #0072b2;
    --bp-color-accent-3: #cc79a7;
    --bp-color-info: #d55e00;
    --bp-color-accent-lime: var(--bp-color-accent);
-   --bp-color-on-accent-lime: var(--bp-color-on-accent);
    --bp-color-accent-pink: var(--bp-color-accent-2);
-   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
    --bp-color-accent-violet: var(--bp-color-accent-3);
+   --bp-color-on-accent-lime: var(--bp-color-on-accent);
+   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
    --bp-color-on-accent-violet: var(--bp-color-on-accent-3);
+}
+
+:root[data-theme='dark'][data-color-vision='tritanopia'] {
+   --bp-color-accent-text: #da6f1c;
+   --bp-color-accent-2-text: #3b93c4;
+   --bp-color-accent-3-text: #cc79a7;
+   --bp-color-info-text: #da6f1c;
+   --bp-color-on-accent-2: var(--bp-color-text);
+}
+
+:root[data-theme='light'][data-color-vision='tritanopia'] {
+   --bp-color-accent-text: #b24e00;
+   --bp-color-accent-2-text: #006aa5;
+   --bp-color-accent-3-text: #98466f;
+   --bp-color-info-text: #b24e00;
+   --bp-color-on-accent: var(--bp-color-text);
+   --bp-color-on-accent-3: var(--bp-color-text);
+   --bp-color-on-info: var(--bp-color-text);
 }
 
 :root[data-color-vision='achromatopsia'] {
    --bp-color-accent: #f0f0f0;
-   --bp-color-on-accent: #101010;
+   --bp-color-accent-text: #f0f0f0;
    --bp-color-accent-2: #cacaca;
+   --bp-color-accent-2-text: #cacaca;
    --bp-color-accent-3: #9a9a9a;
+   --bp-color-accent-3-text: #a8a8a8;
    --bp-color-warning: #d9d9d9;
    --bp-color-danger: #7f7f7f;
    --bp-color-info: #f0f0f0;
+   --bp-color-info-text: #f0f0f0;
+   --bp-color-warning-text: #d9d9d9;
+   --bp-color-danger-text: #9a9a9a;
    --bp-color-accent-lime: var(--bp-color-accent);
-   --bp-color-on-accent-lime: var(--bp-color-on-accent);
    --bp-color-accent-pink: var(--bp-color-accent-2);
-   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
    --bp-color-accent-violet: var(--bp-color-accent-3);
+   --bp-color-on-accent-lime: var(--bp-color-on-accent);
+   --bp-color-on-accent-pink: var(--bp-color-on-accent-2);
    --bp-color-on-accent-violet: var(--bp-color-on-accent-3);
 }
 
 :root[data-theme='light'][data-color-vision='achromatopsia'] {
    --bp-color-accent: #101010;
+   --bp-color-accent-text: #101010;
    --bp-color-on-accent: #ffffff;
    --bp-color-accent-2: #444444;
+   --bp-color-accent-2-text: #444444;
+   --bp-color-on-accent-2: #ffffff;
    --bp-color-accent-3: #777777;
+   --bp-color-accent-3-text: #707070;
+   --bp-color-on-accent-3: #000000;
    --bp-color-warning: #222222;
+   --bp-color-on-warning: #ffffff;
    --bp-color-danger: #3d3d3d;
+   --bp-color-on-danger: #ffffff;
    --bp-color-info: #101010;
+   --bp-color-info-text: #101010;
+   --bp-color-warning-text: #222222;
+   --bp-color-danger-text: #3d3d3d;
+   --bp-color-on-info: #ffffff;
+}
+
+:root[data-theme='light'][data-contrast='high'][data-color-vision='achromatopsia'] {
+   --bp-color-on-accent-3: var(--bp-color-text);
 }
 
 /* ==========================================================================

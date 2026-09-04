@@ -77,7 +77,7 @@
   place-items: center;
   width: 48px;
   height: 48px;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-display);
   font-size: 1.8rem;
   line-height: 0.8;
@@ -131,7 +131,7 @@
 
 .nav__links a:hover,
 .nav__links a:focus-visible {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   transform: translateY(-1px);
 }
 
@@ -170,7 +170,7 @@
 
 .nav__language {
   padding-inline: 0.75rem;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-mono);
   font-size: 0.76rem;
   font-weight: 950;
@@ -181,7 +181,7 @@
   align-items: center;
   justify-content: center;
   padding: 0 0.85rem;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-mono);
   font-size: 0.72rem;
   font-weight: 950;
@@ -290,7 +290,7 @@
 }
 
 :root[data-theme='light'] .nav__brand-mark {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   text-shadow: 0.08em 0 #000000, -0.04em 0 #ffffff;
 }
 
@@ -298,7 +298,7 @@
 :root[data-theme='light'] .nav__links a:focus-visible,
 :root[data-theme='light'] .nav__language,
 :root[data-theme='light'] .nav__contact {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
 }
 
 :root[data-theme='light'] .nav__action,

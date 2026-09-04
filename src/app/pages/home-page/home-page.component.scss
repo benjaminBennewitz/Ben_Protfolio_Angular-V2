@@ -346,7 +346,7 @@
 .hero__brand {
   display: block;
   margin-bottom: var(--bp-space-3);
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-display);
   font-size: clamp(2.95rem, 10.5vw, 9.1rem);
   line-height: 0.72;
@@ -399,7 +399,7 @@
 }
 
 .hero__headline-line--accent span {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   text-shadow: 0.03em 0 rgba(255, 255, 255, 0.3);
   animation-delay: 220ms;
 }
@@ -424,7 +424,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   content: '> ';
 }
 
@@ -561,7 +561,7 @@
   gap: 1rem;
   border-bottom: 1px solid color-mix(in srgb, var(--bp-color-accent) 54%, var(--bp-color-border));
   padding: 0.72rem 0.95rem;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-mono);
   font-size: 0.76rem;
   font-weight: 900;
@@ -620,7 +620,7 @@
 }
 
 .hero__status-list dd {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-weight: 900;
 }
 
@@ -755,7 +755,7 @@
 :root[data-theme='light'] .hero__hook::before,
 :root[data-theme='light'] .hero__status-bar,
 :root[data-theme='light'] .hero__status-list dd {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
 }
 
 :root[data-theme='light'] .hero__hook {
@@ -793,7 +793,7 @@
 }
 
 :root[data-theme='light'] .hero__status-list dd {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
 }
 
 :root[data-theme='light'] .hero__status-bar {
@@ -845,7 +845,7 @@
 }
 
 :host-context(:root[data-theme='light']) .hero__status-list dd {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
 }
 
 :root[data-color-vision='achromatopsia'] .hero__status,
@@ -1475,7 +1475,7 @@
   display: grid;
   align-content: start;
   gap: 0.55rem;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-display);
   line-height: 0.78;
 }
@@ -1907,7 +1907,7 @@
 }
 
 .skills__level-meta b {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
 }
 
 .skills__level-track {
@@ -2092,7 +2092,7 @@
   font-family: var(--bp-font-mono);
   font-size: clamp(0.78rem, 1vw, 0.92rem);
   letter-spacing: 0.1em;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
 }
 
 .capabilities__signal span {
@@ -2241,7 +2241,7 @@
   position: absolute;
   right: var(--bp-space-4);
   top: var(--bp-space-4);
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: 1.7rem;
   transition: transform 180ms var(--bp-ease-out);
 }
@@ -2256,7 +2256,7 @@
   height: 2.1rem;
   border: 1px solid var(--bp-color-border-strong);
   background: color-mix(in srgb, var(--bp-color-bg) 84%, var(--bp-color-accent) 10%);
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: 1.2rem;
   font-style: normal;
   box-shadow: 3px 3px 0 color-mix(in srgb, var(--bp-color-accent) 20%, transparent);
@@ -2459,7 +2459,7 @@
 
 .faq__item summary::after {
   content: '+';
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-family: var(--bp-font-display);
   font-size: 1.55rem;
   line-height: 1;
@@ -2469,7 +2469,7 @@
 .faq__item:hover summary,
 .faq__item:focus-within summary,
 .faq__item[open] summary {
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   padding-left: calc(var(--bp-space-4) + 0.35rem);
 }
 
@@ -3135,7 +3135,7 @@
   z-index: 2;
   width: min(30rem, 52vw);
   height: 76%;
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   opacity: 0.78;
   transform: translateX(-50%);
 }
@@ -3416,7 +3416,7 @@
   border: 1px solid var(--bp-color-border-strong);
   padding: 0.28rem 0.5rem;
   background: var(--bp-color-surface-solid);
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   font-size: clamp(1.7rem, 3vw, 2.8rem);
   line-height: 0.9;
   letter-spacing: -0.06em;
@@ -3425,7 +3425,7 @@
 
 .hero__eyebrow {
 
-  color: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
   letter-spacing: 0.24em;
 }
 

@@ -183,6 +183,11 @@ Portfolio/
 │   │   │   │   ├── project-visual.component.html
 │   │   │   │   ├── project-visual.component.scss
 │   │   │   │   └── project-visual.component.ts
+│   │   │   ├── repository-gate/
+│   │   │   │   ├── repository-gate.component.html
+│   │   │   │   ├── repository-gate.component.scss
+│   │   │   │   ├── repository-gate.component.spec.ts
+│   │   │   │   └── repository-gate.component.ts
 │   │   │   ├── reveal-text/
 │   │   │   │   ├── reveal-text.component.html
 │   │   │   │   ├── reveal-text.component.scss

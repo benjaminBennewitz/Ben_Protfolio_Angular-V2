@@ -242,11 +242,23 @@
 .footer__social {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
   gap: 0.58rem;
   align-self: end;
-  justify-self: end;
+  justify-self: stretch;
+  width: 100%;
   margin-top: var(--bp-space-2);
+}
+
+.footer__social-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.58rem;
+  margin: 0 0 0 auto;
+  padding: 0;
+  list-style: none;
 }
 
 .footer__social a {
@@ -482,7 +494,7 @@
   }
 
   .footer__social {
-    justify-self: start;
+    justify-self: stretch;
   }
 
   .footer__pet-trigger {

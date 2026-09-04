@@ -1275,9 +1275,28 @@ export interface FooterContent {
   readonly petDialogText: string;
   /** Zugängliche Beschriftung des Fülli-Auslösers. */
   readonly petDialogLabel: string;
+  /** Texte der spielerischen Repository-Zugangsabfrage. */
+  readonly repositoryGate: RepositoryGateContent;
   /** Social-Media-Links als kompakte Icon-Gruppe im Footer. */
   readonly socialLinks: readonly FooterLink[];
   readonly columns: readonly FooterColumn[];
+}
+
+/** Übersetzte Texte der Repository-Sicherheitsfrage im Footer. */
+export interface RepositoryGateContent {
+  readonly triggerLabel: string;
+  readonly dialogTitle: string;
+  readonly dialogLabel: string;
+  readonly closeLabel: string;
+  readonly intro: string;
+  readonly question: string;
+  readonly inputLabel: string;
+  readonly inputPlaceholder: string;
+  readonly submitLabel: string;
+  readonly failureTitle: string;
+  readonly failureLabel: string;
+  readonly failureText: string;
+  readonly failureCloseLabel: string;
 }
 
 /** Linkgruppe im Footer. */

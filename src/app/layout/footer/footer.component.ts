@@ -10,12 +10,13 @@ import { RouterLink } from '@angular/router';
 import { AchievementService } from '../../core/services/achievement.service';
 import { LanguageService } from '../../core/services/language.service';
 import { GlobalOverlayService } from '../../core/services/global-overlay.service';
+import { RepositoryGateComponent } from '../../shared/repository-gate/repository-gate.component';
 
 /** Footer mit semantischen Linkgruppen. */
 @Component({
   selector: 'bp-footer',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, RepositoryGateComponent],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss',
 })

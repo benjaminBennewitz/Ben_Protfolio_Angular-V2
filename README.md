@@ -65,6 +65,7 @@ Der Fokus liegt auf einer Seite, die visuell auffällt und technisch kontrollier
 | **Accessibility** | Einstellbare Kontrast-, Farbseh-, Schrift-, Komfort- und Bewegungspräferenzen |
 | **Sprachen** | Vollständige deutsche und englische Inhalte mit persistentem Language Switcher |
 | **Navigation** | Sticky Navigation, Custom Cursor, Scroll-to-top und Body-basiertes Scroll-Snap |
+| **Repository-Gate** | Footer-Button ohne `href`, Sicherheitsfrage und rotierender 5er-Fehlerstapel |
 | **Motion** | Viewport-gesteuerte Reveals, gestaffelte Animationen und performante Deferred Sections |
 | **Case Studies** | Eigenständige Detailseiten mit Architektur, Rolle, Stack, Highlights und visuellen Szenen |
 | **SEO** | Routenbezogene Metadaten, Canonicals, strukturierte Daten, Sitemap und Social-Meta-Tags |

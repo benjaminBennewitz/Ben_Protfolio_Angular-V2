@@ -1,0 +1,51 @@
+<!-- src/app/shared/repository-gate/repository-gate.component.html -->
+<button #repositoryTrigger class="repository-gate__trigger" type="button" aria-haspopup="dialog"
+  [attr.aria-label]="copy().triggerLabel" [title]="copy().triggerLabel" (click)="openRepositoryGate()">
+  <span class="repository-gate__code" aria-hidden="true">&lt;/&gt;</span>
+  <span>Repo</span>
+</button>
+
+<dialog #repositoryDialog class="repository-gate" [attr.aria-label]="copy().dialogLabel"
+  (cancel)="closeRepositoryGate($event)" (click)="closeFromBackdrop($event)">
+  <section class="repository-gate__window bp-dos-window" aria-labelledby="repository-gate-title">
+    <div class="bp-dos-window__bar">
+      <span id="repository-gate-title">{{ copy().dialogTitle }}</span>
+      <button type="button" [attr.aria-label]="copy().closeLabel" (click)="closeRepositoryGate()">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+
+    <div class="bp-dos-window__body repository-gate__body">
+      <p>{{ copy().intro }}</p>
+
+      <form class="repository-gate__form" novalidate (submit)="verifyAnswer($event, answerInput)">
+        <label for="repository-answer">{{ copy().question }}</label>
+        <span class="repository-gate__input-label" id="repository-answer-hint">{{ copy().inputLabel }}</span>
+        <div class="repository-gate__input-row">
+          <input #answerInput id="repository-answer" name="repository-answer" type="text" required autocomplete="off"
+            autocapitalize="none" spellcheck="false" [attr.aria-describedby]="'repository-answer-hint'"
+            [attr.aria-invalid]="hasFailed() ? 'true' : null" [placeholder]="copy().inputPlaceholder">
+          <button class="repository-gate__submit" type="submit">{{ copy().submitLabel }}</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <div class="repository-gate__failures" aria-live="assertive" aria-relevant="additions removals">
+    @for (failureId of failures(); track failureId; let index = $index) {
+    <section class="repository-gate__failure bp-dos-window" role="alert"
+      [attr.aria-label]="copy().failureLabel" [style.--failure-offset]="failureOffset(index)"
+      [style.--failure-rotation]="failureRotation(index)">
+      <div class="bp-dos-window__bar">
+        <span>{{ copy().failureTitle }}</span>
+        <button type="button" [attr.aria-label]="copy().failureCloseLabel" (click)="dismissFailure(failureId)">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="bp-dos-window__body repository-gate__failure-body">
+        <strong>{{ copy().failureText }}</strong>
+      </div>
+    </section>
+    }
+  </div>
+</dialog>

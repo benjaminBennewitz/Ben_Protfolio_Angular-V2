@@ -8,7 +8,6 @@
   <strong>Design. Code. Repeat.</strong><br />
   An interactive Angular experience combining full-stack web development, UI/UX, graphic design, and controlled chaos.
 </p>
-
 <p align="center">
   <a href="https://b2folio.de/"><img alt="Live: b2folio.de" src="https://img.shields.io/badge/Live-b2folio.de-a7ff19?style=for-the-badge&labelColor=111111" /></a>
   <img alt="Angular" src="https://img.shields.io/badge/Angular-21.2-DD0031?style=for-the-badge&logo=angular&logoColor=white" />
@@ -92,8 +91,10 @@ The goal is a website that remains technically controlled while making a strong 
 | **Intranet** | Modular Angular and Django platform with apps, roles, permissions, communication, and automation |
 | **Dein Fußabdruck** | Interactive web and game project featuring simulation, animation, and gameplay logic |
 | **Carly Managed** | Project management application with boards, tasks, live synchronization, and gamification |
-| **Globi Flow** | Local lab-report assistance system with OCR, review workflows, a knowledge base, and patient reports |
+| **Globi Flow** | Published local lab-report assistance system with OCR, review workflows, hardened upload isolation, controlled knowledge content, and patient reports · [Live Demo](https://globi-flow-demo.b2folio.de/) · [Frontend](https://github.com/benjaminBennewitz/Globi-Flow.git) |
 | **Graphic Design Catalog** | Editorial design catalog with a reader, gallery, and creative project presentation |
+
+> **Globi Flow backend:** The Django backend is maintained in a separate private repository and is intentionally not published or linked from the portfolio. This reduces unnecessary disclosure of server-side implementation and deployment details. Repository privacy is an additional defense-in-depth measure and does not replace runtime hardening, secret isolation, access controls, or server segmentation.
 
 ## Architecture
 
@@ -218,7 +219,7 @@ Neither the public visibility of this repository nor any technically available G
 
 ## Author
 
-**Benjamin Bennewitz**  
+**Benjamin Bennewitz**
 Full-Stack Web Development · UI/UX · Graphic Design
 
 [b2folio.de](https://b2folio.de/) · [GitHub](https://github.com/benjaminBennewitz) · [LinkedIn](https://www.linkedin.com/in/benjamin-bennewitz-116a12306/)

@@ -959,7 +959,7 @@ export interface ProjectLiveDemo {
   readonly text: string;
   /** Optionaler externer Link zur Demo. */
   readonly url?: string;
-  /** Optionaler externer Link zum zugehörigen GitHub-Repository. */
+  /** Optionaler externer Link zum Repository. */
   readonly githubUrl?: string;
 }
 

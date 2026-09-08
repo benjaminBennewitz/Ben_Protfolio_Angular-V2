@@ -623,6 +623,13 @@
 }
 
 
+.project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost {
+  border-color: color-mix(in srgb, var(--project-detail-blue), transparent 28%);
+  background: var(--bp-color-surface-solid);
+  color: var(--bp-color-text);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--project-detail-blue), transparent 72%);
+}
+
 .project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost:hover,
 .project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost:focus-visible {
   border-color: var(--project-detail-blue);
@@ -633,15 +640,6 @@
 .project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost:hover > *,
 .project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost:focus-visible > * {
   color: var(--bp-color-on-accent) !important;
-}
-
-:root[data-theme='light'] .project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost,
-:host-context(:root[data-theme='light']) .project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost,
-:host-context([data-theme='light']) .project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost {
-  border-color: color-mix(in srgb, var(--project-detail-blue), transparent 42%);
-  background: color-mix(in srgb, var(--bp-color-surface-solid) 92%, var(--project-detail-blue) 8%);
-  color: var(--project-detail-ink);
-  box-shadow: 4px 4px 0 color-mix(in srgb, var(--project-detail-blue), transparent 82%);
 }
 
 .project-detail[data-project='blutanalyse'] .project-detail__demo {
@@ -1315,7 +1313,7 @@
 }
 
 .project-detail__blood-pipeline .project-detail__section-head {
-  margin-bottom: 0;
+  margin-bottom: clamp(2.25rem, 4vw, 3.75rem);
 }
 
 @keyframes project-detail-blood-object-float {

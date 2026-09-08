@@ -622,6 +622,28 @@
   display: block;
 }
 
+
+.project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost:hover,
+.project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost:focus-visible {
+  border-color: var(--project-detail-blue);
+  background: var(--bp-color-accent-hover);
+  color: var(--bp-color-on-accent) !important;
+}
+
+.project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost:hover > *,
+.project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost:focus-visible > * {
+  color: var(--bp-color-on-accent) !important;
+}
+
+:root[data-theme='light'] .project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost,
+:host-context(:root[data-theme='light']) .project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost,
+:host-context([data-theme='light']) .project-detail[data-project='blutanalyse'] .project-detail__hero-actions .bp-button--ghost {
+  border-color: color-mix(in srgb, var(--project-detail-blue), transparent 42%);
+  background: color-mix(in srgb, var(--bp-color-surface-solid) 92%, var(--project-detail-blue) 8%);
+  color: var(--project-detail-ink);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--project-detail-blue), transparent 82%);
+}
+
 .project-detail[data-project='blutanalyse'] .project-detail__demo {
   scroll-snap-align: none;
   scroll-snap-stop: normal;

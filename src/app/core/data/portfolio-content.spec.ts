@@ -60,6 +60,7 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(footprint?.availability).toBe('coming-soon');
     expect(globiFlow?.availability).toBeUndefined();
     expect(globiFlow?.liveDemo?.status).toBe('available');
+    expect(globiFlow?.liveDemo?.githubUrl).toBe('https://github.com/benjaminBennewitz/Globi-Flow.git');
   });
 
   it.each(SUPPORTED_LANGUAGES)('liefert drei Telemetry-Charts pro technischer Case Study für %s', (language) => {

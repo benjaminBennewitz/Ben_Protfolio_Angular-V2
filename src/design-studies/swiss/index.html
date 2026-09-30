@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="[WHATWESEE] – Swiss-inspired photography journal design study by Benjamin Bennewitz.">
+  <meta name="theme-color" content="#f4f3ef">
+  <title>[WHATWESEE] — A Photography Journal</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/favicon.svg">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+  <div class="site-shell">
+    <header class="site-header" data-header>
+      <a class="brand" href="#top" aria-label="[WHATWESEE] Startseite">[WHATWESEE]</a>
+
+      <nav class="desktop-nav" aria-label="Hauptnavigation">
+        <a href="#landscape">01 Landscape</a>
+        <a href="#architecture">02 Architecture</a>
+        <a href="#animals">03 Animals</a>
+        <a href="#flowers">04 Flowers</a>
+      </nav>
+
+      <span class="journal-label">A Photography Journal</span>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menü öffnen">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile Navigation" aria-hidden="true">
+        <a href="#top">Index</a>
+        <a href="#landscape">01 Landscape</a>
+        <a href="#architecture">02 Architecture</a>
+        <a href="#animals">03 Animals</a>
+        <a href="#flowers">04 Flowers</a>
+        <a href="#about">About</a>
+        <a href="#journal">Journal</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero__copy" data-reveal="up">
+          <h1 id="hero-title"><span>[WHAT</span><span>WESEE]</span></h1>
+          <p class="hero__kicker">A Photography Journal<br>by Benjamin Bennewitz</p>
+
+          <div class="hero__intro">
+            <span class="index-number">01</span>
+            <p>Images from places, structures, creatures and details that shape the way we see the world.</p>
+          </div>
+          <p class="hero__statement">Four perspectives.<br>One continuous observation.</p>
+        </div>
+
+        <div class="hero-slider" data-slider aria-roledescription="carousel" aria-label="Fotografische Themen">
+          <div class="hero-slider__viewport">
+            <figure class="hero-slide is-active" data-slide data-category="Landscape" data-index="01 / 04" data-meta="ALPS · EUROPE · 2024">
+              <img src="./assets/images/hero-landscape.webp" alt="Berglandschaft als temporäres Demo-Motiv" width="577" height="340" fetchpriority="high">
+              <span class="hero-slide__accent hero-slide__accent--blue" aria-hidden="true"></span>
+              <figcaption>DEMO IMAGE · FINAL PHOTOGRAPHY © BENJAMIN BENNEWITZ</figcaption>
+            </figure>
+            <figure class="hero-slide" data-slide data-category="Architecture" data-index="02 / 04" data-meta="STRUCTURES · EUROPE · 2024">
+              <img src="./assets/images/archive-architecture.webp" alt="Brutalistische Architektur als temporäres Demo-Motiv" width="424" height="177">
+              <span class="hero-slide__accent hero-slide__accent--blue" aria-hidden="true"></span>
+              <figcaption>DEMO IMAGE · FINAL PHOTOGRAPHY © BENJAMIN BENNEWITZ</figcaption>
+            </figure>
+            <figure class="hero-slide" data-slide data-category="Animals" data-index="03 / 04" data-meta="WILDLIFE · EUROPE · 2024">
+              <img src="./assets/images/archive-animals.webp" alt="Hirsch als temporäres Demo-Motiv" width="421" height="162">
+              <span class="hero-slide__accent hero-slide__accent--green" aria-hidden="true"></span>
+              <figcaption>DEMO IMAGE · FINAL PHOTOGRAPHY © BENJAMIN BENNEWITZ</figcaption>
+            </figure>
+            <figure class="hero-slide" data-slide data-category="Flowers" data-index="04 / 04" data-meta="BOTANICAL · EUROPE · 2024">
+              <img src="./assets/images/archive-flowers.webp" alt="Blüte als temporäres Demo-Motiv" width="424" height="178">
+              <span class="hero-slide__accent hero-slide__accent--green" aria-hidden="true"></span>
+              <figcaption>DEMO IMAGE · FINAL PHOTOGRAPHY © BENJAMIN BENNEWITZ</figcaption>
+            </figure>
+          </div>
+
+          <div class="hero-slider__meta" aria-live="polite">
+            <span data-slider-category>Landscape</span>
+            <span data-slider-meta>ALPS · EUROPE · 2024</span>
+            <strong data-slider-index>01 / 04</strong>
+          </div>
+
+          <div class="hero-slider__controls">
+            <button type="button" data-slider-prev aria-label="Vorheriges Bild">←</button>
+            <button type="button" data-slider-next aria-label="Nächstes Bild">→</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="about section" id="about" aria-labelledby="about-title">
+        <div class="section-rule"><span>About</span></div>
+        <div class="about__grid">
+          <header class="about__title" data-reveal="left">
+            <h2 id="about-title">The<br>Project</h2>
+            <p>A personal photographic journal and ongoing archive by Benjamin Bennewitz.</p>
+          </header>
+
+          <div class="about__questions">
+            <article data-reveal="up">
+              <h3>What<br>is [WHATWESEE]?</h3>
+              <p>A visual journal of places, structures, creatures and details that shape the way I see the world. It is an ongoing archive of photographs, observations and stories.</p>
+            </article>
+            <article data-reveal="up">
+              <h3>Why<br>do I photograph?</h3>
+              <p>To pay closer attention. Photography helps me notice the extraordinary in the ordinary and to understand my surroundings more deeply.</p>
+            </article>
+            <article data-reveal="up">
+              <h3>How<br>do I work?</h3>
+              <p>With curiosity, patience and a focus on light, composition and genuine moments. I work mostly on location and let the subject guide the process.</p>
+            </article>
+            <article data-reveal="up">
+              <h3>Where<br>do I photograph?</h3>
+              <p>Primarily in Germany and across Europe: in mountains, cities, rural areas and in between. Familiar places, new places and the spaces in between.</p>
+            </article>
+            <article data-reveal="up">
+              <h3>Focus<br>what do I document?</h3>
+              <p>Landscapes, architecture, animals and flowers. Four perspectives that often intersect and together form a broader understanding of the world around us.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="archive section" id="archive" aria-labelledby="archive-title">
+        <h2 class="visually-hidden" id="archive-title">Photography archive</h2>
+
+        <article class="archive-item archive-item--left" id="landscape" data-reveal="left">
+          <div class="archive-item__copy">
+            <span class="archive-item__number">01</span>
+            <h3>Landscape</h3>
+            <p>Vast spaces, quiet moments and ever-changing light. Landscapes remind us how small we are — and how much there is to discover.</p>
+            <div class="archive-item__meta"><span>12 images</span><span>→</span></div>
+          </div>
+          <figure class="archive-item__figure">
+            <img src="./assets/images/archive-landscape.webp" alt="Berglandschaft als temporäres Demo-Motiv" width="545" height="171" loading="lazy">
+            <span class="image-accent image-accent--green" aria-hidden="true"></span>
+            <figcaption>DEMO IMAGE · FINAL PHOTOGRAPHY © BENJAMIN BENNEWITZ</figcaption>
+          </figure>
+          <aside class="archive-item__keywords" aria-label="Schlagwörter">
+            <span>Places</span><span>Light</span><span>Weather</span><span>Perspective</span>
+          </aside>
+        </article>
+
+        <article class="archive-item archive-item--right" id="architecture" data-reveal="right">
+          <figure class="archive-item__figure">
+            <img src="./assets/images/archive-architecture.webp" alt="Architektur als temporäres Demo-Motiv" width="424" height="177" loading="lazy">
+            <span class="image-accent image-accent--blue" aria-hidden="true"></span>
+            <figcaption>DEMO IMAGE · FINAL PHOTOGRAPHY © BENJAMIN BENNEWITZ</figcaption>
+          </figure>
+          <div class="archive-item__copy">
+            <span class="archive-item__number">02</span>
+            <h3>Architecture</h3>
+            <p>Built environments tell stories of time, purpose and people. In lines, surfaces and spaces we find a different kind of nature.</p>
+            <div class="archive-item__meta"><span>10 images</span><span>→</span></div>
+          </div>
+          <aside class="archive-item__keywords" aria-label="Schlagwörter">
+            <span>Structures</span><span>Spaces</span><span>Details</span><span>Contrasts</span>
+          </aside>
+        </article>
+
+        <article class="archive-item archive-item--left" id="animals" data-reveal="left">
+          <div class="archive-item__copy">
+            <span class="archive-item__number">03</span>
+            <h3>Animals</h3>
+            <p>Encounters, moments and behaviour. Animals show us presence, instinct and a raw kind of truth.</p>
+            <div class="archive-item__meta"><span>08 images</span><span>→</span></div>
+          </div>
+          <figure class="archive-item__figure">
+            <img src="./assets/images/archive-animals.webp" alt="Hirsch als temporäres Demo-Motiv" width="421" height="162" loading="lazy">
+            <span class="image-accent image-accent--green" aria-hidden="true"></span>
+            <figcaption>DEMO IMAGE · FINAL PHOTOGRAPHY © BENJAMIN BENNEWITZ</figcaption>
+          </figure>
+          <aside class="archive-item__keywords" aria-label="Schlagwörter">
+            <span>Movement</span><span>Behaviour</span><span>Habitats</span><span>Moments</span>
+          </aside>
+        </article>
+
+        <article class="archive-item archive-item--right" id="flowers" data-reveal="right">
+          <figure class="archive-item__figure">
+            <img src="./assets/images/archive-flowers.webp" alt="Blüte als temporäres Demo-Motiv" width="424" height="178" loading="lazy">
+            <span class="image-accent image-accent--green" aria-hidden="true"></span>
+            <figcaption>DEMO IMAGE · FINAL PHOTOGRAPHY © BENJAMIN BENNEWITZ</figcaption>
+          </figure>
+          <div class="archive-item__copy">
+            <span class="archive-item__number">04</span>
+            <h3>Flowers</h3>
+            <p>Small details, complex structures and quiet beauty. Flowers reveal an intricate world that often remains unseen.</p>
+            <div class="archive-item__meta"><span>10 images</span><span>→</span></div>
+          </div>
+          <aside class="archive-item__keywords" aria-label="Schlagwörter">
+            <span>Details</span><span>Structures</span><span>Colours</span><span>Seasons</span>
+          </aside>
+        </article>
+      </section>
+
+      <section class="journal section" id="journal" aria-labelledby="journal-title">
+        <div class="section-rule"><span>Journal</span><span>Thoughts on photography, places and perspective.</span></div>
+        <div class="journal__grid">
+          <header data-reveal="left">
+            <h2 id="journal-title">On Looking<br>Closer</h2>
+            <p>A short reflection on what photography means to me — and why the details often matter most.</p>
+          </header>
+
+          <div class="journal__article" data-reveal="up">
+            <p><strong>Photography is a way of paying attention.</strong> It slows me down, makes me look closer and helps me see what is often overlooked. A mountain ridge, a concrete wall, an animal's gaze or the structure of a flower — each of these can reveal an entire world when we take the time to really look.</p>
+            <p>I am drawn to the tension between the vast and the small, the natural and the built, the obvious and the hidden. These contrasts remind me that everything is connected, and that beauty often lies in the details.</p>
+            <p>Through this project, I want to create a growing archive of moments that inspire curiosity and a deeper appreciation for our surroundings. Not as a documentation of extraordinary events, but as a collection of honest observations from everyday life and from places worth remembering.</p>
+            <blockquote>“The more we look,<br>the more we find.”<cite>— Benjamin Bennewitz</cite></blockquote>
+          </div>
+
+          <figure class="journal__figure" data-reveal="right">
+            <img src="./assets/images/article-landscape.webp" alt="Bergmotiv als temporäres Demo-Motiv" width="141" height="125" loading="lazy">
+            <figcaption>DEMO IMAGE · FINAL PHOTOGRAPHY © BENJAMIN BENNEWITZ</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="cta" aria-labelledby="cta-title">
+        <div class="cta__copy" data-reveal="left">
+          <span>Next</span>
+          <h2 id="cta-title">Explore<br>The Archive</h2>
+          <p>Four perspectives. A growing collection.<br>More to see, more to discover.</p>
+        </div>
+        <figure class="cta__visual" data-reveal="right">
+          <img src="./assets/images/cta-landscape.webp" alt="Panorama als temporäres Demo-Motiv" width="495" height="135" loading="lazy">
+          <span class="cta__overlay" aria-hidden="true"></span>
+          <figcaption>DEMO IMAGE · FINAL PHOTOGRAPHY © BENJAMIN BENNEWITZ</figcaption>
+          <div class="cta__actions">
+            <a href="#archive">View selected series <span>→</span></a>
+            <a href="#top">Back to index <span>↑</span></a>
+          </div>
+        </figure>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer__brand">
+        <strong>[WHATWESEE]</strong>
+        <p>© 2026 Benjamin Bennewitz.<br>All rights reserved.</p>
+      </div>
+
+      <nav class="footer__sitemap" aria-label="Sitemap">
+        <strong>Sitemap</strong>
+        <a href="#landscape">01 Landscape</a>
+        <a href="#architecture">02 Architecture</a>
+        <a href="#animals">03 Animals</a>
+        <a href="#flowers">04 Flowers</a>
+        <a href="#about">About</a>
+        <a href="#journal">Journal</a>
+      </nav>
+
+      <div class="footer__legal">
+        <strong>Hinweis</strong>
+        <p>Designstudie ohne Verkaufsabsicht. Die derzeitigen Demo-Motive sind Platzhalter und werden durch eigene Fotografien ersetzt.</p>
+        <div class="footer__links">
+          <a href="#" data-placeholder-link>Impressum</a>
+          <a href="#" data-placeholder-link>Datenschutz</a>
+        </div>
+      </div>
+
+      <div class="footer__credit">
+        <strong>Design & Development</strong>
+        <p>Benjamin Bennewitz <a href="https://b2folio.de" target="_blank" rel="noopener noreferrer">[B²] · design.code.repeat.</a></p>
+      </div>
+    </footer>
+  </div>
+
+  <button class="scroll-top" type="button" data-scroll-top aria-label="Nach oben scrollen">↑</button>
+</body>
+</html>

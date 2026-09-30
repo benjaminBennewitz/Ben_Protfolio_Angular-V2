@@ -318,63 +318,78 @@ folio/
 │   │   │   └── og-portfolio-preview.svg
 │   │   └── favicon.svg
 │   ├── design-studies/
-│   │   └── brutalism/
+│   │   ├── brutalism/
+│   │   │   ├── assets/
+│   │   │   │   ├── branding/
+│   │   │   │   │   ├── favicon-dark.svg
+│   │   │   │   │   ├── favicon-light.svg
+│   │   │   │   │   ├── icon-rf.svg
+│   │   │   │   │   ├── logo-dark.svg
+│   │   │   │   │   └── logo-light.svg
+│   │   │   │   ├── doodles/
+│   │   │   │   │   ├── bars.svg
+│   │   │   │   │   ├── circle.svg
+│   │   │   │   │   ├── cross.svg
+│   │   │   │   │   ├── doodle-arrow.svg
+│   │   │   │   │   ├── doodle-arrow-repeat.svg
+│   │   │   │   │   ├── subwoofer.svg
+│   │   │   │   │   ├── swirl.svg
+│   │   │   │   │   ├── wave.svg
+│   │   │   │   │   ├── wave-v2.svg
+│   │   │   │   │   └── zick-zack.svg
+│   │   │   │   ├── fonts/
+│   │   │   │   │   ├── Anton/
+│   │   │   │   │   │   ├── Anton-Regular.ttf
+│   │   │   │   │   │   └── OFL.txt
+│   │   │   │   │   └── IBM_Plex_Mono/
+│   │   │   │   │       ├── IBMPlexMono-Bold.ttf
+│   │   │   │   │       ├── IBMPlexMono-BoldItalic.ttf
+│   │   │   │   │       ├── IBMPlexMono-ExtraLight.ttf
+│   │   │   │   │       ├── IBMPlexMono-ExtraLightItalic.ttf
+│   │   │   │   │       ├── IBMPlexMono-Italic.ttf
+│   │   │   │   │       ├── IBMPlexMono-Light.ttf
+│   │   │   │   │       ├── IBMPlexMono-LightItalic.ttf
+│   │   │   │   │       ├── IBMPlexMono-Medium.ttf
+│   │   │   │   │       ├── IBMPlexMono-MediumItalic.ttf
+│   │   │   │   │       ├── IBMPlexMono-Regular.ttf
+│   │   │   │   │       ├── IBMPlexMono-SemiBold.ttf
+│   │   │   │   │       ├── IBMPlexMono-SemiBoldItalic.ttf
+│   │   │   │   │       ├── IBMPlexMono-Thin.ttf
+│   │   │   │   │       ├── IBMPlexMono-ThinItalic.ttf
+│   │   │   │   │       └── OFL.txt
+│   │   │   │   ├── icons/
+│   │   │   │   │   ├── arrow-right-left.svg
+│   │   │   │   │   ├── arrow-up-down.svg
+│   │   │   │   │   ├── barcode.svg
+│   │   │   │   │   ├── cloud.svg
+│   │   │   │   │   ├── instagram.svg
+│   │   │   │   │   ├── pause.svg
+│   │   │   │   │   ├── play.svg
+│   │   │   │   │   ├── plus.svg
+│   │   │   │   │   ├── world.svg
+│   │   │   │   │   └── youtube.svg
+│   │   │   │   └── img/
+│   │   │   │       ├── experience-section.webp
+│   │   │   │       ├── hero.webp
+│   │   │   │       ├── line-up-section.webp
+│   │   │   │       ├── location-section.webp
+│   │   │   │       └── meets-section.webp
+│   │   │   └── index.html
+│   │   └── swiss/
 │   │       ├── assets/
-│   │       │   ├── branding/
-│   │       │   │   ├── favicon-dark.svg
-│   │       │   │   ├── favicon-light.svg
-│   │       │   │   ├── icon-rf.svg
-│   │       │   │   ├── logo-dark.svg
-│   │       │   │   └── logo-light.svg
-│   │       │   ├── doodles/
-│   │       │   │   ├── bars.svg
-│   │       │   │   ├── circle.svg
-│   │       │   │   ├── cross.svg
-│   │       │   │   ├── doodle-arrow.svg
-│   │       │   │   ├── doodle-arrow-repeat.svg
-│   │       │   │   ├── subwoofer.svg
-│   │       │   │   ├── swirl.svg
-│   │       │   │   ├── wave.svg
-│   │       │   │   ├── wave-v2.svg
-│   │       │   │   └── zick-zack.svg
-│   │       │   ├── fonts/
-│   │       │   │   ├── Anton/
-│   │       │   │   │   ├── Anton-Regular.ttf
-│   │       │   │   │   └── OFL.txt
-│   │       │   │   └── IBM_Plex_Mono/
-│   │       │   │       ├── IBMPlexMono-Bold.ttf
-│   │       │   │       ├── IBMPlexMono-BoldItalic.ttf
-│   │       │   │       ├── IBMPlexMono-ExtraLight.ttf
-│   │       │   │       ├── IBMPlexMono-ExtraLightItalic.ttf
-│   │       │   │       ├── IBMPlexMono-Italic.ttf
-│   │       │   │       ├── IBMPlexMono-Light.ttf
-│   │       │   │       ├── IBMPlexMono-LightItalic.ttf
-│   │       │   │       ├── IBMPlexMono-Medium.ttf
-│   │       │   │       ├── IBMPlexMono-MediumItalic.ttf
-│   │       │   │       ├── IBMPlexMono-Regular.ttf
-│   │       │   │       ├── IBMPlexMono-SemiBold.ttf
-│   │       │   │       ├── IBMPlexMono-SemiBoldItalic.ttf
-│   │       │   │       ├── IBMPlexMono-Thin.ttf
-│   │       │   │       ├── IBMPlexMono-ThinItalic.ttf
-│   │       │   │       └── OFL.txt
-│   │       │   ├── icons/
-│   │       │   │   ├── arrow-right-left.svg
-│   │       │   │   ├── arrow-up-down.svg
-│   │       │   │   ├── barcode.svg
-│   │       │   │   ├── cloud.svg
-│   │       │   │   ├── instagram.svg
-│   │       │   │   ├── pause.svg
-│   │       │   │   ├── play.svg
-│   │       │   │   ├── plus.svg
-│   │       │   │   ├── world.svg
-│   │       │   │   └── youtube.svg
-│   │       │   └── img/
-│   │       │       ├── experience-section.webp
-│   │       │       ├── hero.webp
-│   │       │       ├── line-up-section.webp
-│   │       │       ├── location-section.webp
-│   │       │       └── meets-section.webp
-│   │       └── index.html
+│   │       │   ├── images/
+│   │       │   │   ├── archive-animals.webp
+│   │       │   │   ├── archive-architecture.webp
+│   │       │   │   ├── archive-flowers.webp
+│   │       │   │   ├── archive-landscape.webp
+│   │       │   │   ├── article-landscape.webp
+│   │       │   │   ├── cta-landscape.webp
+│   │       │   │   └── hero-landscape.webp
+│   │       │   └── favicon.svg
+│   │       ├── index.html
+│   │       ├── README.md
+│   │       ├── script.js
+│   │       └── styles.css
 │   ├── environments/
 │   │   ├── environment.production.ts
 │   │   └── environment.ts

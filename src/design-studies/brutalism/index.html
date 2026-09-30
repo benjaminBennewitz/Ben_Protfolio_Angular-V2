@@ -48,6 +48,9 @@
     .eyebrow,.meta,.nav,.ticker,.mini,.footer{font-size:clamp(.69rem,.78vw,.88rem);text-transform:uppercase;letter-spacing:.02em}
     .display{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.86;letter-spacing:-.025em;margin:0}
     .doodle{position:absolute;pointer-events:none;user-select:none;z-index:3}
+    .ai-image{position:relative}
+    .ai-image-tag{position:absolute;right:10px;bottom:10px;z-index:6;display:inline-flex;align-items:center;min-height:26px;padding:5px 8px;border:1px solid currentColor;background:rgba(9,9,9,.88);color:var(--white);font-family:var(--mono);font-size:.62rem;font-weight:700;line-height:1;letter-spacing:.06em;text-transform:uppercase;pointer-events:none;backdrop-filter:blur(4px)}
+    .ai-image-tag::before{content:"AI";display:grid;place-items:center;width:18px;height:18px;margin-right:7px;background:var(--orange);color:var(--ink);font-size:.56rem;letter-spacing:0}
     .reveal{opacity:0;transform:translateY(28px);transition:opacity .72s cubic-bezier(.2,.75,.2,1),transform .72s cubic-bezier(.2,.75,.2,1);transition-delay:var(--reveal-delay,0ms)}
     .reveal.reveal--left{transform:translateX(-30px)}
     .reveal.reveal--right{transform:translateX(30px)}
@@ -196,8 +199,9 @@
           </div>
           <img class="doodle wave" src="./assets/doodles/wave.svg" alt="" aria-hidden="true">
         </div>
-        <div class="hero-media">
+        <div class="hero-media ai-image">
           <img src="./assets/img/hero.webp" alt="Brutalistische Betonarchitektur mit Festivaltechnik und Lautsprecherturm">
+          <span class="ai-image-tag">Generated image</span>
           <div class="hero-coords mini">51.3407°N<br>12.3731°E</div>
           <img class="doodle swirl" src="./assets/doodles/swirl.svg" alt="" aria-hidden="true">
         </div>
@@ -208,7 +212,7 @@
       </div>
 
       <section class="intro" aria-labelledby="intro-title">
-        <div class="intro-media"><img src="./assets/img/meets-section.webp" alt="Menschenmenge vor einer Bühne in roher Betonarchitektur"><img class="doodle arrow" src="./assets/doodles/doodle-arrow-repeat.svg" alt="" aria-hidden="true"></div>
+        <div class="intro-media ai-image"><img src="./assets/img/meets-section.webp" alt="Menschenmenge vor einer Bühne in roher Betonarchitektur"><span class="ai-image-tag">Generated image</span><img class="doodle arrow" src="./assets/doodles/doodle-arrow-repeat.svg" alt="" aria-hidden="true"></div>
         <div class="intro-copy">
           <p class="eyebrow">01 / Collision</p>
           <h2 class="display" id="intro-title">Music<br>meets<br>space</h2>
@@ -228,7 +232,7 @@
             <img class="doodle circle" src="./assets/doodles/circle.svg" alt="" aria-hidden="true">
           </div>
         </article>
-        <div class="panel panel-image lineup-image"><img src="./assets/img/line-up-section.webp" alt="DJ-Performance im Gegenlicht"></div>
+        <div class="panel panel-image lineup-image ai-image"><img src="./assets/img/line-up-section.webp" alt="DJ-Performance im Gegenlicht"><span class="ai-image-tag">Generated image</span></div>
 
         <article class="panel location" id="location">
           <div class="location-inner">
@@ -238,7 +242,7 @@
               <p>Ein verlorener Industrieraum, neu gedacht: rohe Flächen, lange Sichtachsen, massive Resonanzkörper.</p>
               <p class="mini">Concrete / steel / sound / light</p>
             </div>
-            <div class="location-media"><img src="./assets/img/location-section.webp" alt="Monumentale Betonbauten eines ehemaligen Industrieareals"><img class="doodle cross" src="./assets/doodles/cross.svg" alt="" aria-hidden="true"></div>
+            <div class="location-media ai-image"><img src="./assets/img/location-section.webp" alt="Monumentale Betonbauten eines ehemaligen Industrieareals"><span class="ai-image-tag">Generated image</span><img class="doodle cross" src="./assets/doodles/cross.svg" alt="" aria-hidden="true"></div>
           </div>
         </article>
 
@@ -249,7 +253,7 @@
             <div class="audio-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
           </div>
         </article>
-        <div class="panel panel-image experience-image"><img src="./assets/img/experience-section.webp" alt="Lichtinstallation mit orangefarbenen Ringen in einem industriellen Raum"></div>
+        <div class="panel panel-image experience-image ai-image"><img src="./assets/img/experience-section.webp" alt="Lichtinstallation mit orangefarbenen Ringen in einem industriellen Raum"><span class="ai-image-tag">Generated image</span></div>
 
         <article class="panel statement" id="about">
           <div class="statement-copy"><p class="eyebrow">05 / Statement</p><h3>Not just a festival</h3><p>Eine Plattform für Klang, Raum und neue Perspektiven.</p></div>
@@ -272,7 +276,7 @@
       </section>
 
       <section class="newsletter" id="newsletter" aria-labelledby="newsletter-title">
-        <div class="newsletter-media"><img src="./assets/img/hero.webp" alt="Detail der RAW/FORM Festivalarchitektur"></div>
+        <div class="newsletter-media ai-image"><img src="./assets/img/hero.webp" alt="Detail der RAW/FORM Festivalarchitektur"><span class="ai-image-tag">Generated image</span></div>
         <div class="newsletter-copy"><p class="eyebrow">08 / Signal</p><h2 class="display" id="newsletter-title">Stay in the loop.</h2><p>Lineup drops, installations, ticket releases. No noise unless it matters.</p><form class="signup" onsubmit="event.preventDefault()" aria-label="Newsletter Demo"><label class="sr-only" for="email" style="position:absolute;clip:rect(0 0 0 0);clip-path:inset(50%);width:1px;height:1px;overflow:hidden">E-Mail-Adresse</label><input id="email" type="email" placeholder="YOUR EMAIL ADDRESS" autocomplete="email"><button type="submit">Sign up →</button></form></div>
       </section>
     </main>
@@ -290,6 +294,7 @@
           <p class="footer-heading" id="footer-legal">Rechtliches</p>
           <nav class="footer-links" aria-label="Rechtliche Links"><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a></nav>
           <p class="footer-study-note">RAW/FORM ist eine fiktive Designstudie und kein reales Festival. Sämtliche Termine, Preise, Tickets, Künstlernamen und Angebote dienen ausschließlich der visuellen Demonstration. Es bestehen keine Verkaufsabsichten und es findet kein Ticketverkauf statt.</p>
+          <p class="footer-study-note"><strong>Bildhinweis:</strong> Alle fotografischen Bildmotive dieser Designstudie wurden mit künstlicher Intelligenz generiert. Logos, Doodles, Layout und Frontend sind davon ausgenommen.</p>
         </section>
         <section class="footer-column" aria-labelledby="footer-social">
           <p class="footer-heading" id="footer-social">Social Media</p>

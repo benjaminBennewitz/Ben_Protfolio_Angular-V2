@@ -388,6 +388,12 @@ export interface ProjectsContent {
   readonly detailLabel: string;
   /** Hinweis für vorübergehend deaktivierte Case-Studies. */
   readonly projectComingSoonLabel: string;
+  /** Zugängliche Beschriftung der Sprungnavigation innerhalb der Portfolio-Seite. */
+  readonly jumpNavAriaLabel: string;
+  /** Beschriftung des Sprunglinks zu den Case Studies. */
+  readonly caseStudiesJumpLabel: string;
+  /** Beschriftung des Sprunglinks zu den Design Studies. */
+  readonly designStudiesJumpLabel: string;
   /** Kleine Beschriftung der eigenständigen visuellen Designstudien. */
   readonly designStudiesEyebrow: string;
   /** Überschrift der Design-Study-Section. */

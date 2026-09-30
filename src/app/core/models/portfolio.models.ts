@@ -388,6 +388,16 @@ export interface ProjectsContent {
   readonly detailLabel: string;
   /** Hinweis für vorübergehend deaktivierte Case-Studies. */
   readonly projectComingSoonLabel: string;
+  /** Kleine Beschriftung der eigenständigen visuellen Designstudien. */
+  readonly designStudiesEyebrow: string;
+  /** Überschrift der Design-Study-Section. */
+  readonly designStudiesTitle: string;
+  /** Einordnung der Designstudien als visuelle Experimente außerhalb der Case Studies. */
+  readonly designStudiesText: string;
+  /** Beschriftung des Links zur eigenständigen Designstudie. */
+  readonly designStudiesOpenLabel: string;
+  /** Zugängliche Beschriftung der Design-Study-Liste. */
+  readonly designStudiesAriaLabel: string;
   readonly overviewLabel: string;
   readonly typeLabel: string;
   readonly yearLabel: string;

@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RAW/FORM – fiktive Brutalism Design Study für ein Festival zwischen elektronischer Musik, Architektur, Kunst und Community.">
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#f2f0e9">
+  <title>RAW/FORM — Brutalism Design Study</title>
+  <link rel="icon" href="./assets/branding/favicon-light.svg" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="./assets/branding/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+  <style>
+    @font-face{font-family:"Anton";src:url("./assets/fonts/Anton/Anton-Regular.ttf") format("truetype");font-display:swap;font-style:normal;font-weight:400}
+    @font-face{font-family:"IBM Plex Mono";src:url("./assets/fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf") format("truetype");font-display:swap;font-style:normal;font-weight:400}
+    @font-face{font-family:"IBM Plex Mono";src:url("./assets/fonts/IBM_Plex_Mono/IBMPlexMono-SemiBold.ttf") format("truetype");font-display:swap;font-style:normal;font-weight:600}
+    @font-face{font-family:"IBM Plex Mono";src:url("./assets/fonts/IBM_Plex_Mono/IBMPlexMono-Bold.ttf") format("truetype");font-display:swap;font-style:normal;font-weight:700}
+
+    :root{
+      --paper:#f2f0e9;
+      --ink:#090909;
+      --muted:#d9d7d0;
+      --line:#1a1a1a;
+      --orange:#fc4a02;
+      --white:#f7f6f1;
+      --max:1920px;
+      --header-h:73px;
+      --pad:clamp(16px,2.2vw,36px);
+      --border:1px solid var(--line);
+      --display:"Anton",Impact,sans-serif;
+      --mono:"IBM Plex Mono",ui-monospace,monospace;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;overflow-x:clip;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--orange) var(--ink)}
+    body{margin:0;background:var(--ink);color:var(--ink);font-family:var(--mono);overflow-x:clip;overflow-y:visible}
+    html::-webkit-scrollbar{width:7px}
+    html::-webkit-scrollbar-track{background:var(--ink)}
+    html::-webkit-scrollbar-thumb{background:var(--orange);border-radius:0}
+    html::-webkit-scrollbar-button{display:none;width:0;height:0}
+    img,svg{display:block;max-width:100%}
+    a{color:inherit;text-decoration:none}
+    button,input{font:inherit}
+    :focus-visible{outline:3px solid var(--orange);outline-offset:4px}
+    ::selection{background:var(--orange);color:var(--ink)}
+    .site{width:min(100%,var(--max));margin-inline:auto;background:var(--paper)}
+    @media (min-width:1921px){.site{border-inline:var(--border)}}
+    .skip-link{position:absolute;left:8px;top:-64px;z-index:1000;background:var(--orange);padding:12px 16px;font-weight:700}.skip-link:focus{top:8px}
+    .eyebrow,.meta,.nav,.ticker,.mini,.footer{font-size:clamp(.69rem,.78vw,.88rem);text-transform:uppercase;letter-spacing:.02em}
+    .display{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.86;letter-spacing:-.025em;margin:0}
+    .doodle{position:absolute;pointer-events:none;user-select:none;z-index:3}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .72s cubic-bezier(.2,.75,.2,1),transform .72s cubic-bezier(.2,.75,.2,1);transition-delay:var(--reveal-delay,0ms)}
+    .reveal.reveal--left{transform:translateX(-30px)}
+    .reveal.reveal--right{transform:translateX(30px)}
+    .reveal.is-visible{opacity:1;transform:translate(0,0)}
+    /* Bilder bleiben auch ohne funktionierenden Observer sichtbar. */
+    .image-reveal{overflow:hidden}
+    .image-reveal > img:not(.doodle){opacity:.72;transform:scale(1.035);transition:opacity .7s ease,transform 1s cubic-bezier(.16,.82,.23,1),filter .5s ease}
+    .image-reveal.is-visible > img:not(.doodle){opacity:1;transform:scale(1)}
+    .lineup-image.image-reveal > img:not(.doodle){opacity:.72;transform:scale(1.34);transform-origin:52% 43%}
+    .lineup-image.image-reveal.is-visible > img:not(.doodle){opacity:1;transform:scale(1.34)}
+    .lineup-image.image-reveal:hover > img:not(.doodle){transform:scale(1.56);filter:grayscale(.05) saturate(1.65) contrast(1.14)}
+
+    /* HEADER */
+    .header{position:sticky;top:0;z-index:50;display:grid;grid-template-columns:minmax(360px,1.1fr) minmax(500px,1fr) minmax(164px,auto);height:var(--header-h);border-bottom:var(--border);background:rgba(242,240,233,.96);backdrop-filter:blur(10px);overflow:hidden}
+    .brand{height:100%;padding:8px var(--pad);border-right:var(--border);display:flex;align-items:center;gap:18px;min-width:0;overflow:hidden}.brand img{width:auto;height:clamp(42px,2.8vw,52px);max-width:230px;flex:0 0 auto}
+    .brand small{max-width:120px;line-height:1.05;font-size:.68rem;text-transform:uppercase;white-space:nowrap;overflow:hidden}
+    .nav{display:grid;grid-template-columns:repeat(4,minmax(108px,1fr));height:100%;min-width:0}.nav a{position:relative;display:grid;place-items:center;height:100%;min-width:0;padding:0 clamp(10px,1vw,22px);border-left:var(--border);overflow:hidden;isolation:isolate;transition:color .25s ease}.nav a::before{content:"";position:absolute;inset:0;background:var(--ink);transform:translateY(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1);z-index:-1}.nav a:hover{color:var(--white)}.nav a:hover::before{transform:translateY(0)}
+    .ticket-link{position:relative;height:100%;background:var(--orange);font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;padding:0 clamp(18px,2vw,34px);border-left:var(--border);overflow:hidden;isolation:isolate;white-space:nowrap;transition:color .25s ease}.ticket-link::before{content:"";position:absolute;inset:0;background:var(--ink);transform:translateX(-102%);transition:transform .32s cubic-bezier(.2,.8,.2,1);z-index:-1}.ticket-link span{transition:transform .25s ease}.ticket-link:hover{color:var(--white)}.ticket-link:hover::before{transform:translateX(0)}.ticket-link:hover span{transform:translate(4px,-4px)}
+    .menu-toggle{display:none;height:100%;width:72px;border:0;border-left:var(--border);background:var(--paper);color:var(--ink);padding:0;cursor:pointer;position:relative;z-index:52}
+    .menu-toggle__icon{display:grid;gap:6px;width:28px;margin:auto}.menu-toggle__icon span{display:block;width:100%;height:2px;background:currentColor;transform-origin:center;transition:transform .28s ease,opacity .2s ease}
+    .menu-toggle[aria-expanded="true"] .menu-toggle__icon span:nth-child(1){transform:translateY(8px) rotate(45deg)}.menu-toggle[aria-expanded="true"] .menu-toggle__icon span:nth-child(2){opacity:0}.menu-toggle[aria-expanded="true"] .menu-toggle__icon span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+    .mobile-nav{display:none}
+
+    /* HERO */
+    .hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);height:calc(100svh - var(--header-h));min-height:620px;max-height:calc(100svh - var(--header-h));border-bottom:var(--border)}
+    .hero-copy{position:relative;padding:clamp(22px,3vw,50px) var(--pad);overflow:hidden;border-right:var(--border);display:flex;flex-direction:column;justify-content:space-between;isolation:isolate}
+    .hero-copy::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(242,240,233,.96),rgba(242,240,233,.84));z-index:-1}
+    .hero-title{font-size:clamp(5.2rem,13vw,14rem);max-width:7ch}
+    .hero-title .slash{color:var(--orange)}
+    .hero-kicker{font-family:var(--display);font-size:clamp(1.45rem,2vw,2.6rem);text-transform:uppercase;line-height:.92;max-width:10ch;margin-left:auto}
+    .hero-bottom{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}.hero-meta{font-family:var(--display);font-size:clamp(1.35rem,1.8vw,2.2rem);text-transform:uppercase;line-height:.95}.hero-cta{position:relative;border:2px solid var(--ink);padding:12px 18px;font-weight:700;transform:rotate(-2deg);overflow:visible;transition:transform .25s ease,color .25s ease,background .25s ease}.hero-cta::after{content:"";position:absolute;inset:-8px -12px;border:3px solid var(--orange);border-radius:50%;transform:rotate(5deg);transition:transform .3s ease,inset .3s ease}.hero-cta:hover{background:var(--ink);color:var(--white);transform:rotate(0deg) translateY(-3px)}.hero-cta:hover::after{transform:rotate(-4deg) scale(1.08);inset:-10px -14px}
+    .hero-media{position:relative;overflow:hidden;min-height:0;background:var(--ink)}.hero-media > img:not(.doodle){width:100%;height:100%;object-fit:cover;object-position:center 44%;filter:grayscale(1) contrast(1.08)}.hero-coords{position:absolute;right:18px;top:18px;color:var(--white);text-align:right;z-index:4}
+    .hero-media .doodle.swirl{right:-8%;top:18%;width:42%;filter:invert(38%) sepia(100%) saturate(3449%) hue-rotate(6deg) brightness(101%) contrast(104%)}.hero-copy .doodle.wave{right:7%;top:40%;width:30%}
+
+    /* TICKER */
+    .ticker{display:flex;align-items:center;gap:20px;background:var(--ink);color:var(--white);padding:16px var(--pad);border-bottom:var(--border);overflow:hidden;white-space:nowrap}.ticker strong{color:var(--orange)}.ticker span{display:inline-flex;align-items:center;gap:20px}.ticker span::after{content:"→";color:var(--orange);font-size:1.2rem}
+
+    /* SPLIT INTRO */
+    .intro{display:grid;grid-template-columns:1.05fr .95fr;border-bottom:var(--border)}
+    .intro-media{position:relative;min-height:560px;overflow:hidden;border-right:var(--border);background:var(--ink)}.intro-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.13)}
+    .intro-copy{background:var(--orange);padding:clamp(28px,4vw,68px);position:relative;overflow:hidden}.intro-copy h2{font-size:clamp(4rem,8vw,9rem);max-width:5ch}.intro-copy p{max-width:36ch;font-size:clamp(.95rem,1vw,1.15rem);line-height:1.55;margin-top:30px}.intro-copy .wave{right:5%;bottom:8%;width:36%}.intro-media .arrow{left:4%;bottom:6%;width:24%}
+
+    /* SECTIONS GRID */
+    .study-grid{display:grid;grid-template-columns:repeat(12,1fr);border-bottom:var(--border)}
+    .panel{position:relative;min-width:0;border-right:var(--border);border-bottom:var(--border);overflow:hidden}.panel:nth-child(3n){border-right:0}
+    .panel-copy{padding:clamp(24px,3vw,52px)}.panel h3{font-family:var(--display);font-size:clamp(3.4rem,6vw,7rem);line-height:.88;text-transform:uppercase;margin:0 0 28px}.panel ul{list-style:none;margin:0;padding:0;font-size:clamp(.85rem,.92vw,1.05rem);line-height:1.65;text-transform:uppercase}.experience h3{font-size:clamp(2.8rem,4.1vw,5.15rem);letter-spacing:-.035em}.panel ul li{display:flex;justify-content:space-between;gap:24px}.panel ul li span:last-child{opacity:.65}
+    .panel-image{min-height:480px;background:#111}.panel-image img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.08);transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .5s ease}.panel-image:hover img{transform:scale(1.045);filter:grayscale(.75) contrast(1.12)}.lineup-image img{transform:scale(1.34);transform-origin:52% 43%}.lineup-image:hover img{transform:scale(1.56);filter:grayscale(.05) saturate(1.65) contrast(1.14)}
+    .experience-image img{transform:scale(1.28);transform-origin:50% 50%;filter:grayscale(.35) saturate(1.25) contrast(1.12)}.experience-image:hover img{transform:scale(1.48);filter:grayscale(0) saturate(1.75) contrast(1.16)}
+    .experience-image.image-reveal > img:not(.doodle){transform:scale(1.28);opacity:.78}.experience-image.image-reveal.is-visible > img:not(.doodle){transform:scale(1.28);opacity:1}.experience-image.image-reveal:hover > img:not(.doodle){transform:scale(1.48);filter:grayscale(0) saturate(1.75) contrast(1.16)}
+    .lineup{grid-column:span 3}.lineup-image{grid-column:span 3}.location{grid-column:span 6}.experience{grid-column:span 3}.experience-image{grid-column:span 3}.statement{grid-column:span 6}
+    .location-inner{display:grid;grid-template-columns:1fr 1.3fr;min-height:480px}.location-copy{padding:clamp(24px,3vw,52px);border-right:var(--border)}.location-media{position:relative}.location-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1)}
+    .statement{display:grid;grid-template-columns:1fr 1fr;min-height:480px}.statement-copy{padding:clamp(24px,3vw,52px);border-right:var(--border)}.statement-copy h3{font-size:clamp(4rem,7vw,8rem);max-width:6ch}.statement-media{position:relative;background:var(--paper);display:grid;place-items:center;padding:40px}.statement-media .wave{width:80%;position:static}.statement-note{position:absolute;right:8%;bottom:15%;max-width:16ch;font-family:var(--mono);font-size:clamp(1rem,1.25vw,1.6rem);font-style:italic;transform:rotate(-8deg)}
+    .panel .circle{right:5%;top:4%;width:90px}.panel .cross{right:5%;bottom:4%;width:70px}
+    .audio-bars{position:absolute;right:5%;bottom:7%;width:min(38%,180px);height:96px;display:flex;align-items:flex-end;gap:clamp(4px,.45vw,8px);pointer-events:none}
+    .audio-bars span{flex:1;min-width:4px;height:var(--bar-height);background:var(--orange);transform-origin:center bottom;animation:audio-level var(--bar-speed) ease-in-out infinite alternate;animation-delay:var(--bar-delay)}
+    .audio-bars span:nth-child(1){--bar-height:38%;--bar-speed:.72s;--bar-delay:-.15s}.audio-bars span:nth-child(2){--bar-height:76%;--bar-speed:.58s;--bar-delay:-.38s}.audio-bars span:nth-child(3){--bar-height:52%;--bar-speed:.83s;--bar-delay:-.22s}.audio-bars span:nth-child(4){--bar-height:92%;--bar-speed:.64s;--bar-delay:-.51s}.audio-bars span:nth-child(5){--bar-height:64%;--bar-speed:.78s;--bar-delay:-.31s}.audio-bars span:nth-child(6){--bar-height:100%;--bar-speed:.55s;--bar-delay:-.43s}.audio-bars span:nth-child(7){--bar-height:46%;--bar-speed:.86s;--bar-delay:-.27s}.audio-bars span:nth-child(8){--bar-height:80%;--bar-speed:.69s;--bar-delay:-.59s}.audio-bars span:nth-child(9){--bar-height:58%;--bar-speed:.74s;--bar-delay:-.11s}
+    @keyframes audio-level{0%{transform:scaleY(.28);opacity:.66}45%{transform:scaleY(.82);opacity:1}100%{transform:scaleY(1.08);opacity:.88}}
+
+    /* MANIFESTO */
+    .manifesto{display:grid;grid-template-columns:.8fr 1.2fr;background:var(--ink);color:var(--white);border-bottom:var(--border)}.manifesto-left{padding:clamp(28px,4vw,70px);border-right:1px solid #444}.manifesto h2{font-size:clamp(4.4rem,9vw,10rem);max-width:7ch}.manifesto-right{padding:clamp(28px,4vw,70px);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px}.manifesto-right p{line-height:1.6;margin:0}.manifesto-tag{color:var(--orange);font-weight:700;text-transform:uppercase}
+
+    /* TICKETS */
+    .tickets{border-bottom:var(--border)}.tickets-head{display:flex;justify-content:space-between;gap:24px;padding:clamp(26px,3vw,48px) var(--pad);border-bottom:var(--border);align-items:end}.tickets-head h2{font-size:clamp(4rem,8vw,9rem)}.ticket-grid{display:grid;grid-template-columns:repeat(3,1fr)}.ticket-card{padding:clamp(24px,3vw,46px);border-right:var(--border);min-height:320px;display:flex;flex-direction:column}.ticket-card:last-child{border-right:0}.ticket-card.featured{background:var(--orange)}.ticket-card h3{font-family:var(--display);font-size:clamp(2.4rem,3.4vw,4rem);text-transform:uppercase;margin:0}.price{font-family:var(--display);font-size:clamp(3.4rem,5vw,6rem);margin:.2em 0}.ticket-card p{line-height:1.5;max-width:32ch}.ticket-card a{position:relative;margin-top:auto;border:2px solid currentColor;padding:13px 16px;font-weight:700;text-transform:uppercase;display:flex;justify-content:space-between;overflow:hidden;transition:color .28s ease,transform .28s ease}.ticket-card a::before{content:"";position:absolute;inset:0;background:var(--ink);transform:translateX(-102%);transition:transform .3s cubic-bezier(.2,.8,.2,1);z-index:-1}.ticket-card a{isolation:isolate}.ticket-card a span{position:relative;z-index:1}.ticket-card a span{transition:transform .25s ease}.ticket-card a:hover{color:var(--white);transform:translateY(-3px)}.ticket-card a:hover::before{transform:translateX(0)}.ticket-card a:hover span{transform:translateX(6px)}
+
+    /* NEWSLETTER */
+    .newsletter{display:grid;grid-template-columns:1fr 1fr;border-bottom:var(--border)}.newsletter-media{min-height:420px;border-right:var(--border)}.newsletter-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1)}.newsletter-copy{padding:clamp(28px,4vw,60px)}.newsletter-copy h2{font-size:clamp(4rem,7vw,8rem)}.signup{display:flex;margin-top:30px;border:2px solid var(--ink);max-width:620px}.signup input{flex:1;min-width:0;border:0;background:transparent;padding:16px}.signup button{border:0;border-left:2px solid var(--ink);background:var(--orange);padding:16px 22px;font-weight:700;text-transform:uppercase;cursor:pointer;transition:background .25s ease,color .25s ease,letter-spacing .25s ease}.signup button:hover{background:var(--ink);color:var(--white);letter-spacing:.06em}.signup input{transition:background .25s ease}.signup input:focus{background:rgba(252,74,2,.08);outline:0}
+
+    /* FOOTER */
+    .footer{background:var(--ink);color:var(--white)}
+    .footer-main{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid #333}
+    .footer-column{padding:clamp(30px,3vw,50px) var(--pad);min-width:0}.footer-column + .footer-column{border-left:1px solid #333}
+    .footer-heading{margin:0 0 22px;color:var(--orange);font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+    .footer-logo{width:min(280px,100%);margin-bottom:22px}.footer-links{display:grid;gap:10px;align-content:start}.footer-links a{width:max-content;max-width:100%;transition:color .2s ease,transform .2s ease}.footer-links a:hover{color:var(--orange);transform:translateX(4px)}
+    .footer-study-note{max-width:58ch;margin:18px 0 0;color:#bdbdbd;line-height:1.55;text-transform:none;font-size:.78rem}
+    .social{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}.social-link{display:grid;place-items:center;width:46px;height:46px;border:1px solid #454545;transition:border-color .2s ease,background .2s ease}.social-link:hover{border-color:var(--orange);background:rgba(252,74,2,.08)}
+    .social-icon{display:block;width:24px;height:24px;background:var(--white);transition:background .2s ease;mask-repeat:no-repeat;mask-position:center;mask-size:contain;-webkit-mask-repeat:no-repeat;-webkit-mask-position:center;-webkit-mask-size:contain}.social-link:hover .social-icon{background:var(--orange);animation:social-pulse .62s ease-in-out infinite alternate}.social-icon--instagram{mask-image:url("./assets/icons/instagram.svg");-webkit-mask-image:url("./assets/icons/instagram.svg")}.social-icon--youtube{mask-image:url("./assets/icons/youtube.svg");-webkit-mask-image:url("./assets/icons/youtube.svg")}.social-icon--soundcloud{mask-image:url("./assets/icons/cloud.svg");-webkit-mask-image:url("./assets/icons/cloud.svg")}
+    @keyframes social-pulse{0%{transform:scale(1)}100%{transform:scale(1.18)}}
+    .footer-bottom{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:18px var(--pad);color:#bdbdbd;border-top:1px solid #181818;text-transform:none}.footer-bottom a{color:var(--white);text-decoration:underline;text-underline-offset:4px;transition:color .2s ease}.footer-bottom a:hover{color:var(--orange)}.author-tag{color:var(--white)}.author-tag strong{color:var(--orange)}
+
+    /* COOKIE DEMO */
+    .cookie-demo{position:fixed;left:clamp(12px,2vw,26px);bottom:clamp(12px,2vw,26px);z-index:90;width:min(560px,calc(100vw - 24px));background:var(--paper);color:var(--ink);border:2px solid var(--ink);box-shadow:10px 10px 0 var(--orange);padding:20px;transform:translateY(calc(100% + 50px));opacity:0;pointer-events:none;transition:transform .42s cubic-bezier(.2,.8,.2,1),opacity .3s ease}
+    .cookie-demo.is-visible{transform:translateY(0);opacity:1;pointer-events:auto}.cookie-demo__head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:14px}.cookie-demo__title{font-family:var(--display);font-size:2.2rem;line-height:.9;text-transform:uppercase;margin:0}.cookie-demo__index{font-size:.72rem;font-weight:700;color:var(--orange)}.cookie-demo p{margin:0;max-width:58ch;line-height:1.45;font-size:.78rem;text-transform:none}.cookie-demo__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}.cookie-demo button{border:2px solid var(--ink);background:transparent;color:var(--ink);padding:10px 14px;font-weight:700;text-transform:uppercase;cursor:pointer;transition:background .2s ease,color .2s ease,transform .2s ease}.cookie-demo button:last-child{background:var(--orange)}.cookie-demo button:hover{background:var(--ink);color:var(--white);transform:translateY(-2px)}
+
+    /* SCROLL TO TOP */
+    .scroll-top{position:fixed;right:clamp(12px,2vw,26px);bottom:clamp(12px,2vw,26px);z-index:85;width:48px;height:48px;border:2px solid var(--ink);background:var(--orange);color:var(--ink);display:grid;place-items:center;font-size:1.25rem;font-weight:700;cursor:pointer;opacity:0;transform:translateY(18px);pointer-events:none;transition:opacity .24s ease,transform .24s ease,background .2s ease,color .2s ease,bottom .3s ease}.scroll-top.is-visible{opacity:1;transform:translateY(0);pointer-events:auto}.scroll-top:hover{background:var(--ink);color:var(--white)}body.cookie-open .scroll-top{bottom:184px}
+
+    @media (max-width:1100px){
+      .header{grid-template-columns:minmax(0,1fr) auto auto;overflow:visible}.brand{border-right:0}.nav{display:none}.brand img{height:46px}.menu-toggle{display:block}
+      .mobile-nav{position:fixed;top:var(--header-h);left:0;right:0;z-index:49;display:grid;align-content:start;background:var(--ink);color:var(--white);height:calc(100dvh - var(--header-h));padding:18px;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-12px);transition:opacity .25s ease,transform .28s cubic-bezier(.2,.8,.2,1),visibility .25s ease}
+      .mobile-nav.is-open{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
+      .mobile-nav a{position:relative;display:flex;align-items:center;justify-content:space-between;min-height:76px;padding:0 18px;border-bottom:1px solid #383838;font-family:var(--display);font-size:clamp(2.4rem,8vw,4.8rem);line-height:1;text-transform:uppercase;overflow:hidden;isolation:isolate}.mobile-nav a:first-child{border-top:1px solid #383838}.mobile-nav a::after{content:"↗";font-family:var(--mono);font-size:1.1rem;color:var(--orange)}.mobile-nav a::before{content:"";position:absolute;inset:0;background:var(--orange);transform:translateX(-102%);transition:transform .3s cubic-bezier(.2,.8,.2,1);z-index:-1}.mobile-nav a:hover,.mobile-nav a:focus-visible{color:var(--ink)}.mobile-nav a:hover::before,.mobile-nav a:focus-visible::before{transform:translateX(0)}
+      html.menu-open{overflow:hidden}
+      .hero{grid-template-columns:1fr;height:auto;min-height:0;max-height:none}.hero-copy{border-right:0;border-bottom:var(--border);min-height:640px}.hero-media{min-height:560px}
+      .intro{grid-template-columns:1fr}.intro-media{border-right:0;border-bottom:var(--border)}
+      .lineup,.lineup-image,.experience,.experience-image{grid-column:span 6}.location,.statement{grid-column:span 12}
+      .manifesto{grid-template-columns:1fr}.manifesto-left{border-right:0;border-bottom:1px solid #444}
+      .newsletter{grid-template-columns:1fr}.newsletter-media{border-right:0;border-bottom:var(--border)}
+    }
+
+    @media (max-width:720px){
+      .site{border-inline:0}.header{position:sticky}.brand{padding:12px 16px}.brand small{display:none}.brand img{width:150px}.ticket-link{padding:0 14px;font-size:.74rem}.menu-toggle{width:60px}.mobile-nav{padding:12px}.mobile-nav a{min-height:68px;padding-inline:14px}
+      .hero-copy{padding:26px 16px;min-height:540px}.hero-title{font-size:clamp(4.8rem,28vw,8.2rem)}.hero-kicker{font-size:1.45rem;margin-left:0;margin-top:20px}.hero-bottom{grid-template-columns:1fr}.hero-cta{justify-self:start}.hero-media{min-height:480px}.hero-copy .doodle.wave{width:46%;right:-8%;top:42%}.hero-media .doodle.swirl{width:55%;right:-15%}
+      .ticker{padding-inline:16px;overflow:auto;scrollbar-width:none}.ticker::-webkit-scrollbar{display:none}
+      .intro-media{min-height:420px}.intro-copy{padding:34px 16px}.intro-copy h2{font-size:clamp(4.2rem,21vw,7rem)}
+      .study-grid{display:block}.panel{border-right:0}.lineup,.lineup-image,.location,.experience,.experience-image,.statement{width:100%}.panel-image{min-height:390px}.location-inner,.statement{grid-template-columns:1fr}.location-copy,.statement-copy{border-right:0;border-bottom:var(--border)}.location-media{min-height:360px}.statement-media{min-height:320px}.panel h3{font-size:clamp(3.7rem,18vw,6rem)}
+      .manifesto-right{grid-template-columns:1fr}.manifesto{padding:0}.manifesto h2{font-size:clamp(4.6rem,21vw,7rem)}
+      .tickets-head{padding-inline:16px;align-items:flex-start;flex-direction:column}.ticket-grid{grid-template-columns:1fr}.ticket-card{border-right:0;border-bottom:var(--border)}.ticket-card:last-child{border-bottom:0}
+      .newsletter-copy{padding:34px 16px}.newsletter-copy h2{font-size:clamp(4rem,19vw,6.5rem)}.signup{flex-direction:column}.signup button{border-left:0;border-top:2px solid var(--ink)}
+      .footer-main{grid-template-columns:1fr}.footer-column{padding:30px 16px}.footer-column + .footer-column{border-left:0;border-top:1px solid #333}.footer-bottom{padding-inline:16px;flex-direction:column;align-items:flex-start}.footer-logo{width:240px}.cookie-demo{left:12px;bottom:12px;padding:16px;box-shadow:7px 7px 0 var(--orange)}body.cookie-open .scroll-top{bottom:226px}
+    }
+
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}.image-reveal > img:not(.doodle){opacity:1!important}.lineup-image.image-reveal > img:not(.doodle){transform:scale(1.34)!important}.experience-image.image-reveal > img:not(.doodle){transform:scale(1.28)!important}.audio-bars span{transform:scaleY(var(--static-scale,.72))}.audio-bars span:nth-child(2n){--static-scale:.45}.audio-bars span:nth-child(3n){--static-scale:.92}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Zum Inhalt springen</a>
+  <div class="site">
+    <header class="header">
+      <a class="brand" href="#top" aria-label="RAW/FORM Startseite">
+        <img src="./assets/branding/logo-dark.svg" alt="RAW/FORM">
+        <small>Music<br>Architecture<br>People</small>
+      </a>
+      <nav class="nav" aria-label="Hauptnavigation">
+        <a href="#lineup">Lineup</a><a href="#location">Location</a><a href="#experience">Experience</a><a href="#about">About</a>
+      </nav>
+      <a class="ticket-link" href="#tickets">Tickets <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Menü öffnen">
+        <span class="menu-toggle__icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+    </header>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile Navigation" aria-hidden="true">
+      <a href="#lineup">Lineup</a><a href="#location">Location</a><a href="#experience">Experience</a><a href="#about">About</a><a href="#tickets">Tickets</a>
+    </nav>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div>
+            <p class="eyebrow">A three-day festival / Leipzig, Germany</p>
+            <h1 class="display hero-title" id="hero-title">RAW<span class="slash">/</span><br>FORM</h1>
+          </div>
+          <p class="hero-kicker">Electronic music architecture art community</p>
+          <div class="hero-bottom">
+            <div class="hero-meta">16—18 Aug 2025<br>Alte Betonwerke<br>Leipzig</div>
+            <a class="hero-cta" href="#tickets">Get tickets ↗</a>
+          </div>
+          <img class="doodle wave" src="./assets/doodles/wave.svg" alt="" aria-hidden="true">
+        </div>
+        <div class="hero-media">
+          <img src="./assets/img/hero.webp" alt="Brutalistische Betonarchitektur mit Festivaltechnik und Lautsprecherturm">
+          <div class="hero-coords mini">51.3407°N<br>12.3731°E</div>
+          <img class="doodle swirl" src="./assets/doodles/swirl.svg" alt="" aria-hidden="true">
+        </div>
+      </section>
+
+      <div class="ticker" aria-label="Festivalinformationen">
+        <strong>RAW/FORM</strong><span>3 days</span><span>4 stages</span><span>60+ artists</span><span>installations</span><span>talks</span><span>food</span><span>community</span>
+      </div>
+
+      <section class="intro" aria-labelledby="intro-title">
+        <div class="intro-media"><img src="./assets/img/meets-section.webp" alt="Menschenmenge vor einer Bühne in roher Betonarchitektur"><img class="doodle arrow" src="./assets/doodles/doodle-arrow-repeat.svg" alt="" aria-hidden="true"></div>
+        <div class="intro-copy">
+          <p class="eyebrow">01 / Collision</p>
+          <h2 class="display" id="intro-title">Music<br>meets<br>space</h2>
+          <p>RAW/FORM bringt elektronische Musik, brutalistische Räume und visuelle Kultur zusammen. Drei Tage, an denen Klang nicht dekoriert, sondern Architektur neu lesbar macht.</p>
+          <img class="doodle wave" src="./assets/doodles/wave-v2.svg" alt="" aria-hidden="true">
+        </div>
+      </section>
+
+      <section class="study-grid" aria-label="Festivalprogramm">
+        <article class="panel lineup" id="lineup">
+          <div class="panel-copy">
+            <p class="eyebrow">02 / Lineup</p>
+            <h3>Lineup</h3>
+            <ul>
+              <li><span>KAS:ST</span><span>FR</span></li><li><span>Tama Sumo</span><span>DE</span></li><li><span>RHR</span><span>UK</span></li><li><span>Nørbak</span><span>PT</span></li><li><span>Ella Void</span><span>DE</span></li><li><span>Phase O</span><span>NL</span></li><li><span>+ many more</span><span>→</span></li>
+            </ul>
+            <img class="doodle circle" src="./assets/doodles/circle.svg" alt="" aria-hidden="true">
+          </div>
+        </article>
+        <div class="panel panel-image lineup-image"><img src="./assets/img/line-up-section.webp" alt="DJ-Performance im Gegenlicht"></div>
+
+        <article class="panel location" id="location">
+          <div class="location-inner">
+            <div class="location-copy">
+              <p class="eyebrow">03 / Location</p><h3>Location</h3>
+              <p><strong>Alte Betonwerke Leipzig</strong></p>
+              <p>Ein verlorener Industrieraum, neu gedacht: rohe Flächen, lange Sichtachsen, massive Resonanzkörper.</p>
+              <p class="mini">Concrete / steel / sound / light</p>
+            </div>
+            <div class="location-media"><img src="./assets/img/location-section.webp" alt="Monumentale Betonbauten eines ehemaligen Industrieareals"><img class="doodle cross" src="./assets/doodles/cross.svg" alt="" aria-hidden="true"></div>
+          </div>
+        </article>
+
+        <article class="panel experience" id="experience">
+          <div class="panel-copy">
+            <p class="eyebrow">04 / Experience</p><h3>Experience</h3>
+            <ul><li><span>Installations</span></li><li><span>Art spaces</span></li><li><span>Food & drinks</span></li><li><span>Talks & panels</span></li><li><span>Workshops</span></li><li><span>Community</span></li></ul>
+            <div class="audio-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+        </article>
+        <div class="panel panel-image experience-image"><img src="./assets/img/experience-section.webp" alt="Lichtinstallation mit orangefarbenen Ringen in einem industriellen Raum"></div>
+
+        <article class="panel statement" id="about">
+          <div class="statement-copy"><p class="eyebrow">05 / Statement</p><h3>Not just a festival</h3><p>Eine Plattform für Klang, Raum und neue Perspektiven.</p></div>
+          <div class="statement-media"><img class="wave" src="./assets/doodles/wave.svg" alt="" aria-hidden="true"><p class="statement-note">A platform for a louder tomorrow.</p></div>
+        </article>
+      </section>
+
+      <section class="manifesto" aria-labelledby="manifesto-title">
+        <div class="manifesto-left"><p class="eyebrow">06 / Manifesto</p><h2 class="display" id="manifesto-title">A harder culture for a brighter tomorrow.</h2></div>
+        <div class="manifesto-right"><p><span class="manifesto-tag">Sound is material.</span><br>Wir behandeln Klang nicht als Hintergrund, sondern als räumliches Element. Druck, Resonanz und Stille gehören zum Entwurf.</p><p><span class="manifesto-tag">Space is active.</span><br>Beton, Höhe, Distanz und Leere werden Teil der Performance. Architektur ist kein Container, sondern Mitspieler.</p><p><span class="manifesto-tag">People complete it.</span><br>Ohne Publikum bleibt jeder Raum unvollständig. RAW/FORM ist auf Begegnung, Bewegung und gemeinsames Erleben ausgelegt.</p><p><span class="manifesto-tag">Nothing polished.</span><br>Keine glatten Oberflächen, keine austauschbare Festivalästhetik. Rohheit bleibt sichtbar und wird bewusst gestaltet.</p></div>
+      </section>
+
+      <section class="tickets" id="tickets" aria-labelledby="tickets-title">
+        <div class="tickets-head"><div><p class="eyebrow">07 / Tickets</p><h2 class="display" id="tickets-title">Choose your noise.</h2></div><p class="mini">Limited capacity / fictional design study</p></div>
+        <div class="ticket-grid">
+          <article class="ticket-card"><h3>Day pass</h3><div class="price">€89</div><p>Access to one full festival day, all installations and talks.</p><a href="#newsletter">Select <span>→</span></a></article>
+          <article class="ticket-card featured"><h3>Weekend pass</h3><div class="price">€149</div><p>Full access to all three days, stages, installations and community spaces.</p><a href="#newsletter">Get weekend pass <span>→</span></a></article>
+          <article class="ticket-card"><h3>Supporter</h3><div class="price">€199</div><p>Weekend access plus limited edition print and supporter area.</p><a href="#newsletter">Select <span>→</span></a></article>
+        </div>
+      </section>
+
+      <section class="newsletter" id="newsletter" aria-labelledby="newsletter-title">
+        <div class="newsletter-media"><img src="./assets/img/hero.webp" alt="Detail der RAW/FORM Festivalarchitektur"></div>
+        <div class="newsletter-copy"><p class="eyebrow">08 / Signal</p><h2 class="display" id="newsletter-title">Stay in the loop.</h2><p>Lineup drops, installations, ticket releases. No noise unless it matters.</p><form class="signup" onsubmit="event.preventDefault()" aria-label="Newsletter Demo"><label class="sr-only" for="email" style="position:absolute;clip:rect(0 0 0 0);clip-path:inset(50%);width:1px;height:1px;overflow:hidden">E-Mail-Adresse</label><input id="email" type="email" placeholder="YOUR EMAIL ADDRESS" autocomplete="email"><button type="submit">Sign up →</button></form></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-main">
+        <section class="footer-column" aria-labelledby="footer-sitemap">
+          <p class="footer-heading" id="footer-sitemap">Sitemap</p>
+          <img class="footer-logo" src="./assets/branding/logo-light.svg" alt="RAW/FORM">
+          <nav class="footer-links" aria-label="Sitemap">
+            <a href="#top">Start</a><a href="#lineup">Lineup</a><a href="#location">Location</a><a href="#experience">Experience</a><a href="#about">About</a><a href="#tickets">Tickets</a><a href="#newsletter">Newsletter</a>
+          </nav>
+        </section>
+        <section class="footer-column" aria-labelledby="footer-legal">
+          <p class="footer-heading" id="footer-legal">Rechtliches</p>
+          <nav class="footer-links" aria-label="Rechtliche Links"><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a></nav>
+          <p class="footer-study-note">RAW/FORM ist eine fiktive Designstudie und kein reales Festival. Sämtliche Termine, Preise, Tickets, Künstlernamen und Angebote dienen ausschließlich der visuellen Demonstration. Es bestehen keine Verkaufsabsichten und es findet kein Ticketverkauf statt.</p>
+        </section>
+        <section class="footer-column" aria-labelledby="footer-social">
+          <p class="footer-heading" id="footer-social">Social Media</p>
+          <div class="social" aria-label="Social Media">
+            <a class="social-link social-placeholder" href="#" aria-label="Instagram"><span class="social-icon social-icon--instagram" aria-hidden="true"></span></a>
+            <a class="social-link social-placeholder" href="#" aria-label="YouTube"><span class="social-icon social-icon--youtube" aria-hidden="true"></span></a>
+            <a class="social-link social-placeholder" href="#" aria-label="SoundCloud"><span class="social-icon social-icon--soundcloud" aria-hidden="true"></span></a>
+          </div>
+          <p class="footer-study-note">Music creates places.<br>Places create people.</p>
+        </section>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Benjamin Bennewitz. RAW/FORM Design Study.</span>
+        <span class="author-tag">Design & Development: <a href="https://b2folio.de" target="_blank" rel="noopener noreferrer"><strong>Benjamin Bennewitz [B²] · design.code.repeat</strong></a></span>
+      </div>
+    </footer>
+  </div>
+
+  <aside class="cookie-demo" id="cookie-demo" aria-labelledby="cookie-demo-title" aria-live="polite">
+    <div class="cookie-demo__head"><h2 class="cookie-demo__title" id="cookie-demo-title">Cookie signal.</h2><span class="cookie-demo__index">DEMO / 01</span></div>
+    <p>Dieses Banner ist Teil der Designstudie. Es werden keine Tracking-Cookies gesetzt. Die Buttons demonstrieren ausschließlich das visuelle Consent-Verhalten.</p>
+    <div class="cookie-demo__actions"><button type="button" data-cookie-choice="necessary">Nur notwendige</button><button type="button" data-cookie-choice="all">Alle akzeptieren</button></div>
+  </aside>
+
+  <button class="scroll-top" id="scroll-top" type="button" aria-label="Zum Seitenanfang">↑</button>
+  <script>
+    (() => {
+      document.querySelectorAll('.social-placeholder').forEach((link) => link.addEventListener('click', (event) => event.preventDefault()));
+
+      const menuToggle = document.querySelector('#menu-toggle');
+      const mobileNav = document.querySelector('#mobile-nav');
+      const setMenuState = (open) => {
+        if (!menuToggle || !mobileNav) return;
+        menuToggle.setAttribute('aria-expanded', String(open));
+        menuToggle.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+        mobileNav.setAttribute('aria-hidden', String(!open));
+        mobileNav.classList.toggle('is-open', open);
+        document.documentElement.classList.toggle('menu-open', open);
+      };
+      menuToggle?.addEventListener('click', () => setMenuState(menuToggle.getAttribute('aria-expanded') !== 'true'));
+      mobileNav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenuState(false)));
+      mobileNav?.addEventListener('click', (event) => { if (event.target === mobileNav) setMenuState(false); });
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setMenuState(false); });
+      window.addEventListener('resize', () => { if (window.innerWidth > 1100) setMenuState(false); }, { passive: true });
+
+      const cookieDemo = document.querySelector('#cookie-demo');
+      const cookieButtons = document.querySelectorAll('[data-cookie-choice]');
+      if (cookieDemo && sessionStorage.getItem('rawform-cookie-demo') !== 'dismissed') {
+        requestAnimationFrame(() => {
+          cookieDemo.classList.add('is-visible');
+          document.body.classList.add('cookie-open');
+        });
+      }
+      cookieButtons.forEach((button) => button.addEventListener('click', () => {
+        sessionStorage.setItem('rawform-cookie-demo', 'dismissed');
+        cookieDemo?.classList.remove('is-visible');
+        document.body.classList.remove('cookie-open');
+      }));
+
+      const scrollTopButton = document.querySelector('#scroll-top');
+      const syncScrollTop = () => scrollTopButton?.classList.toggle('is-visible', window.scrollY > 520);
+      window.addEventListener('scroll', syncScrollTop, { passive: true });
+      syncScrollTop();
+      scrollTopButton?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion || !('IntersectionObserver' in window)) return;
+
+      const revealTargets = [
+        ...document.querySelectorAll('.eyebrow, .display, .panel h3, .panel li, .manifesto-right p, .ticket-card, .newsletter-copy > p, .signup')
+      ];
+
+      revealTargets.forEach((element, index) => {
+        element.classList.add('reveal');
+        element.style.setProperty('--reveal-delay', `${Math.min(index % 5, 4) * 55}ms`);
+      });
+
+      document.querySelectorAll('.hero-media, .intro-media, .panel-image, .location-media, .newsletter-media').forEach((element) => {
+        element.classList.add('image-reveal');
+      });
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+
+      document.querySelectorAll('.reveal, .image-reveal').forEach((element) => observer.observe(element));
+    })();
+  </script>
+</body>
+</html>

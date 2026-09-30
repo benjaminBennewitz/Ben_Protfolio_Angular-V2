@@ -60,4 +60,48 @@
   </section>
 
   <bp-project-stack bpViewportActivity [detailLabel]="content().projectsIntro.detailLabel" [labels]="content().projectsIntro" [projects]="projects()" />
+
+  <section class="design-studies bp-section" id="design-studies" bpViewportActivity aria-labelledby="design-studies-title">
+    <div class="bp-container design-studies__layout">
+      <header class="design-studies__intro bp-motion-copy" bpReveal>
+        <p class="design-studies__eyebrow">{{ content().projectsIntro.designStudiesEyebrow }}</p>
+        <bp-reveal-text id="design-studies-title" class="design-studies__title-reveal" [text]="content().projectsIntro.designStudiesTitle" headingClass="design-studies__title" level="h2" />
+        <p class="design-studies__lead">{{ content().projectsIntro.designStudiesText }}</p>
+      </header>
+
+      <div class="design-studies__grid" [attr.aria-label]="content().projectsIntro.designStudiesAriaLabel">
+        @for (study of designStudies; track study.id; let index = $index) {
+        <article class="design-study" bpReveal>
+          <a class="design-study__link" [href]="study.href" target="_blank" rel="noopener noreferrer"
+            [attr.aria-label]="content().projectsIntro.designStudiesOpenLabel + ': ' + study.name">
+            <div class="design-study__visual">
+              <img [src]="study.preview" [alt]="study.name + ' — ' + study.subtitle" width="1448" height="1086" loading="lazy" decoding="async" />
+              <span class="design-study__index" aria-hidden="true">DS/{{ (index + 1).toString().padStart(2, '0') }}</span>
+              <span class="design-study__open" aria-hidden="true">↗</span>
+            </div>
+
+            <div class="design-study__body">
+              <div>
+                <p class="design-study__type">Standalone HTML / CSS / JS</p>
+                <h3>{{ study.name }}</h3>
+                <p>{{ study.subtitle }}</p>
+              </div>
+
+              <ul class="design-study__tags" aria-label="Tags">
+                @for (tag of study.tags; track tag) {
+                <li>{{ tag }}</li>
+                }
+              </ul>
+
+              <span class="design-study__cta">
+                {{ content().projectsIntro.designStudiesOpenLabel }}
+                <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+              </span>
+            </div>
+          </a>
+        </article>
+        }
+      </div>
+    </div>
+  </section>
 </main>

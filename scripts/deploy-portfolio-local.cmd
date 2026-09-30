@@ -94,6 +94,11 @@ if not exist "%BUILD_DIR%\sitemap.xml" (
   exit /b 1
 )
 
+if not exist "%BUILD_DIR%\design-studies\brutalism\index.html" (
+  echo [B2FOLIO][FEHLER] Build unvollstaendig: RAW/FORM Design Study fehlt.
+  exit /b 1
+)
+
 if exist "%ARCHIVE%" del /q "%ARCHIVE%"
 
 echo [B2FOLIO] Build archivieren...

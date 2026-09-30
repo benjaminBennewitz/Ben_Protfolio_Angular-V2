@@ -45,6 +45,11 @@
                 "glob": ".htaccess",
                 "input": "src",
                 "output": "."
+              },
+              {
+                "glob": "**/*",
+                "input": "src/design-studies",
+                "output": "design-studies"
               }
             ],
             "styles": [],

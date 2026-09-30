@@ -57,6 +57,11 @@ if [[ ! -d "$TMP_DIR/assets" ]]; then
   exit 1
 fi
 
+if [[ ! -f "$TMP_DIR/design-studies/brutalism/index.html" ]]; then
+  echo "[B2FOLIO][FEHLER] RAW/FORM Design Study fehlt im Build-Archiv." >&2
+  exit 1
+fi
+
 echo "[B2FOLIO] Build nach $WEB_DIR spiegeln..."
 rsync -a --delete \
   --exclude='.well-known/' \

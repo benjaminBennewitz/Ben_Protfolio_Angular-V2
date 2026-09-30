@@ -21,6 +21,27 @@ import { ViewportActivityDirective } from '../../shared/viewport-activity.direct
 type PortfolioChocolateKey = 'default' | 'eaten';
 
 /** Konfiguration eines fallenden Schoko-Eis für die Portfolio-Bühne. */
+/** Konfiguration einer eigenständigen visuellen Designstudie. */
+interface DesignStudy {
+  /** Stabile Kennung der Studie. */
+  readonly id: string;
+
+  /** Sichtbarer Projektname. */
+  readonly name: string;
+
+  /** Kurze visuelle Einordnung. */
+  readonly subtitle: string;
+
+  /** Öffentlicher Pfad der statischen Microsite. */
+  readonly href: string;
+
+  /** Vorschaubild innerhalb der Portfolio-Section. */
+  readonly preview: string;
+
+  /** Kompakte Gestaltungsschwerpunkte. */
+  readonly tags: readonly string[];
+}
+
 interface PortfolioChocolateEgg {
   /** Horizontale Endposition innerhalb des Portrait-Kastens. */
   readonly left: string;
@@ -67,6 +88,18 @@ export class PortfolioPageComponent {
 
   /** Sichtbarkeit des dekorativen Terminalfensters im Portfolio-Intro. */
   readonly isProjectsDialogVisible = signal<boolean>(true);
+
+  /** Eigenständige visuelle Studien unterhalb der klassischen Case Studies. */
+  readonly designStudies: readonly DesignStudy[] = [
+    {
+      id: 'raw-form',
+      name: 'RAW/FORM',
+      subtitle: 'Brutalist Festival Landingpage',
+      href: '/design-studies/brutalism/',
+      preview: '/design-studies/brutalism/assets/img/hero.webp',
+      tags: ['Brutalism', 'Editorial', 'Motion', 'HTML / CSS / JS'],
+    },
+  ];
 
   /** Aktuell sichtbarer Zustand des Schoko-Bildes im Portfolio-Intro. */
   readonly activePortfolioChocolateImage = signal<PortfolioChocolateKey>('default');

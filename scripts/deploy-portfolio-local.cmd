@@ -12,11 +12,17 @@ set "PROJECT_DIR=%SCRIPT_DIR%.."
 set "BUILD_DIR=%PROJECT_DIR%\dist\ben-portfolio-experience\browser"
 set "ARCHIVE=%TEMP%\portfolio-frontend.tar.gz"
 
-REM Rechnerabhaengiger SSH-Key. Optional einmalig pro Rechner setzen:
-REM   setx B2FOLIO_SSH_KEY "%USERPROFILE%\.ssh\id_ed25519"
-REM Ohne gesetzte Variable wird der Windows-Standard-Key id_ed25519 verwendet.
-if not defined B2FOLIO_SSH_KEY set "B2FOLIO_SSH_KEY=%USERPROFILE%\.ssh\id_ed25519"
-set "SSH_KEY=%B2FOLIO_SSH_KEY%"
+REM Rechnerabhaengiger SSH-Key. Prioritaet:
+REM   1. B2FOLIO_SSH_KEY (projektspezifisch)
+REM   2. DCR_SSH_KEY     (bereits funktionierender Server-Key)
+REM   3. Windows-Standard-Key id_ed25519
+if defined B2FOLIO_SSH_KEY (
+  set "SSH_KEY=%B2FOLIO_SSH_KEY%"
+) else if defined DCR_SSH_KEY (
+  set "SSH_KEY=%DCR_SSH_KEY%"
+) else (
+  set "SSH_KEY=%USERPROFILE%\.ssh\id_ed25519"
+)
 
 set "SERVER_USER=ben"
 set "SERVER_HOST=159.195.54.12"

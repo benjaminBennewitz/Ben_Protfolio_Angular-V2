@@ -1,30 +1,39 @@
+@REM scripts/deploy-portfolio-local.cmd
 @echo off
-REM scripts/deploy-portfolio-local.cmd
 setlocal EnableExtensions
 
-REM Baut das Portfolio lokal reproduzierbar und deployed ausschließlich den fertigen
+REM Baut das Portfolio lokal reproduzierbar und deployed ausschliesslich den fertigen
 REM Angular-Browser-Build auf den vorbereiteten KeyHelp-Webspace von b2folio.de.
+REM Voraussetzung: OpenSSH-Client, scp, ssh, tar, Node/npm und Git sind lokal verfuegbar.
+REM Wichtig: npm ist unter Windows eine CMD-Datei und muss in Batch-Scripten mit CALL gestartet werden.
 
-set "SERVER=ben@159.195.54.12"
-set "BUILD_DIR=dist\ben-portfolio-experience\browser"
+set "SCRIPT_DIR=%~dp0"
+set "PROJECT_DIR=%SCRIPT_DIR%.."
+set "BUILD_DIR=%PROJECT_DIR%\dist\ben-portfolio-experience\browser"
 set "ARCHIVE=%TEMP%\portfolio-frontend.tar.gz"
-set "REMOTE_ARCHIVE=/tmp/portfolio-frontend.tar.gz"
-set "REMOTE_DEPLOY=/usr/local/bin/deploy-portfolio-frontend"
 
-if defined B2FOLIO_SSH_KEY (
-  set "SSH_KEY=%B2FOLIO_SSH_KEY%"
-) else if defined DCR_SSH_KEY (
-  set "SSH_KEY=%DCR_SSH_KEY%"
-) else (
-  set "SSH_KEY=%USERPROFILE%\.ssh\dcr_vserver_werbung06"
-)
+REM Rechnerabhaengiger SSH-Key. Optional einmalig pro Rechner setzen:
+REM   setx B2FOLIO_SSH_KEY "%USERPROFILE%\.ssh\id_ed25519"
+REM Ohne gesetzte Variable wird der Windows-Standard-Key id_ed25519 verwendet.
+if not defined B2FOLIO_SSH_KEY set "B2FOLIO_SSH_KEY=%USERPROFILE%\.ssh\id_ed25519"
+set "SSH_KEY=%B2FOLIO_SSH_KEY%"
+
+set "SERVER_USER=ben"
+set "SERVER_HOST=159.195.54.12"
+set "SERVER_ARCHIVE=/tmp/portfolio-frontend.tar.gz"
+set "SERVER_DEPLOY=/usr/local/bin/deploy-portfolio-frontend"
+
+cd /d "%PROJECT_DIR%" || exit /b 1
 
 if not exist "%SSH_KEY%" (
-  echo [B2FOLIO][FEHLER] SSH-Key nicht gefunden: %SSH_KEY%
-  echo [B2FOLIO] Standard auf Werbung06: %%USERPROFILE%%\.ssh\dcr_vserver_werbung06
-  echo [B2FOLIO] Optional kann B2FOLIO_SSH_KEY oder DCR_SSH_KEY einen anderen Key vorgeben.
+  echo.
+  echo [B2FOLIO][FEHLER] SSH-Key wurde nicht gefunden: %SSH_KEY%
+  echo [B2FOLIO][HINWEIS] Setze optional B2FOLIO_SSH_KEY auf den passenden privaten Key.
   exit /b 1
 )
+
+echo.
+echo [B2FOLIO] SSH-Key: %SSH_KEY%
 
 where git >nul 2>&1 || (
   echo [B2FOLIO][FEHLER] git wurde nicht gefunden.
@@ -51,11 +60,6 @@ where ssh >nul 2>&1 || (
   exit /b 1
 )
 
-git rev-parse --show-toplevel >nul 2>&1 || (
-  echo [B2FOLIO][FEHLER] Das Script muss aus dem Portfolio-Git-Repository gestartet werden.
-  exit /b 1
-)
-
 set "GIT_DIRTY="
 for /f "delims=" %%I in ('git status --porcelain') do set "GIT_DIRTY=1"
 
@@ -65,12 +69,15 @@ if defined GIT_DIRTY (
   exit /b 1
 )
 
+echo.
 echo [B2FOLIO] Repository aktualisieren...
 git pull --ff-only || exit /b 1
 
+echo.
 echo [B2FOLIO] Abhaengigkeiten reproduzierbar installieren...
 call npm ci || exit /b 1
 
+echo.
 echo [B2FOLIO] Production-Build erstellen...
 call npm run build:production || exit /b 1
 
@@ -99,18 +106,22 @@ if not exist "%BUILD_DIR%\design-studies\brutalism\index.html" (
   exit /b 1
 )
 
-if exist "%ARCHIVE%" del /q "%ARCHIVE%"
+if exist "%ARCHIVE%" del /f /q "%ARCHIVE%"
 
+echo.
 echo [B2FOLIO] Build archivieren...
 tar -czf "%ARCHIVE%" -C "%BUILD_DIR%" . || exit /b 1
 
+echo.
 echo [B2FOLIO] Build auf den Server laden...
-scp -i "%SSH_KEY%" "%ARCHIVE%" %SERVER%:%REMOTE_ARCHIVE% || exit /b 1
+scp -i "%SSH_KEY%" "%ARCHIVE%" %SERVER_USER%@%SERVER_HOST%:%SERVER_ARCHIVE% || exit /b 1
 
+echo.
 echo [B2FOLIO] Serverseitiges Deployment starten...
-ssh -t -i "%SSH_KEY%" %SERVER% "sudo %REMOTE_DEPLOY% %REMOTE_ARCHIVE%" || exit /b 1
+ssh -t -i "%SSH_KEY%" %SERVER_USER%@%SERVER_HOST% "sudo %SERVER_DEPLOY% %SERVER_ARCHIVE%" || exit /b 1
 
-if exist "%ARCHIVE%" del /q "%ARCHIVE%"
+if exist "%ARCHIVE%" del /f /q "%ARCHIVE%"
 
+echo.
 echo [B2FOLIO] Deployment abgeschlossen: https://b2folio.de/
-exit /b 0
+endlocal

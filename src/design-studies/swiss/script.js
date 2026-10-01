@@ -85,7 +85,34 @@
     document.body.classList.add('menu-open');
   });
 
-  mobileMenu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  const mobileMenuLinks = [...(mobileMenu?.querySelectorAll('a[href^="#"]') || [])];
+  mobileMenuLinks.forEach((link) => link.addEventListener('click', closeMenu));
+
+  const setActiveMenuLink = (id) => {
+    mobileMenuLinks.forEach((link) => {
+      const isActive = link.getAttribute('href') === `#${id}`;
+      link.classList.toggle('is-active', isActive);
+      if (isActive) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  };
+
+  if ('IntersectionObserver' in window && mobileMenuLinks.length) {
+    const menuTargets = mobileMenuLinks
+      .map((link) => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    const menuObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible?.target?.id) setActiveMenuLink(visible.target.id);
+    }, { rootMargin: '-18% 0px -62% 0px', threshold: [0, 0.15, 0.4, 0.7] });
+
+    menuTargets.forEach((target) => menuObserver.observe(target));
+    setActiveMenuLink('top');
+  }
+
   window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeMenu();
   });

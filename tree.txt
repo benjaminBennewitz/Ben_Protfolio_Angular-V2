@@ -1,5 +1,7 @@
-folio/
+B2Folio/
 ├── .angular/
+│   └── ...
+├── dist/
 │   └── ...
 ├── node_modules/
 │   └── ...
@@ -239,6 +241,113 @@ folio/
 │   │   │   │   │   │   ├── settings-themes.webp
 │   │   │   │   │   │   └── settings-tools.webp
 │   │   │   │   │   └── carly.svg
+│   │   │   │   ├── design-catalog/
+│   │   │   │   │   ├── en/
+│   │   │   │   │   │   ├── catalog-page-01.webp
+│   │   │   │   │   │   ├── catalog-page-02.webp
+│   │   │   │   │   │   ├── catalog-page-03.webp
+│   │   │   │   │   │   ├── catalog-page-04.webp
+│   │   │   │   │   │   ├── catalog-page-05.webp
+│   │   │   │   │   │   ├── catalog-page-06.webp
+│   │   │   │   │   │   ├── catalog-page-07.webp
+│   │   │   │   │   │   ├── catalog-page-08.webp
+│   │   │   │   │   │   ├── catalog-page-09.webp
+│   │   │   │   │   │   ├── catalog-page-10.webp
+│   │   │   │   │   │   ├── catalog-page-11.webp
+│   │   │   │   │   │   ├── catalog-page-12.webp
+│   │   │   │   │   │   ├── catalog-page-13.webp
+│   │   │   │   │   │   ├── catalog-page-14.webp
+│   │   │   │   │   │   ├── catalog-page-15.webp
+│   │   │   │   │   │   ├── catalog-page-16.webp
+│   │   │   │   │   │   ├── catalog-page-17.webp
+│   │   │   │   │   │   ├── catalog-page-18.webp
+│   │   │   │   │   │   ├── catalog-page-19.webp
+│   │   │   │   │   │   ├── catalog-page-20.webp
+│   │   │   │   │   │   ├── catalog-page-21.webp
+│   │   │   │   │   │   ├── catalog-page-22.webp
+│   │   │   │   │   │   ├── catalog-page-23.webp
+│   │   │   │   │   │   ├── catalog-page-24.webp
+│   │   │   │   │   │   ├── catalog-page-25.webp
+│   │   │   │   │   │   ├── catalog-page-26.webp
+│   │   │   │   │   │   ├── catalog-page-27.webp
+│   │   │   │   │   │   ├── catalog-page-28.webp
+│   │   │   │   │   │   ├── catalog-page-29.webp
+│   │   │   │   │   │   ├── catalog-page-30.webp
+│   │   │   │   │   │   ├── catalog-page-31.webp
+│   │   │   │   │   │   ├── catalog-page-32.webp
+│   │   │   │   │   │   ├── catalog-page-33.webp
+│   │   │   │   │   │   ├── catalog-page-34.webp
+│   │   │   │   │   │   ├── catalog-page-35.webp
+│   │   │   │   │   │   ├── catalog-page-36.webp
+│   │   │   │   │   │   ├── catalog-page-37.webp
+│   │   │   │   │   │   ├── catalog-page-38.webp
+│   │   │   │   │   │   ├── catalog-page-39.webp
+│   │   │   │   │   │   ├── catalog-page-40.webp
+│   │   │   │   │   │   ├── catalog-page-41.webp
+│   │   │   │   │   │   ├── catalog-page-42.webp
+│   │   │   │   │   │   ├── catalog-page-43.webp
+│   │   │   │   │   │   ├── catalog-page-44.webp
+│   │   │   │   │   │   ├── catalog-page-45.webp
+│   │   │   │   │   │   ├── catalog-page-46.webp
+│   │   │   │   │   │   ├── catalog-page-47.webp
+│   │   │   │   │   │   ├── catalog-page-48.webp
+│   │   │   │   │   │   ├── catalog-page-49.webp
+│   │   │   │   │   │   ├── catalog-page-50.webp
+│   │   │   │   │   │   ├── catalog-page-51.webp
+│   │   │   │   │   │   ├── catalog-page-52.webp
+│   │   │   │   │   │   ├── catalog-page-53.webp
+│   │   │   │   │   │   └── catalog-page-54.webp
+│   │   │   │   │   └── masonry/
+│   │   │   │   │       ├── 01.webp
+│   │   │   │   │       ├── 02.webp
+│   │   │   │   │       ├── 03.webp
+│   │   │   │   │       ├── 04.webp
+│   │   │   │   │       ├── 05.webp
+│   │   │   │   │       ├── 06.webp
+│   │   │   │   │       ├── 07.webp
+│   │   │   │   │       ├── 08.webp
+│   │   │   │   │       ├── 09.webp
+│   │   │   │   │       ├── 10.webp
+│   │   │   │   │       ├── 11.webp
+│   │   │   │   │       ├── 12.webp
+│   │   │   │   │       ├── 13.webp
+│   │   │   │   │       ├── 14.webp
+│   │   │   │   │       ├── 15.webp
+│   │   │   │   │       ├── 16.webp
+│   │   │   │   │       ├── 17.webp
+│   │   │   │   │       ├── 18.webp
+│   │   │   │   │       ├── 19.webp
+│   │   │   │   │       ├── 20.webp
+│   │   │   │   │       ├── 21.webp
+│   │   │   │   │       ├── 22.webp
+│   │   │   │   │       ├── 23.webp
+│   │   │   │   │       ├── 24.webp
+│   │   │   │   │       ├── 25.webp
+│   │   │   │   │       ├── 26.webp
+│   │   │   │   │       ├── 27.webp
+│   │   │   │   │       ├── 28.webp
+│   │   │   │   │       ├── 29.webp
+│   │   │   │   │       ├── 31.webp
+│   │   │   │   │       ├── 32.webp
+│   │   │   │   │       ├── 33.webp
+│   │   │   │   │       ├── 34.webp
+│   │   │   │   │       ├── 35.webp
+│   │   │   │   │       ├── 36.webp
+│   │   │   │   │       ├── 37.webp
+│   │   │   │   │       ├── 39.webp
+│   │   │   │   │       ├── 40.webp
+│   │   │   │   │       ├── 41.webp
+│   │   │   │   │       ├── 47.webp
+│   │   │   │   │       ├── 49.webp
+│   │   │   │   │       ├── 50.webp
+│   │   │   │   │       ├── 51.webp
+│   │   │   │   │       ├── 52.webp
+│   │   │   │   │       ├── 53.webp
+│   │   │   │   │       ├── 54.webp
+│   │   │   │   │       ├── 55.webp
+│   │   │   │   │       ├── 56.webp
+│   │   │   │   │       ├── 57.webp
+│   │   │   │   │       └── 58.webp
 │   │   │   │   ├── globi-flow/
 │   │   │   │   │   ├── auswertung.webp
 │   │   │   │   │   ├── importe.webp

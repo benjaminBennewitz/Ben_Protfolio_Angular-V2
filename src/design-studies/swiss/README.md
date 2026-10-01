@@ -12,9 +12,7 @@ Statische Onepager-Studie im Swiss-/International-Typographic-Style.
 
 ## Bildstatus
 
-Die aktuell enthaltenen Bilder wurden ausschließlich aus dem freigegebenen Layout-Entwurf als **temporäre Entwicklungs-Platzhalter** ausgeschnitten. Vor Veröffentlichung bitte durch die finalen Fotografien von Benjamin Bennewitz ersetzen.
-
-Die sichtbaren `figcaption`-Credits sind deshalb absichtlich als `DEMO IMAGE · FINAL PHOTOGRAPHY © BENJAMIN BENNEWITZ` formuliert. Nach Austausch der Bilder können sie auf `© Benjamin Bennewitz` verkürzt werden.
+Die finalen Fotografien von Benjamin Bennewitz sind eingebunden. Sichtbare `figcaption`-Credits verwenden ausschließlich `© Benjamin Bennewitz`.
 
 ## Geplante Bildrollen
 
@@ -26,7 +24,7 @@ Die sichtbaren `figcaption`-Credits sind deshalb absichtlich als `DEMO IMAGE · 
 - `article-landscape.webp` — Journal / Artikel
 - `cta-landscape.webp` — CTA / Archive
 
-Für den Hero-Slider werden die vorhandenen Archivbilder ebenfalls als temporäre Slides verwendet.
+Für den Hero-Slider werden die vorhandenen Archivbilder als zusätzliche Slides verwendet.
 
 ## Technik
 

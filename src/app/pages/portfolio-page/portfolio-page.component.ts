@@ -5,7 +5,7 @@
  * @description Rendert die ausgelagerte Projektübersicht inklusive Schoko-Intro als eigene Portfolio-Route.
  */
 
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, ElementRef, HostListener, inject, signal, ViewChild } from '@angular/core';
 import { PORTFOLIO_PROJECTS } from '../../core/data/portfolio-projects';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
@@ -99,7 +99,25 @@ export class PortfolioPageComponent {
       preview: '/design-studies/brutalism/assets/img/hero.webp',
       tags: ['Brutalism', 'Editorial', 'Motion', 'HTML / CSS / JS'],
     },
+    {
+      id: 'whatwesee',
+      name: '[WHATWESEE]',
+      subtitle: 'Swiss-inspired Photography Journal',
+      href: '/design-studies/swiss/',
+      preview: '/design-studies/swiss/assets/images/hero-landscape.webp',
+      tags: ['Swiss Style', 'Photography', 'Editorial', 'HTML / CSS / JS'],
+    },
   ];
+
+  /** Referenz auf die Scroll-Strecke der Design-Studies-Bühne. */
+  @ViewChild('designStudiesSection')
+  private designStudiesSection?: ElementRef<HTMLElement>;
+
+  /** Scrollfortschritt innerhalb der fixierten Design-Studies-Bühne (0–1). */
+  readonly designStudiesProgress = signal<number>(0);
+
+  /** Zusätzlicher Scrollweg: pro weiterer Studie entsteht eine eigene Einflugstrecke. */
+  readonly designStudiesScrollHeight = `${100 + Math.max(0, this.designStudies.length - 1) * 120}svh`;
 
   /** Aktuell sichtbarer Zustand des Schoko-Bildes im Portfolio-Intro. */
   readonly activePortfolioChocolateImage = signal<PortfolioChocolateKey>('default');
@@ -171,6 +189,126 @@ export class PortfolioPageComponent {
       'Case Studies von B² Benjamin Bennewitz: Intranet, Dein Fußabdruck, Carly Managed, Globi Flow mit lokaler OCR und ein interaktives Designarchiv.',
       '/portfolio',
     );
+  }
+
+  /** RAF-ID für einen ruhigen, scroll-gekoppelten Design-Studies-Stack. */
+  private designStudiesScrollFrame = 0;
+
+  /** Synchronisiert den Scrollfortschritt der eingerasteten Design-Studies-Bühne. */
+  @HostListener('window:scroll')
+  @HostListener('window:resize')
+  queueDesignStudiesProgressSync(): void {
+    if (typeof window === 'undefined' || this.designStudiesScrollFrame !== 0) {
+      return;
+    }
+
+    this.designStudiesScrollFrame = window.requestAnimationFrame(() => {
+      this.designStudiesScrollFrame = 0;
+      this.syncDesignStudiesProgress();
+    });
+  }
+
+  /** Berechnet den Fortschritt erst ab dem Moment, in dem die Bühne im Viewport eingerastet ist. */
+  private syncDesignStudiesProgress(): void {
+    const section = this.designStudiesSection?.nativeElement;
+    if (!section || typeof window === 'undefined') {
+      return;
+    }
+
+    const rect = section.getBoundingClientRect();
+    const scrollDistance = Math.max(1, rect.height - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, -rect.top / scrollDistance));
+    this.designStudiesProgress.set(progress);
+  }
+
+  /** Liefert den individuellen Aufklebe-Fortschritt einer Study-Karte. */
+  designStudyCardProgress(index: number): number {
+    if (index === 0) {
+      return 1;
+    }
+
+    const incomingCards = Math.max(1, this.designStudies.length - 1);
+    const segment = 1 / incomingCards;
+    const segmentStart = (index - 1) * segment;
+
+    // Die erste Karte bleibt nach dem Einrasten bewusst allein sichtbar.
+    // Erst zusätzlicher Scrollweg startet den Sticker-Impact; danach bleibt
+    // erneut Ruhe, damit der fertige Stack betrachtet werden kann.
+    const start = segmentStart + segment * 0.32;
+    const end = segmentStart + segment * 0.84;
+    const progress = (this.designStudiesProgress() - start) / Math.max(0.001, end - start);
+
+    return Math.min(1, Math.max(0, progress));
+  }
+
+  /** Berechnet einen Sticker-Impact: aus der Tiefe, kurzer Schlag, dann Settle. */
+  designStudyTransform(index: number): string {
+    if (index === 0) {
+      return 'translate3d(0, 0, 0) rotate(0deg) scale(1)';
+    }
+
+    const progress = this.designStudyCardProgress(index);
+    const direction = index % 2 === 1 ? 1 : -1;
+
+    let x: number;
+    let y: number;
+    let z: number;
+    let rotation: number;
+    let scale: number;
+
+    if (progress < 0.72) {
+      const phase = this.easeOutCubic(progress / 0.72);
+      x = this.lerp(direction * 4.6, direction * 0.45, phase);
+      y = this.lerp(-4.8, 0.7, phase);
+      z = this.lerp(320, 0, phase);
+      rotation = this.lerp(direction * 5.5, direction * -1.8, phase);
+      scale = this.lerp(1.58, 0.955, phase);
+    } else if (progress < 0.9) {
+      const phase = this.easeOutCubic((progress - 0.72) / 0.18);
+      x = this.lerp(direction * 0.45, direction * -0.14, phase);
+      y = this.lerp(0.7, -0.12, phase);
+      z = 0;
+      rotation = this.lerp(direction * -1.8, direction * 0.65, phase);
+      scale = this.lerp(0.955, 1.035, phase);
+    } else {
+      const phase = this.easeOutCubic((progress - 0.9) / 0.1);
+      x = this.lerp(direction * -0.14, 0, phase);
+      y = this.lerp(-0.12, 0, phase);
+      z = 0;
+      rotation = this.lerp(direction * 0.65, 0, phase);
+      scale = this.lerp(1.035, 1, phase);
+    }
+
+    return `translate3d(${x.toFixed(3)}vw, ${y.toFixed(3)}vh, ${z.toFixed(1)}px) rotate(${rotation.toFixed(3)}deg) scale(${scale.toFixed(4)})`;
+  }
+
+  /** Tiefenunschärfe für den kurzen Anflug aus dem Vordergrund. */
+  designStudyFilter(index: number): string {
+    if (index === 0) {
+      return 'none';
+    }
+
+    const progress = this.designStudyCardProgress(index);
+    const blur = Math.max(0, 5.5 * (1 - Math.min(1, progress / 0.68)));
+    return `blur(${blur.toFixed(2)}px)`;
+  }
+
+  /** Blendet die Karte erst kurz vor ihrem sichtbaren Anflug ein. */
+  designStudyOpacity(index: number): number {
+    if (index === 0) {
+      return 1;
+    }
+
+    const progress = this.designStudyCardProgress(index);
+    return Math.min(1, Math.max(0, progress / 0.12));
+  }
+
+  private lerp(from: number, to: number, progress: number): number {
+    return from + (to - from) * progress;
+  }
+
+  private easeOutCubic(progress: number): number {
+    return 1 - Math.pow(1 - Math.min(1, Math.max(0, progress)), 3);
   }
 
   /** Wechselt im Portfolio-Einstieg auf das vorbereitete Schoko-Folgeportrait. */

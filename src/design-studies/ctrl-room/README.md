@@ -50,19 +50,13 @@ Die englischen UI-Texte folgen dem mitgelieferten Entwurf. CTRL//ROOM, KATZKII, 
 
 Hero-, Artist- und Crowd-Fotografie tragen sichtbare `AI GENERATED IMAGE`-Labels. Der Track ist ebenfalls KI-generiert und wird in beiden Playerbereichen sowie im Musik-Datensatz gekennzeichnet. Der Footer erklärt die Bild- und Audio-Kennzeichnung. Das Albumcover wird als bereitgestelltes Artwork genutzt; es wurde für diese Umsetzung nicht neu generiert. Das Layout sowie Charts, Linien, Glitches und Farbflächen entstehen in HTML/CSS/SVG/JavaScript.
 
-## Portfolio-Integration
+## Portfolio-Integration – separater Schritt
 
-Die Study liegt unter `src/design-studies/ctrl-room/` und wird über die bestehende Asset-Konfiguration in `angular.json` mitgebaut. Öffentlicher Pfad: `/design-studies/ctrl-room/`.
+Die Study ist für einen Unterordner wie `src/design-studies/ctrl-room/` vorbereitet. Relative Asset-Pfade erlauben den Betrieb unter `/design-studies/ctrl-room/`. Keine eigene Buildpipeline und kein Router nötig.
 
-Die Portfolio-Karte ist in der vorhandenen `designStudies`-Liste ergänzt. Der Scroll-Stack berechnet seinen zusätzlichen Scrollweg bereits aus der Anzahl der Studies; ein eigener Kartenmechanismus ist nicht nötig.
+Der B²-Portfolio-Quellcode lag für diese Lieferung nicht vor. `angular.json`, Portfolio-Section und Deploy-Skripte sind daher noch nicht geändert. Bei der Integration die bestehende Asset-Kopie und Deployment-Prüfung weiterverwenden.
 
-Rechtliche Links verwenden die vorhandenen Routen `/impressum` und `/datenschutz`. `B² PORTFOLIO` führt zu `/portfolio#design-studies`, die Autorenzeile zur Portfolio-Startseite. Die Study bleibt bei `noindex, follow` und verwendet keinen Angular-Router.
-
-Lokales und serverseitiges Deployment prüfen die drei Pflicht-Studies RAW/FORM, WHATWESEE und CTRL//ROOM sowie die CSS-, JS- und Audio-Datei von CTRL//ROOM. Zusätzliche Study-Ordner werden ebenfalls auf `index.html` geprüft.
-
-Die Root-`.htaccess` lässt gehashte Angular-Bundles weiterhin dauerhaft cachen. Unverhashte CSS-/JS-Dateien unter `/design-studies/` müssen vor Wiederverwendung revalidiert werden.
-
-Einmalige Aktualisierung des installierten Server-Skripts und Deploy-Schritte: `scripts/ctrl-room-deployment.md` im Portfolio-Projekt.
+Rechtliche Links zeigen vorläufig auf `https://b2folio.de/impressum` und `https://b2folio.de/datenschutz`. Die endgültigen Routen einschließlich eventueller Hash-Routing-Konventionen anhand des echten B²-Projekts prüfen und übernehmen. Die Study nutzt `noindex, follow`.
 
 ## Validierung
 

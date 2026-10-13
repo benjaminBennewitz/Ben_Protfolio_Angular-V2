@@ -1,6 +1,8 @@
 folio/
 ├── .angular/
 │   └── ...
+├── dist/
+│   └── ...
 ├── node_modules/
 │   └── ...
 ├── scripts/
@@ -376,8 +378,20 @@ folio/
 │   │   │   │       └── meets-section.webp
 │   │   │   └── index.html
 │   │   ├── ctrl-room/
+│   │   │   ├── assets/
+│   │   │   │   ├── album-cover.webp
+│   │   │   │   ├── artist-portrait.webp
+│   │   │   │   ├── ctrl-room-logo.svg
+│   │   │   │   ├── favicon.svg
+│   │   │   │   ├── hero-portrait.jpg
+│   │   │   │   ├── Midnight_in_the_Lower_Sector.mp3
+│   │   │   │   ├── noise-loud.webp
+│   │   │   │   ├── noise-minimal.webp
+│   │   │   │   └── rave-atmosphere.webp
 │   │   │   ├── index.html
-│   │   │   └── README.md
+│   │   │   ├── README.md
+│   │   │   ├── script.js
+│   │   │   └── styles.css
 │   │   └── swiss/
 │   │       ├── assets/
 │   │       │   ├── images/

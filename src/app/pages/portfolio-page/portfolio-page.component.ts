@@ -107,6 +107,14 @@ export class PortfolioPageComponent {
       preview: '/design-studies/swiss/assets/images/hero-landscape.webp',
       tags: ['Swiss Style', 'Photography', 'Editorial', 'HTML / CSS / JS'],
     },
+    {
+      id: 'ctrl-room',
+      name: 'CTRL//ROOM',
+      subtitle: 'Audiovisual Digital Culture Platform',
+      href: '/design-studies/ctrl-room/',
+      preview: '/design-studies/ctrl-room/assets/hero-portrait.jpg',
+      tags: ['Y2K', 'Cyber Interface', 'Web Audio', 'HTML / CSS / JS'],
+    },
   ];
 
   /** Referenz auf die Scroll-Strecke der Design-Studies-Bühne. */

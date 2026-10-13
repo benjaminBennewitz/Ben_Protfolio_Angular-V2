@@ -32,7 +32,9 @@
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
 
   <FilesMatch "\.(?:js|css)$">
-    Header set Cache-Control "public, max-age=31536000, immutable"
+    # Angular-Bundles sind gehasht; statische Studies behalten feste Dateinamen.
+    Header set Cache-Control "public, max-age=31536000, immutable" "expr=%{REQUEST_URI} !~ m#^/design-studies/#"
+    Header set Cache-Control "no-cache, must-revalidate" "expr=%{REQUEST_URI} =~ m#^/design-studies/#"
   </FilesMatch>
 
   <FilesMatch "\.(?:woff2|webp|avif|png|jpe?g|gif|svg|ico)$">

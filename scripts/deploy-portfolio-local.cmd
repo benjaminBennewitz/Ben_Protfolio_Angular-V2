@@ -107,9 +107,30 @@ if not exist "%BUILD_DIR%\sitemap.xml" (
   exit /b 1
 )
 
-if not exist "%BUILD_DIR%\design-studies\brutalism\index.html" (
-  echo [B2FOLIO][FEHLER] Build unvollstaendig: RAW/FORM Design Study fehlt.
-  exit /b 1
+REM Jede vorhandene Study muss mit eigener index.html im Build enthalten sein.
+for /d %%S in ("%PROJECT_DIR%\src\design-studies\*") do (
+  if not exist "%%S\index.html" (
+    echo [B2FOLIO][FEHLER] Study-Einstiegsdatei fehlt: %%~nxS/index.html
+    exit /b 1
+  )
+  if not exist "%BUILD_DIR%\design-studies\%%~nxS\index.html" (
+    echo [B2FOLIO][FEHLER] Design Study fehlt im Build: %%~nxS
+    exit /b 1
+  )
+)
+
+REM Bekannte Studies und die externen CTRL/ROOM-Dateien explizit absichern.
+for %%S in (brutalism swiss ctrl-room) do (
+  if not exist "%BUILD_DIR%\design-studies\%%S\index.html" (
+    echo [B2FOLIO][FEHLER] Pflicht-Study fehlt im Build: %%S
+    exit /b 1
+  )
+)
+for %%F in (styles.css script.js assets\Midnight_in_the_Lower_Sector.mp3) do (
+  if not exist "%BUILD_DIR%\design-studies\ctrl-room\%%F" (
+    echo [B2FOLIO][FEHLER] CTRL/ROOM-Datei fehlt im Build: %%F
+    exit /b 1
+  )
 )
 
 if exist "%ARCHIVE%" del /f /q "%ARCHIVE%"

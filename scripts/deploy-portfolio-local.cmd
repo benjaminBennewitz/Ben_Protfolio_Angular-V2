@@ -120,7 +120,7 @@ for /d %%S in ("%PROJECT_DIR%\src\design-studies\*") do (
 )
 
 REM Bekannte Studies und die externen CTRL/ROOM-Dateien explizit absichern.
-for %%S in (brutalism swiss ctrl-room) do (
+for %%S in (brutalism swiss ctrl-room scoop) do (
   if not exist "%BUILD_DIR%\design-studies\%%S\index.html" (
     echo [B2FOLIO][FEHLER] Pflicht-Study fehlt im Build: %%S
     exit /b 1
@@ -129,6 +129,14 @@ for %%S in (brutalism swiss ctrl-room) do (
 for %%F in (styles.css script.js assets\Midnight_in_the_Lower_Sector.mp3) do (
   if not exist "%BUILD_DIR%\design-studies\ctrl-room\%%F" (
     echo [B2FOLIO][FEHLER] CTRL/ROOM-Datei fehlt im Build: %%F
+    exit /b 1
+  )
+)
+
+REM SCOOP-Laufzeitdateien vor dem Upload absichern.
+for %%F in (styles.css script.js artwork.js assets\preview.webp assets\scoop-logo.svg assets\strawlarry-cup.svg assets\brostacchio-cup.svg assets\jochen-cup.svg assets\nadin-portrait.webp assets\ben-portrait.webp fonts\web\lilita-one.woff fonts\web\nunito-sans.woff) do (
+  if not exist "%BUILD_DIR%\design-studies\scoop\%%F" (
+    echo [B2FOLIO][FEHLER] SCOOP-Datei fehlt im Build: %%F
     exit /b 1
   )
 )

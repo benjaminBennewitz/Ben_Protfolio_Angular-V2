@@ -115,6 +115,14 @@ export class PortfolioPageComponent {
       preview: '/design-studies/ctrl-room/assets/hero-portrait.jpg',
       tags: ['Y2K', 'Cyber Interface', 'Web Audio', 'HTML / CSS / JS'],
     },
+    {
+      id: 'scoop',
+      name: 'SCOOP!',
+      subtitle: 'Playful Ice Cream Shop',
+      href: '/design-studies/scoop/',
+      preview: '/design-studies/scoop/assets/preview.webp',
+      tags: ['Comic Design', 'SVG Animation', 'Interactive Shop', 'HTML / CSS / JS'],
+    },
   ];
 
   /** Referenz auf die Scroll-Strecke der Design-Studies-Bühne. */

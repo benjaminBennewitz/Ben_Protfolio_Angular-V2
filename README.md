@@ -202,6 +202,14 @@ dist/ben-portfolio-experience/browser
 
 The production configuration enables optimization, file hashing, environment-specific frontend configuration, and bundle budgets. `.htaccess`, `robots.txt`, `sitemap.xml`, and the local assets are copied into the build output.
 
+### Standalone Design Studies
+
+The portfolio links to RAW/FORM, [WHATWESEE], CTRL//ROOM and SCOOP! under `/design-studies/`. SCOOP! is a comic-style ice cream shop with SVG characters, a scroll path, a configurable mix box and browser-local demo interactions. Its card uses a composed preview made from the study's original SVG assets.
+
+Angular copies the runtime files directly. SCOOP! Illustrator masters, draft PNGs, original TTF fonts and source documentation are excluded from the deployment output; local webfonts and their license files remain included. Source originals stay in the repository.
+
+Both deployment scripts validate all four studies and SCOOP!'s required runtime files. After updating the server script in Git, reinstall its copy at `/usr/local/bin/deploy-portfolio-frontend` before deploying. See [SCOOP! deployment steps](scripts/scoop-deployment.md).
+
 ## License and Usage
 
 This project is **proprietary and not open source**. Its public visibility serves exclusively to allow professional and design-related evaluation.

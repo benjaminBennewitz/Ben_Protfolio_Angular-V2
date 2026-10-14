@@ -7,7 +7,8 @@ folio/
 │   └── ...
 ├── scripts/
 │   ├── deploy-portfolio-local.cmd
-│   └── deploy-portfolio-server.sh
+│   ├── deploy-portfolio-server.sh
+│   └── scoop-deployment.md
 ├── src/
 │   ├── app/
 │   │   ├── core/
@@ -388,6 +389,42 @@ folio/
 │   │   │   │   ├── noise-loud.webp
 │   │   │   │   ├── noise-minimal.webp
 │   │   │   │   └── rave-atmosphere.webp
+│   │   │   ├── index.html
+│   │   │   ├── README.md
+│   │   │   ├── script.js
+│   │   │   └── styles.css
+│   │   ├── scoop/
+│   │   │   ├── assets/
+│   │   │   │   ├── ben-portrait.webp
+│   │   │   │   ├── brostacchio-cup.svg
+│   │   │   │   ├── brostacchio-scoop.svg
+│   │   │   │   ├── cups-complete.ai
+│   │   │   │   ├── favicon.svg
+│   │   │   │   ├── golden-waffel.svg
+│   │   │   │   ├── jochen-cup.svg
+│   │   │   │   ├── jochen-scoop.svg
+│   │   │   │   ├── nadin-portrait.webp
+│   │   │   │   ├── portrait-notes.md
+│   │   │   │   ├── preview.webp
+│   │   │   │   ├── SCOOP! – Comic-Eis-Shop mit Mix-Box.png
+│   │   │   │   ├── Scoop! Eiscreme-Charaktere im Designboard-3.png
+│   │   │   │   ├── scoop-logo.svg
+│   │   │   │   ├── scoops-complete.ai
+│   │   │   │   ├── strawlarry-cup.svg
+│   │   │   │   └── strawlarry-scoop.svg
+│   │   │   ├── fonts/
+│   │   │   │   ├── Lilita_One/
+│   │   │   │   │   ├── LilitaOne-Regular.ttf
+│   │   │   │   │   └── OFL.txt
+│   │   │   │   ├── Nunito_Sans/
+│   │   │   │   │   ├── NunitoSans-Italic-VariableFont_YTLC,opsz,wdth,wght.ttf
+│   │   │   │   │   ├── NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf
+│   │   │   │   │   ├── OFL.txt
+│   │   │   │   │   └── README.txt
+│   │   │   │   └── web/
+│   │   │   │       ├── lilita-one.woff
+│   │   │   │       └── nunito-sans.woff
+│   │   │   ├── artwork.js
 │   │   │   ├── index.html
 │   │   │   ├── README.md
 │   │   │   ├── script.js

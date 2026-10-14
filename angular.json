@@ -49,7 +49,15 @@
               {
                 "glob": "**/*",
                 "input": "src/design-studies",
-                "output": "design-studies"
+                "output": "design-studies",
+                "ignore": [
+                  "scoop/**/*.ai",
+                  "scoop/fonts/**/*.ttf",
+                  "scoop/assets/*.png",
+                  "scoop/README.md",
+                  "scoop/fonts/**/README.txt",
+                  "scoop/assets/portrait-notes.md"
+                ]
               }
             ],
             "styles": [],

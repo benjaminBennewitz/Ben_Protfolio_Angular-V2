@@ -57,7 +57,7 @@ if [[ ! -d "$TMP_DIR/assets" ]]; then
   exit 1
 fi
 
-for required_study in brutalism swiss ctrl-room; do
+for required_study in brutalism swiss ctrl-room scoop; do
   if [[ ! -f "$TMP_DIR/design-studies/$required_study/index.html" ]]; then
     echo "[B2FOLIO][FEHLER] Design Study fehlt im Build-Archiv: $required_study" >&2
     exit 1
@@ -74,6 +74,13 @@ done
 for study_file in styles.css script.js assets/Midnight_in_the_Lower_Sector.mp3; do
   if [[ ! -f "$TMP_DIR/design-studies/ctrl-room/$study_file" ]]; then
     echo "[B2FOLIO][FEHLER] CTRL/ROOM-Datei fehlt im Build-Archiv: $study_file" >&2
+    exit 1
+  fi
+done
+
+for study_file in styles.css script.js artwork.js assets/preview.webp assets/scoop-logo.svg assets/strawlarry-cup.svg assets/brostacchio-cup.svg assets/jochen-cup.svg assets/nadin-portrait.webp assets/ben-portrait.webp fonts/web/lilita-one.woff fonts/web/nunito-sans.woff; do
+  if [[ ! -f "$TMP_DIR/design-studies/scoop/$study_file" ]]; then
+    echo "[B2FOLIO][FEHLER] SCOOP-Datei fehlt im Build-Archiv: $study_file" >&2
     exit 1
   fi
 done

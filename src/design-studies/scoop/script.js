@@ -8,6 +8,7 @@
   const voteKey = 'scoop-demo-vote-v1';
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+  const automaticHover = matchMedia('(hover: none), (pointer: coarse)');
   const loader = $('#page-loader');
   const loaderStarted = performance.now();
   $('.site-shell').inert = true; document.body.classList.add('is-loading');
@@ -178,6 +179,25 @@
     path.setAttribute('vector-effect', 'non-scaling-stroke'); svg.append(path); bubble.append(svg, element('span', 'speech-text', text));
     return bubble;
   }
+  const automaticHoverTargets = new Map();
+  const automaticHoverObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      const state = automaticHoverTargets.get(entry.target);
+      if (state) { state.visible = entry.isIntersecting && entry.intersectionRatio >= .3; refreshAutomaticHover(entry.target); }
+    }
+  }, { threshold: [0, .3] }) : null;
+  /** Dekorative Hover-Zustände laufen auf Touch-Geräten nur sichtbar und ohne Reduced Motion. */
+  function refreshAutomaticHover(target) {
+    const state = automaticHoverTargets.get(target);
+    state?.update(automaticHover.matches && state.visible && !document.hidden && !motion.matches);
+  }
+  function watchAutomaticHover(target, update) {
+    automaticHoverTargets.set(target, { visible: false, update }); automaticHoverObserver?.observe(target); refreshAutomaticHover(target);
+  }
+  function refreshAutomaticHovers() { for (const target of automaticHoverTargets.keys()) refreshAutomaticHover(target); }
+  automaticHover.addEventListener('change', refreshAutomaticHovers);
+  motion.addEventListener('change', refreshAutomaticHovers);
+  document.addEventListener('visibilitychange', refreshAutomaticHovers);
   $$('[data-product]').forEach(card => {
     let quantity = 1; const output = $('[data-quantity-output]', card); const decrement = $('[data-quantity="-1"]', card); const increment = $('[data-quantity="1"]', card); const buy = $('[data-add]', card);
     function syncQuantity() { output.textContent = quantity; decrement.disabled = quantity <= 1; increment.disabled = quantity >= 12; }
@@ -185,11 +205,12 @@
     buy.addEventListener('click', () => { addToCart({ type: 'single', product: card.dataset.product }, quantity); flyCup(card.dataset.product, buy); });
     const cloud = $('.speech-cloud', card);
     let bubbleSlot = 0;
-    let hovering = false, focused = false, speechTimer = 0, previousMessage = '';
+    let hovering = false, focused = false, automaticActive = false, speechTimer = 0, previousMessage = '';
+    function speechActive() { return hovering || (!automaticHover.matches && focused) || automaticActive; }
     const messages = [...speechMessages.general, ...speechMessages[card.dataset.product]];
     function stopSpeech() { clearTimeout(speechTimer); speechTimer = 0; $$('.speech-bubble', cloud).forEach(bubble => bubble.getAnimations?.().forEach(animation => animation.cancel())); cloud.replaceChildren(); bubbleSlot = 0; card.classList.remove('is-chatty'); }
     function speak() {
-      if (!(hovering || focused) || document.hidden) { stopSpeech(); return; }
+      if (!speechActive() || document.hidden) { stopSpeech(); return; }
       const choices = messages.filter(message => message !== previousMessage);
       previousMessage = choices[Math.floor(Math.random() * choices.length)];
       if (cloud.children.length === 5) cloud.firstElementChild.remove();
@@ -202,12 +223,13 @@
       if (!motion.matches) bubble.animate([{ opacity: 0, scale: '.85', translate: '0 8px' }, { opacity: 1, scale: '1', translate: '0 0' }], { duration: 220, easing: 'ease-out' });
       speechTimer = setTimeout(speak, Math.random() * 2000);
     }
-    function syncSpeech() { if ((hovering || focused) && !document.hidden) { if (!speechTimer) speak(); } else stopSpeech(); }
-    card.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') { hovering = true; card.classList.add('is-mouth-open'); syncSpeech(); } });
-    card.addEventListener('pointerleave', () => { hovering = false; card.classList.remove('is-mouth-open'); syncSpeech(); });
+    function syncSpeech() { card.classList.toggle('is-mouth-open', (hovering || automaticActive) && !document.hidden); if (speechActive() && !document.hidden) { if (!speechTimer) speak(); } else stopSpeech(); }
+    card.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') { hovering = true; syncSpeech(); } });
+    card.addEventListener('pointerleave', () => { hovering = false; syncSpeech(); });
     card.addEventListener('focusin', () => { focused = true; syncSpeech(); });
     card.addEventListener('focusout', event => { if (!card.contains(event.relatedTarget)) { focused = false; syncSpeech(); } });
     document.addEventListener('visibilitychange', syncSpeech);
+    watchAutomaticHover(card, active => { automaticActive = active; card.classList.toggle('is-auto-hover', active); syncSpeech(); });
     syncQuantity();
   });
 
@@ -235,7 +257,7 @@
       if (value !== attr.value) node.setAttribute(attr.name, value);
     } });
     svg.dataset.character = key; host.replaceChildren(svg);
-    const actor = { svg, visible: !visibilityObserver, eyes: $$('[data-eye]', svg).map(eye => ({ white: $('[data-eye-white]', eye), mover: $('[data-pupil]', eye), base: null, x: 0, y: 0 })), arms: [] };
+    const actor = { svg, gazePhase: mountIndex * .65, visible: !visibilityObserver, eyes: $$('[data-eye]', svg).map(eye => ({ white: $('[data-eye-white]', eye), mover: $('[data-pupil]', eye), base: null, x: 0, y: 0 })), arms: [] };
     if (key === 'jochen-scoop') $$('[data-arm]', svg).forEach(path => {
       const length = path.getTotalLength(); const points = [0, 1 / 3, 2 / 3, 1].map(t => { const p = path.getPointAtLength(t * length); return { x: p.x, y: p.y }; });
       const hand = $('[data-hand]', path.parentElement); const nearEnd = path.getPointAtLength(length - 1); const end = points[3];
@@ -334,20 +356,21 @@
   function resetFounderArms(actor) { for (const arm of actor.arms) { arm.path.setAttribute('d', arm.original); arm.hand.removeAttribute('transform'); } }
   /** Die Portrait-Arme nutzen dieselbe Pfadverformung wie Jochen, jedoch nur bei Hover/Fokus/Klick. */
   $$('.founder-wave').forEach(button => {
-    const actor = { arms: [], active: false }; let hovering = false, focused = false, tapped = false, tapTimer = 0;
+    const actor = { arms: [], active: false }; let hovering = false, focused = false, tapped = false, automaticActive = false, tapTimer = 0;
     $$('[data-founder-arm]', button).forEach(path => {
       const length = path.getTotalLength(), points = [0, 1 / 3, 2 / 3, 1].map(t => { const p = path.getPointAtLength(t * length); return { x: p.x, y: p.y }; });
       const end = points[3], near = path.getPointAtLength(length - 1);
       actor.arms.push({ path, hand: $('[data-founder-hand]', path.parentElement), points, original: path.getAttribute('d'), phase: actor.arms.length * 2.4, angle: Math.atan2(end.y - near.y, end.x - near.x) });
     });
-    function syncWave() { actor.active = hovering || focused || tapped; if (!actor.active || motion.matches) resetFounderArms(actor); else requestFrame(); }
+    function syncWave() { actor.active = (hovering || focused || tapped || automaticActive) && !document.hidden && (!automaticHover.matches || automaticActive || hovering); if (!actor.active || motion.matches) resetFounderArms(actor); else requestFrame(); }
     button.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') { hovering = true; syncWave(); } });
     button.addEventListener('pointerleave', () => { hovering = false; syncWave(); });
     button.addEventListener('focus', () => { focused = true; syncWave(); }); button.addEventListener('blur', () => { focused = false; syncWave(); });
     button.addEventListener('click', () => { clearTimeout(tapTimer); tapped = true; syncWave(); tapTimer = setTimeout(() => { tapped = false; syncWave(); }, 1600); });
+    watchAutomaticHover(button, active => { automaticActive = active; button.classList.toggle('is-auto-hover', active); syncWave(); });
     founderActors.add(actor);
   });
-  function updateEyes(actor) {
+  function updateEyes(actor, time) {
     let moving = false;
     for (const eye of actor.eyes) {
       if (!eye.base) {
@@ -360,6 +383,7 @@
         const p = new DOMPoint(pointer.x, pointer.y).matrixTransform(matrix.inverse()); dx = p.x - eye.base.x; dy = p.y - eye.base.y;
         const magnitude = Math.hypot(dx, dy); if (magnitude) { dx = dx / magnitude * Math.min(10, magnitude * .04); dy = dy / magnitude * Math.min(7, magnitude * .025); }
       }
+      if (automaticHover.matches && loader.hidden && !finePointer.matches) { dx = Math.sin(time * .9 + actor.gazePhase) * 5; dy = Math.cos(time * .65 + actor.gazePhase) * 2; }
       if (Math.abs(dx - eye.x) > .05 || Math.abs(dy - eye.y) > .05) moving = true;
       eye.x += (dx - eye.x) * .25; eye.y += (dy - eye.y) * .25;
       eye.mover.setAttribute('transform', `translate(${eye.base.centerX + eye.x},${eye.base.centerY + eye.y})`);
@@ -381,7 +405,7 @@
       for (let i = 0; i < 3; i++) { const lower = heroLayers[i], above = heroLayers[i + 1]; if (lower.shadow) lower.shadow.style.opacity = above.contact ? String(Math.max(0, 1 - Math.abs(above.offset - lower.offset) / 90)) : '0'; }
       if (heroElapsed >= 2700) finishHero();
     } else heroPreviousFrame = 0;
-    for (const actor of actors) if (actor.visible && actor.svg.isConnected) { eyesMoving = updateEyes(actor) || eyesMoving; if (heroVisible && heroLanded && actor.arms.length) updateArms(actor, now / 1000); }
+    for (const actor of actors) if (actor.visible && actor.svg.isConnected) { eyesMoving = updateEyes(actor, now / 1000) || (automaticHover.matches && loader.hidden) || eyesMoving; if (heroVisible && heroLanded && actor.arms.length) updateArms(actor, now / 1000); }
     let founderMoving = false;
     for (const actor of founderActors) if (actor.active) { updateArms(actor, now / 1000); founderMoving = true; }
     const pathMoving = advancePath();

@@ -103,7 +103,8 @@
           @for (study of designStudies; track study.id; let index = $index) {
           <article class="design-study" [class.design-study--even]="index % 2 === 1" [style.z-index]="index + 1"
             [style.opacity]="designStudyOpacity(index)" [style.transform]="designStudyTransform(index)"
-            [style.filter]="designStudyFilter(index)" [style.pointer-events]="designStudyCardProgress(index) > 0.96 ? 'auto' : 'none'">
+            [style.filter]="designStudyFilter(index)" [style.pointer-events]="isDesignStudyCardInteractive(index) ? 'auto' : 'none'"
+            [attr.inert]="isDesignStudyCardInteractive(index) ? null : ''">
             <a class="design-study__link" [href]="study.href" target="_blank" rel="noopener noreferrer"
               [attr.aria-label]="content().projectsIntro.designStudiesOpenLabel + ': ' + study.name">
               <div class="design-study__visual">

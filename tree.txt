@@ -429,18 +429,35 @@ folio/
 │   │   │   ├── README.md
 │   │   │   ├── script.js
 │   │   │   └── styles.css
-│   │   └── swiss/
+│   │   ├── swiss/
+│   │   │   ├── assets/
+│   │   │   │   ├── images/
+│   │   │   │   │   ├── archive-animals.webp
+│   │   │   │   │   ├── archive-architecture.webp
+│   │   │   │   │   ├── archive-flowers.webp
+│   │   │   │   │   ├── archive-landscape.webp
+│   │   │   │   │   ├── article-landscape.webp
+│   │   │   │   │   ├── cta-landscape.webp
+│   │   │   │   │   └── hero-landscape.webp
+│   │   │   │   └── favicon.svg
+│   │   │   ├── index.html
+│   │   │   ├── README.md
+│   │   │   ├── script.js
+│   │   │   └── styles.css
+│   │   └── type-break/
 │   │       ├── assets/
-│   │       │   ├── images/
-│   │       │   │   ├── archive-animals.webp
-│   │       │   │   ├── archive-architecture.webp
-│   │       │   │   ├── archive-flowers.webp
-│   │       │   │   ├── archive-landscape.webp
-│   │       │   │   ├── article-landscape.webp
-│   │       │   │   ├── cta-landscape.webp
-│   │       │   │   └── hero-landscape.webp
-│   │       │   └── favicon.svg
+│   │       │   ├── anton-regular.ttf
+│   │       │   ├── favicon.svg
+│   │       │   ├── noto-serif-cjk-jp-subset.woff2
+│   │       │   ├── OFL.txt
+│   │       │   ├── OFL-NOTO.txt
+│   │       │   ├── preview.svg
+│   │       │   ├── preview.webp
+│   │       │   └── type-break-manifesto.pdf
+│   │       ├── docs/
+│   │       │   └── MANIFESTO.md
 │   │       ├── index.html
+│   │       ├── physics.js
 │   │       ├── README.md
 │   │       ├── script.js
 │   │       └── styles.css

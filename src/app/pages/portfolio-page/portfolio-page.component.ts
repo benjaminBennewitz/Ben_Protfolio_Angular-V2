@@ -116,6 +116,14 @@ export class PortfolioPageComponent {
       tags: ['Y2K', 'Cyber Interface', 'Web Audio', 'HTML / CSS / JS'],
     },
     {
+      id: 'type-break',
+      name: 'TYPE破BREAK',
+      subtitle: 'Interactive Typographic Manifesto',
+      href: '/design-studies/type-break/',
+      preview: '/design-studies/type-break/assets/preview.webp',
+      tags: ['Kinetic Type', 'Creative Coding', 'Interactive Poster', 'HTML / CSS / JS'],
+    },
+    {
       id: 'scoop',
       name: 'SCOOP!',
       subtitle: 'Playful Ice Cream Shop',
@@ -131,6 +139,26 @@ export class PortfolioPageComponent {
 
   /** Scrollfortschritt innerhalb der fixierten Design-Studies-Bühne (0–1). */
   readonly designStudiesProgress = signal<number>(0);
+
+  /** Die oberste sichtbare Karte erhält bereits beim Einflug die vollständige Klickfläche. */
+  readonly activeDesignStudyIndex = computed<number>(() => {
+    for (let index = this.designStudies.length - 1; index > 0; index--) {
+      if (this.designStudyCardProgress(index) > 0) {
+        return index;
+      }
+    }
+
+    return 0;
+  });
+
+  /** Mobile zeigt sämtliche Karten untereinander; auf Desktop ist nur die oberste bedienbar. */
+  isDesignStudyCardInteractive(index: number): boolean {
+    if (typeof window !== 'undefined' && window.innerWidth <= 900) {
+      return true;
+    }
+
+    return this.activeDesignStudyIndex() === index;
+  }
 
   /** Zusätzlicher Scrollweg: pro weiterer Studie entsteht eine eigene Einflugstrecke. */
   readonly designStudiesScrollHeight = `${100 + Math.max(0, this.designStudies.length - 1) * 120}svh`;

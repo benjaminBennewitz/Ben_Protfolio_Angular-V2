@@ -83,6 +83,13 @@ html {
   scrollbar-width: thin;
 }
 
+@media (max-width: 980px) {
+  html.bp-mobile-menu-open {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+}
+
 body {
   width: 100%;
   min-height: 100%;

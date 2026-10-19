@@ -5,7 +5,7 @@
  * @description Bietet Anker-Navigation, Mobile-Menü, Dark-/Light-Mode, Language-Switcher und leichte Umschaltanimationen.
  */
 
-import { Component, WritableSignal, computed, inject, signal } from '@angular/core';
+import { Component, DestroyRef, ElementRef, HostListener, ViewChild, WritableSignal, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 import { ThemeService } from '../../core/services/theme.service';
@@ -21,6 +21,22 @@ import { GlobalOverlayService } from '../../core/services/global-overlay.service
   styleUrl: './navigation.component.scss',
 })
 export class NavigationComponent {
+  /** Fokusrückführung und Cleanup bei Navigation über Tastatur. */
+  @ViewChild('mobileLinks') private readonly mobileLinks?: ElementRef<HTMLElement>;
+
+  @ViewChild('menuToggle') private readonly menuToggle?: ElementRef<HTMLButtonElement>;
+
+  /** Entfernt den Scroll-Lock, wenn die Navigation zerstört wird. */
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      if (typeof document !== 'undefined') {
+        document.documentElement.classList.remove('bp-mobile-menu-open');
+      }
+    });
+  }
+
   /** Sprachservice für Labels und Sprachwechsel. */
   readonly languageService = inject(LanguageService);
 
@@ -50,12 +66,66 @@ export class NavigationComponent {
 
   /** Öffnet oder schließt das mobile Menü. */
   toggleMenu(): void {
-    this.menuOpen.update((isOpen) => !isOpen);
+    const shouldOpen = !this.menuOpen();
+    this.setMenuOpen(shouldOpen);
+
+    if (shouldOpen && typeof window !== 'undefined') {
+      window.requestAnimationFrame(() => this.mobileLinks?.nativeElement.querySelector('a')?.focus());
+    }
   }
 
   /** Schließt das mobile Menü nach einer Navigation. */
   closeMenu(): void {
-    this.menuOpen.set(false);
+    this.setMenuOpen(false);
+  }
+
+  /** Verhindert Scrollen der Seite, solange das Fullscreen-Menü geöffnet ist. */
+  private setMenuOpen(isOpen: boolean): void {
+    this.menuOpen.set(isOpen);
+
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('bp-mobile-menu-open', isOpen);
+    }
+  }
+
+  /** Schließt das Menü mit Escape und hält Tastaturfokus im geöffneten Overlay. */
+  @HostListener('document:keydown', ['$event'])
+  onDocumentKeydown(event: KeyboardEvent): void {
+    if (!this.menuOpen()) {
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      this.closeMenu();
+      this.menuToggle?.nativeElement.focus();
+      return;
+    }
+
+    if (event.key !== 'Tab' || typeof document === 'undefined') {
+      return;
+    }
+
+    const header = this.menuToggle?.nativeElement.closest('header');
+    const elements = Array.from(header?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? [])
+      .filter((element) => element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden');
+    const currentIndex = elements.indexOf(document.activeElement as HTMLElement);
+
+    if (!elements.length) {
+      return;
+    }
+
+    if ((event.shiftKey && currentIndex <= 0) || (!event.shiftKey && currentIndex === elements.length - 1)) {
+      event.preventDefault();
+      elements[event.shiftKey ? elements.length - 1 : 0].focus();
+    }
+  }
+
+  /** Stellt beim Wechsel zum Desktop die ursprüngliche Navigation wieder her. */
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    if (this.menuOpen() && window.innerWidth > 980) {
+      this.closeMenu();
+    }
   }
 
   /** Öffnet das globale Access-Panel aus der mobilen Navigation. */

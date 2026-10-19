@@ -6,15 +6,17 @@
     <span class="nav__brand-text">design<br>code. repeat.</span>
   </a>
 
-  <nav class="nav__links" [attr.aria-label]="content().menu">
-    <a routerLink="/" fragment="hero" (click)="closeMenu()">01_{{ content().home }}</a>
-    <a routerLink="/" fragment="about" (click)="closeMenu()">02_{{ content().about }}</a>
-    <a routerLink="/" fragment="skills" (click)="closeMenu()">03_{{ content().skills }}</a>
-    <a routerLink="/portfolio" (click)="closeMenu()">04_{{ content().portfolio }}</a>
-    <a routerLink="/snippets" (click)="closeMenu()">05_{{ content().snippets }}</a>
-    <a routerLink="/" fragment="process" (click)="closeMenu()">06_{{ content().process }}</a>
-    <a routerLink="/" fragment="faq" (click)="closeMenu()">07_{{ content().faq }}</a>
-    <a routerLink="/" fragment="contact" (click)="closeMenu()">08_{{ content().contact }}</a>
+  <nav #mobileLinks id="portfolio-navigation" class="nav__links" [attr.aria-label]="content().menu">
+    <span class="nav__mobile-title" aria-hidden="true">{{ content().menu }} / 08</span>
+    <a routerLink="/" fragment="hero" (click)="closeMenu()"><span class="nav__link-number" aria-hidden="true">01_</span><span class="nav__link-label">{{ content().home }}</span><span class="nav__link-arrow" aria-hidden="true">↗</span></a>
+    <a routerLink="/" fragment="about" (click)="closeMenu()"><span class="nav__link-number" aria-hidden="true">02_</span><span class="nav__link-label">{{ content().about }}</span><span class="nav__link-arrow" aria-hidden="true">↗</span></a>
+    <a routerLink="/" fragment="skills" (click)="closeMenu()"><span class="nav__link-number" aria-hidden="true">03_</span><span class="nav__link-label">{{ content().skills }}</span><span class="nav__link-arrow" aria-hidden="true">↗</span></a>
+    <a routerLink="/portfolio" (click)="closeMenu()"><span class="nav__link-number" aria-hidden="true">04_</span><span class="nav__link-label">{{ content().portfolio }}</span><span class="nav__link-arrow" aria-hidden="true">↗</span></a>
+    <a routerLink="/snippets" (click)="closeMenu()"><span class="nav__link-number" aria-hidden="true">05_</span><span class="nav__link-label">{{ content().snippets }}</span><span class="nav__link-arrow" aria-hidden="true">↗</span></a>
+    <a routerLink="/" fragment="process" (click)="closeMenu()"><span class="nav__link-number" aria-hidden="true">06_</span><span class="nav__link-label">{{ content().process }}</span><span class="nav__link-arrow" aria-hidden="true">↗</span></a>
+    <a routerLink="/" fragment="faq" (click)="closeMenu()"><span class="nav__link-number" aria-hidden="true">07_</span><span class="nav__link-label">{{ content().faq }}</span><span class="nav__link-arrow" aria-hidden="true">↗</span></a>
+    <a routerLink="/" fragment="contact" (click)="closeMenu()"><span class="nav__link-number" aria-hidden="true">08_</span><span class="nav__link-label">{{ content().contact }}</span><span class="nav__link-arrow" aria-hidden="true">↗</span></a>
+    <span class="nav__mobile-footer" aria-hidden="true">B² / DESIGN. CODE. REPEAT.</span>
   </nav>
 
   <div class="nav__actions">
@@ -42,8 +44,8 @@
       <span>// terminal_access</span>
     </a>
 
-    <button class="nav__burger" type="button" [attr.aria-label]="menuOpen() ? content().close : content().menu"
-      [attr.aria-expanded]="menuOpen()" (click)="toggleMenu()">
+    <button #menuToggle class="nav__burger" type="button" [attr.aria-label]="menuOpen() ? content().close : content().menu"
+      [attr.aria-expanded]="menuOpen()" aria-controls="portfolio-navigation" (click)="toggleMenu()">
       <span></span>
       <span></span>
       <span></span>

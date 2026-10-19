@@ -456,6 +456,8 @@ folio/
 │   │   ├── tokens.scss
 │   │   └── utilities.scss
 │   ├── .htaccess
+│   ├── favicon.ico
+│   ├── favicon.png
 │   ├── index.html
 │   ├── main.ts
 │   ├── robots.txt

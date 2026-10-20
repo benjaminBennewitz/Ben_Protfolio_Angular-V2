@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1448 1086" role="img" aria-label="FOLD. — Typografisches Poster und aufgefaltetes sechsseitiges Würfelnetz">
+<defs><pattern id="grid" width="58" height="58" patternUnits="userSpaceOnUse"><path d="M58 0H0V58" fill="none" stroke="#17191f" stroke-opacity=".11" stroke-width="1"/></pattern>
+<filter id="shadow" x="-30%" y="-30%" width="170%" height="170%"><feDropShadow dx="16" dy="24" stdDeviation="18" flood-color="#17191f" flood-opacity=".25"/></filter></defs>
+<rect width="1448" height="1086" fill="#f0ede5"/><rect width="1448" height="1086" fill="url(#grid)"/>
+<path d="M0 79H1448M0 995H1448" stroke="#17191f" stroke-opacity=".45"/>
+<text x="78" y="55" fill="#17191f" font-family="Arial,sans-serif" font-size="29" font-weight="800">FOLD<tspan fill="#2458f5">.</tspan></text>
+<text x="1364" y="51" text-anchor="end" fill="#17191f" font-family="monospace" font-size="17" font-weight="700">STUDY 007 / 6 SIDES / 1 STORY</text>
+<text x="78" y="216" fill="#17191f" font-family="Arial,sans-serif" font-weight="900" font-size="175" letter-spacing="-14">THERE IS</text>
+<text x="78" y="386" fill="#2458f5" font-family="Arial,sans-serif" font-weight="900" font-size="166" letter-spacing="-14">ANOTHER</text>
+<text x="78" y="553" fill="#17191f" font-family="Arial,sans-serif" font-weight="900" font-size="188" letter-spacing="-16">SIDE<tspan fill="#ff674a">.</tspan></text>
+<text x="81" y="655" fill="#17191f" font-family="monospace" font-size="25" font-weight="700">ONE OBJECT. SIX PERSPECTIVES.</text>
+<text x="81" y="693" fill="#17191f" font-family="monospace" font-size="19">SCROLL / FLIP / UNFOLD ↗</text>
+<g transform="translate(975 565) rotate(-11)" filter="url(#shadow)">
+<g stroke="#17191f" stroke-width="2"><rect x="0" y="0" width="139" height="139" fill="#2458f5"/><rect x="-139" y="0" width="139" height="139" fill="#17191f"/><rect x="139" y="0" width="139" height="139" fill="#ff674a"/><rect x="278" y="0" width="139" height="139" fill="#f0ede5"/><rect x="0" y="-139" width="139" height="139" fill="#ffce45"/><rect x="0" y="139" width="139" height="139" fill="#2458f5"/></g>
+<g font-family="monospace" font-size="15" font-weight="700"><text x="13" y="29" fill="white">04 / TURN</text><text x="-126" y="29" fill="white">03 / LOOK</text><text x="152" y="29" fill="#17191f">05 / NEW</text><text x="290" y="29" fill="#17191f">06 / ALL</text><text x="13" y="-109" fill="#17191f">01 / TOP</text><text x="13" y="170" fill="white">02 / FLIP</text></g>
+<circle cx="71" cy="73" r="43" stroke="#ffce45" stroke-width="6" fill="none"/><circle cx="71" cy="73" r="26" stroke="#ffce45" stroke-width="3" fill="none"/><rect x="176" y="55" width="60" height="60" stroke="#2458f5" stroke-width="4" fill="none" transform="rotate(16 206 85)"/>
+</g>
+<rect x="77" y="765" width="390" height="66" rx="33" fill="#17191f"/><circle cx="115" cy="798" r="24" fill="#ffce45"/><text x="115" y="806" font-family="Arial,sans-serif" font-size="26" text-anchor="middle">↗</text><text x="153" y="807" font-family="monospace" font-size="19" font-weight="700" fill="white">EXPLORE FOLD.</text>
+<text x="78" y="1040" font-family="monospace" font-weight="700" font-size="19" fill="#17191f">THE WHOLE PICTURE IS MORE THAN ONE SIDE.</text>
+<text x="1367" y="1040" font-family="monospace" font-weight="700" font-size="19" text-anchor="end" fill="#2458f5">KEEP UNFOLDING ↗</text>
+</svg>

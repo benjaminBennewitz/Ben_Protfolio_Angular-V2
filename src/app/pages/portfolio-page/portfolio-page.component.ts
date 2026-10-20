@@ -129,7 +129,15 @@ export class PortfolioPageComponent {
       subtitle: 'Playful Ice Cream Shop',
       href: '/design-studies/scoop/',
       preview: '/design-studies/scoop/assets/preview.webp',
-      tags: ['Comic Design', 'SVG Animation', 'Interactive Shop', 'HTML / CSS / JS'],
+      tags: ['Comic Design', 'SVG Animation', 'Illustrator', 'Interactive Shop', 'HTML / CSS / JS'],
+    },
+    {
+      id: 'fold',
+      name: 'FOLD.',
+      subtitle: 'Six Sides. One Perspective Experiment.',
+      href: '/design-studies/fold/',
+      preview: '/design-studies/fold/assets/preview.webp',
+      tags: ['3D CSS', 'Scroll Experience', 'Editorial', 'Vibe Coded'],
     },
   ];
 

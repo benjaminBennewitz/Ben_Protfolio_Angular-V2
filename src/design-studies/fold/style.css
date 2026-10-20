@@ -1,0 +1,300 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+:root{font-family:'Space Grotesk',sans-serif;color:#17191f;background:#f0ede5}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;overflow-x:clip}a{color:inherit}header{position:fixed;inset:0 0 auto;height:72px;z-index:30;display:flex;justify-content:space-between;align-items:center;padding:0 clamp(20px,4vw,70px);color:white;mix-blend-mode:difference;pointer-events:none}header>*{pointer-events:auto}header span,header>a:last-child,.hud,footer{font:500 11px 'DM Mono',monospace;letter-spacing:.09em}header a{text-decoration:none}.logo{font:700 28px 'Space Grotesk',sans-serif;letter-spacing:-.08em}.logo span{color:#ff674a}.journey{height:1350svh}.stage{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate;background:#e7e1d7}.scene{position:absolute;inset:0;overflow:hidden}.scene>div{pointer-events:none}.grain{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:.14;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E")}.hud{position:absolute;inset:auto clamp(20px,4vw,70px) 22px;display:flex;justify-content:space-between;z-index:20;pointer-events:none;color:#17191f}.paper{width:1000px;height:1000px;position:relative;overflow:hidden;backface-visibility:hidden;transform-style:preserve-3d;background:var(--bg);color:var(--fg);border:1px solid rgba(23,25,31,.2)}.paper:before{content:'';position:absolute;inset:30px;border:2px solid currentColor;opacity:.16;pointer-events:none}.paper:after{content:'FOLD.  /  SIX SIDES — ONE EXPERIENCE';position:absolute;top:53px;left:64px;font:500 14px 'DM Mono',monospace;letter-spacing:.08em}.paper .inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:80px 78px 100px;overflow:hidden}.paper .eyebrow{font:500 16px 'DM Mono',monospace;letter-spacing:.1em}.paper h1,.paper h2{font-size:clamp(70px,10vw,128px);line-height:.88;letter-spacing:-.09em;margin:32px 0 28px;font-weight:700;max-width:850px}.paper em{font-style:normal;color:var(--accent)}.paper p.copy{font-size:25px;line-height:1.4;max-width:650px;font-weight:500}.paper .footnote{position:absolute;bottom:52px;left:70px;font:500 14px 'DM Mono',monospace}.paper button{align-self:start;margin-top:15px;background:transparent;color:inherit;border:2px solid currentColor;padding:15px 24px;font:500 17px 'DM Mono',monospace;cursor:pointer;pointer-events:auto}.paper button:focus-visible,.paper button:hover{background:var(--fg);color:var(--bg)}.paper.is-current{pointer-events:auto}.paper:not(.is-current) button{pointer-events:none}.paper .inner{pointer-events:none}.paper .inner button{pointer-events:auto}.paper.net .inner{padding:90px}.paper.net h1,.paper.net h2{font-size:75px}.paper.net p.copy{font-size:21px}.paper.net .footnote{display:none}#fallback{position:absolute;z-index:40;top:50%;left:10%;background:#ffce45;padding:25px}footer{background:#17191f;color:#f0ede5;padding:55px clamp(20px,5vw,80px);min-height:330px;display:flex;flex-direction:column;gap:35px}footer strong{font:700 clamp(32px,6vw,90px) 'Space Grotesk',sans-serif;line-height:1;letter-spacing:-.07em}footer nav{display:flex;gap:15px 25px;flex-wrap:wrap}footer nav a{text-decoration:none}footer nav a:hover{text-decoration:underline}.skip{position:fixed;top:-100px;left:15px;z-index:100;background:white;padding:12px}.skip:focus{top:12px}@media(max-width:700px){header{height:58px}header>span{display:none}header>a:last-child{font-size:9px}.hud{font-size:9px}.paper .inner{padding:100px 95px}.paper h1,.paper h2{font-size:110px}.paper p.copy{font-size:28px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* V6.1 PATCH: Keep the 3D face square, but compose content inside a safe zone.
+   Scaling the content (not the panel) preserves the seamless cube geometry. */
+.paper .inner{
+  width:1000px;
+  height:1000px;
+  inset:auto;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(.62);
+  transform-origin:center center;
+}
+.paper h1,.paper h2{font-size:112px}
+.paper p.copy{font-size:26px}
+.paper.net .inner{
+  transform:translate(-50%,-50%) scale(1);
+}
+@media(max-width:700px){
+  .paper .inner{transform:translate(-50%,-50%) scale(.53)}
+  .paper.net .inner{transform:translate(-50%,-50%) scale(1)}
+}
+
+/* V6.2: entire unfolded face is an interactive hit area. */
+.paper.net{cursor:pointer;pointer-events:auto;transition:filter .2s ease}
+.paper.net:hover{filter:brightness(1.075)}
+.paper.net:focus-within{outline:4px solid currentColor;outline-offset:-8px}
+.paper.net button{display:none}
+.scene>div{pointer-events:auto}.paper:not(.net){pointer-events:none}.paper.is-current:not(.net) button{pointer-events:auto}
+
+/* Restored FOLD editorial styling and real HTML interaction on the active face. */
+.scene>div,.scene>div>div{pointer-events:auto}
+.paper.is-current{pointer-events:auto;user-select:text;-webkit-user-select:text}
+.paper.is-current .inner,.paper.is-current .inner *{pointer-events:auto;user-select:text;-webkit-user-select:text}
+.paper:not(.is-current){pointer-events:none}
+.paper:not(.is-current) *{pointer-events:none}
+.paper.net,.paper.net *{pointer-events:auto}
+.paper.net{cursor:pointer}
+.paper.net .inner{user-select:none}
+.paper .dot{color:var(--accent)}
+.paper h1{letter-spacing:-.09em}
+.paper h1 em{font-size:.67em;line-height:1.04;display:inline-block;letter-spacing:-.055em}
+.paper button{transition:background .18s,color .18s,transform .18s}
+.paper button:hover{transform:translateY(-3px)}
+.paper ::selection{background:var(--accent);color:var(--bg)}
+
+/* V6.7 — expressive editorial paper composition inspired by the original study. */
+.paper{isolation:isolate}
+.paper .inner{z-index:3}
+.paper .art-orbit{position:absolute;width:640px;height:640px;right:-240px;top:90px;border:75px solid var(--accent);border-radius:50%;opacity:.84;transform:rotate(-22deg);pointer-events:none;z-index:1;mix-blend-mode:multiply}
+.paper .art-stamp{position:absolute;bottom:150px;right:100px;font:700 28px/1.05 'DM Mono',monospace;letter-spacing:-.06em;transform:rotate(-90deg);transform-origin:bottom right;z-index:2;opacity:.7;pointer-events:none}
+.paper .art-rule{position:absolute;width:1050px;height:2px;top:190px;left:-90px;background:var(--fg);opacity:.25;transform:rotate(-19deg);pointer-events:none}
+.paper--top .art-orbit{border-radius:0;transform:rotate(26deg);width:540px;height:700px;right:-185px;top:250px;border-width:35px}
+.paper--bottom .art-orbit{border-radius:50%;width:790px;height:790px;top:240px;right:-470px;border-width:120px;opacity:.32}
+.paper--left .art-orbit{border-radius:0;transform:rotate(44deg);width:580px;height:580px;top:350px;right:-340px;border-width:85px}
+.paper--front .art-orbit{border-radius:50%;width:620px;height:620px;right:-290px;top:350px;border-width:45px}
+.paper--right .art-orbit{border-radius:0;transform:rotate(-17deg);top:80px;right:-330px;border-width:95px}
+.paper--back .art-orbit{border-radius:50%;top:370px;right:-290px;border-width:10px}
+.paper .eyebrow{color:var(--accent);font-weight:700}
+.paper h1,.paper h2{position:relative;text-transform:uppercase;letter-spacing:-.105em;line-height:.87}
+.paper h1 em,.paper h2 em{font-size:.8em;letter-spacing:-.08em}
+.paper p.copy{max-width:660px}
+.paper.net .art-orbit{opacity:.2}
+footer#end{display:block;background:#f0ede5;color:#17191f;padding:0;min-height:0;font-family:'Space Grotesk',sans-serif}
+.footer-lead,.footer-end{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px clamp(22px,4vw,72px);border-bottom:1px solid rgba(23,25,31,.2);font:500 11px 'DM Mono',monospace}
+footer#end .footer-headline{font:700 clamp(90px,16vw,300px)/.78 'Space Grotesk',sans-serif;letter-spacing:-.11em;padding:clamp(90px,12vw,200px) clamp(22px,4vw,72px);margin:0}
+footer#end .footer-headline span{color:#2458f5}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:45px;padding:70px clamp(22px,4vw,72px);border-top:1px solid rgba(23,25,31,.2)}
+.footer-grid h3{font:500 11px 'DM Mono',monospace;color:#2458f5}
+.footer-grid p{max-width:340px;font-size:19px;line-height:1.35}
+.footer-grid nav{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.footer-grid nav a{text-decoration:none;font-size:18px}
+.footer-grid nav a:hover{text-decoration:underline}
+.footer-wordmark{font:700 60px 'Space Grotesk',sans-serif;letter-spacing:-.1em;text-decoration:none}
+.footer-wordmark span{color:#2458f5}
+.footer-end{border-top:1px solid rgba(23,25,31,.2);border-bottom:0}
+@media(max-width:700px){.footer-grid{grid-template-columns:1fr;padding:45px 22px}.footer-lead,.footer-end{font-size:9px}footer#end .footer-headline{font-size:clamp(68px,17vw,120px);padding:90px 22px}}
+
+/* V6.8 — original editorial language, not an additional interactive chapter. */
+.paper .art-orbit{display:none}
+.paper .art-stamp{font-size:14px;right:55px;bottom:140px;opacity:.48}
+.paper .art-rule{width:100%;left:0;top:90px;transform:none;height:1px;opacity:.23}
+.paper .editorial-meta{position:absolute;top:51px;right:60px;font:500 12px 'DM Mono',monospace;letter-spacing:.045em;opacity:.65}
+.paper .editorial-meta b{color:var(--accent)}
+.paper .inner{z-index:4}
+.paper h1,.paper h2{font-size:140px;line-height:.83;letter-spacing:-.105em}
+.paper .inner .eyebrow{font-size:15px;letter-spacing:.06em}
+.paper .inner .copy{font-size:24px;line-height:1.42;max-width:620px}
+.paper .hero-o{color:var(--accent)}
+.paper--top .inner h1{font-size:155px;line-height:.91}
+.paper--top .inner h1 em{font-size:.48em;line-height:1.06;letter-spacing:-.075em}
+.paper--top .inner .copy{font-size:23px;max-width:520px}
+.paper--left{--bg:#17191f!important;--fg:#f0ede5!important;--accent:#ffce45!important}
+.paper--left .inner h2{font-size:172px}
+.paper--left .inner{align-items:flex-start}
+.paper--right .inner h2{font-size:154px}
+.paper--right .inner h2 em{font-size:.79em}
+.paper--front .inner h2{font-size:164px}
+.paper--bottom .inner h2{font-size:160px}
+.paper--back .inner h2{font-size:154px}
+.paper .marquee{display:none;position:absolute;left:0;right:0;top:745px;height:82px;align-items:center;overflow:hidden;background:#2458f5;color:#fff;font:700 49px/1 'Space Grotesk',sans-serif;letter-spacing:-.07em;white-space:nowrap;z-index:6}
+.paper--right .marquee{display:flex}
+.paper .marquee span{flex:none;animation:fold-marquee 17s linear infinite}
+@keyframes fold-marquee{to{transform:translateX(-100%)}}
+.paper.net .marquee{display:flex;top:780px;height:55px;font-size:34px}
+.paper.net .marquee span{animation-duration:24s}
+.paper.net .inner h1,.paper.net .inner h2{font-size:82px}
+.paper.net .inner .copy{font-size:21px}
+.paper.net .editorial-meta{display:none}
+footer#end{min-height:0;height:100svh;max-height:100svh;display:flex;flex-direction:column;overflow:hidden}
+footer#end .footer-lead{flex:0 0 auto;padding-block:15px}
+footer#end .footer-headline{flex:1;display:flex;align-items:flex-end;gap:.18em;white-space:nowrap;font-size:clamp(56px,10.5vw,205px);line-height:.82;letter-spacing:-.105em;padding:0 clamp(20px,4vw,72px) 12px}
+footer#end .footer-grid{flex:0 1 auto;min-height:0;padding:22px clamp(20px,4vw,72px);gap:20px}
+footer#end .footer-grid p{font-size:clamp(11px,1.05vw,15px);margin:8px 0}
+footer#end .footer-grid h3{margin:0 0 12px}
+footer#end .footer-grid nav{gap:8px}
+footer#end .footer-grid nav a{font-size:clamp(12px,1vw,15px)}
+footer#end .footer-wordmark{font-size:40px}
+footer#end .footer-end{flex:0 0 auto;padding-block:14px}
+.to-top{display:grid;place-items:center;background:#ffce45;color:#17191f;border:1px solid #17191f;text-decoration:none;font:700 23px 'Space Grotesk',sans-serif;width:45px;height:45px;transition:transform .2s}
+.to-top:hover{transform:translateY(-5px)}
+@media(max-width:700px){
+ footer#end .footer-headline{font-size:clamp(38px,10vw,80px);white-space:normal;flex-wrap:wrap;align-content:end}
+ footer#end .footer-grid{grid-template-columns:1fr 1fr;padding:16px 22px}
+ footer#end .footer-grid>div:first-child{display:none}
+ footer#end .footer-lead{font-size:8px}
+ footer#end .footer-end{font-size:8px}
+ .paper .marquee span{animation-duration:25s}
+}
+@media(prefers-reduced-motion:reduce){.paper .marquee span{animation:none}}
+
+/* V6.9: active-face input, visible marquee, bounded net banner and net depth. */
+.scene,.scene>div,.scene>div>div{pointer-events:auto!important}
+.paper{user-select:text;-webkit-user-select:text}
+.paper:not(.is-current){pointer-events:none!important}
+.paper:not(.is-current) *{pointer-events:none!important}
+.paper.is-current{pointer-events:auto!important;user-select:text!important;-webkit-user-select:text!important}
+.paper.is-current .inner,.paper.is-current .inner *{pointer-events:auto!important;user-select:text!important;-webkit-user-select:text!important}
+.paper.is-current button{pointer-events:auto!important;cursor:pointer!important;position:relative;z-index:30}
+.paper.net{pointer-events:auto!important;cursor:pointer;transition:filter .2s,box-shadow .2s}
+.paper.net *{pointer-events:none!important}
+.paper.net:hover{filter:brightness(1.17) contrast(1.05);box-shadow:inset 0 0 0 14px #ffce45,0 0 0 7px #17191f}
+.paper.net:after{transition:opacity .2s}
+.paper.net:hover:after{opacity:.65}
+.paper--right .marquee{top:600px;height:84px;display:flex}
+.paper .marquee{overflow:hidden!important;contain:paint;isolation:isolate;transform:translateZ(0);z-index:7;max-width:1000px;width:1000px;right:auto;left:0}
+.paper.net .marquee{top:600px;height:74px;font-size:40px;max-width:1000px}
+.paper .marquee span{will-change:transform}
+.paper--right .inner{padding-bottom:250px}
+.unfold-ground-shadow{position:absolute;left:50%;top:63%;width:min(76vw,1050px);height:min(24vh,240px);transform:translate(-50%,-50%) rotate(-9deg);background:radial-gradient(ellipse at center,rgba(20,22,30,.48) 0%,rgba(20,22,30,.23) 37%,rgba(20,22,30,0) 74%);filter:blur(24px);z-index:0;opacity:0;pointer-events:none;transition:opacity .25s}
+.scene{z-index:1}
+.paper.is-current ::selection{background:#ffce45;color:#17191f}
+
+/* V6.10: only chapter 05 owns a ticker, including the unfolded net. */
+.paper.net .marquee{display:none!important}
+.paper--right.net .marquee{display:flex!important}
+.paper--right .inner{padding-bottom:0!important;transform:translateY(-72px)}
+.paper--right .marquee{top:715px!important;height:70px!important;font-size:43px!important}
+.paper--right .inner button{margin-bottom:10px}
+.paper:not(.is-current):not(.net){pointer-events:none!important}
+.paper.is-current:not(.net){pointer-events:auto!important}
+.paper.is-current:not(.net) .inner,.paper.is-current:not(.net) .inner *{user-select:text!important;-webkit-user-select:text!important}
+.paper.is-current:not(.net) button{user-select:none!important;-webkit-user-select:none!important}
+/* Shadow sits behind the complete net and makes the height legible. */
+.unfold-ground-shadow{width:min(86vw,1330px)!important;height:min(39vh,390px)!important;top:68%!important;filter:blur(31px)!important;background:radial-gradient(ellipse at center,rgba(12,14,20,.72) 0%,rgba(12,14,20,.38) 37%,rgba(12,14,20,0) 76%)!important}
+/* The footer has its own header zone, below the persistent navigation. */
+footer#end{padding-top:64px!important;box-sizing:border-box}
+footer#end .footer-lead{position:relative;z-index:2;min-height:45px;align-items:center;padding-top:8px!important;padding-bottom:12px!important}
+footer#end .footer-headline{display:block!important;flex:1 1 auto;align-content:end;white-space:normal!important;font-size:clamp(66px,10vw,174px)!important;line-height:.79!important;padding-bottom:20px!important}
+footer#end .footer-headline span{display:block}
+footer#end .footer-grid{flex:0 0 auto}
+@media(max-width:700px){footer#end{padding-top:58px!important}footer#end .footer-headline{font-size:clamp(54px,14vw,105px)!important}}
+
+/* V6.11: remove the destructive chapter-05 offset and restore the page composition. */
+.paper--right .inner{transform:none!important;padding-bottom:0!important}
+.paper--right .marquee{top:690px!important;height:75px!important}
+.paper--right{clip-path:inset(0)}
+.paper--right .marquee{clip-path:inset(0);overflow:hidden!important}
+.paper--right .marquee span{display:inline-block}
+/* The camera-facing copy is the sole native interactive surface at rest.
+   The CSS3D original remains responsible for every visible 3D transition. */
+.chapter-interaction-overlay{position:absolute;inset:0;z-index:15;display:none;overflow:hidden;pointer-events:none}
+.chapter-interaction-overlay.active{display:block;pointer-events:auto}
+.chapter-interaction-overlay .paper{
+ position:absolute!important;width:1000px!important;height:1000px!important;
+ left:50%;top:50%;margin-left:-500px;margin-top:-500px;
+ transform:scale(var(--overlay-scale,1))!important;transform-origin:center center;
+ pointer-events:auto!important;visibility:visible!important;opacity:1!important;
+ clip-path:inset(0);backface-visibility:visible!important
+}
+.chapter-interaction-overlay .paper .inner,
+.chapter-interaction-overlay .paper .inner *{pointer-events:auto!important;user-select:text!important;-webkit-user-select:text!important}
+.chapter-interaction-overlay .paper button{cursor:pointer!important}
+.chapter-interaction-overlay .paper .marquee{pointer-events:none!important}
+
+/* V6.12 — chapter 05 layout repair.
+   The earlier translateY(-72px) replaced the mandatory translate(-50%,-50%)
+   and displaced the entire 1000px content surface outside its square. */
+.paper--right .inner,
+.chapter-interaction-overlay .paper--right .inner {
+  inset:auto!important;
+  top:50%!important;
+  left:50%!important;
+  width:1000px!important;
+  height:1000px!important;
+  padding:80px 78px 100px!important;
+  justify-content:center!important;
+  transform:translate(-50%,-50%) scale(.54)!important;
+  transform-origin:center center!important;
+  overflow:visible!important;
+}
+.paper--right .inner h2,
+.chapter-interaction-overlay .paper--right .inner h2 {
+  font-size:136px!important;
+  line-height:.91!important;
+  margin:22px 0 22px!important;
+}
+.paper--right .inner .copy,
+.chapter-interaction-overlay .paper--right .inner .copy {
+  font-size:24px!important;
+  max-width:690px!important;
+}
+.paper--right .inner button,
+.chapter-interaction-overlay .paper--right .inner button {
+  margin-top:10px!important;
+  margin-bottom:0!important;
+}
+.paper--right .marquee,
+.chapter-interaction-overlay .paper--right .marquee {
+  top:735px!important;
+  height:74px!important;
+  left:0!important;
+  width:1000px!important;
+  max-width:1000px!important;
+  overflow:hidden!important;
+}
+/* In the unfolded net the paper is no longer cropped: use its compact composition. */
+.paper--right.net .inner {
+  transform:translate(-50%,-50%) scale(1)!important;
+}
+
+/* V6.13: keep the chapter-05 ticker inside the camera-visible central crop.
+   The page is a 1000px square, but the viewport only sees its central band. */
+.paper--right .marquee,
+.chapter-interaction-overlay .paper--right .marquee {
+  top:640px!important;
+  height:65px!important;
+  font-size:39px!important;
+  z-index:9!important;
+  display:flex!important;
+}
+.paper--right .inner,
+.chapter-interaction-overlay .paper--right .inner {
+  padding-bottom:185px!important;
+}
+/* The net uses its own position so the ticker stays on face 05. */
+.paper--right.net .marquee {top:600px!important;height:65px!important}
+
+/* V6.14 — printed geometric studies, attached to each actual cube face.
+   Decorations never intercept selection, clicks, or keyboard interaction. */
+.paper{isolation:isolate}
+.paper .fold-geometry{position:absolute;pointer-events:none!important;user-select:none;z-index:0;display:block}
+.paper .inner{z-index:3}
+.paper .fold-geometry--ring{
+  width:310px;height:310px;border:3px solid currentColor;border-radius:50%;
+  right:70px;top:105px;opacity:.17;transform:rotate(-20deg);
+}
+.paper .fold-geometry--ring::before,
+.paper .fold-geometry--ring::after{content:"";position:absolute;border:inherit;border-radius:inherit}
+.paper .fold-geometry--ring::before{inset:28px}
+.paper .fold-geometry--ring::after{inset:94px;background:currentColor;opacity:.65}
+.paper .fold-geometry--cross{
+  width:170px;height:170px;right:95px;bottom:115px;opacity:.19;
+  background:linear-gradient(currentColor,currentColor) center/100% 2px no-repeat,
+             linear-gradient(currentColor,currentColor) center/2px 100% no-repeat;
+  transform:rotate(32deg);
+}
+.paper .fold-geometry--index{
+  right:65px;bottom:52px;font:700 15px 'DM Mono',monospace;
+  letter-spacing:.12em;writing-mode:vertical-rl;opacity:.52
+}
+.paper--top .fold-geometry--ring{width:410px;height:410px;right:-135px;top:105px;border-radius:0;transform:rotate(24deg);opacity:.2}
+.paper--bottom .fold-geometry--ring{width:480px;height:480px;right:-155px;top:280px;opacity:.14}
+.paper--left .fold-geometry--ring{width:440px;height:440px;right:-150px;top:240px;border-radius:0;transform:rotate(45deg);opacity:.12}
+.paper--front .fold-geometry--ring{width:380px;height:380px;right:-90px;top:115px;opacity:.18}
+.paper--right .fold-geometry--ring{width:310px;height:310px;right:-115px;top:110px;opacity:.15}
+.paper--right .fold-geometry--cross{right:75px;bottom:90px;opacity:.12}
+.paper--back .fold-geometry--ring{width:420px;height:420px;right:-160px;top:200px;opacity:.12}
+.paper.net .fold-geometry--ring,.paper.net .fold-geometry--cross{opacity:.1}
+@media(prefers-reduced-motion:reduce){.fold-geometry{animation:none!important}}
+
+/* V6.15: square geometry on chapter 05 only. */
+.paper--right .fold-geometry--ring,
+.chapter-interaction-overlay .paper--right .fold-geometry--ring {
+  border-radius:0!important;transform:rotate(24deg)!important;
+  width:300px;height:300px;right:-85px;top:115px;
+}
+.paper--right .fold-geometry--ring::before,
+.paper--right .fold-geometry--ring::after {border-radius:0!important}

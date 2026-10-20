@@ -393,6 +393,19 @@ folio/
 │   │   │   ├── README.md
 │   │   │   ├── script.js
 │   │   │   └── styles.css
+│   │   ├── fold/
+│   │   │   ├── assets/
+│   │   │   │   ├── favicon.svg
+│   │   │   │   ├── preview.svg
+│   │   │   │   └── preview.webp
+│   │   │   ├── experience.js
+│   │   │   ├── index.html
+│   │   │   ├── paper-three.js
+│   │   │   ├── README.md
+│   │   │   ├── script.js
+│   │   │   ├── style.css
+│   │   │   ├── styles.css
+│   │   │   └── THREE-ENGINE.md
 │   │   ├── scoop/
 │   │   │   ├── assets/
 │   │   │   │   ├── ben-portrait.webp

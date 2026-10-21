@@ -83,8 +83,8 @@ try{
    guidePercent.textContent=p>0?`${Math.round(p*100)}%`:'READY';
    guideLabel.textContent=label;
    guide.classList.toggle('touch-guide--engaged',p>.02);
-   guideStep.textContent=mobile.index===6?'07 / UNFOLDED':`${String(mobile.index+1).padStart(2,'0')} / 06`;
-   guideNext.textContent=mobile.index===6?'SWIPE UP TO RETURN ↑':'NEXT PERSPECTIVE ↓';
+   guideStep.textContent=mobile.index>=6?'07 / UNFOLDED':`${String(mobile.index+1).padStart(2,'0')} / 06`;
+   guideNext.textContent=mobile.index===6?'SWIPE FOR FOOTER ↓':'NEXT PERSPECTIVE ↓';
  }
  function update(t){
   const phase=t*9.75;shadow.style.opacity=phase>9?String(ease((phase-9.53)/.17)*.38):'0';
@@ -177,36 +177,69 @@ try{
  function stopFraction(index){return index===6?1:(index*1.5+.22)/9.75}
  function stopY(index){return journey.getBoundingClientRect().top+scrollY+(journey.offsetHeight-innerHeight)*stopFraction(index)}
  function chapterAt(t){const phase=t*9.75;return phase>=9?6:Math.min(5,Math.floor(phase/1.5))}
- /** Runs a single touch-triggered transition, not a forced scroll-jump chain. */
- function animateMobileStop(index){
-   const target=clamp(index,0,6);
-   if(mobile.animating || target===mobile.index)return;
-   mobile.animating=true;
-   mobile.preview=null;
-   const from=scrollY,to=stopY(target),duration=reduced?0:850,start=performance.now();
-   const oldBehavior=document.documentElement.style.scrollBehavior;
-   document.documentElement.style.scrollBehavior='auto';
-   mobile.index=target;
-   touchFeedback(1,target===6?'UNFOLDING…':'FLIPPING…');
-   function tick(now){
-     const p=duration?clamp((now-start)/duration):1;
-     const eased=1-Math.pow(1-p,3);
-     scrollTo(0,from+(to-from)*eased);
-     if(p<1){requestAnimationFrame(tick);return;}
-     scrollTo(0,to);
-     document.documentElement.style.scrollBehavior=oldBehavior;
-     mobile.animating=false;
-     touchFeedback(0,target===6?'THE WHOLE PICTURE':'SWIPE TO FLIP');
-   }
-   requestAnimationFrame(tick);
- }
- function go(index){
-   if(mobileQuery.matches){
-     animateMobileStop(index);
-   }else{
-     scrollTo({top:stopY(index),behavior:reduced?'instant':'smooth'});
-   }
- }
+  /** Move from one position to another without changing the chapter state.
+   * Kept separate so the unfolding animation can have its own duration. */
+  function tweenScroll(from,to,duration){
+    return new Promise(resolve=>{
+      if(reduced || duration<=0){scrollTo(0,to);resolve();return}
+      const start=performance.now();
+      function step(now){
+        const progress=clamp((now-start)/duration);
+        // Smooth at the endpoints, without the hard acceleration of easeOutCubic.
+        const eased=ease(progress);
+        scrollTo(0,from+(to-from)*eased);
+        if(progress<1)requestAnimationFrame(step);
+        else {scrollTo(0,to);resolve()}
+      }
+      requestAnimationFrame(step);
+    });
+  }
+  /** Mobile 01–06 retain their responsive 850ms flips.
+   * 06 → unfolded gets a separate ~2.4 second reveal and then an exit to footer. */
+  async function animateMobileStop(index){
+    const target=clamp(index,0,7);
+    if(mobile.animating || target===mobile.index)return;
+    mobile.animating=true;
+    mobile.preview=null;
+    const fromIndex=mobile.index;
+    const oldBehavior=document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior='auto';
+    try{
+      if(target===7){
+        // Finish the sticky journey, then allow the browser to scroll normally.
+        touchFeedback(1,'TO THE FOOTER ↓');
+        const footer=document.querySelector('footer#end');
+        const footerY=footer?footer.getBoundingClientRect().top+scrollY:stopY(6)+innerHeight;
+        await tweenScroll(scrollY,footerY,900);
+        mobile.index=7;
+      }else if(target===6 && fromIndex===5){
+        // The final flip is finished: phase 9–9.75 is ONLY the unfold.
+        // Never run that final 3D movement inside an 850ms chapter flip.
+        mobile.index=6;
+        touchFeedback(.35,'PREPARING THE UNFOLD…');
+        const revealStart=journey.getBoundingClientRect().top+scrollY+
+          (journey.offsetHeight-innerHeight)*(9/9.75);
+        await tweenScroll(scrollY,revealStart,550);
+        touchFeedback(.65,'UNFOLDING…');
+        await tweenScroll(scrollY,stopY(6),2400);
+      }else{
+        mobile.index=target;
+        touchFeedback(1,target===6?'FOLDING BACK…':'FLIPPING…');
+        await tweenScroll(scrollY,stopY(target),target===5&&fromIndex===6?1100:850);
+      }
+    }finally{
+      document.documentElement.style.scrollBehavior=oldBehavior;
+      mobile.animating=false;
+      touchFeedback(0,mobile.index===6?'SWIPE FOR FOOTER ↓':'SWIPE TO FLIP');
+    }
+  }
+  function go(index){
+    if(mobileQuery.matches){
+      animateMobileStop(index);
+    }else{
+      scrollTo({top:stopY(index),behavior:reduced?'instant':'smooth'});
+    }
+  }
  /** Touch gestures only take over inside the sticky experience, not on the footer. */
  let gesture=null;
  function withinJourney(){
@@ -231,9 +264,9 @@ try{
    event.preventDefault();
    gesture.dy=dy;
    const dir=dy<0?1:-1;
-   const canMove=mobile.index+dir>=0 && mobile.index+dir<=6;
+   const canMove=mobile.index+dir>=0 && mobile.index+dir<=7;
    const progress=canMove?clamp(Math.abs(dy)/Math.max(100,innerHeight*.22)):0;
-   touchFeedback(progress,canMove?(dir>0?'REVEALING NEXT SIDE':'RETURNING TO PREVIOUS SIDE'):'END OF EXPERIENCE');
+   touchFeedback(progress,canMove?(mobile.index===6&&dir>0?'TO THE FOOTER ↓':dir>0?'REVEALING NEXT SIDE':'RETURNING TO PREVIOUS SIDE'):'END OF EXPERIENCE');
  },{passive:false,capture:true});
  function finishGesture(event){
    if(!gesture)return;
@@ -242,7 +275,7 @@ try{
    if(!captured){touchFeedback(0,'SWIPE TO FLIP');return;}
    const dir=dy<0?1:-1;
    // A deliberate 42px swipe advances exactly one chapter, no matter its speed.
-   if(Math.abs(dy)>=42 && mobile.index+dir>=0 && mobile.index+dir<=6){
+   if(Math.abs(dy)>=42 && mobile.index+dir>=0 && mobile.index+dir<=7){
      animateMobileStop(mobile.index+dir);
    }else{
      touchFeedback(0,'SWIPE TO FLIP');
@@ -255,8 +288,8 @@ try{
  addEventListener('scroll',()=>{
    if(!mobileQuery.matches||mobile.animating||mobile.dragging)return;
    const now=performance.now();if(now-lastScrollSync<80)return;lastScrollSync=now;
-   mobile.index=chapterAt(measure());
-   touchFeedback(0,mobile.index===6?'THE WHOLE PICTURE':'SWIPE TO FLIP');
+   mobile.index=withinJourney()?chapterAt(measure()):mobile.index;
+   touchFeedback(0,mobile.index===6?'SWIPE FOR FOOTER ↓':'SWIPE TO FLIP');
  },{passive:true});
  touchFeedback(0,'SWIPE TO FLIP');
  document.addEventListener('click',event=>{

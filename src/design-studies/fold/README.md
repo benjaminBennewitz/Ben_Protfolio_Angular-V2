@@ -8,7 +8,7 @@ FOLD ist eine eigenständige, frameworkfreie Microsite über Perspektivwechsel. 
 
 - Leitidee: **THERE IS ALWAYS ANOTHER SIDE.**
 - Farbpalette: Paper `#F0EDE5`, Ink `#17191F`, Blue `#2458F5`, Coral `#FF674A`, Yellow `#FFCE45`.
-- Schrift: Space Grotesk + DM Mono (Google Fonts mit System-Fallbacks).
+- Schrift: Space Grotesk + DM Mono (lokal gehostete Portfolio-Schriften mit System-Fallbacks).
 - Stack: semantisches HTML, CSS 3D, Vanilla JavaScript; keine npm- oder Framework-Abhängigkeiten.
 
 ## Kapitel und Interaktionen

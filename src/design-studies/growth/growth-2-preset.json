@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "preset": "kapok-study-01",
+  "seeds": {
+    "trunk": 431988,
+    "buttress": 4500,
+    "surfaceRoots": 9104,
+    "underground": 8026,
+    "terrain": 7171,
+    "groundLife": 10000,
+    "stones": 3008,
+    "branches": 600000,
+    "leaves": 9000,
+    "moss": 9904,
+    "vines": 6403,
+    "epiphytes": 5012,
+    "atmosphere": 7291
+  },
+  "trunk": {
+    "buttressCount": 6
+  },
+  "canopy": {
+    "primaryMin": 4,
+    "primaryMax": 6,
+    "secondaryMin": 4,
+    "secondaryMax": 6
+  },
+  "ground": {
+    "stoneCount": 135,
+    "moundCount": 43
+  }
+}

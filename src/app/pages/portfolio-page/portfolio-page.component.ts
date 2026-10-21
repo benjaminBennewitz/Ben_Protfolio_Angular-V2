@@ -139,6 +139,14 @@ export class PortfolioPageComponent {
       preview: '/design-studies/fold/assets/preview.webp',
       tags: ['3D CSS', 'Scroll Experience', 'Editorial', 'Vibe Coded'],
     },
+    {
+      id: 'growth',
+      name: 'GROWTH.',
+      subtitle: 'A Living World — 50 Metres of Discovery',
+      href: '/design-studies/growth/',
+      preview: '/design-studies/growth/assets/preview.svg',
+      tags: ['Three.js', 'Procedural Nature', 'Scroll Experience', 'WebGL'],
+    },
   ];
 
   /** Referenz auf die Scroll-Strecke der Design-Studies-Bühne. */

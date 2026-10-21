@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0a1510" />
+  <meta name="description" content="GROWTH — eine experimentelle Reise von den Wurzeln bis über die Krone eines 50 Meter hohen Regenwaldbaums." />
+  <title>GROWTH — A Living World</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="stylesheet" href="./src/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#content">Zum Inhalt springen</a>
+  <div id="scene" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="hud">
+    <div class="hud-brand-group"><a class="brand" href="#origin" aria-label="GROWTH, zurück zum Ursprung"><span class="brand-symbol">✳</span> GROWTH<span class="brand-dot">.</span></a><aside class="altimeter" aria-label="Aktuelle Höhe am Baum">
+    <span class="altimeter-label">ALTITUDE</span>
+    <div class="altimeter-value"><span id="height-value">-03.0</span><small>M</small></div>
+    <div class="altimeter-track" aria-hidden="true"><div id="altimeter-fill"></div></div>
+    <span class="altimeter-bottom">ROOT SYSTEM</span>
+    <span class="altimeter-top">CANOPY</span>
+  </aside></div>
+    <span class="hud-center">AN EXPERIMENTAL ASCENT / 001</span>
+    <button id="sound-toggle" class="hud-button" type="button" aria-label="Sound ist in diesem Prototyp nicht verfügbar" disabled>SOUND OFF <span class="mute-mark">↗</span></button>
+  </header>
+  <nav class="chapter-nav" aria-label="Kapitel-Navigation">
+    <a href="#sky" data-name="60 M" aria-label="Über die Baumkrone"></a>
+    <a href="#impact" data-name="50 M" aria-label="Zur Baumkrone"></a>
+    <a href="#canopy" data-name="40 M" aria-label="Zum Kronendach"></a>
+    <a href="#hidden" data-name="30 M" aria-label="Zu den verborgenen Lebensräumen"></a>
+    <a href="#connection" data-name="20 M" aria-label="Zu den Beziehungen"></a>
+    <a href="#ascent" data-name="10 M" aria-label="Zum Stamm"></a>
+    <a href="#origin" data-name="00 M" aria-label="Zum Waldboden"></a>
+    <a href="#roots" data-name="−03 M" aria-label="Zu den Wurzeln"></a>
+  </nav>
+  <main id="content">
+    <section id="sky" class="chapter chapter--sky chapter--summit" data-height="62" aria-labelledby="sky-title">
+      <div class="chapter-content chapter-content--right">
+        <span class="eyebrow">07 / 60.0 M / ABOVE THE CANOPY</span>
+        <h2 id="sky-title">ABOVE<br />THE <em>WORLD.</em></h2>
+        <p>Ein neuer Blickwinkel: Die Kamera steigt über den Wipfel hinaus. Unter uns wird aus einzelnen Ästen eine lebendige Krone.</p>
+        <span class="discovery-hint">◌ KRONENFUNKTIONEN ENTDECKEN</span>
+        <span class="chapter-meta">LOOK DOWN ↓</span>
+      </div>
+    </section>
+    <section id="impact" class="chapter chapter--sky" data-height="50" aria-labelledby="impact-title">
+      <div class="chapter-content chapter-content--right">
+        <span class="eyebrow">06 / 50.0 M / THE IMPACT</span>
+        <h2 id="impact-title">A TREE<br />IS NEVER<br /><em>JUST A TREE.</em></h2>
+        <p>Über dem Kronendach öffnet sich der Blick. Wasser, Kohlenstoff und Energie verbinden diesen Baum mit der Atmosphäre.</p>
+        <span class="discovery-hint">◌ LUFTREINIGUNG & KLIMA ENTDECKEN</span>
+        <span class="chapter-meta">THE WORLD ABOVE ↗</span>
+      </div>
+    </section>
+    <section id="canopy" class="chapter" data-height="42" aria-labelledby="canopy-title">
+      <div class="chapter-content">
+        <span class="eyebrow">05 / 40.0 M / THE CANOPY</span>
+        <h2 id="canopy-title">LIFE IN<br /><em>EVERY</em><br />DIRECTION.</h2>
+        <p>Äste verzweigen sich zu einem eigenen Lebensraum. Licht, Wind und tausende kleine Begegnungen prägen die Baumkrone.</p>
+        <span class="chapter-meta">LOOK UP ↑</span>
+      </div>
+    </section>
+    <section id="hidden" class="chapter" data-height="31" aria-labelledby="hidden-title">
+      <div class="chapter-content chapter-content--right">
+        <span class="eyebrow">04 / 30.0 M / HIDDEN WORLDS</span>
+        <h2 id="hidden-title">WORLDS<br />WITHIN<br /><em>WORLDS.</em></h2>
+        <p>Aufsitzerpflanzen nutzen die Äste als Lebensraum. Manche Bromelien sammeln Wasser und beherbergen winzige Ökosysteme.</p>
+        <span class="discovery-hint">◌ LEBENSGEMEINSCHAFT ENTDECKEN</span>
+      </div>
+    </section>
+    <section id="connection" class="chapter" data-height="22" aria-labelledby="connection-title">
+      <div class="chapter-content">
+        <span class="eyebrow">03 / 20.0 M / CONNECTION</span>
+        <h2 id="connection-title">NOTHING<br />GROWS<br /><em>ALONE.</em></h2>
+        <p>Lianen, Moose und Flechten machen den Stamm zu einer belebten Landschaft. Beziehungen können nützlich, neutral oder konkurrierend sein.</p>
+        <span class="discovery-hint">◌ BROMELIEN & WASSERSPEICHER ENTDECKEN</span>
+        <span class="chapter-meta">FOLLOW THE VINES ↗</span>
+      </div>
+    </section>
+    <section id="ascent" class="chapter" data-height="11" aria-labelledby="ascent-title">
+      <div class="chapter-content chapter-content--right">
+        <span class="eyebrow">02 / 10.0 M / ASCENT</span>
+        <h2 id="ascent-title">THE<br /><em>LONG</em><br />WAY UP.</h2>
+        <p>In der feuchten Schattenwelt kämpfen junge Pflanzen um Licht. Der gewaltige Stamm führt uns immer weiter nach oben.</p>
+        <span class="chapter-meta">KEEP ASCENDING ↑</span>
+      </div>
+    </section>
+    <section id="origin" class="chapter" data-height="0.6" aria-labelledby="origin-title">
+      <div class="chapter-content">
+        <span class="eyebrow">01 / 00.6 M / ORIGIN</span>
+        <h2 id="origin-title">EVERYTHING<br />BEGINS<br /><em>BELOW.</em></h2>
+        <p>Massive Brettwurzeln stützen den Baum. Feuchter Waldboden, Pilze und abgestorbenes Pflanzenmaterial bilden ein dichtes System.</p>
+        <span class="discovery-hint">◌ PILZE & MOOSE ENTDECKEN</span>
+      </div>
+    </section>
+    <footer id="roots" class="chapter footer" data-height="-3" aria-labelledby="root-title">
+      <div class="footer-inner">
+        <div class="footer-topline"><span>00 / BELOW THE SURFACE</span><span>EST. 50 M ABOVE YOU</span></div>
+        <span class="footer-kicker">THE UNDERGROUND CHAPTER</span>
+        <h1 id="root-title">GROWTH<span class="period">.</span></h1>
+        <div class="footer-copy">
+          <p>EVERY GREAT THING<br />STARTS <em>UNDERGROUND.</em></p>
+          <div class="footer-description">Eine experimentelle Reise durch einen Regenwaldbaum. Von den unsichtbaren Wurzeln bis zur atmenden Krone.</div>
+        </div>
+        <button class="begin-button" id="begin-button" type="button"><span>BEGIN ASCENT</span><span aria-hidden="true">↑</span></button>
+        <div class="footer-bottom"><span>GROWTH / EXPERIMENTAL WEB STUDY</span><span>SCROLL UP TO EXPLORE ↑</span><a href="#sky">SKIP TO THE TOP ↑</a></div>
+      </div>
+    </footer>
+  </main>
+  <div class="orientation" id="orientation"><span class="orientation-line"></span>SCROLL UP TO GROW <span aria-hidden="true">↑</span></div>
+  <div class="loading" id="loading" aria-live="polite"><span>GROWTH<span class="period">.</span></span><small>ENTERING THE FOREST</small></div>
+  <div id="discovery-markers" class="discovery-markers" aria-label="Entdeckungen am Baum"></div>
+  <div id="discovery-line" class="discovery-connector" hidden aria-hidden="true"></div>
+  <aside id="discovery-popover" class="discovery-popover" role="dialog" aria-label="Pflanzeninformation" hidden>
+    <button type="button" id="discovery-close" class="discovery-close" aria-label="Infoblase schließen">×</button>
+    <p data-bubble-label class="discovery-bubble-label"></p>
+    <h3 data-bubble-title></h3>
+    <p data-bubble-copy></p>
+  </aside>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

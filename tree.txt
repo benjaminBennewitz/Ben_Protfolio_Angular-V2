@@ -212,6 +212,20 @@ folio/
 │   │   └── app.routes.ts
 │   ├── assets/
 │   │   ├── fonts/
+│   │   │   ├── studies/
+│   │   │   │   ├── BarlowCondensed-Black.ttf
+│   │   │   │   ├── BarlowCondensed-Bold.ttf
+│   │   │   │   ├── BarlowCondensed-ExtraBold.ttf
+│   │   │   │   ├── DMMono-Medium.ttf
+│   │   │   │   ├── DMMono-Regular.ttf
+│   │   │   │   ├── DMSans-Bold.ttf
+│   │   │   │   ├── DMSans-Medium.ttf
+│   │   │   │   ├── DMSans-Regular.ttf
+│   │   │   │   ├── DMSans-SemiBold.ttf
+│   │   │   │   ├── SpaceGrotesk-Bold.ttf
+│   │   │   │   ├── SpaceGrotesk-Medium.ttf
+│   │   │   │   ├── SpaceGrotesk-Regular.ttf
+│   │   │   │   └── SpaceGrotesk-SemiBold.ttf
 │   │   │   ├── inter-variable.woff2
 │   │   │   ├── jetbrains-mono-variable.woff2
 │   │   │   ├── material-symbols-outlined-latin-fill-normal.woff2
@@ -403,6 +417,20 @@ folio/
 │   │   │   ├── README.md
 │   │   │   ├── script.js
 │   │   │   └── style.css
+│   │   ├── growth/
+│   │   │   ├── assets/
+│   │   │   │   └── preview.svg
+│   │   │   ├── src/
+│   │   │   │   ├── config.js
+│   │   │   │   ├── debug.js
+│   │   │   │   ├── main.js
+│   │   │   │   ├── random.js
+│   │   │   │   ├── styles.css
+│   │   │   │   └── world.js
+│   │   │   ├── favicon.svg
+│   │   │   ├── growth-2-preset.json
+│   │   │   ├── index.html
+│   │   │   └── README.md
 │   │   ├── scoop/
 │   │   │   ├── assets/
 │   │   │   │   ├── ben-portrait.webp
@@ -417,6 +445,7 @@ folio/
 │   │   │   │   ├── portrait-notes.md
 │   │   │   │   ├── preview.webp
 │   │   │   │   ├── SCOOP! – Comic-Eis-Shop mit Mix-Box.png
+│   │   │   │   ├── SCOOP! #U2013 Comic-Eis-Shop mit Mix-Box.png
 │   │   │   │   ├── Scoop! Eiscreme-Charaktere im Designboard-3.png
 │   │   │   │   ├── scoop-logo.svg
 │   │   │   │   ├── scoops-complete.ai
@@ -498,6 +527,8 @@ folio/
 ├── .editorconfig
 ├── .gitignore
 ├── angular.json
+├── Barlow_Condensed,DM_Mono,DM_Sans,Space_Grotesk.zip
+├── install-local-fonts.ps1
 ├── LICENSE
 ├── make-tree.ps1
 ├── package.json

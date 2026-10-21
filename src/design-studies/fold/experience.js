@@ -15,6 +15,14 @@ try{
  const renderer=new CSS3DRenderer();renderer.domElement.style.position='absolute';renderer.domElement.style.inset='0';renderer.domElement.style.pointerEvents='auto';sceneNode.append(renderer.domElement);
  const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(40,1,.1,100);
  const root=new THREE.Group();scene.add(root);const stage=sceneNode.closest('.stage');const shadow=document.createElement('div');shadow.className='unfold-ground-shadow';shadow.setAttribute('aria-hidden','true');stage.insertBefore(shadow,sceneNode);
+ const mobileQuery=matchMedia('(max-width: 800px) and (pointer: coarse)');
+ const guide=document.querySelector('#touch-guide');
+ const guideFill=document.querySelector('#touch-guide-fill');
+ const guideLabel=document.querySelector('#touch-guide-label');
+ const guidePercent=document.querySelector('#touch-guide-percent');
+ const guideStep=document.querySelector('#touch-guide-step');
+ const guideNext=document.querySelector('#touch-guide-next');
+ const mobile={index:0,active:false,dragging:false,preview:null,animating:false,progress:0};
  const S=4,PIX=1000,scale=S/PIX;
  const info=[
   {id:3,name:'FRONT',bg:'#2458f5',fg:'#fff',accent:'#ffce45',title:'TURN THE<br><em>WORLD.</em>',copy:'Manchmal verändert sich nicht die Welt. Sondern nur der Blick, mit dem wir sie betrachten.'},
@@ -66,6 +74,18 @@ try{
  // Force the bottom camera to use the same continuous 180° turn path.
  // Both views face outward, never into the cube.
  poses[1].quat.copy(poses[0].quat).multiply(halfTurn);
+ /** Shows touch confirmation immediately, independently of the 3D transition. */
+ function touchFeedback(progress,label){
+   if(!mobileQuery.matches)return;
+   const p=clamp(progress);
+   mobile.progress=p;
+   guideFill.style.transform=`scaleX(${p})`;
+   guidePercent.textContent=p>0?`${Math.round(p*100)}%`:'READY';
+   guideLabel.textContent=label;
+   guide.classList.toggle('touch-guide--engaged',p>.02);
+   guideStep.textContent=mobile.index===6?'07 / UNFOLDED':`${String(mobile.index+1).padStart(2,'0')} / 06`;
+   guideNext.textContent=mobile.index===6?'SWIPE UP TO RETURN ↑':'NEXT PERSPECTIVE ↓';
+ }
  function update(t){
   const phase=t*9.75;shadow.style.opacity=phase>9?String(ease((phase-9.53)/.17)*.38):'0';
   if(phase<9){
@@ -128,16 +148,117 @@ try{
  function resize(){const w=sceneNode.clientWidth,h=sceneNode.clientHeight;camera.aspect=w/h;camera.fov=w<700?55:40;camera.updateProjectionMatrix();renderer.setSize(w,h)}
  addEventListener('resize',resize,{passive:true});resize();
  let current=0;
- function measure(){const r=journey.getBoundingClientRect();return clamp(-r.top/Math.max(1,journey.offsetHeight-innerHeight))}
- function frame(){const desired=measure();current=reduced?desired:mix(current,desired,.17);if(Math.abs(current-desired)<.00005)current=desired;update(current);if(current>.997&&!reduced){const t=performance.now()*.001;camera.position.y+=Math.sin(t*.62)*.105;camera.position.x+=Math.cos(t*.45)*.055;}renderer.render(scene,camera);requestAnimationFrame(frame)}
- frame();
- // Native body scrolling: no wheel interception or forced jump between faces.
- // The journey length and per-face plateau control the perceived animation speed.
- function go(index){
-   const distance=journey.offsetHeight-innerHeight;
-   const fraction=index===6?1:(index*1.5+.22)/9.75;
-   scrollTo({top:journey.getBoundingClientRect().top+scrollY+distance*fraction,behavior:reduced?'instant':'smooth'});
+ let lastRender=-1;
+ let lastFloat=0;
+ function measure(){
+   const r=journey.getBoundingClientRect();
+   return clamp(-r.top/Math.max(1,journey.offsetHeight-innerHeight));
  }
+ function frame(now){
+   requestAnimationFrame(frame);
+   if(document.hidden)return;
+   const desired=mobile.preview??measure();
+   const delta=Math.abs(current-desired);
+   if(delta>.00006)current=reduced?desired:mix(current,desired,mobileQuery.matches?.29:.17);
+   else current=desired;
+   const hoveringNet=current>.997&&!reduced;
+   // The expensive CSS3D matrix updates are skipped entirely on resting chapters.
+   const netTick=hoveringNet && (!mobileQuery.matches || now-lastFloat>=34);
+   if(netTick)lastFloat=now;
+   const changed=Math.abs(current-lastRender)>.000015 || netTick;
+   if(!changed)return;
+   update(current);
+   if(netTick){const t=now*.001;camera.position.y+=Math.sin(t*.62)*.105;camera.position.x+=Math.cos(t*.45)*.055;}
+   renderer.render(scene,camera);
+   lastRender=current;
+ }
+ requestAnimationFrame(frame);
+ /** Scroll positions preserve the existing six-section motion and unfolded finale. */
+ function stopFraction(index){return index===6?1:(index*1.5+.22)/9.75}
+ function stopY(index){return journey.getBoundingClientRect().top+scrollY+(journey.offsetHeight-innerHeight)*stopFraction(index)}
+ function chapterAt(t){const phase=t*9.75;return phase>=9?6:Math.min(5,Math.floor(phase/1.5))}
+ /** Runs a single touch-triggered transition, not a forced scroll-jump chain. */
+ function animateMobileStop(index){
+   const target=clamp(index,0,6);
+   if(mobile.animating || target===mobile.index)return;
+   mobile.animating=true;
+   mobile.preview=null;
+   const from=scrollY,to=stopY(target),duration=reduced?0:850,start=performance.now();
+   const oldBehavior=document.documentElement.style.scrollBehavior;
+   document.documentElement.style.scrollBehavior='auto';
+   mobile.index=target;
+   touchFeedback(1,target===6?'UNFOLDING…':'FLIPPING…');
+   function tick(now){
+     const p=duration?clamp((now-start)/duration):1;
+     const eased=1-Math.pow(1-p,3);
+     scrollTo(0,from+(to-from)*eased);
+     if(p<1){requestAnimationFrame(tick);return;}
+     scrollTo(0,to);
+     document.documentElement.style.scrollBehavior=oldBehavior;
+     mobile.animating=false;
+     touchFeedback(0,target===6?'THE WHOLE PICTURE':'SWIPE TO FLIP');
+   }
+   requestAnimationFrame(tick);
+ }
+ function go(index){
+   if(mobileQuery.matches){
+     animateMobileStop(index);
+   }else{
+     scrollTo({top:stopY(index),behavior:reduced?'instant':'smooth'});
+   }
+ }
+ /** Touch gestures only take over inside the sticky experience, not on the footer. */
+ let gesture=null;
+ function withinJourney(){
+   const rect=journey.getBoundingClientRect();
+   return rect.top<=1 && rect.bottom>=innerHeight-1;
+ }
+ document.addEventListener('touchstart',event=>{
+   if(!mobileQuery.matches||!withinJourney()||mobile.animating||event.touches.length!==1)return;
+   if(event.target.closest('header,footer,#touch-guide,a,button'))return;
+   const touch=event.touches[0];
+   gesture={y:touch.clientY,x:touch.clientX,dy:0,startedAt:performance.now(),captured:false};
+   mobile.dragging=true;
+ },{passive:true,capture:true});
+ document.addEventListener('touchmove',event=>{
+   if(!gesture||!mobileQuery.matches)return;
+   if(event.touches.length!==1){gesture=null;mobile.dragging=false;return;}
+   const touch=event.touches[0],dy=touch.clientY-gesture.y,dx=touch.clientX-gesture.x;
+   if(!gesture.captured && Math.abs(dy)<9)return;
+   if(!gesture.captured && Math.abs(dx)>Math.abs(dy)*1.4){gesture=null;mobile.dragging=false;return;}
+   gesture.captured=true;
+   // Browser scrolling is disabled only after a real vertical swipe is recognized.
+   event.preventDefault();
+   gesture.dy=dy;
+   const dir=dy<0?1:-1;
+   const canMove=mobile.index+dir>=0 && mobile.index+dir<=6;
+   const progress=canMove?clamp(Math.abs(dy)/Math.max(100,innerHeight*.22)):0;
+   touchFeedback(progress,canMove?(dir>0?'REVEALING NEXT SIDE':'RETURNING TO PREVIOUS SIDE'):'END OF EXPERIENCE');
+ },{passive:false,capture:true});
+ function finishGesture(event){
+   if(!gesture)return;
+   const dy=gesture.dy,captured=gesture.captured;
+   gesture=null;mobile.dragging=false;
+   if(!captured){touchFeedback(0,'SWIPE TO FLIP');return;}
+   const dir=dy<0?1:-1;
+   // A deliberate 42px swipe advances exactly one chapter, no matter its speed.
+   if(Math.abs(dy)>=42 && mobile.index+dir>=0 && mobile.index+dir<=6){
+     animateMobileStop(mobile.index+dir);
+   }else{
+     touchFeedback(0,'SWIPE TO FLIP');
+   }
+ }
+ document.addEventListener('touchend',finishGesture,{passive:true,capture:true});
+ document.addEventListener('touchcancel',()=>{gesture=null;mobile.dragging=false;touchFeedback(0,'SWIPE TO FLIP')},{passive:true,capture:true});
+ // Keep touch chapter state synchronized when arriving through browser links/history.
+ let lastScrollSync=0;
+ addEventListener('scroll',()=>{
+   if(!mobileQuery.matches||mobile.animating||mobile.dragging)return;
+   const now=performance.now();if(now-lastScrollSync<80)return;lastScrollSync=now;
+   mobile.index=chapterAt(measure());
+   touchFeedback(0,mobile.index===6?'THE WHOLE PICTURE':'SWIPE TO FLIP');
+ },{passive:true});
+ touchFeedback(0,'SWIPE TO FLIP');
  document.addEventListener('click',event=>{
    const button=event.target.closest('[data-next],[data-go]');
    if(!button)return;

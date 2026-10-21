@@ -7,8 +7,7 @@ folio/
 │   └── ...
 ├── scripts/
 │   ├── deploy-portfolio-local.cmd
-│   ├── deploy-portfolio-server.sh
-│   └── scoop-deployment.md
+│   └── deploy-portfolio-server.sh
 ├── src/
 │   ├── app/
 │   │   ├── core/
@@ -403,9 +402,7 @@ folio/
 │   │   │   ├── paper-three.js
 │   │   │   ├── README.md
 │   │   │   ├── script.js
-│   │   │   ├── style.css
-│   │   │   ├── styles.css
-│   │   │   └── THREE-ENGINE.md
+│   │   │   └── style.css
 │   │   ├── scoop/
 │   │   │   ├── assets/
 │   │   │   │   ├── ben-portrait.webp

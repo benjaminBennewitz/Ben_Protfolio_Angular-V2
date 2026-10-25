@@ -1,0 +1,5 @@
+node_modules/
+__pycache__/
+*.pyc
+*.blend1
+assets/models/cartridge/dungeon-wanted_*

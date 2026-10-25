@@ -1,0 +1,14 @@
+{
+  "name": "bentendo-dungeon-wanted",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/checks/check-code.js",
+    "test": "node --test tests/*.test.js",
+    "check:python": "python scripts/checks/check-python.py"
+  },
+  "devDependencies": {
+    "acorn": "^8.19.0"
+  }
+}

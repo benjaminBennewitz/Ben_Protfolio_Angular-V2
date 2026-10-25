@@ -1,0 +1,6 @@
+GBFX by Yogi (Tronimal)
+https://yogi-tronimal.itch.io/gbfx
+License: Creative Commons Attribution 4.0 International
+https://creativecommons.org/licenses/by/4.0/
+WAV conversion from the supplied FX Hammer bank, rendered at 44100 Hz stereo.
+One common gain adjustment; original relative levels preserved.

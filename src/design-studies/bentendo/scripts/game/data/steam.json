@@ -1,0 +1,291 @@
+{
+  "id": "steam",
+  "title": "Dampfkanal",
+  "width": 24,
+  "height": 18,
+  "spawn": [
+    2,
+    15
+  ],
+  "music": "steam-channel",
+  "objects": [
+    {
+      "x": 8,
+      "y": 2,
+      "kind": "note",
+      "note": {
+        "id": "founding",
+        "title": "Die erste Schicht",
+        "text": "Die Gilde entstand, als drei Handwerker eine eingestürzte Portalstation gemeinsam wieder aufbauten. Seitdem gilt: Niemand muss hier alles können. Aber niemand soll mit einem Problem allein bleiben."
+      },
+      "id": "prop-0",
+      "name": "Notiz",
+      "action": "note"
+    },
+    {
+      "x": 22,
+      "y": 7,
+      "kind": "note",
+      "note": {
+        "id": "shiftbook",
+        "title": "Aus dem Schichtbuch",
+        "text": "Ein missglückter Test ist besser als ein ungeprüftes Portal. Fehler kommen ins Schichtbuch, nicht unter den Teppich. Wer eine Reparatur übernimmt, schreibt auf, was die nächste Schicht wissen muss."
+      },
+      "id": "prop-1",
+      "name": "Notiz",
+      "action": "note"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "kind": "note",
+      "note": {
+        "id": "help",
+        "title": "Notiz ohne Namen",
+        "text": "Heute zum ersten Mal den Hausmeister um Hilfe gebeten. Er hat bloß genickt und einen zweiten Schlüssel geholt. Hätte ich gestern schon fragen sollen. Den Becher suche ich ihm trotzdem noch."
+      },
+      "id": "prop-2",
+      "name": "Notiz",
+      "action": "note"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "kind": "chest",
+      "item": "Zahnradamulett",
+      "coins": 12,
+      "id": "prop-3",
+      "name": "Truhe",
+      "action": "chest"
+    },
+    {
+      "x": 20,
+      "y": 3,
+      "kind": "chest",
+      "item": "Runensplitter",
+      "coins": 15,
+      "id": "prop-4",
+      "name": "Truhe",
+      "action": "chest"
+    },
+    {
+      "x": 20,
+      "y": 14,
+      "kind": "chest",
+      "item": "Schutzsiegel",
+      "coins": 10,
+      "id": "prop-5",
+      "name": "Truhe",
+      "action": "chest"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "kind": "chest",
+      "coins": 8,
+      "id": "prop-6",
+      "name": "Truhe",
+      "action": "chest"
+    },
+    {
+      "x": 17,
+      "y": 16,
+      "kind": "chest",
+      "coins": 6,
+      "id": "prop-7",
+      "name": "Truhe",
+      "action": "chest"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "kind": "valve",
+      "valve": 0,
+      "id": "prop-8",
+      "name": "Druckventil",
+      "action": "valve"
+    },
+    {
+      "x": 17,
+      "y": 13,
+      "kind": "valve",
+      "valve": 1,
+      "id": "prop-9",
+      "name": "Druckventil",
+      "action": "valve"
+    },
+    {
+      "x": 19,
+      "y": 5,
+      "kind": "valve",
+      "valve": 2,
+      "id": "prop-10",
+      "name": "Druckventil",
+      "action": "valve"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "kind": "boiler",
+      "text": "Ein alter Druckkessel. Die Entlastungsleitung führt zu einem Handventil.",
+      "id": "prop-11",
+      "name": "Druckkessel",
+      "action": "inspect"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "kind": "boiler",
+      "text": "Ein alter Druckkessel. Die Entlastungsleitung führt zu einem Handventil.",
+      "id": "prop-12",
+      "name": "Druckkessel",
+      "action": "inspect"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "kind": "boiler",
+      "text": "Ein alter Druckkessel. Die Entlastungsleitung führt zu einem Handventil.",
+      "id": "prop-13",
+      "name": "Druckkessel",
+      "action": "inspect"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "kind": "boiler",
+      "text": "Ein alter Druckkessel. Die Entlastungsleitung führt zu einem Handventil.",
+      "id": "prop-14",
+      "name": "Druckkessel",
+      "action": "inspect"
+    },
+    {
+      "x": 16,
+      "y": 7,
+      "kind": "boiler",
+      "text": "Ein alter Druckkessel. Die Entlastungsleitung führt zu einem Handventil.",
+      "id": "prop-15",
+      "name": "Druckkessel",
+      "action": "inspect"
+    },
+    {
+      "x": 17,
+      "y": 7,
+      "kind": "boiler",
+      "text": "Ein alter Druckkessel. Die Entlastungsleitung führt zu einem Handventil.",
+      "id": "prop-16",
+      "name": "Druckkessel",
+      "action": "inspect"
+    },
+    {
+      "x": 16,
+      "y": 8,
+      "kind": "boiler",
+      "text": "Ein alter Druckkessel. Die Entlastungsleitung führt zu einem Handventil.",
+      "id": "prop-17",
+      "name": "Druckkessel",
+      "action": "inspect"
+    },
+    {
+      "x": 17,
+      "y": 8,
+      "kind": "boiler",
+      "text": "Ein alter Druckkessel. Die Entlastungsleitung führt zu einem Handventil.",
+      "id": "prop-18",
+      "name": "Druckkessel",
+      "action": "inspect"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "kind": "barrel",
+      "text": "Dichtungen, trocken gelagert. Ausnahmsweise.",
+      "id": "prop-19",
+      "name": "Fass",
+      "action": "inspect"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "kind": "barrel",
+      "text": "Kesselöl. Der Deckel klebt schon seit Jahren.",
+      "id": "prop-20",
+      "name": "Fass",
+      "action": "inspect"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "kind": "shelf",
+      "text": "Alte Druckprotokolle. Die Nadeln standen früher deutlich niedriger.",
+      "id": "prop-21",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "kind": "shelf",
+      "text": "Pumpenersatzteile. Der große Schraubenschlüssel hat Bissspuren.",
+      "id": "prop-22",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 18,
+      "y": 2,
+      "kind": "pipes",
+      "text": "Die Zuleitung zur oberen Druckkammer.",
+      "id": "prop-23",
+      "name": "Rohrleitung",
+      "action": "inspect"
+    },
+    {
+      "x": 21,
+      "y": 15,
+      "kind": "barrel",
+      "text": "Ein Vorrat sauberes Wasser. Gleich daneben tropft die Decke.",
+      "id": "prop-24",
+      "name": "Fass",
+      "action": "inspect"
+    },
+    {
+      "id": "npc",
+      "name": "Hausmeister",
+      "x": 3,
+      "y": 14,
+      "kind": "npc",
+      "action": "talk",
+      "text": "Kupplung in den Regler. Dann drei Ventile aufdrehen. An den Stegen warteste, bis der Dampf nachlässt."
+    },
+    {
+      "id": "console",
+      "name": "Druckregler",
+      "x": 5,
+      "y": 13,
+      "kind": "console",
+      "action": "steam-console"
+    },
+    {
+      "id": "door",
+      "name": "Ausgang",
+      "x": 21,
+      "y": 2,
+      "kind": "door",
+      "action": "steam-exit"
+    },
+    {
+      "id": "return",
+      "name": "Lagertür",
+      "x": 1,
+      "y": 15,
+      "kind": "door",
+      "action": "travel",
+      "to": "storage",
+      "spawn": [
+        11,
+        8
+      ]
+    }
+  ]
+}

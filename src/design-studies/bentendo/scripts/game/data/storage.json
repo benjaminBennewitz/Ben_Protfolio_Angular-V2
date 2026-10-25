@@ -1,0 +1,169 @@
+{
+  "id": "storage",
+  "title": "Materiallager",
+  "width": 14,
+  "height": 10,
+  "spawn": [
+    2,
+    8
+  ],
+  "music": "dungeon-loop",
+  "objects": [
+    {
+      "x": 1,
+      "y": 1,
+      "kind": "barrel",
+      "text": "Leere Ölflaschen. Sogar das Pfand ist verflucht.",
+      "id": "prop-0",
+      "name": "Fass",
+      "action": "inspect"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "kind": "shelf",
+      "text": "Kleine Runen, große Runen. Eine ganze Reihe Ersatzteile.",
+      "id": "prop-1",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "kind": "shelf",
+      "text": "I und III versorgen Antrieb und Steuerung. II führt zur beschädigten Nebenleitung und bleibt aus.",
+      "id": "prop-2",
+      "name": "Schaltplan",
+      "action": "inspect"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "kind": "tools",
+      "text": "Zwischen den Teilen steht ein alter Pausenbecher.",
+      "id": "prop-3",
+      "name": "Werkzeug",
+      "action": "take",
+      "item": "Pausenbecher"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "kind": "shelf",
+      "text": "Kupplungen, große Ausführung. Viel zu schwer fürs Portal.",
+      "id": "prop-4",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "kind": "shelf",
+      "text": "Kupplungen, kleine Ausführung. Das Fach darunter passt.",
+      "id": "prop-5",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "kind": "barrel",
+      "text": "Warnung: Magischer Schmierstoff. Nicht schütteln.",
+      "id": "prop-6",
+      "name": "Fass",
+      "action": "inspect"
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "kind": "chest",
+      "text": "Hier liegen die isolierten Runenkupplungen.",
+      "id": "prop-7",
+      "name": "Truhe",
+      "action": "chest",
+      "item": "Runenkupplung"
+    },
+    {
+      "x": 11,
+      "y": 6,
+      "kind": "barrel",
+      "text": "Altmetall. Irgendwann wird bestimmt noch was draus.",
+      "id": "prop-8",
+      "name": "Fass",
+      "action": "inspect"
+    },
+    {
+      "x": 12,
+      "y": 6,
+      "kind": "pipes",
+      "text": "Diese Leitung führt zum Dampfkanal.",
+      "id": "prop-9",
+      "name": "Rohrleitung",
+      "action": "inspect"
+    },
+    {
+      "id": "npc",
+      "name": "Hausmeister",
+      "x": 4,
+      "y": 7,
+      "kind": "npc",
+      "action": "cup-return"
+    },
+    {
+      "id": "console",
+      "name": "Prüfpult",
+      "x": 6,
+      "y": 6,
+      "kind": "console",
+      "action": "storage-console"
+    },
+    {
+      "id": "door",
+      "name": "Kanaltür",
+      "x": 12,
+      "y": 8,
+      "kind": "door",
+      "action": "storage-exit"
+    },
+    {
+      "id": "return",
+      "name": "Wartungstür",
+      "x": 1,
+      "y": 8,
+      "kind": "door",
+      "action": "travel",
+      "to": "hall",
+      "spawn": [
+        11,
+        1
+      ]
+    },
+    {
+      "id": "switch-0",
+      "name": "Relais I",
+      "x": 2,
+      "y": 3,
+      "kind": "lever",
+      "action": "switch",
+      "index": 0
+    },
+    {
+      "id": "switch-1",
+      "name": "Relais II",
+      "x": 4,
+      "y": 3,
+      "kind": "lever",
+      "action": "switch",
+      "index": 1
+    },
+    {
+      "id": "switch-2",
+      "name": "Relais III",
+      "x": 6,
+      "y": 3,
+      "kind": "lever",
+      "action": "switch",
+      "index": 2
+    }
+  ]
+}

@@ -1,0 +1,246 @@
+{
+  "id": "archive",
+  "title": "Runenarchiv",
+  "width": 18,
+  "height": 14,
+  "spawn": [
+    2,
+    11
+  ],
+  "music": "rune-archive",
+  "objects": [
+    {
+      "x": 2,
+      "y": 2,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-0",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-1",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-2",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-3",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-4",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-5",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-6",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 9,
+      "y": 2,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-7",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-8",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 8,
+      "y": 4,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-9",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 9,
+      "y": 4,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-10",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 11,
+      "y": 10,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-11",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 13,
+      "y": 8,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-12",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 14,
+      "y": 8,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-13",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 15,
+      "y": 8,
+      "kind": "shelf",
+      "text": "Chroniken, Schichtbücher und sehr alte Reparaturanleitungen.",
+      "id": "prop-14",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "id": "npc",
+      "name": "Hausmeister",
+      "x": 4,
+      "y": 12,
+      "kind": "npc",
+      "action": "talk",
+      "text": "Die Regale rollen noch. Stell dich davor und schieb mit A. Falls was klemmt, hilft der Rückstellhebel am Eingang."
+    },
+    {
+      "id": "reset",
+      "name": "Rückstellhebel",
+      "x": 2,
+      "y": 12,
+      "kind": "lever",
+      "action": "reset"
+    },
+    {
+      "id": "return",
+      "name": "Eingang",
+      "x": 1,
+      "y": 11,
+      "kind": "door",
+      "action": "travel",
+      "to": "city",
+      "spawn": [
+        14,
+        27
+      ]
+    },
+    {
+      "id": "exit",
+      "name": "Gartenausgang",
+      "x": 16,
+      "y": 1,
+      "kind": "door",
+      "action": "travel",
+      "to": "city",
+      "spawn": [
+        17,
+        21
+      ]
+    },
+    {
+      "id": "note",
+      "name": "Randnotiz",
+      "x": 16,
+      "y": 11,
+      "kind": "note",
+      "action": "note",
+      "note": {
+        "id": "archive-margin",
+        "title": "Am Rand der Chronik",
+        "text": "In der ersten Gildenordnung stand: Wer den längsten Hebel hat, trägt die Verantwortung. Darunter hat jemand ergänzt: Und wer keinen hat, fragt nach einem zweiten Paar Hände. Der Zusatz ist inzwischen offiziell."
+      }
+    }
+  ],
+  "blocks": [
+    {
+      "id": "shelf-a",
+      "x": 6,
+      "y": 10,
+      "w": 1,
+      "h": 2,
+      "kind": "bookshelf",
+      "name": "Rollregal",
+      "action": "push"
+    },
+    {
+      "id": "box-a",
+      "x": 9,
+      "y": 8,
+      "w": 1,
+      "h": 1,
+      "kind": "box",
+      "name": "Kiste",
+      "action": "push"
+    },
+    {
+      "id": "shelf-b",
+      "x": 12,
+      "y": 5,
+      "w": 1,
+      "h": 2,
+      "kind": "bookshelf",
+      "name": "Rollregal",
+      "action": "push"
+    },
+    {
+      "id": "box-b",
+      "x": 15,
+      "y": 3,
+      "w": 1,
+      "h": 1,
+      "kind": "box",
+      "name": "Kiste",
+      "action": "push"
+    }
+  ]
+}

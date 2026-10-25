@@ -1,0 +1,162 @@
+{
+  "id": "hall",
+  "title": "Wartungshalle",
+  "width": 14,
+  "height": 10,
+  "spawn": [
+    3,
+    8
+  ],
+  "music": "dungeon-loop",
+  "objects": [
+    {
+      "x": 1,
+      "y": 1,
+      "kind": "barrel",
+      "text": "Alte Dichtungen. Riecht nach Öl und sehr langer Pause.",
+      "id": "prop-0",
+      "name": "Fass",
+      "action": "inspect"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "kind": "barrel",
+      "text": "Schrauben, nach Größe sortiert. Fast jedenfalls.",
+      "id": "prop-1",
+      "name": "Fass",
+      "action": "inspect"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "kind": "barrel",
+      "text": "Ein Fass voll Ersatzteile. Die Rune liegt woanders.",
+      "id": "prop-2",
+      "name": "Fass",
+      "action": "inspect"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "kind": "chest",
+      "text": "Werkzeug der Gilde. Alles da, sogar der kleine Schlüssel.",
+      "id": "prop-3",
+      "name": "Truhe",
+      "action": "inspect"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "kind": "shelf",
+      "text": "Wartungsbücher. Eines trägt den Titel: Erst mal ausschalten.",
+      "id": "prop-4",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "kind": "shelf",
+      "text": "Ersatzkristalle. Die meisten sind leider durchgebrannt.",
+      "id": "prop-5",
+      "name": "Regal",
+      "action": "inspect"
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "kind": "bench",
+      "text": "Die Werkbank des Hausmeisters. Bitte nichts umsortieren.",
+      "id": "prop-6",
+      "name": "Werkbank",
+      "action": "inspect"
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "kind": "tools",
+      "text": "Ein Satz Runenschlüssel. Der kleinste fehlt natürlich.",
+      "id": "prop-7",
+      "name": "Werkzeug",
+      "action": "inspect"
+    },
+    {
+      "x": 11,
+      "y": 7,
+      "kind": "barrel",
+      "text": "Kühlwasser. Für die Anlage, nicht für den Kaffee.",
+      "id": "prop-8",
+      "name": "Fass",
+      "action": "inspect"
+    },
+    {
+      "x": 12,
+      "y": 7,
+      "kind": "pipes",
+      "text": "Die Kühlleitung ist dicht. Wenigstens etwas.",
+      "id": "prop-9",
+      "name": "Rohrleitung",
+      "action": "inspect"
+    },
+    {
+      "id": "npc",
+      "name": "Hausmeister",
+      "x": 3,
+      "y": 6,
+      "kind": "npc",
+      "action": "talk",
+      "text": "Da biste! Schieb die Kiste mit A. Die Ersatzrune liegt im nördlichen Lager."
+    },
+    {
+      "id": "console",
+      "name": "Runenverteiler",
+      "x": 11,
+      "y": 2,
+      "kind": "console",
+      "action": "hall-console"
+    },
+    {
+      "id": "door",
+      "name": "Lagertür",
+      "x": 12,
+      "y": 1,
+      "kind": "door",
+      "action": "hall-exit"
+    },
+    {
+      "id": "return",
+      "name": "Stadttür",
+      "x": 1,
+      "y": 8,
+      "kind": "door",
+      "action": "travel",
+      "to": "city",
+      "spawn": [
+        5,
+        27
+      ]
+    },
+    {
+      "id": "rune",
+      "name": "Ersatzrune",
+      "x": 10,
+      "y": 2,
+      "kind": "rune",
+      "action": "take",
+      "item": "Ersatzrune"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "crate",
+      "name": "Kiste",
+      "x": 6,
+      "y": 4,
+      "w": 1,
+      "h": 1,
+      "kind": "box",
+      "action": "push"
+    }
+  ]
+}

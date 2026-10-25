@@ -61,7 +61,21 @@
                   "scoop/assets/*.png",
                   "scoop/README.md",
                   "scoop/fonts/**/README.txt",
-                  "scoop/assets/portrait-notes.md"
+                  "scoop/assets/portrait-notes.md",
+                  "bentendo/node_modules/**",
+                  "bentendo/tests/**",
+                  "bentendo/scripts/checks/**",
+                  "bentendo/scripts/blender/**",
+                  "bentendo/scripts/maintenance/**",
+                  "bentendo/scripts/audio/tools/**",
+                  "bentendo/assets/source/**",
+                  "bentendo/docs/**",
+                  "bentendo/package*.json",
+                  "bentendo/.gitignore",
+                  "bentendo/**/__pycache__/**",
+                  "bentendo/**/*.pyc",
+                  "bentendo/README.md",
+                  "bentendo/*.pdf"
                 ]
               }
             ],

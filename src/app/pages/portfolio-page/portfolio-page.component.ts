@@ -147,6 +147,14 @@ export class PortfolioPageComponent {
       preview: '/design-studies/growth/assets/preview.svg',
       tags: ['Three.js', 'Procedural Nature', 'Scroll Experience', 'WebGL'],
     },
+    {
+      id: 'bentendo',
+      name: 'BENTENDO™',
+      subtitle: 'A Playable Handheld — DUNGEON WANTED',
+      href: '/design-studies/bentendo/',
+      preview: '/design-studies/bentendo/assets/preview.svg',
+      tags: ['Three.js', 'Pixel RPG', 'Web Audio', 'Game Design'],
+    },
   ];
 
   /** Referenz auf die Scroll-Strecke der Design-Studies-Bühne. */

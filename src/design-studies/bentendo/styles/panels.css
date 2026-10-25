@@ -1,0 +1,78 @@
+/*###############################
+###
+###     base.component.scss
+###     Produktion App
+###     BASED ON: Angular  21.02.0, SCSS,
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Navigation
+   02   Bedienfelder
+   03   Cartridge
+   04   Toneinstellungen
+   05   Responsive
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Navigation
+   ========================================================================== */
+
+.utility { position: absolute; inset: auto 20px 16px; display: flex; justify-content: space-between; align-items: end; gap: 12px; pointer-events: none; z-index: 5; }
+.utility > * { pointer-events: auto; }
+.utility a { display: inline-flex; align-items: center; text-decoration: none; font-size: 12px; }
+.utility-actions { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+#debug-level { max-width: 170px; }
+
+/* ==========================================================================
+   02   Bedienfelder
+   ========================================================================== */
+
+.panel { position: absolute; right: 20px; bottom: 78px; width: min(380px, calc(100% - 40px)); max-height: calc(100% - 100px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #879568 #20231e; padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 16px 50px #0005; z-index: 8; font-size: 12px; line-height: 1.7; }
+.panel h1 { margin: 0 0 12px; font-size: 23px; letter-spacing: -.05em; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.panel label { display: grid; grid-template-columns: 95px 1fr; gap: 12px; align-items: center; margin: 12px 0; }
+.panel .check { display: flex; gap: 10px; }
+.note { color: #b6bea7; }
+.legal { display: flex; gap: 16px; }
+summary { min-height: 44px; cursor: pointer; padding-block: 12px; }
+
+/* ==========================================================================
+   03   Cartridge
+   ========================================================================== */
+
+#cartridge-state { color: var(--accent); }
+#cartridge-panel { right: 20px; left: auto; width: min(330px, calc(100% - 40px)); }
+#cartridge-panel .actions { display: grid; grid-template-columns: 1fr 1fr; }
+#cartridge-panel .actions button { text-align: left; }
+
+/* ==========================================================================
+   04   Toneinstellungen
+   ========================================================================== */
+
+.icon-definitions { position: absolute; width: 0; height: 0; overflow: hidden; }
+.sound-icon { width: 22px; height: 22px; flex: 0 0 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.setting-label, #sound-toggle { display: inline-flex; align-items: center; gap: 8px; }
+.panel .volume-setting { grid-template-columns: 1fr auto; gap: 0 12px; }
+.volume-setting input { grid-column: 1 / -1; }
+.volume-setting output { color: var(--accent); font-variant-numeric: tabular-nums; }
+
+/* ==========================================================================
+   05   Responsive
+   ========================================================================== */
+
+@media (max-width: 600px) { .utility { inset-inline: 10px; gap: 6px; } .utility-actions { gap: 5px; } .utility a, .utility button, .utility select { padding-inline: 8px; font-size: 11px; } #debug-level { max-width: 132px; } .panel { right: 10px; width: calc(100% - 20px); padding: 16px; } #cartridge-panel { right: 10px; bottom: 72px; max-height: 37svh; width: calc(100% - 20px); } #cartridge-panel .note { display: none; } #cartridge-panel h1 { font-size: 18px; margin-bottom: 4px; } #cartridge-panel p { margin-block: 4px 8px; } }
+@media (max-height: 500px) and (min-width: 601px) { .panel { width: 300px; } #cartridge-panel { max-height: calc(100% - 90px); } }
+

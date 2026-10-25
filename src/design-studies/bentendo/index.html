@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#252625">
+  <meta name="description" content="DUNGEON WANTED – eine interaktive Handheld-Studie von B².">
+  <title>BENTENDO™ — DUNGEON WANTED</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles/base.css">
+  <link rel="stylesheet" href="./styles/device.css">
+  <link rel="stylesheet" href="./styles/panels.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three/three.module.js"}}</script>
+</head>
+<body>
+<svg class="icon-definitions" aria-hidden="true" focusable="false"><defs>
+  <symbol id="icon-sound-on" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3z"/><path d="M16 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></symbol>
+  <symbol id="icon-sound-off" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3zm13 0 6 6m0-6-6 6"/></symbol>
+</defs></svg>
+<main id="experience" aria-label="Interaktiver BENTENDO Handheld">
+  <div id="viewport" aria-hidden="true"></div>
+  <div id="loading" role="status">BENTENDO™<span>Handheld und Cartridge werden geladen …</span></div>
+  <p id="error" role="alert" hidden></p>
+  <p id="status" class="sr-only" role="status" aria-live="polite"></p>
+  <button id="power" class="hotspot" role="switch" aria-checked="false" aria-label="Power-Schalter: auf Touch tippen oder ziehen, mit Enter umschalten" hidden><span>POWER →</span></button>
+  <div id="contrast" class="hotspot" role="slider" tabindex="0" aria-label="Displaykontrast" aria-valuemin="20" aria-valuemax="100" aria-valuenow="75" hidden><span>KONTRAST ↕</span></div>
+  <div id="volume" class="hotspot" role="slider" tabindex="0" aria-label="Lautstärke" aria-valuemin="0" aria-valuemax="100" aria-valuenow="35" hidden><span>LAUTSTÄRKE ↕</span></div>
+  <button id="cartridge-hotspot" class="hotspot cartridge-hotspot" aria-label="DUNGEON WANTED Cartridge betrachten" hidden><span>CARTRIDGE</span></button>
+  <button id="screen-action" class="screen-action" aria-label="DUNGEON WANTED starten" hidden></button>
+  <nav id="model-controls" class="model-controls" aria-label="Tasten am Gerät" hidden>
+    <button class="touch-key" data-model-action="interact" aria-label="A: bestätigen oder untersuchen"><span>A</span></button>
+    <button class="touch-key" data-model-action="back" aria-label="B: zurück oder Rucksack"><span>B</span></button>
+    <button class="touch-key" data-model-action="start" aria-label="START: Spielmenü"><span>START</span></button>
+    <button class="touch-key" data-model-action="select" aria-label="SELECT: speichern"><span>SELECT</span></button>
+    <button class="touch-key touch-direction" data-model-direction="up" aria-label="Steuerkreuz oben"><span>↑</span></button>
+    <button class="touch-key touch-direction" data-model-direction="left" aria-label="Steuerkreuz links"><span>←</span></button>
+    <button class="touch-key touch-direction" data-model-direction="down" aria-label="Steuerkreuz unten"><span>↓</span></button>
+    <button class="touch-key touch-direction" data-model-direction="right" aria-label="Steuerkreuz rechts"><span>→</span></button>
+  </nav>
+  <nav class="device-discovery" aria-label="Bedienpunkte am Gehäuse">
+    <button class="touch-guide" data-device-view="top" aria-label="Power-Schalter zeigen" hidden><span>POWER</span></button>
+    <button class="touch-guide" data-device-view="left" aria-label="Kontrastrad zeigen" hidden><span>KONTRAST</span></button>
+    <button class="touch-guide" data-device-view="right" aria-label="Lautstärkerad zeigen" hidden><span>TON</span></button>
+    <button class="touch-guide" data-device-view="rear" aria-label="Modulschacht zeigen" hidden><span>MODUL</span></button>
+  </nav>
+  <nav class="utility" aria-label="Study-Navigation">
+    <a href="/portfolio#design-studies">← Portfolio</a>
+    <div class="utility-actions">
+      <select id="debug-level" aria-label="Debugraum direkt öffnen" disabled>
+        <option value="">Debug: Raum / LCD</option><option value="lcd-noise">LCD-Rauschen</option><option value="village">Bruchstein · Auftakt</option><option value="city">Stadt · Prototyp</option>
+        <option value="hall">Wartungshalle</option><option value="storage">Materiallager</option>
+        <option value="steam">Dampfkanal</option><option value="archive">Runenarchiv</option><option value="mara-cave">Alte Staukammer</option><option value="quell-entry">Quellgewölbe</option><option value="quell-nest">Spinnenbrut</option>
+      </select>
+      <button id="help-toggle" aria-expanded="false" aria-controls="help">Bedienung</button>
+    </div>
+  </nav>
+  <section id="cartridge-panel" class="panel" aria-labelledby="cartridge-heading" hidden>
+    <h1 id="cartridge-heading" tabindex="-1">DUNGEON WANTED</h1>
+    <p id="cartridge-state"></p>
+    <div class="actions">
+      <button id="cart-push" data-cartridge="push">Hineindrücken</button>
+      <button id="cart-examine" data-cartridge="examine">Betrachten</button>
+      <button id="cart-turn" data-cartridge="turn">Umdrehen</button>
+      <button id="cart-blow" data-cartridge="blow">Pusten</button>
+      <button id="cart-insert" data-cartridge="insert">Zurück in den Schacht</button>
+      <button id="cart-close" data-cartridge="close">Zur Frontansicht</button>
+    </div>
+    <p class="note">Cartridge auf der Rückseite mit gedrückter Maustaste in den Schacht schieben oder „Hineindrücken“ wählen. Zum Einschalten muss sie eingerastet sein.</p>
+  </section>
+  <section id="help" class="panel" aria-labelledby="help-heading" hidden>
+    <h1 id="help-heading">BENTENDO™</h1>
+    <p>Cartridge vollständig hineindrücken, dann Power einschalten. Maus zum oberen oder seitlichen Rand bewegen. Touch: wischen oder eine Ansicht auswählen.</p>
+    <div class="actions" aria-label="Ansicht wählen">
+      <button data-view="front">Front</button><button data-view="top">Oben · Power</button><button data-view="bottom">Unten · Tasten</button>
+      <button data-view="left">Kontrast</button><button data-view="right">Lautstärke</button>
+      <button id="inspect-cartridge">Cartridge betrachten</button>
+    </div>
+    <p>Auf Touch Power antippen oder halten und nach rechts ziehen. Die markierten Gehäusepunkte zeigen vor dem Spiel die Bedienelemente. Stellräder vertikal ziehen oder mit Pfeiltasten bedienen.</p>
+    <label class="volume-setting"><span class="setting-label"><svg class="sound-icon" data-sound-icon aria-hidden="true"><use href="#icon-sound-on"/></svg>Lautstärke</span><output id="volume-value" for="volume-input">35 %</output><input id="volume-input" type="range" min="0" max="100" value="35"></label>
+    <label class="volume-setting"><span>Musik · BGM</span><output id="bgm-value" for="bgm-input">100 %</output><input id="bgm-input" type="range" min="0" max="100" value="100"></label>
+    <label class="volume-setting"><span>Effekte · SFX</span><output id="sfx-value" for="sfx-input">100 %</output><input id="sfx-input" type="range" min="0" max="100" value="100"></label>
+    <label>Kontrast <input id="contrast-input" type="range" min="20" max="100" value="75" disabled></label>
+    <button id="sound-toggle" aria-pressed="false"><svg class="sound-icon" data-sound-icon aria-hidden="true"><use href="#icon-sound-on"/></svg><span id="sound-toggle-label">Ton ausschalten</span></button>
+    <label class="check"><input id="gimmicks" type="checkbox" checked> Gelegentliche Kontaktprobleme erlauben</label>
+    <p>Der erste vollständig eingerastete Start gelingt immer. Kontaktprobleme sind optional: ausschalten, Cartridge herausnehmen, pusten und erneut einsetzen. Kein Mikrofon nötig.</p>
+    <p>Pfeile: laufen · A/Leertaste: untersuchen · B: Rucksack/Dialog schließen · im Rucksack mit Pfeilen Karte, Notizen oder Ton wählen und mit A öffnen · START/Enter/P: Pause · SELECT/S: Speichern. Die 3D-Tasten sind ebenfalls bedienbar.</p>
+    <p id="save-status" role="status"></p>
+    <details><summary>Über diese Study und Credits</summary>
+      <p>BENTENDO™ ist ein fiktiver Name für eine unabhängige Handheld-Hommage von B². Keine Verbindung zu Nintendo. Nintendo und Game Boy sind Marken ihrer jeweiligen Rechteinhaber.</p>
+      <p>Dungeon-Tiles: <a href="https://sodacoma.itch.io/awakening-complete-tileset" target="_blank" rel="noopener noreferrer">Awakening von Sodacoma</a>. Weitere Quellen stehen in den <a href="./CREDITS.md">Projekt-Credits</a>.</p>
+      <p>Keine Übertragung von Spieleingaben, kein Mikrofonzugriff. Spielstand, Charakterwahl und Funde werden automatisch lokal in diesem Browser gespeichert. Am Titel kannst du fortsetzen oder ein neues Spiel beginnen. Gesamtlautstärke, BGM, SFX und Stummschaltung werden lokal in deinem Browser gespeichert.</p>
+      <div class="legal"><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a></div>
+    </details>
+    <button id="help-close">Bedienung schließen</button>
+  </section>
+  <nav id="game-controls" aria-label="Spielfigur steuern" hidden>
+    <div class="game-actions"><button data-game="start" aria-label="START: Pause und Menü">START</button><button data-game="select" aria-label="SELECT: Spiel speichern">SELECT</button><button data-game="interact" aria-label="A: Objekt benutzen">A</button><button data-game="back" aria-label="B: Rucksack oder schließen">B</button></div>
+    <div class="direction-pad">
+      <button data-direction="up" aria-label="Nach oben">↑</button>
+      <button data-direction="left" aria-label="Nach links">←</button>
+      <button data-direction="down" aria-label="Nach unten">↓</button>
+      <button data-direction="right" aria-label="Nach rechts">→</button>
+    </div>
+  </nav>
+  <noscript>Bitte JavaScript aktivieren, um den Handheld zu bedienen.</noscript>
+</main>
+<script type="module" src="./scripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+Vom Nutzer am 23.10.2026 bereitgestellt: GBDungeon.png und GB Dungeon.tsx.
+Originalatlas unverändert, 70 Kacheln zu 16 x 16 Pixeln. Tiled-Metadaten: GBDungeon.tsx.
+Die Darstellung verwendet die bestehende LCD-Palettenumsetzung.

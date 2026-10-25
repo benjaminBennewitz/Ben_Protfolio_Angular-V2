@@ -1,11 +1,17 @@
-folio/
+B2Folio/
 ├── .angular/
 │   └── ...
 ├── dist/
 │   └── ...
+├── docs/
+│   └── bentendo-integration.md
 ├── node_modules/
 │   └── ...
 ├── scripts/
+│   ├── tests/
+│   │   └── bentendo-integration.test.mjs
+│   ├── bentendo-commit-plan.json
+│   ├── commit-bentendo-history.mjs
 │   ├── deploy-portfolio-local.cmd
 │   └── deploy-portfolio-server.sh
 ├── src/
@@ -255,6 +261,113 @@ folio/
 │   │   │   │   │   │   ├── settings-themes.webp
 │   │   │   │   │   │   └── settings-tools.webp
 │   │   │   │   │   └── carly.svg
+│   │   │   │   ├── design-catalog/
+│   │   │   │   │   ├── en/
+│   │   │   │   │   │   ├── catalog-page-01.webp
+│   │   │   │   │   │   ├── catalog-page-02.webp
+│   │   │   │   │   │   ├── catalog-page-03.webp
+│   │   │   │   │   │   ├── catalog-page-04.webp
+│   │   │   │   │   │   ├── catalog-page-05.webp
+│   │   │   │   │   │   ├── catalog-page-06.webp
+│   │   │   │   │   │   ├── catalog-page-07.webp
+│   │   │   │   │   │   ├── catalog-page-08.webp
+│   │   │   │   │   │   ├── catalog-page-09.webp
+│   │   │   │   │   │   ├── catalog-page-10.webp
+│   │   │   │   │   │   ├── catalog-page-11.webp
+│   │   │   │   │   │   ├── catalog-page-12.webp
+│   │   │   │   │   │   ├── catalog-page-13.webp
+│   │   │   │   │   │   ├── catalog-page-14.webp
+│   │   │   │   │   │   ├── catalog-page-15.webp
+│   │   │   │   │   │   ├── catalog-page-16.webp
+│   │   │   │   │   │   ├── catalog-page-17.webp
+│   │   │   │   │   │   ├── catalog-page-18.webp
+│   │   │   │   │   │   ├── catalog-page-19.webp
+│   │   │   │   │   │   ├── catalog-page-20.webp
+│   │   │   │   │   │   ├── catalog-page-21.webp
+│   │   │   │   │   │   ├── catalog-page-22.webp
+│   │   │   │   │   │   ├── catalog-page-23.webp
+│   │   │   │   │   │   ├── catalog-page-24.webp
+│   │   │   │   │   │   ├── catalog-page-25.webp
+│   │   │   │   │   │   ├── catalog-page-26.webp
+│   │   │   │   │   │   ├── catalog-page-27.webp
+│   │   │   │   │   │   ├── catalog-page-28.webp
+│   │   │   │   │   │   ├── catalog-page-29.webp
+│   │   │   │   │   │   ├── catalog-page-30.webp
+│   │   │   │   │   │   ├── catalog-page-31.webp
+│   │   │   │   │   │   ├── catalog-page-32.webp
+│   │   │   │   │   │   ├── catalog-page-33.webp
+│   │   │   │   │   │   ├── catalog-page-34.webp
+│   │   │   │   │   │   ├── catalog-page-35.webp
+│   │   │   │   │   │   ├── catalog-page-36.webp
+│   │   │   │   │   │   ├── catalog-page-37.webp
+│   │   │   │   │   │   ├── catalog-page-38.webp
+│   │   │   │   │   │   ├── catalog-page-39.webp
+│   │   │   │   │   │   ├── catalog-page-40.webp
+│   │   │   │   │   │   ├── catalog-page-41.webp
+│   │   │   │   │   │   ├── catalog-page-42.webp
+│   │   │   │   │   │   ├── catalog-page-43.webp
+│   │   │   │   │   │   ├── catalog-page-44.webp
+│   │   │   │   │   │   ├── catalog-page-45.webp
+│   │   │   │   │   │   ├── catalog-page-46.webp
+│   │   │   │   │   │   ├── catalog-page-47.webp
+│   │   │   │   │   │   ├── catalog-page-48.webp
+│   │   │   │   │   │   ├── catalog-page-49.webp
+│   │   │   │   │   │   ├── catalog-page-50.webp
+│   │   │   │   │   │   ├── catalog-page-51.webp
+│   │   │   │   │   │   ├── catalog-page-52.webp
+│   │   │   │   │   │   ├── catalog-page-53.webp
+│   │   │   │   │   │   └── catalog-page-54.webp
+│   │   │   │   │   └── masonry/
+│   │   │   │   │       ├── 01.webp
+│   │   │   │   │       ├── 02.webp
+│   │   │   │   │       ├── 03.webp
+│   │   │   │   │       ├── 04.webp
+│   │   │   │   │       ├── 05.webp
+│   │   │   │   │       ├── 06.webp
+│   │   │   │   │       ├── 07.webp
+│   │   │   │   │       ├── 08.webp
+│   │   │   │   │       ├── 09.webp
+│   │   │   │   │       ├── 10.webp
+│   │   │   │   │       ├── 11.webp
+│   │   │   │   │       ├── 12.webp
+│   │   │   │   │       ├── 13.webp
+│   │   │   │   │       ├── 14.webp
+│   │   │   │   │       ├── 15.webp
+│   │   │   │   │       ├── 16.webp
+│   │   │   │   │       ├── 17.webp
+│   │   │   │   │       ├── 18.webp
+│   │   │   │   │       ├── 19.webp
+│   │   │   │   │       ├── 20.webp
+│   │   │   │   │       ├── 21.webp
+│   │   │   │   │       ├── 22.webp
+│   │   │   │   │       ├── 23.webp
+│   │   │   │   │       ├── 24.webp
+│   │   │   │   │       ├── 25.webp
+│   │   │   │   │       ├── 26.webp
+│   │   │   │   │       ├── 27.webp
+│   │   │   │   │       ├── 28.webp
+│   │   │   │   │       ├── 29.webp
+│   │   │   │   │       ├── 31.webp
+│   │   │   │   │       ├── 32.webp
+│   │   │   │   │       ├── 33.webp
+│   │   │   │   │       ├── 34.webp
+│   │   │   │   │       ├── 35.webp
+│   │   │   │   │       ├── 36.webp
+│   │   │   │   │       ├── 37.webp
+│   │   │   │   │       ├── 39.webp
+│   │   │   │   │       ├── 40.webp
+│   │   │   │   │       ├── 41.webp
+│   │   │   │   │       ├── 47.webp
+│   │   │   │   │       ├── 49.webp
+│   │   │   │   │       ├── 50.webp
+│   │   │   │   │       ├── 51.webp
+│   │   │   │   │       ├── 52.webp
+│   │   │   │   │       ├── 53.webp
+│   │   │   │   │       ├── 54.webp
+│   │   │   │   │       ├── 55.webp
+│   │   │   │   │       ├── 56.webp
+│   │   │   │   │       ├── 57.webp
+│   │   │   │   │       └── 58.webp
 │   │   │   │   ├── globi-flow/
 │   │   │   │   │   ├── auswertung.webp
 │   │   │   │   │   ├── importe.webp
@@ -334,6 +447,415 @@ folio/
 │   │   │   └── og-portfolio-preview.svg
 │   │   └── favicon.svg
 │   ├── design-studies/
+│   │   ├── bentendo/
+│   │   │   ├── assets/
+│   │   │   │   ├── cartridge/
+│   │   │   │   │   ├── dungeon-wanted.png
+│   │   │   │   │   └── dungeon-wanted-female.png
+│   │   │   │   ├── characters/
+│   │   │   │   │   └── adventurer-portraits.png
+│   │   │   │   ├── fonts/
+│   │   │   │   │   ├── OFL-Tiny5.txt
+│   │   │   │   │   └── Tiny5-Regular.ttf
+│   │   │   │   ├── models/
+│   │   │   │   │   └── gameboy.glb
+│   │   │   │   ├── sounds/
+│   │   │   │   │   ├── gbfx/
+│   │   │   │   │   │   ├── 00_beep.wav
+│   │   │   │   │   │   ├── 01_beep.wav
+│   │   │   │   │   │   ├── 10_bling_up.wav
+│   │   │   │   │   │   ├── 11_bling_down.wav
+│   │   │   │   │   │   ├── 20_pitch_up.wav
+│   │   │   │   │   │   ├── 21_pitch_down.wav
+│   │   │   │   │   │   ├── 23_pitch_down_echo.wav
+│   │   │   │   │   │   ├── 30_explosion.wav
+│   │   │   │   │   │   ├── 33_weird_pitch_up.wav
+│   │   │   │   │   │   ├── 35_pitch_up_echo.wav
+│   │   │   │   │   │   ├── 36_pitch_down_echo.wav
+│   │   │   │   │   │   └── CREDITS.txt
+│   │   │   │   │   ├── bruchstein-night.mp3
+│   │   │   │   │   ├── dungeon-loop.mp3
+│   │   │   │   │   ├── forest-canopy.mp3
+│   │   │   │   │   ├── forest-night.mp3
+│   │   │   │   │   ├── maras-quellplan.mp3
+│   │   │   │   │   ├── quellgewoelbe.mp3
+│   │   │   │   │   ├── rune-archive.mp3
+│   │   │   │   │   ├── start-beep.mp3
+│   │   │   │   │   ├── steam-channel.mp3
+│   │   │   │   │   ├── title-screen.mp3
+│   │   │   │   │   └── town-square.mp3
+│   │   │   │   ├── source/
+│   │   │   │   │   └── gameboy.blend
+│   │   │   │   ├── sprites/
+│   │   │   │   │   ├── animals/
+│   │   │   │   │   │   ├── hedgehog.png
+│   │   │   │   │   │   ├── minifolks-wolf.png
+│   │   │   │   │   │   ├── mouse.png
+│   │   │   │   │   │   └── squirrel.png
+│   │   │   │   │   ├── npcs/
+│   │   │   │   │   │   └── 5yvalia-samples.png
+│   │   │   │   │   ├── explorer.png
+│   │   │   │   │   └── goblin.png
+│   │   │   │   ├── tiles/
+│   │   │   │   │   ├── Old Tilesets/
+│   │   │   │   │   │   ├── Dungeons (GameboyBW).png
+│   │   │   │   │   │   ├── Dungeons (GameboyG).png
+│   │   │   │   │   │   ├── Dungeons.png
+│   │   │   │   │   │   ├── GUI (GameboyBW).png.png
+│   │   │   │   │   │   ├── GUI (GameboyG).png
+│   │   │   │   │   │   ├── GUI.png
+│   │   │   │   │   │   ├── Overworld (Dark).png
+│   │   │   │   │   │   ├── Overworld (GameboyBW).png
+│   │   │   │   │   │   ├── Overworld (GameboyG).png
+│   │   │   │   │   │   ├── Overworld (Light).png
+│   │   │   │   │   │   ├── Overworld (Woods).png
+│   │   │   │   │   │   ├── Sprites (GameboyBW).png
+│   │   │   │   │   │   ├── Sprites (GameboyG).png
+│   │   │   │   │   │   └── Sprites.png
+│   │   │   │   │   ├── cottage-interior.png
+│   │   │   │   │   ├── fantasy-interior.png
+│   │   │   │   │   ├── NEW Dungeons (v2).png
+│   │   │   │   │   ├── NEW Overworld (Classic)(v2).png
+│   │   │   │   │   ├── NEW Overworld (Cool)(v2).png
+│   │   │   │   │   ├── NEW Overworld (Default)(v2).png
+│   │   │   │   │   ├── NEW Overworld (Forest)(v2).png
+│   │   │   │   │   ├── NEW Overworld (Swamp)(v2).png
+│   │   │   │   │   ├── NEW Overworld (Warm)(v2).png
+│   │   │   │   │   ├── NEW Overworld Frozen(v2).png
+│   │   │   │   │   └── NEW Overworld Mystic(v2).png
+│   │   │   │   ├── tilesets/
+│   │   │   │   │   └── gb-dungeon/
+│   │   │   │   │       ├── GBDungeon.png
+│   │   │   │   │       ├── GBDungeon.tsx
+│   │   │   │   │       └── SOURCE.txt
+│   │   │   │   ├── title/
+│   │   │   │   │   ├── dungeon-background.png
+│   │   │   │   │   └── dungeon-logo.png
+│   │   │   │   ├── favicon.svg
+│   │   │   │   └── preview.svg
+│   │   │   ├── docs/
+│   │   │   │   ├── art/
+│   │   │   │   │   ├── adventurer-presets.md
+│   │   │   │   │   ├── awakening-inventory.md
+│   │   │   │   │   ├── minifolks-dog.md
+│   │   │   │   │   └── title-prompts.md
+│   │   │   │   ├── levels/
+│   │   │   │   │   ├── bruchstein-audio-balance.md
+│   │   │   │   │   ├── bruchstein-character-stock.md
+│   │   │   │   │   ├── bruchstein-combat-sounds-hearts.md
+│   │   │   │   │   ├── bruchstein-consistency.md
+│   │   │   │   │   ├── bruchstein-details.md
+│   │   │   │   │   ├── bruchstein-device-buttons.md
+│   │   │   │   │   ├── bruchstein-diagonal-running-combat.md
+│   │   │   │   │   ├── bruchstein-discoveries.md
+│   │   │   │   │   ├── bruchstein-dungeon-polish.md
+│   │   │   │   │   ├── bruchstein-hackschwung.md
+│   │   │   │   │   ├── bruchstein-hackschwung-tempo.md
+│   │   │   │   │   ├── bruchstein-health-quellgewoelbe.md
+│   │   │   │   │   ├── bruchstein-houses.md
+│   │   │   │   │   ├── bruchstein-interior-audio.md
+│   │   │   │   │   ├── bruchstein-inventory-tasks.md
+│   │   │   │   │   ├── bruchstein-life.md
+│   │   │   │   │   ├── bruchstein-mara-buttons.md
+│   │   │   │   │   ├── bruchstein-maras-quellplan.md
+│   │   │   │   │   ├── bruchstein-north.md
+│   │   │   │   │   ├── bruchstein-opening.md
+│   │   │   │   │   ├── bruchstein-plant-ground.md
+│   │   │   │   │   ├── bruchstein-polish.md
+│   │   │   │   │   ├── bruchstein-portrait-bleeps.md
+│   │   │   │   │   ├── bruchstein-questbuch.md
+│   │   │   │   │   ├── bruchstein-reactive-residents.md
+│   │   │   │   │   ├── bruchstein-resident-chatter.md
+│   │   │   │   │   ├── bruchstein-room-save.md
+│   │   │   │   │   ├── bruchstein-save-map.md
+│   │   │   │   │   ├── bruchstein-settings-chamber.md
+│   │   │   │   │   ├── bruchstein-speech-bubbles.md
+│   │   │   │   │   ├── bruchstein-success-fetch.md
+│   │   │   │   │   ├── bruchstein-tavern-courtesy.md
+│   │   │   │   │   ├── bruchstein-thrust-map-edges.md
+│   │   │   │   │   ├── bruchstein-touch-material.md
+│   │   │   │   │   └── prototype.md
+│   │   │   │   ├── patches/
+│   │   │   │   │   └── bruchstein-review-01.md
+│   │   │   │   ├── story/
+│   │   │   │   │   ├── abendwald-und-spielzeit.md
+│   │   │   │   │   ├── dungeon-wanted-leitfaden.md
+│   │   │   │   │   ├── ostpass-wald.md
+│   │   │   │   │   ├── tagesablauf-und-nachtruhe.md
+│   │   │   │   │   └── wirtshaus-gesellschaft-und-bettruhe.md
+│   │   │   │   ├── technical/
+│   │   │   │   │   ├── cartridge.md
+│   │   │   │   │   ├── code-rules.md
+│   │   │   │   │   ├── gbfx-zuordnung.md
+│   │   │   │   │   ├── quellgewoelbe-gb-dungeon.md
+│   │   │   │   │   └── validation.md
+│   │   │   │   ├── asset-credits.md
+│   │   │   │   ├── audio-prompts.md
+│   │   │   │   ├── cartridge-drag.md
+│   │   │   │   ├── deleted-files.json
+│   │   │   │   └── README.md
+│   │   │   ├── scripts/
+│   │   │   │   ├── audio/
+│   │   │   │   │   ├── tools/
+│   │   │   │   │   │   ├── build_forest_music.py
+│   │   │   │   │   │   ├── build_night_music.py
+│   │   │   │   │   │   └── build_quell_music.py
+│   │   │   │   │   ├── animal-calls.js
+│   │   │   │   │   ├── audio-manager.js
+│   │   │   │   │   ├── combat-calls.js
+│   │   │   │   │   ├── effects.js
+│   │   │   │   │   ├── forest-calls.js
+│   │   │   │   │   ├── game-cues.js
+│   │   │   │   │   ├── gbfx-sounds.js
+│   │   │   │   │   ├── interaction-calls.js
+│   │   │   │   │   ├── mechanical-sounds.js
+│   │   │   │   │   ├── preferences.js
+│   │   │   │   │   ├── success-calls.js
+│   │   │   │   │   ├── sword-swoosh.js
+│   │   │   │   │   ├── synth-calls.js
+│   │   │   │   │   └── ui-calls.js
+│   │   │   │   ├── blender/
+│   │   │   │   │   └── build_cartridge.py
+│   │   │   │   ├── checks/
+│   │   │   │   │   ├── check-code.js
+│   │   │   │   │   └── check-python.py
+│   │   │   │   ├── core/
+│   │   │   │   │   ├── config.js
+│   │   │   │   │   ├── dom.js
+│   │   │   │   │   ├── frame-loop.js
+│   │   │   │   │   ├── geometry.js
+│   │   │   │   │   ├── sound-ui.js
+│   │   │   │   │   └── ui.js
+│   │   │   │   ├── device/
+│   │   │   │   │   ├── cartridge/
+│   │   │   │   │   │   ├── cartridge.js
+│   │   │   │   │   │   ├── controller.js
+│   │   │   │   │   │   ├── cover.js
+│   │   │   │   │   │   ├── fit.js
+│   │   │   │   │   │   ├── model.js
+│   │   │   │   │   │   ├── pocket.js
+│   │   │   │   │   │   ├── poses.js
+│   │   │   │   │   │   └── state.js
+│   │   │   │   │   ├── input/
+│   │   │   │   │   │   ├── cartridge-drag.js
+│   │   │   │   │   │   ├── drag.js
+│   │   │   │   │   │   ├── game-input.js
+│   │   │   │   │   │   ├── keyboard-cursor.js
+│   │   │   │   │   │   ├── model-buttons.js
+│   │   │   │   │   │   ├── native-buttons.js
+│   │   │   │   │   │   ├── power-gesture.js
+│   │   │   │   │   │   ├── rear-intent.js
+│   │   │   │   │   │   ├── views.js
+│   │   │   │   │   │   └── view-zones.js
+│   │   │   │   │   ├── brand.js
+│   │   │   │   │   ├── button-motion.js
+│   │   │   │   │   ├── handheld.js
+│   │   │   │   │   ├── hotspots.js
+│   │   │   │   │   ├── model.js
+│   │   │   │   │   ├── scene.js
+│   │   │   │   │   ├── touch-points.js
+│   │   │   │   │   └── view-target.js
+│   │   │   │   ├── display/
+│   │   │   │   │   ├── assets.js
+│   │   │   │   │   ├── cave-assets.js
+│   │   │   │   │   ├── display.js
+│   │   │   │   │   ├── flora-assets.js
+│   │   │   │   │   ├── font.js
+│   │   │   │   │   ├── furniture-assets.js
+│   │   │   │   │   ├── hero-assets.js
+│   │   │   │   │   ├── lcd-effects.js
+│   │   │   │   │   ├── life-assets.js
+│   │   │   │   │   └── tree-assets.js
+│   │   │   │   ├── game/
+│   │   │   │   │   ├── data/
+│   │   │   │   │   │   ├── archive.json
+│   │   │   │   │   │   ├── characters.js
+│   │   │   │   │   │   ├── daily-residents.js
+│   │   │   │   │   │   ├── discoveries.js
+│   │   │   │   │   │   ├── dungeon-furniture.js
+│   │   │   │   │   │   ├── dungeon-layouts.js
+│   │   │   │   │   │   ├── east-pipes.js
+│   │   │   │   │   │   ├── east-rooms.js
+│   │   │   │   │   │   ├── forest-passages.js
+│   │   │   │   │   │   ├── forest-sections.js
+│   │   │   │   │   │   ├── hall.json
+│   │   │   │   │   │   ├── house-furniture.js
+│   │   │   │   │   │   ├── house-layouts.js
+│   │   │   │   │   │   ├── house-patrols.js
+│   │   │   │   │   │   ├── house-rooms.js
+│   │   │   │   │   │   ├── house-shapes.js
+│   │   │   │   │   │   ├── interiors.js
+│   │   │   │   │   │   ├── items.js
+│   │   │   │   │   │   ├── mara-rooms.js
+│   │   │   │   │   │   ├── quell-dungeon.js
+│   │   │   │   │   │   ├── quest-east.js
+│   │   │   │   │   │   ├── quest-helpers.js
+│   │   │   │   │   │   ├── quest-mara.js
+│   │   │   │   │   │   ├── quest-village.js
+│   │   │   │   │   │   ├── resident-lines.js
+│   │   │   │   │   │   ├── rooms.js
+│   │   │   │   │   │   ├── steam.json
+│   │   │   │   │   │   ├── storage.json
+│   │   │   │   │   │   ├── tavern-company.js
+│   │   │   │   │   │   ├── title.js
+│   │   │   │   │   │   ├── town.js
+│   │   │   │   │   │   ├── village.js
+│   │   │   │   │   │   ├── village-fauna.js
+│   │   │   │   │   │   ├── village-life.js
+│   │   │   │   │   │   └── village-north.js
+│   │   │   │   │   ├── render/
+│   │   │   │   │   │   ├── bag.js
+│   │   │   │   │   │   ├── cave.js
+│   │   │   │   │   │   ├── character.js
+│   │   │   │   │   │   ├── daylight.js
+│   │   │   │   │   │   ├── discoveries.js
+│   │   │   │   │   │   ├── dog.js
+│   │   │   │   │   │   ├── dungeon.js
+│   │   │   │   │   │   ├── dungeon-atlas.js
+│   │   │   │   │   │   ├── dungeon-furniture.js
+│   │   │   │   │   │   ├── dungeon-passages.js
+│   │   │   │   │   │   ├── dungeon-scenery.js
+│   │   │   │   │   │   ├── east.js
+│   │   │   │   │   │   ├── fetch-stick.js
+│   │   │   │   │   │   ├── health.js
+│   │   │   │   │   │   ├── interior.js
+│   │   │   │   │   │   ├── interior-fixtures.js
+│   │   │   │   │   │   ├── map.js
+│   │   │   │   │   │   ├── objects.js
+│   │   │   │   │   │   ├── overlays.js
+│   │   │   │   │   │   ├── primitives.js
+│   │   │   │   │   │   ├── quest-markers.js
+│   │   │   │   │   │   ├── quests.js
+│   │   │   │   │   │   ├── save-indicator.js
+│   │   │   │   │   │   ├── seated-guest.js
+│   │   │   │   │   │   ├── sleeping-pets.js
+│   │   │   │   │   │   ├── speech-bubble.js
+│   │   │   │   │   │   ├── system-menu.js
+│   │   │   │   │   │   ├── tavern.js
+│   │   │   │   │   │   ├── terrain.js
+│   │   │   │   │   │   ├── village.js
+│   │   │   │   │   │   ├── village-ground.js
+│   │   │   │   │   │   ├── village-life.js
+│   │   │   │   │   │   ├── village-north.js
+│   │   │   │   │   │   ├── village-scenery.js
+│   │   │   │   │   │   ├── weapon-swing.js
+│   │   │   │   │   │   └── world.js
+│   │   │   │   │   ├── systems/
+│   │   │   │   │   │   ├── actions.js
+│   │   │   │   │   │   ├── audio-menu.js
+│   │   │   │   │   │   ├── collision.js
+│   │   │   │   │   │   ├── combat-save.js
+│   │   │   │   │   │   ├── daily-life.js
+│   │   │   │   │   │   ├── discoveries.js
+│   │   │   │   │   │   ├── dog-fetch.js
+│   │   │   │   │   │   ├── dungeon.js
+│   │   │   │   │   │   ├── dungeon-combat.js
+│   │   │   │   │   │   ├── dungeon-migrations.js
+│   │   │   │   │   │   ├── east-story.js
+│   │   │   │   │   │   ├── fetch-path.js
+│   │   │   │   │   │   ├── forest-return.js
+│   │   │   │   │   │   ├── forest-travel.js
+│   │   │   │   │   │   ├── health.js
+│   │   │   │   │   │   ├── health-save.js
+│   │   │   │   │   │   ├── heart-drops.js
+│   │   │   │   │   │   ├── inventory.js
+│   │   │   │   │   │   ├── loot.js
+│   │   │   │   │   │   ├── mara-quest.js
+│   │   │   │   │   │   ├── player-movement.js
+│   │   │   │   │   │   ├── push.js
+│   │   │   │   │   │   ├── puzzles.js
+│   │   │   │   │   │   ├── quest-journal.js
+│   │   │   │   │   │   ├── quest-log.js
+│   │   │   │   │   │   ├── quest-map.js
+│   │   │   │   │   │   ├── quest-rumors.js
+│   │   │   │   │   │   ├── resident-chatter.js
+│   │   │   │   │   │   ├── resident-reactions.js
+│   │   │   │   │   │   ├── resident-visibility.js
+│   │   │   │   │   │   ├── rest-menu.js
+│   │   │   │   │   │   ├── save-manager.js
+│   │   │   │   │   │   ├── save-migrations.js
+│   │   │   │   │   │   ├── save-state.js
+│   │   │   │   │   │   ├── save-validation.js
+│   │   │   │   │   │   ├── system-menu.js
+│   │   │   │   │   │   ├── tavern.js
+│   │   │   │   │   │   ├── tavern-conversations.js
+│   │   │   │   │   │   ├── tavern-guests.js
+│   │   │   │   │   │   ├── tavern-service.js
+│   │   │   │   │   │   ├── text.js
+│   │   │   │   │   │   ├── village.js
+│   │   │   │   │   │   ├── village-tasks.js
+│   │   │   │   │   │   ├── wanderers.js
+│   │   │   │   │   │   ├── weapon-timing.js
+│   │   │   │   │   │   ├── world-clock.js
+│   │   │   │   │   │   └── world-music.js
+│   │   │   │   │   └── game.js
+│   │   │   │   ├── maintenance/
+│   │   │   │   │   └── cleanup-legacy.ps1
+│   │   │   │   ├── app.js
+│   │   │   │   └── main.js
+│   │   │   ├── styles/
+│   │   │   │   ├── base.css
+│   │   │   │   ├── device.css
+│   │   │   │   └── panels.css
+│   │   │   ├── tests/
+│   │   │   │   ├── audio-calls.test.js
+│   │   │   │   ├── cartridge.test.js
+│   │   │   │   ├── cartridge-controller.test.js
+│   │   │   │   ├── cartridge-cover.test.js
+│   │   │   │   ├── cartridge-drag.test.js
+│   │   │   │   ├── character-stock.test.js
+│   │   │   │   ├── daily-life.test.js
+│   │   │   │   ├── diagonal-movement.test.js
+│   │   │   │   ├── discoveries.test.js
+│   │   │   │   ├── dog-fetch.test.js
+│   │   │   │   ├── dungeon-layouts.test.js
+│   │   │   │   ├── dungeon-polish.test.js
+│   │   │   │   ├── east-story.test.js
+│   │   │   │   ├── forest-edge.test.js
+│   │   │   │   ├── forest-evening.test.js
+│   │   │   │   ├── forest-expansion.test.js
+│   │   │   │   ├── gbfx.test.js
+│   │   │   │   ├── health-dungeon.test.js
+│   │   │   │   ├── heart-drops.test.js
+│   │   │   │   ├── helpers.js
+│   │   │   │   ├── inventory-tasks.test.js
+│   │   │   │   ├── mara-buttons.test.js
+│   │   │   │   ├── night-music.test.js
+│   │   │   │   ├── quest-log.test.js
+│   │   │   │   ├── resident-chatter.test.js
+│   │   │   │   ├── resident-life.test.js
+│   │   │   │   ├── rest-menu.test.js
+│   │   │   │   ├── save-ui.test.js
+│   │   │   │   ├── settings-chamber.test.js
+│   │   │   │   ├── speech-bubble.test.js
+│   │   │   │   ├── system-menu.test.js
+│   │   │   │   ├── tavern-company.test.js
+│   │   │   │   ├── tavern-courtesy.test.js
+│   │   │   │   ├── touch-points.test.js
+│   │   │   │   ├── town.test.js
+│   │   │   │   ├── ux.test.js
+│   │   │   │   ├── village.test.js
+│   │   │   │   ├── village-houses.test.js
+│   │   │   │   ├── village-life.test.js
+│   │   │   │   └── world.test.js
+│   │   │   ├── vendor/
+│   │   │   │   └── three/
+│   │   │   │       ├── addons/
+│   │   │   │       │   ├── loaders/
+│   │   │   │       │   │   └── GLTFLoader.js
+│   │   │   │       │   └── utils/
+│   │   │   │       │       ├── BufferGeometryUtils.js
+│   │   │   │       │       └── SkeletonUtils.js
+│   │   │   │       ├── LICENSE
+│   │   │   │       ├── three.core.js
+│   │   │   │       └── three.module.js
+│   │   │   ├── .gitignore
+│   │   │   ├── CREDITS.md
+│   │   │   ├── DUNGEON_WANTED_GDD_v1_0.pdf
+│   │   │   ├── index.html
+│   │   │   ├── package.json
+│   │   │   ├── package-lock.json
+│   │   │   └── README.md
 │   │   ├── brutalism/
 │   │   │   ├── assets/
 │   │   │   │   ├── branding/
@@ -527,8 +1049,6 @@ folio/
 ├── .editorconfig
 ├── .gitignore
 ├── angular.json
-├── Barlow_Condensed,DM_Mono,DM_Sans,Space_Grotesk.zip
-├── install-local-fonts.ps1
 ├── LICENSE
 ├── make-tree.ps1
 ├── package.json

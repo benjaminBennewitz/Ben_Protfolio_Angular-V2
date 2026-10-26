@@ -1,53 +1,55 @@
 # TYPE破BREAK — Nothing New Without Breaking
 
-[← Studienübersicht](../../../README.md#standalone-design-studies) · [Studie öffnen](https://b2folio.de/design-studies/type-break/)
+[← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/type-break/)
 
-Interaktives typografisches Manifest über Druck, Zerfall und kreative Transformation. Schrift vermittelt die Geschichte durch Größe, Bewegung und physische Reaktionen.
+An interactive typographic manifesto about pressure, destruction, and creative transformation. Scale, movement, and simulated physical reactions make type part of the narrative.
 
-## Konzept und Gestaltung
+> [!NOTE]
+> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
+
+> [!IMPORTANT]
+> The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
+
+## Concept and visual direction
 
 **THE SYSTEM → THE PRESSURE → THE BREAK → THE NEW.**
 
-Anton bildet das starre typografische System. Signalrot, Off-White und lokal eingebundene japanische Schlüsselglyphen setzen Kontraste. Die Wirkung entsteht aus Maßstab, Kompression und Verschiebung. Die japanischen Zeichen tragen inhaltliche Bedeutung und sind keine zufälligen Dekorationen.
+Anton represents a rigid typographic system. Signal red, off-white, and locally bundled Japanese key glyphs provide contrast. Compression and displacement connect the visual language to the subject. Japanese characters carry meaning rather than serving as random decoration.
 
-## Kapitel und Interaktionen
+## Chapters and interaction experiments
 
-| Station | Verhalten |
+| Station | Behavior |
 | --- | --- |
-| The System | Einzelne Hero-Glyphen reagieren auf Pointer bzw. Touch; die Komposition verändert sich beim Scrollen. |
-| The Pressure | Scroll-Kompression, Scherung und Rotation führen zur typografischen Bruch-Klimax. |
-| Intervention | Fragmentierte Wörter und CTA-Texte setzen sich bei Hover, Fokus oder Aktivierung zusammen. |
-| The Break | Canvas-Simulation mit PUSH, PULL, BREAK und REFORM. |
-| The New | Eigene Aussage eingeben, als Poster ansehen und lokal als PNG exportieren. |
-| Manifesto | Redaktionelle Publikationsvorschau mit Download der vierseitigen PDF-Fassung. |
+| The System | Individual hero glyphs respond to pointer or touch input; scrolling changes the composition. |
+| The Pressure | Scroll-driven compression, skew, and rotation lead to a typographic breaking point. |
+| Intervention | Fragmented words and calls to action reform on hover, focus, or activation. |
+| The Break | A Canvas simulation provides PUSH, PULL, BREAK, and REFORM tools. |
+| The New | A statement becomes a typographic poster with browser-local PNG export. |
+| Manifesto | An editorial publication preview links to a four-page PDF. |
 
-Drei großformatige Interludes verbinden die Kapitel. Der Footer greift die Typografie auf und bietet Kapitelnavigation sowie Download- und Portfoliolinks. Der Poster-Remix erzeugt eine neue Aussage; vorhandene Physics-Fragmente morphen nicht geometrisch in den neuen Text.
+Three oversized interludes connect the chapters. The footer continues the typography and provides chapter, download, and portfolio links. Poster creation produces a new statement; the existing simulated fragments do not geometrically morph into the new text.
 
-## Technische Umsetzung
+## Technical approach
 
-| Bereich | Datei / Verzeichnis |
+| Area | File / directory |
 | --- | --- |
-| Kapitel, Formular und Navigation | [index.html](index.html) |
-| Designsystem und responsive Darstellung | [styles.css](styles.css) |
-| Scrollmechanik, Glyphen und Poster-Export | [script.js](script.js) |
-| Fragment- und Reformationssimulation | [physics.js](physics.js) |
-| Redaktionelle Grundlage | [docs/MANIFESTO.md](docs/MANIFESTO.md) |
-| Druckfassung | [assets/type-break-manifesto.pdf](assets/type-break-manifesto.pdf) |
+| Chapters, form, and navigation | [index.html](index.html) |
+| Visual system and responsive presentation | [styles.css](styles.css) |
+| Scroll mechanics, glyphs, and poster export | [script.js](script.js) |
+| Fragment and reformation simulation | [physics.js](physics.js) |
+| Editorial source | [docs/MANIFESTO.md](docs/MANIFESTO.md) |
+| Print edition | [assets/type-break-manifesto.pdf](assets/type-break-manifesto.pdf) |
 
-HTML, CSS, Canvas und Vanilla JavaScript ohne npm-Laufzeitabhängigkeiten. Scrollbewegungen laufen über `requestAnimationFrame` und CSS-Transforms; Kapitel-Reveals über `IntersectionObserver`. Die Physiksimulation pausiert außerhalb des Viewports, ihre Pixeldichte ist begrenzt.
+The runtime combines HTML, CSS, Canvas, and VanillaJS. Scroll effects use `requestAnimationFrame` and CSS transforms; chapter reveals use `IntersectionObserver`. The physics simulation pauses outside the viewport and limits pixel density.
 
-## Bedienbarkeit und lokale Daten
+The learning focus is combining typographic storytelling, direct manipulation, Canvas simulation, and image export in one browser experience.
 
-Skip-Link, sichtbare Fokuszustände, beschriftete Werkzeuge, Touchbedienung und ein editierbares Formular ergänzen die visuellen Experimente. `prefers-reduced-motion` und ein zusätzlicher Motion-Toggle reduzieren Animationen. Die Seite scrollt über das Dokument; die Kapitel verwenden keinen globalen inneren Seitenscroller.
+## Interaction limits and local data
 
-Postertext und Export werden lokal im Browser verarbeitet. Eingegebene Aussagen werden nicht an ein Backend übertragen.
+The implementation includes labelled tools, focus styling, touch input, a motion toggle, and support for reduced-motion preferences. These features do not amount to a comprehensive accessibility audit. The page uses normal document scrolling.
 
-## Lokal entwickeln und integrieren
+Poster text and image export are processed locally in the browser. Entered statements are not sent to an application backend.
 
-Im Portfolio-Stamm `npm start` ausführen und `/design-studies/type-break/` öffnen. Alternativ im Studienordner `python -m http.server 8080` und anschließend `http://localhost:8080/` starten. HTTP ist für konsistentes Laden und Exportieren vorzuziehen.
+## Portfolio integration and sources
 
-Angular übernimmt die statische Studie über die bestehende Asset-Konfiguration. Es ist kein zusätzlicher Build notwendig.
-
-## Schriften und Rechte
-
-Anton und der Subset von Noto Serif CJK JP Bold liegen lokal vor. Die Lizenzhinweise stehen in [assets/OFL.txt](assets/OFL.txt) und [assets/OFL-NOTO.txt](assets/OFL-NOTO.txt). Eigene Inhalte unterliegen der [Portfolio-Lizenz](../../../LICENSE).
+The study is served at `/design-studies/type-break/` through Angular's asset configuration. Anton and the Noto Serif CJK JP Bold subset are bundled locally. Their notices are in [assets/OFL.txt](assets/OFL.txt) and [assets/OFL-NOTO.txt](assets/OFL-NOTO.txt).

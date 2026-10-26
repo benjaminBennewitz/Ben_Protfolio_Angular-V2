@@ -1,48 +1,52 @@
 # FOLD. — There Is Always Another Side
 
-[← Studienübersicht](../../../README.md#standalone-design-studies) · [Studie öffnen](https://b2folio.de/design-studies/fold/)
+[← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/fold/)
 
-Experimentelle 3D-Experience über Perspektivwechsel. Sechs gestaltete Seiten bilden ein gemeinsames Würfelobjekt, das sich durch Scrollen beziehungsweise Wischen erkunden und am Ende zu einem zusammenhängenden Netz entfalten lässt.
+An experimental 3D experience about changing perspectives. Six designed faces form a shared cube that can be explored through scrolling or swiping, then unfolded into a connected net.
 
-## Konzept und Gestaltung
+> [!NOTE]
+> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
 
-**THERE IS ALWAYS ANOTHER SIDE.** Papierweiß und dunkle Druckfarbe treffen auf Blau, Koralle und Gelb. Space Grotesk und DM Mono verbinden großformatige Aussagen mit technischen Randnotizen. Die Gestaltung nutzt Seitenwechsel als Erzählprinzip: Das Objekt bleibt zusammenhängend, während Kamera und Blickwinkel wechseln.
+> [!IMPORTANT]
+> The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
 
-Die sechs Perspektiven tragen die Aussagen FOLD, LOOK CLOSER, TURN THE WORLD, CHANGE THE ANGLE, SAME PAGE. NEW WORLD und THE WHOLE PICTURE.
+## Concept and visual direction
 
-## Interaktionen
+**THERE IS ALWAYS ANOTHER SIDE.** Paper white and dark ink meet blue, coral, and yellow. Space Grotesk and DM Mono combine oversized statements with technical marginal notes. Changing the viewpoint becomes the narrative: the object remains connected while the camera moves around it.
 
-- Auf Desktop steuert der normale Body-Scroll die Kamerafahrt zwischen den sechs Würfelseiten.
-- Auf mobilen Touchgeräten führt ein bewusster vertikaler Swipe jeweils zur nächsten oder vorherigen Station. Eine Fortschrittsanzeige begleitet die Geste.
-- Beim Finale fährt die Kamera zurück, richtet das Objekt aus und öffnet die verbundenen Flächen entlang ihrer Scharniere zum Würfelnetz.
-- Die entfalteten Flächen führen zu ihrer jeweiligen Perspektive zurück.
-- Der mobile Unfold besitzt eine eigene längere Animationsphase; eine weitere Geste führt zum regulär erreichbaren Footer.
+The six perspectives carry the statements FOLD, LOOK CLOSER, TURN THE WORLD, CHANGE THE ANGLE, SAME PAGE. NEW WORLD, and THE WHOLE PICTURE.
 
-## Aktuelle technische Umsetzung
+## Interaction experiments
 
-Die aktive Version verwendet **Three.js mit CSS3DRenderer**. Die sichtbaren Flächen sind HTML-Elemente, die als CSS3D-Objekte in einer gemeinsamen Szene angeordnet werden. Kamera, Quaternionen und verschachtelte Scharniergruppen bestimmen ihre räumlichen Beziehungen. Es handelt sich nicht um eine WebGL-gerenderte Papierphysik.
+- Desktop document scrolling drives the camera between six cube faces.
+- On mobile touch devices, a deliberate vertical swipe advances or returns by one station. A progress indicator accompanies the gesture.
+- At the finale, the camera retreats, aligns the object, and opens connected panels along their hinges.
+- The unfolded panels link back to their corresponding perspectives.
+- Mobile unfolding has its own longer animation phase; a further gesture reaches the regular footer.
 
-| Bereich | Datei / Verzeichnis |
+## Current technical approach
+
+The active implementation uses **Three.js with CSS3DRenderer** and VanillaJS. Visible faces are HTML elements placed as CSS3D objects in one scene. The camera, quaternions, and nested hinge groups determine their spatial relationships. This is not a WebGL paper-physics simulation.
+
+| Area | File / directory |
 | --- | --- |
-| Einstieg, Importmap, Szene und Footer | [index.html](index.html) |
-| Typografie, Papierflächen und responsive Zustände | [style.css](style.css) |
-| Aktive Szene, Kamerafahrt, Faltung und Touchsteuerung | [experience.js](experience.js) |
-| Vorschau und weitere Studienassets | `assets/` |
+| Entry, import map, scene mount, and footer | [index.html](index.html) |
+| Typography, panels, and responsive states | [style.css](style.css) |
+| Active scene, camera path, folding, and touch input | [experience.js](experience.js) |
+| Preview and other study assets | `assets/` |
 
-Die Importmap lädt Three.js und den CSS3DRenderer aus einem CDN. `script.js` und `paper-three.js` sind Dateien früherer Umsetzungsstände und werden vom aktuellen Einstieg nicht geladen. Sie beschreiben nicht die aktive Laufzeitarchitektur.
+The import map loads Three.js and CSS3DRenderer from a CDN. `script.js` and `paper-three.js` belong to earlier implementations and are not loaded by the current entry page.
 
-## Performance und Bedienbarkeit
+The learning focus is spatial HTML composition, quaternion-based camera movement, linked folding geometry, and translating scroll progress into deliberate touch navigation.
 
-CSS3D-Matrixupdates entfallen bei ruhenden Kapitelansichten; bei verstecktem Tab pausiert die Verarbeitung. Nicht aktive Flächen erhalten `inert` und passende ARIA-Zustände. Bei `prefers-reduced-motion` werden Scrolltweens und Glättung übersprungen und die schwebende Netzbewegung deaktiviert; die räumliche Navigation bleibt bestehen.
+## Performance and limitations
 
-Die Faltung verwendet ebene Flächen und festgelegte Scharniere. Elastische Papierkrümmung, Knüllphysik und eine physikalische Simulation sind nicht Bestandteil der Studie. Bei fehlgeschlagener Modulinitialisierung erscheint ein Fallback-Hinweis.
+CSS3D matrix updates are skipped in resting chapter views, and processing pauses while the tab is hidden. Inactive faces use `inert` and matching ARIA states. Reduced-motion preferences skip scroll tweens and interpolation and disable the floating net motion; spatial navigation still exists.
 
-## Lokal entwickeln und integrieren
+The folding system uses flat panels and predefined hinges. Elastic paper bending, crumpling, and physical material simulation are outside its scope. Failed module initialization displays a fallback notice. The experiment does not claim complete keyboard, assistive-technology, or reduced-motion equivalence.
 
-Im Portfolio-Stamm `npm start` ausführen und `/design-studies/fold/` öffnen. Für eine vollständige lokale Darstellung ist dieser Weg vorzuziehen: Die Schriftdateien werden unter `/assets/fonts/studies/` aus dem Portfolio geladen. Alternativ den gesamten `src`-Ordner über HTTP ausliefern und von dort `/design-studies/fold/` aufrufen.
+## Portfolio integration and sources
 
-Für die CDN-Module ist eine Netzwerkverbindung erforderlich. Eine eigene npm-Installation für die Studie ist nicht nötig. Angular übernimmt die statische Auslieferung über seine Asset-Konfiguration.
+The study is served at `/design-studies/fold/` through Angular's asset configuration. Fonts are shared portfolio assets under `/assets/fonts/studies/`. The CDN modules require a network connection.
 
-## Inhalte und Rechte
-
-Gestaltung und projektspezifische Umsetzung: Benjamin Bennewitz / B². Es gilt die [Portfolio-Lizenz](../../../LICENSE); Three.js und die verwendeten Schriften unterliegen ihren jeweiligen eigenen Bedingungen.
+Original design and implementation are by Benjamin Bennewitz / B². Three.js and the fonts retain their own terms.

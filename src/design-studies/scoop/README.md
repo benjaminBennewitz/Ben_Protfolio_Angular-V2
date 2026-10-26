@@ -1,51 +1,57 @@
 # SCOOP! — Comic Ice Cream Shop
 
-[← Studienübersicht](../../../README.md#standalone-design-studies) · [Studie öffnen](https://b2folio.de/design-studies/scoop/)
+[← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/scoop/)
 
-Illustrativer Demo-Shop, in dem Eisfiguren, Produktwahl und Scrollbewegung eine gemeinsame Markenwelt bilden. Gestaltung und Interaktionen verbinden eine verspielte Produktinszenierung mit nachvollziehbaren Shop-Zuständen.
+An illustrative demo shop that brings ice cream characters, product selection, and scrolling into one visual identity. The study combines playful product presentation with explicit shop states.
 
-## Konzept und Gestaltung
+> [!NOTE]
+> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
 
-Strawlarry / Erdbeere, Brostacchio / Pistazie und Jochen / Vanille treten als eigenständige SVG-Charaktere auf. Große Lilita-One-Headlines, Nunito Sans, Zutaten-Doodles und eine gezeichnete Pfadführung prägen die Comic-Gestaltung.
+> [!IMPORTANT]
+> The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
 
-Hero, Sorten, Mix-Box, Markengeschichte und Flavor Vote führen durch die Microsite. Die Portraits sind als KI-Platzhalter gekennzeichnet.
+## Concept and visual direction
 
-## Shop-Interaktionen
+Strawlarry / strawberry, Brostacchio / pistachio, and Jochen / vanilla are individual SVG characters. Large Lilita One headlines, Nunito Sans body text, ingredient doodles, and a drawn path create the comic-inspired identity.
 
-- Einzelbecher mit 500 ml und einem Demo-Preis von 6,90 €.
-- Mix-Box mit drei frei kombinierbaren Bechern für 20,70 €; dieselbe Sorte kann mehrfach gewählt werden.
-- Tastaturbedienbare Mix-Auswahl, Warenkorb mit Mengenänderung, Entfernen und Summenberechnung.
-- Warenkorb und Flavor Vote speichern ihren Zustand lokal im Browser.
-- Der Demo-Checkout leert den Warenkorb und weist darauf hin, dass weder Bestellung noch Zahlung ausgelöst werden.
-- Das Vote-Popup zeigt einen ausdrücklich fiktiven Zwischenstand, keine echte serverseitige Abstimmung.
+The hero, flavors, mix box, brand story, and Flavor Vote structure the page. Portraits are labelled as AI placeholders.
 
-Es gibt kein Bestellbackend, keine Zahlungsabwicklung und keinen Versand.
+## Shop interaction experiments
 
-## Animation und Umsetzung
+- Individual 500 ml cups with a demo price of €6.90.
+- A three-cup mix box at €20.70, including repeated flavors.
+- Keyboard-operable mix selection and a cart with quantity changes, removal, and totals.
+- Browser-local state for the cart and Flavor Vote.
+- A demo checkout that clears the cart and explicitly confirms that no order or payment was processed.
+- A voting popup with an explicitly fictional interim result rather than server-side poll data.
 
-Der Hero lässt die Eisfiguren zeitversetzt auf die Waffel fallen und nachfedern. Kontaktschatten erscheinen beim Aufprall. Pupillen bleiben über Clip-Pfade innerhalb ihrer Augenformen; Arme werden entlang von Béziersegmenten verformt. Sprechblasen und Mundzustände reagieren auf Produktinteraktionen.
+There is no order backend, payment processing, or shipping service. Product names, prices, and shop controls support the design experiment.
 
-Die Mix-Box animiert gewählte Becher unabhängig voneinander. Der gezeichnete Hintergrundpfad folgt den tatsächlichen Section-Höhen und besitzt einen eigenen mobilen Verlauf. `ResizeObserver` berücksichtigt Layoutänderungen.
+## Animation and technical approach
 
-| Bereich | Datei / Verzeichnis |
+The hero drops characters onto a waffle with staggered timing and settling motion. Contact shadows appear on impact. Clip paths constrain pupil movement; arms deform along Bézier segments. Product interactions trigger speech bubbles and mouth states.
+
+The mix box animates selected cups independently. A drawn background path follows the actual section heights and has a separate mobile layout. `ResizeObserver` accounts for layout changes.
+
+| Area | File / directory |
 | --- | --- |
-| Shop-Struktur und Dialoge | [index.html](index.html) |
-| Layout, Typografie und Animationen | [styles.css](styles.css) |
-| Shop-Zustand und Interaktionen | [script.js](script.js) |
-| Aus den Original-SVGs abgeleitete Templates | [artwork.js](artwork.js) |
-| Originalgrafiken und WebP-Previews | `assets/` |
-| Lokale Webfonts und Lizenztexte | `fonts/` |
+| Shop structure and dialogs | [index.html](index.html) |
+| Layout, typography, and animation | [styles.css](styles.css) |
+| Shop state and interactions | [script.js](script.js) |
+| Templates derived from original SVG artwork | [artwork.js](artwork.js) |
+| Original graphics and WebP previews | `assets/` |
+| Local webfonts and license records | `fonts/` |
 
-Die SVG-Instanzen erhalten eindeutige IDs für ihre Masken und Clips. Der Loader wartet auf Fonts und Bild-Decoding sowie eine Mindestanzeigezeit. Animationen berücksichtigen Tab- und Viewport-Sichtbarkeit. Reduced Motion zeigt den fertigen Hero und deaktiviert die entsprechenden Bewegungen.
+HTML, CSS, SVG, and VanillaJS provide the runtime. SVG instances receive unique IDs for masks and clips. The loader considers font and image readiness plus a minimum display time. Animation work accounts for viewport and tab visibility. Reduced-motion preferences display the completed hero and disable the associated movements.
 
-## Bedienbarkeit und lokale Entwicklung
+The learning focus is SVG character animation, geometric deformation, responsive visual storytelling, and a consistent browser-local shop state.
 
-Warenkorb und mobiles Menü besitzen Escape-Bedienung und Fokusverwaltung. Die wesentlichen Shop-Aktionen sind per Tastatur und Touch erreichbar. Ohne JavaScript bleiben redaktionelle Inhalte und statische Produktgrafiken zugänglich.
+## Interaction scope
 
-Im Portfolio-Stamm `npm start` ausführen und `/design-studies/scoop/` öffnen. Alternativ im Studienordner `python -m http.server 8080` und anschließend `http://localhost:8080/` starten. Die eingebetteten SVG-Templates benötigen keinen eigenen Fetch; eine zusätzliche npm-Installation ist nicht nötig.
+The cart and mobile menu include Escape handling and focus management. Core shop actions support keyboard and touch input. Static product artwork and editorial content remain available without the interactive shop code. These implementation details do not imply production readiness or full accessibility coverage.
 
-## Portfolio und Rechte
+## Portfolio integration and sources
 
-Angular kopiert die Laufzeitdateien einschließlich lokaler WOFF-Fonts und ihrer Lizenzen. Illustrator-Master, Entwurfs-PNGs, ursprüngliche TTF-Schriften und Entwicklungsunterlagen sind gemäß `angular.json` vom Web-Build ausgenommen.
+The study is served at `/design-studies/scoop/`. Angular publishes runtime files, WOFF fonts, and their license records. Illustrator masters, draft PNGs, original TTF files, and selected development material are excluded according to `angular.json`.
 
-Originalgrafiken und eigene Umsetzung unterliegen der [Portfolio-Lizenz](../../../LICENSE). Die jeweiligen OFL-Dateien bleiben bei den Font-Ordnern erhalten.
+Original graphics and implementation remain subject to the portfolio license. The fonts retain their accompanying OFL records.

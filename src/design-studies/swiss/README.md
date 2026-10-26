@@ -1,41 +1,47 @@
 # [WHATWESEE] — A Photography Journal
 
-[← Studienübersicht](../../../README.md#standalone-design-studies) · [Studie öffnen](https://b2folio.de/design-studies/swiss/)
+[← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/swiss/)
 
-Fotografie-Journal im Swiss-/International-Typographic-Style. Im Mittelpunkt stehen die Fotografien von Benjamin Bennewitz und eine ruhige, präzise redaktionelle Präsentation.
+A photography journal inspired by the Swiss / International Typographic Style. Benjamin Bennewitz's photographs are presented through a restrained editorial system.
 
-## Konzept und Gestaltung
+> [!NOTE]
+> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
 
-Ein klares Raster, reduzierte Systemtypografie, großzügige Bildflächen und nummerierte Archivbereiche schaffen die visuelle Ordnung. Die Studie verbindet ein fotografisches Portfolio mit einem Journal: Landschaft, Architektur, Tiere und Blumen stehen als unterschiedliche Blickwinkel nebeneinander.
+> [!IMPORTANT]
+> The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
 
-Der Hero-Slider eröffnet die Seite; Projektvorstellung, Archiv, redaktioneller Artikel und Abschluss führen durch die Bildwelt. Die Fotografien bleiben die Hauptinhalte, während Bewegung die Orientierung unterstützt.
+## Concept and visual direction
 
-## Interaktionen
+A precise grid, system typography, generous image areas, and numbered archive sections establish the visual order. Landscape, architecture, animals, and flowers represent different ways of observing the world.
 
-- Hero-Slider mit automatischem Wechsel, Vor-/Zurück-Buttons und aktualisierten Kategorie- und Indexangaben.
-- Autoplay pausiert bei Hover oder Fokus im Slider und startet bei reduzierter Bewegung nicht automatisch.
-- Einmalige Reveals über `IntersectionObserver`; Archivbereiche erscheinen abwechselnd von links und rechts.
-- Mobile Navigation und reguläre Ankerlinks zu den Seitenbereichen.
+The hero slider introduces the imagery. A project statement, photographic archive, journal article, and closing section develop the editorial structure. Photography remains the main content; movement supports its presentation.
 
-## Technische Umsetzung
+## Interaction experiments
 
-Reines HTML, CSS und Vanilla JavaScript ohne eigene Buildpipeline. Das Layout ist auf maximal 1920 Pixel begrenzt und verwendet responsive Raster. Bilder sind als lokale WebP-Dateien eingebunden; `<figure>` und `<figcaption>` ordnen Motive und Credits semantisch zu.
+- A hero slider with automatic progression, previous/next controls, and updated category and index labels.
+- Autoplay pauses while the slider is hovered or contains focus. Reduced-motion preferences prevent automatic progression.
+- One-time reveals through `IntersectionObserver`; archive sections enter alternately from the left and right.
+- Mobile navigation and regular anchor links between page sections.
 
-| Bereich | Datei / Verzeichnis |
+## Technical approach
+
+HTML, CSS, and VanillaJS form a standalone page with responsive grids and a maximum layout width of 1920 pixels. Photographs are local WebP assets. `<figure>` and `<figcaption>` associate images and credits within the document structure.
+
+| Area | File / directory |
 | --- | --- |
-| Struktur und Bildcredits | [index.html](index.html) |
-| Raster, Typografie und Breakpoints | [styles.css](styles.css) |
-| Slider, Menü und Reveals | [script.js](script.js) |
-| Fotografien | `assets/images/` |
+| Page structure and image credits | [index.html](index.html) |
+| Grid, typography, and responsive rules | [styles.css](styles.css) |
+| Slider, menu, and reveals | [script.js](script.js) |
+| Photographs | `assets/images/` |
 
-Die vorhandenen Archivbilder dienen zugleich als zusätzliche Hero-Slides. `hero-landscape.webp`, `archive-landscape.webp`, `archive-architecture.webp`, `archive-animals.webp`, `archive-flowers.webp`, `article-landscape.webp` und `cta-landscape.webp` übernehmen die jeweiligen Bildrollen.
+Existing archive images also provide additional hero slides. `hero-landscape.webp`, `archive-landscape.webp`, `archive-architecture.webp`, `archive-animals.webp`, `archive-flowers.webp`, `article-landscape.webp`, and `cta-landscape.webp` supply the respective editorial image roles.
 
-## Lokal entwickeln und integrieren
+The learning focus is composition, photographic hierarchy, responsive image presentation, and restrained motion rather than a feature-heavy application.
 
-Im Portfolio-Stamm `npm start` ausführen und `/design-studies/swiss/` öffnen. Alternativ im Studienordner `python -m http.server 8080` starten und `http://localhost:8080/` aufrufen. Es ist keine zusätzliche npm-Installation für die Studie nötig.
+## Portfolio integration
 
-Angular kopiert die statische Microsite in den entsprechenden Studienpfad. Die Portfolio-Karte und der Quicklink verweisen auf dieselbe Seite.
+The study is served at `/design-studies/swiss/`. Angular publishes the standalone files through its asset configuration. The portfolio card and quicklink point to the same page; the study retains its own layout and interaction code.
 
-## Inhalte und Rechte
+## Credits and source notes
 
-Die eingebundenen Fotografien stammen von Benjamin Bennewitz; sichtbare Bildcredits verwenden `© Benjamin Bennewitz`. Gestaltung, Code und eigene Inhalte unterliegen der [Portfolio-Lizenz](../../../LICENSE).
+The photographs are by Benjamin Bennewitz. Visible captions use `© Benjamin Bennewitz`. Original design, code, and content remain subject to the portfolio license.

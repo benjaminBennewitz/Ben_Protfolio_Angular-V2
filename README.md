@@ -41,9 +41,7 @@
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Quality and Accessibility](#quality-and-accessibility)
-- [Authorized Local Development](#authorized-local-development)
-- [Scripts](#scripts)
-- [Build and Deployment](#build-and-deployment)
+- [Implementation and Delivery](#implementation-and-delivery)
 - [License and Usage](#license-and-usage)
 - [Author](#author)
 
@@ -100,7 +98,10 @@ The goal is a website that remains technically controlled while making a strong 
 
 ## Standalone Design Studies
 
-Eight independent experiences explore distinct visual directions and interaction models. Cards and quicklinks live on `/portfolio#design-studies`. Each study has its own detailed README covering concept, interaction, architecture, local development, and source notes.
+> [!NOTE]
+> The standalone design studies are non-commercial experiments for personal learning, exploring new technologies, and combining visual and interaction techniques. They are not production products or commercial services. Accessibility and production readiness are not their primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed for these studies.
+
+Eight independent experiences explore distinct visual directions and interaction models. Cards and quicklinks live on `/portfolio#design-studies`. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
 
 ### RAW/FORM
 
@@ -146,13 +147,13 @@ A procedural WebGL tree turns upward document scrolling into an ascent from unde
 
 ### BENTENDO™ / DUNGEON WANTED
 
-An interactive 3D handheld surrounds a playable Canvas pixel RPG with cartridge handling, physical controls, and an LCD. The evolving game includes quests, combat, NPC routines, a day/night cycle, and local saves; its own README covers development, tests, and asset credits.
+An interactive 3D handheld surrounds a playable Canvas pixel RPG with cartridge handling, physical controls, and an LCD. The evolving game includes quests, combat, NPC routines, a day/night cycle, and local saves; its own README covers the learning focus, architecture, prototype limits, and asset credits.
 
 [Study README](src/design-studies/bentendo/README.md) · [Open study](https://b2folio.de/design-studies/bentendo/)
 
 ### Shared integration
 
-Each study owns its HTML, styles, scripts, and assets. Angular copies these experiences as static pages; portfolio theme, language, and accessibility services do not automatically apply to them. Dependencies and supported interactions are documented in each study's README.
+Each study owns its HTML, styles, scripts, and assets. Angular copies these experiences as static pages; portfolio theme, language, and accessibility services do not automatically apply to them. Dependencies and supported interactions are documented in each study's README. Framework-free interaction code is written in VanillaJS; individual studies also explore Canvas, SVG, WebGL, Web Audio, or CSS3D.
 
 ## Architecture
 
@@ -214,9 +215,11 @@ src/
 
 ## Quality and Accessibility
 
+The following features describe the main Angular portfolio. Standalone studies have their own experimental scope and do not automatically inherit these features.
+
 - strict TypeScript and Angular template checks
 - semantic HTML structure and a consistent heading hierarchy
-- visible focus states and fully keyboard-accessible interactions
+- visible focus states and keyboard interaction support
 - ARIA labels for interactive elements and controls requiring additional context
 - contrast-conscious dark and light themes with additional accessibility preferences
 - support for reduced or disabled motion
@@ -227,51 +230,13 @@ src/
 
 Material Symbols are bundled as a reduced local font, so icon rendering does not depend on an external font CDN.
 
-## Authorized Local Development
+## Implementation and Delivery
 
-> [!CAUTION]
-> The following commands document the internal development workflow. Their publication does not grant permission to download, execute, or reuse this project. They may only be used by the rights holder or by persons who have received explicit written authorization.
+The portfolio is an Angular application with lazy-loaded pages, centralized services, shared components, and a token-based SCSS system. Production configuration includes optimization, hashed application bundles, public environment configuration, and size budgets.
 
-An Angular 21-compatible Node.js version and npm are required.
+The `angular.json` asset rules publish all eight standalone studies alongside the application. Selected source-only material is excluded, including SCOOP artwork masters and BENTENDO tests, generators, Blender sources, and internal documentation. Static delivery also includes `.htaccess`, crawler configuration, the sitemap, fonts, and study assets.
 
-```bash
-npm ci
-npm run start
-```
-
-The local Angular development server is then available at the following address by default:
-
-```txt
-http://localhost:4200
-```
-
-## Scripts
-
-| Command | Purpose |
-| --- | --- |
-| `npm run start` | Starts the Angular development server |
-| `npm run build` | Creates the default production build |
-| `npm run build:production` | Explicitly creates the production build |
-| `npm run watch` | Continuously builds using the development configuration |
-| `npm run test` | Runs the unit tests |
-
-## Build and Deployment
-
-```bash
-npm run build:production
-```
-
-The deployable browser build is generated in:
-
-```txt
-dist/ben-portfolio-experience/browser
-```
-
-The production configuration enables optimization, file hashing, environment-specific frontend configuration, and bundle budgets. `.htaccess`, `robots.txt`, `sitemap.xml`, and the local assets are copied into the build output.
-
-The `angular.json` asset rules copy all eight standalone studies and exclude selected development-only material, including SCOOP source masters and BENTENDO tests, generators, Blender sources, and internal documentation. Study-specific details belong in the linked study READMEs.
-
-Local deployment scripts remain in the root-level `scripts/` directory, which is ignored by Git. BENTENDO's nested runtime scripts remain versioned. Deploy the complete browser output, including `.htaccess` and `design-studies/`; an installed server-side deployment script is managed separately.
+Local deployment utilities are kept outside Git tracking in the root-level `scripts/` directory. Nested study runtime scripts remain versioned. These implementation notes document the work for review; they are not installation instructions or permission to reproduce, execute, deploy, or reuse it.
 
 ## License and Usage
 

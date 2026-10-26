@@ -1,69 +1,66 @@
 # BENTENDO™ / DUNGEON WANTED
 
-[← Studienübersicht](../../../README.md#standalone-design-studies) · [Studie öffnen](https://b2folio.de/design-studies/bentendo/)
+[← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/bentendo/)
 
-Interaktiver 3D-Handheld mit bedienbarer Cartridge und einem spielbaren Pixel-Rollenspiel. Das Gerät bildet die physische Bühne; DUNGEON WANTED besitzt darunter eine eigenständige Spielwelt und Spielzustandsverwaltung. Laufender Entwicklungsstand, kein abgeschlossenes Vollspiel.
+An interactive 3D handheld with a working cartridge and a playable pixel RPG. The device provides the physical stage while DUNGEON WANTED maintains its own game world and state. This is an evolving prototype, not a finished game release.
 
-## Konzept und Gestaltung
+> [!NOTE]
+> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
 
-Die Studie verbindet eine nostalgische Handheld-Hommage mit einer erkundbaren Abenteuerwelt. Gehäuse, Einschalter, Kontrast- und Lautstärkeräder, Cartridge und LCD reagieren auf Eingaben. Das Handheld-Modell wurde im Projekt vollständig mit Python erstellt. Die Musik entstand mit freien Tools und KI.
+> [!IMPORTANT]
+> The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
 
-BENTENDO und DUNGEON WANTED sind fiktive Projektnamen. Die Studie ist unabhängig von Nintendo; Marken ihrer jeweiligen Rechteinhaber bleiben unberührt.
+## Concept and visual direction
 
-## Gerät und Bedienung
+The study connects a nostalgic handheld homage with an explorable adventure world. The shell, power switch, contrast and volume wheels, cartridge, and LCD respond to input. The handheld model was created entirely with Python for this project. Music was created using free tools and AI.
 
-- Cartridge betrachten, umdrehen, einrasten lassen und durch eine animierte Aktion pusten; kein Mikrofonzugriff.
-- Einschalten über den Power-Schalter; Gehäuseansichten per Pointer, Touch oder Bedienhilfe erreichen.
-- Tastatur, Touch-Steuerung und die sichtbaren 3D-Tasten bedienen das Spiel.
-- Pfeile bewegen die Figur, A/Leertaste interagiert, B öffnet den Rucksack beziehungsweise schließt Dialoge, START/Enter/P pausiert und SELECT/S speichert.
-- Lautstärke, Musik und Effekte getrennt einstellen; Displaykontrast und optionale Kontaktprobleme über die Bedienhilfe steuern.
-- Debug-Auswahl für direkte Raumaufrufe und LCD-Rauschen.
+BENTENDO and DUNGEON WANTED are fictional project names. The study is independent of Nintendo; trademarks remain with their respective owners.
 
-Die [Credits-Seite](credits.html) öffnet aus der Studiennavigation in einem neuen Tab, damit die laufende Spielsitzung erhalten bleibt.
+## Device and input experiments
 
-## Spielwelt und Systeme
+- Inspect, turn, insert, and virtually blow into the cartridge; no microphone access is involved.
+- Power the device through its switch and reach different shell views through pointer, touch, or the controls panel.
+- Use keyboard input, touch controls, or the visible device buttons to interact with the game.
+- Arrow keys move the character; A/Space interacts; B opens the backpack or closes dialogs; START/Enter/P pauses; SELECT/S saves.
+- Adjust master volume, music, and effects separately, plus display contrast and optional simulated contact issues.
+- Inspect rooms or LCD noise through the debugging interface.
 
-Bruchstein mit begehbaren Innenräumen, Bewohnern und Tieren bildet den Ausgangspunkt. Quests, Journal, Rucksack und Karte führen zu Waldgebieten, Rohrpuzzle und dem ersten Dungeon mit Kampf. Tag/Nacht, Bewohner-Tagesabläufe, Schenkengäste und wählbare Ruhezeiten ergänzen die Welt.
+The [credits page](credits.html) opens in a separate tab from study navigation, preserving the running session.
 
-Spielstand, Charakterwahl und Audioeinstellungen bleiben lokal im Browser. Die Speicherung ist an den jeweiligen Browser und Origin gebunden; ein Stand von localhost wird nicht automatisch auf eine andere Domain übertragen.
+## Game world and systems
 
-## Architektur und Dateien
+Bruchstein, with explorable interiors, residents, and animals, is the starting hub. Quests, a journal, inventory, and a map lead into forest areas, a pipe puzzle, and the first combat dungeon. Day/night progression, resident routines, tavern guests, and rest choices extend the world.
 
-| Bereich | Verantwortung |
+Save data, character selection, and audio settings stay in the browser and are bound to its origin. Data is not automatically shared across domains or browsers.
+
+## Architecture
+
+| Area | Responsibility |
 | --- | --- |
-| [index.html](index.html), `styles/` | Zugängliche Bedienelemente, Gerätedarstellung und Dialoge |
-| `scripts/core/` | Konfiguration und Ablaufsteuerung |
-| `scripts/device/` | Modelle, Kamera, Cartridge und Eingaben |
-| `scripts/display/` | Canvas-LCD und Grafikladen |
-| `scripts/game/data/` | Räume, Figuren und Inhaltsdefinitionen |
-| `scripts/game/systems/` | Spielregeln, Bewegung, Kampf, Quests und Speicherung |
-| `scripts/game/render/` | Darstellung der Spielwelt und Spieloberfläche |
-| `scripts/audio/` | Audioverwaltung, Effekte und Entwicklungswerkzeuge |
-| `tests/`, `scripts/checks/` | Spieltests, Portfolio-Integration und Strukturprüfungen |
-| `assets/`, `vendor/` | Modelle, Sprites, Medien und lokale Three.js-Laufzeit |
-| `docs/` | Bestehende technische, gestalterische und spielerische Entwicklungsunterlagen |
+| [index.html](index.html), `styles/` | Interface controls, device presentation, and dialogs |
+| `scripts/core/` | Configuration and orchestration |
+| `scripts/device/` | Models, camera, cartridge, and input |
+| `scripts/display/` | Canvas LCD and graphic loading |
+| `scripts/game/data/` | Rooms, characters, and content definitions |
+| `scripts/game/systems/` | Rules, movement, combat, quests, and saves |
+| `scripts/game/render/` | World and game interface rendering |
+| `scripts/audio/` | Audio management, effects, and authoring utilities |
+| `tests/`, `scripts/checks/` | Game tests, integration checks, and structural validation |
+| `assets/`, `vendor/` | Models, sprites, media, and local Three.js runtime |
+| `docs/` | Existing technical, visual, and game development records |
 
-Das Gerät nutzt Three.js, das Spiel ein Canvas-LCD. Die Importmap verweist auf die lokal mitgelieferte Three.js-Laufzeit. Es läuft keine Angular-Instanz im Spiel und kein iframe ist erforderlich.
+The device uses Three.js and the game uses a Canvas LCD, coordinated through VanillaJS modules. The import map references locally bundled Three.js files. The game does not instantiate Angular or depend on an iframe.
 
-## Lokal entwickeln und prüfen
+The learning focus is combining device interaction, 3D presentation, a 2D game renderer, modular game rules, persistent state, and coordinated audio.
 
-Im Portfolio-Stamm `npm start` ausführen und `/design-studies/bentendo/` öffnen. Alternativ im Studienordner `python -m http.server 8080` starten und `http://localhost:8080/` aufrufen. Für das Spielen ist keine eigene npm-Installation nötig.
+## Scope and limitations
 
-Entwicklungstests im Studienordner:
+The repository contains automated checks for game behavior and portfolio integration, alongside code-structure checks. These do not establish a finished game, comprehensive device support, or full accessibility. Keyboard and touch controls are implemented within the experimental interaction model.
 
-```bash
-npm ci
-npm test
-npm run check
-npm run check:python
-```
+## Portfolio integration and sources
 
-Python 3 ist für die Python-Strukturprüfung erforderlich. Optionale Generatoren können weitere Abhängigkeiten benötigen. `tests/portfolio-integration.test.js` prüft die Anbindung an Portfolio und Asset-Konfiguration.
+The study is served at `/design-studies/bentendo/`. Angular publishes runtime files while excluding tests, internal documentation, Blender sources, selected authoring utilities, and study package metadata according to `angular.json`. The card uses an SVG handheld composition with an LCD excerpt rendered by the game.
 
-## Portfolio-Integration und Quellen
+Sources and modifications are recorded in [CREDITS.md](CREDITS.md) and the [public credits](credits.html). The separate GBFX sound effects remain third-party assets under CC BY 4.0. The documented question about distributing the dungeon atlas is independent of the project's Python model and AI-assisted music.
 
-Der Produktionsbuild im Portfolio-Stamm übernimmt die Laufzeitdateien. Tests, interne Dokumentation, Blender-Quelle, Prüf-/Generatorwerkzeuge und eigene Paketmetadaten werden gemäß `angular.json` nicht veröffentlicht. Die Kartenansicht nutzt eine gestaltete SVG-Handheldvorschau mit einem vom Spielrenderer erzeugten LCD-Ausschnitt.
-
-Quellen und Bearbeitungen stehen in [CREDITS.md](CREDITS.md) und den [öffentlichen Credits](credits.html). Die separat verwendeten GBFX-Soundeffekte bleiben Fremdassets unter CC BY 4.0. Die dort dokumentierte Frage zur Weitergabe des Dungeonatlas bleibt davon getrennt. Eigene Beiträge unterliegen der [Portfolio-Lizenz](../../../LICENSE).
-
-Alle dauerhaft benötigten Spielskripte, Tests und Unterlagen liegen innerhalb dieser Studie. Der Ignore-Eintrag `/scripts/` betrifft ausschließlich den lokalen Deployment-Ordner im Portfolio-Stamm.
+Runtime scripts, tests, and development records stay within this study. The root-level `/scripts/` ignore rule applies only to local portfolio deployment utilities.

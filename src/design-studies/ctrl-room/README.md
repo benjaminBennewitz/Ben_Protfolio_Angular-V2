@@ -1,42 +1,48 @@
 # CTRL//ROOM — Digital Culture, Different Frequencies
 
-[← Studienübersicht](../../../README.md#standalone-design-studies) · [Studie öffnen](https://b2folio.de/design-studies/ctrl-room/)
+[← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/ctrl-room/)
 
-Audiovisuelle Microsite zwischen elektronischer Musik, Y2K-Interface und digitaler Kultur. Die Studie verbindet ein fiktives Kulturarchiv mit einem tatsächlich bedienbaren Musikplayer.
+An audiovisual microsite connecting electronic music, Y2K interface design, and digital culture. A fictional cultural archive surrounds a functioning music player.
 
-## Konzept und Gestaltung
+> [!NOTE]
+> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
 
-Dunkle Flächen, Lime-Akzente, blaue Rahmen, technische Labels und Fensteroberflächen bilden das Interface. Music, Visuals, People und Places gliedern die Inhalte. Das fiktive Artist-Profil KATZKII und der Track „Midnight in the Lower Sector“ verbinden die Bereiche miteinander.
+> [!IMPORTANT]
+> The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
 
-Künstler, Events, Archivdatensätze und Netzwerkzahlen sind als Design-Study-Inhalte gekennzeichnet. Es gibt keine reale Buchung, keinen Ticketverkauf und keine Live-Community.
+## Concept and visual direction
 
-## Interaktionen
+Dark surfaces, lime accents, blue outlines, technical labels, and window-like panels define the interface. Music, Visuals, People, and Places organize the content. The fictional artist KATZKII and the track “Midnight in the Lower Sector” connect the different areas.
 
-- Ein gemeinsamer Audioplayer mit Play/Pause, Seeking, Lautstärke, Mute sowie Lade- und Fehlerzuständen.
-- Das Playerfenster lässt sich minimieren und in einem Dialog vergrößern. Dabei wird derselbe Player weiterverwendet; der Track startet nicht neu.
-- Equalizer und Waveform reagieren bei Wiedergabe auf echte Web-Audio-Analysedaten. Die illustrative Equalizer-Vorschau außerhalb der Wiedergabe ist davon getrennt.
-- Archiv mit 13 lokalen Datensätzen, kombinierbarer Kategorie-/Textsuche, Leerzustand und Detaildialog. `/` fokussiert die Suche außerhalb von Eingabefeldern.
-- Pointerreaktionen, endliche Klickwellen sowie Hover- und Fokusanimationen.
+Artists, events, archive entries, and network figures are labelled as fictional study content. There is no booking, ticket sale, or live community service.
 
-Audio startet erst nach Nutzeraktion. Dialoge und mobiles Menü besitzen Escape-Bedienung und Fokusverwaltung. Reduced Motion deaktiviert die visuellen Bewegungen und die laufende Audiovisualisierung; Audio bleibt bedienbar. Dynamische Visualisierung ist auf höchstens 30 FPS begrenzt und berücksichtigt Sichtbarkeit und Tabzustand.
+## Interaction experiments
 
-## Technische Umsetzung
+- A shared audio player with play/pause, seeking, volume, mute, loading, and error states.
+- A player window that can be minimized or expanded into a dialog. The same player is moved, preserving playback position.
+- An equalizer and waveform driven by actual Web Audio analysis during playback. An illustrative equalizer preview is used separately while audio is idle.
+- An archive with 13 local records, combined category and text filters, an empty state, and a detail dialog. `/` focuses search outside input fields.
+- Pointer reactions, finite click waves, and hover/focus transitions.
 
-| Bereich | Datei / Verzeichnis |
+Audio begins after user interaction. Dialogs and the mobile menu include Escape handling and focus management. Reduced-motion preferences disable visual effects and running audio visualization while keeping audio controls available. Dynamic visualization is capped at 30 FPS and considers viewport and tab visibility.
+
+## Technical approach
+
+| Area | File / directory |
 | --- | --- |
-| Struktur, Player und native Dialoge | [index.html](index.html) |
-| Design-Tokens, Layout und Zustände | [styles.css](styles.css) |
-| Web Audio, Archiv, Navigation und Effekte | [script.js](script.js) |
-| Bilder, Logos, Texturen und MP3 | `assets/` |
+| Structure, player, and native dialogs | [index.html](index.html) |
+| Design tokens, layout, and states | [styles.css](styles.css) |
+| Web Audio, archive, navigation, and effects | [script.js](script.js) |
+| Images, logos, textures, and MP3 | `assets/` |
 
-HTML, CSS, SVG und Vanilla JavaScript; keine eigene Buildpipeline. Fonts, Skripte und Medien werden lokal geladen. Die Seite nutzt den normalen Body-Scroll; nur die Archivtabelle kann auf kleinen Displays innerhalb ihres Bereichs horizontal scrollen.
+HTML, CSS, SVG, and VanillaJS provide the runtime. Fonts, scripts, and media are bundled locally. The page uses document scrolling; the archive table can scroll horizontally within its own area on narrow screens.
 
-## Lokal entwickeln und integrieren
+The learning focus is coordinating audio state, real-time analysis, reusable player views, and a strongly styled interface without a component framework. Audio analysis is disabled under `file://` because of local media restrictions.
 
-Im Portfolio-Stamm `npm start` ausführen und `/design-studies/ctrl-room/` öffnen. Alternativ im Studienordner `python -m http.server 8080` und anschließend `http://localhost:8080/` starten.
+## Portfolio integration
 
-Für die echte Web-Audio-Analyse ist HTTP zu verwenden. Unter `file://` bleibt die Analyse deaktiviert; der native Audioplayer kann weiterhin genutzt werden. Die Integration in die Angular-Asset-Kopie und die Portfolio-Übersicht ist bereits vorhanden.
+The study is served at `/design-studies/ctrl-room/`. Its existing Angular asset integration publishes it as an independent page. It does not inherit the main portfolio's runtime services.
 
-## Inhalte und Rechte
+## Credits and source notes
 
-Fotografische Motive und Audiotrack sind als KI-generiert gekennzeichnet. Das Albumcover wird als bereitgestelltes Artwork verwendet. Interface, Charts, Linien und Farbflächen entstehen im Code. Eigene Beiträge unterliegen der [Portfolio-Lizenz](../../../LICENSE); mitgelieferte Fremdrechte bleiben unberührt.
+Photographic motifs and the audio track are labelled as AI-generated. The album cover is supplied artwork. The interface, charts, lines, and color surfaces are implemented in code. Third-party rights remain separate from the portfolio license.

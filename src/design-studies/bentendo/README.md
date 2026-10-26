@@ -25,6 +25,6 @@ Spielstand und Audioeinstellungen bleiben lokal im Browser. Der vorhandene Speic
 
 `npm run build:production` im Portfolio-Stamm baut das Portfolio einschließlich der Studie. Tests, Prüf-/Generatorwerkzeuge, Blender-Quelldatei, Entwicklungsdokumentation und eigene Paketmetadaten der Studie werden nicht in den Web-Build kopiert. Sie bleiben im Repository erhalten.
 
-Quellen und Rechtehinweise: [CREDITS.md](CREDITS.md). Ausführliche bestehende Entwicklungsunterlagen: `docs/`. Die Quellenverweise ersetzen keine Lizenznachweise der gelieferten Fremdassets.
+Öffentliche Quellenübersicht: [Credits](credits.html), direkt in der Studiennavigation und in der Bedienhilfe verlinkt. Quellen und Rechtehinweise: [CREDITS.md](CREDITS.md). Ausführliche bestehende Entwicklungsunterlagen: `docs/`. Die Quellenverweise ersetzen keine Lizenznachweise der gelieferten Fremdassets.
 
-Die Git-Historie wird als fachlich gegliederter Erstimport des aktuellen Arbeitsstands angelegt. Anleitung: `docs/bentendo-integration.md` im Portfolio-Stamm. Alte Entwicklungsdaten und frühere Releases werden nicht nachträglich vorgetäuscht.
+Die Werkzeuge für den einmaligen Git-Erstimport wurden nach der Integration entfernt. Der dauerhafte Portfolio-Integrationstest liegt unter `tests/portfolio-integration.test.js` und läuft mit `npm test` im Studienordner. Laufzeitcode, Entwicklungswerkzeuge, Tests und Spielunterlagen bleiben vollständig innerhalb dieser Studie.

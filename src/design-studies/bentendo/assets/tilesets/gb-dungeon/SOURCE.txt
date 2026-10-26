@@ -1,3 +1,12 @@
-Vom Nutzer am 23.10.2026 bereitgestellt: GBDungeon.png und GB Dungeon.tsx.
-Originalatlas unverändert, 70 Kacheln zu 16 x 16 Pixeln. Tiled-Metadaten: GBDungeon.tsx.
-Die Darstellung verwendet die bestehende LCD-Palettenumsetzung.
+Retro Green! Dungeon Tileset — PetricakeGames
+https://petricakegames.itch.io/retro-green-dungeon-tileset
+
+Geliefert am 23.10.2026 als GBDungeon.png und GB Dungeon.tsx.
+Zuordnung am 26.10.2026 anhand der identischen Dateinamen, 70 Kacheln
+zu 16 x 16 Pixeln und des Quellenhinweises in docs/story/ostpass-wald.md.
+Originalatlas unverändert; LCD-Palettenumsetzung im Renderer.
+
+Anbieterbedingungen (geprüft am 26.10.2026): Verwendung in kostenlosen
+und kommerziellen Projekten erlaubt; Weitergabe des Assets ausgeschlossen.
+Credits freiwillig erwünscht. Die Erlaubnis zur Weitergabe unveränderter
+PNG-/TSX-Dateien im öffentlichen Repository ist separat zu klären.

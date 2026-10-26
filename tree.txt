@@ -3,15 +3,9 @@ B2Folio/
 │   └── ...
 ├── dist/
 │   └── ...
-├── docs/
-│   └── bentendo-integration.md
 ├── node_modules/
 │   └── ...
 ├── scripts/
-│   ├── tests/
-│   │   └── bentendo-integration.test.mjs
-│   ├── bentendo-commit-plan.json
-│   ├── commit-bentendo-history.mjs
 │   ├── deploy-portfolio-local.cmd
 │   └── deploy-portfolio-server.sh
 ├── src/
@@ -237,6 +231,30 @@ B2Folio/
 │   │   │   ├── material-symbols-outlined-latin-fill-normal.woff2
 │   │   │   └── material-symbols-portfolio.woff2
 │   │   ├── images/
+│   │   │   ├── project-stack/
+│   │   │   │   ├── project_2/
+│   │   │   │   │   ├── pj2_chest.webp
+│   │   │   │   │   ├── pj2_key.webp
+│   │   │   │   │   ├── pj2_lock.webp
+│   │   │   │   │   └── pj2_square.webp
+│   │   │   │   ├── analysis-sticker-success.webp
+│   │   │   │   ├── arm.webp
+│   │   │   │   ├── blood-drop-halftone.webp
+│   │   │   │   ├── bomb.webp
+│   │   │   │   ├── boom.webp
+│   │   │   │   ├── egle1-idle.webp
+│   │   │   │   ├── egle1-satisfied.webp
+│   │   │   │   ├── egle2-idle.webp
+│   │   │   │   ├── egle2-satisfied.webp
+│   │   │   │   ├── eyball-green-hurt.webp
+│   │   │   │   ├── eyeball-green.webp
+│   │   │   │   ├── paper-crumpled-pink.webp
+│   │   │   │   ├── planet-saved.webp
+│   │   │   │   ├── scream-girl-pink.webp
+│   │   │   │   ├── start-blood-analysis.webp
+│   │   │   │   ├── teardrop.webp
+│   │   │   │   ├── thumb-lime.webp
+│   │   │   │   └── trash-red.webp
 │   │   │   ├── projects/
 │   │   │   │   ├── carly-managed/
 │   │   │   │   │   ├── screens/
@@ -249,11 +267,11 @@ B2Folio/
 │   │   │   │   │   │   ├── inbox.webp
 │   │   │   │   │   │   ├── members.webp
 │   │   │   │   │   │   ├── pool.webp
-│   │   │   │   │   │   ├── projects.webp
 │   │   │   │   │   │   ├── project-settings-danger-zone.webp
 │   │   │   │   │   │   ├── project-settings-layout.webp
 │   │   │   │   │   │   ├── project-settings-masterdata.webp
 │   │   │   │   │   │   ├── project-settings-members.webp
+│   │   │   │   │   │   ├── projects.webp
 │   │   │   │   │   │   ├── settings-accessibility.webp
 │   │   │   │   │   │   ├── settings-carly.webp
 │   │   │   │   │   │   ├── settings-general.webp
@@ -261,113 +279,6 @@ B2Folio/
 │   │   │   │   │   │   ├── settings-themes.webp
 │   │   │   │   │   │   └── settings-tools.webp
 │   │   │   │   │   └── carly.svg
-│   │   │   │   ├── design-catalog/
-│   │   │   │   │   ├── en/
-│   │   │   │   │   │   ├── catalog-page-01.webp
-│   │   │   │   │   │   ├── catalog-page-02.webp
-│   │   │   │   │   │   ├── catalog-page-03.webp
-│   │   │   │   │   │   ├── catalog-page-04.webp
-│   │   │   │   │   │   ├── catalog-page-05.webp
-│   │   │   │   │   │   ├── catalog-page-06.webp
-│   │   │   │   │   │   ├── catalog-page-07.webp
-│   │   │   │   │   │   ├── catalog-page-08.webp
-│   │   │   │   │   │   ├── catalog-page-09.webp
-│   │   │   │   │   │   ├── catalog-page-10.webp
-│   │   │   │   │   │   ├── catalog-page-11.webp
-│   │   │   │   │   │   ├── catalog-page-12.webp
-│   │   │   │   │   │   ├── catalog-page-13.webp
-│   │   │   │   │   │   ├── catalog-page-14.webp
-│   │   │   │   │   │   ├── catalog-page-15.webp
-│   │   │   │   │   │   ├── catalog-page-16.webp
-│   │   │   │   │   │   ├── catalog-page-17.webp
-│   │   │   │   │   │   ├── catalog-page-18.webp
-│   │   │   │   │   │   ├── catalog-page-19.webp
-│   │   │   │   │   │   ├── catalog-page-20.webp
-│   │   │   │   │   │   ├── catalog-page-21.webp
-│   │   │   │   │   │   ├── catalog-page-22.webp
-│   │   │   │   │   │   ├── catalog-page-23.webp
-│   │   │   │   │   │   ├── catalog-page-24.webp
-│   │   │   │   │   │   ├── catalog-page-25.webp
-│   │   │   │   │   │   ├── catalog-page-26.webp
-│   │   │   │   │   │   ├── catalog-page-27.webp
-│   │   │   │   │   │   ├── catalog-page-28.webp
-│   │   │   │   │   │   ├── catalog-page-29.webp
-│   │   │   │   │   │   ├── catalog-page-30.webp
-│   │   │   │   │   │   ├── catalog-page-31.webp
-│   │   │   │   │   │   ├── catalog-page-32.webp
-│   │   │   │   │   │   ├── catalog-page-33.webp
-│   │   │   │   │   │   ├── catalog-page-34.webp
-│   │   │   │   │   │   ├── catalog-page-35.webp
-│   │   │   │   │   │   ├── catalog-page-36.webp
-│   │   │   │   │   │   ├── catalog-page-37.webp
-│   │   │   │   │   │   ├── catalog-page-38.webp
-│   │   │   │   │   │   ├── catalog-page-39.webp
-│   │   │   │   │   │   ├── catalog-page-40.webp
-│   │   │   │   │   │   ├── catalog-page-41.webp
-│   │   │   │   │   │   ├── catalog-page-42.webp
-│   │   │   │   │   │   ├── catalog-page-43.webp
-│   │   │   │   │   │   ├── catalog-page-44.webp
-│   │   │   │   │   │   ├── catalog-page-45.webp
-│   │   │   │   │   │   ├── catalog-page-46.webp
-│   │   │   │   │   │   ├── catalog-page-47.webp
-│   │   │   │   │   │   ├── catalog-page-48.webp
-│   │   │   │   │   │   ├── catalog-page-49.webp
-│   │   │   │   │   │   ├── catalog-page-50.webp
-│   │   │   │   │   │   ├── catalog-page-51.webp
-│   │   │   │   │   │   ├── catalog-page-52.webp
-│   │   │   │   │   │   ├── catalog-page-53.webp
-│   │   │   │   │   │   └── catalog-page-54.webp
-│   │   │   │   │   └── masonry/
-│   │   │   │   │       ├── 01.webp
-│   │   │   │   │       ├── 02.webp
-│   │   │   │   │       ├── 03.webp
-│   │   │   │   │       ├── 04.webp
-│   │   │   │   │       ├── 05.webp
-│   │   │   │   │       ├── 06.webp
-│   │   │   │   │       ├── 07.webp
-│   │   │   │   │       ├── 08.webp
-│   │   │   │   │       ├── 09.webp
-│   │   │   │   │       ├── 10.webp
-│   │   │   │   │       ├── 11.webp
-│   │   │   │   │       ├── 12.webp
-│   │   │   │   │       ├── 13.webp
-│   │   │   │   │       ├── 14.webp
-│   │   │   │   │       ├── 15.webp
-│   │   │   │   │       ├── 16.webp
-│   │   │   │   │       ├── 17.webp
-│   │   │   │   │       ├── 18.webp
-│   │   │   │   │       ├── 19.webp
-│   │   │   │   │       ├── 20.webp
-│   │   │   │   │       ├── 21.webp
-│   │   │   │   │       ├── 22.webp
-│   │   │   │   │       ├── 23.webp
-│   │   │   │   │       ├── 24.webp
-│   │   │   │   │       ├── 25.webp
-│   │   │   │   │       ├── 26.webp
-│   │   │   │   │       ├── 27.webp
-│   │   │   │   │       ├── 28.webp
-│   │   │   │   │       ├── 29.webp
-│   │   │   │   │       ├── 31.webp
-│   │   │   │   │       ├── 32.webp
-│   │   │   │   │       ├── 33.webp
-│   │   │   │   │       ├── 34.webp
-│   │   │   │   │       ├── 35.webp
-│   │   │   │   │       ├── 36.webp
-│   │   │   │   │       ├── 37.webp
-│   │   │   │   │       ├── 39.webp
-│   │   │   │   │       ├── 40.webp
-│   │   │   │   │       ├── 41.webp
-│   │   │   │   │       ├── 47.webp
-│   │   │   │   │       ├── 49.webp
-│   │   │   │   │       ├── 50.webp
-│   │   │   │   │       ├── 51.webp
-│   │   │   │   │       ├── 52.webp
-│   │   │   │   │       ├── 53.webp
-│   │   │   │   │       ├── 54.webp
-│   │   │   │   │       ├── 55.webp
-│   │   │   │   │       ├── 56.webp
-│   │   │   │   │       ├── 57.webp
-│   │   │   │   │       └── 58.webp
 │   │   │   │   ├── globi-flow/
 │   │   │   │   │   ├── auswertung.webp
 │   │   │   │   │   ├── importe.webp
@@ -393,47 +304,23 @@ B2Folio/
 │   │   │   │           ├── projects-board.webp
 │   │   │   │           ├── projects-inbox.webp
 │   │   │   │           └── projects-welcome.webp
-│   │   │   ├── project-stack/
-│   │   │   │   ├── project_2/
-│   │   │   │   │   ├── pj2_chest.webp
-│   │   │   │   │   ├── pj2_key.webp
-│   │   │   │   │   ├── pj2_lock.webp
-│   │   │   │   │   └── pj2_square.webp
-│   │   │   │   ├── analysis-sticker-success.webp
-│   │   │   │   ├── arm.webp
-│   │   │   │   ├── blood-drop-halftone.webp
-│   │   │   │   ├── bomb.webp
-│   │   │   │   ├── boom.webp
-│   │   │   │   ├── egle1-idle.webp
-│   │   │   │   ├── egle1-satisfied.webp
-│   │   │   │   ├── egle2-idle.webp
-│   │   │   │   ├── egle2-satisfied.webp
-│   │   │   │   ├── eyball-green-hurt.webp
-│   │   │   │   ├── eyeball-green.webp
-│   │   │   │   ├── paper-crumpled-pink.webp
-│   │   │   │   ├── planet-saved.webp
-│   │   │   │   ├── scream-girl-pink.webp
-│   │   │   │   ├── start-blood-analysis.webp
-│   │   │   │   ├── teardrop.webp
-│   │   │   │   ├── thumb-lime.webp
-│   │   │   │   └── trash-red.webp
 │   │   │   ├── brain_rotation.gif
 │   │   │   ├── brain_rotation.webp
 │   │   │   ├── chocolate-egg.webp
-│   │   │   ├── default-hero-head.webp
 │   │   │   ├── default-hero-head-360.webp
 │   │   │   ├── default-hero-head-480.webp
 │   │   │   ├── default-hero-head-560.webp
+│   │   │   ├── default-hero-head.webp
 │   │   │   ├── fuelli.webp
 │   │   │   ├── hero-head-fck.webp
 │   │   │   ├── hero-head-insane.webp
 │   │   │   ├── hero-head-lol.webp
 │   │   │   ├── me-after-chocolate.webp
-│   │   │   ├── me-and-coffee.webp
 │   │   │   ├── me-and-coffee-480.webp
 │   │   │   ├── me-and-coffee-720.webp
-│   │   │   ├── me-and-coffee-error.webp
 │   │   │   ├── me-and-coffee-error-480.webp
+│   │   │   ├── me-and-coffee-error.webp
+│   │   │   ├── me-and-coffee.webp
 │   │   │   ├── me-with-chocolate.webp
 │   │   │   └── nice-head-loader.webp
 │   │   ├── snippet-demos/
@@ -450,8 +337,8 @@ B2Folio/
 │   │   ├── bentendo/
 │   │   │   ├── assets/
 │   │   │   │   ├── cartridge/
-│   │   │   │   │   ├── dungeon-wanted.png
-│   │   │   │   │   └── dungeon-wanted-female.png
+│   │   │   │   │   ├── dungeon-wanted-female.png
+│   │   │   │   │   └── dungeon-wanted.png
 │   │   │   │   ├── characters/
 │   │   │   │   │   └── adventurer-portraits.png
 │   │   │   │   ├── fonts/
@@ -549,8 +436,8 @@ B2Folio/
 │   │   │   │   │   ├── bruchstein-diagonal-running-combat.md
 │   │   │   │   │   ├── bruchstein-discoveries.md
 │   │   │   │   │   ├── bruchstein-dungeon-polish.md
-│   │   │   │   │   ├── bruchstein-hackschwung.md
 │   │   │   │   │   ├── bruchstein-hackschwung-tempo.md
+│   │   │   │   │   ├── bruchstein-hackschwung.md
 │   │   │   │   │   ├── bruchstein-health-quellgewoelbe.md
 │   │   │   │   │   ├── bruchstein-houses.md
 │   │   │   │   │   ├── bruchstein-interior-audio.md
@@ -594,6 +481,8 @@ B2Folio/
 │   │   │   │   ├── cartridge-drag.md
 │   │   │   │   ├── deleted-files.json
 │   │   │   │   └── README.md
+│   │   │   ├── node_modules/
+│   │   │   │   └── ...
 │   │   │   ├── scripts/
 │   │   │   │   ├── audio/
 │   │   │   │   │   ├── tools/
@@ -645,8 +534,8 @@ B2Folio/
 │   │   │   │   │   │   ├── native-buttons.js
 │   │   │   │   │   │   ├── power-gesture.js
 │   │   │   │   │   │   ├── rear-intent.js
-│   │   │   │   │   │   ├── views.js
-│   │   │   │   │   │   └── view-zones.js
+│   │   │   │   │   │   ├── view-zones.js
+│   │   │   │   │   │   └── views.js
 │   │   │   │   │   ├── brand.js
 │   │   │   │   │   ├── button-motion.js
 │   │   │   │   │   ├── handheld.js
@@ -699,10 +588,10 @@ B2Folio/
 │   │   │   │   │   │   ├── tavern-company.js
 │   │   │   │   │   │   ├── title.js
 │   │   │   │   │   │   ├── town.js
-│   │   │   │   │   │   ├── village.js
 │   │   │   │   │   │   ├── village-fauna.js
 │   │   │   │   │   │   ├── village-life.js
-│   │   │   │   │   │   └── village-north.js
+│   │   │   │   │   │   ├── village-north.js
+│   │   │   │   │   │   └── village.js
 │   │   │   │   │   ├── render/
 │   │   │   │   │   │   ├── bag.js
 │   │   │   │   │   │   ├── cave.js
@@ -710,16 +599,16 @@ B2Folio/
 │   │   │   │   │   │   ├── daylight.js
 │   │   │   │   │   │   ├── discoveries.js
 │   │   │   │   │   │   ├── dog.js
-│   │   │   │   │   │   ├── dungeon.js
 │   │   │   │   │   │   ├── dungeon-atlas.js
 │   │   │   │   │   │   ├── dungeon-furniture.js
 │   │   │   │   │   │   ├── dungeon-passages.js
 │   │   │   │   │   │   ├── dungeon-scenery.js
+│   │   │   │   │   │   ├── dungeon.js
 │   │   │   │   │   │   ├── east.js
 │   │   │   │   │   │   ├── fetch-stick.js
 │   │   │   │   │   │   ├── health.js
-│   │   │   │   │   │   ├── interior.js
 │   │   │   │   │   │   ├── interior-fixtures.js
+│   │   │   │   │   │   ├── interior.js
 │   │   │   │   │   │   ├── map.js
 │   │   │   │   │   │   ├── objects.js
 │   │   │   │   │   │   ├── overlays.js
@@ -733,11 +622,11 @@ B2Folio/
 │   │   │   │   │   │   ├── system-menu.js
 │   │   │   │   │   │   ├── tavern.js
 │   │   │   │   │   │   ├── terrain.js
-│   │   │   │   │   │   ├── village.js
 │   │   │   │   │   │   ├── village-ground.js
 │   │   │   │   │   │   ├── village-life.js
 │   │   │   │   │   │   ├── village-north.js
 │   │   │   │   │   │   ├── village-scenery.js
+│   │   │   │   │   │   ├── village.js
 │   │   │   │   │   │   ├── weapon-swing.js
 │   │   │   │   │   │   └── world.js
 │   │   │   │   │   ├── systems/
@@ -748,15 +637,15 @@ B2Folio/
 │   │   │   │   │   │   ├── daily-life.js
 │   │   │   │   │   │   ├── discoveries.js
 │   │   │   │   │   │   ├── dog-fetch.js
-│   │   │   │   │   │   ├── dungeon.js
 │   │   │   │   │   │   ├── dungeon-combat.js
 │   │   │   │   │   │   ├── dungeon-migrations.js
+│   │   │   │   │   │   ├── dungeon.js
 │   │   │   │   │   │   ├── east-story.js
 │   │   │   │   │   │   ├── fetch-path.js
 │   │   │   │   │   │   ├── forest-return.js
 │   │   │   │   │   │   ├── forest-travel.js
-│   │   │   │   │   │   ├── health.js
 │   │   │   │   │   │   ├── health-save.js
+│   │   │   │   │   │   ├── health.js
 │   │   │   │   │   │   ├── heart-drops.js
 │   │   │   │   │   │   ├── inventory.js
 │   │   │   │   │   │   ├── loot.js
@@ -777,13 +666,13 @@ B2Folio/
 │   │   │   │   │   │   ├── save-state.js
 │   │   │   │   │   │   ├── save-validation.js
 │   │   │   │   │   │   ├── system-menu.js
-│   │   │   │   │   │   ├── tavern.js
 │   │   │   │   │   │   ├── tavern-conversations.js
 │   │   │   │   │   │   ├── tavern-guests.js
 │   │   │   │   │   │   ├── tavern-service.js
+│   │   │   │   │   │   ├── tavern.js
 │   │   │   │   │   │   ├── text.js
-│   │   │   │   │   │   ├── village.js
 │   │   │   │   │   │   ├── village-tasks.js
+│   │   │   │   │   │   ├── village.js
 │   │   │   │   │   │   ├── wanderers.js
 │   │   │   │   │   │   ├── weapon-timing.js
 │   │   │   │   │   │   ├── world-clock.js
@@ -795,14 +684,15 @@ B2Folio/
 │   │   │   │   └── main.js
 │   │   │   ├── styles/
 │   │   │   │   ├── base.css
+│   │   │   │   ├── credits.css
 │   │   │   │   ├── device.css
 │   │   │   │   └── panels.css
 │   │   │   ├── tests/
 │   │   │   │   ├── audio-calls.test.js
-│   │   │   │   ├── cartridge.test.js
 │   │   │   │   ├── cartridge-controller.test.js
 │   │   │   │   ├── cartridge-cover.test.js
 │   │   │   │   ├── cartridge-drag.test.js
+│   │   │   │   ├── cartridge.test.js
 │   │   │   │   ├── character-stock.test.js
 │   │   │   │   ├── daily-life.test.js
 │   │   │   │   ├── diagonal-movement.test.js
@@ -821,6 +711,7 @@ B2Folio/
 │   │   │   │   ├── inventory-tasks.test.js
 │   │   │   │   ├── mara-buttons.test.js
 │   │   │   │   ├── night-music.test.js
+│   │   │   │   ├── portfolio-integration.test.js
 │   │   │   │   ├── quest-log.test.js
 │   │   │   │   ├── resident-chatter.test.js
 │   │   │   │   ├── resident-life.test.js
@@ -834,9 +725,9 @@ B2Folio/
 │   │   │   │   ├── touch-points.test.js
 │   │   │   │   ├── town.test.js
 │   │   │   │   ├── ux.test.js
-│   │   │   │   ├── village.test.js
 │   │   │   │   ├── village-houses.test.js
 │   │   │   │   ├── village-life.test.js
+│   │   │   │   ├── village.test.js
 │   │   │   │   └── world.test.js
 │   │   │   ├── vendor/
 │   │   │   │   └── three/
@@ -850,11 +741,12 @@ B2Folio/
 │   │   │   │       ├── three.core.js
 │   │   │   │       └── three.module.js
 │   │   │   ├── .gitignore
+│   │   │   ├── credits.html
 │   │   │   ├── CREDITS.md
 │   │   │   ├── DUNGEON_WANTED_GDD_v1_0.pdf
 │   │   │   ├── index.html
-│   │   │   ├── package.json
 │   │   │   ├── package-lock.json
+│   │   │   ├── package.json
 │   │   │   └── README.md
 │   │   ├── brutalism/
 │   │   │   ├── assets/
@@ -868,12 +760,12 @@ B2Folio/
 │   │   │   │   │   ├── bars.svg
 │   │   │   │   │   ├── circle.svg
 │   │   │   │   │   ├── cross.svg
-│   │   │   │   │   ├── doodle-arrow.svg
 │   │   │   │   │   ├── doodle-arrow-repeat.svg
+│   │   │   │   │   ├── doodle-arrow.svg
 │   │   │   │   │   ├── subwoofer.svg
 │   │   │   │   │   ├── swirl.svg
-│   │   │   │   │   ├── wave.svg
 │   │   │   │   │   ├── wave-v2.svg
+│   │   │   │   │   ├── wave.svg
 │   │   │   │   │   └── zick-zack.svg
 │   │   │   │   ├── fonts/
 │   │   │   │   │   ├── Anton/
@@ -941,8 +833,11 @@ B2Folio/
 │   │   │   └── style.css
 │   │   ├── growth/
 │   │   │   ├── assets/
-│   │   │   │   └── preview.svg
-│   │   │   ├── src/
+│   │   │   │   └── preview.webp
+│   │   │   ├── scripts/
+│   ├── deploy-portfolio-local.cmd
+│   └── deploy-portfolio-server.sh
+├── src/
 │   │   │   │   ├── config.js
 │   │   │   │   ├── debug.js
 │   │   │   │   ├── main.js
@@ -966,9 +861,9 @@ B2Folio/
 │   │   │   │   ├── nadin-portrait.webp
 │   │   │   │   ├── portrait-notes.md
 │   │   │   │   ├── preview.webp
-│   │   │   │   ├── SCOOP! – Comic-Eis-Shop mit Mix-Box.png
 │   │   │   │   ├── SCOOP! #U2013 Comic-Eis-Shop mit Mix-Box.png
 │   │   │   │   ├── Scoop! Eiscreme-Charaktere im Designboard-3.png
+│   │   │   │   ├── SCOOP! – Comic-Eis-Shop mit Mix-Box.png
 │   │   │   │   ├── scoop-logo.svg
 │   │   │   │   ├── scoops-complete.ai
 │   │   │   │   ├── strawlarry-cup.svg
@@ -1010,8 +905,8 @@ B2Folio/
 │   │       │   ├── anton-regular.ttf
 │   │       │   ├── favicon.svg
 │   │       │   ├── noto-serif-cjk-jp-subset.woff2
-│   │       │   ├── OFL.txt
 │   │       │   ├── OFL-NOTO.txt
+│   │       │   ├── OFL.txt
 │   │       │   ├── preview.svg
 │   │       │   ├── preview.webp
 │   │       │   └── type-break-manifesto.pdf
@@ -1041,18 +936,13 @@ B2Folio/
 │   ├── robots.txt
 │   ├── sitemap.xml
 │   └── styles.scss
-├── tools/
-│   ├── asset-cleanup/
-│   │   ├── asset-audit.md
-│   │   └── cleanup-unused-assets.cmd
-│   └── subset-material-symbols.py
 ├── .editorconfig
 ├── .gitignore
 ├── angular.json
 ├── LICENSE
 ├── make-tree.ps1
-├── package.json
 ├── package-lock.json
+├── package.json
 ├── README.md
 ├── tools.md
 ├── tree.txt

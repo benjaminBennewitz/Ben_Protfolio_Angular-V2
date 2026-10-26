@@ -36,6 +36,7 @@
 - [Highlights](#highlights)
 - [Project Areas](#project-areas)
 - [Selected Case Studies](#selected-case-studies)
+- [Standalone Design Studies](#standalone-design-studies)
 - [Architecture](#architecture)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
@@ -77,6 +78,7 @@ The goal is a website that remains technically controlled while making a strong 
 | **`/`** | Homepage with hero, about section, experience, skills, process, projects, FAQ, and contact form |
 | **`/portfolio`** | Overview of the selected case studies |
 | **`/projects/:slug`** | Dynamic project detail pages with individual visual direction |
+| **`/design-studies/:study/`** | Eight independent interactive studies, served as static pages alongside Angular |
 | **`/snippets`** | Short technical examples with isolated demo assets |
 | **`/achievements`** | Unlockable interactions and portfolio achievements |
 | **`/danke`** | Confirmation page after a successful contact request |
@@ -138,6 +140,8 @@ src/
 │  ├─ images/                  # Hero, loader, and project assets
 │  ├─ snippet-demos/           # Isolated examples for the snippets page
 │  └─ social/                  # Social and repository preview
+├─ design-studies/            # Eight self-contained studies, each with its own assets and runtime
+│  └─ bentendo/               # Game runtime, vendor libraries, credits, docs, tools, and tests
 ├─ environments/              # Public frontend configuration by environment
 ├─ styles/                    # Tokens, base styles, utilities, and case-study styles
 ├─ styles.scss                # Global SCSS entry point
@@ -202,13 +206,46 @@ dist/ben-portfolio-experience/browser
 
 The production configuration enables optimization, file hashing, environment-specific frontend configuration, and bundle budgets. `.htaccess`, `robots.txt`, `sitemap.xml`, and the local assets are copied into the build output.
 
-### Standalone Design Studies
+## Standalone Design Studies
 
-The portfolio links to RAW/FORM, [WHATWESEE], CTRL//ROOM and SCOOP! under `/design-studies/`. SCOOP! is a comic-style ice cream shop with SVG characters, a scroll path, a configurable mix box and browser-local demo interactions. Its card uses a composed preview made from the study's original SVG assets.
+| Study | Route | Focus |
+| --- | --- | --- |
+| RAW/FORM | `/design-studies/brutalism/` | Brutalist visual direction and typography |
+| [WHATWESEE] | `/design-studies/swiss/` | Swiss-inspired editorial design |
+| CTRL//ROOM | `/design-studies/ctrl-room/` | Atmospheric interactive control room |
+| TYPE/BREAK | `/design-studies/type-break/` | Experimental typography and interaction |
+| SCOOP! | `/design-studies/scoop/` | Comic ice cream shop, SVG characters, and configurable mix box |
+| FOLD. | `/design-studies/fold/` | Scroll-driven 3D folding and interactive unfold finale |
+| GROWTH. | `/design-studies/growth/` | Procedural Three.js tree and camera ascent from roots to canopy |
+| BENTENDO™ | `/design-studies/bentendo/` | Interactive 3D handheld and DUNGEON WANTED pixel RPG |
 
-Angular copies the runtime files directly. SCOOP! Illustrator masters, draft PNGs, original TTF fonts and source documentation are excluded from the deployment output; local webfonts and their license files remain included. Source originals stay in the repository.
+Study cards and quicklinks live on `/portfolio#design-studies`. The GROWTH card uses a WebP screenshot of the running study.
 
-Both deployment scripts validate all four studies and SCOOP!'s required runtime files. After updating the server script in Git, reinstall its copy at `/usr/local/bin/deploy-portfolio-frontend` before deploying. See [SCOOP! deployment steps](scripts/scoop-deployment.md).
+These are standalone experiences with their own HTML, styles, scripts, and assets. They are copied by the Angular asset configuration rather than rendered as Angular components. Their themes, language support, controls, and dependencies are study-specific; the portfolio's global services do not automatically apply to them. GROWTH currently loads Three.js from a CDN, while BENTENDO bundles its Three.js runtime locally.
+
+`angular.json` excludes SCOOP source masters and BENTENDO development-only files from deployment. BENTENDO runtime scripts remain included; its tests, checks, Blender sources, audio generators, development documentation, and package metadata stay in the repository only. All BENTENDO-related source, documentation, and tests belong under `src/design-studies/bentendo/`.
+
+### BENTENDO development and validation
+
+DUNGEON WANTED is an evolving game prototype: cartridge interactions, keyboard and touch controls, quests, combat, NPCs, a day/night cycle, local saves, and separate music/effect controls. Save data stays within the current browser origin.
+
+```bash
+cd src/design-studies/bentendo
+npm ci
+npm test
+npm run check
+npm run check:python
+```
+
+Run these commands from the study directory. Python 3 is required for the Python structure check; optional asset generators have their own dependencies. The test suite includes the portfolio integration check, which resolves the repository root relative to its own file.
+
+Public [BENTENDO credits](src/design-studies/bentendo/credits.html) and the [source record](src/design-studies/bentendo/CREDITS.md) list external assets, license references, and unresolved provenance. Credits open in a new tab from the study so the running game is preserved.
+
+### Repository maintenance and deployment
+
+The root-level `docs/` and `tools/` directories have been removed. The one-time BENTENDO import plan and commit generator are retired. The deployment scripts remain locally under `scripts/`; only the root-level `/scripts/` directory is ignored by Git. Existing tracked deployment files must be untracked once with `git rm -r --cached -- scripts`, which preserves local files. BENTENDO runtime scripts under `src/design-studies/bentendo/scripts/` remain versioned. Asset-cleanup reports and the icon-subset generator are no longer included. Existing runtime assets and the generated icon font remain available. `make-tree.ps1` and `tools.md` remain root-level utilities.
+
+Deployment uses the complete contents of `dist/ben-portfolio-experience/browser/` after a successful production build. Include hidden `.htaccess` and all eight `design-studies` subdirectories. Local deployment through `scripts/deploy-portfolio-local.cmd` remains available; the server script is retained locally as `scripts/deploy-portfolio-server.sh`. Both files are unchanged by this cleanup and are excluded from future versioning after the one-time untracking step. An already installed server-side deployment script is not removed or updated by this source cleanup.
 
 ## License and Usage
 
@@ -223,7 +260,7 @@ Without prior explicit written permission, you may not:
 - use its content for AI or machine-learning training, datasets, or automated reproduction,
 - reuse personal data, contact details, or information from the legal notice.
 
-Neither the public visibility of this repository nor any technically available GitHub feature grants additional usage rights. The complete [B2FOLIO.DE Read-Only Source License](./LICENSE) applies exclusively. Clearly marked third-party components remain subject to their respective license terms.
+Neither the public visibility of this repository nor any technically available GitHub feature grants additional usage rights. The complete [B2FOLIO.DE Read-Only Source License](./LICENSE) applies to original project contributions. Clearly marked third-party components remain subject to their respective license terms. This includes fonts, models, textures, sprites, music, and sound effects in standalone studies. Attribution does not grant permission to republish asset source files. BENTENDO's credits record project-created Python models, music created with free tools and AI, and the remaining third-party redistribution question; the repository license does not resolve third-party restrictions.
 
 ## Author
 

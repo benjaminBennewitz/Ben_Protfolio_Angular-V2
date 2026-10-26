@@ -144,7 +144,7 @@ export class PortfolioPageComponent {
       name: 'GROWTH.',
       subtitle: 'A Living World — 50 Metres of Discovery',
       href: '/design-studies/growth/',
-      preview: '/design-studies/growth/assets/preview.svg',
+      preview: '/design-studies/growth/assets/preview.webp',
       tags: ['Three.js', 'Procedural Nature', 'Scroll Experience', 'WebGL'],
     },
     {

@@ -18,8 +18,8 @@
 # Operating system
 .DS_Store
 
-# Local development tools
-/tools/color-audit/
+# Local deployment scripts (keep files locally)
+/scripts/
 
 # Generated / local project assets
 /src/assets/images/projects/design-catalog/de/

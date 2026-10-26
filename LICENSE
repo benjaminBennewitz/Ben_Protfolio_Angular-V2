@@ -1,5 +1,5 @@
 B2FOLIO.DE READ-ONLY SOURCE LICENSE
-Version 1.0, 2026-09-04
+Version 1.1, 2026-10-26
 
 Copyright (c) 2026 Benjamin Bennewitz. All rights reserved.
 
@@ -11,8 +11,20 @@ other original content in this repository (collectively, the "Work"), unless
 a file or component is expressly identified as being subject to a separate
 license.
 
-Third-party libraries, fonts, tools, and other third-party material remain
-subject to their respective licenses and are not relicensed by this document.
+Third-party libraries, fonts, tools, models, textures, sprites, music, sound
+effects, and other third-party material remain subject to their respective
+licenses and are not relicensed by this document. The restrictions below
+apply only to the Work and do not override permissions granted directly
+by third-party rights holders.
+
+Standalone studies under src/design-studies/ are included in the Work only
+to the extent of the copyright holder's original contributions. In particular,
+BENTENDO asset attributions and asset origin and usage notes are documented in
+src/design-studies/bentendo/CREDITS.md and its public credits.html page.
+Applicable third-party license and attribution files must remain intact.
+A source attribution is not itself a license or permission to redistribute
+the attributed asset. Trademarks remain with their respective owners;
+references do not imply affiliation or endorsement.
 
 2. Limited permission to view
 

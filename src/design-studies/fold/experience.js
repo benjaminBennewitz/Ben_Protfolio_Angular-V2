@@ -8,6 +8,8 @@ const instruction=document.querySelector('#instruction');
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 const ease=v=>{const t=clamp(v);return t*t*(3-2*t)};
 const mix=(a,b,t)=>a+(b-a)*t;
+const visitedPerspectives=new Set();
+let perspectivesCompleted=false;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 try{
  const THREE=await import('three');
@@ -87,6 +89,7 @@ try{
    guideNext.textContent=mobile.index===6?'SWIPE FOR FOOTER ↓':'NEXT PERSPECTIVE ↓';
  }
  function update(t){
+  if(!perspectivesCompleted && t>=.997 && visitedPerspectives.size===6){perspectivesCompleted=true;document.dispatchEvent(new CustomEvent('bp:study-achievement', { detail: 'study-fold-perspectives' }));}
   const phase=t*9.75;shadow.style.opacity=phase>9?String(ease((phase-9.53)/.17)*.38):'0';
   if(phase<9){
    fold(1);root.quaternion.identity();
@@ -108,6 +111,7 @@ try{
    const outward=new THREE.Vector3(0,0,1).applyQuaternion(q);
    camera.position.copy(cubeCenter).addScaledVector(outward,S/2+close+pull);
    const selected=spin<.5?section:next;
+   if(spin<.015)visitedPerspectives.add(selected);
    faces.forEach(f=>{const on=f.data.id===selected;f.el.classList.toggle('is-current',on);f.el.style.zIndex=on?'20':'0';f.el.classList.remove('net');f.el.inert=!on;f.el.style.visibility=(!on && spin<.015)?'hidden':'visible';f.el.setAttribute('aria-hidden',String(!on))});
    counter.textContent=`${String(selected+1).padStart(2,'0')} / 06`;
    instruction.textContent='SCROLL TO FLIP ↓';

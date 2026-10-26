@@ -60,6 +60,10 @@ const markerRoot = document.querySelector('#discovery-markers');
 const popup = document.querySelector('#discovery-popover');
 const popupLine = document.querySelector('#discovery-line');
 let selectedMarker = null;
+const discoveredPoints = new Set();
+let ascentStarted = false;
+let ascentCompleted = false;
+let ascentReady = false;
 const markerButtons = world.infoPoints.map(point => {
   const button = document.createElement('button');
   button.type='button';button.className='discovery-point';button.dataset.species=point.type;
@@ -78,6 +82,8 @@ function closeDiscovery() { selectedMarker=null;popup.hidden=true;popupLine.hidd
 function toggleDiscovery(entry) {
   if(selectedMarker?.point===entry.point){closeDiscovery();return;}
   selectedMarker=entry;
+  discoveredPoints.add(entry.point);
+  if (discoveredPoints.size === markerButtons.length) document.dispatchEvent(new CustomEvent('bp:study-achievement', { detail: 'study-growth-discovery' }));
   const data=speciesInfo[entry.point.type];
   popup.querySelector('[data-bubble-label]').textContent=data.label;
   popup.querySelector('[data-bubble-title]').textContent=data.title;
@@ -219,6 +225,11 @@ function animate(ms) {
   }
   positionProgress = reducedMotion.matches ? desiredProgress : THREE.MathUtils.damp(positionProgress, desiredProgress, 3.2, delta);
   const height = cameraHeightForProgress(positionProgress);
+  if (ascentReady && height <= 1) ascentStarted = true;
+  if (ascentStarted && !ascentCompleted && height >= 60) {
+    ascentCompleted = true;
+    document.dispatchEvent(new CustomEvent('bp:study-achievement', { detail: 'study-growth-ascent' }));
+  }
   const orbit = 1.8 + Math.min((height + 3) / 59, 1) * Math.PI * 2.45;
   const radius = height > 54 ? THREE.MathUtils.lerp(23, 29, THREE.MathUtils.clamp((height - 54) / 9, 0, 1)) : height > 34 ? THREE.MathUtils.lerp(11, 23, (height - 34) / 22) : 11;
   const entryPullback = 2.8 * THREE.MathUtils.smoothstep(height, -1, 1.5) * (1 - THREE.MathUtils.smoothstep(height, 7, 11));
@@ -276,6 +287,7 @@ function animate(ms) {
 const hasAnchor = Boolean(window.location.hash && document.querySelector(window.location.hash));
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.addEventListener('load', () => {
+  ascentReady = true;
   if (!hasAnchor) window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' });
   updateScroll();
   positionProgress = desiredProgress;

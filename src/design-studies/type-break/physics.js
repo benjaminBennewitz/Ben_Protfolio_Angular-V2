@@ -32,6 +32,8 @@
   let interactionCount = 0;
   let broken = false;
   let reforming = false;
+  let trophyFractured = false;
+  let trophyReforming = false;
   let grabbed = null;
   let stageVisible = false;
 
@@ -156,6 +158,7 @@
   /** Erzeugt aus jedem Glyphen eine transparente Textur und teilt sie in sichtbare Splitter. */
   function fracture() {
     if (broken) return;
+    trophyFractured = true;
     broken = true;
     reforming = false;
     grabbed = null;
@@ -238,6 +241,10 @@
 
   /** Schließt die Rückformung erst nach der sichtbaren Fragmentbewegung ab. */
   function finishReform() {
+    if (trophyReforming) {
+      document.dispatchEvent(new CustomEvent('bp:study-achievement', { detail: 'study-type-reform' }));
+      trophyReforming = false;
+    }
     layout();
     interactionCount = 0;
     prompt.style.opacity = '1';
@@ -379,7 +386,7 @@
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-pressed', String(active));
     });
-    if (nextMode === 'reform') reform();
+    if (nextMode === 'reform') { trophyReforming = trophyFractured && broken; reform(); }
     if (nextMode === 'break') fracture();
     if (nextMode === 'push' || nextMode === 'pull') {
       stateLabel.textContent = broken ? 'STRUCTURE: FRACTURED' : `FORCE: ${nextMode.toUpperCase()}`;

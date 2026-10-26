@@ -144,12 +144,53 @@
    03   Karten
    ========================================================================== */
 
+
+.achievements__groups {
+  display: grid;
+  gap: 2.5rem;
+  min-width: 0;
+}
+
+.achievements__group {
+  min-width: 0;
+}
+
+.achievements__group-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--bp-color-border-strong);
+  padding-bottom: 0.85rem;
+}
+
+.achievements__group-header h2 {
+  margin: 0;
+  color: var(--bp-color-text);
+  font-family: var(--bp-font-mono);
+  font-size: 1rem;
+}
+
+.achievements__group-header span {
+  margin-left: auto;
+  color: var(--bp-color-accent);
+  font-family: var(--bp-font-mono);
+  white-space: nowrap;
+}
+
+.achievements__group-header p {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  font-size: 0.85rem;
+}
+
 .achievements__list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   min-width: 0;
-  padding-top: clamp(12.2rem, 15vw, 16.2rem);
 }
 
 .achievement-card {
@@ -234,12 +275,12 @@
   text-transform: uppercase;
 }
 
-.achievement-card__copy h2,
+.achievement-card__copy h3,
 .achievement-card__copy p {
   margin: 0;
 }
 
-.achievement-card__copy h2 {
+.achievement-card__copy h3 {
   font-family: var(--bp-font-display);
   font-size: clamp(1.15rem, 2.2vw, 1.7rem);
   line-height: 1.04;
@@ -283,10 +324,6 @@
   .achievements__grid,
   .achievements__list {
     grid-template-columns: 1fr;
-  }
-
-  .achievements__list {
-    padding-top: 0.5rem;
   }
 
   .achievements__intro {
@@ -343,7 +380,7 @@
     padding: 0.72rem;
   }
 
-  .achievement-card__copy h2 {
+  .achievement-card__copy h3 {
     font-size: 1.1rem;
   }
 

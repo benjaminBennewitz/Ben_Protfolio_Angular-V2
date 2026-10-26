@@ -22,8 +22,16 @@
       </button>
     </section>
 
-    <section class="achievements__list" aria-label="Achievements">
-      @for (achievement of achievementsService.achievements(); track achievement.id) {
+    <div class="achievements__groups">
+      @for (group of groups(); track group.id) {
+      <section class="achievements__group" [attr.aria-labelledby]="'achievement-group-' + group.id">
+        <header class="achievements__group-header">
+          <h2 [id]="'achievement-group-' + group.id">{{ group.title }}</h2>
+          <span>{{ group.unlocked }} / {{ group.items.length }}</span>
+          <p>{{ group.description }}</p>
+        </header>
+        <div class="achievements__list">
+      @for (achievement of group.items; track achievement.id) {
       <article class="achievement-card bp-card" [class.achievement-card--unlocked]="achievement.unlocked"
         [class.achievement-card--interactive]="achievementIsInteractive(achievement)" [attr.role]="achievementIsInteractive(achievement) ? 'button' : null"
         [attr.tabindex]="achievementIsInteractive(achievement) ? 0 : null" (click)="openAchievement(achievement)"
@@ -38,7 +46,7 @@
 
         <div class="achievement-card__copy">
           <span>{{ achievement.category }}</span>
-          <h2>{{ achievement.unlocked ? achievement.title : texts().lockedTitle }}</h2>
+          <h3>{{ achievement.unlocked ? achievement.title : texts().lockedTitle }}</h3>
 
           @if (achievement.unlocked) {
           <p>{{ achievement.description }}</p>
@@ -52,6 +60,9 @@
         </div>
       </article>
       }
-    </section>
+        </div>
+      </section>
+      }
+    </div>
   </div>
 </main>

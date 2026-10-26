@@ -111,6 +111,7 @@
 
   /** Addiert Mengen zentral; alle Preise werden aus dem Produktkatalog in Cent berechnet. */
   function addToCart(item, quantity = 1) {
+    if (item.type === 'box' && new Set(item.flavors).size === 3) document.dispatchEvent(new CustomEvent('bp:study-achievement', { detail: 'study-scoop-mix' }));
     const id = item.type === 'box' ? `box:${item.flavors.join(',')}` : `single:${item.product}`;
     const existing = cart.find(row => row.id === id);
     const previous = existing?.quantity || 0;

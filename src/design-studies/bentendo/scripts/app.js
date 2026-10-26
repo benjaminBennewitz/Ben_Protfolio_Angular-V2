@@ -28,6 +28,7 @@ export class App {
     this.cartridge = new CartridgeController(this);
     this.loop = new FrameLoop(this.frame.bind(this));
     this.request = this.loop.request;
+    this.trophyRearSeen = false; this.trophyAdventureStarted = false;
     this.phase = 'off'; this.helpOpen = false; this.time = 0; this.bootTime = 0;
     this.bootSoundStarted = false; this.bootFinishedAt = null; this.bootRun = 0;
     this.idleTimer = 0;
@@ -53,7 +54,9 @@ export class App {
   setView(view) {
     if (!this.device.ready || this.phase === 'boot') return;
     if (this.cartridge.open && view !== 'rear') return this.cartridge.leave(view);
-    this.device.setView(view); this.request();
+    this.device.setView(view);
+    if (view === 'rear' && this.game.mode !== 'world') this.trophyRearSeen = true;
+    this.request();
   }
   /** Übernimmt einen gültigen Stellradwert. @param {string} key Regler. @param {number} value Zahlenwert. */
   setValue(key,value) {
@@ -92,6 +95,10 @@ export class App {
   finishBoot(run) { if (run === this.bootRun && this.phase === 'boot') { this.bootFinishedAt = this.bootTime; this.request(); } }
   /** Synchronisiert die passende vorhandene Musikdatei. */
   updateAudio() {
+    if (this.trophyRearSeen && !this.trophyAdventureStarted && this.phase === 'on' && this.game.mode === 'world' && !this.game.debugging) {
+      this.trophyAdventureStarted = true;
+      document.dispatchEvent(new CustomEvent('bp:study-achievement', { detail: 'study-bentendo-turn' }));
+    }
     const track = this.phase === 'on' && !document.hidden ? ['title','character'].includes(this.game.mode) ? 'title-screen' : worldMusic(this.game) : '';
     this.audio.playMusic(track);
     for (const cue of this.game.sounds.splice(0)) this.playCue(cue);

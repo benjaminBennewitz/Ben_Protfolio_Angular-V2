@@ -59,6 +59,12 @@ export class AchievementsPageComponent {
   /** Fortschrittstext der freigeschalteten Trophäen. */
   readonly progressText = computed<string>(() => `${this.achievementsService.unlockedCount()} / ${this.achievementsService.totalCount()}`);
 
+  /** Eigenständige Fortschritte für Hauptspiel und optionale Designstudien. */
+  readonly groups = computed(() => [
+    { id: 'base', title: this.languageService.language() === 'de' ? 'Portfolio · Hauptspiel' : 'Portfolio · Base Game', description: this.languageService.language() === 'de' ? 'Diese Trophäen zählen für Platin.' : 'These trophies count towards platinum.', items: this.achievementsService.achievements().filter(item => !item.dlc) },
+    { id: 'dlc', title: 'Design Studies · DLC', description: this.languageService.language() === 'de' ? 'Neun zusätzliche Trophäen aus sechs Designstudien. Zählen zum Gesamtfortschritt, nicht für Platin.' : 'Nine extra trophies across six design studies. Count towards total progress, not platinum.', items: this.achievementsService.achievements().filter(item => item.dlc) },
+  ].map(group => ({ ...group, unlocked: group.items.filter(item => item.unlocked).length })));
+
   /** Synchronisiert Meta-Daten mit der aktiven Sprache. */
   constructor() {
     effect(() => this.seoService.setPageSeo(this.texts().metaTitle, this.texts().metaDescription, '/achievements'));
@@ -93,7 +99,7 @@ const PAGE_TEXTS: Record<'de' | 'en', AchievementPageTexts> = {
     eyebrow: 'secret_room.exe',
     title: 'Achievements',
     intro: 'Kleine Trophäen für versteckte Interaktionen, Mini-Games und bewusst unnötige Portfolio-Momente. Der Fortschritt bleibt lokal in deinem Browser.',
-    progressLabel: 'Freigeschaltet',
+    progressLabel: 'Gesamt · inkl. DLC',
     lockedTitle: '???',
     hintButton: 'Hinweis anzeigen',
     resetButton: 'Fortschritt zurücksetzen',
@@ -105,7 +111,7 @@ const PAGE_TEXTS: Record<'de' | 'en', AchievementPageTexts> = {
     eyebrow: 'secret_room.exe',
     title: 'Achievements',
     intro: 'Tiny trophies for hidden interactions, mini-games and intentionally unnecessary portfolio moments. Progress stays local in your browser.',
-    progressLabel: 'Unlocked',
+    progressLabel: 'Total · incl. DLC',
     lockedTitle: '???',
     hintButton: 'Show hint',
     resetButton: 'Reset progress',

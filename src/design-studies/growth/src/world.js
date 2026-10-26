@@ -1337,7 +1337,7 @@ function addSpecimen(type, label, height, angle, geometry, material, scale, chap
     object:fungus,normal:radial,chapterMin:-.15,chapterMax:5.0,
     bubbleSide:'right',bubbleVertical:'down',skipOcclusion:true});
 }
-addSpecimen('moss','Moospolster',5.7,2.9,mossGeometry,mossMaterials[1],[.55,.72,.17],2,9.5,{ bubbleSide:'right', bubbleVertical:'down' });
+addSpecimen('moss','Moospolster',5.7,2.9,mossGeometry,mossMaterials[1],[.55,.72,.17],2,9.5,{ markerOffset:1.1, bubbleSide:'right', bubbleVertical:'down' });
 addSpecimen('leaves','Aufsitzerpflanzen',12.4,3.8,bladeGeometry,leafMaterials[3],[.9,1.45,1],8.5,18,{ bubbleSide:'left', bubbleVertical:'up', anchorOffset: vec(0,.12,0) });
 // Larger grouped bromeliad: the same group receives the anchored discovery marker.
 {
@@ -1374,7 +1374,7 @@ for (let i=0;i<26;i++) {
 
 // Hidden worlds point in chapter 04: a visible tank bromeliad higher up the trunk/branch transition.
 {
-  const y=31.0, angle=1.65, center=trunkCenterAt(y);
+  const y=31.0, angle=6.2, center=trunkCenterAt(y);
   const plant=new THREE.Group();
   plant.position.copy(center).add(vec(Math.cos(angle)*(trunkRadiusAt(y)+.18),0,Math.sin(angle)*(trunkRadiusAt(y)+.18)));
   plant.rotation.y=-angle;
@@ -1387,7 +1387,7 @@ for (let i=0;i<26;i++) {
   addBromeliadBracts(plant, 6, .3);
   scene.add(plant);
   const normal=vec(Math.cos(angle),0,Math.sin(angle));
-  infoPoints.push({type:'symbiosis',label:'Zusammenleben',height:y,position:plant.position.clone().addScaledVector(normal,.28).add(vec(0,.62,0)),object:plant,normal,chapterMin:26,chapterMax:37,bubbleSide:'left',bubbleVertical:'down'});
+  infoPoints.push({type:'symbiosis',label:'Zusammenleben',height:y,position:plant.position.clone().addScaledVector(normal,.9).add(vec(0,.62,0)),object:plant,normal,chapterMin:26,chapterMax:37,bubbleSide:'left',bubbleVertical:'down'});
 }
 // Chapter 06/07 discovery marker uses a deliberately unobtrusive screen-space
 // anchor over the existing left crown. Do not create a separate floating plant.

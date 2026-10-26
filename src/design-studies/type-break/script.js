@@ -317,6 +317,7 @@
         link.click();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
         feedback.textContent = 'POSTER READY TO SAVE.';
+        if (input.value.trim()) document.dispatchEvent(new CustomEvent('bp:study-achievement', { detail: 'study-type-poster' }));
       }, 'image/png');
     });
     document.fonts.ready.then(() => renderPoster(currentMessage));

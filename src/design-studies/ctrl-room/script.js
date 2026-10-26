@@ -325,6 +325,7 @@
     select("#dialog-play").hidden = !record.playable;
     document.body.classList.add("dialog-open");
     dialog.showModal();
+    if (!audio.paused && !audio.ended && audio.readyState >= 2) document.dispatchEvent(new CustomEvent('bp:study-achievement', { detail: 'study-ctrl-reception' }));
     select(".dialog-close", dialog).focus();
   }
 

@@ -5,7 +5,9 @@
  * @description Verwaltet versteckte Trophäen, LocalStorage-Fortschritt und übersetzbare Hinweise.
  */
 
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { STUDY_ACHIEVEMENTS, StudyAchievementId } from '../../../design-studies/shared/achievement-catalog.js';
+import { readStudyAchievements, resetStudyAchievements, STUDY_STORAGE_PREFIX, unlockStudyAchievement } from '../../../design-studies/shared/achievement-progress.js';
 import { PortfolioLanguage } from '../models/portfolio.models';
 import { LanguageService } from './language.service';
 
@@ -26,7 +28,8 @@ export type AchievementId =
   | 'rescue-lane-404'
   | 'world-upside-down'
   | 'loyal-companion'
-  | 'platinum-complete';
+  | 'platinum-complete'
+  | StudyAchievementId;
 
 /** Technische Definition einer Trophäe. */
 interface AchievementDefinition {
@@ -36,6 +39,8 @@ interface AchievementDefinition {
   readonly icon: string;
   /** Kurze Kategorie der Interaktion. */
   readonly category: string;
+  /** Zusatzinhalte gehören nicht zum Platin-Abschluss. */
+  readonly dlc?: boolean;
 }
 
 /** Übersetzbarer Text einer Trophäe. */
@@ -91,10 +96,35 @@ export class AchievementService {
     { id: 'world-upside-down', icon: 'accessibility_new', category: 'access' },
     { id: 'loyal-companion', icon: 'music_note', category: 'footer' },
     { id: 'platinum-complete', icon: 'workspace_premium', category: 'platin' },
+    ...STUDY_ACHIEVEMENTS.map(({ id, category, icon }) => ({ id, category, icon, dlc: true })),
   ];
 
   /** Interner Fortschrittszustand. */
   private readonly stateSignal = signal<StoredAchievementState>(this.readStoredState());
+
+  /** Getrennter DLC-Speicher verhindert Konflikte mit parallel geöffneten Studien-Tabs. */
+  private readonly studyUnlocks = signal<readonly StudyAchievementId[]>(readStudyAchievements());
+
+  /** Synchronisiert lokale Erfolge auch bei Rückkehr aus einer eigenständigen Studie. */
+  constructor() {
+    const refreshStudies = (): void => { this.studyUnlocks.set(readStudyAchievements()); };
+    const onStorage = (event: StorageEvent): void => {
+      if (event.key === null || event.key.startsWith(STUDY_STORAGE_PREFIX)) refreshStudies();
+      if (event.key === null || event.key === this.storageKey) this.stateSignal.set(this.readStoredState());
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('focus', refreshStudies);
+    document.addEventListener('bp:study-unlocked', refreshStudies);
+    document.addEventListener('bp:study-reset', refreshStudies);
+    inject(DestroyRef).onDestroy(() => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('focus', refreshStudies);
+      document.removeEventListener('bp:study-unlocked', refreshStudies);
+      document.removeEventListener('bp:study-reset', refreshStudies);
+      if (this.activeUnlockTimeoutId !== null) window.clearTimeout(this.activeUnlockTimeoutId);
+      this.clearPlatinumModalTimeout();
+    });
+  }
 
   /** Aktuell sichtbare Trophy-Notification. */
   private readonly activeUnlockIdSignal = signal<AchievementId | null>(null);
@@ -119,7 +149,7 @@ export class AchievementService {
     return this.definitions.map((definition) => ({
       ...definition,
       ...translations[definition.id],
-      unlocked: state.unlocked.includes(definition.id),
+      unlocked: definition.dlc ? this.studyUnlocks().includes(definition.id as StudyAchievementId) : state.unlocked.includes(definition.id),
       hintVisible: state.hints.includes(definition.id),
     }));
   });
@@ -134,13 +164,17 @@ export class AchievementService {
   readonly isPlatinumModalVisible = computed<boolean>(() => this.platinumModalVisibleSignal());
 
   /** Anzahl freigeschalteter Trophäen. */
-  readonly unlockedCount = computed<number>(() => this.stateSignal().unlocked.length);
+  readonly unlockedCount = computed<number>(() => this.achievements().filter((achievement) => achievement.unlocked).length);
 
   /** Gesamtanzahl verfügbarer Trophäen. */
   readonly totalCount = computed<number>(() => this.definitions.length);
 
   /** Schaltet eine Trophäe dauerhaft frei. */
   unlock(id: AchievementId): void {
+    if (id.startsWith('study-')) {
+      unlockStudyAchievement(id as StudyAchievementId);
+      return;
+    }
     let unlockedNow = false;
 
     this.stateSignal.update((state) => {
@@ -194,6 +228,8 @@ export class AchievementService {
 
   /** Setzt den lokalen Fortschritt zurück. */
   resetProgress(): void {
+    resetStudyAchievements();
+    this.studyUnlocks.set([]);
     this.unlockToastQueue.splice(0, this.unlockToastQueue.length);
 
     if (this.activeUnlockTimeoutId !== null) {
@@ -215,7 +251,7 @@ export class AchievementService {
     }
 
     const state = this.stateSignal();
-    const regularIds = this.definitions.filter((definition) => definition.id !== 'platinum-complete').map((definition) => definition.id);
+    const regularIds = this.definitions.filter((definition) => !definition.dlc && definition.id !== 'platinum-complete').map((definition) => definition.id);
     const allRegularUnlocked = regularIds.every((id) => state.unlocked.includes(id));
 
     if (!allRegularUnlocked || state.unlocked.includes('platinum-complete')) {
@@ -232,9 +268,9 @@ export class AchievementService {
       const value = localStorage.getItem(this.storageKey);
       const parsed = value ? JSON.parse(value) as Partial<StoredAchievementState> : null;
 
-      const unlocked = this.validIds(this.migrateLegacyAchievementIds(parsed?.unlocked));
+      const unlocked = this.validIds(this.migrateLegacyAchievementIds(parsed?.unlocked)).filter(id => !id.startsWith('study-'));
       const hints = this.validIds(this.migrateLegacyAchievementIds(parsed?.hints));
-      const regularIds = this.definitions.filter((definition) => definition.id !== 'platinum-complete').map((definition) => definition.id);
+      const regularIds = this.definitions.filter((definition) => !definition.dlc && definition.id !== 'platinum-complete').map((definition) => definition.id);
       const normalizedUnlocked = unlocked.includes('platinum-complete') && !regularIds.every((id) => unlocked.includes(id))
         ? unlocked.filter((id) => id !== 'platinum-complete')
         : unlocked;
@@ -322,6 +358,7 @@ export class AchievementService {
 /** Übersetzungen der geheimen Trophäen. */
 const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, AchievementTranslation>> = {
   de: {
+    ...Object.fromEntries(STUDY_ACHIEVEMENTS.map(item => [item.id, item.de])) as Record<StudyAchievementId, AchievementTranslation>,
     'loader-human': {
       title: 'Menschliche Freigabe',
       description: 'Du hast die beleidigte Bootsequenz überzeugt und das Interface gestartet.',
@@ -399,11 +436,12 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
     },
     'platinum-complete': {
       title: 'Platin freigeschaltet',
-      description: 'Du hast alle versteckten Details gefunden. 100 % Portfolio erkundet – Ruhm freigeschaltet.',
-      hint: 'Schalte alle anderen Trophäen frei und vervollständige die Experience.',
+      description: 'Du hast alle versteckten Details gefunden. 100 % Hauptspiel erkundet – Ruhm freigeschaltet.',
+      hint: 'Schalte alle Trophäen des Hauptspiels frei. Die DLC-Studien sind ein eigener Ausflug.',
     },
   },
   en: {
+    ...Object.fromEntries(STUDY_ACHIEVEMENTS.map(item => [item.id, item.en])) as Record<StudyAchievementId, AchievementTranslation>,
     'loader-human': {
       title: 'Human Clearance',
       description: 'You convinced the offended boot sequence and launched the interface.',
@@ -481,8 +519,8 @@ const ACHIEVEMENT_TRANSLATIONS: Record<PortfolioLanguage, Record<AchievementId, 
     },
     'platinum-complete': {
       title: 'Platinum Unlocked',
-      description: 'You found every hidden detail. 100% of the portfolio explored – glory unlocked.',
-      hint: 'Unlock every other trophy and complete the experience.',
+      description: 'You found every hidden detail. 100% of the base game explored – glory unlocked.',
+      hint: 'Unlock every base-game trophy. The DLC studies are a separate adventure.',
     },
   },
 };

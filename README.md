@@ -98,6 +98,62 @@ The goal is a website that remains technically controlled while making a strong 
 
 > **Globi Flow backend:** The Django backend is maintained in a separate private repository and is intentionally not published or linked from the portfolio. This reduces unnecessary disclosure of server-side implementation and deployment details. Repository privacy is an additional defense-in-depth measure and does not replace runtime hardening, secret isolation, access controls, or server segmentation.
 
+## Standalone Design Studies
+
+Eight independent experiences explore distinct visual directions and interaction models. Cards and quicklinks live on `/portfolio#design-studies`. Each study has its own detailed README covering concept, interaction, architecture, local development, and source notes.
+
+### RAW/FORM
+
+A fictional festival website combining brutalist typography, hard grid lines, orange accents, photography, and editorial blocks. Viewport-driven reveals support the poster-like composition; ticket and newsletter sections remain demonstrations.
+
+[Study README](src/design-studies/brutalism/README.md) · [Open study](https://b2folio.de/design-studies/brutalism/)
+
+### [WHATWESEE]
+
+A Swiss-inspired photography journal presenting Benjamin Bennewitz's photographs through a precise grid, large images, and restrained typography. A category-based hero slider and alternating archive reveals connect portfolio and editorial storytelling.
+
+[Study README](src/design-studies/swiss/README.md) · [Open study](https://b2folio.de/design-studies/swiss/)
+
+### CTRL//ROOM
+
+An audiovisual digital-culture interface with a fictional artist profile and searchable archive. A shared audio player, real Web Audio analysis, expandable windows, and finite pointer effects bring the Y2K-inspired interface to life.
+
+[Study README](src/design-studies/ctrl-room/README.md) · [Open study](https://b2folio.de/design-studies/ctrl-room/)
+
+### TYPE破BREAK
+
+An interactive manifesto about pressure, destruction, and creative transformation. Scroll-driven typography leads into a Canvas fragment simulation, a local poster editor with PNG export, and a printable manifesto.
+
+[Study README](src/design-studies/type-break/README.md) · [Open study](https://b2folio.de/design-studies/type-break/)
+
+### SCOOP!
+
+A comic-style ice cream shop built around original SVG characters, expressive product reactions, and a drawn scroll path. A configurable three-cup mix box and browser-local cart demonstrate a complete purchase flow without ordering or payment services.
+
+[Study README](src/design-studies/scoop/README.md) · [Open study](https://b2folio.de/design-studies/scoop/)
+
+### FOLD.
+
+A connected six-face cube explores how a change in perspective changes the story. Three.js with CSS3DRenderer moves the camera between HTML panels, then unfolds the same object into an interactive net; touch devices use deliberate chapter swipes.
+
+[Study README](src/design-studies/fold/README.md) · [Open study](https://b2folio.de/design-studies/fold/)
+
+### GROWTH.
+
+A procedural WebGL tree turns upward document scrolling into an ascent from underground roots to the canopy and beyond. Camera movement, an altitude display, small discovery popovers, water, and atmospheric layers connect the visual journey to the tree's habitats.
+
+[Study README](src/design-studies/growth/README.md) · [Open study](https://b2folio.de/design-studies/growth/)
+
+### BENTENDO™ / DUNGEON WANTED
+
+An interactive 3D handheld surrounds a playable Canvas pixel RPG with cartridge handling, physical controls, and an LCD. The evolving game includes quests, combat, NPC routines, a day/night cycle, and local saves; its own README covers development, tests, and asset credits.
+
+[Study README](src/design-studies/bentendo/README.md) · [Open study](https://b2folio.de/design-studies/bentendo/)
+
+### Shared integration
+
+Each study owns its HTML, styles, scripts, and assets. Angular copies these experiences as static pages; portfolio theme, language, and accessibility services do not automatically apply to them. Dependencies and supported interactions are documented in each study's README.
+
 ## Architecture
 
 | Layer | Responsibility |
@@ -140,8 +196,15 @@ src/
 │  ├─ images/                  # Hero, loader, and project assets
 │  ├─ snippet-demos/           # Isolated examples for the snippets page
 │  └─ social/                  # Social and repository preview
-├─ design-studies/            # Eight self-contained studies, each with its own assets and runtime
-│  └─ bentendo/               # Game runtime, vendor libraries, credits, docs, tools, and tests
+├─ design-studies/            # Independent experiences; each folder has its own README
+│  ├─ brutalism/              # RAW/FORM
+│  ├─ swiss/                  # [WHATWESEE]
+│  ├─ ctrl-room/              # CTRL//ROOM
+│  ├─ type-break/             # TYPE破BREAK
+│  ├─ scoop/                  # SCOOP!
+│  ├─ fold/                   # FOLD.
+│  ├─ growth/                 # GROWTH.
+│  └─ bentendo/               # BENTENDO / DUNGEON WANTED
 ├─ environments/              # Public frontend configuration by environment
 ├─ styles/                    # Tokens, base styles, utilities, and case-study styles
 ├─ styles.scss                # Global SCSS entry point
@@ -206,46 +269,9 @@ dist/ben-portfolio-experience/browser
 
 The production configuration enables optimization, file hashing, environment-specific frontend configuration, and bundle budgets. `.htaccess`, `robots.txt`, `sitemap.xml`, and the local assets are copied into the build output.
 
-## Standalone Design Studies
+The `angular.json` asset rules copy all eight standalone studies and exclude selected development-only material, including SCOOP source masters and BENTENDO tests, generators, Blender sources, and internal documentation. Study-specific details belong in the linked study READMEs.
 
-| Study | Route | Focus |
-| --- | --- | --- |
-| RAW/FORM | `/design-studies/brutalism/` | Brutalist visual direction and typography |
-| [WHATWESEE] | `/design-studies/swiss/` | Swiss-inspired editorial design |
-| CTRL//ROOM | `/design-studies/ctrl-room/` | Atmospheric interactive control room |
-| TYPE/BREAK | `/design-studies/type-break/` | Experimental typography and interaction |
-| SCOOP! | `/design-studies/scoop/` | Comic ice cream shop, SVG characters, and configurable mix box |
-| FOLD. | `/design-studies/fold/` | Scroll-driven 3D folding and interactive unfold finale |
-| GROWTH. | `/design-studies/growth/` | Procedural Three.js tree and camera ascent from roots to canopy |
-| BENTENDO™ | `/design-studies/bentendo/` | Interactive 3D handheld and DUNGEON WANTED pixel RPG |
-
-Study cards and quicklinks live on `/portfolio#design-studies`. The GROWTH card uses a WebP screenshot of the running study.
-
-These are standalone experiences with their own HTML, styles, scripts, and assets. They are copied by the Angular asset configuration rather than rendered as Angular components. Their themes, language support, controls, and dependencies are study-specific; the portfolio's global services do not automatically apply to them. GROWTH currently loads Three.js from a CDN, while BENTENDO bundles its Three.js runtime locally.
-
-`angular.json` excludes SCOOP source masters and BENTENDO development-only files from deployment. BENTENDO runtime scripts remain included; its tests, checks, Blender sources, audio generators, development documentation, and package metadata stay in the repository only. All BENTENDO-related source, documentation, and tests belong under `src/design-studies/bentendo/`.
-
-### BENTENDO development and validation
-
-DUNGEON WANTED is an evolving game prototype: cartridge interactions, keyboard and touch controls, quests, combat, NPCs, a day/night cycle, local saves, and separate music/effect controls. Save data stays within the current browser origin.
-
-```bash
-cd src/design-studies/bentendo
-npm ci
-npm test
-npm run check
-npm run check:python
-```
-
-Run these commands from the study directory. Python 3 is required for the Python structure check; optional asset generators have their own dependencies. The test suite includes the portfolio integration check, which resolves the repository root relative to its own file.
-
-Public [BENTENDO credits](src/design-studies/bentendo/credits.html) and the [source record](src/design-studies/bentendo/CREDITS.md) list external assets, license references, and unresolved provenance. Credits open in a new tab from the study so the running game is preserved.
-
-### Repository maintenance and deployment
-
-The root-level `docs/` and `tools/` directories have been removed. The one-time BENTENDO import plan and commit generator are retired. The deployment scripts remain locally under `scripts/`; only the root-level `/scripts/` directory is ignored by Git. Existing tracked deployment files must be untracked once with `git rm -r --cached -- scripts`, which preserves local files. BENTENDO runtime scripts under `src/design-studies/bentendo/scripts/` remain versioned. Asset-cleanup reports and the icon-subset generator are no longer included. Existing runtime assets and the generated icon font remain available. `make-tree.ps1` and `tools.md` remain root-level utilities.
-
-Deployment uses the complete contents of `dist/ben-portfolio-experience/browser/` after a successful production build. Include hidden `.htaccess` and all eight `design-studies` subdirectories. Local deployment through `scripts/deploy-portfolio-local.cmd` remains available; the server script is retained locally as `scripts/deploy-portfolio-server.sh`. Both files are unchanged by this cleanup and are excluded from future versioning after the one-time untracking step. An already installed server-side deployment script is not removed or updated by this source cleanup.
+Local deployment scripts remain in the root-level `scripts/` directory, which is ignored by Git. BENTENDO's nested runtime scripts remain versioned. Deploy the complete browser output, including `.htaccess` and `design-studies/`; an installed server-side deployment script is managed separately.
 
 ## License and Usage
 
@@ -260,7 +286,7 @@ Without prior explicit written permission, you may not:
 - use its content for AI or machine-learning training, datasets, or automated reproduction,
 - reuse personal data, contact details, or information from the legal notice.
 
-Neither the public visibility of this repository nor any technically available GitHub feature grants additional usage rights. The complete [B2FOLIO.DE Read-Only Source License](./LICENSE) applies to original project contributions. Clearly marked third-party components remain subject to their respective license terms. This includes fonts, models, textures, sprites, music, and sound effects in standalone studies. Attribution does not grant permission to republish asset source files. BENTENDO's credits record project-created Python models, music created with free tools and AI, and the remaining third-party redistribution question; the repository license does not resolve third-party restrictions.
+Neither the public visibility of this repository nor any technically available GitHub feature grants additional usage rights. The complete [B2FOLIO.DE Read-Only Source License](./LICENSE) applies to original project contributions. Clearly marked third-party components remain subject to their respective license terms. This includes fonts, models, textures, sprites, music, and sound effects in standalone studies. Attribution does not grant permission to republish asset source files. Study-specific READMEs and credit records describe source material and applicable third-party notices. The repository license does not override third-party conditions.
 
 ## Author
 

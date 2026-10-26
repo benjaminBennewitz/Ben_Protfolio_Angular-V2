@@ -1,94 +1,52 @@
-# GROWTH 2.0 — Procedural Authoring Edition
+# GROWTH. — A Living World
 
-Eigenständiges Projekt, unabhängig von GROWTH v2.0 (Prototyp).
+[← Studienübersicht](../../../README.md#standalone-design-studies) · [Studie öffnen](https://b2folio.de/design-studies/growth/)
 
-## Start
+Prozedurale Baum-Experience mit einer Kamerafahrt vom unterirdischen Wurzelsystem über den Stamm bis über die Krone. Scrollen wird als vertikaler Aufstieg durch einen zusammenhängenden Lebensraum inszeniert.
 
-```bash
-python -m http.server 8080
-```
+## Konzept und Gestaltung
 
-Dann http://localhost:8080/ öffnen. Three.js wird aus dem CDN geladen.
+Der Einstieg liegt am unteren Ende des Dokuments. Von dort führt Scrollen nach oben durch die Höhenkapitel: Wurzeln, Waldboden, Stamm, Aufsitzerpflanzen, verborgene Lebensräume, Kronendach und der Blick darüber hinaus.
 
-Debug-Oberfläche: http://localhost:8080/?debug=1
+Dunkle Waldtöne, helle Akzente, großformatige Barlow-Condensed-Typografie und ein technisches HUD verbinden Naturdarstellung und Expedition. Der Höhenmesser folgt der Kameraposition. Nebel, atmosphärische Layer und animiertes Wasser geben der Szene Tiefe.
 
-## Architektur
+## Interaktionen
 
-- `src/main.js`: Rendering, Scroll/Kamera, Kapitel und Interaktionen
-- `src/world.js`: bisherige Geometriegeneratoren, benannte Layer
-- `src/config.js`: validierte Seeds und steuerbare Parameter
-- `src/random.js`: deterministische Zufallsströme
-- `src/debug.js`: Layer-Toggles, JSON-Preset-Export/-Import per Eingabefeld
+- Kamerahöhe und Blickrichtung folgen dem normalen Dokument-Scroll; Kapiteltexte bleiben HTML-Inhalte über der Szene.
+- Die Kapitelnavigation springt gezielt zu Höhenabschnitten. „Begin Ascent“ führt aus dem Einstieg zum Waldboden.
+- Entdeckungspunkte erläutern unter anderem Pilze, Moose, Bromelien und die Wirkung der Krone. Kleine angeschlossene Infoblasen ersetzen ein bildschirmfüllendes Overlay.
+- Die meisten Marker folgen 3D-Positionen und Sichtbarkeitsprüfungen. Der Atmosphärenpunkt links im Kronenbereich ist bewusst redaktionell im Bildschirmraum platziert.
+- Der Sound-Schalter ist als deaktiviertes Prototyp-Bedienelement gekennzeichnet; eine Tonfunktion ist nicht implementiert.
 
-Die Generatoren teilen **keinen** Zufallszustand zwischen den Layern. Beim Hinzufügen neuer
-Steine verändert sich z. B. die Zufallsfolge der Astgenerierung nicht.
+## Technische Umsetzung
 
-## Presets
+Die Szene wird mit Three.js und WebGL erzeugt. Baum, Wurzeln, Bewuchs und Umgebung entstehen prozedural; ein externes Baummodell ist für diese Variante nicht erforderlich. Texturen werden teilweise direkt per Canvas erzeugt.
 
-Die Debug-Ansicht zeigt die aktuelle Konfiguration als JSON. Ändern und `Apply / Reload`
-wählen. `Export JSON` sichert den Zustand (Parameter und Seeds), `Copy JSON` kopiert ihn.
-Ein JSON-Preset kann in das Textfeld eingefügt und mit `Apply / Reload` geladen werden.
-Die URL enthält die angewendete Konfiguration und kann geteilt werden.
+| Bereich | Datei |
+| --- | --- |
+| Kapitel, HUD und Infoblasen | [index.html](index.html) |
+| Rendering, Kamera und Interaktion | [src/main.js](src/main.js) |
+| Geometriegeneratoren und Layer | [src/world.js](src/world.js) |
+| Validierte Seeds und Parameter | [src/config.js](src/config.js) |
+| Deterministische Zufallsströme | [src/random.js](src/random.js) |
+| Autorenwerkzeuge und Presets | [src/debug.js](src/debug.js) |
+| Gestaltung und lokale Schriftanbindung | [src/styles.css](src/styles.css) |
+| Portfolio-Kartenvorschau | [assets/preview.webp](assets/preview.webp) |
 
-**Abgrenzung:** Ein Preset friert Parameter und Seeds ein, nicht die komplette Geometrie.
-Reproduzierbarkeit gilt bei gleicher Generatorversion. Ein GLB-/Geometrie-Snapshot
-und echtes Hot-Reload einzelner Generatoren sind bewusst nicht implementiert.
+Die Generatorbereiche verwenden getrennte Zufallsströme. Änderungen am Boden verändern dadurch nicht automatisch die Astfolge. Ein Preset hält Seeds und Parameter fest; Reproduzierbarkeit setzt dieselbe Generatorversion voraus. Es ist kein eingefrorener Geometrie- oder GLB-Snapshot.
 
-Die WebGL-Szene muss im Browser geprüft werden. `node --check` validiert Syntax,
-nicht GPU-Shader oder Bildwirkung.
+## Autorenmodus
 
+`/design-studies/growth/?debug=1` öffnet Layer-Toggles sowie JSON-Import und -Export. „Apply / Reload“ lädt eine Konfiguration neu; die URL kann deren Parameter tragen. Einzelne Generatoren werden nicht live ausgetauscht.
 
-## Stand dieses Patches
+## Lokal entwickeln und integrieren
 
-- stärker verschmolzene, organischere Buttresses statt raketenhafter Flügel
-- zusätzliche oberirdische Wurzeln und feuchtere Bodenszenerie
-- flacher Sumpf/Tümpel an einer Seite des Baums
-- zusätzliche Lianen
-- mehr Astmasse auf der rechten/hinteren Kronenseite
+Im Portfolio-Stamm `npm start` ausführen und `/design-studies/growth/` öffnen. Alternativ den gesamten `src`-Ordner per HTTP ausliefern. Dieser Start erhält die absoluten Fontpfade unter `/assets/fonts/studies/`.
 
+Three.js wird aus einem CDN geladen und benötigt eine Netzwerkverbindung. Die Fonts Barlow Condensed, DM Sans und DM Mono liegen lokal im Portfolio. Es gibt keine Google-Fonts-Anfrage. Angular kopiert die Studie als eigenständige Seite.
 
-## Stand dieses Patches 2.2
+## Bewegung, Grenzen und Rechte
 
-- Buttresses deutlich stärker miteinander verbunden
-- zusätzliche Basis-Web-Struktur gegen sternförmige Lücken
-- kleinerer Taper des Stamms bis etwa Mitte Kapitel 03
-- Lianen vollständig entfernt
-- bisherige Sumpf-/Tümpel-Erweiterung bleibt erhalten
+`prefers-reduced-motion` überspringt die Kameraglättung und setzt Wasser- und Atmosphärenzeit auf einen statischen Wert. Eine WebGL-fähige Browserumgebung bleibt erforderlich. Syntaxprüfungen ersetzen keine Prüfung der GPU-Darstellung.
 
-## v2.5
-- Stammdurchmesser um 20 % reduziert (bei erhaltener Brettwurzel-Ausladung)
-- Tümpel mit unregelmäßigem, feuchtem Ufer, Erdübergang und Ufersteinen
-
-## 2.6 Detailrunde
-- 3D-verankerte pulsierende Infopunkte, keine Kapitel-Infobuttons mehr
-- zusätzliche Stammvegetation, Fächerpilze und Moos
-- Bromelien in Kapitel 03 verdichtet
-- Lianen hängen monoton abwärts, ohne aufwärtsführende Schleifen
-- Start: python -m http.server 8080
-
-
-## v2.7
-Fixierte Exemplare mit sichtbarkeitsgeprüften 3D-Hotspots, angeschlossene kleine Infoblasen ohne Modal-Overlay, dichterer Bewuchs am Stammfuß, weniger Bewuchs über Kapitel 03 und weicher Kamera-Rückzug zwischen 00 und 01.
-
-
-## Stand dieses Patches 2.8
-
-- rote Bromelie mit roten Blüten für Kapitel 03
-- zusätzliche Bromelien mit roten Blüten im mittleren Höhenbereich
-- zusätzlicher Entdeckungspunkt für Kapitel 04
-- zusätzlicher Entdeckungspunkt für Kapitel 07 / Luftreinigung
-- technischer gestaltete Info-Box mit Datenraster
-- punktabhängige Öffnungsrichtung der Boxen
-- Hauptastansatz etwas tiefer gesetzt
-
-
-## Hotfix 3.0.1
-- Schwebenden Blattcluster in Kapitel 06 entfernt.
-- Luftreinigungs-Infopunkt als absichtlich bildschirmfester Marker links im Kronenbereich (34 % Breite, 39 % Höhe) für Kapitel 06/07 platziert.
-- Öffnungsrichtung links, weg vom rechtsstehenden Kapiteltext.
-
-
-Patch 3.0.2: hellere Discovery-Dialoge, Wasseranimation mit sanften Wellen und schwimmenden Blättern, Kronenpunkt nur in Kapitel 06 sichtbar.
-
-
-Patch 3.0.3: Google Fonts entfernt; lokal verfügbare Systemschriftarten verwendet. Dichter segmentierte Wassergeometrie mit stärkeren, überlagerten Ufer- und Stammkreiswellen sowie deutlicher treibenden Blättern.
+Eigene Generatoren, Gestaltung und Inhalte unterliegen der [Portfolio-Lizenz](../../../LICENSE). Die jeweiligen Bedingungen von Three.js und den Schriften bleiben bestehen.

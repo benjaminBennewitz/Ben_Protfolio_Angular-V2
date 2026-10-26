@@ -1,30 +1,69 @@
 # BENTENDO™ / DUNGEON WANTED
 
-Eigenständige Designstudie von B²: ein interaktiver 3D-Handheld mit bedienbarer Cartridge und einem spielbaren Pixel-Rollenspiel. Laufender Entwicklungsstand, kein abgeschlossenes Vollspiel.
+[← Studienübersicht](../../../README.md#standalone-design-studies) · [Studie öffnen](https://b2folio.de/design-studies/bentendo/)
 
-## Im Portfolio
+Interaktiver 3D-Handheld mit bedienbarer Cartridge und einem spielbaren Pixel-Rollenspiel. Das Gerät bildet die physische Bühne; DUNGEON WANTED besitzt darunter eine eigenständige Spielwelt und Spielzustandsverwaltung. Laufender Entwicklungsstand, kein abgeschlossenes Vollspiel.
 
-- Studie: `/design-studies/bentendo/`
-- Projektkarte und Quicklink: `/portfolio#design-studies`
-- Der vorhandene Angular-Asset-Schritt kopiert das Spiel unverändert als eigenständige Seite. Keine Angular-Laufzeit im Spiel und kein iframe.
-- Die Vorschau ist eine gestaltete SVG-Handheldansicht mit einem echten, über den Spielrenderer erzeugten LCD-Ausschnitt.
+## Konzept und Gestaltung
 
-## Lokal entwickeln
+Die Studie verbindet eine nostalgische Handheld-Hommage mit einer erkundbaren Abenteuerwelt. Gehäuse, Einschalter, Kontrast- und Lautstärkeräder, Cartridge und LCD reagieren auf Eingaben. Das Handheld-Modell wurde im Projekt vollständig mit Python erstellt. Die Musik entstand mit freien Tools und KI.
 
-Im Portfolio-Stamm: `npm start`, dann `/design-studies/bentendo/` öffnen. Alternativ in diesem Ordner `python -m http.server 8080` und `http://localhost:8080/` öffnen.
+BENTENDO und DUNGEON WANTED sind fiktive Projektnamen. Die Studie ist unabhängig von Nintendo; Marken ihrer jeweiligen Rechteinhaber bleiben unberührt.
 
-Nur für die Entwicklung im Spielordner: `npm ci`, `npm test`, `npm run check` und `npm run check:python`.
+## Gerät und Bedienung
 
-## Enthalten
+- Cartridge betrachten, umdrehen, einrasten lassen und durch eine animierte Aktion pusten; kein Mikrofonzugriff.
+- Einschalten über den Power-Schalter; Gehäuseansichten per Pointer, Touch oder Bedienhilfe erreichen.
+- Tastatur, Touch-Steuerung und die sichtbaren 3D-Tasten bedienen das Spiel.
+- Pfeile bewegen die Figur, A/Leertaste interagiert, B öffnet den Rucksack beziehungsweise schließt Dialoge, START/Enter/P pausiert und SELECT/S speichert.
+- Lautstärke, Musik und Effekte getrennt einstellen; Displaykontrast und optionale Kontaktprobleme über die Bedienhilfe steuern.
+- Debug-Auswahl für direkte Raumaufrufe und LCD-Rauschen.
 
-Bedienbares Three.js-Gerät, Cartridge-Interaktionen, Touch- und Tastatursteuerung, Canvas-LCD, Charakterwahl, Bruchstein mit Innenräumen, NPCs und Tieren, Quests und Journal, Wald und Rohrpuzzle, erstes Dungeon mit Kampf, Rucksack/Profil, lokales Speichern, Tag/Nacht, Gäste im Wirtshaus und wählbare Schlafzeiten.
+Die [Credits-Seite](credits.html) öffnet aus der Studiennavigation in einem neuen Tab, damit die laufende Spielsitzung erhalten bleibt.
 
-Spielstand und Audioeinstellungen bleiben lokal im Browser. Der vorhandene Speicherschlüssel wird bei der Integration nicht geändert. Bei einem Wechsel von localhost zu einer anderen Domain lässt sich der Browserstand nicht automatisch mitnehmen.
+## Spielwelt und Systeme
 
-## Build und Quellen
+Bruchstein mit begehbaren Innenräumen, Bewohnern und Tieren bildet den Ausgangspunkt. Quests, Journal, Rucksack und Karte führen zu Waldgebieten, Rohrpuzzle und dem ersten Dungeon mit Kampf. Tag/Nacht, Bewohner-Tagesabläufe, Schenkengäste und wählbare Ruhezeiten ergänzen die Welt.
 
-`npm run build:production` im Portfolio-Stamm baut das Portfolio einschließlich der Studie. Tests, Prüf-/Generatorwerkzeuge, Blender-Quelldatei, Entwicklungsdokumentation und eigene Paketmetadaten der Studie werden nicht in den Web-Build kopiert. Sie bleiben im Repository erhalten.
+Spielstand, Charakterwahl und Audioeinstellungen bleiben lokal im Browser. Die Speicherung ist an den jeweiligen Browser und Origin gebunden; ein Stand von localhost wird nicht automatisch auf eine andere Domain übertragen.
 
-Öffentliche Quellenübersicht: [Credits](credits.html), direkt in der Studiennavigation und in der Bedienhilfe verlinkt. Quellen und Rechtehinweise: [CREDITS.md](CREDITS.md). Ausführliche bestehende Entwicklungsunterlagen: `docs/`. Die Quellenverweise ersetzen keine Lizenznachweise der gelieferten Fremdassets.
+## Architektur und Dateien
 
-Die Werkzeuge für den einmaligen Git-Erstimport wurden nach der Integration entfernt. Der dauerhafte Portfolio-Integrationstest liegt unter `tests/portfolio-integration.test.js` und läuft mit `npm test` im Studienordner. Laufzeitcode, Entwicklungswerkzeuge, Tests und Spielunterlagen bleiben vollständig innerhalb dieser Studie.
+| Bereich | Verantwortung |
+| --- | --- |
+| [index.html](index.html), `styles/` | Zugängliche Bedienelemente, Gerätedarstellung und Dialoge |
+| `scripts/core/` | Konfiguration und Ablaufsteuerung |
+| `scripts/device/` | Modelle, Kamera, Cartridge und Eingaben |
+| `scripts/display/` | Canvas-LCD und Grafikladen |
+| `scripts/game/data/` | Räume, Figuren und Inhaltsdefinitionen |
+| `scripts/game/systems/` | Spielregeln, Bewegung, Kampf, Quests und Speicherung |
+| `scripts/game/render/` | Darstellung der Spielwelt und Spieloberfläche |
+| `scripts/audio/` | Audioverwaltung, Effekte und Entwicklungswerkzeuge |
+| `tests/`, `scripts/checks/` | Spieltests, Portfolio-Integration und Strukturprüfungen |
+| `assets/`, `vendor/` | Modelle, Sprites, Medien und lokale Three.js-Laufzeit |
+| `docs/` | Bestehende technische, gestalterische und spielerische Entwicklungsunterlagen |
+
+Das Gerät nutzt Three.js, das Spiel ein Canvas-LCD. Die Importmap verweist auf die lokal mitgelieferte Three.js-Laufzeit. Es läuft keine Angular-Instanz im Spiel und kein iframe ist erforderlich.
+
+## Lokal entwickeln und prüfen
+
+Im Portfolio-Stamm `npm start` ausführen und `/design-studies/bentendo/` öffnen. Alternativ im Studienordner `python -m http.server 8080` starten und `http://localhost:8080/` aufrufen. Für das Spielen ist keine eigene npm-Installation nötig.
+
+Entwicklungstests im Studienordner:
+
+```bash
+npm ci
+npm test
+npm run check
+npm run check:python
+```
+
+Python 3 ist für die Python-Strukturprüfung erforderlich. Optionale Generatoren können weitere Abhängigkeiten benötigen. `tests/portfolio-integration.test.js` prüft die Anbindung an Portfolio und Asset-Konfiguration.
+
+## Portfolio-Integration und Quellen
+
+Der Produktionsbuild im Portfolio-Stamm übernimmt die Laufzeitdateien. Tests, interne Dokumentation, Blender-Quelle, Prüf-/Generatorwerkzeuge und eigene Paketmetadaten werden gemäß `angular.json` nicht veröffentlicht. Die Kartenansicht nutzt eine gestaltete SVG-Handheldvorschau mit einem vom Spielrenderer erzeugten LCD-Ausschnitt.
+
+Quellen und Bearbeitungen stehen in [CREDITS.md](CREDITS.md) und den [öffentlichen Credits](credits.html). Die separat verwendeten GBFX-Soundeffekte bleiben Fremdassets unter CC BY 4.0. Die dort dokumentierte Frage zur Weitergabe des Dungeonatlas bleibt davon getrennt. Eigene Beiträge unterliegen der [Portfolio-Lizenz](../../../LICENSE).
+
+Alle dauerhaft benötigten Spielskripte, Tests und Unterlagen liegen innerhalb dieser Studie. Der Ignore-Eintrag `/scripts/` betrifft ausschließlich den lokalen Deployment-Ordner im Portfolio-Stamm.

@@ -1,4 +1,4 @@
-B2Folio/
+folio/
 ├── .angular/
 │   └── ...
 ├── dist/
@@ -231,30 +231,6 @@ B2Folio/
 │   │   │   ├── material-symbols-outlined-latin-fill-normal.woff2
 │   │   │   └── material-symbols-portfolio.woff2
 │   │   ├── images/
-│   │   │   ├── project-stack/
-│   │   │   │   ├── project_2/
-│   │   │   │   │   ├── pj2_chest.webp
-│   │   │   │   │   ├── pj2_key.webp
-│   │   │   │   │   ├── pj2_lock.webp
-│   │   │   │   │   └── pj2_square.webp
-│   │   │   │   ├── analysis-sticker-success.webp
-│   │   │   │   ├── arm.webp
-│   │   │   │   ├── blood-drop-halftone.webp
-│   │   │   │   ├── bomb.webp
-│   │   │   │   ├── boom.webp
-│   │   │   │   ├── egle1-idle.webp
-│   │   │   │   ├── egle1-satisfied.webp
-│   │   │   │   ├── egle2-idle.webp
-│   │   │   │   ├── egle2-satisfied.webp
-│   │   │   │   ├── eyball-green-hurt.webp
-│   │   │   │   ├── eyeball-green.webp
-│   │   │   │   ├── paper-crumpled-pink.webp
-│   │   │   │   ├── planet-saved.webp
-│   │   │   │   ├── scream-girl-pink.webp
-│   │   │   │   ├── start-blood-analysis.webp
-│   │   │   │   ├── teardrop.webp
-│   │   │   │   ├── thumb-lime.webp
-│   │   │   │   └── trash-red.webp
 │   │   │   ├── projects/
 │   │   │   │   ├── carly-managed/
 │   │   │   │   │   ├── screens/
@@ -267,11 +243,11 @@ B2Folio/
 │   │   │   │   │   │   ├── inbox.webp
 │   │   │   │   │   │   ├── members.webp
 │   │   │   │   │   │   ├── pool.webp
+│   │   │   │   │   │   ├── projects.webp
 │   │   │   │   │   │   ├── project-settings-danger-zone.webp
 │   │   │   │   │   │   ├── project-settings-layout.webp
 │   │   │   │   │   │   ├── project-settings-masterdata.webp
 │   │   │   │   │   │   ├── project-settings-members.webp
-│   │   │   │   │   │   ├── projects.webp
 │   │   │   │   │   │   ├── settings-accessibility.webp
 │   │   │   │   │   │   ├── settings-carly.webp
 │   │   │   │   │   │   ├── settings-general.webp
@@ -304,23 +280,47 @@ B2Folio/
 │   │   │   │           ├── projects-board.webp
 │   │   │   │           ├── projects-inbox.webp
 │   │   │   │           └── projects-welcome.webp
+│   │   │   ├── project-stack/
+│   │   │   │   ├── project_2/
+│   │   │   │   │   ├── pj2_chest.webp
+│   │   │   │   │   ├── pj2_key.webp
+│   │   │   │   │   ├── pj2_lock.webp
+│   │   │   │   │   └── pj2_square.webp
+│   │   │   │   ├── analysis-sticker-success.webp
+│   │   │   │   ├── arm.webp
+│   │   │   │   ├── blood-drop-halftone.webp
+│   │   │   │   ├── bomb.webp
+│   │   │   │   ├── boom.webp
+│   │   │   │   ├── egle1-idle.webp
+│   │   │   │   ├── egle1-satisfied.webp
+│   │   │   │   ├── egle2-idle.webp
+│   │   │   │   ├── egle2-satisfied.webp
+│   │   │   │   ├── eyball-green-hurt.webp
+│   │   │   │   ├── eyeball-green.webp
+│   │   │   │   ├── paper-crumpled-pink.webp
+│   │   │   │   ├── planet-saved.webp
+│   │   │   │   ├── scream-girl-pink.webp
+│   │   │   │   ├── start-blood-analysis.webp
+│   │   │   │   ├── teardrop.webp
+│   │   │   │   ├── thumb-lime.webp
+│   │   │   │   └── trash-red.webp
 │   │   │   ├── brain_rotation.gif
 │   │   │   ├── brain_rotation.webp
 │   │   │   ├── chocolate-egg.webp
+│   │   │   ├── default-hero-head.webp
 │   │   │   ├── default-hero-head-360.webp
 │   │   │   ├── default-hero-head-480.webp
 │   │   │   ├── default-hero-head-560.webp
-│   │   │   ├── default-hero-head.webp
 │   │   │   ├── fuelli.webp
 │   │   │   ├── hero-head-fck.webp
 │   │   │   ├── hero-head-insane.webp
 │   │   │   ├── hero-head-lol.webp
 │   │   │   ├── me-after-chocolate.webp
+│   │   │   ├── me-and-coffee.webp
 │   │   │   ├── me-and-coffee-480.webp
 │   │   │   ├── me-and-coffee-720.webp
-│   │   │   ├── me-and-coffee-error-480.webp
 │   │   │   ├── me-and-coffee-error.webp
-│   │   │   ├── me-and-coffee.webp
+│   │   │   ├── me-and-coffee-error-480.webp
 │   │   │   ├── me-with-chocolate.webp
 │   │   │   └── nice-head-loader.webp
 │   │   ├── snippet-demos/
@@ -337,8 +337,8 @@ B2Folio/
 │   │   ├── bentendo/
 │   │   │   ├── assets/
 │   │   │   │   ├── cartridge/
-│   │   │   │   │   ├── dungeon-wanted-female.png
-│   │   │   │   │   └── dungeon-wanted.png
+│   │   │   │   │   ├── dungeon-wanted.png
+│   │   │   │   │   └── dungeon-wanted-female.png
 │   │   │   │   ├── characters/
 │   │   │   │   │   └── adventurer-portraits.png
 │   │   │   │   ├── fonts/
@@ -436,8 +436,8 @@ B2Folio/
 │   │   │   │   │   ├── bruchstein-diagonal-running-combat.md
 │   │   │   │   │   ├── bruchstein-discoveries.md
 │   │   │   │   │   ├── bruchstein-dungeon-polish.md
-│   │   │   │   │   ├── bruchstein-hackschwung-tempo.md
 │   │   │   │   │   ├── bruchstein-hackschwung.md
+│   │   │   │   │   ├── bruchstein-hackschwung-tempo.md
 │   │   │   │   │   ├── bruchstein-health-quellgewoelbe.md
 │   │   │   │   │   ├── bruchstein-houses.md
 │   │   │   │   │   ├── bruchstein-interior-audio.md
@@ -481,8 +481,6 @@ B2Folio/
 │   │   │   │   ├── cartridge-drag.md
 │   │   │   │   ├── deleted-files.json
 │   │   │   │   └── README.md
-│   │   │   ├── node_modules/
-│   │   │   │   └── ...
 │   │   │   ├── scripts/
 │   │   │   │   ├── audio/
 │   │   │   │   │   ├── tools/
@@ -534,8 +532,8 @@ B2Folio/
 │   │   │   │   │   │   ├── native-buttons.js
 │   │   │   │   │   │   ├── power-gesture.js
 │   │   │   │   │   │   ├── rear-intent.js
-│   │   │   │   │   │   ├── view-zones.js
-│   │   │   │   │   │   └── views.js
+│   │   │   │   │   │   ├── views.js
+│   │   │   │   │   │   └── view-zones.js
 │   │   │   │   │   ├── brand.js
 │   │   │   │   │   ├── button-motion.js
 │   │   │   │   │   ├── handheld.js
@@ -588,10 +586,10 @@ B2Folio/
 │   │   │   │   │   │   ├── tavern-company.js
 │   │   │   │   │   │   ├── title.js
 │   │   │   │   │   │   ├── town.js
+│   │   │   │   │   │   ├── village.js
 │   │   │   │   │   │   ├── village-fauna.js
 │   │   │   │   │   │   ├── village-life.js
-│   │   │   │   │   │   ├── village-north.js
-│   │   │   │   │   │   └── village.js
+│   │   │   │   │   │   └── village-north.js
 │   │   │   │   │   ├── render/
 │   │   │   │   │   │   ├── bag.js
 │   │   │   │   │   │   ├── cave.js
@@ -599,16 +597,16 @@ B2Folio/
 │   │   │   │   │   │   ├── daylight.js
 │   │   │   │   │   │   ├── discoveries.js
 │   │   │   │   │   │   ├── dog.js
+│   │   │   │   │   │   ├── dungeon.js
 │   │   │   │   │   │   ├── dungeon-atlas.js
 │   │   │   │   │   │   ├── dungeon-furniture.js
 │   │   │   │   │   │   ├── dungeon-passages.js
 │   │   │   │   │   │   ├── dungeon-scenery.js
-│   │   │   │   │   │   ├── dungeon.js
 │   │   │   │   │   │   ├── east.js
 │   │   │   │   │   │   ├── fetch-stick.js
 │   │   │   │   │   │   ├── health.js
-│   │   │   │   │   │   ├── interior-fixtures.js
 │   │   │   │   │   │   ├── interior.js
+│   │   │   │   │   │   ├── interior-fixtures.js
 │   │   │   │   │   │   ├── map.js
 │   │   │   │   │   │   ├── objects.js
 │   │   │   │   │   │   ├── overlays.js
@@ -622,11 +620,11 @@ B2Folio/
 │   │   │   │   │   │   ├── system-menu.js
 │   │   │   │   │   │   ├── tavern.js
 │   │   │   │   │   │   ├── terrain.js
+│   │   │   │   │   │   ├── village.js
 │   │   │   │   │   │   ├── village-ground.js
 │   │   │   │   │   │   ├── village-life.js
 │   │   │   │   │   │   ├── village-north.js
 │   │   │   │   │   │   ├── village-scenery.js
-│   │   │   │   │   │   ├── village.js
 │   │   │   │   │   │   ├── weapon-swing.js
 │   │   │   │   │   │   └── world.js
 │   │   │   │   │   ├── systems/
@@ -637,15 +635,15 @@ B2Folio/
 │   │   │   │   │   │   ├── daily-life.js
 │   │   │   │   │   │   ├── discoveries.js
 │   │   │   │   │   │   ├── dog-fetch.js
+│   │   │   │   │   │   ├── dungeon.js
 │   │   │   │   │   │   ├── dungeon-combat.js
 │   │   │   │   │   │   ├── dungeon-migrations.js
-│   │   │   │   │   │   ├── dungeon.js
 │   │   │   │   │   │   ├── east-story.js
 │   │   │   │   │   │   ├── fetch-path.js
 │   │   │   │   │   │   ├── forest-return.js
 │   │   │   │   │   │   ├── forest-travel.js
-│   │   │   │   │   │   ├── health-save.js
 │   │   │   │   │   │   ├── health.js
+│   │   │   │   │   │   ├── health-save.js
 │   │   │   │   │   │   ├── heart-drops.js
 │   │   │   │   │   │   ├── inventory.js
 │   │   │   │   │   │   ├── loot.js
@@ -666,13 +664,13 @@ B2Folio/
 │   │   │   │   │   │   ├── save-state.js
 │   │   │   │   │   │   ├── save-validation.js
 │   │   │   │   │   │   ├── system-menu.js
+│   │   │   │   │   │   ├── tavern.js
 │   │   │   │   │   │   ├── tavern-conversations.js
 │   │   │   │   │   │   ├── tavern-guests.js
 │   │   │   │   │   │   ├── tavern-service.js
-│   │   │   │   │   │   ├── tavern.js
 │   │   │   │   │   │   ├── text.js
-│   │   │   │   │   │   ├── village-tasks.js
 │   │   │   │   │   │   ├── village.js
+│   │   │   │   │   │   ├── village-tasks.js
 │   │   │   │   │   │   ├── wanderers.js
 │   │   │   │   │   │   ├── weapon-timing.js
 │   │   │   │   │   │   ├── world-clock.js
@@ -689,10 +687,10 @@ B2Folio/
 │   │   │   │   └── panels.css
 │   │   │   ├── tests/
 │   │   │   │   ├── audio-calls.test.js
+│   │   │   │   ├── cartridge.test.js
 │   │   │   │   ├── cartridge-controller.test.js
 │   │   │   │   ├── cartridge-cover.test.js
 │   │   │   │   ├── cartridge-drag.test.js
-│   │   │   │   ├── cartridge.test.js
 │   │   │   │   ├── character-stock.test.js
 │   │   │   │   ├── daily-life.test.js
 │   │   │   │   ├── diagonal-movement.test.js
@@ -725,9 +723,9 @@ B2Folio/
 │   │   │   │   ├── touch-points.test.js
 │   │   │   │   ├── town.test.js
 │   │   │   │   ├── ux.test.js
+│   │   │   │   ├── village.test.js
 │   │   │   │   ├── village-houses.test.js
 │   │   │   │   ├── village-life.test.js
-│   │   │   │   ├── village.test.js
 │   │   │   │   └── world.test.js
 │   │   │   ├── vendor/
 │   │   │   │   └── three/
@@ -745,8 +743,8 @@ B2Folio/
 │   │   │   ├── CREDITS.md
 │   │   │   ├── DUNGEON_WANTED_GDD_v1_0.pdf
 │   │   │   ├── index.html
-│   │   │   ├── package-lock.json
 │   │   │   ├── package.json
+│   │   │   ├── package-lock.json
 │   │   │   └── README.md
 │   │   ├── brutalism/
 │   │   │   ├── assets/
@@ -760,12 +758,12 @@ B2Folio/
 │   │   │   │   │   ├── bars.svg
 │   │   │   │   │   ├── circle.svg
 │   │   │   │   │   ├── cross.svg
-│   │   │   │   │   ├── doodle-arrow-repeat.svg
 │   │   │   │   │   ├── doodle-arrow.svg
+│   │   │   │   │   ├── doodle-arrow-repeat.svg
 │   │   │   │   │   ├── subwoofer.svg
 │   │   │   │   │   ├── swirl.svg
-│   │   │   │   │   ├── wave-v2.svg
 │   │   │   │   │   ├── wave.svg
+│   │   │   │   │   ├── wave-v2.svg
 │   │   │   │   │   └── zick-zack.svg
 │   │   │   │   ├── fonts/
 │   │   │   │   │   ├── Anton/
@@ -804,7 +802,8 @@ B2Folio/
 │   │   │   │       ├── line-up-section.webp
 │   │   │   │       ├── location-section.webp
 │   │   │   │       └── meets-section.webp
-│   │   │   └── index.html
+│   │   │   ├── index.html
+│   │   │   └── README.md
 │   │   ├── ctrl-room/
 │   │   │   ├── assets/
 │   │   │   │   ├── album-cover.webp
@@ -834,10 +833,7 @@ B2Folio/
 │   │   ├── growth/
 │   │   │   ├── assets/
 │   │   │   │   └── preview.webp
-│   │   │   ├── scripts/
-│   ├── deploy-portfolio-local.cmd
-│   └── deploy-portfolio-server.sh
-├── src/
+│   │   │   ├── src/
 │   │   │   │   ├── config.js
 │   │   │   │   ├── debug.js
 │   │   │   │   ├── main.js
@@ -861,9 +857,9 @@ B2Folio/
 │   │   │   │   ├── nadin-portrait.webp
 │   │   │   │   ├── portrait-notes.md
 │   │   │   │   ├── preview.webp
+│   │   │   │   ├── SCOOP! – Comic-Eis-Shop mit Mix-Box.png
 │   │   │   │   ├── SCOOP! #U2013 Comic-Eis-Shop mit Mix-Box.png
 │   │   │   │   ├── Scoop! Eiscreme-Charaktere im Designboard-3.png
-│   │   │   │   ├── SCOOP! – Comic-Eis-Shop mit Mix-Box.png
 │   │   │   │   ├── scoop-logo.svg
 │   │   │   │   ├── scoops-complete.ai
 │   │   │   │   ├── strawlarry-cup.svg
@@ -905,8 +901,8 @@ B2Folio/
 │   │       │   ├── anton-regular.ttf
 │   │       │   ├── favicon.svg
 │   │       │   ├── noto-serif-cjk-jp-subset.woff2
-│   │       │   ├── OFL-NOTO.txt
 │   │       │   ├── OFL.txt
+│   │       │   ├── OFL-NOTO.txt
 │   │       │   ├── preview.svg
 │   │       │   ├── preview.webp
 │   │       │   └── type-break-manifesto.pdf
@@ -941,8 +937,8 @@ B2Folio/
 ├── angular.json
 ├── LICENSE
 ├── make-tree.ps1
-├── package-lock.json
 ├── package.json
+├── package-lock.json
 ├── README.md
 ├── tools.md
 ├── tree.txt

@@ -1,75 +1,42 @@
-# CTRL//ROOM
+# CTRL//ROOM — Digital Culture, Different Frequencies
 
-Eigenständige Design Study für B² Portfolio: Y2K / Cyber Interface / Digital Culture.
+[← Studienübersicht](../../../README.md#standalone-design-studies) · [Studie öffnen](https://b2folio.de/design-studies/ctrl-room/)
 
-## Starten
+Audiovisuelle Microsite zwischen elektronischer Musik, Y2K-Interface und digitaler Kultur. Die Studie verbindet ein fiktives Kulturarchiv mit einem tatsächlich bedienbaren Musikplayer.
 
-Den Ordner entpacken und `index.html` öffnen. Layout, Archiv und nativer Audioplayer funktionieren auch ohne Build.
+## Konzept und Gestaltung
 
-Für die echte Web-Audio-Visualisierung über einen lokalen HTTP-Server starten:
+Dunkle Flächen, Lime-Akzente, blaue Rahmen, technische Labels und Fensteroberflächen bilden das Interface. Music, Visuals, People und Places gliedern die Inhalte. Das fiktive Artist-Profil KATZKII und der Track „Midnight in the Lower Sector“ verbinden die Bereiche miteinander.
 
-```bash
-cd ctrl-room
-python -m http.server 8080
-```
+Künstler, Events, Archivdatensätze und Netzwerkzahlen sind als Design-Study-Inhalte gekennzeichnet. Es gibt keine reale Buchung, keinen Ticketverkauf und keine Live-Community.
 
-Dann `http://localhost:8080/` aufrufen. Unter `file://` bleibt die Analyse deaktiviert, um Einschränkungen bei lokalen Media-Quellen zu vermeiden. Der Track kann trotzdem abgespielt werden. Kein npm, keine Installation und keine externen Requests für Fonts, Skripte oder Assets nötig.
+## Interaktionen
 
-## Dateien
+- Ein gemeinsamer Audioplayer mit Play/Pause, Seeking, Lautstärke, Mute sowie Lade- und Fehlerzuständen.
+- Das Playerfenster lässt sich minimieren und in einem Dialog vergrößern. Dabei wird derselbe Player weiterverwendet; der Track startet nicht neu.
+- Equalizer und Waveform reagieren bei Wiedergabe auf echte Web-Audio-Analysedaten. Die illustrative Equalizer-Vorschau außerhalb der Wiedergabe ist davon getrennt.
+- Archiv mit 13 lokalen Datensätzen, kombinierbarer Kategorie-/Textsuche, Leerzustand und Detaildialog. `/` fokussiert die Suche außerhalb von Eingabefeldern.
+- Pointerreaktionen, endliche Klickwellen sowie Hover- und Fokusanimationen.
 
-- `index.html`: semantische Struktur, fünf Sections und Footer, Player, Navigation und natives Detaildialogfenster.
-- `styles.css`: Design-Tokens, Layout, Visual Layers, Zustände und Breakpoints.
-- `script.js`: gemeinsamer Audioplayer, Web-Audio-Analyse, Navigation, Reveal, Archivsuche, Filter und Details.
-- `assets/`: bereitgestellte Bilder, Logos, Texturen und Original-MP3. Die Asset-Dateinamen bleiben erhalten; das Favicon hat einen Lime-Hintergrund für Sichtbarkeit auf dunklen Browserflächen.
+Audio startet erst nach Nutzeraktion. Dialoge und mobiles Menü besitzen Escape-Bedienung und Fokusverwaltung. Reduced Motion deaktiviert die visuellen Bewegungen und die laufende Audiovisualisierung; Audio bleibt bedienbar. Dynamische Visualisierung ist auf höchstens 30 FPS begrenzt und berücksichtigt Sichtbarkeit und Tabzustand.
 
-## Funktionen
+## Technische Umsetzung
 
-- Hero mit Portrait, Playerfenster und verlinkter Demo-Eventliste. Der Titel hat keinen Hover-Effekt. Das Portrait reagiert auf den Mauszeiger mit kleiner Perspektivbewegung, Kontrast und einem einmaligen Scan.
-- Buttons: Lichtstreifen, versetzter blauer Rahmen und bewegte Icons/Pfeile bei Hover oder Fokus. Keine Endlosschleifen.
-- Klick auf nicht bedienbare Flächen: drei endliche Signalringe, maximal vier gleichzeitige Wellen; keine Wellen beim Bedienen von Buttons, Links oder Eingaben.
-- Music / Visuals / People / Places als codebasierte Module; ein Modul wählt seine Archivkategorie aus.
-- Places: einmaliger Standortwechsel Berlin → Hamburg → Cologne bei Hover oder Tastaturfokus, keine Endlosschleife.
-- Manifesto mit SVG-Demochart und klar gekennzeichneten Beispieldaten.
-- Artist-Profil mit Detaildialog und funktionierendem Release-Player.
-- 13 lokale Archivdatensätze; kombinierbare Kategorie- und Textsuche, Detaildialog, Leerzustand. `/` fokussiert die Suche außerhalb von Eingabefeldern.
-- Das kleine Playerfenster lässt sich auf die Titelleiste minimieren und in einem nativen Modal mit etwa 80vw × 80svh vergrößern. Im Overlay sind Seeking, Lautstärke, Mute und Playerstatus verfügbar. Escape, Hintergrundklick oder Restore stellen den ursprünglichen Zustand wieder her; Minimieren im Overlay kehrt zur eingeklappten Titelleiste zurück. Derselbe Player wird verschoben, der Track wird nicht neu gestartet.
-- Beide Play-Buttons steuern denselben Track. Play/Pause, Mute, Volume, Seeking, Laufzeit, Lade- und Fehlerzustände.
-- Equalizer und Waveform reagieren bei Wiedergabe auf echte Audiodaten. Ohne Wiedergabe animiert das Music-Modul eine illustrative Equalizer-Vorschau über transform. Diese läuft nur bei sichtbarem Modul und sichtbarem Tab. Bei echter Audioanalyse übernimmt der Analyser die Balken ohne zusätzliche CSS-Bewegung. Die Waveform bleibt ohne Wiedergabe statisch.
-- Audio startet ausschließlich durch Nutzeraktion. Die Datei wird nicht als Endlosschleife abgespielt.
-- Mobile Navigation: deckende Fläche, Scroll-Lock, Fokusbegrenzung, Escape, korrekte ARIA-Zustände und Fokuswechsel zur gewählten Section.
-- Detaildialog: nativer Modalzustand, Escape, Schließen über Hintergrund und Fokus-Rückgabe.
-- Die Texte in der rechten Archivspalte sind um etwa 20 % vergrößert. Footer-Texte sind mindestens 12 px (= 9 pt) groß.
-- Reduced Motion deaktiviert Reveals, Übergänge, Pointereffekte, Klickwellen und laufende Audiovisualisierung. Audio selbst bleibt bedienbar.
-- Kein globaler innerer Scrollcontainer. Die Archivtabelle kann bei kleinen Viewports innerhalb ihres eigenen Bereichs horizontal gescrollt werden; die Seite bleibt in der Breite begrenzt.
-- Maximal 1920 px, darüber zentriert. Breakpoints berücksichtigen 320 px. Dynamische Visualisierung maximal 30 FPS, nur in sichtbaren Bereichen und bei sichtbarem Tab.
-- Ohne JavaScript bleiben Ankernavigation, Inhalte und native Audiosteuerung erreichbar.
+| Bereich | Datei / Verzeichnis |
+| --- | --- |
+| Struktur, Player und native Dialoge | [index.html](index.html) |
+| Design-Tokens, Layout und Zustände | [styles.css](styles.css) |
+| Web Audio, Archiv, Navigation und Effekte | [script.js](script.js) |
+| Bilder, Logos, Texturen und MP3 | `assets/` |
 
-## Inhalte und Kennzeichnung
+HTML, CSS, SVG und Vanilla JavaScript; keine eigene Buildpipeline. Fonts, Skripte und Medien werden lokal geladen. Die Seite nutzt den normalen Body-Scroll; nur die Archivtabelle kann auf kleinen Displays innerhalb ihres Bereichs horizontal scrollen.
 
-Die englischen UI-Texte folgen dem mitgelieferten Entwurf. CTRL//ROOM, KATZKII, Archiveinträge, Events und Netzwerkzahlen sind fiktive Design-Study-Inhalte. Keine Buchung, kein Ticketverkauf, keine echte Live-Community.
+## Lokal entwickeln und integrieren
 
-Hero-, Artist- und Crowd-Fotografie tragen sichtbare `AI GENERATED IMAGE`-Labels. Der Track ist ebenfalls KI-generiert und wird in beiden Playerbereichen sowie im Musik-Datensatz gekennzeichnet. Der Footer erklärt die Bild- und Audio-Kennzeichnung. Das Albumcover wird als bereitgestelltes Artwork genutzt; es wurde für diese Umsetzung nicht neu generiert. Das Layout sowie Charts, Linien, Glitches und Farbflächen entstehen in HTML/CSS/SVG/JavaScript.
+Im Portfolio-Stamm `npm start` ausführen und `/design-studies/ctrl-room/` öffnen. Alternativ im Studienordner `python -m http.server 8080` und anschließend `http://localhost:8080/` starten.
 
-## Portfolio-Integration – separater Schritt
+Für die echte Web-Audio-Analyse ist HTTP zu verwenden. Unter `file://` bleibt die Analyse deaktiviert; der native Audioplayer kann weiterhin genutzt werden. Die Integration in die Angular-Asset-Kopie und die Portfolio-Übersicht ist bereits vorhanden.
 
-Die Study ist für einen Unterordner wie `src/design-studies/ctrl-room/` vorbereitet. Relative Asset-Pfade erlauben den Betrieb unter `/design-studies/ctrl-room/`. Keine eigene Buildpipeline und kein Router nötig.
+## Inhalte und Rechte
 
-Der B²-Portfolio-Quellcode lag für diese Lieferung nicht vor. `angular.json`, Portfolio-Section und Deploy-Skripte sind daher noch nicht geändert. Bei der Integration die bestehende Asset-Kopie und Deployment-Prüfung weiterverwenden.
-
-Rechtliche Links zeigen vorläufig auf `https://b2folio.de/impressum` und `https://b2folio.de/datenschutz`. Die endgültigen Routen einschließlich eventueller Hash-Routing-Konventionen anhand des echten B²-Projekts prüfen und übernehmen. Die Study nutzt `noindex, follow`.
-
-## Validierung
-
-JavaScript-Syntax, lokale Asset- und Ankerziele, HTML-Struktur, SVG-Dateien, Demo-Datensätze, Archivsuche/-filter, Player-Zustandslogik, Modalzustände, synchronisierte Player-Regler und Klickwellen-Logik werden vor Auslieferung geprüft. Quelltextdateien verwenden CRLF.
-
-Eine Browserprüfung von Layout, Touch-Verhalten, tatsächlicher Audioausgabe und Web-Audio-Analyse war in der Arbeitsumgebung nicht verfügbar. Diese Punkte im lokalen Browser prüfen; die Breakpoint-Regeln sind implementiert, aber nicht als auf Geräten getestet ausgewiesen.
-
-## Commit nach Portfolio-Integration
-
-```bash
-git add src/design-studies/ctrl-room
-git commit -m "feat(design-studies): add CTRL ROOM audiovisual study"
-git push
-```
-
-Geänderte Integrationsdateien zusätzlich gezielt zu `git add` nehmen.
+Fotografische Motive und Audiotrack sind als KI-generiert gekennzeichnet. Das Albumcover wird als bereitgestelltes Artwork verwendet. Interface, Charts, Linien und Farbflächen entstehen im Code. Eigene Beiträge unterliegen der [Portfolio-Lizenz](../../../LICENSE); mitgelieferte Fremdrechte bleiben unberührt.

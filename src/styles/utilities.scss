@@ -628,6 +628,16 @@ html[data-motion='reduced']::before {
   }
 }
 
+.bp-reveal--instant,
+.bp-reveal--instant .bp-stagger-item,
+.bp-reveal--instant.bp-motion-copy > *:not(bp-reveal-text) {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  animation: none;
+  transition: none;
+}
+
 .project-detail :is(.project-detail__copy, .project-detail__section-head, .project-detail__demo-panel, .project-detail__highlights, .project-detail__character-copy, .project-detail__blood-guide-copy, .project-detail__runner-panel > div, .project-detail__catalog-reader-head) h2 {
   position: relative;
   display: inline-block;

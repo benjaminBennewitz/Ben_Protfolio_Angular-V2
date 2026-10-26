@@ -25,6 +25,10 @@ folio/
 │   │   │       ├── experience-gate.service.ts
 │   │   │       ├── global-overlay.service.ts
 │   │   │       ├── language.service.ts
+│   │   │       ├── reveal-observer.service.spec.ts
+│   │   │       ├── reveal-observer.service.ts
+│   │   │       ├── route-scroll.service.spec.ts
+│   │   │       ├── route-scroll.service.ts
 │   │   │       ├── seo.service.ts
 │   │   │       ├── system-toast.service.ts
 │   │   │       ├── tab-title.service.ts
@@ -191,6 +195,7 @@ folio/
 │   │   │   ├── reveal-text/
 │   │   │   │   ├── reveal-text.component.html
 │   │   │   │   ├── reveal-text.component.scss
+│   │   │   │   ├── reveal-text.component.spec.ts
 │   │   │   │   └── reveal-text.component.ts
 │   │   │   ├── system-dialog/
 │   │   │   │   ├── system-dialog.component.html

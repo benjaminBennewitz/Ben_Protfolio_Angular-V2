@@ -61,7 +61,8 @@
    03   Dokument
    ========================================================================== */
 
-html.bp-initial-scroll-reset {
+html.bp-initial-scroll-reset,
+html.bp-route-scroll-reset {
   scroll-behavior: auto !important;
   scroll-snap-type: none !important;
 }

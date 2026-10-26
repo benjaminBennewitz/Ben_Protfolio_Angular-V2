@@ -9,6 +9,7 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
+import { RouteScrollService } from './core/services/route-scroll.service';
 import { ExperienceGateService } from './core/services/experience-gate.service';
 import { AppRuntimeComponent } from './layout/app-runtime/app-runtime.component';
 import { AccessibilityPanelComponent } from './layout/accessibility-panel/accessibility-panel.component';
@@ -66,6 +67,7 @@ export class AppComponent {
 
   /** Initialisiert ausschließlich die leichte route-spezifische Layoutsynchronisierung. */
   constructor() {
+    inject(RouteScrollService);
     this.syncRouteLayout();
 
     this.router.events

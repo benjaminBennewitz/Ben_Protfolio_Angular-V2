@@ -23,6 +23,7 @@
    02   Word Reveal
    03   Hero Variante
    04   Animationen
+   05   Übersprungene Inhalte
    ========================================================================== */
 
 /* ==========================================================================
@@ -106,12 +107,10 @@
 
 .reveal--visible .reveal__word::before {
   animation: reveal-slice 760ms var(--bp-ease-out) forwards;
-  animation-delay: calc(var(--delay) * 1ms);
 }
 
 .reveal--visible .reveal__word span {
   animation: reveal-word 760ms var(--bp-ease-out) forwards;
-  animation-delay: calc((var(--delay) + 90) * 1ms);
 }
 
 .reveal__title--section {
@@ -156,4 +155,21 @@
     opacity: 1;
     transform: translate3d(0, 0, 0) skewY(0deg);
   }
+}
+
+/* ==========================================================================
+   05   Übersprungene Inhalte
+   ========================================================================== */
+
+.reveal--instant .bp-eyebrow,
+.reveal--instant .reveal__word span {
+  opacity: 1;
+  transform: none;
+  animation: none;
+  transition: none;
+}
+
+.reveal--instant .reveal__word::before {
+  display: none;
+  animation: none;
 }

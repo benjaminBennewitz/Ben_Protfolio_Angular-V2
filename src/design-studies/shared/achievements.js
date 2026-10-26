@@ -1,77 +1,133 @@
-/** @file Kleine, gemeinsame DLC-Benachrichtigung der eigenständigen Studien. */
+/** @file Bindet das bestehende Portfolio-Trophy-Popup in eigenständige Studien ein. */
 import { STUDY_ACHIEVEMENTS } from './achievement-catalog.js';
 import { STUDY_STORAGE_PREFIX, unlockStudyAchievement } from './achievement-progress.js';
 
 const queue = [];
 let current = null;
 let timer = null;
+let nextTimer = null;
+let host = null;
+let shadow = null;
 let layer = null;
-let dialog = null;
 let previousFocus = null;
-let language = 'de';
-try { language = localStorage.getItem('bp-language') === 'en' ? 'en' : 'de'; } catch { /* Standardsprache beibehalten. */ }
+let ready = null;
+let preparing = false;
 
-/** Verwendet die Top-Layer nur ohne Modalität: Spiel und Tastatur bleiben bedienbar. */
+/** Liest Portfolio-Einstellungen auch dann sicher, wenn der Browser Speicher blockiert. */
+function setting(key) {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+
+/** Übernimmt Sprache, Theme und Motion-Einstellung des Portfolios. */
+function syncPreferences() {
+  if (!host) return;
+  const theme = setting('bp-theme');
+  host.dataset.theme = theme === 'light' || theme === 'dark' ? theme : matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  host.style.colorScheme = host.dataset.theme;
+  let reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  try {
+    const preferences = JSON.parse(setting('bp-accessibility-preferences-v1') || 'null');
+    reduced ||= Boolean(preferences && (preferences.motion !== 'full' || preferences.comfort === 'simple'));
+  } catch { /* Bei unvollständigen Einstellungen gilt die Browserpräferenz. */ }
+  layer.toggleAttribute('data-reduced-motion', reduced);
+}
+
+/** Lädt dieselben lokalen Schriftdateien wie das bisherige Portfolio-Popup. */
+function loadFont(family, file, descriptors = {}) {
+  const url = new URL('../../assets/fonts/' + file, import.meta.url);
+  const face = new FontFace(family, `url("${url.href}")`, descriptors);
+  return face.load().then(font => document.fonts.add(font)).catch(() => undefined);
+}
+
+/** Erstellt dieselbe Kartenstruktur; Shadow DOM schützt sie vor fremden Studien-Styles. */
 function prepareToast() {
-  if (layer) return;
+  if (ready) return ready;
+  host = document.createElement('div');
+  host.style.cssText = 'all:initial;position:fixed;inset:0;margin:0;padding:0;border:0;z-index:98;pointer-events:none;display:none';
+  if ('showPopover' in host) host.setAttribute('popover', 'manual');
+  shadow = host.attachShadow({ mode: 'open' });
   const css = document.createElement('link');
   css.rel = 'stylesheet';
   css.href = new URL('./achievements.css', import.meta.url).href;
-  document.head.append(css);
+  const styled = new Promise(resolve => { css.onload = resolve; css.onerror = resolve; });
+  shadow.append(css);
   layer = document.createElement('div');
-  layer.className = 'bp-study-trophy-live';
-  layer.setAttribute('role', 'status');
+  layer.className = 'achievement-toast-layer';
   layer.setAttribute('aria-live', 'polite');
   layer.setAttribute('aria-atomic', 'true');
-  document.body.append(layer);
-  dialog = document.createElement('aside');
-  dialog.className = 'bp-study-trophy';
-  if ('showPopover' in dialog) dialog.setAttribute('popover', 'manual');
+  const toast = document.createElement('section');
+  toast.className = 'achievement-toast bp-card';
+  toast.setAttribute('role', 'status');
+  const icon = document.createElement('div');
+  icon.className = 'achievement-toast__icon';
+  icon.setAttribute('aria-hidden', 'true');
+  const symbol = document.createElement('span');
+  symbol.className = 'material-symbols-outlined';
+  symbol.textContent = 'emoji_events';
+  icon.append(symbol);
   const copy = document.createElement('div');
-  const label = document.createElement('p');
-  label.textContent = language === 'de' ? 'Design Studies · DLC — Trophäe freigeschaltet' : 'Design Studies · DLC — Trophy unlocked';
-  copy.append(label, document.createElement('h2'), document.createElement('span'));
+  copy.className = 'achievement-toast__copy';
+  copy.append(document.createElement('p'), document.createElement('h2'), document.createElement('span'));
   const close = document.createElement('button');
   close.type = 'button';
-  close.textContent = '×';
-  close.setAttribute('aria-label', language === 'de' ? 'Benachrichtigung schließen' : 'Close notification');
+  const closeIcon = document.createElement('span');
+  closeIcon.className = 'material-symbols-outlined';
+  closeIcon.setAttribute('aria-hidden', 'true');
+  closeIcon.textContent = 'close';
+  close.append(closeIcon);
   close.addEventListener('click', dismiss);
-  dialog.append(copy, close);
-  document.body.append(dialog);
+  toast.append(icon, copy, close);
+  layer.append(toast);
+  shadow.append(layer);
+  document.body.append(host);
+  ready = Promise.all([
+    styled,
+    loadFont('Material Symbols Outlined', 'material-symbols-portfolio.woff2', { weight: '100 700' }),
+    loadFont('Inter', 'inter-variable.woff2', { weight: '100 900' }),
+    loadFont('JetBrains Mono', 'jetbrains-mono-variable.woff2', { weight: '100 800' }),
+  ]);
+  return ready;
 }
 
-/** Zeigt jeden Erfolg einmal und wartet bei Hintergrund-Tabs auf die Rückkehr. */
-function next() {
-  if (current || !queue.length || document.hidden) return;
-  try { language = localStorage.getItem('bp-language') === 'en' ? 'en' : 'de'; } catch { /* Bisherige Sprache beibehalten. */ }
-  prepareToast();
-  dialog.querySelector('p').textContent = language === 'de' ? 'Design Studies · DLC — Trophäe freigeschaltet' : 'Design Studies · DLC — Trophy unlocked';
-  dialog.querySelector('button').setAttribute('aria-label', language === 'de' ? 'Benachrichtigung schließen' : 'Close notification');
+/** Bewahrt Beschriftung, Position, Einblendung und Anzeigedauer des bisherigen Popups. */
+async function next() {
+  if (current || preparing || !queue.length || document.hidden) return;
+  preparing = true;
+  await prepareToast();
+  preparing = false;
+  if (!queue.length || document.hidden) return;
   current = queue.shift();
+  const language = setting('bp-language') === 'en' ? 'en' : 'de';
   const text = current[language];
-  dialog.querySelector('h2').textContent = text.title;
-  dialog.querySelector('span').textContent = text.description;
-  layer.textContent = `${language === 'de' ? 'Trophäe freigeschaltet' : 'Trophy unlocked'}: ${text.title}. ${text.description}`;
+  syncPreferences();
+  const copy = shadow.querySelector('.achievement-toast__copy');
+  copy.querySelector('p').textContent = language === 'de' ? 'trophäe freigeschaltet' : 'achievement unlocked';
+  copy.querySelector('h2').textContent = text.title;
+  copy.querySelector('span').textContent = text.description;
+  shadow.querySelector('button').setAttribute('aria-label', language === 'de' ? 'Achievement-Notification schließen' : 'Close achievement notification');
   previousFocus = document.activeElement;
-  dialog.hidden = false;
-  dialog.showPopover?.();
-  /** Popover darf weder Canvas-Steuerung noch ein geöffnetes Dialogfeld unfokussieren. */
+  host.style.display = 'block';
+  host.showPopover?.();
   if (document.activeElement !== previousFocus && previousFocus instanceof HTMLElement) previousFocus.focus({ preventScroll: true });
-  timer = setTimeout(dismiss, 6000);
+  timer = setTimeout(dismiss, 4200);
 }
 
-/** Räumt den Hinweis auf und lässt den nächsten Erfolg aus der Warteschlange folgen. */
+/** Schließt ohne Fokusverlust und plant die nächste Trophäe wie im Hauptsystem. */
 function dismiss() {
   clearTimeout(timer);
-  if (dialog) {
-    const hadFocus = dialog.contains(document.activeElement);
-    dialog.hidePopover?.();
-    dialog.hidden = true;
+  clearTimeout(nextTimer);
+  if (host) {
+    const hadFocus = shadow.activeElement !== null;
+    host.hidePopover?.();
+    host.style.display = 'none';
     if (hadFocus && previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus({ preventScroll: true });
   }
   current = null;
-  setTimeout(next, 180);
+  nextTimer = setTimeout(next, 160);
 }
+
+/** Entfernt wartende Hinweise, wenn der Fortschritt zurückgesetzt wurde. */
+function reset() { queue.length = 0; dismiss(); }
 
 document.addEventListener('bp:study-achievement', event => unlockStudyAchievement(event.detail));
 document.addEventListener('bp:study-unlocked', event => {
@@ -79,5 +135,9 @@ document.addEventListener('bp:study-unlocked', event => {
   if (trophy) { queue.push(trophy); next(); }
 });
 document.addEventListener('visibilitychange', next);
-document.addEventListener('bp:study-reset', () => { queue.length = 0; dismiss(); });
-window.addEventListener('storage', event => { if (event.key === null || (event.key.startsWith(STUDY_STORAGE_PREFIX) && event.newValue === null)) { queue.length = 0; dismiss(); } });
+document.addEventListener('bp:study-reset', reset);
+window.addEventListener('focus', syncPreferences);
+window.addEventListener('storage', event => {
+  if (event.key === null || (event.key.startsWith(STUDY_STORAGE_PREFIX) && event.newValue === null)) reset();
+  if (event.key === null || event.key === 'bp-theme' || event.key === 'bp-accessibility-preferences-v1') syncPreferences();
+});

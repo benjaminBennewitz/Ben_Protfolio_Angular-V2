@@ -1,29 +1,277 @@
-/* Gemeinsame DLC-Karte; eigene Namen verhindern Eingriffe in die Studien-Styles. */
-.bp-study-trophy {
-  all: initial;
-  box-sizing: border-box;
+/*###############################
+###
+###     achievements.css (gemeinsames Portfolio-Trophy-Design)
+###     Portfolio App
+###     BASED ON: Angular 21.02.0, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Layer
+   02   Toast
+   03   Responsive
+   ========================================================================== */
+
+/* ========================================================================== 
+   01   Layer
+   ========================================================================== */
+
+.achievement-toast-layer {
+  font-family: var(--bp-font-body, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-size: 16px;
+  color: var(--bp-color-text, light-dark(#101010, #f6f0e8));
   position: fixed;
-  inset: auto 20px 20px auto;
-  z-index: 2147483647;
-  display: flex;
-  align-items: start;
-  gap: 18px;
-  width: min(420px, calc(100vw - 32px));
-  margin: 0;
-  border: 2px solid #b9f33d;
-  padding: 20px;
-  background: #121611;
-  color: #f6f8f1;
-  box-shadow: 6px 6px 0 #0008;
-  font: 14px/1.5 ui-monospace, monospace;
-  color-scheme: dark;
+  z-index: calc(var(--bp-z-loader, 100) - 2);
+  top: calc(var(--bp-header-height, 76px) + 0.7rem);
+  right: clamp(0.8rem, 2vw, 1.25rem);
+  width: min(90vw, 390px);
+  pointer-events: none;
 }
-.bp-study-trophy[hidden] { display: none; }
-.bp-study-trophy p { margin: 0 0 8px; color: #b9f33d; font: 700 10px/1.5 ui-monospace, monospace; text-transform: uppercase; letter-spacing: .06em; }
-.bp-study-trophy h2 { margin: 0 0 8px; color: #f6f8f1; font: 700 20px/1.2 ui-monospace, monospace; letter-spacing: -.03em; text-transform: none; }
-.bp-study-trophy span { color: #d4dccc; font: 13px/1.5 ui-monospace, monospace; }
-.bp-study-trophy button { all: unset; display: grid; place-items: center; flex: 0 0 32px; min-height: 32px; color: #f6f8f1; font: 24px/1 ui-monospace, monospace; cursor: pointer; }
-.bp-study-trophy button:hover { background: #b9f33d; color: #121611; }
-.bp-study-trophy button:focus-visible { outline: 2px solid #b9f33d; outline-offset: 3px; }
-.bp-study-trophy-live { position: fixed; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-@media (max-width: 600px) { .bp-study-trophy { inset: max(12px, env(safe-area-inset-top)) 16px auto auto; padding: 16px; } }
+
+/* ========================================================================== 
+   02   Toast
+   ========================================================================== */
+
+.achievement-toast {
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--bp-color-border, light-dark(rgba(17, 17, 17, .24), rgba(246, 240, 232, .18)));
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.72rem 0.82rem;
+  background: color-mix(in srgb, var(--bp-color-surface-solid, light-dark(#fffdf8, #17171c)) 94%, transparent);
+  backdrop-filter: blur(14px);
+  border-color: color-mix(in srgb, var(--bp-color-accent, light-dark(#005cff, #a7ff19)) 54%, var(--bp-color-border, light-dark(rgba(17, 17, 17, 0.24), rgba(246, 240, 232, 0.18))));
+  box-shadow: 0 18px 54px var(--bp-color-shadow, light-dark(rgba(31, 23, 14, 0.18), rgba(0, 0, 0, 0.52))), 8px 8px 0 color-mix(in srgb, var(--bp-color-accent, light-dark(#005cff, #a7ff19)) 16%, transparent);
+  pointer-events: auto;
+  animation: achievement-toast-in 340ms var(--bp-ease-pop, cubic-bezier(0.18, 0.89, 0.32, 1.28));
+}
+
+.achievement-toast__icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border: 1px solid var(--bp-color-border-strong, light-dark(rgba(17, 17, 17, 0.48), rgba(246, 240, 232, 0.34)));
+  background: color-mix(in srgb, var(--bp-color-accent, light-dark(#005cff, #a7ff19)) 18%, var(--bp-color-surface-strong, light-dark(#eee2cf, #22222a)));
+  color: var(--bp-color-accent, light-dark(#005cff, #a7ff19));
+}
+
+.achievement-toast__icon .material-symbols-outlined {
+  font-size: 1.55rem;
+  font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 48;
+}
+
+.achievement-toast__copy {
+  display: grid;
+  gap: 0.12rem;
+}
+
+.achievement-toast__copy p,
+.achievement-toast__copy h2,
+.achievement-toast__copy span {
+  margin: 0;
+}
+
+.achievement-toast__copy p {
+  color: var(--bp-color-accent, light-dark(#005cff, #a7ff19));
+  font-family: var(--bp-font-mono, 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace);
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.achievement-toast__copy h2 {
+  font-family: var(--bp-font-display, 'Arial Black', 'Impact', system-ui, sans-serif);
+  font-size: clamp(0.98rem, 3vw, 1.35rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.achievement-toast__copy span {
+  color: var(--bp-color-text-muted, light-dark(#342d26, #b8b0a7));
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.achievement-toast button {
+  box-sizing: border-box;
+  padding: 0;
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  line-height: 1;
+  border: 1px solid var(--bp-color-border, light-dark(rgba(17, 17, 17, 0.24), rgba(246, 240, 232, 0.18)));
+  background: var(--bp-color-surface-strong, light-dark(#eee2cf, #22222a));
+  color: var(--bp-color-on-surface-strong, light-dark(#101010, #f6f0e8));
+  cursor: pointer;
+  transition: transform 180ms var(--bp-ease-out, cubic-bezier(0.22, 1, 0.36, 1)), background-color 180ms ease, color 180ms ease;
+}
+
+.achievement-toast button .material-symbols-outlined {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  font-size: 1.08rem;
+  line-height: 1;
+}
+
+.achievement-toast button:hover {
+  transform: translateY(-1px);
+  background: var(--bp-color-danger, light-dark(#bd1238, #ff2d55));
+  color: var(--bp-color-on-danger, light-dark(#ffffff, #000000));
+}
+
+@keyframes achievement-toast-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -18px, 0) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* ========================================================================== 
+   03   Responsive
+   ========================================================================== */
+
+@media (max-width: 560px) {
+  .achievement-toast-layer {
+    right: 0.6rem;
+    width: calc(100vw - 1.2rem);
+  }
+
+  .achievement-toast {
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    gap: 0.65rem;
+  }
+
+  .achievement-toast__icon {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .achievement-toast {
+    animation-duration: 0.001ms;
+  }
+}
+
+/* ========================================================================== 
+   04   Arcade-Tech
+   ========================================================================== */
+
+.achievement-toast {
+  position: relative;
+  border-width: 2px;
+  background: color-mix(in srgb, var(--bp-color-surface-solid, light-dark(#fffdf8, #17171c)) 96%, transparent);
+  box-shadow:
+    8px 8px 0 color-mix(in srgb, var(--bp-color-accent, light-dark(#005cff, #a7ff19)) 28%, transparent),
+    12px 12px 0 color-mix(in srgb, #000000 18%, transparent),
+    0 18px 54px var(--bp-color-shadow, light-dark(rgba(31, 23, 14, 0.18), rgba(0, 0, 0, 0.52)));
+  backdrop-filter: blur(8px);
+  animation: achievement-toast-in 300ms steps(5, end) both;
+}
+
+.achievement-toast::before {
+  position: absolute;
+  top: -2px;
+  left: 58px;
+  width: 28%;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--bp-color-accent, light-dark(#005cff, #a7ff19)) 0 8px, transparent 8px 12px);
+  pointer-events: none;
+  content: '';
+}
+
+.achievement-toast::after {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background-image:
+    linear-gradient(var(--bp-arcade-grid, light-dark(rgba(16, 16, 16, 0.08), rgba(246, 240, 232, 0.08))) 1px, transparent 1px),
+    linear-gradient(90deg, var(--bp-arcade-grid, light-dark(rgba(16, 16, 16, 0.08), rgba(246, 240, 232, 0.08))) 1px, transparent 1px);
+  background-size: 8px 8px;
+  pointer-events: none;
+  content: '';
+}
+
+.achievement-toast__icon,
+.achievement-toast__copy,
+.achievement-toast button {
+  position: relative;
+  z-index: 1;
+}
+
+.achievement-toast__icon {
+  border-width: 2px;
+  box-shadow: 3px 3px 0 color-mix(in srgb, var(--bp-color-accent, light-dark(#005cff, #a7ff19)) 30%, transparent);
+}
+
+.achievement-toast__copy p,
+.achievement-toast__copy h2 {
+  font-family: var(--bp-font-system, Consolas, 'Cascadia Mono', 'JetBrains Mono', 'Courier New', ui-monospace, monospace);
+}
+
+.achievement-toast__copy h2 {
+  letter-spacing: 0.025em;
+}
+
+.achievement-toast button {
+  border-width: 2px;
+  box-shadow: 2px 2px 0 color-mix(in srgb, var(--bp-color-border-strong, light-dark(rgba(17, 17, 17, 0.48), rgba(246, 240, 232, 0.34))) 46%, transparent);
+  transition: transform 120ms var(--bp-ease-step, steps(4, end)), background-color 120ms var(--bp-ease-step, steps(4, end)), color 120ms var(--bp-ease-step, steps(4, end)), box-shadow 120ms var(--bp-ease-step, steps(4, end));
+}
+
+.achievement-toast button:hover,
+.achievement-toast button:focus-visible {
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--bp-color-danger, light-dark(#bd1238, #ff2d55)) 32%, transparent);
+  transform: translate(-1px, -1px);
+}
+
+.achievement-toast-layer *,
+.achievement-toast-layer *::before,
+.achievement-toast-layer *::after {
+  box-sizing: border-box;
+}
+
+.achievement-toast .material-symbols-outlined {
+  direction: ltr;
+  font-family: 'Material Symbols Outlined';
+  font-feature-settings: 'liga';
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .achievement-toast { animation: none; }
+}
+
+.achievement-toast-layer[data-reduced-motion] .achievement-toast { animation: none; }
+
+.achievement-toast button:focus-visible {
+  outline: var(--bp-focus-ring-width, 3px) solid var(--bp-focus-ring-color, var(--bp-color-accent, light-dark(#005cff, #a7ff19)));
+  outline-offset: var(--bp-focus-ring-offset, 4px);
+}
+
+@media (max-width: 360px) {
+  .achievement-toast-layer { top: calc(var(--bp-header-height, 68px) + 0.7rem); }
+}

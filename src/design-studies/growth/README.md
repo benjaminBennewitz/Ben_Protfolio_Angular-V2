@@ -2,13 +2,23 @@
 
 [← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/growth/)
 
-A procedural tree experience with a camera ascent from underground roots through the trunk to the canopy and beyond. Upward scrolling becomes a journey through a connected habitat.
+A theme-led technical study exploring how a tree and its habitats can become an explorable 3D web experience. The subject determines the spatial journey; procedural modeling, camera work, and rendering are the main implementation challenge.
 
 > [!NOTE]
-> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
+> This is a non-commercial, experimental study in graphic design and web development, created for personal learning. It is not a production product or a commercial service. Its specific design and technical objectives are described below. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
 
 > [!IMPORTANT]
 > The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
+
+## Intent and learning focus
+
+**Primary focus: interpreting a specific theme through interactive 3D.**
+
+The starting point is the tree as a connected living environment, from underground roots to the canopy and atmosphere. The question is how that subject can be experienced spatially in a browser rather than presented only through photographs, diagrams, or a sequence of flat sections.
+
+The theme determines the structure: upward movement becomes an ascent, height becomes a navigation principle, and different habitats become stages of the journey. Vegetation, water, fog, light, and explanatory markers help relate the technical scene to the subject.
+
+The main learning challenge is technical: building a convincing procedural world, composing a continuous camera route, and connecting 3D positions with readable HTML annotations. Typography, color, and the expedition-like HUD support that interpretation. The study does not begin by translating a named historical graphic-design style.
 
 ## Concept and visual direction
 
@@ -54,3 +64,5 @@ Reduced-motion preferences skip camera interpolation and freeze water and atmosp
 The study is served at `/design-studies/growth/`. Angular publishes the standalone files. Three.js is loaded from a CDN; Barlow Condensed, DM Sans, and DM Mono are shared local portfolio fonts under `/assets/fonts/studies/`. There is no Google Fonts request.
 
 Original generators, design, and content are covered by the portfolio license. Three.js and the fonts retain their own terms.
+
+The tree and environment are generated procedurally with Three.js and Canvas. This is code-generated scene content, not AI-generated forest photography. The portfolio preview is a screenshot of the rendered scene.

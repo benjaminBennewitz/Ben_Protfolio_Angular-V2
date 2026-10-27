@@ -166,7 +166,7 @@
   function drawWave(realData = false) {
     if (!canvasContext) return;
     canvasContext.clearRect(0, 0, canvasWidth, canvasHeight);
-    canvasContext.strokeStyle = audio.muted ? "#8b9589" : "#d2ff3b";
+    canvasContext.strokeStyle = audio.muted ? "#8199bb" : "#91caff";
     canvasContext.lineWidth = 1;
     canvasContext.beginPath();
     const points = realData ? timeData.length : 120;
@@ -464,39 +464,54 @@
   document.addEventListener("click", createSignalRipple);
 
   const hero = select(".hero");
-  const portrait = select(".hero-portrait");
-  let portraitFrame = 0;
-  let portraitPointer = null;
+  let heroFrame = 0;
+  let heroPointer = null;
+  let heroVisible = true;
 
-  /** Aktualisiert die Bildreaktion maximal einmal pro Renderframe. */
-  function updatePortraitHover() {
-    portraitFrame = 0;
-    if (!portraitPointer || motionPreference.matches) return;
-    const rect = portrait.getBoundingClientRect();
-    const { x, y, interactive } = portraitPointer;
-    const overPortrait = !interactive && x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
-    portrait.classList.toggle("is-hovered", overPortrait);
-    if (overPortrait) {
-      portrait.style.setProperty("--portrait-x", `${(x - rect.left) / rect.width * 8 - 4}px`);
-      portrait.style.setProperty("--portrait-y", `${(y - rect.top) / rect.height * 8 - 4}px`);
+  /** Bündelt Pointer- und Scrollreaktionen in einem Frame für alle Hero-Ebenen. */
+  function updateHeroLayers() {
+    heroFrame = 0;
+    if (!heroVisible || document.hidden || motionPreference.matches) return;
+    const rect = hero.getBoundingClientRect();
+    const x = heroPointer ? Math.max(-1, Math.min(1, (heroPointer.x - rect.left) / rect.width * 2 - 1)) : 0;
+    const y = heroPointer ? Math.max(-1, Math.min(1, (heroPointer.y - rect.top) / rect.height * 2 - 1)) : 0;
+    const scroll = Math.max(0, Math.min(rect.height, -rect.top));
+    hero.style.setProperty("--hero-x", `${x * 14}px`);
+    hero.style.setProperty("--hero-y", `${y * 10}px`);
+    hero.style.setProperty("--hero-scroll", `${scroll}px`);
+  }
+
+  /** Plant nur bei sichtbarem Hero und erlaubter Bewegung einen Renderframe. */
+  function requestHeroFrame() {
+    if (!heroFrame && heroVisible && !document.hidden && !motionPreference.matches) {
+      heroFrame = requestAnimationFrame(updateHeroLayers);
     }
   }
 
-  /** Entfernt offene Bildreaktionen und ausstehende Pointer-Frames. */
-  function resetPortraitHover() {
-    cancelAnimationFrame(portraitFrame);
-    portraitFrame = 0;
-    portraitPointer = null;
-    portrait.classList.remove("is-hovered");
-    portrait.style.removeProperty("--portrait-x");
-    portrait.style.removeProperty("--portrait-y");
+  /** Stoppt ausstehende Frames und stellt die statische Komposition wieder her. */
+  function resetHeroLayers() {
+    cancelAnimationFrame(heroFrame);
+    heroFrame = 0;
+    heroPointer = null;
+    ["--hero-x", "--hero-y", "--hero-scroll"].forEach(property => hero.style.removeProperty(property));
   }
   hero.addEventListener("pointermove", event => {
-    if (event.pointerType !== "mouse" || motionPreference.matches) return;
-    portraitPointer = { x: event.clientX, y: event.clientY, interactive: Boolean(event.target.closest("a, button, input")) };
-    if (!portraitFrame) portraitFrame = requestAnimationFrame(updatePortraitHover);
+    if (event.pointerType !== "mouse") return;
+    heroPointer = event.target.closest("a, button, input") ? null : { x: event.clientX, y: event.clientY };
+    requestHeroFrame();
   });
-  hero.addEventListener("pointerleave", resetPortraitHover);
+  hero.addEventListener("pointerleave", () => { heroPointer = null; requestHeroFrame(); });
+  window.addEventListener("scroll", requestHeroFrame, { passive: true });
+  window.addEventListener("resize", requestHeroFrame);
+  if ("IntersectionObserver" in window) {
+    const heroObserver = new IntersectionObserver(entries => {
+      heroVisible = entries[0].isIntersecting;
+      if (heroVisible) requestHeroFrame();
+      else { cancelAnimationFrame(heroFrame); heroFrame = 0; }
+    });
+    heroObserver.observe(hero);
+  }
+  requestHeroFrame();
 
   if ("IntersectionObserver" in window) {
     const visibilityObserver = new IntersectionObserver(entries => {
@@ -542,18 +557,18 @@
     document.body.classList.toggle("page-hidden", document.hidden);
     if (document.hidden) {
       stopVisualization();
-      resetPortraitHover();
+      resetHeroLayers();
       interactionLayer.replaceChildren();
     }
-    else startVisualization();
+    else { startVisualization(); requestHeroFrame(); }
   });
   motionPreference.addEventListener("change", () => {
     if (motionPreference.matches) {
       stopVisualization();
-      resetPortraitHover();
+      resetHeroLayers();
       interactionLayer.replaceChildren();
       selectAll(".reveal.is-pending").forEach(element => element.classList.remove("is-pending"));
-    } else startVisualization();
+    } else { startVisualization(); requestHeroFrame(); }
   });
 
   audio.volume = .55;

@@ -2,13 +2,23 @@
 
 [← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/fold/)
 
-An experimental 3D experience about changing perspectives. Six designed faces form a shared cube that can be explored through scrolling or swiping, then unfolded into a connected net.
+A technical study in spatial web composition, camera movement, and connected folding behavior. Six HTML faces form one 3D object; the visual theme of changing perspectives gives the implementation a narrative.
 
 > [!NOTE]
-> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
+> This is a non-commercial, experimental study in graphic design and web development, created for personal learning. It is not a production product or a commercial service. Its specific design and technical objectives are described below. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
 
 > [!IMPORTANT]
 > The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
+
+## Intent and learning focus
+
+**Primary focus: implementing a connected spatial interaction in the browser.**
+
+The central question is how six designed web panels can behave as faces of one object: the viewpoint changes, the panels remain spatially related, and the same object eventually unfolds into a connected net.
+
+The main challenge is technical. Camera orientation, quaternion interpolation, hinge hierarchies, scroll progress, and deliberate mobile gestures must produce one continuous and understandable transition. The final unfolding is part of the same geometry and interaction model, rather than a separate replacement scene.
+
+The editorial statements, color, and typography make those spatial relationships legible and give the movement a theme. They support the experiment; the starting point is the interaction and its 3D implementation, not the translation of an established graphic-design style.
 
 ## Concept and visual direction
 
@@ -50,3 +60,5 @@ The folding system uses flat panels and predefined hinges. Elastic paper bending
 The study is served at `/design-studies/fold/` through Angular's asset configuration. Fonts are shared portfolio assets under `/assets/fonts/studies/`. The CDN modules require a network connection.
 
 Original design and implementation are by Benjamin Bennewitz / B². Three.js and the fonts retain their own terms.
+
+The visible cube faces and folding composition are rendered from HTML and CSS3D transforms. Procedural presentation and animation are distinct from AI-generated imagery; the active experience does not use a generated video to simulate its folding sequence.

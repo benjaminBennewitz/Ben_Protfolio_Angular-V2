@@ -2,13 +2,23 @@
 
 [← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/swiss/)
 
-A photography journal inspired by the Swiss / International Typographic Style. Benjamin Bennewitz's photographs are presented through a restrained editorial system.
+A graphic-design-led study translating Swiss / International Typographic Style into a responsive photographic journal. Benjamin Bennewitz's own photographs supply the content; the central experiment is the editorial system that presents them.
 
 > [!NOTE]
-> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
+> This is a non-commercial, experimental study in graphic design and web development, created for personal learning. It is not a production product or a commercial service. Its specific design and technical objectives are described below. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
 
 > [!IMPORTANT]
 > The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
+
+## Intent and learning focus
+
+**Primary focus: graphic design — translating Swiss design principles into a web format.**
+
+The starting point is the Swiss / International Typographic Style: a clear grid, deliberate typographic hierarchy, sans-serif typography, asymmetrical balance, and controlled use of empty space. The question is how these principles can organize a contemporary photographic website while preserving the clarity of an editorial composition.
+
+The photographs are not interchangeable interface decoration. Their framing, scale, sequence, and relationship to captions and text are part of the design work. A consistent grid connects landscape, architecture, animals, and flowers without flattening their individual character. Restrained color and typography give the images room to lead.
+
+The implementation is a supporting challenge. Responsive layouts and a small amount of motion translate the editorial system across viewports; the slider is a presentation tool, not the reason for the study. This is an interpretation of Swiss design principles for the web rather than a historical reproduction of a printed layout.
 
 ## Concept and visual direction
 
@@ -44,4 +54,4 @@ The study is served at `/design-studies/swiss/`. Angular publishes the standalon
 
 ## Credits and source notes
 
-The photographs are by Benjamin Bennewitz. Visible captions use `© Benjamin Bennewitz`. Original design, code, and content remain subject to the portfolio license.
+All photographs in this study are original photographs by Benjamin Bennewitz; they are not AI-generated images. Image captions and the footer already identify their authorship. **Photography © Benjamin Bennewitz. All rights reserved.** The portfolio license applies to these original photographs as well as the original design and code; public display does not grant a reuse licence.

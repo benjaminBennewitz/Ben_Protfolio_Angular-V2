@@ -2,13 +2,23 @@
 
 [← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/bentendo/)
 
-An interactive 3D handheld with a working cartridge and a playable pixel RPG. The device provides the physical stage while DUNGEON WANTED maintains its own game world and state. This is an evolving prototype, not a finished game release.
+A technical study in object-oriented programming (OOP) and interactive 3D: a simulated handheld surrounds a playable pixel RPG. Device, display, game, input, and audio have distinct responsibilities; the nostalgic visual setting gives that architecture a concrete purpose.
 
 > [!NOTE]
-> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
+> This is a non-commercial, experimental study in graphic design and web development, created for personal learning. It is not a production product or a commercial service. Its specific design and technical objectives are described below. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
 
 > [!IMPORTANT]
 > The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
+
+## Intent and learning focus
+
+**Primary focus: object-oriented programming (OOP), modular responsibilities, and interactive 3D.**
+
+The central question is how a simulated physical device and a running game can be combined without turning their behavior into one monolithic script. The handheld supplies a concrete problem space for object-oriented structure: device state, cartridge handling, input, display, audio, and game rules must cooperate while retaining clear responsibilities.
+
+Classes such as `App`, `Handheld`, `Display`, `Game`, and `AudioManager` coordinate with smaller modules and data definitions. The study explores composition and state boundaries in VanillaJS alongside Three.js modeling, camera views, hit testing, and the integration of a 2D Canvas display into a 3D device.
+
+The retro visual direction supports the simulation and makes its behavior understandable. It is the setting for the programming and 3D experiment, rather than the transfer of a named graphic-design movement into a website. The growing adventure world extends the architectural challenge; this remains an evolving prototype, not a finished game release.
 
 ## Concept and visual direction
 
@@ -51,7 +61,7 @@ Save data, character selection, and audio settings stay in the browser and are b
 
 The device uses Three.js and the game uses a Canvas LCD, coordinated through VanillaJS modules. The import map references locally bundled Three.js files. The game does not instantiate Angular or depend on an iframe.
 
-The learning focus is combining device interaction, 3D presentation, a 2D game renderer, modular game rules, persistent state, and coordinated audio.
+The learning focus is object-oriented composition and clear state ownership while combining device interaction, 3D presentation, a 2D game renderer, modular game rules, persistence, and coordinated audio.
 
 ## Scope and limitations
 
@@ -64,3 +74,5 @@ The study is served at `/design-studies/bentendo/`. Angular publishes runtime fi
 Sources and modifications are recorded in [CREDITS.md](CREDITS.md) and the [public credits](credits.html). The separate GBFX sound effects remain third-party assets under CC BY 4.0. The documented question about distributing the dungeon atlas is independent of the project's Python model and AI-assisted music.
 
 Runtime scripts, tests, and development records stay within this study. The root-level `/scripts/` ignore rule applies only to local portfolio deployment utilities.
+
+Asset provenance is kept separate from the programming focus: the Python-built handheld model, project music made with free tools and AI, and third-party sprites and sound effects are described individually in the credits. AI-assisted music is not presented as original photography or as a blanket description of every game asset.

@@ -2,13 +2,23 @@
 
 [← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/brutalism/)
 
-A fictional festival microsite connecting electronic music, architecture, art, and community. The study explores how a poster-like visual identity can carry an entire event website.
+A graphic-design-led study translating brutalist and neo-brutalist visual principles into a responsive festival website. RAW/FORM starts with a visual language; browser interaction is the means of making that language work on screen.
 
 > [!NOTE]
-> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
+> This is a non-commercial, experimental study in graphic design and web development, created for personal learning. It is not a production product or a commercial service. Its specific design and technical objectives are described below. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
 
 > [!IMPORTANT]
 > The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
+
+## Intent and learning focus
+
+**Primary focus: graphic design — translating a visual concept into a web format.**
+
+The starting point is brutalist graphic design: an exposed grid, uncompromising typographic scale, hard divisions, a restricted palette, and deliberately direct visual communication. The question is how those principles can form a coherent website rather than remain a static poster or moodboard.
+
+The fictional festival provides a setting for that translation. Headlines act as compositional blocks, rules make the grid visible, and orange creates a repeatable system for emphasis. Image cropping, density, spacing, and the relationship between text and image establish the identity across different sections and screen sizes. Concrete architecture supports the subject matter; it is not the sole reason for calling the graphic direction brutalist.
+
+Responsive layout, reveals, and lightweight interaction are a second challenge: they must preserve the intended visual hierarchy and rhythm when the poster-like composition becomes a changing browser viewport. The purpose is to study that transfer from graphic design to the web, not to build an operational festival platform.
 
 ## Concept and visual direction
 
@@ -43,3 +53,5 @@ The study is served at `/design-studies/brutalism/`. Angular's asset configurati
 ## Credits and source notes
 
 Design and implementation: Benjamin Bennewitz / B². Font license records remain with the local font directories and are not replaced by the portfolio license.
+
+The photographic-looking festival, crowd, performance, and venue images are AI-generated and identified by visible AI badges in the study. They illustrate a fictional event rather than document a real festival. Their origin is separate from the authored graphic design, layout, and interface code.

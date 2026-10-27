@@ -814,13 +814,20 @@ folio/
 │   │   │   ├── assets/
 │   │   │   │   ├── album-cover.webp
 │   │   │   │   ├── artist-portrait.webp
+│   │   │   │   ├── artist-studio.webp
 │   │   │   │   ├── ctrl-room-logo.svg
 │   │   │   │   ├── favicon.svg
+│   │   │   │   ├── hero-chrome-star.webp
+│   │   │   │   ├── hero-musician.webp
 │   │   │   │   ├── hero-portrait.jpg
 │   │   │   │   ├── Midnight_in_the_Lower_Sector.mp3
 │   │   │   │   ├── noise-loud.webp
 │   │   │   │   ├── noise-minimal.webp
-│   │   │   │   └── rave-atmosphere.webp
+│   │   │   │   ├── OFL-DM-Mono.txt
+│   │   │   │   ├── OFL-Space-Grotesk.txt
+│   │   │   │   ├── preview.webp
+│   │   │   │   ├── rave-atmosphere.webp
+│   │   │   │   └── y2k-hero.webp
 │   │   │   ├── index.html
 │   │   │   ├── README.md
 │   │   │   ├── script.js

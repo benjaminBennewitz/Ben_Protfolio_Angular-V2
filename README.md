@@ -99,25 +99,25 @@ The goal is a website that remains technically controlled while making a strong 
 ## Standalone Design Studies
 
 > [!NOTE]
-> The standalone design studies are non-commercial experiments for personal learning, exploring new technologies, and combining visual and interaction techniques. They are not production products or commercial services. Accessibility and production readiness are not their primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed for these studies.
+> The standalone design studies are non-commercial experiments in graphic design and web development. Some begin with a visual language or illustrated identity; others begin with a theme or a technical interaction. Their READMEs explain that intent before the implementation details. They are not production products or commercial services. Accessibility and production readiness are not their primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed for these studies.
 
 Eight independent experiences explore distinct visual directions and interaction models. Cards and quicklinks live on `/portfolio#design-studies`. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
 
 ### RAW/FORM
 
-A fictional festival website combining brutalist typography, hard grid lines, orange accents, photography, and editorial blocks. Viewport-driven reveals support the poster-like composition; ticket and newsletter sections remain demonstrations.
+**Graphic-design-led.** RAW/FORM translates brutalist and neo-brutalist graphic principles into a responsive festival website: exposed grids, uncompromising typographic scale, hard divisions, and a restricted palette. Responsive behavior and motion are supporting challenges; the visual concept is the starting point.
 
 [Study README](src/design-studies/brutalism/README.md) · [Open study](https://b2folio.de/design-studies/brutalism/)
 
 ### [WHATWESEE]
 
-A Swiss-inspired photography journal presenting Benjamin Bennewitz's photographs through a precise grid, large images, and restrained typography. A category-based hero slider and alternating archive reveals connect portfolio and editorial storytelling.
+**Graphic-design-led.** [WHATWESEE] translates Swiss / International Typographic Style into a responsive photographic journal. Grid, typographic hierarchy, asymmetrical balance, and empty space organize Benjamin Bennewitz's own photographs; implementation and restrained motion support the editorial concept.
 
 [Study README](src/design-studies/swiss/README.md) · [Open study](https://b2folio.de/design-studies/swiss/)
 
 ### CTRL//ROOM
 
-An audiovisual digital-culture interface with a fictional artist profile and searchable archive. A shared audio player, real Web Audio analysis, expandable windows, and finite pointer effects bring the Y2K-inspired interface to life.
+**Graphic-design-led.** CTRL//ROOM translates Y2K visual culture into an electronic-music website: chrome typography, translucent cobalt surfaces, orbital imagery, icy silver, and magenta form a coherent graphic system. A custom media-player shell anchors the composition, with the same material language carried into the artist profile, archive, navigation, and dialogs. Web Audio and archive interactions support the design brief.
 
 [Study README](src/design-studies/ctrl-room/README.md) · [Open study](https://b2folio.de/design-studies/ctrl-room/)
 
@@ -129,25 +129,25 @@ An interactive manifesto about pressure, destruction, and creative transformatio
 
 ### SCOOP!
 
-A comic-style ice cream shop built around original SVG characters, expressive product reactions, and a drawn scroll path. A configurable three-cup mix box and browser-local cart demonstrate a complete purchase flow without ordering or payment services.
+**Illustration- and animation-led.** Doodles, expressive ice cream characters, faces, gestures, speech bubbles, and comic timing define SCOOP!. The fictional shop supplies a setting for that visual world; product selection and cart behavior support the character and animation experiments.
 
 [Study README](src/design-studies/scoop/README.md) · [Open study](https://b2folio.de/design-studies/scoop/)
 
 ### FOLD.
 
-A connected six-face cube explores how a change in perspective changes the story. Three.js with CSS3DRenderer moves the camera between HTML panels, then unfolds the same object into an interactive net; touch devices use deliberate chapter swipes.
+**Technical interaction study.** FOLD. explores how six HTML panels can behave as one connected spatial object and unfold into a net. Camera orientation, hinge hierarchies, scroll mapping, and mobile gestures are the main challenge; the graphic composition gives the interaction a narrative.
 
 [Study README](src/design-studies/fold/README.md) · [Open study](https://b2folio.de/design-studies/fold/)
 
 ### GROWTH.
 
-A procedural WebGL tree turns upward document scrolling into an ascent from underground roots to the canopy and beyond. Camera movement, an altitude display, small discovery popovers, water, and atmospheric layers connect the visual journey to the tree's habitats.
+**Theme-led 3D study.** A tree and its habitats determine the subject and upward journey of GROWTH. The central challenge is interpreting that theme through procedural modeling, camera composition, rendering, and HTML annotations, rather than translating an established graphic-design style.
 
 [Study README](src/design-studies/growth/README.md) · [Open study](https://b2folio.de/design-studies/growth/)
 
 ### BENTENDO™ / DUNGEON WANTED
 
-An interactive 3D handheld surrounds a playable Canvas pixel RPG with cartridge handling, physical controls, and an LCD. The evolving game includes quests, combat, NPC routines, a day/night cycle, and local saves; its own README covers the learning focus, architecture, prototype limits, and asset credits.
+**OOP and 3D study.** BENTENDO combines a simulated handheld with a playable Canvas RPG to explore object-oriented composition, state ownership, and cooperation between device, input, display, audio, and game systems. The nostalgic visual setting gives the technical experiment a concrete purpose.
 
 [Study README](src/design-studies/bentendo/README.md) · [Open study](https://b2folio.de/design-studies/bentendo/)
 
@@ -252,6 +252,14 @@ Without prior explicit written permission, you may not:
 - reuse personal data, contact details, or information from the legal notice.
 
 Neither the public visibility of this repository nor any technically available GitHub feature grants additional usage rights. The complete [B2FOLIO.DE Read-Only Source License](./LICENSE) applies to original project contributions. Clearly marked third-party components remain subject to their respective license terms. This includes fonts, models, textures, sprites, music, and sound effects in standalone studies. Attribution does not grant permission to republish asset source files. Study-specific READMEs and credit records describe source material and applicable third-party notices. The repository license does not override third-party conditions.
+
+### Photography and generated media
+
+All photographs in the SWISS / [WHATWESEE] study are by Benjamin Bennewitz and carry visible author credits. They remain subject to the portfolio license; public display does not grant permission to reuse them.
+
+AI-generated photographic-looking material is identified separately in the relevant studies: RAW/FORM uses visible AI image badges, CTRL//ROOM labels its generated photographic motifs and track, and SCOOP! labels its fictional portrait placeholders. BENTENDO documents AI-assisted project music and third-party game assets in its credits. Procedural Three.js scenes, CSS3D composition, and Canvas rendering are not the same as AI image generation.
+
+Origin labels do not imply that every generated output has the same copyright status, and they do not replace asset-specific terms. Original photography, authored design and code, AI-generated material, and third-party assets should be evaluated separately.
 
 ## Author
 

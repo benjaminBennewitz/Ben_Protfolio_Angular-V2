@@ -5,10 +5,18 @@
 An interactive typographic manifesto about pressure, destruction, and creative transformation. Scale, movement, and simulated physical reactions make type part of the narrative.
 
 > [!NOTE]
-> This is a non-commercial, experimental design and development study created for personal learning, exploring technologies, and combining visual and interaction techniques. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
+> This is a non-commercial, experimental study in graphic design and web development, created for personal learning. It is not a production product or a commercial service. Its specific design and technical objectives are described below. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed.
 
 > [!IMPORTANT]
 > The source is published for inspection and evaluation only. Public visibility does not grant permission to clone, copy, run, modify, or reuse it. The [portfolio license](../../../LICENSE) applies to original project contributions; third-party components retain their own terms.
+
+## Intent and learning focus
+
+**Focus: expressive typography and its translation into an interactive experience.**
+
+Type is the visual material of the study, rather than a neutral container for text. Scale, compression, rhythm, fragmentation, and reformation express the theme of creative change. Interaction lets visitors act on that material; Canvas simulation and poster export make the typographic idea tangible in the browser.
+
+The study connects graphic composition with motion and direct manipulation. Its technical mechanisms serve that relationship rather than define a separate application feature list.
 
 ## Concept and visual direction
 

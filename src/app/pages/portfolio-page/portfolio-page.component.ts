@@ -110,10 +110,10 @@ export class PortfolioPageComponent {
     {
       id: 'ctrl-room',
       name: 'CTRL//ROOM',
-      subtitle: 'Audiovisual Digital Culture Platform',
+      subtitle: 'Y2K Audiovisual Culture Platform',
       href: '/design-studies/ctrl-room/',
-      preview: '/design-studies/ctrl-room/assets/hero-portrait.jpg',
-      tags: ['Y2K', 'Cyber Interface', 'Web Audio', 'HTML / CSS / JS'],
+      preview: '/design-studies/ctrl-room/assets/preview.webp',
+      tags: ['Y2K', 'Chrome / Plastic', 'Web Audio', 'HTML / CSS / JS'],
     },
     {
       id: 'type-break',

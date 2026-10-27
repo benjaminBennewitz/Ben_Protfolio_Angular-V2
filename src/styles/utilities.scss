@@ -70,7 +70,7 @@
   align-items: center;
 }
 
-.bp-grid-two > * {
+.bp-grid-two>* {
   min-width: 0;
 }
 
@@ -193,8 +193,8 @@ html[data-motion='reduced']::before {
 
 :root[data-theme='light'] .bp-button--accent:hover,
 :root[data-theme='light'] .bp-button--accent:focus-visible,
-:root[data-theme='light'] .bp-button--accent:hover > *,
-:root[data-theme='light'] .bp-button--accent:focus-visible > * {
+:root[data-theme='light'] .bp-button--accent:hover>*,
+:root[data-theme='light'] .bp-button--accent:focus-visible>* {
   color: var(--bp-action-primary-fg);
 }
 
@@ -276,7 +276,7 @@ html[data-motion='reduced']::before {
   transition: transform 180ms var(--bp-ease-out), border-color 180ms ease, background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
 }
 
-.bp-button > * {
+.bp-button>* {
   min-width: 0;
 }
 
@@ -353,8 +353,8 @@ html[data-motion='reduced']::before {
   color: var(--bp-action-primary-disabled-fg);
 }
 
-.bp-button--accent:hover > *,
-.bp-button--accent:focus-visible > * {
+.bp-button--accent:hover>*,
+.bp-button--accent:focus-visible>* {
   color: var(--bp-action-primary-hover-fg);
 }
 
@@ -396,7 +396,7 @@ html[data-motion='reduced']::before {
   font-size: 0.78rem;
 }
 
-.bp-terminal__bar > * {
+.bp-terminal__bar>* {
   min-width: 0;
 }
 
@@ -580,23 +580,23 @@ html[data-motion='reduced']::before {
   animation-delay: var(--bp-stagger-delay, 0ms);
 }
 
-.bp-motion-copy > *:not(bp-reveal-text) {
+.bp-motion-copy>*:not(bp-reveal-text) {
   opacity: 0;
   transform: translate3d(0, 24px, 0);
   filter: blur(6px);
   will-change: opacity, transform, filter;
 }
 
-.bp-motion-copy.bp-reveal--visible > *:not(bp-reveal-text) {
+.bp-motion-copy.bp-reveal--visible>*:not(bp-reveal-text) {
   animation: bp-copy-in 720ms var(--bp-ease-out) both;
   animation-delay: var(--bp-copy-delay, 220ms);
 }
 
-.bp-motion-copy.bp-reveal--visible > *:not(bp-reveal-text):nth-child(3) {
+.bp-motion-copy.bp-reveal--visible>*:not(bp-reveal-text):nth-child(3) {
   animation-delay: 310ms;
 }
 
-.bp-motion-copy.bp-reveal--visible > *:not(bp-reveal-text):nth-child(4) {
+.bp-motion-copy.bp-reveal--visible>*:not(bp-reveal-text):nth-child(4) {
   animation-delay: 400ms;
 }
 
@@ -630,7 +630,7 @@ html[data-motion='reduced']::before {
 
 .bp-reveal--instant,
 .bp-reveal--instant .bp-stagger-item,
-.bp-reveal--instant.bp-motion-copy > *:not(bp-reveal-text) {
+.bp-reveal--instant.bp-motion-copy>*:not(bp-reveal-text) {
   opacity: 1;
   transform: none;
   filter: none;

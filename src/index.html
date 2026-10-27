@@ -5,6 +5,8 @@
   <meta charset="utf-8">
   <title>B² Portfolio | Full Stack Webentwicklung & Grafikdesign</title>
   <base href="/">
+
+  <!-- Kritische Startstyles bleiben vor Angular inline verfuegbar. -->
   <style>
     html,
     body {
@@ -17,6 +19,8 @@
       visibility: hidden;
     }
   </style>
+
+  <!-- Scroll-Wiederherstellung vor dem Angular-Bootstrap kontrollieren. -->
   <script>
     (() => {
       const root = document.documentElement;
@@ -26,6 +30,7 @@
         window.history.scrollRestoration = 'manual';
       }
 
+      // Anker-Navigation nicht durch den initialen Scroll-Reset blockieren.
       if (hasFragment) {
         root.classList.remove('bp-initial-scroll-reset', 'bp-initial-scroll-pending');
         return;
@@ -34,6 +39,7 @@
       window.scrollTo(0, 0);
     })();
   </script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description"
     content="B² Portfolio von Benjamin Bennewitz: interaktive Angular-Experience mit MS-DOS-Look, Full Stack Webentwicklung, UI/UX, Intranet-Systemen und Grafikdesign.">
@@ -60,6 +66,7 @@
     content="Interaktives Portfolio im Terminal-, Glitch- und Poster-Look mit Full Stack Webentwicklung, UI/UX und Grafikdesign.">
   <meta name="twitter:image" content="https://b2folio.de/assets/social/og-portfolio-preview.svg">
   <meta name="twitter:image:alt" content="B2FOLIO.DE Developer-Tag mit Design-, Code-, Debug- und Deploy-Workflow">
+
   <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32 48x48 64x64">
   <link rel="icon" type="image/png" href="/favicon.png" sizes="192x192">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">

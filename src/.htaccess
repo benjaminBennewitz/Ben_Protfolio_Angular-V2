@@ -31,6 +31,15 @@
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
 
+  # Framing nur innerhalb der eigenen Domain erlauben (Clickjacking-Schutz).
+  Header always set X-Frame-Options "SAMEORIGIN"
+
+  # CSP-Basis ohne Einschraenkung der vorhandenen Inline-Scripts und -Styles.
+  Header always set Content-Security-Policy "frame-ancestors 'self'; object-src 'none'; base-uri 'self'"
+
+  # HSTS zunaechst nur fuer den aktuellen Host und 24 Stunden testen.
+  Header always set Strict-Transport-Security "max-age=86400" "expr=%{HTTPS} == 'on'"
+
   <FilesMatch "\.(?:js|css)$">
     # Angular-Bundles sind gehasht; statische Studies behalten feste Dateinamen.
     Header set Cache-Control "public, max-age=31536000, immutable" "expr=%{REQUEST_URI} !~ m#^/design-studies/#"

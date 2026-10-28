@@ -1,4 +1,12 @@
-/** Gemeinsame DLC-Texte für Angular und eigenständige VanillaJS-Studien. */
+/**
+ * @file achievement-catalog.js
+ * @description Zentraler, zweisprachiger Erfolgskatalog für Angular und eigenständige Designstudien.
+ */
+
+/**
+ * Enthält alle Erfolgstexte und Metadaten in einer gemeinsamen Datenquelle.
+ * Die zugehörige Typdeklaration befindet sich in achievement-catalog.d.ts.
+ */
 export const STUDY_ACHIEVEMENTS = [
   {
     "id": "study-growth-ascent",

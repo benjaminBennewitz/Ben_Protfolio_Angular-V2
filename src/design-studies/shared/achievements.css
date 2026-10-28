@@ -1,22 +1,32 @@
 /*###############################
 ###
-###     achievements.css (gemeinsames Portfolio-Trophy-Design)
-###     Portfolio App
-###     BASED ON: Angular 21.02.0, SCSS
+###     achievements.css
+###     Portfolio Design Studies — Shared Achievements
+###     BASED ON: CSS3, Shadow DOM
 ###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
 ###
 #################################*/
 
-/* ==========================================================================
+/* ===========================================================================
    INHALTSVERZEICHNIS
 
-   01   Layer
-   02   Toast
-   03   Responsive
+   01   Toast-Layer und Positionierung
+   02   Toast-Karte und Bedienelemente
+   03   Animation und responsives Layout
+   04   Arcade-Tech-Design
+   05   Reduzierte Bewegung und Fokuszustände
    ========================================================================== */
 
-/* ========================================================================== 
-   01   Layer
+/* ===========================================================================
+   01   Toast-Layer und Positionierung
    ========================================================================== */
 
 .achievement-toast-layer {
@@ -31,8 +41,8 @@
   pointer-events: none;
 }
 
-/* ========================================================================== 
-   02   Toast
+/* ===========================================================================
+   02   Toast-Karte und Bedienelemente
    ========================================================================== */
 
 .achievement-toast {
@@ -132,6 +142,10 @@
   color: var(--bp-color-on-danger, light-dark(#ffffff, #000000));
 }
 
+/* ===========================================================================
+   03   Animation und responsives Layout
+   ========================================================================== */
+
 @keyframes achievement-toast-in {
   from {
     opacity: 0;
@@ -143,10 +157,6 @@
     transform: translate3d(0, 0, 0) scale(1);
   }
 }
-
-/* ========================================================================== 
-   03   Responsive
-   ========================================================================== */
 
 @media (max-width: 560px) {
   .achievement-toast-layer {
@@ -171,8 +181,8 @@
   }
 }
 
-/* ========================================================================== 
-   04   Arcade-Tech
+/* ===========================================================================
+   04   Arcade-Tech-Design
    ========================================================================== */
 
 .achievement-toast {
@@ -261,11 +271,19 @@
   white-space: nowrap;
 }
 
+/* ===========================================================================
+   05   Reduzierte Bewegung und Fokuszustände
+   ========================================================================== */
+
 @media (prefers-reduced-motion: reduce) {
-  .achievement-toast { animation: none; }
+  .achievement-toast {
+    animation: none;
+  }
 }
 
-.achievement-toast-layer[data-reduced-motion] .achievement-toast { animation: none; }
+.achievement-toast-layer[data-reduced-motion] .achievement-toast {
+  animation: none;
+}
 
 .achievement-toast button:focus-visible {
   outline: var(--bp-focus-ring-width, 3px) solid var(--bp-focus-ring-color, var(--bp-color-accent, light-dark(#005cff, #a7ff19)));
@@ -273,5 +291,7 @@
 }
 
 @media (max-width: 360px) {
-  .achievement-toast-layer { top: calc(var(--bp-header-height, 68px) + 0.7rem); }
+  .achievement-toast-layer {
+    top: calc(var(--bp-header-height, 68px) + 0.7rem);
+  }
 }

@@ -36,11 +36,13 @@ The page moves from the oversized opening through the line-up, location, experie
 
 ## Technical approach
 
-HTML, CSS, and VanillaJS share a single entry file. `IntersectionObserver` activates the reveals while the page follows normal document scrolling. The relevant motion is disabled under `prefers-reduced-motion`, leaving the content visible.
+HTML, CSS, and VanillaJS are separated into the entry page, a stylesheet, and one deferred script. `IntersectionObserver` activates the reveals while the page follows normal document scrolling. The relevant motion is disabled under `prefers-reduced-motion`, leaving the content visible.
 
 | Area | File / directory |
 | --- | --- |
-| Structure, styles, and interactions | [index.html](index.html) |
+| Semantic page structure | [index.html](index.html) |
+| Design tokens, layout, and visual states | [styles.css](styles.css) |
+| Menu, demo actions, and reveals | [scripts/main.js](scripts/main.js) |
 | Images and SVG graphics | `assets/` |
 | Local fonts and license records | `assets/fonts/` |
 
@@ -55,3 +57,43 @@ The study is served at `/design-studies/brutalism/`. Angular's asset configurati
 Design and implementation: Benjamin Bennewitz / B². Font license records remain with the local font directories and are not replaced by the portfolio license.
 
 The photographic-looking festival, crowd, performance, and venue images are AI-generated and identified by visible AI badges in the study. They illustrate a fictional event rather than document a real festival. Their origin is separate from the authored graphic design, layout, and interface code.
+
+
+## Wartung nach dem Refactoring vom 28.10.2026
+
+Die eingebetteten CSS- und JavaScript-Blöcke wurden vollständig aus `index.html` entfernt. Auch der Inline-Submit-Handler der Newsletter-Demo und der Inline-Stil ihres zugänglichen Labels liegen jetzt in den zuständigen Dateien. Die HTML enthält nur noch Struktur, Inhalte und Dateiverweise.
+
+| Datei | Zuständigkeit |
+| --- | --- |
+| `index.html` | Semantische Bereiche, Inhalte, Formulare, Navigation und Verweise auf CSS/JavaScript. |
+| `styles.css` | Unveränderte visuelle Regeln und die aus dem Newsletter-Label übernommene `.sr-only`-Regel. |
+| `scripts/main.js` | Kleine, private Initialisierungsfunktionen für Demo-Aktionen, Menü, Cookie-Hinweis, Scroll-to-top und Reveals. |
+
+Für die überschaubare Logik genügt ein klassisches, mit `defer` eingebundenes Skript. Es benötigt weder ES-Modulimporte noch Bibliotheken, einen Bundler oder einen zusätzlichen Build-Schritt. Die Funktionen bleiben innerhalb einer privaten Startfunktion; es werden keine neuen globalen API-Objekte angelegt. Die vorhandenen Assetpfade funktionieren unverändert, weil die CSS-Datei neben der HTML liegt.
+
+### Schreibstil
+
+Alle 20 Funktionen besitzen JSDoc mit Parametern und Rückgabewerten. Normale Variablen haben rechts ausgerichtete einzeilige Kommentare. Variablenblöcke innerhalb von Funktionen werden durch Leerzeilen vom übrigen Code getrennt; zwischen Funktionen steht eine Leerzeile. Die eigentliche Ablauf- und Ereignislogik ist in kleine Aufgaben unterteilt. Die private Startfunktion und die Menü-/Cookie-Initialisierungen enthalten ihre eng zugehörigen privaten Helfer.
+
+`styles.css` enthält Entwicklerkopf, Autor und Signatur nach dem Swiss-Muster sowie ein Inhaltsverzeichnis mit 17 passenden Abschnittsmarkierungen. Die Regeln bleiben in der bisherigen Kaskadenreihenfolge. Die einzige zusätzliche CSS-Regel übernimmt die vorherigen Inline-Deklarationen des Newsletter-Labels unverändert.
+
+### Verhalten und gezielte Absicherung
+
+Menü-Breakpoints, ARIA-Zustände, Escape-Verhalten, Cookie-Speicherschlüssel, Scroll-to-top-Schwelle, Reveal-Auswahl, Verzögerungen und Observer-Einstellungen bleiben erhalten. Newsletter und Social-Verweise bleiben ausdrücklich funktionslose Demos; ihre Standardaktionen werden jetzt über benannte Event-Handler verhindert.
+
+Ein gesperrter `sessionStorage` unterbricht die Seite nicht mehr. Der Cookie-Hinweis lässt sich weiterhin ausblenden, seine Entscheidung kann dann jedoch nicht für einen erneuten Seitenaufruf gespeichert werden. Diese kleine Absicherung ist die einzige beabsichtigte funktionale Erweiterung.
+
+### Prüfung
+
+- JavaScript-Syntax, JSDoc-Abdeckung, Variablenkommentare und lokale HTML-Dateiverweise geprüft.
+- Menü inklusive Escape und Ankernavigation, Cookie-Ausblendung mit Wiederherstellung nach Neuladen, Scroll-to-top, Newsletter-Demo und Social-Platzhalter auf Desktop und Mobilansicht gegen den Ausgangsstand geprüft.
+- Die 213 bisherigen CSSOM-Regeln nach reiner Formatierungsnormalisierung verglichen: unverändert. Die neue `.sr-only`-Regel entspricht dem ausgelagerten Inline-Stil.
+- Ganzseitenaufnahmen mit vollständig geladenen Bildern und Schriften bei Reduced Motion verglichen: bei 390 Pixeln Breite pixelgleich; bei 1440 Pixeln Breite unterscheiden sich lediglich 94 Pixel um maximal eine Farbstufe. Seitengrößen und Geometrie stimmen überein.
+- Gesperrten Sitzungsspeicher geprüft: Seite und Cookie-Ausblendung bleiben bedienbar.
+- Alle 46 Reveal-Ziele beim Scrollen freigegeben; ohne `IntersectionObserver` bleiben die Inhalte sichtbar.
+
+Die Prüfung ist kein vollständiger Accessibility- oder Cross-Browser-Audit; ein vollständiger Angular-Build wurde nicht ausgeführt. Testwerkzeuge sind keine neuen Projektabhängigkeiten.
+
+### Änderungs-ZIP übernehmen
+
+Im Projektwurzelverzeichnis entpacken. Es enthält nur die vier geänderten oder neuen Dateien unter `src/design-studies/brutalism/`. Keine bisherigen Dateien müssen gelöscht werden. Die vorhandene Angular-Asset-Konfiguration übernimmt die neuen CSS- und JavaScript-Dateien automatisch.

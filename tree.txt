@@ -808,8 +808,11 @@ folio/
 │   │   │   │       ├── line-up-section.webp
 │   │   │   │       ├── location-section.webp
 │   │   │   │       └── meets-section.webp
+│   │   │   ├── scripts/
+│   │   │   │   └── main.js
 │   │   │   ├── index.html
-│   │   │   └── README.md
+│   │   │   ├── README.md
+│   │   │   └── styles.css
 │   │   ├── ctrl-room/
 │   │   │   ├── assets/
 │   │   │   │   ├── album-cover.webp
@@ -828,35 +831,65 @@ folio/
 │   │   │   │   ├── preview.webp
 │   │   │   │   ├── rave-atmosphere.webp
 │   │   │   │   └── y2k-hero.webp
+│   │   │   ├── scripts/
+│   │   │   │   ├── archive.js
+│   │   │   │   ├── dom.js
+│   │   │   │   ├── effects.js
+│   │   │   │   ├── main.js
+│   │   │   │   ├── navigation.js
+│   │   │   │   ├── player.js
+│   │   │   │   └── records.js
 │   │   │   ├── index.html
 │   │   │   ├── README.md
-│   │   │   ├── script.js
 │   │   │   └── styles.css
 │   │   ├── fold/
 │   │   │   ├── assets/
 │   │   │   │   ├── favicon.svg
 │   │   │   │   ├── preview.svg
 │   │   │   │   └── preview.webp
-│   │   │   ├── experience.js
+│   │   │   ├── scripts/
+│   │   │   │   ├── experience.js
+│   │   │   │   ├── face-content.js
+│   │   │   │   ├── frame-loop.js
+│   │   │   │   ├── interaction-surface.js
+│   │   │   │   ├── math.js
+│   │   │   │   ├── navigation.js
+│   │   │   │   ├── paper-model.js
+│   │   │   │   ├── stage.js
+│   │   │   │   └── view.js
 │   │   │   ├── index.html
-│   │   │   ├── paper-three.js
 │   │   │   ├── README.md
-│   │   │   ├── script.js
 │   │   │   └── style.css
 │   │   ├── growth/
 │   │   │   ├── assets/
 │   │   │   │   └── preview.webp
-│   │   │   ├── src/
+│   │   │   ├── scripts/
+│   │   │   │   ├── camera-flight.js
 │   │   │   │   ├── config.js
 │   │   │   │   ├── debug.js
+│   │   │   │   ├── discovery.js
+│   │   │   │   ├── environment-motion.js
 │   │   │   │   ├── main.js
 │   │   │   │   ├── random.js
-│   │   │   │   ├── styles.css
+│   │   │   │   ├── scene.js
 │   │   │   │   └── world.js
+│   │   │   ├── world/
+│   │   │   │   ├── atmosphere.js
+│   │   │   │   ├── branches.js
+│   │   │   │   ├── canopy.js
+│   │   │   │   ├── core.js
+│   │   │   │   ├── epiphytes.js
+│   │   │   │   ├── geometry.js
+│   │   │   │   ├── ground.js
+│   │   │   │   ├── layers.js
+│   │   │   │   ├── roots.js
+│   │   │   │   ├── terrain.js
+│   │   │   │   └── trunk.js
 │   │   │   ├── favicon.svg
 │   │   │   ├── growth-2-preset.json
 │   │   │   ├── index.html
-│   │   │   └── README.md
+│   │   │   ├── README.md
+│   │   │   └── styles.css
 │   │   ├── scoop/
 │   │   │   ├── assets/
 │   │   │   │   ├── ben-portrait.webp
@@ -889,10 +922,27 @@ folio/
 │   │   │   │   └── web/
 │   │   │   │       ├── lilita-one.woff
 │   │   │   │       └── nunito-sans.woff
-│   │   │   ├── artwork.js
+│   │   │   ├── scripts/
+│   │   │   │   ├── arm-motion.js
+│   │   │   │   ├── artwork.js
+│   │   │   │   ├── artwork-mount.js
+│   │   │   │   ├── automatic-hover.js
+│   │   │   │   ├── cart.js
+│   │   │   │   ├── dom.js
+│   │   │   │   ├── experience.js
+│   │   │   │   ├── eye-motion.js
+│   │   │   │   ├── founder-wave.js
+│   │   │   │   ├── ingredients.js
+│   │   │   │   ├── mix-picker.js
+│   │   │   │   ├── navigation.js
+│   │   │   │   ├── product-cards.js
+│   │   │   │   ├── products.js
+│   │   │   │   ├── script.js
+│   │   │   │   ├── scroll-path.js
+│   │   │   │   ├── shop.js
+│   │   │   │   └── voting.js
 │   │   │   ├── index.html
 │   │   │   ├── README.md
-│   │   │   ├── script.js
 │   │   │   └── styles.css
 │   │   ├── shared/
 │   │   │   ├── achievement-catalog.d.ts

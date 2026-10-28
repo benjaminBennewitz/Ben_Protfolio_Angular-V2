@@ -44,7 +44,10 @@ Audio begins after user interaction. Dialogs and the mobile menu include Escape 
 | --- | --- |
 | Structure, player, and native dialogs | [index.html](index.html) |
 | Design tokens, layout, and states | [styles.css](styles.css) |
-| Web Audio, archive, navigation, and effects | [script.js](script.js) |
+| Entry and composition | [scripts/main.js](scripts/main.js) |
+| Shared audio and player windows | [scripts/player.js](scripts/player.js) |
+| Local archive and detail dialog | [scripts/archive.js](scripts/archive.js), [scripts/records.js](scripts/records.js) |
+| Navigation and visual effects | [scripts/navigation.js](scripts/navigation.js), [scripts/effects.js](scripts/effects.js) |
 | Images, logos, textures, and MP3 | `assets/` |
 
 HTML, CSS, SVG, and VanillaJS provide the runtime. Fonts, scripts, and media are bundled locally. The page uses document scrolling; the archive table can scroll horizontally within its own area on narrow screens.
@@ -60,3 +63,56 @@ The study is served at `/design-studies/ctrl-room/`. Its existing Angular asset 
 The transparent musician in `assets/hero-musician.webp` was generated with OpenAI ImageGen from the approved hero composition. The People module and artist profile use a separately generated studio photograph, `assets/artist-studio.webp`, with a different pose and headphones around the artist’s neck. The separate chrome ornament in `assets/hero-chrome-star.webp` was generated with OpenAI ImageGen as a transparent layer. These images are labelled as AI-generated. The earlier composite hero remains as a source asset in `assets/y2k-hero.webp`; it is not used as the live hero backdrop. Venue imagery and the audio track retain their AI origin labels. The album cover remains the supplied artwork; it has not been replaced or reclassified.
 
 The hero’s background structure and elliptical rings are CSS; the independently moving chrome star is a separate generated image. The code-rendered backdrop and rings remain distinct from the generated imagery. The interface, chrome headline, player frame, gradients, charts, and interaction effects are implemented in HTML, CSS, SVG, Canvas, and VanillaJS. Locally bundled [Space Grotesk](assets/OFL-Space-Grotesk.txt) and [DM Mono](assets/OFL-DM-Mono.txt) fonts are distributed under the SIL Open Font License 1.1; their notices are included with this study. The portfolio card uses `assets/preview.webp`, a screenshot of the implemented page. Third-party rights remain separate from the portfolio license.
+
+
+## Wartungsstruktur nach dem Refactoring vom 28.10.2026
+
+Der Einstieg ist `index.html` → `scripts/main.js`. Die Skripte liegen als lokale ES-Module unter `scripts/`. Es werden keine neuen Laufzeit-Abhängigkeiten oder Build-Schritte eingeführt. CSS und Assets bleiben im bisherigen Verzeichnis.
+
+| Modul | Zuständigkeit und Zustand |
+| --- | --- |
+| `scripts/main.js` | Sucht die gemeinsamen DOM-Anker, erstellt die Bereiche und gibt die Oberfläche nach der Initialisierung frei. |
+| `scripts/dom.js` | Gemeinsame DOM-Suche für einzelne Elemente und Arrays. |
+| `scripts/records.js` | Die unveränderten 13 Demo-Datensätze einschließlich Beschreibungstexten. |
+| `scripts/player.js` | Kapselt ausstehenden Wiedergabestart, AudioContext, Analyser, Puffer und Animationsframes. Synchronisiert alle Audioanzeigen und verschiebt denselben Player zwischen regulärer und vergrößerter Ansicht. |
+| `scripts/archive.js` | Kapselt Kategorie und Dialogauslöser; rendert sichere Textknoten, Leerzustand, Trefferanzeige und Detaildialog. |
+| `scripts/navigation.js` | Mobiles Menü, Fokusfalle, Fokusführung nach Ankernavigation und Such-Tastenkürzel `/`. |
+| `scripts/effects.js` | Hero-Parallax, begrenzte Signal-Ringe, Reveals, aktive Desktop-Navigation und Reaktionen auf Sichtbarkeit und Reduced Motion. |
+
+Der gemeinsame DOM-Kontext wird nur beim Start weitergereicht. Jeder Bereich deklariert die tatsächlich verwendeten Abhängigkeiten durch seine Parameter. Privater Zustand bleibt bei seinem zuständigen Bereich. Die öffentlichen Player-Aktionen verbinden Archiv und Effekte mit der Audiosteuerung; die Bereiche greifen nicht auf private Audio-Puffer zu.
+
+Es bleibt bei einem Audioelement und demselben verschiebbaren Player. Ein Modalwechsel lädt den Track nicht neu. Audioanalyse wird erst nach einer Wiedergabeaktion verbunden; Reduced Motion stoppt visuelle Aktualisierungen, lässt die Audiosteuerung aber bedienbar. Die vorhandenen Bilder und Medien bleiben unverändert.
+
+### Codekonventionen
+
+Alle 106 Funktionen einschließlich Callbacks besitzen JSDoc. Normale Variablen erhalten rechts ausgerichtete einzeilige Kommentare. Innerhalb von Funktionen trennen Leerzeilen die Variablenblöcke vom übrigen Code. Mehrfachdeklarationen wurden aufgelöst; zwischen Funktionen steht eine Leerzeile.
+
+Der Richtwert beträgt etwa 20 Codezeilen je Funktion. Archivzeilen, Aktionszellen, Leerzustände und die einzelnen Player-Steuergruppen sind deshalb getrennt. Zustandsgekapselte Factory-Funktionen, zusammenhängende Ereignisregistrierung und einzelne Audio-/Canvas-Abläufe bleiben bewusst länger, wenn eine weitere Aufteilung das Verständnis verschlechtern würde. Funktionalität und überschaubare Datenflüsse haben Vorrang.
+
+Die CSS-Datei besitzt den Entwicklerkopf mit Autor und Signatur im Stil der Swiss-Studie sowie ein Inhaltsverzeichnis mit 25 korrespondierenden Abschnittsmarkierungen. Die `@charset`-Angabe bleibt am Dateianfang. Deklarationen, Selektoren und Kaskadenreihenfolge bleiben semantisch erhalten.
+
+### Start
+
+Die modulare Version über HTTP öffnen, beispielsweise mit dem bestehenden Angular-Start oder aus dem Projektwurzelverzeichnis:
+
+```sh
+python3 -m http.server 8080 --directory src
+```
+
+Danach `http://localhost:8080/design-studies/ctrl-room/` aufrufen. Anders als das frühere klassische Sammelskript können lokale ES-Modulimporte beim direkten Öffnen über `file://` vom Browser blockiert werden. Die vorhandene Einschränkung der Web-Audio-Analyse unter `file://` bleibt zusätzlich bestehen.
+
+### Prüfung
+
+- JavaScript-Syntax, lokale Importe, JSDoc-Abdeckung und normale Variablenkommentare geprüft.
+- Alle 13 Archivdatensätze mit dem Ausgangsstand verglichen: unverändert.
+- Archivkategorien, kombinierte Suche, Leerzustand, tatsächliche Detail- und Interview-Klicks, Dialogschluss, Player-Minimierung, Vergrößerung und Wiederherstellung auf Desktop und Mobilansicht gegen den Ausgangsstand geprüft.
+- Echte MP3-Wiedergabe, Pause, Lautstärke, Stummschaltung und Positionswechsel über die Regler bei HTTP-Range-Unterstützung geprüft; Wiedergabe bleibt beim Vergrößern und Wiederherstellen aktiv. Die Vergleichstests verwenden denselben lokalen Track.
+- Mobiles Menü mit inerten Inhaltsbereichen und Escape sowie das Such-Tastenkürzel geprüft.
+- Die Wellenform reagiert während der Wiedergabe auf echte Analysedaten. Reduced Motion friert die Visualisierung ein und setzt Hero-Parallax zurück, während Audio weiterläuft. Der Equalizer enthält weiterhin 24 Balken.
+- Die 310 Browser-CSSOM-Regeln nach Normalisierung reiner Formatierungsunterschiede mit dem Ausgangsstand verglichen: identisch.
+
+Die Prüfung ersetzt keinen vollständigen Accessibility- oder Cross-Browser-Audit. Ein vollständiger Angular-Build wurde nicht ausgeführt. Testwerkzeuge sind keine neuen Projektabhängigkeiten.
+
+### Änderungs-ZIP übernehmen
+
+Das ZIP enthält nur geänderte oder neue Dateien unter `src/design-studies/ctrl-room/`. Im Projektwurzelverzeichnis entpacken und anschließend die bisherige Datei `src/design-studies/ctrl-room/script.js` löschen. Der neue Einstieg ist bereits in `index.html` eingetragen. Unveränderte Bilder, Fonts und MP3-Dateien werden nicht erneut mitgeliefert.

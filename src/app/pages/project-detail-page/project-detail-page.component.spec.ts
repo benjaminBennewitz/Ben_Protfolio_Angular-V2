@@ -50,12 +50,16 @@ describe('ProjectDetailPageComponent', /** Gruppiert die Verhaltensprüfungen de
     page.closeTerminal();
     page.closeCaseNote();
     page.closeTerminalWidget('status');
+    page.catalogReader.activeCatalogSpreadIndex.set(2);
+    page.catalogReader.isCatalogMenuOpen.set(true);
     params.next(convertToParamMap({ slug: 'blutanalyse' }));
     fixture.detectChanges();
     expect(page.project()?.slug).toBe('blutanalyse');
     expect(page.isTerminalVisible()).toBe(true);
     expect(page.isCaseNoteVisible()).toBe(true);
     expect(page.isTerminalWidgetVisible('status')).toBe(true);
+    expect(page.catalogReader.activeCatalogSpreadIndex()).toBe(0);
+    expect(page.catalogReader.isCatalogMenuOpen()).toBe(false);
     language.set('en');
     fixture.detectChanges();
     expect(TestBed.inject(SeoService).setProjectSeo).toHaveBeenLastCalledWith(page.project());

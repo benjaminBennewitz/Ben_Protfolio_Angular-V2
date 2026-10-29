@@ -147,6 +147,10 @@ folio/
 │   │   │   │   ├── privacy-page.component.spec.ts
 │   │   │   │   └── privacy-page.component.ts
 │   │   │   ├── project-detail-page/
+│   │   │   │   ├── catalog-flow.spec.ts
+│   │   │   │   ├── catalog-flow.ts
+│   │   │   │   ├── catalog-reader.spec.ts
+│   │   │   │   ├── catalog-reader.ts
 │   │   │   │   ├── project-detail-page.component.html
 │   │   │   │   ├── project-detail-page.component.scss
 │   │   │   │   ├── project-detail-page.component.spec.ts

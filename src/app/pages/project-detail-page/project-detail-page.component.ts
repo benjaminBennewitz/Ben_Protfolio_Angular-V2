@@ -11,7 +11,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PORTFOLIO_PROJECTS } from '../../core/data/portfolio-projects';
 import type { ProjectAppModule, ProjectGalleryItem } from '../../core/models/projects.models';
 import type { ProjectBloodGuideModeKey } from '../../core/models/blood.models';
-import type { ProjectCatalogPage, ProjectCatalogSpread } from '../../core/models/catalog.models';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
 import { ProjectTelemetryComponent } from '../../shared/project-telemetry/project-telemetry.component';
@@ -19,37 +18,8 @@ import { CarlyMascotPreviewComponent } from '../../shared/carly-mascot-preview/c
 import { LanguageService } from '../../core/services/language.service';
 import { AchievementService } from '../../core/services/achievement.service';
 import { SeoService } from '../../core/services/seo.service';
-
-/** Stabile Reader-Seite mit fertig berechnetem Bild-Asset für Angular-Bindings. */
-interface CatalogReaderPage extends ProjectCatalogPage {
-  readonly asset?: string; // Fertiger Asset-Pfad für die decodierbare Katalogseite.
-}
-
-/** Stabile Reader-Doppelseite mit vorbereiteten Seiten-ViewModels. */
-interface CatalogReaderSpread extends Omit<ProjectCatalogSpread, 'pages'> {
-  readonly pages: readonly CatalogReaderPage[]; // Vorbereitete Seiten mit stabilen Asset-Bindings.
-  readonly pageLabel: string;                   // Sichtbarer Seitenbereich für die Overlay-Navigation.
-}
-
-interface CatalogFlowParticle {
-  x: number;     // Aktuelle X-Position auf dem Canvas.
-  y: number;     // Aktuelle Y-Position auf dem Canvas.
-  speed: number; // Individuelle Bewegungsgeschwindigkeit.
-  phase: number; // Individueller Phasenversatz für weicheres Noise-Verhalten.
-}
-
-/** Beweglicher Lupenzustand für den WebP-Katalogreader. */
-interface CatalogLoupeState {
-  readonly isVisible: boolean;         // Sichtbarkeit der Kataloglupe.
-  readonly pageNumber: string;         // Seitenkennung der aktuell vergrößerten Katalogseite.
-  readonly x: number;                  // Aktueller X-Wert innerhalb der Katalogseite.
-  readonly y: number;                  // Aktueller Y-Wert innerhalb der Katalogseite.
-  readonly width: number;              // Breite des Lupenfensters.
-  readonly height: number;             // Höhe des Lupenfensters.
-  readonly asset: string;              // Vergrößertes Hintergrundbild der aktuellen Katalogseite.
-  readonly backgroundSize: string;     // Berechnete Hintergrundgröße passend zur echten Seitengröße.
-  readonly backgroundPosition: string; // Berechnete Hintergrundposition passend zur Mausposition.
-}
+import { CatalogFlow } from './catalog-flow';
+import { CatalogReader } from './catalog-reader';
 
 /** Detailseite für einzelne Projekte. */
 @Component({
@@ -65,61 +35,40 @@ interface CatalogLoupeState {
   ],
 })
 export class ProjectDetailPageComponent implements OnDestroy {
-  private readonly zone = inject(NgZone);                                                                                                                                          // Angular-Zone für performante Canvas-Animationen außerhalb der Change Detection.
-  private readonly route = inject(ActivatedRoute);                                                                                                                                 // Aktive Route mit Projekt-Slug.
-  private readonly languageService = inject(LanguageService);                                                                                                                      // Sprachservice für Inhalte.
-  private readonly seoService = inject(SeoService);                                                                                                                                // SEO-Service für Detailseiten-Meta-Daten.
-  private readonly achievementService = inject(AchievementService);                                                                                                                // Achievement-Service für geschlossene MS-DOS-Fenster.
-  private catalogFlowCanvas?: HTMLCanvasElement;                                                                                                                                   // Canvas-Element der generativen Design-Archiv-Hero-Fläche.
-  private catalogFlowContext?: CanvasRenderingContext2D;                                                                                                                           // Zeichenkontext der generativen Design-Archiv-Hero-Fläche.
-  private catalogFlowAnimationId = 0;                                                                                                                                              // Aktive Animation-Frame-ID für sauberes Stoppen.
-  private readonly catalogAssetPreloadTasks = new Map<string, Promise<void>>();                                                                                                    // Laufende und abgeschlossene Preload-Tasks der Katalogseiten-Assets.
-  private cancelCatalogBackgroundPreload?: () => void;                                                                                                                             // Abbruchfunktion für das stille Hintergrund-Preloading des Katalogs.
-  private activeCatalogBackgroundPreloadKey = '';                                                                                                                                  // Aktiver Schlüssel für das laufende Hintergrund-Preloading.
-  private catalogSpreadSwitchToken = 0;                                                                                                                                            // Wechsel-Token gegen veraltete async Katalog-Navigationswechsel.
-  private lightboxScrollTop = 0;                                                                                                                                                   // Scrollposition vor dem Öffnen der Lightbox.
-  private galleryLightboxReturnFocus: HTMLElement | null = null;                                                                                                                   // Element, das vor dem Öffnen der Lightbox fokussiert war.
-  private galleryLightboxFocusFrameId = 0;                                                                                                                                         // Geplanter Fokus-Frame für Öffnen und Schließen der Lightbox.
+  private readonly route = inject(ActivatedRoute);                                             // Aktive Route mit Projekt-Slug.
+  private readonly languageService = inject(LanguageService);                                  // Sprachservice für Inhalte.
+  private readonly seoService = inject(SeoService);                                            // SEO-Service für Detailseiten-Meta-Daten.
+  private readonly achievementService = inject(AchievementService);                            // Achievement-Service für geschlossene MS-DOS-Fenster.
+  private lightboxScrollTop = 0;                                                               // Scrollposition vor dem Öffnen der Lightbox.
+  private galleryLightboxReturnFocus: HTMLElement | null = null;                               // Element, das vor dem Öffnen der Lightbox fokussiert war.
+  private galleryLightboxFocusFrameId = 0;                                                     // Geplanter Fokus-Frame für Öffnen und Schließen der Lightbox.
 
-  @ViewChild('catalogMenuTrigger') private catalogMenuTrigger?: ElementRef<HTMLButtonElement>;                                                                                     // Trigger des Katalog-Inhaltsverzeichnisses für den Fokus-Rücksprung.
+  @ViewChild('catalogMenuTrigger') private catalogMenuTrigger?: ElementRef<HTMLButtonElement>; // Trigger des Katalog-Inhaltsverzeichnisses für den Fokus-Rücksprung.
 
-  @ViewChild('catalogMenuDialog') private catalogMenuDialog?: ElementRef<HTMLElement>;                                                                                             // Modales Inhaltsverzeichnis des Designkatalogs.
-  private catalogMenuFocusFrameId = 0;                                                                                                                                             // Geplanter Fokus-Frame für das Katalog-Inhaltsverzeichnis.
-  private isLightboxScrollLocked = false;                                                                                                                                          // Gibt an, ob der Body-Scroll wegen einer offenen Lightbox gesperrt ist.
-  private galleryLightboxSwitchToken = 0;                                                                                                                                          // Wechsel-Token gegen veraltete async Lightbox-Navigationen.
-  private pendingGalleryLightboxIndex: number | null = null;                                                                                                                       // Zielindex während schneller Lightbox-Navigationswechsel.
-  private galleryLightboxSwitchTimeoutId: ReturnType<typeof setTimeout> | undefined;                                                                                               // Timeout-ID für das Zurücksetzen der Lightbox-Fade-Phase.
-  private readonly projectScrollResetFrameIds: number[] = [];                                                                                                                      // Geplante Animation-Frames für das zuverlässige Zurücksetzen der Detailseiten-Scrollposition.
-  private readonly galleryLightboxFadeOutDuration = 120;                                                                                                                           // Dauer der ausblendenden Lightbox-Wechselphase in Millisekunden.
-  private readonly galleryLightboxFadeInDuration = 220;                                                                                                                            // Dauer der einblendenden Lightbox-Wechselphase in Millisekunden.
-  private catalogFlowResizeObserver?: ResizeObserver;                                                                                                                              // Resize-Observer für responsive Canvas-Abmessungen.
-  private catalogFlowVisibilityObserver?: IntersectionObserver;                                                                                                                    // Sichtbarkeits-Observer für die Hero-gebundene Canvas-Animation.
-  private catalogFlowTime = 0;                                                                                                                                                     // Zeitwert der Flow-Field-Bewegung.
-  private readonly catalogFlowParticles: CatalogFlowParticle[] = [];                                                                                                               // Bewegliche Flow-Partikel für die Canvas-Linien.
-  private readonly catalogFlowParticleCount = 180;                                                                                                                                 // Anzahl der Flow-Partikel als Performance-Limit.
-  readonly isCatalogFlowHeroVisible = signal<boolean>(false);                                                                                                                      // Gibt an, ob die Design-Archiv-Hero-Fläche sichtbar genug für Animation ist.
-  private readonly slug = signal<string>('');                                                                                                                                      // Aktueller Slug aus der Route.
-  private readonly selectedArchitectureNodeId = signal<string>('');                                                                                                                // Ausgewählter Architektur-Knoten im Deep-Dive-Modul.
-  private readonly selectedAppModuleId = signal<string>('');                                                                                                                       // Ausgewählte App-Karte im gestapelten Hero-Modul.
-  private readonly closedTerminalWidgetIds = signal<readonly string[]>([]);                                                                                                        // Geschlossene Terminalfenster im Hero.
-  readonly isTerminalVisible = signal<boolean>(true);                                                                                                                              // Sichtbarkeit des Fallback-MS-DOS-Terminalfensters im Hero.
-  readonly isCaseNoteVisible = signal<boolean>(true);                                                                                                                              // Sichtbarkeit des technischen Hinweisfensters im Deep-Dive.
-  readonly bloodGuideMode = signal<ProjectBloodGuideModeKey>('scale');                                                                                                             // Aktiver Diagrammstil im Werte-Guide der Daten-Dashboard-Seite.
-  readonly activeCatalogSpreadIndex = signal<number>(0);                                                                                                                           // Aktuell ausgewählte Doppelseite im Designkatalog.
-  readonly catalogSpreadDirection = signal<1 | -1 | 0>(0);                                                                                                                         // Bewegungsrichtung der aktuellen Katalogseiten-Animation.
-  readonly isCatalogReaderBusy = signal<boolean>(false);                                                                                                                           // Ladezustand während eine Ziel-Doppelseite vor dem sichtbaren Wechsel decodiert wird.
-  readonly activeGalleryLightboxIndex = signal<number | null>(null);                                                                                                               // Aktuell geöffneter Projektgalerie-Eintrag in der gemeinsamen Lightbox.
-  readonly galleryLightboxSwitchPhase = signal<'idle' | 'fade-out' | 'fade-in'>('idle');                                                                                           // Aktuelle Animationsphase beim Durchschalten der Design-Lightbox.
-  readonly galleryLightboxSwitchDirection = signal<1 | -1>(1);                                                                                                                     // Bewegungsrichtung der aktuellen Lightbox-Wechselanimation.
-  readonly galleryLightboxBackground = signal<string>('#0a070d');                                                                                                                  // Stabiler sichtbarer Hintergrund der Lightbox, entkoppelt vom gerade wechselnden Inhalt.
-  readonly isCatalogMenuOpen = signal<boolean>(false);                                                                                                                             // Sichtbarkeit des Inhaltsverzeichnis-Overlays im Designkatalog.
-  readonly catalogLoupe = signal<CatalogLoupeState>({ isVisible: false, pageNumber: '', x: 0, y: 0, width: 0, height: 0, asset: '', backgroundSize: '', backgroundPosition: '' }); // Bewegliche Hover-Lupe für echte Katalogseitenbilder.
+  @ViewChild('catalogMenuDialog') private catalogMenuDialog?: ElementRef<HTMLElement>;         // Modales Inhaltsverzeichnis des Designkatalogs.
+  private isLightboxScrollLocked = false;                                                      // Gibt an, ob der Body-Scroll wegen einer offenen Lightbox gesperrt ist.
+  private galleryLightboxSwitchToken = 0;                                                      // Wechsel-Token gegen veraltete async Lightbox-Navigationen.
+  private pendingGalleryLightboxIndex: number | null = null;                                   // Zielindex während schneller Lightbox-Navigationswechsel.
+  private galleryLightboxSwitchTimeoutId: ReturnType<typeof setTimeout> | undefined;           // Timeout-ID für das Zurücksetzen der Lightbox-Fade-Phase.
+  private readonly projectScrollResetFrameIds: number[] = [];                                  // Geplante Animation-Frames für das zuverlässige Zurücksetzen der Detailseiten-Scrollposition.
+  private readonly galleryLightboxFadeOutDuration = 120;                                       // Dauer der ausblendenden Lightbox-Wechselphase in Millisekunden.
+  private readonly galleryLightboxFadeInDuration = 220;                                        // Dauer der einblendenden Lightbox-Wechselphase in Millisekunden.
+  private readonly slug = signal<string>('');                                                  // Aktueller Slug aus der Route.
+  private readonly selectedArchitectureNodeId = signal<string>('');                            // Ausgewählter Architektur-Knoten im Deep-Dive-Modul.
+  private readonly selectedAppModuleId = signal<string>('');                                   // Ausgewählte App-Karte im gestapelten Hero-Modul.
+  private readonly closedTerminalWidgetIds = signal<readonly string[]>([]);                    // Geschlossene Terminalfenster im Hero.
+  readonly isTerminalVisible = signal<boolean>(true);                                          // Sichtbarkeit des Fallback-MS-DOS-Terminalfensters im Hero.
+  readonly isCaseNoteVisible = signal<boolean>(true);                                          // Sichtbarkeit des technischen Hinweisfensters im Deep-Dive.
+  readonly bloodGuideMode = signal<ProjectBloodGuideModeKey>('scale');                         // Aktiver Diagrammstil im Werte-Guide der Daten-Dashboard-Seite.
+  readonly activeGalleryLightboxIndex = signal<number | null>(null);                           // Aktuell geöffneter Projektgalerie-Eintrag in der gemeinsamen Lightbox.
+  readonly galleryLightboxSwitchPhase = signal<'idle' | 'fade-out' | 'fade-in'>('idle');       // Aktuelle Animationsphase beim Durchschalten der Design-Lightbox.
+  readonly galleryLightboxSwitchDirection = signal<1 | -1>(1);                                 // Bewegungsrichtung der aktuellen Lightbox-Wechselanimation.
+  readonly galleryLightboxBackground = signal<string>('#0a070d');                              // Stabiler sichtbarer Hintergrund der Lightbox, entkoppelt vom gerade wechselnden Inhalt.
 
   /** Canvas-Referenz der generativen Katalog-Hero-Fläche. */
   @ViewChild('catalogFlowCanvas')
   set catalogFlowCanvasRef(canvasRef: ElementRef<HTMLCanvasElement> | undefined) {
-    this.catalogFlowCanvas = canvasRef?.nativeElement;
-    this.connectCatalogFlowVisibilityObserver();
+    this.catalogFlow.setCanvas(canvasRef?.nativeElement);
   }
 
   readonly content = computed(                                                   // Übersetzter Inhalt der aktuellen Sprache.
@@ -130,6 +79,16 @@ export class ProjectDetailPageComponent implements OnDestroy {
   readonly project = computed(                                                   // Ausgewähltes Projekt passend zum Route-Slug.
     /** Ausgewähltes Projekt passend zum Route-Slug. */
     () => PORTFOLIO_PROJECTS[this.languageService.language()].find(/** Ausgewähltes Projekt passend zum Route-Slug. */(project) => project.slug === this.slug())
+  );
+
+  readonly catalogFlow = new CatalogFlow(this.project, inject(NgZone));          // Canvas-Animation des Katalog-Heros.
+  readonly catalogReader = new CatalogReader(                                    // Katalogzustand mit Navigation, Lupe und Menüfokus.
+    this.project,
+    this.languageService.language,
+    /** Liefert den aktuell gerenderten Menü-Trigger für den Fokus-Rücksprung. */
+    () => this.catalogMenuTrigger?.nativeElement,
+    /** Liefert das aktuell gerenderte Inhaltsverzeichnis für die Fokussteuerung. */
+    () => this.catalogMenuDialog?.nativeElement,
   );
 
   readonly activeArchitectureNode = computed(                                    // Aktiver Architektur-Knoten mit Fallback auf den ersten Eintrag.
@@ -163,19 +122,6 @@ export class ProjectDetailPageComponent implements OnDestroy {
       const index = modules.findIndex(/** Index der aktiven App-Karte für Stack-Offset und Pagination. */(module) => module.id === selectedId); // Aktueller Eintrags- oder Schleifenindex.
 
       return Math.max(index, 0);
-    }
-  );
-
-  readonly activeCatalogSpread = computed<CatalogReaderSpread | undefined>(      // Aktive Doppelseite des digitalen Designkatalogs mit stabilen Asset-Bindings.
-    /** Aktive Doppelseite des digitalen Designkatalogs mit stabilen Asset-Bindings. */
-    () => {
-
-      const showcase = this.project()?.catalogShowcase;        // Katalog-Konfiguration des aktiven Projekts.
-      const spreads = showcase?.spreads ?? [];                // Für den Reader aufbereitete Doppelseiten.
-      const index = this.getNormalizedCatalogSpreadIndex(); // Aktueller Eintrags- oder Schleifenindex.
-      const spread = spreads[index] ?? spreads[0];           // Aktuell betrachtete Katalog-Doppelseite.
-
-      return spread ? this.createCatalogReaderSpread(spread) : undefined;
     }
   );
 
@@ -224,22 +170,20 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.route.paramMap.pipe(takeUntilDestroyed()).subscribe(/** Verarbeitet den aktuellen Schritt des Routenwechsels. */(params) => this.updateSlug(params.get('slug') ?? ''));
 
     effect(/** Synchronisiert Meta-Daten und abhängige Seitenzustände. */() => this.updateSeo());
-    effect(/** Synchronisiert Meta-Daten und abhängige Seitenzustände. */() => this.toggleCatalogFlow());
-    effect(/** Synchronisiert Meta-Daten und abhängige Seitenzustände. */() => this.preloadCatalogAssetsAroundActiveSpread());
+    effect(/** Synchronisiert Meta-Daten und abhängige Seitenzustände. */() => this.catalogFlow.toggleCatalogFlow());
+    effect(/** Synchronisiert Meta-Daten und abhängige Seitenzustände. */() => this.catalogReader.preloadCatalogAssetsAroundActiveSpread());
     effect(/** Synchronisiert Meta-Daten und abhängige Seitenzustände. */() => this.toggleGalleryLightboxScrollLock());
   }
 
   /** Stoppt laufende Browser-APIs beim Verlassen der Detailseite. */
   ngOnDestroy(): void {
-    this.stopCatalogFlow();
-    this.catalogFlowVisibilityObserver?.disconnect();
-    this.cancelCatalogBackgroundPreload?.();
+    this.catalogFlow.destroy();
+    this.catalogReader.destroy();
     this.galleryLightboxSwitchToken += 1;
     this.resetGalleryLightboxSwitch();
     this.unlockGalleryLightboxScroll();
     this.cancelGalleryLightboxFocusFrame();
     this.galleryLightboxReturnFocus = null;
-    this.cancelCatalogMenuFocusFrame();
     this.clearProjectScrollResetFrames();
   }
 
@@ -268,92 +212,18 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.selectAppModule(modules[nextIndex]?.id ?? modules[0].id);
   }
 
-  /** Wählt eine konkrete Katalog-Doppelseite aus. */
-  selectCatalogSpread(index: number): void {
-    this.hideCatalogLoupe();
-
-    const currentIndex = this.getNormalizedCatalogSpreadIndex();                   // Index des aktuell nächsten Panels oder Eintrags.
-    const direction = index > currentIndex ? 1 : index < currentIndex ? -1 : 0; // Bewegungsrichtung des aktuellen Wechsels.
-
-    void this.setCatalogSpreadIndex(index, direction);
-  }
-
-  /** Öffnet oder schließt das Inhaltsverzeichnis des Designkatalogs. */
-  toggleCatalogMenu(): void {
-    this.hideCatalogLoupe();
-
-    if (this.isCatalogMenuOpen()) {
-      this.closeCatalogMenu();
-      return;
-    }
-
-    this.isCatalogMenuOpen.set(true);
-    this.scheduleCatalogMenuInitialFocus();
-  }
-
-  /** Schließt das Inhaltsverzeichnis des Designkatalogs und setzt den Fokus zurück. */
-  closeCatalogMenu(): void {
-    if (!this.isCatalogMenuOpen()) {
-      return;
-    }
-
-    this.isCatalogMenuOpen.set(false);
-    this.scheduleCatalogMenuFocusReturn();
-  }
-
-  /** Wechselt zur vorherigen oder nächsten Katalog-Doppelseite. */
-  selectAdjacentCatalogSpread(direction: 1 | -1): void {
-    this.hideCatalogLoupe();
-    void this.setCatalogSpreadIndex(this.getNormalizedCatalogSpreadIndex() + direction, direction);
-  }
-
-  /** Aktualisiert die rechteckige Hover-Lupe innerhalb einer Katalogseite. */
-  updateCatalogLoupe(event: PointerEvent, page: CatalogReaderPage): void {
-    if (!page.asset || event.pointerType === 'touch' || this.isCatalogMenuOpen()) {
-      this.hideCatalogLoupe();
-      return;
-    }
-
-    const element = event.currentTarget instanceof HTMLElement ? event.currentTarget : undefined; // Gerendertes Element der aktuellen Interaktion.
-
-    if (!element) {
-      this.hideCatalogLoupe();
-      return;
-    }
-
-    const rect = element.getBoundingClientRect(); // Gemessene Grenzen des aktuellen Elements.
-    const x = event.clientX - rect.left;       // Horizontale Position oder berechneter Versatz.
-    const y = event.clientY - rect.top;        // Vertikale Position oder berechneter Versatz.
-
-    if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
-      this.hideCatalogLoupe();
-      return;
-    }
-
-    this.catalogLoupe.set(this.createCatalogLoupeState(page, rect, x, y));
-  }
-
-  /** Blendet die Kataloglupe aus. */
-  hideCatalogLoupe(): void {
-    if (!this.catalogLoupe().isVisible) {
-      return;
-    }
-
-    this.catalogLoupe.set({ isVisible: false, pageNumber: '', x: 0, y: 0, width: 0, height: 0, asset: '', backgroundSize: '', backgroundPosition: '' });
-  }
-
   /** Reagiert auf Tastaturbefehle innerhalb der modalen Projekt-Overlays. */
   @HostListener('window:keydown', ['$event'])
   handleWindowKeydown(event: KeyboardEvent): void {
-    if (this.isCatalogMenuOpen()) {
+    if (this.catalogReader.isCatalogMenuOpen()) {
       if (event.key === 'Escape') {
         event.preventDefault();
-        this.closeCatalogMenu();
+        this.catalogReader.closeCatalogMenu();
         return;
       }
 
       if (event.key === 'Tab') {
-        this.trapCatalogMenuFocus(event);
+        this.catalogReader.trapCatalogMenuFocus(event);
         return;
       }
     }
@@ -412,67 +282,6 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.activeGalleryLightboxIndex.set(null);
     this.galleryLightboxReturnFocus = null;
     this.scheduleGalleryLightboxReturnFocus(returnFocus);
-  }
-
-  /** Setzt den Fokus nach dem Öffnen auf den Schließen-Button des Katalogmenüs. */
-  private scheduleCatalogMenuInitialFocus(): void {
-    this.cancelCatalogMenuFocusFrame();
-    this.catalogMenuFocusFrameId = window.requestAnimationFrame(/** Fokussiert nach dem Rendern das erste verfügbare Bedienelement. */() => {
-      this.catalogMenuFocusFrameId = 0;
-      this.catalogMenuDialog?.nativeElement.querySelector<HTMLElement>('button:not([disabled])')?.focus({ preventScroll: true });
-    });
-  }
-
-  /** Gibt den Fokus nach dem Schließen an den stabilen Katalogmenü-Trigger zurück. */
-  private scheduleCatalogMenuFocusReturn(): void {
-    this.cancelCatalogMenuFocusFrame();
-    this.catalogMenuFocusFrameId = window.requestAnimationFrame(/** Gibt den Fokus nach dem Schließen an den stabilen Katalogmenü-Trigger zurück. */() => {
-      this.catalogMenuFocusFrameId = 0;
-      this.catalogMenuTrigger?.nativeElement.focus({ preventScroll: true });
-    });
-  }
-
-  /** Hält Tab-Navigation innerhalb des geöffneten Katalog-Inhaltsverzeichnisses. */
-  private trapCatalogMenuFocus(event: KeyboardEvent): void {
-
-    const panel = this.catalogMenuDialog?.nativeElement; // Gerenderter Bereich für Messung oder Fokussteuerung.
-
-    if (!panel) {
-      return;
-    }
-
-    const focusableElements = Array.from(panel.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')) as HTMLElement[]; // Innerhalb des Dialogs erreichbare Bedienelemente.
-
-    if (!focusableElements.length) {
-      event.preventDefault();
-      panel.focus({ preventScroll: true });
-      return;
-    }
-
-    const first = focusableElements[0];                           // Erstes fokussierbares Element im Dialog.
-    const last = focusableElements[focusableElements.length - 1]; // Letztes fokussierbares Element im Dialog.
-    const activeElement = document.activeElement;                 // Aktuell fokussiertes Element des Dokuments.
-
-    if (event.shiftKey && (activeElement === first || !panel.contains(activeElement))) {
-      event.preventDefault();
-      last.focus({ preventScroll: true });
-      return;
-    }
-
-    if (!event.shiftKey && (activeElement === last || !panel.contains(activeElement))) {
-      event.preventDefault();
-      first.focus({ preventScroll: true });
-    }
-  }
-
-  /** Bricht einen noch offenen Fokus-Frame des Katalogmenüs ab. */
-  private cancelCatalogMenuFocusFrame(): void {
-    if (!this.catalogMenuFocusFrameId) {
-      return;
-    }
-
-    window.cancelAnimationFrame(this.catalogMenuFocusFrameId);
-    this.catalogMenuFocusFrameId = 0;
   }
 
   /** Setzt den Tastaturfokus nach dem Öffnen auf den Schließen-Button der Lightbox. */
@@ -557,37 +366,6 @@ export class ProjectDetailPageComponent implements OnDestroy {
 
     this.pendingGalleryLightboxIndex = nextIndex;
     void this.switchGalleryLightboxItem(nextIndex, direction);
-  }
-
-  /** Baut den stabilen Lupenzustand aus Seitengröße und Mausposition. */
-  private createCatalogLoupeState(page: CatalogReaderPage, rect: DOMRect, x: number, y: number): CatalogLoupeState {
-
-    const zoom = 1.8;                         // Vergrößerungsfaktor der Kataloglupe.
-    const width = this.getCatalogLoupeWidth(); // Berechnete Breite in CSS-Pixeln.
-    const height = Math.round(width * 0.68);    // Berechnete Höhe in CSS-Pixeln.
-    const bgX = -(x * zoom - width / 2);     // Horizontaler Hintergrundversatz der Lupe.
-    const bgY = -(y * zoom - height / 2);    // Vertikaler Hintergrundversatz der Lupe.
-
-    return {
-      isVisible: true,
-      pageNumber: page.number,
-      x,
-      y,
-      width,
-      height,
-      asset: page.asset ?? '',
-      backgroundSize: `${rect.width * zoom}px ${rect.height * zoom}px`,
-      backgroundPosition: `${bgX}px ${bgY}px`,
-    };
-  }
-
-  /** Ermittelt eine responsive Lupenbreite ohne Layout-Messung im Template. */
-  private getCatalogLoupeWidth(): number {
-    if (typeof window === 'undefined') {
-      return 230;
-    }
-
-    return Math.round(Math.min(Math.max(window.innerWidth * 0.189, 189), 336));
   }
 
   /** Wechselt die Lightbox per ruhigem Crossfade, damit Hintergrundfarben nicht hart blitzen. */
@@ -683,239 +461,6 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.galleryLightboxSwitchTimeoutId = undefined;
   }
 
-  /** Erstellt eine stabile Reader-Doppelseite ohne Template-Methoden für Resource-URLs. */
-  private createCatalogReaderSpread(spread: ProjectCatalogSpread): CatalogReaderSpread {
-
-    const pages = spread.pages.map(/** Überträgt den Eintrag in die benötigte Seiten- oder Fensterdarstellung. */(page) => this.createCatalogReaderPage(page)); // Aufbereitete Seiten einer Katalog-Doppelseite.
-    const pageLabel = this.getCatalogSpreadPageLabel(pages);                                                                                                         // Lesbare Seitenkennung der Doppelseite.
-
-    return { ...spread, pages, pageLabel };
-  }
-
-  /** Erstellt eine stabile Reader-Seite mit decodierbarem Bild-Asset. */
-  private createCatalogReaderPage(page: ProjectCatalogPage): CatalogReaderPage {
-
-    const asset = this.getCatalogPageAsset(page); // Aufgelöster Bild- oder Dateipfad der Katalogseite.
-
-    return { ...page, asset };
-  }
-
-  /** Gibt den passenden Katalogseiten-Pfad für den einsprachigen WebP-Katalog zurück. */
-  private getCatalogPageAsset(page: ProjectCatalogPage): string | undefined {
-
-    const language = this.languageService.language(); // Aktive Sprache für lokalisierte Katalogdateien.
-
-    return page.imageByLanguage?.[language] ?? page.image;
-  }
-
-  /** Gibt den sichtbaren Seitenbereich der aktuellen Reader-Ansicht zurück. */
-  private getCatalogSpreadPageLabel(pages: readonly CatalogReaderPage[]): string {
-
-    const numbers = pages.map(/** Überträgt den Eintrag in die benötigte Seiten- oder Fensterdarstellung. */(page) => page.number); // Sichtbare Seitenzahlen der Doppelseite.
-
-    if (!numbers.length) {
-      return '';
-    }
-
-    const total = this.project()?.catalogShowcase?.spreads.at(-1)?.pages.at(-1)?.number ?? numbers.at(-1) ?? ''; // Gesamtzahl verfügbarer Katalog-Doppelseiten.
-    const range = numbers.length === 1 ? numbers[0] : `${numbers[0]}–${numbers.at(-1)}`;                         // Nachbarschaft aktiver Doppelseiten für das Preloading.
-
-    return `${range} / ${total}`;
-  }
-
-  /** Setzt den Reader-Index erst nach fertig decodierten Zielseiten. */
-  private async setCatalogSpreadIndex(index: number, direction: 1 | -1 | 0 = 0): Promise<void> {
-
-    const spreads = this.project()?.catalogShowcase?.spreads ?? []; // Für den Reader aufbereitete Doppelseiten.
-
-    if (!spreads.length) {
-      return;
-    }
-
-    const normalizedIndex = (index + spreads.length) % spreads.length; // Auf den gültigen Bereich begrenzter Doppelseitenindex.
-
-    if (normalizedIndex === this.getNormalizedCatalogSpreadIndex()) {
-      this.catalogSpreadDirection.set(0);
-      return;
-    }
-
-    const switchToken = ++this.catalogSpreadSwitchToken; // Kennung gegen überholte asynchrone Wechsel.
-
-    this.isCatalogReaderBusy.set(true);
-
-    try {
-      await this.preloadCatalogSpreadAssets(normalizedIndex);
-
-      if (switchToken !== this.catalogSpreadSwitchToken) {
-        return;
-      }
-
-      this.catalogSpreadDirection.set(direction);
-      this.activeCatalogSpreadIndex.set(normalizedIndex);
-    } finally {
-      if (switchToken === this.catalogSpreadSwitchToken) {
-        this.isCatalogReaderBusy.set(false);
-      }
-    }
-  }
-
-  /** Lädt die ersten Katalogseiten und Nachbarspreads leise in den Browser-Cache. */
-  private preloadCatalogAssetsAroundActiveSpread(): void {
-
-    const showcase = this.project()?.catalogShowcase; // Katalog-Konfiguration des aktiven Projekts.
-
-    if (!showcase || typeof window === 'undefined') {
-      return;
-    }
-
-    const activeIndex = this.getNormalizedCatalogSpreadIndex(); // Aktuell sichtbarer Doppelseitenindex.
-    const preloadPages = [                                        // Beim Wechsel vorab zu ladende Doppelseiten.
-      ...showcase.spreads.slice(0, 4).flatMap(/** Lädt die ersten Katalogseiten und Nachbarspreads leise in den Browser-Cache. */(spread) => spread.pages),
-      ...showcase.spreads.slice(Math.max(activeIndex - 1, 0), activeIndex + 4).flatMap(/** Lädt die ersten Katalogseiten und Nachbarspreads leise in den Browser-Cache. */(spread) => spread.pages),
-    ];
-
-    preloadPages.forEach(/** Lädt die ersten Katalogseiten und Nachbarspreads leise in den Browser-Cache. */(page) => void this.preloadCatalogAsset(this.getCatalogPageAsset(page)));
-  }
-
-  /** Lädt eine konkrete Doppelseite vollständig vor dem sichtbaren Wechsel. */
-  private async preloadCatalogSpreadAssets(index: number): Promise<void> {
-
-    const spreads = this.project()?.catalogShowcase?.spreads ?? []; // Für den Reader aufbereitete Doppelseiten.
-    const spread = spreads[index];                                 // Aktuell betrachtete Katalog-Doppelseite.
-
-    if (!spread) {
-      return;
-    }
-
-    await Promise.all(spread.pages.map(/** Überträgt den Eintrag in die benötigte Seiten- oder Fensterdarstellung. */(page) => this.preloadCatalogAsset(this.getCatalogPageAsset(page))));
-  }
-
-  /** Startet ein stilles Hintergrund-Preloading für den kompletten aktuellen Sprachkatalog. */
-  private scheduleCatalogBackgroundPreload(): void {
-
-    const project = this.project();           // Aktives Projekt für Zustandswechsel oder Metadaten.
-    const showcase = project?.catalogShowcase; // Katalog-Konfiguration des aktiven Projekts.
-
-    if (!project || !showcase || typeof window === 'undefined') {
-      this.cancelCatalogBackgroundPreload?.();
-      this.activeCatalogBackgroundPreloadKey = '';
-      return;
-    }
-
-    const preloadKey = `${project.slug}:${this.languageService.language()}`; // Schlüssel des laufenden Hintergrund-Preloadings.
-
-    if (this.activeCatalogBackgroundPreloadKey === preloadKey) {
-      return;
-    }
-
-    this.cancelCatalogBackgroundPreload?.();
-    this.activeCatalogBackgroundPreloadKey = preloadKey;
-
-    const assets = showcase.spreads // Geordnete Asset-Pfade für das stille Hintergrundladen.
-      .flatMap(/** Startet ein stilles Hintergrund-Preloading für den kompletten aktuellen Sprachkatalog. */(spread) => spread.pages)
-      .map(/** Überträgt den Eintrag in die benötigte Seiten- oder Fensterdarstellung. */(page) => this.getCatalogPageAsset(page))
-      .filter(/** Prüft, ob der Eintrag die Auswahlbedingung erfüllt. */(asset): asset is string => Boolean(asset));
-
-    let assetIndex = 0;             // Index des nächsten im Hintergrund zu ladenden Assets.
-
-    /** Startet ein stilles Hintergrund-Preloading für den kompletten aktuellen Sprachkatalog. */
-    const preloadNextAsset = () => {
-
-      const asset = assets[assetIndex]; // Aufgelöster Bild- oder Dateipfad der Katalogseite.
-
-      if (!asset) {
-        this.cancelCatalogBackgroundPreload = undefined;
-        return;
-      }
-
-      assetIndex += 1;
-
-      void this.preloadCatalogAsset(asset).finally(/** Gibt den abgeschlossenen Versand für nachfolgende Anfragen frei. */() => this.requestCatalogIdleTask(preloadNextAsset));
-    };
-
-    this.requestCatalogIdleTask(preloadNextAsset);
-  }
-
-  /** Plant einen einzelnen leisen Preload-Schritt mit IdleCallback-Fallback. */
-  private requestCatalogIdleTask(callback: () => void): void {
-
-    const idleWindow = window as Window & { // Browserfenster mit optionaler Idle-Callback-Unterstützung.
-      requestIdleCallback?: (handler: () => void, options?: { timeout: number }) => number;
-      cancelIdleCallback?: (handle: number) => void;
-    };
-
-    if (idleWindow.requestIdleCallback && idleWindow.cancelIdleCallback) {
-
-      const handle = idleWindow.requestIdleCallback(callback, { timeout: 1500 }); // Kennung des geplanten Idle-Tasks oder Timers.
-
-      this.cancelCatalogBackgroundPreload = /** Plant einen einzelnen leisen Preload-Schritt mit IdleCallback-Fallback. */ () => idleWindow.cancelIdleCallback?.(handle);
-      return;
-    }
-
-    const handle = window.setTimeout(callback, 140); // Kennung des geplanten Idle-Tasks oder Timers.
-
-    this.cancelCatalogBackgroundPreload = /** Plant einen einzelnen leisen Preload-Schritt mit IdleCallback-Fallback. */ () => window.clearTimeout(handle);
-  }
-
-  /** Lädt ein einzelnes Katalogseiten-Asset ohne sichtbare UI-Auswirkung vor. */
-  private preloadCatalogAsset(asset: string | undefined): Promise<void> {
-    if (!asset || typeof window === 'undefined') {
-      return Promise.resolve();
-    }
-
-    const existingTask = this.catalogAssetPreloadTasks.get(asset); // Bereits laufender oder abgeschlossener Ladeauftrag.
-
-    if (existingTask) {
-      return existingTask;
-    }
-
-    const task = this.isCatalogImageAsset(asset) ? this.preloadCatalogImageAsset(asset) : this.preloadCatalogFileAsset(asset); // Neu angelegter Ladeauftrag für das Asset.
-    const safeTask = task.catch(/** Beendet die bereits sofort erledigte Beobachtung ohne weitere Aktion. */() => undefined); // Abgefangener Ladeauftrag ohne unbehandelte Ablehnung.
-
-    this.catalogAssetPreloadTasks.set(asset, safeTask);
-
-    return safeTask;
-  }
-
-  /** Lädt ein Bild und wartet, bis es sicher decodiert ist. */
-  private preloadCatalogImageAsset(asset: string): Promise<void> {
-    return new Promise(/** Beendet den asynchronen Lade- oder Warteauftrag. */(resolve) => {
-
-      const image = new Image(); // Bildobjekt für das Laden und Decodieren des Assets.
-
-      image.decoding = 'async';
-      image.loading = 'eager';
-
-      /** Beendet den asynchronen Lade- oder Warteauftrag. */
-      const resolveDecodedImage = () => {
-        if (image.decode) {
-          void image.decode().then(resolve).catch(resolve);
-          return;
-        }
-
-        resolve();
-      };
-
-      image.onload = resolveDecodedImage;
-      image.onerror = /** Beendet den asynchronen Lade- oder Warteauftrag. */ () => resolve();
-      image.src = asset;
-
-      if (image.complete) {
-        resolveDecodedImage();
-      }
-    });
-  }
-
-  /** Lädt Nicht-Bild-Dateien in den Browser-Cache vor. */
-  private async preloadCatalogFileAsset(asset: string): Promise<void> {
-    await fetch(asset, { cache: 'force-cache' });
-  }
-
-  /** Prüft, ob ein Katalog-Asset direkt als Bild decodiert werden kann. */
-  private isCatalogImageAsset(asset: string): boolean {
-    return /\.(avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(asset);
-  }
-
   /** Aktiviert oder deaktiviert den globalen Scroll-Lock passend zur Lightbox. */
   private toggleGalleryLightboxScrollLock(): void {
     if (this.activeGalleryLightboxIndex() === null) {
@@ -1008,16 +553,10 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.selectedArchitectureNodeId.set('');
     this.selectedAppModuleId.set('');
     this.closedTerminalWidgetIds.set([]);
-    this.catalogSpreadSwitchToken += 1;
     this.galleryLightboxSwitchToken += 1;
-    this.activeCatalogSpreadIndex.set(0);
-    this.catalogSpreadDirection.set(0);
-    this.isCatalogReaderBusy.set(false);
     this.resetGalleryLightboxSwitch();
     this.activeGalleryLightboxIndex.set(null);
-    this.isCatalogMenuOpen.set(false);
-    this.cancelCatalogMenuFocusFrame();
-    this.hideCatalogLoupe();
+    this.catalogReader.reset();
     this.isTerminalVisible.set(true);
     this.isCaseNoteVisible.set(true);
   }
@@ -1061,239 +600,6 @@ export class ProjectDetailPageComponent implements OnDestroy {
     }
 
     this.projectScrollResetFrameIds.length = 0;
-  }
-
-  /** Ermittelt den gültigen Katalog-Index für aktuelle Projektdaten. */
-  private getNormalizedCatalogSpreadIndex(): number {
-
-    const spreads = this.project()?.catalogShowcase?.spreads ?? []; // Für den Reader aufbereitete Doppelseiten.
-
-    if (!spreads.length) {
-      return 0;
-    }
-
-    return Math.min(Math.max(this.activeCatalogSpreadIndex(), 0), spreads.length - 1);
-  }
-
-  /** Startet oder stoppt die generative Katalog-Hero-Fläche passend zu Projekt und Viewport. */
-  private toggleCatalogFlow(): void {
-    if (this.project()?.slug !== 'grafikdesign-katalog' || !this.isCatalogFlowHeroVisible()) {
-      this.stopCatalogFlow();
-      return;
-    }
-
-    queueMicrotask(/** Startet oder stoppt die generative Katalog-Hero-Fläche passend zu Projekt und Viewport. */() => this.restartCatalogFlow());
-  }
-
-  /** Initialisiert die Canvas-Animation neu. */
-  private restartCatalogFlow(): void {
-    this.stopCatalogFlow();
-
-    if (!this.catalogFlowCanvas || this.project()?.slug !== 'grafikdesign-katalog' || !this.isCatalogFlowHeroVisible()) {
-      return;
-    }
-
-    const context = this.catalogFlowCanvas.getContext('2d', { alpha: true }); // Verfügbarer Canvas-Zeichenkontext.
-
-    if (!context) {
-      return;
-    }
-
-    this.catalogFlowContext = context;
-    this.catalogFlowResizeObserver = new ResizeObserver(/** Initialisiert die Canvas-Animation neu. */() => this.resizeCatalogFlow());
-    this.catalogFlowResizeObserver.observe(this.catalogFlowCanvas);
-    this.resizeCatalogFlow();
-    this.seedCatalogFlowParticles();
-
-    if (this.isCatalogMotionReduced()) {
-      this.drawCatalogFlowFrame();
-      return;
-    }
-
-    this.zone.runOutsideAngular(/** Plant den nächsten Layout- oder Animationsschritt der Seite. */() => {
-
-      /** Plant den nächsten Layout- oder Animationsschritt der Seite. */
-      const draw = () => {
-        this.drawCatalogFlowFrame();
-
-        if (!this.catalogFlowContext || !this.isCatalogFlowHeroVisible()) {
-          return;
-        }
-
-        this.catalogFlowAnimationId = requestAnimationFrame(draw);
-      };
-
-      this.catalogFlowAnimationId = requestAnimationFrame(draw);
-    });
-  }
-
-  /** Verbindet die Katalog-Hero-Animation mit der echten Hero-Sichtbarkeit. */
-  private connectCatalogFlowVisibilityObserver(): void {
-    this.catalogFlowVisibilityObserver?.disconnect();
-    this.catalogFlowVisibilityObserver = undefined;
-    this.isCatalogFlowHeroVisible.set(false);
-
-    if (!this.catalogFlowCanvas || typeof window === 'undefined') {
-      this.stopCatalogFlow();
-      return;
-    }
-
-    if (typeof IntersectionObserver === 'undefined') {
-      this.isCatalogFlowHeroVisible.set(true);
-      return;
-    }
-
-    const heroElement = this.catalogFlowCanvas.closest('.project-detail__hero') ?? this.catalogFlowCanvas; // Hero-Bereich für die Sichtbarkeitsbeobachtung.
-
-    this.catalogFlowVisibilityObserver = new IntersectionObserver(/** Verbindet die Katalog-Hero-Animation mit der echten Hero-Sichtbarkeit. */(entries) => {
-
-      const isVisible = Boolean(entries[0]?.isIntersecting); // Hero liegt ausreichend im sichtbaren Bereich.
-
-      this.isCatalogFlowHeroVisible.set(isVisible);
-
-      if (!isVisible) {
-        this.stopCatalogFlow();
-      }
-    }, { threshold: [0, 0.08, 0.2] });
-
-    this.catalogFlowVisibilityObserver.observe(heroElement);
-  }
-
-  /** Stoppt Canvas-Animation und Observer. */
-  private stopCatalogFlow(): void {
-    if (this.catalogFlowAnimationId) {
-      cancelAnimationFrame(this.catalogFlowAnimationId);
-      this.catalogFlowAnimationId = 0;
-    }
-
-    this.catalogFlowResizeObserver?.disconnect();
-    this.catalogFlowResizeObserver = undefined;
-    this.catalogFlowContext = undefined;
-  }
-
-  /** Passt die Canvas-Auflösung an die echte Darstellungsgröße an. */
-  private resizeCatalogFlow(): void {
-    if (!this.catalogFlowCanvas || !this.catalogFlowContext) {
-      return;
-    }
-
-    const rect = this.catalogFlowCanvas.getBoundingClientRect();    // Gemessene Grenzen des aktuellen Elements.
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);         // Begrenztes Pixelverhältnis für die Canvas-Auflösung.
-    const width = Math.max(1, Math.floor(rect.width * pixelRatio));  // Berechnete Breite in CSS-Pixeln.
-    const height = Math.max(1, Math.floor(rect.height * pixelRatio)); // Berechnete Höhe in CSS-Pixeln.
-
-    if (this.catalogFlowCanvas.width === width && this.catalogFlowCanvas.height === height) {
-      return;
-    }
-
-    this.catalogFlowCanvas.width = width;
-    this.catalogFlowCanvas.height = height;
-    this.catalogFlowContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-    this.seedCatalogFlowParticles();
-  }
-
-  /** Verteilt die Flow-Partikel neu über die gesamte Fläche. */
-  private seedCatalogFlowParticles(): void {
-    if (!this.catalogFlowCanvas) {
-      return;
-    }
-
-    const rect = this.catalogFlowCanvas.getBoundingClientRect(); // Gemessene Grenzen des aktuellen Elements.
-
-    this.catalogFlowParticles.length = 0;
-
-    for (let index = 0; index < this.catalogFlowParticleCount; index += 1) {
-      this.catalogFlowParticles.push({
-        x: Math.random() * rect.width,
-        y: Math.random() * rect.height,
-        speed: 0.35 + Math.random() * 1.15,
-        phase: Math.random() * Math.PI * 2,
-      });
-    }
-  }
-
-  /** Zeichnet eine Flow-Field-ähnliche Animationsstufe. */
-  private drawCatalogFlowFrame(): void {
-    if (!this.catalogFlowCanvas || !this.catalogFlowContext) {
-      return;
-    }
-
-    if (!this.isCatalogFlowHeroVisible()) {
-      this.stopCatalogFlow();
-      return;
-    }
-
-    const rect = this.catalogFlowCanvas.getBoundingClientRect(); // Gemessene Grenzen des aktuellen Elements.
-    const ctx = this.catalogFlowContext;                        // Canvas-Kontext des aktuellen Zeichenframes.
-
-    this.catalogFlowTime += 0.006;
-
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.045)';
-    ctx.fillRect(0, 0, rect.width, rect.height);
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.lineWidth = 0.85;
-
-    for (const particle of this.catalogFlowParticles) {
-
-      const previousX = particle.x;                         // Horizontale Partikelposition vor dem Bewegungsschritt.
-      const previousY = particle.y;                         // Vertikale Partikelposition vor dem Bewegungsschritt.
-      const angle = this.getCatalogFlowAngle(particle); // Strömungswinkel an der aktuellen Partikelposition.
-
-      particle.x += Math.cos(angle) * particle.speed;
-      particle.y += Math.sin(angle) * particle.speed;
-
-      if (particle.x < -20 || particle.x > rect.width + 20 || particle.y < -20 || particle.y > rect.height + 20) {
-        this.resetCatalogFlowParticle(particle, rect.width, rect.height);
-        continue;
-      }
-
-      ctx.strokeStyle = this.getCatalogFlowStroke(particle, rect.width);
-      ctx.beginPath();
-      ctx.moveTo(previousX, previousY);
-      ctx.lineTo(particle.x, particle.y);
-      ctx.stroke();
-    }
-  }
-
-  /** Erzeugt einen weichen Winkel aus trigonometrischem Pseudo-Noise. */
-  private getCatalogFlowAngle(particle: CatalogFlowParticle): number {
-
-    const xWave = Math.sin(particle.x * 0.0065 + this.catalogFlowTime + particle.phase);     // Horizontaler Wellenanteil des Flow-Feldes.
-    const yWave = Math.cos(particle.y * 0.0075 - this.catalogFlowTime * 0.9);                // Vertikaler Wellenanteil des Flow-Feldes.
-    const zWave = Math.sin((particle.x + particle.y) * 0.0028 + this.catalogFlowTime * 1.6); // Zeitabhängiger Wellenanteil des Flow-Feldes.
-
-    return (xWave + yWave + zWave) * Math.PI;
-  }
-
-  /** Setzt ein Partikel am Rand neu ein, ohne harte Wrap-Linien zu zeichnen. */
-  private resetCatalogFlowParticle(particle: CatalogFlowParticle, width: number, height: number): void {
-
-    const side = Math.floor(Math.random() * 4); // Zufällig gewählte Eintrittskante des Partikels.
-
-    particle.x = side === 0 ? 0 : side === 1 ? width : Math.random() * width;
-    particle.y = side === 2 ? 0 : side === 3 ? height : Math.random() * height;
-    particle.speed = 0.35 + Math.random() * 1.15;
-    particle.phase = Math.random() * Math.PI * 2;
-  }
-
-  /** Ermittelt die Linienfarbe mit leichter Positionsvariation. */
-  private getCatalogFlowStroke(particle: CatalogFlowParticle, width: number): string {
-
-    const progress = width > 0 ? particle.x / width : 0;         // Normalisierter Fortschritt des aktuellen Ablaufs.
-    const alpha = 0.16 + Math.sin(progress * Math.PI) * 0.22; // Deckkraft des aktuellen Partikelstrichs.
-
-    return `rgba(255, 79, 216, ${alpha.toFixed(3)})`;
-  }
-
-  /** Prüft reduzierte Motion-Einstellungen für den Canvas. */
-  private isCatalogMotionReduced(): boolean {
-
-    const motionMode = document.documentElement.dataset['motion']; // Gespeicherter globaler Bewegungsmodus.
-
-    return motionMode === 'off' || motionMode === 'reduced' || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
   /** Schreibt SEO-Daten für Treffer oder Missing-State. */

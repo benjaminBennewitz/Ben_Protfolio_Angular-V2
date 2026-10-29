@@ -18,23 +18,17 @@ import { Component, EventEmitter, HostBinding, HostListener, Input, Output } fro
   },
 })
 export class SystemDialogComponent {
-  /** Sichtbarer Fenstertitel. */
-  @Input({ required: true }) title = '';
+  @Input({ required: true }) title = '';                // Sichtbarer Fenstertitel.
 
-  /** Barrierefreier Dialogname; fällt auf den sichtbaren Titel zurück. */
-  @Input() ariaLabel = '';
+  @Input() ariaLabel = '';                              // Barrierefreier Dialogname; fällt auf den sichtbaren Titel zurück.
 
-  /** Barrierefreie Beschriftung des Close-Buttons. */
-  @Input() closeLabel = 'Dialog schließen';
+  @Input() closeLabel = 'Dialog schließen';             // Barrierefreie Beschriftung des Close-Buttons.
 
-  /** Kennzeichnet echte modale Dialoge für assistive Technologien. */
-  @Input() modal = false;
+  @Input() modal = false;                               // Kennzeichnet echte modale Dialoge für assistive Technologien.
 
-  /** Wird bei Close-Button oder Escape ausgelöst. */
-  @Output() readonly closed = new EventEmitter<void>();
+  @Output() readonly closed = new EventEmitter<void>(); // Wird bei Close-Button oder Escape ausgelöst.
 
-  /** Standardrolle für alle echten Systemdialoge. */
-  @HostBinding('attr.role') readonly role = 'dialog';
+  @HostBinding('attr.role') readonly role = 'dialog';   // Standardrolle für alle echten Systemdialoge.
 
   /** Liefert den barrierefreien Namen des Fensters. */
   @HostBinding('attr.aria-label')

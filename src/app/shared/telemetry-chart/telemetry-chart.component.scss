@@ -1,4 +1,35 @@
-/* src/app/shared/telemetry-chart/telemetry-chart.component.scss */
+/*###############################
+###
+###     telemetry-chart.component.scss
+###     TELEMETRY-CHART — Shared Component
+###     BASED ON: Angular, TypeScript, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Diagrammrahmen und Datenpfade
+   02   Animation telemetry-radial-draw
+   03   Animation telemetry-line-draw
+   04   Animation telemetry-fill-in
+   05   Animation telemetry-point-in
+   06   Responsive Darstellung
+   07   Reduzierte Bewegung
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Diagrammrahmen und Datenpfade
+   ========================================================================== */
 
 :host {
   display: block;
@@ -145,10 +176,21 @@
   transition: stroke-width 140ms steps(2, end), filter 140ms linear;
 }
 
-.telemetry-chart__radial-value--1 { stroke: var(--chart-tone-1); }
-.telemetry-chart__radial-value--2 { stroke: var(--chart-tone-2); }
-.telemetry-chart__radial-value--3 { stroke: var(--chart-tone-3); }
-.telemetry-chart__radial-value--4 { stroke: var(--chart-tone-4); }
+.telemetry-chart__radial-value--1 {
+  stroke: var(--chart-tone-1);
+}
+
+.telemetry-chart__radial-value--2 {
+  stroke: var(--chart-tone-2);
+}
+
+.telemetry-chart__radial-value--3 {
+  stroke: var(--chart-tone-3);
+}
+
+.telemetry-chart__radial-value--4 {
+  stroke: var(--chart-tone-4);
+}
 
 .telemetry-chart__radial-value:hover {
   stroke-width: 14;
@@ -260,16 +302,27 @@
   font-size: var(--telemetry-legend-font-size, 0.66rem);
 }
 
-.telemetry-chart__legend li > span {
+.telemetry-chart__legend li>span {
   width: 8px;
   height: 8px;
   background: var(--chart-tone-0);
 }
 
-.telemetry-chart__legend li:nth-child(2) > span { background: var(--chart-tone-1); }
-.telemetry-chart__legend li:nth-child(3) > span { background: var(--chart-tone-2); }
-.telemetry-chart__legend li:nth-child(4) > span { background: var(--chart-tone-3); }
-.telemetry-chart__legend li:nth-child(5) > span { background: var(--chart-tone-4); }
+.telemetry-chart__legend li:nth-child(2)>span {
+  background: var(--chart-tone-1);
+}
+
+.telemetry-chart__legend li:nth-child(3)>span {
+  background: var(--chart-tone-2);
+}
+
+.telemetry-chart__legend li:nth-child(4)>span {
+  background: var(--chart-tone-3);
+}
+
+.telemetry-chart__legend li:nth-child(5)>span {
+  background: var(--chart-tone-4);
+}
 
 .telemetry-chart__legend strong {
   overflow: hidden;
@@ -313,22 +366,55 @@
   animation-delay: calc(500ms + var(--chart-index, 0) * 60ms);
 }
 
+/* ==========================================================================
+   02   Animation telemetry-radial-draw
+   ========================================================================== */
+
 @keyframes telemetry-radial-draw {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
+
+/* ==========================================================================
+   03   Animation telemetry-line-draw
+   ========================================================================== */
 
 @keyframes telemetry-line-draw {
-  to { stroke-dashoffset: 0; }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
+
+/* ==========================================================================
+   04   Animation telemetry-fill-in
+   ========================================================================== */
 
 @keyframes telemetry-fill-in {
-  to { opacity: 1; }
+  to {
+    opacity: 1;
+  }
 }
 
+/* ==========================================================================
+   05   Animation telemetry-point-in
+   ========================================================================== */
+
 @keyframes telemetry-point-in {
-  from { opacity: 0; transform: scale(0); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
+
+/* ==========================================================================
+   06   Responsive Darstellung
+   ========================================================================== */
 
 @media (max-width: 720px) {
   .telemetry-chart__head {
@@ -344,7 +430,12 @@
   }
 }
 
+/* ==========================================================================
+   07   Reduzierte Bewegung
+   ========================================================================== */
+
 @media (prefers-reduced-motion: reduce) {
+
   .telemetry-chart__point,
   .telemetry-chart__radial-value,
   .telemetry-chart__line,

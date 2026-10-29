@@ -25,99 +25,46 @@ type ContactField = 'name' | 'email' | 'message';
   styleUrl: './contact-form.component.scss',
 })
 export class ContactFormComponent {
-  /** Laufender Zähler für eindeutige Formular-IDs bei mehreren Formularinstanzen. */
-  private static nextInstanceId = 0;
+  private static nextInstanceId = 0;                                         // Laufender Zähler für eindeutige Formular-IDs bei mehreren Formularinstanzen.
+  private readonly contactApiService = inject(ContactApiService);            // API-Service für CSRF-Handshake und Contact-Request.
+  private readonly languageService = inject(LanguageService);                // Sprachservice für Labels und Meldungen.
+  private readonly router = inject(Router);                                  // Router für die Danke-Seite nach erfolgreichem Versand.
+  readonly formId = `contact-form-${ContactFormComponent.nextInstanceId++}`; // Eindeutiger technischer Prefix für Formular- und Fehler-IDs.
+  readonly nameId = `${this.formId}-name`;                                   // ID des Namenfelds.
+  readonly emailId = `${this.formId}-email`;                                 // ID des E-Mail-Felds.
+  readonly messageId = `${this.formId}-message`;                             // ID des Nachrichtenfelds.
+  readonly privacyId = `${this.formId}-privacy`;                             // ID der Datenschutz-Checkbox.
+  readonly nameErrorId = `${this.nameId}-error`;                             // ID der Namen-Fehlermeldung.
+  readonly emailErrorId = `${this.emailId}-error`;                           // ID der E-Mail-Fehlermeldung.
+  readonly messageErrorId = `${this.messageId}-error`;                       // ID der Nachrichten-Fehlermeldung.
+  readonly privacyErrorId = `${this.privacyId}-error`;                       // ID der Datenschutz-Fehlermeldung.
+  readonly content = computed(                                               // Übersetzter Kontaktinhalt.
+    /** Übersetzter Kontaktinhalt. */
+    () => this.languageService.content().contact
+  );
 
-  /** API-Service für CSRF-Handshake und Contact-Request. */
-  private readonly contactApiService = inject(ContactApiService);
-
-  /** Sprachservice für Labels und Meldungen. */
-  private readonly languageService = inject(LanguageService);
-
-  /** Router für die Danke-Seite nach erfolgreichem Versand. */
-  private readonly router = inject(Router);
-
-  /** Eindeutiger technischer Prefix für Formular- und Fehler-IDs. */
-  readonly formId = `contact-form-${ContactFormComponent.nextInstanceId++}`;
-
-  /** ID des Namenfelds. */
-  readonly nameId = `${this.formId}-name`;
-
-  /** ID des E-Mail-Felds. */
-  readonly emailId = `${this.formId}-email`;
-
-  /** ID des Nachrichtenfelds. */
-  readonly messageId = `${this.formId}-message`;
-
-  /** ID der Datenschutz-Checkbox. */
-  readonly privacyId = `${this.formId}-privacy`;
-
-  /** ID der Namen-Fehlermeldung. */
-  readonly nameErrorId = `${this.nameId}-error`;
-
-  /** ID der E-Mail-Fehlermeldung. */
-  readonly emailErrorId = `${this.emailId}-error`;
-
-  /** ID der Nachrichten-Fehlermeldung. */
-  readonly messageErrorId = `${this.messageId}-error`;
-
-  /** ID der Datenschutz-Fehlermeldung. */
-  readonly privacyErrorId = `${this.privacyId}-error`;
-
-  /** Übersetzter Kontaktinhalt. */
-  readonly content = computed(() => this.languageService.content().contact);
-
-  /** Name aus dem Formular. */
-  readonly name = signal<string>('');
-
-  /** E-Mail aus dem Formular. */
-  readonly email = signal<string>('');
-
-  /** Nachricht aus dem Formular. */
-  readonly message = signal<string>('');
-
-  /** Unsichtbares Honeypot-Feld gegen einfache Bot-Submits. */
-  readonly website = signal<string>('');
-
-  /** Gewählte Themen aus der Custom-Mehrfachauswahl. */
-  readonly selectedTopics = signal<readonly string[]>([]);
-
-  /** Kenntnisnahme der Datenschutzhinweise. */
-  readonly privacyAccepted = signal<boolean>(false);
-
-  /** Statusmeldung nach Submit. */
-  readonly status = signal<string>('');
-
-  /** Markiert, dass der erste Submit-Versuch erfolgt ist. */
-  readonly hasSubmitted = signal<boolean>(false);
-
-  /** Markiert, dass gerade ein Server-Request läuft. */
-  readonly isSubmitting = signal<boolean>(false);
+  readonly name = signal<string>('');                                        // Name aus dem Formular.
+  readonly email = signal<string>('');                                       // E-Mail aus dem Formular.
+  readonly message = signal<string>('');                                     // Nachricht aus dem Formular.
+  readonly website = signal<string>('');                                     // Unsichtbares Honeypot-Feld gegen einfache Bot-Submits.
+  readonly selectedTopics = signal<readonly string[]>([]);                   // Gewählte Themen aus der Custom-Mehrfachauswahl.
+  readonly privacyAccepted = signal<boolean>(false);                         // Kenntnisnahme der Datenschutzhinweise.
+  readonly status = signal<string>('');                                      // Statusmeldung nach Submit.
+  readonly hasSubmitted = signal<boolean>(false);                            // Markiert, dass der erste Submit-Versuch erfolgt ist.
+  readonly isSubmitting = signal<boolean>(false);                            // Markiert, dass gerade ein Server-Request läuft.
 
   /** Aktualisiert ein Feld anhand des Eingabe-Events. */
   updateField(field: ContactField | 'website', event: Event): void {
-    const value = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement ? event.target.value : '';
 
-    if (field === 'name') {
-      this.name.set(value);
-    }
+    const value = event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement ? event.target.value : ''; // Eingelesener oder normalisierter Eingabewert.
 
-    if (field === 'email') {
-      this.email.set(value);
-    }
-
-    if (field === 'message') {
-      this.message.set(value);
-    }
-
-    if (field === 'website') {
-      this.website.set(value);
-    }
+    this[field].set(value);
   }
 
   /** Schaltet ein Kontakt-Thema in der Custom-Mehrfachauswahl um. */
   toggleTopic(topic: ContactTopic): void {
-    const selected = new Set(this.selectedTopics());
+
+    const selected = new Set(this.selectedTopics()); // Aktuell ausgewählte Kontakt-Themen.
 
     if (selected.has(topic.value)) {
       selected.delete(topic.value);
@@ -135,7 +82,9 @@ export class ContactFormComponent {
 
   /** Aktualisiert die Datenschutz-Kenntnisnahme anhand der nativen Checkbox. */
   updatePrivacyConsent(event: Event): void {
-    const checked = event.target instanceof HTMLInputElement ? event.target.checked : false;
+
+    const checked = event.target instanceof HTMLInputElement ? event.target.checked : false; // Aktueller Zustand der Datenschutz-Checkbox.
+
     this.privacyAccepted.set(checked);
   }
 
@@ -222,10 +171,11 @@ export class ContactFormComponent {
 
   /** Erhält die bestehende Themenauswahl, ohne ein zusätzliches API-Feld einzuführen. */
   private messageWithTopics(): string {
-    const message = this.message().trim();
-    const selectedTopicLabels = this.content().topics
-      .filter((topic) => this.selectedTopics().includes(topic.value))
-      .map((topic) => topic.label);
+
+    const message = this.message().trim();            // Meldung des DOS-Dialogfensters.
+    const selectedTopicLabels = this.content().topics // Übersetzte Beschriftungen der gewählten Kontakt-Themen.
+      .filter(/** Prüft, ob der Eintrag die Auswahlbedingung erfüllt. */(topic) => this.selectedTopics().includes(topic.value))
+      .map(/** Liefert die sichtbare Beschriftung des gewählten Themas. */(topic) => topic.label);
 
     if (!selectedTopicLabels.length) {
       return message;
@@ -240,31 +190,18 @@ export class ContactFormComponent {
       return this.content().serverErrorMessage;
     }
 
-    if (error.kind === 'validation') {
-      return this.content().validationErrorMessage;
-    }
+    const content = this.content();                             // Übersetzte Inhalte der aktuellen Route.
+    const messages: Record<ContactApiError['kind'], string> = { // Zuordnung fachlicher API-Fehler zu übersetzten UI-Meldungen.
+      validation: content.validationErrorMessage,
+      csrf: content.csrfErrorMessage,
+      'payload-too-large': content.payloadTooLargeErrorMessage,
+      'rate-limit': content.rateLimitErrorMessage,
+      unavailable: content.temporaryErrorMessage,
+      network: content.networkErrorMessage,
+      server: content.serverErrorMessage,
+    };
 
-    if (error.kind === 'csrf') {
-      return this.content().csrfErrorMessage;
-    }
-
-    if (error.kind === 'payload-too-large') {
-      return this.content().payloadTooLargeErrorMessage;
-    }
-
-    if (error.kind === 'rate-limit') {
-      return this.content().rateLimitErrorMessage;
-    }
-
-    if (error.kind === 'unavailable') {
-      return this.content().temporaryErrorMessage;
-    }
-
-    if (error.kind === 'network') {
-      return this.content().networkErrorMessage;
-    }
-
-    return this.content().serverErrorMessage;
+    return messages[error.kind];
   }
 
   /** Setzt nach erfolgreichem Versand alle Formularwerte inklusive Honeypot zurück. */
@@ -279,7 +216,6 @@ export class ContactFormComponent {
     this.status.set('');
   }
 
-
   /** Prüft Mindestfelder und einfache E-Mail-Syntax. */
   private isValid(): boolean {
     return !this.nameError() && !this.emailError() && !this.messageError() && this.privacyAccepted();
@@ -287,7 +223,8 @@ export class ContactFormComponent {
 
   /** Ermittelt den Fehlertext für den Namen. */
   private nameError(): string {
-    const value = this.name().trim();
+
+    const value = this.name().trim(); // Eingelesener oder normalisierter Eingabewert.
 
     if (!value) {
       return this.content().nameRequiredError;
@@ -302,7 +239,8 @@ export class ContactFormComponent {
 
   /** Ermittelt den Fehlertext für die E-Mail-Adresse. */
   private emailError(): string {
-    const value = this.email().trim();
+
+    const value = this.email().trim(); // Eingelesener oder normalisierter Eingabewert.
 
     if (!value) {
       return this.content().emailRequiredError;
@@ -317,7 +255,8 @@ export class ContactFormComponent {
 
   /** Ermittelt den Fehlertext für die Nachricht. */
   private messageError(): string {
-    const value = this.message().trim();
+
+    const value = this.message().trim(); // Eingelesener oder normalisierter Eingabewert.
 
     if (!value) {
       return this.content().messageRequiredError;

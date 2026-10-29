@@ -18,15 +18,15 @@ type RgbaColor = readonly [number, number, number, number];
 
 /** Uniform-Locations des Fragment-Shaders. */
 interface ShaderUniforms {
-  readonly resolution: WebGLUniformLocation;
-  readonly time: WebGLUniformLocation;
-  readonly speed: WebGLUniformLocation;
-  readonly intensity: WebGLUniformLocation;
-  readonly zoom: WebGLUniformLocation;
-  readonly frontColor: WebGLUniformLocation;
-  readonly backColor: WebGLUniformLocation;
-  readonly ditherSize: WebGLUniformLocation;
-  readonly shape: WebGLUniformLocation;
+  readonly resolution: WebGLUniformLocation; // Uniform für die aktuelle Canvas-Auflösung.
+  readonly time: WebGLUniformLocation;       // Uniform für die seit Start vergangene Animationszeit.
+  readonly speed: WebGLUniformLocation;      // Uniform für die Animationsgeschwindigkeit.
+  readonly intensity: WebGLUniformLocation;  // Uniform für die Musterintensität.
+  readonly zoom: WebGLUniformLocation;       // Uniform für die Skalierung des prozeduralen Musters.
+  readonly frontColor: WebGLUniformLocation; // Vordergrundfarbe des Dithering-Musters.
+  readonly backColor: WebGLUniformLocation;  // Hintergrundfarbe des Dithering-Musters.
+  readonly ditherSize: WebGLUniformLocation; // Uniform für die Größe der Dithering-Matrix.
+  readonly shape: WebGLUniformLocation;      // Uniform für die prozedurale Formauswahl.
 }
 
 /** Dekorativer GPU-Shader für animierte Dithering-Hintergründe. */
@@ -38,86 +38,46 @@ interface ShaderUniforms {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
-  /** Canvas-Element für das WebGL-Rendering. */
-  @ViewChild('canvasRef')
+  @ViewChild('canvasRef')                                      // Canvas-Element für das WebGL-Rendering.
   private readonly canvasRef?: ElementRef<HTMLCanvasElement>;
 
-  /** Host-Element für Größe und CSS-Farbauflösung. */
-  private readonly hostRef = inject(ElementRef<HTMLElement>);
+  private readonly hostRef = inject(ElementRef<HTMLElement>);  // Host-Element für Größe und CSS-Farbauflösung.
+  private readonly ngZone = inject(NgZone);                    // Führt den Animationsloop außerhalb der Angular-Zone aus.
+  private gl?: WebGL2RenderingContext;                         // WebGL2-Kontext des Canvas.
+  private program?: WebGLProgram;                              // Kompiliertes GPU-Programm für den Swirl.
+  private uniforms?: ShaderUniforms;                           // Uniform-Locations für alle pro Frame benötigten Werte.
+  private resizeObserver?: ResizeObserver;                     // Beobachtet Größenänderungen des Hosts.
+  private rootObserver?: MutationObserver;                     // Beobachtet Theme-, Kontrast- und Motion-Änderungen.
+  private visibilityObserver?: IntersectionObserver;           // Pausiert Rendering außerhalb des sichtbaren Viewports.
+  private animationFrameId = 0;                                // ID des laufenden Animationsframes.
+  private animationStart = 0;                                  // Startzeit der aktuellen Animationssequenz.
+  private isVisible = true;                                    // Sichtbarkeitsstatus des Hosts.
+  private isWebGlAvailable = false;                            // Verhindert wiederholte Starts nach einem fehlgeschlagenen WebGL-Setup.
+  private frontColor: RgbaColor = [167 / 255, 1, 25 / 255, 1]; // Vordergrundfarbe als normalisierte RGBA-Kanäle.
+  private backColor: RgbaColor = [0, 0, 0, 0];                 // Hintergrundfarbe als normalisierte RGBA-Kanäle.
 
-  /** Führt den Animationsloop außerhalb der Angular-Zone aus. */
-  private readonly ngZone = inject(NgZone);
+  @Input() colorBack = 'transparent';                          // CSS-Farbe für die transparenten bzw. dunklen Shader-Flächen.
 
-  /** WebGL2-Kontext des Canvas. */
-  private gl?: WebGL2RenderingContext;
+  @Input() colorFront = 'var(--bp-color-accent)';              // CSS-Farbe für die sichtbaren Dither-Pixel.
 
-  /** Kompiliertes GPU-Programm für den Swirl. */
-  private program?: WebGLProgram;
+  @Input() shape: DitheringShape = 'swirl';                    // Prozedurale Form des Dithering-Musters.
 
-  /** Uniform-Locations für alle pro Frame benötigten Werte. */
-  private uniforms?: ShaderUniforms;
+  @Input() type: DitheringMatrixType = '4x4';                  // Bayer-Matrix für das Dithering.
 
-  /** Beobachtet Größenänderungen des Hosts. */
-  private resizeObserver?: ResizeObserver;
+  @Input() pxSize = 4;                                         // Größe eines Shader-Pixels in CSS-Pixeln.
 
-  /** Beobachtet Theme-, Kontrast- und Motion-Änderungen. */
-  private rootObserver?: MutationObserver;
+  @Input() speed = 0.9;                                        // Geschwindigkeit des Swirls.
 
-  /** Pausiert Rendering außerhalb des sichtbaren Viewports. */
-  private visibilityObserver?: IntersectionObserver;
+  @Input() intensity = 1;                                      // Dichte und Stärke des Musters.
 
-  /** ID des laufenden Animationsframes. */
-  private animationFrameId = 0;
+  @Input() zoom = 1;                                           // Sichtbarer Ausschnitt des mathematischen Swirls.
 
-  /** Startzeit der aktuellen Animationssequenz. */
-  private animationStart = 0;
-
-  /** Sichtbarkeitsstatus des Hosts. */
-  private isVisible = true;
-
-  /** Verhindert wiederholte Starts nach einem fehlgeschlagenen WebGL-Setup. */
-  private isWebGlAvailable = false;
-
-  /** Vordergrundfarbe als normalisierte RGBA-Kanäle. */
-  private frontColor: RgbaColor = [167 / 255, 1, 25 / 255, 1];
-
-  /** Hintergrundfarbe als normalisierte RGBA-Kanäle. */
-  private backColor: RgbaColor = [0, 0, 0, 0];
-
-  /** CSS-Farbe für die transparenten bzw. dunklen Shader-Flächen. */
-  @Input() colorBack = 'transparent';
-
-  /** CSS-Farbe für die sichtbaren Dither-Pixel. */
-  @Input() colorFront = 'var(--bp-color-accent)';
-
-  /** Prozedurale Form des Dithering-Musters. */
-  @Input() shape: DitheringShape = 'swirl';
-
-  /** Bayer-Matrix für das Dithering. */
-  @Input() type: DitheringMatrixType = '4x4';
-
-  /** Größe eines Shader-Pixels in CSS-Pixeln. */
-  @Input() pxSize = 4;
-
-  /** Geschwindigkeit des Swirls. */
-  @Input() speed = 0.9;
-
-  /** Dichte und Stärke des Musters. */
-  @Input() intensity = 1;
-
-  /**
-   * Sichtbarer Ausschnitt des mathematischen Swirls.
-   * 0.4 entspricht dem bisherigen 250-vw-Zoom, ohne eine 2.5-fach größere Renderfläche zu erzeugen.
-   */
-  @Input() zoom = 1;
-
-  /** Dekorativer Hintergrund wird von Screenreadern ignoriert. */
-  @HostBinding('attr.aria-hidden')
+  @HostBinding('attr.aria-hidden') // Dekorativer Hintergrund wird von Screenreadern ignoriert.
   protected readonly ariaHidden = 'true';
 
   /** Initialisiert WebGL, Observer und Animation. */
   ngAfterViewInit(): void {
-    const canvas = this.canvasRef?.nativeElement;
+    const canvas = this.canvasRef?.nativeElement; // Canvas-Element für das aktuelle Renderverfahren.
 
     if (!canvas) {
       return;
@@ -151,9 +111,9 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
 
   /** Registriert Resize-, Sichtbarkeits- und Theme-Beobachter. */
   private bindObservers(): void {
-    const host = this.hostRef.nativeElement;
+    const host = this.hostRef.nativeElement; // Gerendertes Host-Element der Komponente.
 
-    this.resizeObserver = new ResizeObserver(() => {
+    this.resizeObserver = new ResizeObserver(/** Registriert Resize-, Sichtbarkeits- und Theme-Beobachter. */() => {
       this.resizeCanvas();
 
       if (this.isWebGlAvailable) {
@@ -161,18 +121,19 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
         return;
       }
 
-      const canvas = this.canvasRef?.nativeElement;
+      const canvas = this.canvasRef?.nativeElement; // Canvas-Element für das aktuelle Renderverfahren.
+
       canvas && this.renderStaticFallback(canvas);
     });
     this.resizeObserver.observe(host);
 
-    this.visibilityObserver = new IntersectionObserver(([entry]) => {
+    this.visibilityObserver = new IntersectionObserver(/** Registriert Resize-, Sichtbarkeits- und Theme-Beobachter. */([entry]) => {
       this.isVisible = entry?.isIntersecting ?? false;
       this.updateAnimationState();
     }, { threshold: 0.05 });
     this.visibilityObserver.observe(host);
 
-    this.rootObserver = new MutationObserver(() => {
+    this.rootObserver = new MutationObserver(/** Registriert Resize-, Sichtbarkeits- und Theme-Beobachter. */() => {
       this.refreshColors();
 
       if (this.isWebGlAvailable) {
@@ -180,7 +141,8 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
         return;
       }
 
-      const canvas = this.canvasRef?.nativeElement;
+      const canvas = this.canvasRef?.nativeElement; // Canvas-Element für das aktuelle Renderverfahren.
+
       canvas && this.renderStaticFallback(canvas);
     });
     this.rootObserver.observe(document.documentElement, {
@@ -191,7 +153,8 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
 
   /** Initialisiert WebGL2 und kompiliert das GPU-Programm. */
   private initializeWebGl(canvas: HTMLCanvasElement): boolean {
-    const gl = canvas.getContext('webgl2', {
+
+    const gl = canvas.getContext('webgl2', { // WebGL2-Kontext der Shader-Bühne.
       alpha: true,
       antialias: false,
       depth: false,
@@ -207,8 +170,8 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
       return false;
     }
 
-    const vertexShader = this.compileShader(gl, gl.VERTEX_SHADER, this.vertexShaderSource);
-    const fragmentShader = this.compileShader(gl, gl.FRAGMENT_SHADER, this.fragmentShaderSource);
+    const vertexShader = this.compileShader(gl, gl.VERTEX_SHADER, this.vertexShaderSource);       // Kompilierter Vertex-Shader für die Vollbildfläche.
+    const fragmentShader = this.compileShader(gl, gl.FRAGMENT_SHADER, this.fragmentShaderSource); // Kompilierter Fragment-Shader für das Dithering-Muster.
 
     if (!vertexShader || !fragmentShader) {
       vertexShader && gl.deleteShader(vertexShader);
@@ -216,7 +179,7 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
       return false;
     }
 
-    const program = gl.createProgram();
+    const program = gl.createProgram(); // Verknüpftes WebGL-Shaderprogramm.
 
     if (!program) {
       gl.deleteShader(vertexShader);
@@ -236,7 +199,7 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
       return false;
     }
 
-    const uniforms = this.resolveUniforms(gl, program);
+    const uniforms = this.resolveUniforms(gl, program); // Referenzen auf die Shader-Uniforms.
 
     if (!uniforms) {
       gl.deleteProgram(program);
@@ -258,7 +221,8 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
 
   /** Kompiliert einen einzelnen GLSL-Shader und liefert bei Fehlern keinen Shader zurück. */
   private compileShader(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader | undefined {
-    const shader = gl.createShader(type);
+
+    const shader = gl.createShader(type); // Gerade kompilierter WebGL-Shader.
 
     if (!shader) {
       return undefined;
@@ -278,15 +242,16 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
 
   /** Löst alle benötigten Uniform-Locations einmalig auf. */
   private resolveUniforms(gl: WebGL2RenderingContext, program: WebGLProgram): ShaderUniforms | undefined {
-    const resolution = gl.getUniformLocation(program, 'u_resolution');
-    const time = gl.getUniformLocation(program, 'u_time');
-    const speed = gl.getUniformLocation(program, 'u_speed');
-    const intensity = gl.getUniformLocation(program, 'u_intensity');
-    const zoom = gl.getUniformLocation(program, 'u_zoom');
-    const frontColor = gl.getUniformLocation(program, 'u_front_color');
-    const backColor = gl.getUniformLocation(program, 'u_back_color');
-    const ditherSize = gl.getUniformLocation(program, 'u_dither_size');
-    const shape = gl.getUniformLocation(program, 'u_shape');
+
+    const resolution = gl.getUniformLocation(program, 'u_resolution');  // Uniform für die aktuelle Canvas-Auflösung.
+    const time = gl.getUniformLocation(program, 'u_time');              // Uniform für die seit Start vergangene Animationszeit.
+    const speed = gl.getUniformLocation(program, 'u_speed');            // Uniform für die Animationsgeschwindigkeit.
+    const intensity = gl.getUniformLocation(program, 'u_intensity');    // Uniform für die Musterintensität.
+    const zoom = gl.getUniformLocation(program, 'u_zoom');              // Uniform für die Skalierung des prozeduralen Musters.
+    const frontColor = gl.getUniformLocation(program, 'u_front_color'); // Vordergrundfarbe des Dithering-Musters.
+    const backColor = gl.getUniformLocation(program, 'u_back_color');   // Hintergrundfarbe des Dithering-Musters.
+    const ditherSize = gl.getUniformLocation(program, 'u_dither_size'); // Uniform für die Größe der Dithering-Matrix.
+    const shape = gl.getUniformLocation(program, 'u_shape');            // Geometrie der SVG-Maske oder aktuelles Shader-Muster.
 
     if (!resolution || !time || !speed || !intensity || !zoom || !frontColor || !backColor || !ditherSize || !shape) {
       return undefined;
@@ -297,15 +262,15 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
 
   /** Skaliert die interne Renderauflösung passend zur gewünschten Pixelgröße. */
   private resizeCanvas(): void {
-    const canvas = this.canvasRef?.nativeElement;
+    const canvas = this.canvasRef?.nativeElement; // Canvas-Element für das aktuelle Renderverfahren.
 
     if (!canvas) {
       return;
     }
 
-    const pixelSize = Math.max(1, Math.round(this.pxSize));
-    const width = Math.max(1, Math.ceil(this.hostRef.nativeElement.clientWidth / pixelSize));
-    const height = Math.max(1, Math.ceil(this.hostRef.nativeElement.clientHeight / pixelSize));
+    const pixelSize = Math.max(1, Math.round(this.pxSize));                                     // Kantenlänge einer Dithering-Zelle in Pixeln.
+    const width = Math.max(1, Math.ceil(this.hostRef.nativeElement.clientWidth / pixelSize));   // Berechnete Breite in CSS-Pixeln.
+    const height = Math.max(1, Math.ceil(this.hostRef.nativeElement.clientHeight / pixelSize)); // Berechnete Höhe in CSS-Pixeln.
 
     if (canvas.width === width && canvas.height === height) {
       return;
@@ -318,7 +283,7 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
 
   /** Synchronisiert den WebGL-Viewport mit der internen Canvas-Auflösung. */
   private resizeViewport(): void {
-    const canvas = this.canvasRef?.nativeElement;
+    const canvas = this.canvasRef?.nativeElement; // Canvas-Element für das aktuelle Renderverfahren.
 
     if (!canvas || !this.gl) {
       return;
@@ -342,7 +307,7 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.ngZone.runOutsideAngular(() => {
+    this.ngZone.runOutsideAngular(/** Plant den nächsten Layout- oder Animationsschritt der Seite. */() => {
       this.animationFrameId = window.requestAnimationFrame(this.animate);
     });
   }
@@ -364,7 +329,7 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const elapsedSeconds = this.shouldAnimate() ? this.getElapsedSeconds(performance.now()) : 0;
+    const elapsedSeconds = this.shouldAnimate() ? this.getElapsedSeconds(performance.now()) : 0; // Seit Animationsbeginn vergangene Zeit in Sekunden.
     this.renderFrame(elapsedSeconds);
   }
 
@@ -376,10 +341,10 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
 
   /** Übergibt nur Uniforms an die GPU und zeichnet ein bildschirmfüllendes Dreieck. */
   private renderFrame(elapsedSeconds: number): void {
-    const canvas = this.canvasRef?.nativeElement;
-    const gl = this.gl;
-    const program = this.program;
-    const uniforms = this.uniforms;
+    const canvas = this.canvasRef?.nativeElement; // Canvas-Element für das aktuelle Renderverfahren.
+    const gl = this.gl;                           // WebGL2-Kontext der Shader-Bühne.
+    const program = this.program;                 // Verknüpftes WebGL-Shaderprogramm.
+    const uniforms = this.uniforms;               // Referenzen auf die Shader-Uniforms.
 
     if (!canvas || !gl || !program || !uniforms) {
       return;
@@ -419,24 +384,28 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
 
   /** Löst einen CSS-Farbwert über den Browser in normalisierte RGBA-Kanäle auf. */
   private resolveCssColor(value: string): RgbaColor {
-    const probe = document.createElement('span');
+
+    const probe = document.createElement('span'); // Temporäres DOM-Element zur CSS-Farbauflösung.
+
     probe.style.color = value;
     this.hostRef.nativeElement.appendChild(probe);
-    const resolved = getComputedStyle(probe).color;
+
+    const resolved = getComputedStyle(probe).color; // Vom Browser aufgelöster CSS-Farbwert.
+
     probe.remove();
 
     if (resolved === 'transparent') {
       return [0, 0, 0, 0];
     }
 
-    const match = resolved.match(/rgba?\(([^)]+)\)/i);
+    const match = resolved.match(/rgba?\(([^)]+)\)/i); // Treffer der Farbwert-Analyse.
 
     if (!match) {
       return [0, 0, 0, 0];
     }
 
-    const channels = match[1].split(/[ ,/]+/).filter(Boolean).map(Number);
-    const alpha = channels.length > 3 ? channels[3] : 1;
+    const channels = match[1].split(/[ ,/]+/).filter(Boolean).map(Number); // Numerische Farbkanäle des CSS-Farbwerts.
+    const alpha = channels.length > 3 ? channels[3] : 1;                   // Deckkraft des aktuellen Partikelstrichs.
 
     return [
       Math.min(1, Math.max(0, (channels[0] ?? 0) / 255)),
@@ -448,51 +417,58 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
 
   /** Prüft Sichtbarkeit und globale Motion-Präferenz. */
   private shouldAnimate(): boolean {
-    const motion = document.documentElement.dataset['motion'];
+
+    const motion = document.documentElement.dataset['motion']; // Aktuelle Browser-Abfrage für reduzierte Bewegung.
+
     return this.isVisible && motion !== 'reduced' && motion !== 'off';
   }
 
   /** Zeichnet bei fehlendem WebGL2 einen einzigen statischen Frame mit Canvas2D. */
   private renderStaticFallback(canvas: HTMLCanvasElement): void {
-    const context = canvas.getContext('2d', { alpha: true });
+    const context = canvas.getContext('2d', { alpha: true }); // Verfügbarer Canvas-Zeichenkontext.
 
     if (!context) {
       return;
     }
 
-    const width = canvas.width;
-    const height = canvas.height;
-    const imageData = context.createImageData(width, height);
-    const pixels = imageData.data;
-    const radiusBase = Math.max(1, Math.min(width, height) * 0.5);
-    const front = this.frontColor.map((channel, index) => Math.round(channel * (index === 3 ? 255 : 255)));
-    const back = this.backColor.map((channel) => Math.round(channel * 255));
-    const zoom = Math.min(2, Math.max(0.05, this.zoom));
+    const width = canvas.width;                                                                                                                                                            // Berechnete Breite in CSS-Pixeln.
+    const height = canvas.height;                                                                                                                                                          // Berechnete Höhe in CSS-Pixeln.
+    const imageData = context.createImageData(width, height);                                                                                                                              // Bildpuffer des Canvas-Fallbacks.
+    const pixels = imageData.data;                                                                                                                                                         // RGBA-Pixeldaten des aktuellen Bildpuffers.
+    const radiusBase = Math.max(1, Math.min(width, height) * 0.5);                                                                                                                         // Basisradius des prozeduralen Swirl-Musters.
+    const front = this.frontColor.map(/** Skaliert den Farbkanal auf einen ganzzahligen Canvas-Wert. */(channel, index) => Math.round(channel * (index === 3 ? 255 : 255))); // Normalisierte Vordergrundfarbe des Fallbacks.
+    const back = this.backColor.map(/** Überträgt den Eintrag in die benötigte Seiten- oder Fensterdarstellung. */(channel) => Math.round(channel * 255));                                // Normalisierte Hintergrundfarbe des Fallbacks.
+    const zoom = Math.min(2, Math.max(0.05, this.zoom));                                                                                                                                   // Uniform für die Skalierung des prozeduralen Musters.
 
     for (let y = 0; y < height; y += 1) {
       for (let x = 0; x < width; x += 1) {
-        const nx = ((x + 0.5 - width / 2) / radiusBase) * zoom;
-        const ny = ((y + 0.5 - height / 2) / radiusBase) * zoom;
-        let energy = 0;
+
+        const nx = ((x + 0.5 - width / 2) / radiusBase) * zoom;  // Normierte horizontale Pixelposition.
+        const ny = ((y + 0.5 - height / 2) / radiusBase) * zoom; // Normierte vertikale Pixelposition.
+        let energy = 0;                                          // Berechnete Musterstärke an der aktuellen Position.
 
         if (this.shape === 'wave') {
-          const uvX = x / Math.max(1, width);
-          const uvY = 1 - y / Math.max(1, height);
-          const waveX = uvX * 8 - 4;
-          const wave = Math.cos(0.5 * waveX) * Math.sin(1.5 * waveX) * 0.88;
+
+          const uvX = x / Math.max(1, width);                                // Horizontale UV-Koordinate für die Musterberechnung.
+          const uvY = 1 - y / Math.max(1, height);                           // Vertikale UV-Koordinate für die Musterberechnung.
+          const waveX = uvX * 8 - 4;                                         // Horizontaler Anteil der Wellenbewegung.
+          const wave = Math.cos(0.5 * waveX) * Math.sin(1.5 * waveX) * 0.88; // Zusammengesetzte Intensität des Wellenmusters.
+
           energy = 1 - this.smoothStep(-0.95, 0.95, (uvY - 0.48) * 4.2 + wave);
         } else {
-          const distance = Math.hypot(nx, ny);
-          const angle = Math.atan2(ny, nx);
-          const spiral = Math.sin(distance * 17.5 - angle * 5.8);
-          const ring = Math.sin(distance * 23.5);
-          const arm = Math.cos(angle * 2.6 + distance * 8.2);
+
+          const distance = Math.hypot(nx, ny);                    // Abstand der aktuellen Interaktionspunkte.
+          const angle = Math.atan2(ny, nx);                       // Strömungswinkel an der aktuellen Partikelposition.
+          const spiral = Math.sin(distance * 17.5 - angle * 5.8); // Winkelabhängige Auslenkung der Swirl-Spirale.
+          const ring = Math.sin(distance * 23.5);                 // Radialer Wellenanteil des Swirl-Musters.
+          const arm = Math.cos(angle * 2.6 + distance * 8.2);     // Aktueller Spiralarm des prozeduralen Musters.
+
           energy = (spiral * 0.58 + ring * 0.24 + arm * 0.18) * 0.5 + 0.5;
         }
 
-        const threshold = ((y & 3) * 4 + (x & 3)) / 16;
-        const color = energy > threshold ? front : back;
-        const offset = (y * width + x) * 4;
+        const threshold = ((y & 3) * 4 + (x & 3)) / 16;  // Schwellwert für Sichtbarkeit oder Dithering.
+        const color = energy > threshold ? front : back; // Interpolierte Farbe des aktuellen Pixels.
+        const offset = (y * width + x) * 4;              // Offset des Pixels im RGBA-Bildpuffer.
 
         pixels[offset] = color[0] ?? 0;
         pixels[offset + 1] = color[1] ?? 0;
@@ -506,11 +482,12 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
 
   /** Interpoliert weich zwischen zwei Grenzwerten für den statischen Canvas-Fallback. */
   private smoothStep(edge0: number, edge1: number, value: number): number {
-    const t = Math.min(1, Math.max(0, (value - edge0) / Math.max(0.0001, edge1 - edge0)));
+
+    const t = Math.min(1, Math.max(0, (value - edge0) / Math.max(0.0001, edge1 - edge0))); // Normalisierter Zeit- oder Interpolationswert.
+
     return t * t * (3 - 2 * t);
   }
 
-  /** Vertex-Shader für ein einzelnes bildschirmfüllendes Dreieck ohne Vertex-Buffer. */
   private readonly vertexShaderSource = `#version 300 es
     precision highp float;
 
@@ -523,9 +500,8 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
     void main() {
       gl_Position = vec4(POSITIONS[gl_VertexID], 0.0, 1.0);
     }
-  `;
+  `; // Vertex-Shader für das bildschirmfüllende Dreieck.
 
-  /** Fragment-Shader mit Swirl-Feld und Bayer-Dithering. */
   private readonly fragmentShaderSource = `#version 300 es
     precision highp float;
     precision highp int;
@@ -625,5 +601,5 @@ export class DitheringShaderComponent implements AfterViewInit, OnDestroy {
       float threshold = dither_threshold(dither_point);
       out_color = field > threshold ? u_front_color : u_back_color;
     }
-  `;
+  `; // Fragment-Shader für Muster, Dithering und Farbausgabe.
 }

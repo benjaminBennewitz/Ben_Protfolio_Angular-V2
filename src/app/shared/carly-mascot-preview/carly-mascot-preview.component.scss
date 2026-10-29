@@ -1,3 +1,31 @@
+/*###############################
+###
+###     carly-mascot-preview.component.scss
+###     CARLY-MASCOT-PREVIEW — Shared Component
+###     BASED ON: Angular, TypeScript, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   SVG-Host und Figurenbühne
+   02   Reduzierte Bewegung
+   ========================================================================== */
+
+/* ==========================================================================
+   01   SVG-Host und Figurenbühne
+   ========================================================================== */
+
 :host {
   display: block;
   width: 100%;
@@ -29,6 +57,10 @@
   animation: none !important;
   transition: none !important;
 }
+
+/* ==========================================================================
+   02   Reduzierte Bewegung
+   ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .carly-mascot-preview * {

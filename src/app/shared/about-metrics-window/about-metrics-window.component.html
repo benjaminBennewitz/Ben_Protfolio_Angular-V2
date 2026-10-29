@@ -8,8 +8,7 @@
 
   @if (isOpen()) {
   <aside #metricsWindow id="about-metrics-window" class="about-metrics__window bp-dos-window"
-    [class.is-recalculating]="isRecalculating()" role="dialog" tabindex="-1"
-    [attr.aria-label]="content().dialogLabel">
+    [class.is-recalculating]="isRecalculating()" role="dialog" tabindex="-1" [attr.aria-label]="content().dialogLabel">
     <div class="bp-dos-window__bar">
       <span>{{ content().title }}</span>
       <button class="about-metrics__close" type="button" [attr.aria-label]="content().closeLabel"
@@ -66,8 +65,8 @@
   }
 
   @if (isCalculatorOpen()) {
-  <section #calculatorWindow id="about-metrics-calculator" class="about-metrics__calculator bp-dos-window"
-    role="dialog" tabindex="-1" [attr.aria-label]="content().calculator.dialogLabel">
+  <section #calculatorWindow id="about-metrics-calculator" class="about-metrics__calculator bp-dos-window" role="dialog"
+    tabindex="-1" [attr.aria-label]="content().calculator.dialogLabel">
     <div class="bp-dos-window__bar">
       <span>{{ content().calculator.title }}</span>
       <button class="about-metrics__close" type="button" [attr.aria-label]="content().calculator.closeLabel"
@@ -98,11 +97,12 @@
 
         <div class="about-metrics__field about-metrics__field--wide">
           <span>{{ content().calculator.unitLabel }}</span>
-          <div #calculatorUnitSelect class="about-metrics__custom-select"
-            [class.is-open]="isCalculatorUnitMenuOpen()" (focusout)="closeCalculatorUnitMenuOnFocusOut($event)">
-            <button #calculatorUnitTrigger class="about-metrics__custom-select-trigger" type="button" aria-haspopup="listbox"
-              aria-controls="about-metrics-unit-listbox" [attr.aria-expanded]="isCalculatorUnitMenuOpen()"
-              (click)="toggleCalculatorUnitMenu()" (keydown)="handleCalculatorUnitTriggerKeydown($event)">
+          <div #calculatorUnitSelect class="about-metrics__custom-select" [class.is-open]="isCalculatorUnitMenuOpen()"
+            (focusout)="closeCalculatorUnitMenuOnFocusOut($event)">
+            <button #calculatorUnitTrigger class="about-metrics__custom-select-trigger" type="button"
+              aria-haspopup="listbox" aria-controls="about-metrics-unit-listbox"
+              [attr.aria-expanded]="isCalculatorUnitMenuOpen()" (click)="toggleCalculatorUnitMenu()"
+              (keydown)="handleCalculatorUnitTriggerKeydown($event)">
               <span>{{ selectedCalculatorUnit().label }}</span>
               <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
             </button>

@@ -19,9 +19,7 @@ import { ProjectVisualComponent } from '../project-visual/project-visual.compone
   styleUrl: './project-card.component.scss',
 })
 export class ProjectCardComponent {
-  /** Projektinhalt der Karte. */
-  @Input({ required: true }) project!: PortfolioProject;
+  @Input({ required: true }) project!: PortfolioProject; // Projektinhalt der Karte.
 
-  /** Label des Detail-Links. */
-  @Input() detailLabel = 'Projekt öffnen';
+  @Input() detailLabel = 'Projekt öffnen';               // Label des Detail-Links.
 }

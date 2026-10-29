@@ -13,25 +13,29 @@ import {
   viewChild,
 } from '@angular/core';
 
-const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';
-const CARLY_ASSET_URL = '/assets/images/projects/carly-managed/carly.svg';
-const POINTER_IDLE_BEFORE_RANDOM_MS = 1_700;
-const TAIL_KEYFRAME_COUNT = 11;
-const TAIL_TWEEN_FRAME_COUNT = 3;
-const TAIL_FRAME_DURATION_MS = 28;
-const TAIL_IDLE_MIN_MS = 4_500;
-const TAIL_IDLE_MAX_MS = 11_500;
+const SVG_NAMESPACE = 'http://www.w3.org/2000/svg';                        // XML-Namensraum zum Erzeugen der Carly-SVG-Elemente.
+const CARLY_ASSET_URL = '/assets/images/projects/carly-managed/carly.svg'; // Pfad der ursprünglichen Carly-SVG-Datei.
+const POINTER_IDLE_BEFORE_RANDOM_MS = 1_700;                               // Wartezeit ohne Pointer-Bewegung vor zufälligen Blicken.
+const TAIL_KEYFRAME_COUNT = 11;                                            // Anzahl der ursprünglichen Schwanz-Keyframes.
+const TAIL_TWEEN_FRAME_COUNT = 3;                                          // Anzahl der Zwischenbilder je Keyframe-Übergang.
+const TAIL_FRAME_DURATION_MS = 28;                                         // Anzeigedauer eines Schwanz-Frames in Millisekunden.
+const TAIL_IDLE_MIN_MS = 4_500;                                            // Minimale Ruhezeit zwischen Schwanzanimationen.
+const TAIL_IDLE_MAX_MS = 11_500;                                           // Maximale Ruhezeit zwischen Schwanzanimationen.
 
-let carlySvgSourcePromise: Promise<string> | null = null;
+let carlySvgSourcePromise: Promise<string> | null = null; // Gemeinsam verwendeter Ladeauftrag für die Carly-SVG-Quelle.
 
+/** Sichtbare Öffnungszustände der animierten Augen. */
 type CarlyEyeMode = 'open' | 'half' | 'closed';
 
 /** Erstellt die originale Abspielreihenfolge aus Carlys Illustrator-Keyframes. */
 function createTailFrameIds(): string[] {
-  const frameIds: string[] = [];
+
+  const frameIds: string[] = []; // Geordnete Abspielkennungen der Schwanzanimation.
 
   for (let frame = 1; frame <= TAIL_KEYFRAME_COUNT; frame += 1) {
-    const current = `KF${String(frame).padStart(2, '0')}`;
+
+    const current = `KF${String(frame).padStart(2, '0')}`; // Aktueller Zähl-, Animations- oder Messwert.
+
     frameIds.push(current);
 
     if (frame === TAIL_KEYFRAME_COUNT) continue;
@@ -44,12 +48,12 @@ function createTailFrameIds(): string[] {
   return frameIds;
 }
 
-const TAIL_FRAME_IDS = createTailFrameIds();
+const TAIL_FRAME_IDS = createTailFrameIds(); // Vollständige Abspielreihenfolge der Schwanzanimation.
 
 /** Lädt Carlys lokales SVG nur einmal und nutzt anschließend den Browser-Cache. */
 function loadCarlySvgSource(): Promise<string> {
   if (!carlySvgSourcePromise) {
-    carlySvgSourcePromise = fetch(CARLY_ASSET_URL).then((response) => {
+    carlySvgSourcePromise = fetch(CARLY_ASSET_URL).then(/** Führt den geplanten Schritt der Seiteninteraktion aus. */(response) => {
       if (!response.ok) {
         throw new Error(`Carly-Asset konnte nicht geladen werden: ${response.status}`);
       }
@@ -70,54 +74,33 @@ function loadCarlySvgSource(): Promise<string> {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarlyMascotPreviewComponent {
-  /** Gibt an, ob das lokale SVG nicht geladen werden konnte. */
-  protected readonly assetFailed = signal(false);
+  protected readonly assetFailed = signal(false);                           // Gibt an, ob das lokale SVG nicht geladen werden konnte.
+  private readonly svgHost = viewChild<ElementRef<HTMLElement>>('svgHost'); // Hostelement, in das die bereinigte SVG-Struktur übernommen wird.
+  private svgElement: SVGSVGElement | null = null;                          // Aktuell injizierte SVG-Struktur.
+  private originalViewBox = '0 0 351.144 571.7211';                         // Ursprüngliche ViewBox als technischer Fallback.
+  private expressionTimers: number[] = [];                                  // Geplante Ausdruckswechsel für Blinzel-Sequenzen.
+  private blinkTimer: number | null = null;                                 // Timer für zufälliges Blinzeln.
+  private gazeTimer: number | null = null;                                  // Timer für zufällige Blickrichtungen.
+  private pointerFrame: number | null = null;                               // Animation-Frame für gedrosseltes Cursor-Tracking.
+  private tailIdleTimer: number | null = null;                              // Timer für die nächste zufällige Schwanzbewegung.
+  private tailFrameRequest: number | null = null;                           // Animation-Frame der aktuell laufenden Schwanzbewegung.
+  private currentTailFrame = 0;                                             // Aktueller Index innerhalb der Schwanz-Keyframes.
+  private readonly tailFrameIds = [...TAIL_FRAME_IDS];                      // Geordnete Original- und Tween-Frames des Carly-Assets.
+  private lastPointerAt = 0;                                                // Letzter Pointer-Zeitpunkt, damit zufällige Blicke nicht mit Cursor-Tracking kollidieren.
 
-  /** Hostelement, in das die bereinigte SVG-Struktur übernommen wird. */
-  private readonly svgHost = viewChild<ElementRef<HTMLElement>>('svgHost');
-
-  /** Aktuell injizierte SVG-Struktur. */
-  private svgElement: SVGSVGElement | null = null;
-
-  /** Ursprüngliche ViewBox als technischer Fallback. */
-  private originalViewBox = '0 0 351.144 571.7211';
-
-  /** Geplante Ausdruckswechsel für Blinzel-Sequenzen. */
-  private expressionTimers: number[] = [];
-
-  /** Timer für zufälliges Blinzeln. */
-  private blinkTimer: number | null = null;
-
-  /** Timer für zufällige Blickrichtungen. */
-  private gazeTimer: number | null = null;
-
-  /** Animation-Frame für gedrosseltes Cursor-Tracking. */
-  private pointerFrame: number | null = null;
-
-  /** Timer für die nächste zufällige Schwanzbewegung. */
-  private tailIdleTimer: number | null = null;
-
-  /** Animation-Frame der aktuell laufenden Schwanzbewegung. */
-  private tailFrameRequest: number | null = null;
-
-  /** Aktueller Index innerhalb der Schwanz-Keyframes. */
-  private currentTailFrame = 0;
-
-  /** Geordnete Original- und Tween-Frames des Carly-Assets. */
-  private readonly tailFrameIds = [...TAIL_FRAME_IDS];
-
-  /** Letzter Pointer-Zeitpunkt, damit zufällige Blicke nicht mit Cursor-Tracking kollidieren. */
-  private lastPointerAt = 0;
-
+  /** Registriert das Cleanup für den globalen Scroll-Lock des mobilen Menüs. */
   constructor(destroyRef: DestroyRef) {
+
+    /** Führt den geplanten Schritt der Seiteninteraktion aus. */
     const handlePointerMove = (event: PointerEvent): void => this.handlePointerMove(event);
+
     window.addEventListener('pointermove', handlePointerMove, { passive: true });
 
-    afterNextRender(() => {
+    afterNextRender(/** Führt den geplanten Schritt der Seiteninteraktion aus. */() => {
       void this.loadSvg();
     });
 
-    destroyRef.onDestroy(() => {
+    destroyRef.onDestroy(/** Entfernt registrierte Listener und noch ausstehende Browser-Aufgaben. */() => {
       window.removeEventListener('pointermove', handlePointerMove);
       this.clearExpressionTimers();
       this.stopIdleAnimations();
@@ -132,20 +115,25 @@ export class CarlyMascotPreviewComponent {
 
   /** Lädt, bereinigt und initialisiert Carlys SVG-Struktur. */
   private async loadSvg(): Promise<void> {
-    const host = this.svgHost()?.nativeElement;
+
+    const host = this.svgHost()?.nativeElement; // Gerendertes Host-Element der Komponente.
+
     if (!host) return;
 
     try {
-      const source = await loadCarlySvgSource();
-      const documentValue = new DOMParser().parseFromString(source, 'image/svg+xml');
-      const parsedSvg = documentValue.documentElement;
+
+      const source = await loadCarlySvgSource();                                      // Zugehöriger Originaldatenpunkt.
+      const documentValue = new DOMParser().parseFromString(source, 'image/svg+xml'); // Geparstes SVG-Dokument für die Layer-Aufbereitung.
+      const parsedSvg = documentValue.documentElement;                                // Wurzelelement des geparsten Carly-SVGs.
 
       if (parsedSvg.tagName.toLowerCase() !== 'svg') {
         throw new Error('Carly-Asset enthält kein gültiges SVG-Wurzelelement.');
       }
 
       this.sanitizeSvg(parsedSvg);
-      const svg = document.importNode(parsedSvg, true) as unknown as SVGSVGElement;
+
+      const svg = document.importNode(parsedSvg, true) as unknown as SVGSVGElement; // In die Ansicht eingesetztes SVG-Element.
+
       this.originalViewBox = svg.getAttribute('viewBox') ?? this.originalViewBox;
       svg.removeAttribute('width');
       svg.removeAttribute('height');
@@ -172,12 +160,13 @@ export class CarlyMascotPreviewComponent {
 
   /** Entfernt ausführbare oder externe Inhalte aus dem lokal geladenen SVG. */
   private sanitizeSvg(svg: Element): void {
-    svg.querySelectorAll('script, foreignObject').forEach((element) => element.remove());
+    svg.querySelectorAll('script, foreignObject').forEach(/** Entfernt ausführbare oder externe Inhalte aus dem lokal geladenen SVG. */(element) => element.remove());
 
-    svg.querySelectorAll('*').forEach((element) => {
-      Array.from(element.attributes).forEach((attribute) => {
-        const name = attribute.name.toLowerCase();
-        const value = attribute.value.trim();
+    svg.querySelectorAll('*').forEach(/** Entfernt ausführbare oder externe Inhalte aus dem lokal geladenen SVG. */(element) => {
+      Array.from(element.attributes).forEach(/** Entfernt ausführbare oder externe Inhalte aus dem lokal geladenen SVG. */(attribute) => {
+
+        const name = attribute.name.toLowerCase(); // Kennung des gesuchten SVG-Layers.
+        const value = attribute.value.trim();      // Eingelesener oder normalisierter Eingabewert.
 
         if (name.startsWith('on')) {
           element.removeAttribute(attribute.name);
@@ -204,19 +193,22 @@ export class CarlyMascotPreviewComponent {
     pupilId: string,
     highlightId: string,
   ): void {
-    const eyeGroup = svg.querySelector<SVGGraphicsElement>(`#${eyeGroupId}`);
-    const pupil = svg.querySelector<SVGGraphicsElement>(`#${pupilId}`);
-    const highlight = svg.querySelector<SVGGraphicsElement>(`#${highlightId}`);
+
+    const eyeGroup = svg.querySelector<SVGGraphicsElement>(`#${eyeGroupId}`);   // SVG-Gruppe des aktuellen Auges.
+    const pupil = svg.querySelector<SVGGraphicsElement>(`#${pupilId}`);         // SVG-Element der Pupille.
+    const highlight = svg.querySelector<SVGGraphicsElement>(`#${highlightId}`); // Glanzlicht innerhalb der Pupille.
 
     if (!eyeGroup || !pupil || !highlight || !highlight.parentNode) return;
 
-    const previousDisplay = eyeGroup.style.display;
+    const previousDisplay = eyeGroup.style.display; // Vorheriger Anzeigezustand vor der Geometriemessung.
+
     eyeGroup.style.display = 'inline';
 
     try {
-      const pupilBox = pupil.getBBox();
-      const pupilCenterX = pupilBox.x + pupilBox.width / 2;
-      const correction = document.createElementNS(SVG_NAMESPACE, 'g');
+
+      const pupilBox = pupil.getBBox();                                // Gemessene Grenzen der Pupille.
+      const pupilCenterX = pupilBox.x + pupilBox.width / 2;            // Horizontale Mitte der Pupillengeometrie.
+      const correction = document.createElementNS(SVG_NAMESPACE, 'g'); // Korrekturversatz zur optischen Zentrierung.
 
       correction.id = `${highlightId}-light-direction`;
       correction.setAttribute('transform', `matrix(-1 0 0 1 ${2 * pupilCenterX} 0)`);
@@ -244,34 +236,40 @@ export class CarlyMascotPreviewComponent {
     childIds: string[],
     clipSourceId: string,
   ): void {
-    const children = childIds
-      .map((id) => svg.querySelector<SVGGraphicsElement>(`#${id}`))
-      .filter((element): element is SVGGraphicsElement => element !== null);
+
+    const children = childIds // Direkte SVG-Kindelemente der Layer-Gruppe.
+      .map(/** Sucht die animierbare SVG-Gruppe über ihre stabile Kennung. */(id) => svg.querySelector<SVGGraphicsElement>(`#${id}`))
+      .filter(/** Prüft, ob der Eintrag die Auswahlbedingung erfüllt. */(element): element is SVGGraphicsElement => element !== null);
 
     if (children.length === 0) return;
 
-    const parent = children[0].parentNode;
+    const parent = children[0].parentNode; // Übergeordnetes SVG-Element des aktuellen Layers.
+
     if (!parent) return;
 
-    const group = document.createElementNS(SVG_NAMESPACE, 'g');
+    const group = document.createElementNS(SVG_NAMESPACE, 'g'); // SVG-Gruppe für zusammengehörige Augenelemente.
+
     group.id = groupId;
     group.style.transformBox = 'fill-box';
     group.style.transformOrigin = 'center';
     parent.insertBefore(group, children[0]);
 
-    children.forEach((child) => group.appendChild(child));
+    children.forEach(/** Fasst vorhandene SVG-Elemente in einer transformierbaren Gruppe zusammen. */(child) => group.appendChild(child));
     this.applyGazeClip(svg, group, clipSourceId);
   }
 
   /** Begrenzt die beweglichen Augenbestandteile auf die gezeichnete Augenfläche. */
   private applyGazeClip(svg: SVGSVGElement, group: SVGGElement, clipSourceId: string): void {
-    const source = svg.querySelector<SVGGraphicsElement>(`#${clipSourceId}`);
-    const defs = svg.querySelector<SVGDefsElement>('defs');
+
+    const source = svg.querySelector<SVGGraphicsElement>(`#${clipSourceId}`); // SVG-Element als Vorlage für den Beschneidungspfad.
+    const defs = svg.querySelector<SVGDefsElement>('defs');                   // Definitionsbereich für wiederverwendbare SVG-Masken.
+
     if (!source || !defs) return;
 
-    const clipPath = document.createElementNS(SVG_NAMESPACE, 'clipPath');
-    const clipId = `${group.id}-clip`;
-    const shape = source.cloneNode(true) as SVGGraphicsElement;
+    const clipPath = document.createElementNS(SVG_NAMESPACE, 'clipPath'); // Schnittmaske für die Augenbewegung.
+    const clipId = `${group.id}-clip`;                                    // Eindeutige Kennung der Augenmaske.
+    const shape = source.cloneNode(true) as SVGGraphicsElement;           // Uniform für die prozedurale Formauswahl.
+
     shape.removeAttribute('id');
     clipPath.id = clipId;
     clipPath.appendChild(shape);
@@ -281,7 +279,9 @@ export class CarlyMascotPreviewComponent {
 
   /** Zeigt Carly wie auf ihrer Produktseite als vollständige sitzende Figur. */
   private configureFullViewBox(): void {
-    const svg = this.svgElement;
+
+    const svg = this.svgElement; // In die Ansicht eingesetztes SVG-Element.
+
     if (!svg) return;
 
     svg.setAttribute('viewBox', this.originalViewBox);
@@ -303,7 +303,7 @@ export class CarlyMascotPreviewComponent {
     if (this.blinkTimer !== null || this.isMotionReduced()) return;
 
     this.blinkTimer = window.setTimeout(
-      () => {
+      /** Plant ein natürlich unregelmäßiges Blinzeln für den Idle-Zustand. */() => {
         this.blinkTimer = null;
 
         if (!this.canIdleAnimate()) {
@@ -311,18 +311,19 @@ export class CarlyMascotPreviewComponent {
           return;
         }
 
-        const doubleBlink = Math.random() < 0.22;
+        const doubleBlink = Math.random() < 0.22; // Ein zweiter kurzer Lidschlag soll folgen.
+
         this.setEyeMode('half');
-        this.queueExpression(65, () => this.setEyeMode('closed'));
-        this.queueExpression(125, () => this.setEyeMode('open'));
+        this.queueExpression(65, /** Plant ein natürlich unregelmäßiges Blinzeln für den Idle-Zustand. */() => this.setEyeMode('closed'));
+        this.queueExpression(125, /** Plant ein natürlich unregelmäßiges Blinzeln für den Idle-Zustand. */() => this.setEyeMode('open'));
 
         if (doubleBlink) {
-          this.queueExpression(245, () => this.setEyeMode('half'));
-          this.queueExpression(305, () => this.setEyeMode('closed'));
-          this.queueExpression(365, () => this.setEyeMode('open'));
+          this.queueExpression(245, /** Plant ein natürlich unregelmäßiges Blinzeln für den Idle-Zustand. */() => this.setEyeMode('half'));
+          this.queueExpression(305, /** Plant ein natürlich unregelmäßiges Blinzeln für den Idle-Zustand. */() => this.setEyeMode('closed'));
+          this.queueExpression(365, /** Plant ein natürlich unregelmäßiges Blinzeln für den Idle-Zustand. */() => this.setEyeMode('open'));
         }
 
-        this.queueExpression(doubleBlink ? 440 : 200, () => this.scheduleRandomBlink());
+        this.queueExpression(doubleBlink ? 440 : 200, /** Plant ein natürlich unregelmäßiges Blinzeln für den Idle-Zustand. */() => this.scheduleRandomBlink());
       },
       3_000 + Math.random() * 4_500,
     );
@@ -333,7 +334,7 @@ export class CarlyMascotPreviewComponent {
     if (this.gazeTimer !== null || this.isMotionReduced()) return;
 
     this.gazeTimer = window.setTimeout(
-      () => {
+      /** Plant zufällige Blickrichtungen ohne festes Wiederholungsmuster. */() => {
         this.gazeTimer = null;
 
         if (!this.canIdleAnimate()) {
@@ -346,9 +347,10 @@ export class CarlyMascotPreviewComponent {
           return;
         }
 
-        const centered = Math.random() < 0.18;
-        const x = centered ? 0 : Math.max(-1, Math.min(1, (Math.random() - 0.5) * 2.15));
-        const y = centered ? 0 : Math.max(-0.75, Math.min(0.65, (Math.random() - 0.5) * 1.55));
+        const centered = Math.random() < 0.18;                                                  // Der Blick soll in die neutrale Mitte zurückkehren.
+        const x = centered ? 0 : Math.max(-1, Math.min(1, (Math.random() - 0.5) * 2.15));       // Horizontale Position im SVG- oder Animationsraum.
+        const y = centered ? 0 : Math.max(-0.75, Math.min(0.65, (Math.random() - 0.5) * 1.55)); // Vertikale Position im SVG- oder Animationsraum.
+
         this.setGaze(x, y);
         this.scheduleRandomGaze();
       },
@@ -363,51 +365,58 @@ export class CarlyMascotPreviewComponent {
     this.lastPointerAt = Date.now();
     if (this.pointerFrame !== null) return;
 
-    this.pointerFrame = window.requestAnimationFrame(() => {
+    this.pointerFrame = window.requestAnimationFrame(/** Lässt Carly wie in der Produktiv-App in Richtung des Mauszeigers schauen. */() => {
       this.pointerFrame = null;
-      const host = this.svgHost()?.nativeElement;
+
+      const host = this.svgHost()?.nativeElement; // Gerendertes Host-Element der Komponente.
+
       if (!host) return;
 
-      const noseFocus = this.getCrossEyedNoseFocus(event.clientX, event.clientY);
+      const noseFocus = this.getCrossEyedNoseFocus(event.clientX, event.clientY); // Pointer liegt nahe am Nasenzentrum.
+
       if (noseFocus) {
         this.setGaze(...noseFocus);
         return;
       }
 
-      const rect = host.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height * 0.48;
-      const x = Math.max(-1, Math.min(1, (event.clientX - centerX) / Math.max(rect.width * 1.4, 1)));
-      const y = Math.max(-0.8, Math.min(0.8, (event.clientY - centerY) / Math.max(rect.height * 1.5, 1)));
+      const rect = host.getBoundingClientRect();                                                           // Gemessene Grenzen des aktuellen Elements.
+      const centerX = rect.left + rect.width / 2;                                                          // Horizontale Mitte des gemessenen Bereichs.
+      const centerY = rect.top + rect.height * 0.48;                                                       // Vertikale Mitte des gemessenen Bereichs.
+      const x = Math.max(-1, Math.min(1, (event.clientX - centerX) / Math.max(rect.width * 1.4, 1)));      // Horizontale Position im SVG- oder Animationsraum.
+      const y = Math.max(-0.8, Math.min(0.8, (event.clientY - centerY) / Math.max(rect.height * 1.5, 1))); // Vertikale Position im SVG- oder Animationsraum.
+
       this.setGaze(x, y);
     });
   }
 
   /** Lässt beide Pupillen gezielt auf den Cursor an Carlys Nasenspitze schauen. */
   private getCrossEyedNoseFocus(clientX: number, clientY: number): [number, number, number, number] | null {
-    const nose =
+
+    const nose =                                                                       // SVG-Layer der Nase.
       this.svgElement?.querySelector<SVGGraphicsElement>('#nose') ??
       this.svgElement?.querySelector<SVGGraphicsElement>('#nose-base');
-    const leftEye = this.svgElement?.querySelector<SVGGraphicsElement>('#eye-left');
-    const rightEye = this.svgElement?.querySelector<SVGGraphicsElement>('#eye-right');
+    const leftEye = this.svgElement?.querySelector<SVGGraphicsElement>('#eye-left');   // SVG-Layer des linken Auges.
+    const rightEye = this.svgElement?.querySelector<SVGGraphicsElement>('#eye-right'); // SVG-Layer des rechten Auges.
 
     if (!nose || !leftEye || !rightEye) return null;
 
-    const noseBox = nose.getBoundingClientRect();
-    const noseX = noseBox.left + noseBox.width / 2;
-    const noseY = noseBox.top + noseBox.height / 2;
-    const radius = Math.max(noseBox.width, noseBox.height) * 4.8;
+    const noseBox = nose.getBoundingClientRect();                 // Gemessene Grenzen der Nase.
+    const noseX = noseBox.left + noseBox.width / 2;               // Horizontales Nasenzentrum im Viewport.
+    const noseY = noseBox.top + noseBox.height / 2;               // Vertikales Nasenzentrum im Viewport.
+    const radius = Math.max(noseBox.width, noseBox.height) * 4.8; // Radius der Blick- oder Partikelauslenkung.
 
     if (Math.hypot(clientX - noseX, clientY - noseY) > radius) return null;
 
+    /** Lässt beide Pupillen gezielt auf den Cursor an Carlys Nasenspitze schauen. */
     const getDirection = (element: SVGGraphicsElement): [number, number] => {
-      const box = element.getBoundingClientRect();
-      const eyeX = box.left + box.width / 2;
-      const eyeY = box.top + box.height / 2;
-      const deltaX = clientX - eyeX;
-      const deltaY = clientY - eyeY;
-      const length = Math.max(Math.hypot(deltaX, deltaY), 1);
-      const verticalFocus = Math.max(0.72, Math.min(1.2, (deltaY / length) * 1.35));
+
+      const box = element.getBoundingClientRect();                                   // Gemessene SVG-Grenzen für die Blicksteuerung.
+      const eyeX = box.left + box.width / 2;                                         // Horizontale Augenmitte im Viewport.
+      const eyeY = box.top + box.height / 2;                                         // Vertikale Augenmitte im Viewport.
+      const deltaX = clientX - eyeX;                                                 // Horizontale Pointer-Bewegung seit Interaktionsbeginn.
+      const deltaY = clientY - eyeY;                                                 // Vertikale Scroll- oder Pointer-Bewegung.
+      const length = Math.max(Math.hypot(deltaX, deltaY), 1);                        // Betrag des Richtungsvektors.
+      const verticalFocus = Math.max(0.72, Math.min(1.2, (deltaY / length) * 1.35)); // Vertikaler Zielversatz des Blicks.
 
       return [
         Math.max(-1, Math.min(1, (deltaX / length) * 0.92)),
@@ -415,15 +424,17 @@ export class CarlyMascotPreviewComponent {
       ];
     };
 
-    const [leftX, leftY] = getDirection(leftEye);
-    const [rightX, rightY] = getDirection(rightEye);
+    const [leftX, leftY] = getDirection(leftEye);    // Berechneter Blickversatz des linken Auges.
+    const [rightX, rightY] = getDirection(rightEye); // Berechneter Blickversatz des rechten Auges.
 
     return [leftX, leftY, rightX, rightY];
   }
 
   /** Setzt die Blickrichtung beider Augen. */
   private setGaze(leftX: number, leftY: number, rightX = leftX, rightY = leftY): void {
-    const maxX = 4.2;
+
+    const maxX = 4.2; // Maximaler horizontaler Pupillenversatz in SVG-Einheiten.
+    /** Setzt die Blickrichtung beider Augen. */
     const getVerticalOffset = (value: number): number => value * (value > 0 ? 2.65 : 3.1);
 
     this.transformGazeGroup('gaze-left-normal', leftX * maxX, getVerticalOffset(leftY));
@@ -434,7 +445,9 @@ export class CarlyMascotPreviewComponent {
 
   /** Verschiebt Pupille und Lichtreflex gemeinsam weich innerhalb des Auges. */
   private transformGazeGroup(id: string, x: number, y: number): void {
-    const group = this.svgElement?.querySelector<SVGGElement>(`#${id}`);
+
+    const group = this.svgElement?.querySelector<SVGGElement>(`#${id}`); // SVG-Gruppe für zusammengehörige Augenelemente.
+
     if (!group) return;
 
     group.style.transition = this.isMotionReduced()
@@ -471,8 +484,9 @@ export class CarlyMascotPreviewComponent {
   private scheduleRandomTailWag(): void {
     if (this.tailIdleTimer !== null || this.tailFrameRequest !== null || !this.canIdleAnimate()) return;
 
-    const delay = TAIL_IDLE_MIN_MS + Math.random() * (TAIL_IDLE_MAX_MS - TAIL_IDLE_MIN_MS);
-    this.tailIdleTimer = window.setTimeout(() => {
+    const delay = TAIL_IDLE_MIN_MS + Math.random() * (TAIL_IDLE_MAX_MS - TAIL_IDLE_MIN_MS); // Geplante Verzögerung bis zum nächsten Animationsschritt.
+
+    this.tailIdleTimer = window.setTimeout(/** Plant Carlys originale, bewusst unregelmäßige Idle-Schwanzbewegung. */() => {
       this.tailIdleTimer = null;
 
       if (!this.canIdleAnimate()) return;
@@ -488,14 +502,15 @@ export class CarlyMascotPreviewComponent {
     this.setVisible('tail-master', false);
     this.showTailFrame(this.currentTailFrame);
 
-    const startedAt = performance.now();
-    const frameDurations = this.tailFrameIds.map((_, index) => this.getTailFrameDuration(index));
-    const frameEnds = frameDurations.reduce<number[]>((ends, duration) => {
+    const startedAt = performance.now();                                                                                                                                         // Startzeit des aktuellen Animationsablaufs.
+    const frameDurations = this.tailFrameIds.map(/** Berechnet die Anzeigedauer des jeweiligen Schwanzframes. */(_, index) => this.getTailFrameDuration(index)); // Anzeigedauern der einzelnen Animationsframes.
+    const frameEnds = frameDurations.reduce<number[]>(/** Spielt Carlys vollständigen Vektor-Keyframe-Durchlauf ab. */(ends, duration) => {                                     // Kumulierte Endzeiten der Animationsframes.
       ends.push((ends[ends.length - 1] ?? 0) + duration);
       return ends;
     }, []);
-    const totalDuration = frameEnds[frameEnds.length - 1] ?? 0;
+    const totalDuration = frameEnds[frameEnds.length - 1] ?? 0;                                                                                                                  // Gesamtdauer der vorbereiteten Animationsfolge.
 
+    /** Plant den nächsten Layout- oder Animationsschritt der Seite. */
     const advance = (timestamp: number): void => {
       if (!this.canIdleAnimate()) {
         this.stopTailAnimation();
@@ -503,10 +518,10 @@ export class CarlyMascotPreviewComponent {
         return;
       }
 
-      const elapsed = timestamp - startedAt;
-      const frame = Math.min(
+      const elapsed = timestamp - startedAt; // Seit Animationsbeginn vergangene Zeit in Millisekunden.
+      const frame = Math.min(                // Aktueller Animationsframe.
         this.tailFrameIds.length - 1,
-        Math.max(0, frameEnds.findIndex((end) => elapsed < end)),
+        Math.max(0, frameEnds.findIndex(/** Spielt Carlys vollständigen Vektor-Keyframe-Durchlauf ab. */(end) => elapsed < end)),
       );
 
       if (frame !== this.currentTailFrame) {
@@ -529,7 +544,8 @@ export class CarlyMascotPreviewComponent {
 
   /** Verlangsamt die letzten Keyframes wie in Carly Managed für ein weiches Auslaufen. */
   private getTailFrameDuration(frameIndex: number): number {
-    const id = this.tailFrameIds[frameIndex] ?? '';
+
+    const id = this.tailFrameIds[frameIndex] ?? ''; // Kennung des aktuellen SVG-Frames.
 
     if (id === 'KF11') return 120;
     if (id.startsWith('KF10')) return 44;
@@ -546,8 +562,10 @@ export class CarlyMascotPreviewComponent {
 
   /** Zeigt genau einen Schwanz-Keyframe. */
   private showTailFrame(frameIndex: number): void {
-    const visibleId = this.tailFrameIds[frameIndex];
-    this.tailFrameIds.forEach((id) => this.setVisible(id, id === visibleId));
+
+    const visibleId = this.tailFrameIds[frameIndex]; // Kennung des jetzt sichtbaren SVG-Frames.
+
+    this.tailFrameIds.forEach(/** Zeigt genau einen Schwanz-Keyframe. */(id) => this.setVisible(id, id === visibleId));
   }
 
   /** Stoppt geplante und laufende Schwanzbewegungen. */
@@ -562,13 +580,14 @@ export class CarlyMascotPreviewComponent {
       this.tailFrameRequest = null;
     }
 
-    this.tailFrameIds.forEach((id) => this.setVisible(id, false));
+    this.tailFrameIds.forEach(/** Stoppt geplante und laufende Schwanzbewegungen. */(id) => this.setVisible(id, false));
   }
 
   /** Berücksichtigt globale Motion-Settings und die Betriebssystempräferenz. */
   private isMotionReduced(): boolean {
-    const root = document.documentElement;
-    const motion = root.dataset['motion'];
+
+    const root = document.documentElement; // Beobachteter übergeordneter Scroll- oder Layoutbereich.
+    const motion = root.dataset['motion']; // Aktuelle Browser-Abfrage für reduzierte Bewegung.
 
     return (
       motion === 'reduced' ||
@@ -593,14 +612,15 @@ export class CarlyMascotPreviewComponent {
 
   /** Entfernt alle geplanten Übergangs-Timeouts. */
   private clearExpressionTimers(): void {
-    this.expressionTimers.forEach((timer) => window.clearTimeout(timer));
+    this.expressionTimers.forEach(/** Entfernt alle geplanten Übergangs-Timeouts. */(timer) => window.clearTimeout(timer));
     this.expressionTimers = [];
   }
 
   /** Plant einen einzelnen Schritt einer Gesichtssequenz. */
   private queueExpression(delay: number, callback: () => void): void {
-    const timer = window.setTimeout(() => {
-      this.expressionTimers = this.expressionTimers.filter((value) => value !== timer);
+
+    const timer = window.setTimeout(/** Plant einen einzelnen Schritt einer Gesichtssequenz. */() => { // Kennung eines ausstehenden Animations-Timers.
+      this.expressionTimers = this.expressionTimers.filter(/** Prüft, ob der Eintrag die Auswahlbedingung erfüllt. */(value) => value !== timer);
       callback();
     }, delay);
 
@@ -609,7 +629,9 @@ export class CarlyMascotPreviewComponent {
 
   /** Ändert die Sichtbarkeit eines benannten SVG-Elements. */
   private setVisible(id: string, visible: boolean): void {
-    const element = this.svgElement?.querySelector<SVGElement>(`#${id}`);
+
+    const element = this.svgElement?.querySelector<SVGElement>(`#${id}`); // Gerendertes Element der aktuellen Interaktion.
+
     if (!element) return;
     element.style.display = visible ? 'inline' : 'none';
   }

@@ -13,14 +13,9 @@ import { AfterViewInit, Directive, ElementRef, OnDestroy, Renderer2, inject } fr
   standalone: true,
 })
 export class ViewportActivityDirective implements AfterViewInit, OnDestroy {
-  /** Host-Element, dessen Animationszustand kontrolliert wird. */
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
-
-  /** Renderer für klassenbasierte DOM-Änderungen. */
-  private readonly renderer = inject(Renderer2);
-
-  /** Sichtbarkeitsobserver für den Host. */
-  private observer: IntersectionObserver | null = null;
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef); // Host-Element, dessen Animationszustand kontrolliert wird.
+  private readonly renderer = inject(Renderer2);                       // Renderer für klassenbasierte DOM-Änderungen.
+  private observer: IntersectionObserver | null = null;                // Sichtbarkeitsobserver für den Host.
 
   /** Startet die Sichtbarkeitsmessung nach dem ersten Rendern. */
   ngAfterViewInit(): void {
@@ -29,7 +24,7 @@ export class ViewportActivityDirective implements AfterViewInit, OnDestroy {
     }
 
     this.observer = new IntersectionObserver(
-      ([entry]) => this.setPaused(!entry?.isIntersecting),
+      /** Startet die Sichtbarkeitsmessung nach dem ersten Rendern. */([entry]) => this.setPaused(!entry?.isIntersecting),
       { root: null, threshold: 0, rootMargin: '18% 0px 18% 0px' },
     );
 

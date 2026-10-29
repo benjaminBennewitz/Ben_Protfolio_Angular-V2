@@ -19,57 +19,50 @@ import { RevealTextComponent } from '../reveal-text/reveal-text.component';
   styleUrl: './process-lock.component.scss',
 })
 export class ProcessLockComponent {
-  /** Prozessschritte für die Reveal-Sequenz. */
-  @Input({ required: true }) steps: readonly ProcessStep[] = [];
+  @Input({ required: true }) steps: readonly ProcessStep[] = [];                  // Prozessschritte für die Reveal-Sequenz.
 
-  /** Eyebrow-Label der Section. */
-  @Input() eyebrow = '';
+  @Input() eyebrow = '';                                                          // Eyebrow-Label der Section.
 
-  /** Haupttitel der Section. */
-  @Input() title = '';
+  @Input() title = '';                                                            // Haupttitel der Section.
 
-  /** Beschreibung der Section. */
-  @Input() subtitle = '';
+  @Input() subtitle = '';                                                         // Beschreibung der Section.
 
-  /** Kurzer Scroll-Hinweis. */
-  @Input() hint = '';
+  @Input() hint = '';                                                             // Kurzer Scroll-Hinweis.
 
-  /** Referenz auf die gesamte Scroll-Section. */
-  @ViewChild('sectionRef') private readonly sectionRef?: ElementRef<HTMLElement>;
+  @ViewChild('sectionRef') private readonly sectionRef?: ElementRef<HTMLElement>; // Referenz auf die gesamte Scroll-Section.
+  readonly progress = signal<number>(0);                                          // Fortschritt innerhalb der Sticky-Section von 0 bis 1.
+  readonly activeIndex = computed<number>(                                        // Aktiver Prozessschritt anhand des Scrollfortschritts.
+    /** Aktiver Prozessschritt anhand des Scrollfortschritts. */
+    () => Math.min(this.steps.length - 1, Math.floor(this.progress() * this.steps.length))
+  );
 
-  /** Fortschritt innerhalb der Sticky-Section von 0 bis 1. */
-  readonly progress = signal<number>(0);
+  readonly objectTransform = computed<string>( // CSS-Transform des zentralen System-Cores entlang des Prozesses.
+    /** Berechnet die dezente Verschiebung, Drehung und Skalierung des System-Cores. */
+    () => {
 
-  /** Aktiver Prozessschritt anhand des Scrollfortschritts. */
-  readonly activeIndex = computed<number>(() => Math.min(this.steps.length - 1, Math.floor(this.progress() * this.steps.length)));
+      const progress = this.progress();                         // Normalisierter Fortschritt des aktuellen Ablaufs.
+      const rotation = -4 + progress * 8;                       // Berechneter Drehwinkel der Karte.
+      const scale = 0.96 + Math.sin(progress * Math.PI) * 0.06; // Skalierungsfaktor der aktuellen Karte.
+      const y = (progress - 0.5) * 18;                          // Vertikale Position im SVG- oder Animationsraum.
 
-  /**
-   * CSS-Transform für den zentralen System-Core.
-   * Der Orbit rotiert unabhängig; der Core selbst bleibt bewusst kontrolliert und verändert
-   * nur leicht Position, Drehung und Größe entlang des Prozesses.
-   */
-  readonly objectTransform = computed<string>(() => {
-    const progress = this.progress();
-    const rotation = -4 + progress * 8;
-    const scale = 0.96 + Math.sin(progress * Math.PI) * 0.06;
-    const y = (progress - 0.5) * 18;
-
-    return `translate3d(0, ${y}px, 0) rotate(${rotation}deg) scale(${scale})`;
-  });
+      return `translate3d(0, ${y}px, 0) rotate(${rotation}deg) scale(${scale})`;
+    }
+  );
 
   /** Rechnet den Fortschritt beim Scrollen und Resizen neu. */
   @HostListener('window:scroll')
   @HostListener('window:resize')
   updateProgress(): void {
-    const element = this.sectionRef?.nativeElement;
+
+    const element = this.sectionRef?.nativeElement; // Gerendertes Element der aktuellen Interaktion.
 
     if (!element) {
       return;
     }
 
-    const rect = element.getBoundingClientRect();
-    const maxTravel = Math.max(1, rect.height - window.innerHeight);
-    const rawProgress = Math.min(1, Math.max(0, -rect.top / maxTravel));
+    const rect = element.getBoundingClientRect();                        // Gemessene Grenzen des aktuellen Elements.
+    const maxTravel = Math.max(1, rect.height - window.innerHeight);     // Maximale Scroll-Strecke des aktiven Abschnitts.
+    const rawProgress = Math.min(1, Math.max(0, -rect.top / maxTravel)); // Unbegrenzter Fortschritt vor der Bereichsprüfung.
 
     this.progress.set(rawProgress);
   }

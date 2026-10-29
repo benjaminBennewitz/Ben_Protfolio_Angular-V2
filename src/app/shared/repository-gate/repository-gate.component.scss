@@ -1,4 +1,32 @@
-/* src/app/shared/repository-gate/repository-gate.component.scss */
+/*###############################
+###
+###     repository-gate.component.scss
+###     REPOSITORY-GATE — Shared Component
+###     BASED ON: Angular, TypeScript, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Zugangsabfrage und Rückmeldungen
+   02   Animation repository-gate-failure-in
+   03   Responsive Darstellung
+   04   Reduzierte Bewegung
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Zugangsabfrage und Rückmeldungen
+   ========================================================================== */
 
 :host {
   display: block;
@@ -169,6 +197,10 @@
   text-align: center;
 }
 
+/* ==========================================================================
+   02   Animation repository-gate-failure-in
+   ========================================================================== */
+
 @keyframes repository-gate-failure-in {
   from {
     opacity: 0;
@@ -197,6 +229,10 @@
   color: var(--bp-color-on-accent);
 }
 
+/* ==========================================================================
+   03   Responsive Darstellung
+   ========================================================================== */
+
 @media (max-width: 560px) {
   .repository-gate__input-row {
     grid-template-columns: 1fr;
@@ -211,6 +247,10 @@
     width: min(290px, calc(100vw - 2rem));
   }
 }
+
+/* ==========================================================================
+   04   Reduzierte Bewegung
+   ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
   .repository-gate__failure {

@@ -14,36 +14,25 @@ type AboutMetricsMode = 'metric' | 'weird';
 
 /** Sichtbarer Kennzahlenzustand nach Auswahl des aktuellen Einheitenmodus. */
 interface AboutMetricViewFact {
-  /** Stabile ID für Tracking und Animation. */
-  readonly id: string;
-  /** Material-Symbol für die Kennzahl. */
-  readonly icon: string;
-  /** Sichtbarer Name der Kennzahl. */
-  readonly label: string;
-  /** Wert im aktiven Einheitenmodus. */
-  readonly value: string;
-  /** Einheit im aktiven Einheitenmodus. */
-  readonly unit: string;
-  /** Kurzer Begleittext im aktiven Einheitenmodus. */
-  readonly note: string;
+  readonly id: string;    // Stabile ID für Tracking und Animation.
+  readonly icon: string;  // Material-Symbol für die Kennzahl.
+  readonly label: string; // Sichtbarer Name der Kennzahl.
+  readonly value: string; // Wert im aktiven Einheitenmodus.
+  readonly unit: string;  // Einheit im aktiven Einheitenmodus.
+  readonly note: string;  // Kurzer Begleittext im aktiven Einheitenmodus.
 }
 
 /** Physikalische Näherungswerte einer absurden Recheneinheit. */
 interface AbsurdCalculatorUnitData {
-  /** Stabile Einheit zur Verknüpfung mit den Übersetzungsdaten. */
-  readonly key: AboutMetricsCalculatorUnitKey;
-  /** Durchschnittliches Gewicht eines einzelnen Objekts in Gramm. */
-  readonly grams: number;
-  /** Durchschnittliche Länge eines einzelnen Objekts in Zentimetern. */
-  readonly centimeters: number;
+  readonly key: AboutMetricsCalculatorUnitKey; // Stabile Einheit zur Verknüpfung mit den Übersetzungsdaten.
+  readonly grams: number;                      // Durchschnittliches Gewicht eines einzelnen Objekts in Gramm.
+  readonly centimeters: number;                // Durchschnittliche Länge eines einzelnen Objekts in Zentimetern.
 }
 
 /** Sichtbares Ergebnis einer absurden Umrechnung. */
 interface AbsurdCalculatorResult {
-  /** Formatierte Stückzahl des gewählten Objekts. */
-  readonly count: string;
-  /** Kompakte Einheit des Ergebnisses. */
-  readonly unit: string;
+  readonly count: string; // Formatierte Stückzahl des gewählten Objekts.
+  readonly unit: string;  // Kompakte Einheit des Ergebnisses.
 }
 
 /** Kompaktes Fun-Facts-Fenster mit Einheitenwechsel. */
@@ -54,99 +43,73 @@ interface AbsurdCalculatorResult {
   styleUrl: './about-metrics-window.component.scss',
 })
 export class AboutMetricsWindowComponent implements OnDestroy {
-  /** Achievement-Service für geschlossene MS-DOS-Fenster. */
-  private readonly achievementService = inject(AchievementService);
+  private readonly achievementService = inject(AchievementService);                                        // Achievement-Service für geschlossene MS-DOS-Fenster.
+  readonly content = input.required<AboutMetricsContent>();                                                // Übersetzte Inhalte und Labels des Metrics-Fensters.
+  readonly weirdModeSelected = output<void>();                                                             // Meldet den ersten Wechsel in den absurden Einheitenmodus an die Startseite.
 
-  /** Übersetzte Inhalte und Labels des Metrics-Fensters. */
-  readonly content = input.required<AboutMetricsContent>();
-
-  /** Meldet den ersten Wechsel in den absurden Einheitenmodus an die Startseite. */
-  readonly weirdModeSelected = output<void>();
-
-  /** Referenz auf den Auslösebutton für Fokus-Restore. */
-  @ViewChild('metricsTrigger')
+  @ViewChild('metricsTrigger')                                                                             // Referenz auf den Auslösebutton für Fokus-Restore.
   private readonly metricsTrigger?: ElementRef<HTMLButtonElement>;
 
-  /** Referenz auf das sichtbare Dialogfenster für Tastaturfokus. */
-  @ViewChild('metricsWindow')
+  @ViewChild('metricsWindow')                                                                              // Referenz auf das sichtbare Dialogfenster für Tastaturfokus.
   private readonly metricsWindow?: ElementRef<HTMLElement>;
 
-  /** Referenz auf den verzögerten Rechner-Teaser für Fokus-Restore. */
-  @ViewChild('calculatorTrigger')
+  @ViewChild('calculatorTrigger')                                                                          // Referenz auf den verzögerten Rechner-Teaser für Fokus-Restore.
   private readonly calculatorTrigger?: ElementRef<HTMLButtonElement>;
 
-  /** Referenz auf den Rechnerdialog für den Initialfokus. */
-  @ViewChild('calculatorWindow')
+  @ViewChild('calculatorWindow')                                                                           // Referenz auf den Rechnerdialog für den Initialfokus.
   private readonly calculatorWindow?: ElementRef<HTMLElement>;
 
-  /** Referenz auf den Custom-Einheitenwähler für Outside-Click-Erkennung. */
-  @ViewChild('calculatorUnitSelect')
+  @ViewChild('calculatorUnitSelect')                                                                       // Referenz auf den Custom-Einheitenwähler für Outside-Click-Erkennung.
   private readonly calculatorUnitSelect?: ElementRef<HTMLElement>;
 
-  /** Referenz auf den Trigger des Custom-Einheitenwählers. */
-  @ViewChild('calculatorUnitTrigger')
+  @ViewChild('calculatorUnitTrigger')                                                                      // Referenz auf den Trigger des Custom-Einheitenwählers.
   private readonly calculatorUnitTrigger?: ElementRef<HTMLButtonElement>;
 
-  /** Fokusierbare Optionen des geöffneten Custom-Einheitenwählers. */
-  @ViewChildren('calculatorUnitOption')
+  @ViewChildren('calculatorUnitOption')                                                                    // Fokusierbare Optionen des geöffneten Custom-Einheitenwählers.
   private readonly calculatorUnitOptions?: QueryList<ElementRef<HTMLButtonElement>>;
 
-  /** Timeout für die kurze Rechen-/Glitchanimation beim Moduswechsel. */
-  private recalculationTimeoutId: number | null = null;
-
-  /** Timeout für den verzögerten Absurditäten-Rechner-Teaser. */
-  private calculatorTeaserTimeoutId: number | null = null;
-
-  /** Näherungswerte für Snacks und Peripherie des Absurditäten-Rechners. */
-  private readonly calculatorUnitData: Record<AboutMetricsCalculatorUnitKey, AbsurdCalculatorUnitData> = {
+  private recalculationTimeoutId: number | null = null;                                                    // Timeout für die kurze Rechen-/Glitchanimation beim Moduswechsel.
+  private calculatorTeaserTimeoutId: number | null = null;                                                 // Timeout für den verzögerten Absurditäten-Rechner-Teaser.
+  private readonly calculatorUnitData: Record<AboutMetricsCalculatorUnitKey, AbsurdCalculatorUnitData> = { // Näherungswerte für Snacks und Peripherie des Absurditäten-Rechners.
     miniSpringRoll: { key: 'miniSpringRoll', grams: 15, centimeters: 8 },
     wiener: { key: 'wiener', grams: 80, centimeters: 15 },
     mentos: { key: 'mentos', grams: 2.7, centimeters: 0.9 },
     gummyBear: { key: 'gummyBear', grams: 2.5, centimeters: 2.1 },
   };
 
-  /** Sichtbarkeit des schwebenden Metrics-Fensters. */
-  readonly isOpen = signal<boolean>(false);
+  readonly isOpen = signal<boolean>(false);                                                                // Sichtbarkeit des schwebenden Metrics-Fensters.
+  readonly activeMode = signal<AboutMetricsMode>('metric');                                                // Aktuell ausgewählter Einheitenmodus.
+  readonly isRecalculating = signal<boolean>(false);                                                       // Aktiviert die kurze Neu-Berechnen-Animation im Fenster.
+  readonly isCalculatorTeaserVisible = signal<boolean>(false);                                             // Sichtbarkeit des verzögerten Rechner-Teasers.
+  readonly isCalculatorOpen = signal<boolean>(false);                                                      // Sichtbarkeit des überlagerten Absurditäten-Rechner-Fensters.
+  readonly isCalculatorUnitMenuOpen = signal<boolean>(false);                                              // Sichtbarkeit des vollständig eigenen Einheiten-Dropdowns.
+  readonly calculatorHeightCm = signal<number>(185);                                                       // Aktuelle Größeneingabe in Zentimetern.
+  readonly calculatorWeightKg = signal<number>(87);                                                        // Aktuelle Gewichtseingabe in Kilogramm.
+  readonly calculatorUnitKey = signal<AboutMetricsCalculatorUnitKey>('miniSpringRoll');                    // Ausgewählte Einheit des Absurditäten-Rechners.
+  readonly displayedFacts = computed<readonly AboutMetricViewFact[]>(                                      // Sichtbare Facts passend zum aktiven Einheitenmodus.
+    /** Sichtbare Facts passend zum aktiven Einheitenmodus. */
+    () => {
 
-  /** Aktuell ausgewählter Einheitenmodus. */
-  readonly activeMode = signal<AboutMetricsMode>('metric');
+      const mode = this.activeMode(); // Aktiver Darstellungs- oder Einheitenmodus.
 
-  /** Aktiviert die kurze Neu-Berechnen-Animation im Fenster. */
-  readonly isRecalculating = signal<boolean>(false);
+      return this.content().facts.map(/** Überführt die Kennzahl in den ausgewählten Einheitenmodus. */(fact) => this.toViewFact(fact, mode));
+    }
+  );
 
-  /** Sichtbarkeit des verzögerten Rechner-Teasers. */
-  readonly isCalculatorTeaserVisible = signal<boolean>(false);
+  readonly selectedCalculatorUnit = computed(                                                              // Sichtbare Einheit zur aktuellen Rechnerauswahl.
+    /** Sichtbare Einheit zur aktuellen Rechnerauswahl. */
+    () => this.content().calculator.units.find(/** Sichtbare Einheit zur aktuellen Rechnerauswahl. */(unit) => unit.key === this.calculatorUnitKey()) ?? this.content().calculator.units[0]
+  );
 
-  /** Sichtbarkeit des überlagerten Absurditäten-Rechner-Fensters. */
-  readonly isCalculatorOpen = signal<boolean>(false);
+  readonly calculatorHeightResult = computed<AbsurdCalculatorResult>(                                      // Ergebnis der Größenumrechnung in die ausgewählte Einheit.
+    /** Ergebnis der Größenumrechnung in die ausgewählte Einheit. */
+    () => this.calculateHeightResult()
+  );
 
-  /** Sichtbarkeit des vollständig eigenen Einheiten-Dropdowns. */
-  readonly isCalculatorUnitMenuOpen = signal<boolean>(false);
-
-  /** Aktuelle Größeneingabe in Zentimetern. */
-  readonly calculatorHeightCm = signal<number>(185);
-
-  /** Aktuelle Gewichtseingabe in Kilogramm. */
-  readonly calculatorWeightKg = signal<number>(87);
-
-  /** Ausgewählte Einheit des Absurditäten-Rechners. */
-  readonly calculatorUnitKey = signal<AboutMetricsCalculatorUnitKey>('miniSpringRoll');
-
-  /** Sichtbare Facts passend zum aktiven Einheitenmodus. */
-  readonly displayedFacts = computed<readonly AboutMetricViewFact[]>(() => {
-    const mode = this.activeMode();
-
-    return this.content().facts.map((fact) => this.toViewFact(fact, mode));
-  });
-
-  /** Sichtbare Einheit zur aktuellen Rechnerauswahl. */
-  readonly selectedCalculatorUnit = computed(() => this.content().calculator.units.find((unit) => unit.key === this.calculatorUnitKey()) ?? this.content().calculator.units[0]);
-
-  /** Ergebnis der Größenumrechnung in die ausgewählte Einheit. */
-  readonly calculatorHeightResult = computed<AbsurdCalculatorResult>(() => this.calculateHeightResult());
-
-  /** Ergebnis der Gewichtsumrechnung in die ausgewählte Einheit. */
-  readonly calculatorWeightResult = computed<AbsurdCalculatorResult>(() => this.calculateWeightResult());
+  readonly calculatorWeightResult = computed<AbsurdCalculatorResult>(                                      // Ergebnis der Gewichtsumrechnung in die ausgewählte Einheit.
+    /** Ergebnis der Gewichtsumrechnung in die ausgewählte Einheit. */
+    () => this.calculateWeightResult()
+  );
 
   /** Räumt offene Timer beim Entfernen der Komponente auf. */
   ngOnDestroy(): void {
@@ -163,7 +126,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
     this.isOpen.set(true);
     this.scheduleCalculatorTeaser();
-    window.requestAnimationFrame(() => this.metricsWindow?.nativeElement.focus());
+    window.requestAnimationFrame(/** Öffnet oder schließt das Metrics-Fenster über den Trigger. */() => this.metricsWindow?.nativeElement.focus());
   }
 
   /** Schließt das Metrics-Fenster und stellt den Fokus auf den Trigger zurück. */
@@ -204,8 +167,8 @@ export class AboutMetricsWindowComponent implements OnDestroy {
       return;
     }
 
-    const target = event.target;
-    const selectElement = this.calculatorUnitSelect?.nativeElement;
+    const target = event.target;                                    // Ziel-Element für Scrollen oder Pointer-Auswertung.
+    const selectElement = this.calculatorUnitSelect?.nativeElement; // Gerendertes Auswahlelement für den Einheitenwechsel.
 
     if (!(target instanceof Node) || !selectElement?.contains(target)) {
       this.isCalculatorUnitMenuOpen.set(false);
@@ -233,7 +196,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
   openCalculator(): void {
     this.isCalculatorUnitMenuOpen.set(false);
     this.isCalculatorOpen.set(true);
-    window.requestAnimationFrame(() => this.calculatorWindow?.nativeElement.focus());
+    window.requestAnimationFrame(/** Öffnet den Absurditäten-Rechner als versetztes Overlay-Fenster. */() => this.calculatorWindow?.nativeElement.focus());
   }
 
   /** Schließt den Absurditäten-Rechner und stellt den Fokus auf den Teaser zurück. */
@@ -266,7 +229,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
   /** Öffnet oder schließt den eigenen Einheitenwähler. */
   toggleCalculatorUnitMenu(): void {
-    this.isCalculatorUnitMenuOpen.update((isOpen) => !isOpen);
+    this.isCalculatorUnitMenuOpen.update(/** Kehrt den aktuellen Öffnungszustand der Detailansicht um. */(isOpen) => !isOpen);
   }
 
   /**
@@ -274,7 +237,8 @@ export class AboutMetricsWindowComponent implements OnDestroy {
    * @param event Tastaturereignis am Trigger.
    */
   handleCalculatorUnitTriggerKeydown(event: KeyboardEvent): void {
-    const key = event.key;
+
+    const key = event.key; // Gedrückte Taste am Einheitenwähler.
 
     if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') {
       return;
@@ -282,9 +246,11 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
     event.preventDefault();
     this.isCalculatorUnitMenuOpen.set(true);
-    const selectedIndex = Math.max(0, this.content().calculator.units.findIndex((unit) => unit.key === this.calculatorUnitKey()));
-    const targetIndex = key === 'ArrowUp' || key === 'End' ? this.content().calculator.units.length - 1 : key === 'Home' ? 0 : selectedIndex;
-    window.requestAnimationFrame(() => this.focusCalculatorUnitOption(targetIndex));
+
+    const selectedIndex = Math.max(0, this.content().calculator.units.findIndex(/** Öffnet den Einheitenwähler per Tastatur und fokussiert die passende Option. */(unit) => unit.key === this.calculatorUnitKey())); // Index der aktuell ausgewählten Einheit.
+    const targetIndex = key === 'ArrowUp' || key === 'End' ? this.content().calculator.units.length - 1 : key === 'Home' ? 0 : selectedIndex;                                                                         // Gültiger Zielindex der nächsten Option.
+
+    window.requestAnimationFrame(/** Öffnet den Einheitenwähler per Tastatur und fokussiert die passende Option. */() => this.focusCalculatorUnitOption(targetIndex));
   }
 
   /**
@@ -293,8 +259,9 @@ export class AboutMetricsWindowComponent implements OnDestroy {
    * @param optionIndex Index der aktuell fokussierten Option.
    */
   handleCalculatorUnitOptionKeydown(event: KeyboardEvent, optionIndex: number): void {
-    const optionCount = this.content().calculator.units.length;
-    let targetIndex = optionIndex;
+
+    const optionCount = this.content().calculator.units.length; // Anzahl verfügbarer Auswahloptionen.
+    let targetIndex = optionIndex;                              // Gültiger Zielindex der nächsten Option.
 
     if (event.key === 'Escape') {
       event.preventDefault();
@@ -321,8 +288,9 @@ export class AboutMetricsWindowComponent implements OnDestroy {
 
   /** Schließt das Custom-Dropdown, sobald der Tastaturfokus den Wähler verlässt. */
   closeCalculatorUnitMenuOnFocusOut(event: FocusEvent): void {
-    const nextTarget = event.relatedTarget;
-    const selectElement = this.calculatorUnitSelect?.nativeElement;
+
+    const nextTarget = event.relatedTarget;                         // Nächstes Element der Fokusreihenfolge.
+    const selectElement = this.calculatorUnitSelect?.nativeElement; // Gerendertes Auswahlelement für den Einheitenwechsel.
 
     if (!(nextTarget instanceof Node) || !selectElement?.contains(nextTarget)) {
       this.isCalculatorUnitMenuOpen.set(false);
@@ -350,7 +318,8 @@ export class AboutMetricsWindowComponent implements OnDestroy {
    * @param mode Aktiver Einheitenmodus.
    */
   private toViewFact(fact: AboutMetricFact, mode: AboutMetricsMode): AboutMetricViewFact {
-    const isWeirdMode = mode === 'weird';
+
+    const isWeirdMode = mode === 'weird'; // Alternative absurde Einheiten sind ausgewählt.
 
     return {
       id: fact.id,
@@ -367,9 +336,10 @@ export class AboutMetricsWindowComponent implements OnDestroy {
    * @returns Formatierte Ergebnisdaten für die Oberfläche.
    */
   private calculateHeightResult(): AbsurdCalculatorResult {
-    const heightCm = this.calculatorHeightCm();
-    const unitData = this.calculatorUnitData[this.calculatorUnitKey()];
-    const count = heightCm / unitData.centimeters;
+
+    const heightCm = this.calculatorHeightCm();                         // Eingegebene Körpergröße in Zentimetern.
+    const unitData = this.calculatorUnitData[this.calculatorUnitKey()]; // Maße und Gewicht der ausgewählten Vergleichseinheit.
+    const count = heightCm / unitData.centimeters;                      // Berechnete Anzahl der Vergleichseinheiten.
 
     return {
       count: this.formatNumber(count),
@@ -382,9 +352,10 @@ export class AboutMetricsWindowComponent implements OnDestroy {
    * @returns Formatierte Ergebnisdaten für die Oberfläche.
    */
   private calculateWeightResult(): AbsurdCalculatorResult {
-    const weightKg = this.calculatorWeightKg();
-    const unitData = this.calculatorUnitData[this.calculatorUnitKey()];
-    const count = (weightKg * 1000) / unitData.grams;
+
+    const weightKg = this.calculatorWeightKg();                         // Eingegebenes Körpergewicht in Kilogramm.
+    const unitData = this.calculatorUnitData[this.calculatorUnitKey()]; // Maße und Gewicht der ausgewählten Vergleichseinheit.
+    const count = (weightKg * 1000) / unitData.grams;                   // Berechnete Anzahl der Vergleichseinheiten.
 
     return {
       count: this.formatNumber(count),
@@ -396,7 +367,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
   private scheduleCalculatorTeaser(): void {
     this.clearCalculatorTeaserTimeout();
     this.isCalculatorTeaserVisible.set(false);
-    this.calculatorTeaserTimeoutId = window.setTimeout(() => this.isCalculatorTeaserVisible.set(this.isOpen()), 6000);
+    this.calculatorTeaserTimeoutId = window.setTimeout(/** Plant den verzögerten Teaser nach dem Öffnen des Metrics-Fensters. */() => this.isCalculatorTeaserVisible.set(this.isOpen()), 6000);
   }
 
   /**
@@ -406,13 +377,14 @@ export class AboutMetricsWindowComponent implements OnDestroy {
    * @returns Gekappter Zahlenwert für stabile Berechnungen.
    */
   private numberFromInput(event: Event, fallback: number): number {
-    const target = event.target;
+
+    const target = event.target; // Ziel-Element für Scrollen oder Pointer-Auswertung.
 
     if (!(target instanceof HTMLInputElement)) {
       return fallback;
     }
 
-    const value = Number(target.value.replace(',', '.'));
+    const value = Number(target.value.replace(',', '.')); // Eingelesener oder normalisierter Eingabewert.
 
     if (!Number.isFinite(value) || value < 0) {
       return fallback;
@@ -435,7 +407,8 @@ export class AboutMetricsWindowComponent implements OnDestroy {
    * @returns Kompakter, lesbarer Zahlenwert.
    */
   private formatNumber(value: number): string {
-    const locale = this.content().metricLabel === 'Metric' ? 'en-US' : 'de-DE';
+
+    const locale = this.content().metricLabel === 'Metric' ? 'en-US' : 'de-DE'; // Sprachabhängiges Format für die Zahlenausgabe.
 
     return new Intl.NumberFormat(locale, { maximumFractionDigits: value >= 100 ? 0 : 1 }).format(value);
   }
@@ -444,7 +417,7 @@ export class AboutMetricsWindowComponent implements OnDestroy {
   private startRecalculationAnimation(): void {
     this.clearRecalculationTimeout();
     this.isRecalculating.set(true);
-    this.recalculationTimeoutId = window.setTimeout(() => this.isRecalculating.set(false), 520);
+    this.recalculationTimeoutId = window.setTimeout(/** Startet den kurzen Rechenzustand für den animierten Wertewechsel. */() => this.isRecalculating.set(false), 520);
   }
 
   /** Entfernt einen laufenden Rechenanimation-Timer. */

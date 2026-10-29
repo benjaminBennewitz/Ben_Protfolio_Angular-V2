@@ -1,4 +1,30 @@
-/* src/app/shared/pixel-flora/pixel-flora.component.scss */
+/*###############################
+###
+###     pixel-flora.component.scss
+###     PIXEL-FLORA — Shared Component
+###     BASED ON: Angular, TypeScript, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Flora-Sprite und Positionierung
+   02   Animation pixel-flora-wind
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Flora-Sprite und Positionierung
+   ========================================================================== */
 
 :host {
   --pixel-flora-wind-duration: 4.8s;
@@ -21,11 +47,26 @@ svg {
   image-rendering: pixelated;
 }
 
+/* ==========================================================================
+   02   Animation pixel-flora-wind
+   ========================================================================== */
+
 @keyframes pixel-flora-wind {
-  0% { transform: translate3d(0, 0, 0) skewX(-0.8deg) rotate(-0.45deg); }
-  38% { transform: translate3d(0.35px, 0, 0) skewX(0.7deg) rotate(0.35deg); }
-  72% { transform: translate3d(-0.25px, 0, 0) skewX(-0.35deg) rotate(-0.2deg); }
-  100% { transform: translate3d(0.45px, 0, 0) skewX(1deg) rotate(0.55deg); }
+  0% {
+    transform: translate3d(0, 0, 0) skewX(-0.8deg) rotate(-0.45deg);
+  }
+
+  38% {
+    transform: translate3d(0.35px, 0, 0) skewX(0.7deg) rotate(0.35deg);
+  }
+
+  72% {
+    transform: translate3d(-0.25px, 0, 0) skewX(-0.35deg) rotate(-0.2deg);
+  }
+
+  100% {
+    transform: translate3d(0.45px, 0, 0) skewX(1deg) rotate(0.55deg);
+  }
 }
 
 :host-context(:root[data-motion='reduced']),

@@ -16,14 +16,10 @@ import { RevealTextComponent } from '../reveal-text/reveal-text.component';
 
 /** Scroll-Messwerte für das kontrollierte Panel-Snapping. */
 interface ProjectSnapMetrics {
-  /** Dokumentposition des Projekt-Stacks. */
-  readonly start: number;
-  /** Dokumentposition des Projekt-Stack-Endes. */
-  readonly end: number;
-  /** Höhe eines Fullscreen-Projektpanels. */
-  readonly panelHeight: number;
-  /** Aktuelle Scrollposition des Fensters. */
-  readonly scrollY: number;
+  readonly start: number;       // Dokumentposition des Projekt-Stacks.
+  readonly end: number;         // Dokumentposition des Projekt-Stack-Endes.
+  readonly panelHeight: number; // Höhe eines Fullscreen-Projektpanels.
+  readonly scrollY: number;     // Aktuelle Scrollposition des Fensters.
 }
 
 /** Scrollbasierte Fullscreen-Projektbühne mit seitlicher Projektvorschau. */
@@ -35,65 +31,32 @@ interface ProjectSnapMetrics {
   styleUrl: './project-stack.component.scss',
 })
 export class ProjectStackComponent implements AfterViewInit, OnDestroy {
-  /** Projekte, die als Fullscreen-Panels dargestellt werden. */
-  @Input({ required: true }) projects: readonly PortfolioProject[] = [];
+  @Input({ required: true }) projects: readonly PortfolioProject[] = [];                                                                                                                           // Projekte, die als Fullscreen-Panels dargestellt werden.
 
-  /** Projektpanels für passive Sichtbarkeitsmessung und Kollisionsflächen. */
-  @ViewChildren('projectPanel') private readonly projectPanels!: QueryList<ElementRef<HTMLElement>>;
-
-  /** Accessibility-Service für reduzierte oder deaktivierte Bewegung. */
-  private readonly accessibility = inject(AccessibilityPreferenceService);
-
-  /** Achievement-Service für versteckte Projekt-Trophäen. */
-  private readonly achievementService = inject(AchievementService);
-
-  /** Host-Element für einen passiven-unabhängigen Wheel-Listener. */
-  private readonly hostRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  @ViewChildren('projectPanel') private readonly projectPanels!: QueryList<ElementRef<HTMLElement>>;                                                                                               // Projektpanels für passive Sichtbarkeitsmessung und Kollisionsflächen.
+  private readonly accessibility = inject(AccessibilityPreferenceService);                                                                                                                         // Accessibility-Service für reduzierte oder deaktivierte Bewegung.
+  private readonly achievementService = inject(AchievementService);                                                                                                                                // Achievement-Service für versteckte Projekt-Trophäen.
+  private readonly hostRef = inject<ElementRef<HTMLElement>>(ElementRef);                                                                                                                          // Host-Element für einen passiven-unabhängigen Wheel-Listener.
 
   /** Gebundener Wheel-Handler für kontrolliertes Projekt-Snapping. */
   private readonly projectWheelHandler = (event: WheelEvent): void => this.onProjectWheel(event);
 
-  /** Zeitpunkt, bis zu dem weitere Wheel-Impulse kurz geblockt werden. */
-  private projectWheelLockedUntil = 0;
+  private projectWheelLockedUntil = 0;                                                                                                                                                             // Zeitpunkt, bis zu dem weitere Wheel-Impulse kurz geblockt werden.
+  private readonly projectWheelThreshold = 24;                                                                                                                                                     // Mindeststärke eines Wheel-Impulses, bevor die Panel-Normalisierung greift.
+  private readonly projectWheelCooldownMs = 660;                                                                                                                                                   // Kurze Sperre gegen mehrfache Panel-Sprünge bei starkem Mausrad.
 
-  /** Mindeststärke eines Wheel-Impulses, bevor die Panel-Normalisierung greift. */
-  private readonly projectWheelThreshold = 24;
+  @Input() detailLabel = '';                                                                                                                                                                       // Buttonlabel für Detailseiten.
 
-  /** Kurze Sperre gegen mehrfache Panel-Sprünge bei starkem Mausrad. */
-  private readonly projectWheelCooldownMs = 660;
-
-  /** Buttonlabel für Detailseiten. */
-  @Input() detailLabel = '';
-
-  /** Übersetzte Labels für Projektsteuerung und ARIA-Texte. */
-  @Input({ required: true }) labels!: ProjectsContent;
-
-  /** Merkt, ob das Projekt-3-Papier bereits auf dem Papierkorb gelandet ist. */
-  readonly project3PaperLanded = signal(false);
-
-  /** Steuert den verzögerten Success-Wechsel nach der Papierflug-Animation. */
-  readonly project3SuccessVisible = signal(false);
-
-  /** Aktueller Schreibstand des Projekt-5-Dateinamens. */
-  readonly project5TypewriterText = signal('');
-
-  /** Passive Sichtbarkeitsmessung für den Projekt-5-Typewriter. */
-  private project5Observer: IntersectionObserver | null = null;
-
-  /** Verzögerung bis zum Success-Wechsel nach dem Papierwurf. */
-  private readonly project3SuccessDelayMs = 1180;
-
-  /** Timer für den verzögerten Projekt-3-Success-Zustand. */
-  private project3SuccessTimer: ReturnType<typeof setTimeout> | null = null;
-
-  /** Wiederkehrende Timer der Projekt-5-Typewriter-Animation. */
-  private readonly project5TypewriterTimers: ReturnType<typeof setTimeout>[] = [];
-
-  /** Merkt, ob der Projekt-5-Typewriter aktuell läuft. */
-  private project5TypewriterRunning = false;
-
-  /** Vordefinierte Tipp- und Löschschritte für das Projekt-5-Dateinaming. */
-  private readonly project5TypewriterScript: readonly { readonly mode: 'type' | 'delete' | 'pause' | 'clear'; readonly value?: string; readonly count?: number; readonly delayMs?: number; }[] = [
+  @Input({ required: true }) labels!: ProjectsContent;                                                                                                                                             // Übersetzte Labels für Projektsteuerung und ARIA-Texte.
+  readonly project3PaperLanded = signal(false);                                                                                                                                                    // Merkt, ob das Projekt-3-Papier bereits auf dem Papierkorb gelandet ist.
+  readonly project3SuccessVisible = signal(false);                                                                                                                                                 // Steuert den verzögerten Success-Wechsel nach der Papierflug-Animation.
+  readonly project5TypewriterText = signal('');                                                                                                                                                    // Aktueller Schreibstand des Projekt-5-Dateinamens.
+  private project5Observer: IntersectionObserver | null = null;                                                                                                                                    // Passive Sichtbarkeitsmessung für den Projekt-5-Typewriter.
+  private readonly project3SuccessDelayMs = 1180;                                                                                                                                                  // Verzögerung bis zum Success-Wechsel nach dem Papierwurf.
+  private project3SuccessTimer: ReturnType<typeof setTimeout> | null = null;                                                                                                                       // Timer für den verzögerten Projekt-3-Success-Zustand.
+  private readonly project5TypewriterTimers: ReturnType<typeof setTimeout>[] = [];                                                                                                                 // Wiederkehrende Timer der Projekt-5-Typewriter-Animation.
+  private project5TypewriterRunning = false;                                                                                                                                                       // Merkt, ob der Projekt-5-Typewriter aktuell läuft.
+  private readonly project5TypewriterScript: readonly { readonly mode: 'type' | 'delete' | 'pause' | 'clear'; readonly value?: string; readonly count?: number; readonly delayMs?: number; }[] = [ // Vordefinierte Tipp- und Löschschritte für das Projekt-5-Dateinaming.
     { mode: 'type', value: 'i-swear-last-version__only-100-coffees-in-me__final.ai' },
     { mode: 'pause', delayMs: 920 },
     { mode: 'delete', count: 3 },
@@ -122,7 +85,7 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   /** Startet den Projekt-Wheel-Guard und sichtbarkeitsabhängige Interaktionen. */
   ngAfterViewInit(): void {
     this.hostRef.nativeElement.addEventListener('wheel', this.projectWheelHandler, { passive: false });
-    queueMicrotask(() => this.observeProject5Typewriter());
+    queueMicrotask(/** Startet den Projekt-Wheel-Guard und sichtbarkeitsabhängige Interaktionen. */() => this.observeProject5Typewriter());
   }
 
   /** Stoppt Animation, Beobachter und Wheel-Guard. */
@@ -136,28 +99,29 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Normalisiert große Mausrad-Sprünge innerhalb der Fullscreen-Projekte. */
   private onProjectWheel(event: WheelEvent): void {
-    const deltaY = this.normalizedProjectWheelDelta(event);
+
+    const deltaY = this.normalizedProjectWheelDelta(event); // Vertikale Scroll- oder Pointer-Bewegung.
 
     if (!this.shouldHandleProjectWheel(event, deltaY)) {
       return;
     }
 
-    const metrics = this.projectSnapMetrics();
+    const metrics = this.projectSnapMetrics(); // Gemessene Grenzen und Scrollwerte der Section.
 
     if (!metrics) {
       return;
     }
 
-    const now = performance.now();
+    const now = performance.now(); // Aktueller Zeitstempel des Animationsframes.
 
     if (now < this.projectWheelLockedUntil) {
       event.preventDefault();
       return;
     }
 
-    const currentIndex = this.currentProjectPanelIndex(metrics);
-    const direction = deltaY > 0 ? 1 : -1;
-    const targetIndex = currentIndex + direction;
+    const currentIndex = this.currentProjectPanelIndex(metrics); // Index des aktuell nächsten Panels oder Eintrags.
+    const direction = deltaY > 0 ? 1 : -1;                       // Bewegungsrichtung des aktuellen Wechsels.
+    const targetIndex = currentIndex + direction;                // Gültiger Zielindex der nächsten Option.
 
     if (targetIndex < 0 || targetIndex >= this.projects.length) {
       return;
@@ -199,17 +163,18 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Liefert die Dokumentpositionen des aktuellen Projekt-Stacks. */
   private projectSnapMetrics(): ProjectSnapMetrics | null {
-    const stack = this.hostRef.nativeElement.querySelector<HTMLElement>('.project-stack');
-    const firstPanel = this.projectPanels?.first?.nativeElement;
+
+    const stack = this.hostRef.nativeElement.querySelector<HTMLElement>('.project-stack'); // Gerendeter Stapel der Projektkarten.
+    const firstPanel = this.projectPanels?.first?.nativeElement;                           // Erstes Panel für die Höhenmessung.
 
     if (!stack || !firstPanel || this.projects.length <= 0) {
       return null;
     }
 
-    const start = stack.getBoundingClientRect().top + window.scrollY;
-    const panelHeight = Math.max(1, firstPanel.offsetHeight || window.innerHeight);
-    const end = start + panelHeight * this.projects.length;
-    const scrollY = window.scrollY;
+    const start = stack.getBoundingClientRect().top + window.scrollY;               // Startwert der Interpolation.
+    const panelHeight = Math.max(1, firstPanel.offsetHeight || window.innerHeight); // Höhe eines Projekt-Panels in Pixeln.
+    const end = start + panelHeight * this.projects.length;                         // Zielwert der Interpolation.
+    const scrollY = window.scrollY;                                                 // Aktuelle vertikale Scrollposition.
 
     if (scrollY < start - 2 || scrollY > end - 2) {
       return null;
@@ -220,14 +185,15 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Ermittelt das aktuell dominierende Projektpanel. */
   private currentProjectPanelIndex(metrics: ProjectSnapMetrics): number {
-    const rawIndex = Math.round((metrics.scrollY - metrics.start) / metrics.panelHeight);
+
+    const rawIndex = Math.round((metrics.scrollY - metrics.start) / metrics.panelHeight); // Unbegrenzter Panelindex aus dem Scrollfortschritt.
 
     return Math.min(this.projects.length - 1, Math.max(0, rawIndex));
   }
 
   /** Liefert alle anderen Projekte für die rechte Vorschauleiste. */
   previewsFor(activeProject: PortfolioProject): readonly PortfolioProject[] {
-    return this.projects.filter((project) => project.slug !== activeProject.slug);
+    return this.projects.filter(/** Prüft, ob der Eintrag die Auswahlbedingung erfüllt. */(project) => project.slug !== activeProject.slug);
   }
 
   /** Gibt an, ob die Projekt-Case-Study aktuell geöffnet werden kann. */
@@ -263,7 +229,7 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   /** Plant den Statusbild-Wechsel erst nach der Papier-Landeanimation. */
   private queueProject3SuccessState(): void {
     this.clearProject3SuccessTimer();
-    this.project3SuccessTimer = setTimeout(() => {
+    this.project3SuccessTimer = setTimeout(/** Plant den Statusbild-Wechsel erst nach der Papier-Landeanimation. */() => {
       this.project3SuccessVisible.set(true);
       this.project3SuccessTimer = null;
     }, this.project3SuccessDelayMs);
@@ -302,16 +268,16 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const step = this.project5TypewriterScript[stepIndex];
+    const step = this.project5TypewriterScript[stepIndex]; // Aktueller Prozess- oder Animationsschritt.
 
     if (!step) {
-      this.scheduleProject5Typewriter(() => this.runProject5TypewriterStep(0, 0, ''), 900);
+      this.scheduleProject5Typewriter(/** Führt genau einen Tipp-, Lösch- oder Warte-Schritt des Typewriters aus. */() => this.runProject5TypewriterStep(0, 0, ''), 900);
       return;
     }
 
     if (step.mode === 'pause') {
       this.project5TypewriterText.set(currentText);
-      this.scheduleProject5Typewriter(() => this.runProject5TypewriterStep(stepIndex + 1, 0, currentText), step.delayMs ?? 900);
+      this.scheduleProject5Typewriter(/** Führt genau einen Tipp-, Lösch- oder Warte-Schritt des Typewriters aus. */() => this.runProject5TypewriterStep(stepIndex + 1, 0, currentText), step.delayMs ?? 900);
       return;
     }
 
@@ -325,33 +291,37 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const nextText = `${currentText}${step.value?.charAt(charIndex) ?? ''}`;
+    const nextText = `${currentText}${step.value?.charAt(charIndex) ?? ''}`; // Vorbereiteter Text für die nächste Darstellung.
+
     this.project5TypewriterText.set(nextText);
 
     if (charIndex + 1 >= (step.value?.length ?? 0)) {
-      this.scheduleProject5Typewriter(() => this.runProject5TypewriterStep(stepIndex + 1, 0, nextText), 140);
+      this.scheduleProject5Typewriter(/** Führt genau einen Tipp-, Lösch- oder Warte-Schritt des Typewriters aus. */() => this.runProject5TypewriterStep(stepIndex + 1, 0, nextText), 140);
       return;
     }
 
-    this.scheduleProject5Typewriter(() => this.runProject5TypewriterStep(stepIndex, charIndex + 1, nextText), this.project5TypewriterDelay());
+    this.scheduleProject5Typewriter(/** Führt genau einen Tipp-, Lösch- oder Warte-Schritt des Typewriters aus. */() => this.runProject5TypewriterStep(stepIndex, charIndex + 1, nextText), this.project5TypewriterDelay());
   }
 
   /** Löscht Zeichen schrittweise wieder aus dem sichtbaren Dateinamen. */
   private runProject5DeleteChars(nextStepIndex: number, remainingChars: number, currentText: string): void {
     if (remainingChars <= 0 || currentText.length === 0) {
-      this.scheduleProject5Typewriter(() => this.runProject5TypewriterStep(nextStepIndex, 0, currentText), 180);
+      this.scheduleProject5Typewriter(/** Löscht Zeichen schrittweise wieder aus dem sichtbaren Dateinamen. */() => this.runProject5TypewriterStep(nextStepIndex, 0, currentText), 180);
       return;
     }
 
-    const nextText = currentText.slice(0, -1);
+    const nextText = currentText.slice(0, -1); // Vorbereiteter Text für die nächste Darstellung.
+
     this.project5TypewriterText.set(nextText);
-    this.scheduleProject5Typewriter(() => this.runProject5DeleteChars(nextStepIndex, remainingChars - 1, nextText), 48);
+    this.scheduleProject5Typewriter(/** Löscht Zeichen schrittweise wieder aus dem sichtbaren Dateinamen. */() => this.runProject5DeleteChars(nextStepIndex, remainingChars - 1, nextText), 48);
   }
 
   /** Plant einen einzelnen Typewriter-Timer und merkt ihn für das Cleanup vor. */
   private scheduleProject5Typewriter(callback: () => void, delayMs: number): void {
-    const timer = setTimeout(() => {
-      const index = this.project5TypewriterTimers.indexOf(timer);
+
+    const timer = setTimeout(/** Plant einen einzelnen Typewriter-Timer und merkt ihn für das Cleanup vor. */() => { // Kennung eines ausstehenden Animations-Timers.
+
+      const index = this.project5TypewriterTimers.indexOf(timer); // Aktueller Eintrags- oder Schleifenindex.
 
       if (index >= 0) {
         this.project5TypewriterTimers.splice(index, 1);
@@ -379,7 +349,8 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
   /** Beobachtet Projekt 5 und startet den Typewriter nur bei Sichtbarkeit. */
   private observeProject5Typewriter(): void {
-    const project5Panel = this.projectPanelElement('grafikdesign-katalog');
+
+    const project5Panel = this.projectPanelElement('grafikdesign-katalog'); // Gerenderter Bereich der fünften Projekt-Interaktion.
 
     if (!project5Panel || !('IntersectionObserver' in window)) {
       this.startProject5Typewriter();
@@ -388,7 +359,7 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
 
     this.project5Observer?.disconnect();
     this.project5Observer = new IntersectionObserver(
-      ([entry]) => {
+      /** Beobachtet Projekt 5 und startet den Typewriter nur bei Sichtbarkeit. */([entry]) => {
         if (entry?.isIntersecting && entry.intersectionRatio >= 0.3) {
           this.startProject5Typewriter();
           return;
@@ -405,7 +376,7 @@ export class ProjectStackComponent implements AfterViewInit, OnDestroy {
   /** Liefert ein Projektpanel anhand seines Slugs. */
   private projectPanelElement(slug: string): HTMLElement | null {
     return this.projectPanels?.toArray()
-      .find((panelRef, index) => this.projects[index]?.slug === slug)
+      .find(/** Liefert ein Projektpanel anhand seines Slugs. */(panelRef, index) => this.projects[index]?.slug === slug)
       ?.nativeElement ?? null;
   }
 }

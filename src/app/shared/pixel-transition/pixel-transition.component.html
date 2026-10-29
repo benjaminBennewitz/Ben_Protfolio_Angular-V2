@@ -4,36 +4,35 @@
 
   <div class="pixel-transition__grid pixel-transition__grid--coarse">
     @for (cell of coarseCells; track $index) {
-      <span class="pixel-transition__cell pixel-transition__cell--coarse"
-        [class.pixel-transition__cell--accent]="cell.accent"
-        [style.opacity]="coarseOpacity(cell)"
-        [style.transform]="'scale(' + coarseScale(cell) + ')'">
-      </span>
+    <span class="pixel-transition__cell pixel-transition__cell--coarse"
+      [class.pixel-transition__cell--accent]="cell.accent" [style.opacity]="coarseOpacity(cell)"
+      [style.transform]="'scale(' + coarseScale(cell) + ')'">
+    </span>
     }
   </div>
 
   <div class="pixel-transition__grid pixel-transition__grid--medium">
     @for (cell of mediumCells; track $index) {
-      <span class="pixel-transition__cell pixel-transition__cell--medium"
-        [class.pixel-transition__cell--accent]="cell.accent"
-        [style.opacity]="mediumOpacity(cell)"
-        [style.transform]="'scale(' + mediumScale(cell) + ')'">
-      </span>
+    <span class="pixel-transition__cell pixel-transition__cell--medium"
+      [class.pixel-transition__cell--accent]="cell.accent" [style.opacity]="mediumOpacity(cell)"
+      [style.transform]="'scale(' + mediumScale(cell) + ')'">
+    </span>
     }
   </div>
 
   <div class="pixel-transition__grid pixel-transition__grid--fine">
     @for (cell of fineCells; track $index) {
-      <span class="pixel-transition__cell pixel-transition__cell--fine"
-        [class.pixel-transition__cell--accent]="cell.accent"
-        [style.opacity]="fineOpacity(cell)"
-        [style.transform]="'scale(' + fineScale(cell) + ')'">
-      </span>
+    <span class="pixel-transition__cell pixel-transition__cell--fine"
+      [class.pixel-transition__cell--accent]="cell.accent" [style.opacity]="fineOpacity(cell)"
+      [style.transform]="'scale(' + fineScale(cell) + ')'">
+    </span>
     }
   </div>
 
-  <span class="pixel-transition__glitch pixel-transition__glitch--primary" [style.transform]="'translate3d(' + glitchShiftPrimary() + ', 0, 0)'"></span>
-  <span class="pixel-transition__glitch pixel-transition__glitch--secondary" [style.transform]="'translate3d(' + glitchShiftSecondary() + ', 0, 0)'"></span>
+  <span class="pixel-transition__glitch pixel-transition__glitch--primary"
+    [style.transform]="'translate3d(' + glitchShiftPrimary() + ', 0, 0)'"></span>
+  <span class="pixel-transition__glitch pixel-transition__glitch--secondary"
+    [style.transform]="'translate3d(' + glitchShiftSecondary() + ', 0, 0)'"></span>
 
   <span class="pixel-transition__scan pixel-transition__scan--primary" [style.top.%]="scanPosition()"></span>
   <span class="pixel-transition__scan pixel-transition__scan--echo" [style.top.%]="echoScanPosition()"></span>

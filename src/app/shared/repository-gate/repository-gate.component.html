@@ -33,9 +33,8 @@
 
   <div class="repository-gate__failures" aria-live="assertive" aria-relevant="additions removals">
     @for (failureId of failures(); track failureId; let index = $index) {
-    <section class="repository-gate__failure bp-dos-window" role="alert"
-      [attr.aria-label]="copy().failureLabel" [style.--failure-offset]="failureOffset(index)"
-      [style.--failure-rotation]="failureRotation(index)">
+    <section class="repository-gate__failure bp-dos-window" role="alert" [attr.aria-label]="copy().failureLabel"
+      [style.--failure-offset]="failureOffset(index)" [style.--failure-rotation]="failureRotation(index)">
       <div class="bp-dos-window__bar">
         <span>{{ copy().failureTitle }}</span>
         <button type="button" [attr.aria-label]="copy().failureCloseLabel" (click)="dismissFailure(failureId)">

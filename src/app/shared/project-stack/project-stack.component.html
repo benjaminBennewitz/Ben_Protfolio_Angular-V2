@@ -27,7 +27,8 @@
         height="486" loading="lazy" decoding="async" aria-hidden="true" />
       <button class="project-stack__trash-paper" type="button" [disabled]="project3PaperLanded()"
         (click)="triggerProject3PaperFlight($event)" [attr.aria-label]="labels.trashPaperLabel">
-        <img src="assets/images/project-stack/paper-crumpled-pink.webp" alt="" width="240" height="239" loading="lazy" decoding="async" />
+        <img src="assets/images/project-stack/paper-crumpled-pink.webp" alt="" width="240" height="239" loading="lazy"
+          decoding="async" />
       </button>
     </div>
     }
@@ -35,13 +36,14 @@
     @if (index === 0) {
     <div class="project-stack__decor" aria-hidden="true">
       <img class="project-stack__decor-asset project-stack__decor-asset--shocked"
-        src="assets/images/project-stack/scream-girl-pink.webp" alt="" width="280" height="317" loading="lazy" decoding="async" />
+        src="assets/images/project-stack/scream-girl-pink.webp" alt="" width="280" height="317" loading="lazy"
+        decoding="async" />
     </div>
     }
 
-    <div class="project-stack__copy bp-motion-copy" bpReveal
-      [attr.inert]="!isProjectAvailable(project) ? '' : null">
-      <p class="project-stack__kicker project-stack__kicker--headline">{{ project.overviewKicker ?? project.kicker }}</p>
+    <div class="project-stack__copy bp-motion-copy" bpReveal [attr.inert]="!isProjectAvailable(project) ? '' : null">
+      <p class="project-stack__kicker project-stack__kicker--headline">{{ project.overviewKicker ?? project.kicker }}
+      </p>
       <div class="project-stack__number">{{ (index + 1).toString().padStart(2, '0') }}</div>
       <bp-reveal-text class="project-stack__title-reveal" level="h3" [text]="projectTitleText(project)" />
       <p class="project-stack__summary">{{ project.overviewSummary ?? project.summary }}</p>
@@ -75,9 +77,10 @@
 
     <div class="project-stack__visual" bpReveal [attr.inert]="!isProjectAvailable(project) ? '' : null">
       <bp-project-visual [project]="project" [large]="true" [hideAssets]="project.slug === 'kanban-klon'"
-        [showTaskStatus]="project.slug === 'kanban-klon'" [taskStatusSaved]="project3SuccessVisible()" [labels]="labels" />
+        [showTaskStatus]="project.slug === 'kanban-klon'" [taskStatusSaved]="project3SuccessVisible()"
+        [labels]="labels" />
 
-      </div>
+    </div>
 
     <aside class="project-stack__previews" [attr.aria-label]="labels.previewAriaLabel"
       [attr.inert]="!isProjectAvailable(project) ? '' : null">

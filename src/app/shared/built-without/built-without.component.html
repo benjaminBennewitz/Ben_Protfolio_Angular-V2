@@ -1,6 +1,7 @@
 <!-- src/app/shared/built-without/built-without.component.html -->
 <section class="built-strip" id="quality" bpViewportActivity
-  [class.built-strip--telemetry-active]="telemetryStageActive()" [attr.data-stage]="telemetryStageActive() ? 'telemetry' : 'integrity'">
+  [class.built-strip--telemetry-active]="telemetryStageActive()"
+  [attr.data-stage]="telemetryStageActive() ? 'telemetry' : 'integrity'">
   <div class="built-strip__stage bp-container">
     <div class="built-strip__panel built-strip__panel--integrity">
       <div class="built-strip__overview">
@@ -10,7 +11,8 @@
         </div>
 
         <div class="built-strip__groups bp-stagger-list bp-stagger-list--right" bpReveal>
-          <article class="built-strip__group built-strip__group--without bp-stagger-item" [style.--bp-stagger-delay.ms]="120">
+          <article class="built-strip__group built-strip__group--without bp-stagger-item"
+            [style.--bp-stagger-delay.ms]="120">
             <h3>{{ content().withoutLabel }}</h3>
             <ul>
               @for (item of content().withoutItems; track $index) {
@@ -23,7 +25,8 @@
             </ul>
           </article>
 
-          <article class="built-strip__group built-strip__group--capabilities bp-stagger-item" [style.--bp-stagger-delay.ms]="240">
+          <article class="built-strip__group built-strip__group--capabilities bp-stagger-item"
+            [style.--bp-stagger-delay.ms]="240">
             <h3>{{ content().capabilityLabel }}</h3>
             <ul>
               @for (item of content().capabilityItems; track $index) {
@@ -54,25 +57,13 @@
         </header>
 
         <div class="built-strip__charts">
-          <bp-telemetry-chart
-            eyebrow="stack_frequency.radial"
-            [title]="content().recurrenceTitle"
-            [description]="content().recurrenceText"
-            variant="radial"
-            [data]="recurringTechData()"
-            [maxValue]="5"
-            valueSuffix="×"
-            chartId="portfolio-tech-frequency"
-            [syncParentReveal]="true" />
+          <bp-telemetry-chart eyebrow="stack_frequency.radial" [title]="content().recurrenceTitle"
+            [description]="content().recurrenceText" variant="radial" [data]="recurringTechData()" [maxValue]="5"
+            valueSuffix="×" chartId="portfolio-tech-frequency" [syncParentReveal]="true" />
 
-          <bp-telemetry-chart
-            eyebrow="stack_breadth.area"
-            [title]="content().breadthTitle"
-            [description]="content().breadthText"
-            variant="area"
-            [data]="stackBreadthData()"
-            chartId="portfolio-stack-breadth"
-            [syncParentReveal]="true" />
+          <bp-telemetry-chart eyebrow="stack_breadth.area" [title]="content().breadthTitle"
+            [description]="content().breadthText" variant="area" [data]="stackBreadthData()"
+            chartId="portfolio-stack-breadth" [syncParentReveal]="true" />
         </div>
       </div>
 

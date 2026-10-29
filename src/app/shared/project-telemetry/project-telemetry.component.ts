@@ -16,6 +16,5 @@ import { TelemetryChartComponent } from '../telemetry-chart/telemetry-chart.comp
   styleUrl: './project-telemetry.component.scss',
 })
 export class ProjectTelemetryComponent {
-  /** Projekt inklusive lokalisierter Telemetriedaten. */
-  @Input({ required: true }) project!: PortfolioProject;
+  @Input({ required: true }) project!: PortfolioProject; // Projekt inklusive lokalisierter Telemetriedaten.
 }

@@ -17,11 +17,8 @@ type BloodAnalysisState = 'idle' | 'running' | 'complete';
 
 /** Native Assetgröße für stabile Bild-Seitenverhältnisse. */
 interface VisualAssetSize {
-  /** Native Bildbreite. */
-  readonly width: number;
-
-  /** Native Bildhöhe. */
-  readonly height: number;
+  readonly width: number;  // Native Bildbreite.
+  readonly height: number; // Native Bildhöhe.
 }
 
 /** Dekorative Preview-Fläche für Projektkarten und Detailseiten. */
@@ -32,29 +29,21 @@ interface VisualAssetSize {
   styleUrl: './project-visual.component.scss',
 })
 export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
-  /** Achievement-Service für interaktive Projekt-Trophäen. */
-  private readonly achievementService = inject(AchievementService);
+  private readonly achievementService = inject(AchievementService);                                                                // Achievement-Service für interaktive Projekt-Trophäen.
 
-  /** Projekt, aus dem Name, Typ und Accent gezogen werden. */
-  @Input({ required: true }) project!: PortfolioProject;
+  @Input({ required: true }) project!: PortfolioProject;                                                                           // Projekt, aus dem Name, Typ und Accent gezogen werden.
 
-  /** Root-Element der Visual-Bühne für viewportnahe Blutanalyse-Offsets. */
-  @ViewChild('visualShell') private visualShell?: ElementRef<HTMLElement>;
+  @ViewChild('visualShell') private visualShell?: ElementRef<HTMLElement>;                                                         // Root-Element der Visual-Bühne für viewportnahe Blutanalyse-Offsets.
 
-  /** Große Detailvariante der Preview. */
-  @Input() large = false;
+  @Input() large = false;                                                                                                          // Große Detailvariante der Preview.
 
-  /** Versteckt Assets, wenn sie außerhalb der Preview-Bühne gerendert werden. */
-  @Input() hideAssets = false;
+  @Input() hideAssets = false;                                                                                                     // Versteckt Assets, wenn sie außerhalb der Preview-Bühne gerendert werden.
 
-  /** Zeigt das zusätzliche Status-Asset innerhalb der Preview-Bühne. */
-  @Input() showTaskStatus = false;
+  @Input() showTaskStatus = false;                                                                                                 // Zeigt das zusätzliche Status-Asset innerhalb der Preview-Bühne.
 
-  /** Wechselt das Status-Asset in den erfolgreichen Saved-State. */
-  @Input() taskStatusSaved = false;
+  @Input() taskStatusSaved = false;                                                                                                // Wechselt das Status-Asset in den erfolgreichen Saved-State.
 
-  /** Übersetzte ARIA-Labels für interaktive Projektassets. */
-  @Input() labels?: ProjectsContent;
+  @Input() labels?: ProjectsContent;                                                                                               // Übersetzte ARIA-Labels für interaktive Projektassets.
 
   /** Zugängliche Beschriftung für das interaktive Auge. */
   readonly eyeButtonLabel = () => this.labels?.eyeButtonLabel ?? 'Auge anstupsen';
@@ -65,69 +54,31 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
   /** Zugängliche Beschriftung für die Blutanalyse-Interaktion. */
   readonly bloodButtonLabel = () => this.labels?.bloodButtonLabel ?? 'Dashboard starten';
 
-  /** Dauer, bis Auge und Träne wieder zurückgesetzt werden. */
-  private readonly eyeResetDelayMs = 2800;
-
-  /** Dauer der Bomben-Countdown-Animation. */
-  private readonly bombChargeDelayMs = 4000;
-
-  /** Dauer der sichtbaren Boom-Grafik. */
-  private readonly boomRemoveDelayMs = 760;
-
-  /** Schrittfolge der Blutanalyse. */
-  private readonly bloodStatuses = ['CALIBRATING', 'LEECHES ATTACHED', 'EXTRACTING VALUES', 'NO ABNORMALITIES DETECTED'] as const;
-
-  /** Aktueller Trefferzustand des Auges. */
-  private readonly eyeHurt = signal(false);
-
-  /** Sichtbarkeit der animierten Träne. */
-  private readonly eyeTearVisible = signal(false);
-
-  /** Aktueller Zustand der interaktiven Bombe. */
-  private readonly bombState = signal<BombState>('idle');
-
-  /** Aktueller Gesamtzustand der Blutanalyse. */
-  private readonly bloodState = signal<BloodAnalysisState>('idle');
-
-  /** Sichtbarkeit des Arms der Blutanalyse-Szene. */
-  private readonly bloodArmVisible = signal(false);
-
-  /** Sichtbarkeit der Blutegel. */
-  private readonly bloodLeechesVisible = signal(false);
-
-  /** Wechsel der Blutegel in den sattgesaugten Zustand. */
-  private readonly bloodLeechesSatisfied = signal(false);
-
-  /** Sichtbarkeit der Analysebox. */
-  private readonly bloodAnalysisVisible = signal(false);
-
-  /** Aktiver Fortschrittsschritt der Analyse. */
-  private readonly bloodStatusIndex = signal(0);
-
-  /** Abstand der Visual-Bühne zum linken Viewport-Rand. */
-  private readonly bloodLeftOffset = signal(0);
-
-  /** Timer für das Zurücksetzen des Auges. */
-  private eyeResetTimer: ReturnType<typeof setTimeout> | null = null;
-
-  /** Timer für den Wechsel von Bombe zu Explosion. */
-  private bombChargeTimer: ReturnType<typeof setTimeout> | null = null;
-
-  /** Timer für das Entfernen der Explosion. */
-  private bombRemoveTimer: ReturnType<typeof setTimeout> | null = null;
-
-  /** Sammelcontainer für die Blutanalyse-Timer. */
-  private readonly bloodTimers: ReturnType<typeof setTimeout>[] = [];
-
-  /** Zuordnung dekorativer Halftone-Assets zu den Projekt-Slugs. */
-  private readonly visualAssetMap: Readonly<Record<string, readonly string[]>> = {
+  private readonly eyeResetDelayMs = 2800;                                                                                         // Dauer, bis Auge und Träne wieder zurückgesetzt werden.
+  private readonly bombChargeDelayMs = 4000;                                                                                       // Dauer der Bomben-Countdown-Animation.
+  private readonly boomRemoveDelayMs = 760;                                                                                        // Dauer der sichtbaren Boom-Grafik.
+  private readonly bloodStatuses = ['CALIBRATING', 'LEECHES ATTACHED', 'EXTRACTING VALUES', 'NO ABNORMALITIES DETECTED'] as const; // Schrittfolge der Blutanalyse.
+  private readonly eyeHurt = signal(false);                                                                                        // Aktueller Trefferzustand des Auges.
+  private readonly eyeTearVisible = signal(false);                                                                                 // Sichtbarkeit der animierten Träne.
+  private readonly bombState = signal<BombState>('idle');                                                                          // Aktueller Zustand der interaktiven Bombe.
+  private readonly bloodState = signal<BloodAnalysisState>('idle');                                                                // Aktueller Gesamtzustand der Blutanalyse.
+  private readonly bloodArmVisible = signal(false);                                                                                // Sichtbarkeit des Arms der Blutanalyse-Szene.
+  private readonly bloodLeechesVisible = signal(false);                                                                            // Sichtbarkeit der Blutegel.
+  private readonly bloodLeechesSatisfied = signal(false);                                                                          // Wechsel der Blutegel in den sattgesaugten Zustand.
+  private readonly bloodAnalysisVisible = signal(false);                                                                           // Sichtbarkeit der Analysebox.
+  private readonly bloodStatusIndex = signal(0);                                                                                   // Aktiver Fortschrittsschritt der Analyse.
+  private readonly bloodLeftOffset = signal(0);                                                                                    // Abstand der Visual-Bühne zum linken Viewport-Rand.
+  private eyeResetTimer: ReturnType<typeof setTimeout> | null = null;                                                              // Timer für das Zurücksetzen des Auges.
+  private bombChargeTimer: ReturnType<typeof setTimeout> | null = null;                                                            // Timer für den Wechsel von Bombe zu Explosion.
+  private bombRemoveTimer: ReturnType<typeof setTimeout> | null = null;                                                            // Timer für das Entfernen der Explosion.
+  private readonly bloodTimers: ReturnType<typeof setTimeout>[] = [];                                                              // Sammelcontainer für die Blutanalyse-Timer.
+  private readonly visualAssetMap: Readonly<Record<string, readonly string[]>> = {                                                 // Zuordnung dekorativer Halftone-Assets zu den Projekt-Slugs.
     intranet: ['assets/images/project-stack/eyeball-green.webp', 'assets/images/project-stack/bomb.webp'],
     'kanban-klon': ['assets/images/project-stack/trash-red.webp', 'assets/images/project-stack/paper-crumpled-pink.webp'],
     'grafikdesign-katalog': ['assets/images/project-stack/thumb-lime.webp'],
   };
 
-  /** Native Assetgrößen für dynamische Bildquellen. */
-  private readonly visualAssetSizeMap: Readonly<Record<string, VisualAssetSize>> = {
+  private readonly visualAssetSizeMap: Readonly<Record<string, VisualAssetSize>> = {                                               // Native Assetgrößen für dynamische Bildquellen.
     'assets/images/project-stack/eyeball-green.webp': { width: 240, height: 366 },
     'assets/images/project-stack/eyball-green-hurt.webp': { width: 847, height: 1250 },
     'assets/images/project-stack/bomb.webp': { width: 360, height: 374 },
@@ -342,7 +293,7 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
     this.clearEyeTimer();
     this.eyeHurt.set(true);
     this.eyeTearVisible.set(true);
-    this.eyeResetTimer = setTimeout(() => this.resetEyeReaction(), this.eyeResetDelayMs);
+    this.eyeResetTimer = setTimeout(/** Aktiviert kurz das verletzte Auge und lässt die Träne laufen. */() => this.resetEyeReaction(), this.eyeResetDelayMs);
   }
 
   /** Startet den Bomben-Countdown und entfernt die Bombe nach der Explosion. */
@@ -356,7 +307,7 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
 
     this.clearBombTimers();
     this.bombState.set('charging');
-    this.bombChargeTimer = setTimeout(() => this.showBoomReaction(), this.bombChargeDelayMs);
+    this.bombChargeTimer = setTimeout(/** Startet den Bomben-Countdown und entfernt die Bombe nach der Explosion. */() => this.showBoomReaction(), this.bombChargeDelayMs);
   }
 
   /** Startet die Blutanalyse-Sequenz für Projekt 4. */
@@ -373,18 +324,18 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
     this.bloodArmVisible.set(true);
     this.bloodStatusIndex.set(0);
 
-    this.scheduleBloodStep(() => this.bloodLeechesVisible.set(true), 700);
+    this.scheduleBloodStep(/** Startet die Blutanalyse-Sequenz für Projekt 4. */() => this.bloodLeechesVisible.set(true), 700);
 
-    this.scheduleBloodStep(() => {
+    this.scheduleBloodStep(/** Startet die Blutanalyse-Sequenz für Projekt 4. */() => {
       this.bloodLeechesSatisfied.set(true);
       this.bloodAnalysisVisible.set(true);
       this.bloodStatusIndex.set(0);
     }, 1500);
 
-    this.scheduleBloodStep(() => this.bloodStatusIndex.set(1), 2100);
-    this.scheduleBloodStep(() => this.bloodStatusIndex.set(2), 2850);
-    this.scheduleBloodStep(() => this.bloodStatusIndex.set(3), 3600);
-    this.scheduleBloodStep(() => {
+    this.scheduleBloodStep(/** Startet die Blutanalyse-Sequenz für Projekt 4. */() => this.bloodStatusIndex.set(1), 2100);
+    this.scheduleBloodStep(/** Startet die Blutanalyse-Sequenz für Projekt 4. */() => this.bloodStatusIndex.set(2), 2850);
+    this.scheduleBloodStep(/** Startet die Blutanalyse-Sequenz für Projekt 4. */() => this.bloodStatusIndex.set(3), 3600);
+    this.scheduleBloodStep(/** Startet die Blutanalyse-Sequenz für Projekt 4. */() => {
       this.bloodState.set('complete');
       this.achievementService.unlock('blood-complete');
     }, 4600);
@@ -397,13 +348,15 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
 
   /** Plant einen einzelnen Schritt der Blutanalyse. */
   private scheduleBloodStep(action: () => void, delayMs: number): void {
-    const timer = setTimeout(() => action(), delayMs);
+
+    const timer = setTimeout(/** Plant einen einzelnen Schritt der Blutanalyse. */() => action(), delayMs); // Kennung eines ausstehenden Animations-Timers.
+
     this.bloodTimers.push(timer);
   }
 
   /** Plant die Offset-Messung nach dem nächsten Layout-Pass. */
   private updateBloodLeftOffsetLater(): void {
-    requestAnimationFrame(() => this.updateBloodLeftOffset());
+    requestAnimationFrame(/** Plant die Offset-Messung nach dem nächsten Layout-Pass. */() => this.updateBloodLeftOffset());
   }
 
   /** Misst die horizontale Position der Bühne relativ zum Viewport. */
@@ -427,7 +380,7 @@ export class ProjectVisualComponent implements AfterViewInit, OnDestroy {
     this.achievementService.unlock('bomb-defused');
     this.bombState.set('boom');
     this.bombChargeTimer = null;
-    this.bombRemoveTimer = setTimeout(() => this.removeBombReaction(), this.boomRemoveDelayMs);
+    this.bombRemoveTimer = setTimeout(/** Wechselt von blinkender Bombe zur Boom-Grafik. */() => this.removeBombReaction(), this.boomRemoveDelayMs);
   }
 
   /** Entfernt die Bombe nach der Explosion aus der Preview. */

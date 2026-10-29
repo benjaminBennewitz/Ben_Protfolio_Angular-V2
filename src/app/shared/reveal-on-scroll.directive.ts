@@ -14,17 +14,17 @@ import { RevealObserverService } from '../core/services/reveal-observer.service'
   standalone: true,
 })
 export class RevealOnScrollDirective implements AfterViewInit, OnDestroy {
-  /** Host-Element und gemeinsame Reveal-Steuerung. */
-  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly reveals = inject(RevealObserverService);
-  /** Abmeldung beim Entfernen der Direktive. */
-  private stopObserving?: () => void;
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef); // Host-Element und gemeinsame Reveal-Steuerung.
+  private readonly reveals = inject(RevealObserverService);                  // Gemeinsamer Service für einmalige Inhaltsfreigaben.
+  private stopObserving?: () => void;                                        // Abmeldung beim Entfernen der Direktive.
 
   /** Registriert das Element nach dem Aufbau seiner View. */
   ngAfterViewInit(): void {
-    const element = this.elementRef.nativeElement;
+
+    const element = this.elementRef.nativeElement; // Gerendertes Element der aktuellen Interaktion.
+
     element.classList.add('bp-reveal');
-    this.stopObserving = this.reveals.observe(element, (instant) => {
+    this.stopObserving = this.reveals.observe(element, /** Registriert das Element nach dem Aufbau seiner View. */(instant) => {
       element.classList.toggle('bp-reveal--instant', instant);
       element.classList.add('bp-reveal--visible');
     });

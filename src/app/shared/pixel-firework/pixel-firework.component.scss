@@ -1,4 +1,31 @@
-/* src/app/shared/pixel-firework/pixel-firework.component.scss */
+/*###############################
+###
+###     pixel-firework.component.scss
+###     PIXEL-FIREWORK — Shared Component
+###     BASED ON: Angular, TypeScript, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Feuerwerk und Partikeldarstellung
+   02   Animation pixel-firework-launch
+   03   Animation pixel-firework-burst
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Feuerwerk und Partikeldarstellung
+   ========================================================================== */
 
 :host {
   display: block;
@@ -127,18 +154,53 @@
   --py: -48px;
 }
 
-.pixel-firework__particle:nth-child(1) { --px: 0px; --py: -54px; }
-.pixel-firework__particle:nth-child(2) { --px: 42px; --py: -36px; }
-.pixel-firework__particle:nth-child(3) { --px: 56px; --py: 0px; }
-.pixel-firework__particle:nth-child(4) { --px: 38px; --py: 38px; }
-.pixel-firework__particle:nth-child(5) { --px: 0px; --py: 52px; }
-.pixel-firework__particle:nth-child(6) { --px: -40px; --py: 36px; }
-.pixel-firework__particle:nth-child(7) { --px: -56px; --py: 0px; }
-.pixel-firework__particle:nth-child(8) { --px: -40px; --py: -38px; }
+.pixel-firework__particle:nth-child(1) {
+  --px: 0px;
+  --py: -54px;
+}
+
+.pixel-firework__particle:nth-child(2) {
+  --px: 42px;
+  --py: -36px;
+}
+
+.pixel-firework__particle:nth-child(3) {
+  --px: 56px;
+  --py: 0px;
+}
+
+.pixel-firework__particle:nth-child(4) {
+  --px: 38px;
+  --py: 38px;
+}
+
+.pixel-firework__particle:nth-child(5) {
+  --px: 0px;
+  --py: 52px;
+}
+
+.pixel-firework__particle:nth-child(6) {
+  --px: -40px;
+  --py: 36px;
+}
+
+.pixel-firework__particle:nth-child(7) {
+  --px: -56px;
+  --py: 0px;
+}
+
+.pixel-firework__particle:nth-child(8) {
+  --px: -40px;
+  --py: -38px;
+}
 
 .pixel-firework--active .pixel-firework__burst .pixel-firework__particle {
   animation: pixel-firework-burst 820ms steps(8, end) var(--burst-delay) both;
 }
+
+/* ==========================================================================
+   02   Animation pixel-firework-launch
+   ========================================================================== */
 
 @keyframes pixel-firework-launch {
   0% {
@@ -160,6 +222,10 @@
     transform: translate3d(var(--rocket-x), var(--rocket-y), 0);
   }
 }
+
+/* ==========================================================================
+   03   Animation pixel-firework-burst
+   ========================================================================== */
 
 @keyframes pixel-firework-burst {
   0% {

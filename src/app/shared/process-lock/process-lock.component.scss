@@ -1,8 +1,8 @@
 /*###############################
 ###
 ###     process-lock.component.scss
-###     Produktion App
-###     BASED ON: Angular  21.02.0, SCSS,
+###     PROCESS-LOCK — Shared Component
+###     BASED ON: Angular, TypeScript, SCSS
 ###     AUTHOR: Benjamin Bennewitz
 ###
 ###
@@ -13,7 +13,6 @@
 ###       ██████╦╝
 ###       ╚═════╝
 ###
-###
 #################################*/
 
 /* ==========================================================================
@@ -23,10 +22,13 @@
    02   Sticky Layout
    03   Hintergrund
    04   Intro
-   05   Objekt
-   06   Schritte
+   05   Schritte
+   06   Objekt
    07   Animationen
    08   Responsive
+   09   Tablet und Mobile Scroll Deck
+   10   Wide Screen Bühne
+   11   Referenz-Farbset für Scales und Prozesszustände
    ========================================================================== */
 
 /* ==========================================================================
@@ -97,7 +99,7 @@
    ========================================================================== */
 
 /* ==========================================================================
-   06   Schritte
+   05   Schritte
    ========================================================================== */
 
 .process-lock__intro,
@@ -141,7 +143,7 @@
 }
 
 /* ==========================================================================
-   05   Objekt
+   06   Objekt
    ========================================================================== */
 
 .process-lock__object {
@@ -440,6 +442,7 @@
   color: var(--bp-color-accent);
   transform: translate(4px, -3px);
 }
+
 .process-lock__object[data-step='3'] .process-lock__fragment {
   border-color: color-mix(in srgb, var(--bp-color-text) 84%, var(--bp-color-accent));
   background: linear-gradient(135deg, color-mix(in srgb, var(--bp-color-surface-solid) 80%, transparent), color-mix(in srgb, var(--bp-color-accent) 10%, transparent));
@@ -721,31 +724,99 @@
 }
 
 @keyframes process-core-glitch-a {
-  0%, 100% { opacity: 0; transform: translateX(0); }
-  22% { opacity: 0.78; transform: translateX(-13%); }
-  46% { opacity: 0.24; transform: translateX(8%); }
-  68% { opacity: 0.62; transform: translateX(-5%); }
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  22% {
+    opacity: 0.78;
+    transform: translateX(-13%);
+  }
+
+  46% {
+    opacity: 0.24;
+    transform: translateX(8%);
+  }
+
+  68% {
+    opacity: 0.62;
+    transform: translateX(-5%);
+  }
 }
 
 @keyframes process-core-glitch-b {
-  0%, 100% { opacity: 0; transform: translateX(0); }
-  18% { opacity: 0.62; transform: translateX(10%); }
-  42% { opacity: 0.3; transform: translateX(-7%); }
-  72% { opacity: 0.72; transform: translateX(4%); }
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  18% {
+    opacity: 0.62;
+    transform: translateX(10%);
+  }
+
+  42% {
+    opacity: 0.3;
+    transform: translateX(-7%);
+  }
+
+  72% {
+    opacity: 0.72;
+    transform: translateX(4%);
+  }
 }
 
 @keyframes process-core-glitch-c {
-  0%, 100% { opacity: 0; transform: translateX(0); }
-  16% { opacity: 0.84; transform: translateX(-9%); }
-  48% { opacity: 0.28; transform: translateX(6%); }
-  76% { opacity: 0.58; transform: translateX(-3%); }
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  16% {
+    opacity: 0.84;
+    transform: translateX(-9%);
+  }
+
+  48% {
+    opacity: 0.28;
+    transform: translateX(6%);
+  }
+
+  76% {
+    opacity: 0.58;
+    transform: translateX(-3%);
+  }
 }
 
 @keyframes process-core-glitch-d {
-  0%, 100% { opacity: 0; transform: translateX(0); }
-  20% { opacity: 0.92; transform: translateX(8%); }
-  40% { opacity: 0.36; transform: translateX(-5%); }
-  64% { opacity: 0.68; transform: translateX(2%); }
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+
+  20% {
+    opacity: 0.92;
+    transform: translateX(8%);
+  }
+
+  40% {
+    opacity: 0.36;
+    transform: translateX(-5%);
+  }
+
+  64% {
+    opacity: 0.68;
+    transform: translateX(2%);
+  }
 }
 
 /* ==========================================================================
@@ -953,6 +1024,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .process-lock__orbit,
   .process-lock__orbit-node,
   .process-lock__core-scan::after,
@@ -989,8 +1061,8 @@
 }
 
 
-/* ========================================================================== 
-   09   Referenz-Farbset für Scales und Prozesszustände
+/* ==========================================================================
+   11   Referenz-Farbset für Scales und Prozesszustände
    ========================================================================== */
 
 /* Die Geometrie bleibt unverändert; nur die Scale-Farben stammen aus der Referenz. */

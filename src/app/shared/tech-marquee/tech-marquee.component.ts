@@ -15,24 +15,18 @@ import { Component, Input, signal } from '@angular/core';
   styleUrl: './tech-marquee.component.scss',
 })
 export class TechMarqueeComponent {
-  /** Liste der darzustellenden Technologien. */
-  @Input({ required: true }) items: readonly string[] = [];
-
-  /** Aktiver Drag-Zustand für Cursor und manuelles horizontales Scrollen. */
-  readonly isDragging = signal<boolean>(false);
-
-  /** X-Startposition der aktuellen Drag-Geste. */
-  private dragStartX = 0;
-
-  /** ScrollLeft-Wert beim Start der aktuellen Drag-Geste. */
-  private dragStartScrollLeft = 0;
+  @Input({ required: true }) items: readonly string[] = []; // Liste der darzustellenden Technologien.
+  readonly isDragging = signal<boolean>(false);             // Aktiver Drag-Zustand für Cursor und manuelles horizontales Scrollen.
+  private dragStartX = 0;                                   // X-Startposition der aktuellen Drag-Geste.
+  private dragStartScrollLeft = 0;                          // ScrollLeft-Wert beim Start der aktuellen Drag-Geste.
 
   /**
    * Startet manuelles horizontales Scrollen per Pointer-Drag.
    * @param event Pointer-Ereignis auf der Marquee-Fläche.
    */
   startDrag(event: PointerEvent): void {
-    const target = event.currentTarget;
+
+    const target = event.currentTarget; // Ziel-Element für Scrollen oder Pointer-Auswertung.
 
     if (!(target instanceof HTMLElement) || target.scrollWidth <= target.clientWidth) {
       return;
@@ -49,13 +43,15 @@ export class TechMarqueeComponent {
    * @param event Pointer-Ereignis auf der Marquee-Fläche.
    */
   drag(event: PointerEvent): void {
-    const target = event.currentTarget;
+
+    const target = event.currentTarget; // Ziel-Element für Scrollen oder Pointer-Auswertung.
 
     if (!this.isDragging() || !(target instanceof HTMLElement)) {
       return;
     }
 
-    const dragDistanceX = event.clientX - this.dragStartX;
+    const dragDistanceX = event.clientX - this.dragStartX; // Horizontale Strecke der laufenden Drag-Interaktion.
+
     target.scrollLeft = this.dragStartScrollLeft - dragDistanceX;
     event.preventDefault();
   }
@@ -65,7 +61,8 @@ export class TechMarqueeComponent {
    * @param event Pointer-Ereignis auf der Marquee-Fläche.
    */
   finishDrag(event: PointerEvent): void {
-    const target = event.currentTarget;
+
+    const target = event.currentTarget; // Ziel-Element für Scrollen oder Pointer-Auswertung.
 
     if (!this.isDragging()) {
       return;

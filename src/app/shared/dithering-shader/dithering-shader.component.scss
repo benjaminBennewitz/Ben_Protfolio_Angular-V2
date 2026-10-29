@@ -1,4 +1,29 @@
-/* src/app/shared/dithering-shader/dithering-shader.component.scss */
+/*###############################
+###
+###     dithering-shader.component.scss
+###     DITHERING-SHADER — Shared Component
+###     BASED ON: Angular, TypeScript, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Canvas und Shader-Host
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Canvas und Shader-Host
+   ========================================================================== */
 
 :host {
   position: absolute;

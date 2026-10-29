@@ -10,11 +10,8 @@ import { RevealObserverService } from '../../core/services/reveal-observer.servi
 
 /** Einzelnes Wort mit globalem Animationsindex. */
 interface RevealWord {
-  /** Sichtbarer Wortinhalt. */
-  readonly text: string;
-
-  /** Fortlaufender Index für die Delay-Berechnung. */
-  readonly index: number;
+  readonly text: string;  // Sichtbarer Wortinhalt.
+  readonly index: number; // Fortlaufender Index für die Delay-Berechnung.
 }
 
 /** Einzelne Textzeile der Reveal-Headline. */
@@ -28,39 +25,27 @@ type RevealLine = readonly RevealWord[];
   styleUrl: './reveal-text.component.scss',
 })
 export class RevealTextComponent implements AfterViewInit, OnChanges, OnDestroy {
-  /** Host-Element für die richtungsunabhängige Viewport-Erkennung. */
-  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef); // Host-Element für die richtungsunabhängige Viewport-Erkennung.
+  private readonly reveals = inject(RevealObserverService);                  // Gemeinsame Freigabe für Text- und Element-Reveals.
+  private stopObserving?: () => void;                                        // Abmeldung beim Entfernen der Komponente.
 
-  /** Gemeinsame Freigabe für Text- und Element-Reveals. */
-  private readonly reveals = inject(RevealObserverService);
+  @Input() eyebrow = '';                                                     // Optionales Eyebrow-Label über dem Titel.
 
-  /** Abmeldung beim Entfernen der Komponente. */
-  private stopObserving?: () => void;
+  @Input({ required: true }) text = '';                                      // Zu animierender Titeltext.
 
-  /** Optionales Eyebrow-Label über dem Titel. */
-  @Input() eyebrow = '';
+  @Input() size: 'hero' | 'section' = 'section';                             // Überschriftenebene als CSS-Variante.
 
-  /** Zu animierender Titeltext. */
-  @Input({ required: true }) text = '';
+  @Input() level: 'h1' | 'h2' | 'h3' = 'h2';                                 // Semantische Überschriftenebene.
 
-  /** Überschriftenebene als CSS-Variante. */
-  @Input() size: 'hero' | 'section' = 'section';
+  @Input() headingClass = '';                                                // Zusätzliche Klassen für projektspezifische Titelgrößen.
 
-  /** Semantische Überschriftenebene. */
-  @Input() level: 'h1' | 'h2' | 'h3' = 'h2';
+  protected readonly isVisible = signal(false);                              // Markiert, ob die Textanimation gestartet werden darf.
 
-  /** Zusätzliche Klassen für projektspezifische Titelgrößen. */
-  @Input() headingClass = '';
-
-  /** Markiert, ob die Textanimation gestartet werden darf. */
-  protected readonly isVisible = signal(false);
-
-  /** Übersprungene Inhalte bleiben beim Zurückscrollen ohne Nachanimation lesbar. */
-  protected readonly isInstant = signal(false);
+  protected readonly isInstant = signal(false);                              // Übersprungene Inhalte bleiben beim Zurückscrollen ohne Nachanimation lesbar.
 
   /** Initialisiert die Sichtbarkeitsprüfung nach dem Rendern. */
   ngAfterViewInit(): void {
-    this.stopObserving = this.reveals.observe(this.elementRef.nativeElement, (instant) => {
+    this.stopObserving = this.reveals.observe(this.elementRef.nativeElement, /** Initialisiert die Sichtbarkeitsprüfung nach dem Rendern. */(instant) => {
       this.isInstant.set(instant);
       this.isVisible.set(true);
     });
@@ -71,8 +56,7 @@ export class RevealTextComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.stopObserving?.();
   }
 
-  /** Vorbereitete Wörter werden nur bei einer tatsächlichen Textänderung neu aufgebaut. */
-  wordLines: readonly RevealLine[] = [];
+  wordLines: readonly RevealLine[] = []; // Vorbereitete Wörter werden nur bei einer tatsächlichen Textänderung neu aufgebaut.
 
   /**
    * Aktualisiert die Wortaufteilung beim initialen Inhalt und beim Sprachwechsel.
@@ -80,16 +64,19 @@ export class RevealTextComponent implements AfterViewInit, OnChanges, OnDestroy 
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['text']) return;
-    let index = 0;
+
+    let index = 0; // Aktueller Eintrags- oder Schleifenindex.
+
     this.wordLines = this.text
       .split(/\r?\n|<br\s*\/?>/gi)
-      .map((line) => line.split(/\s+/).filter(Boolean).map((word) => ({ text: word, index: index++ })))
-      .filter((line) => line.length > 0);
+      .map(/** Zerlegt die Textzeile in einzeln animierbare Wörter. */(line) => line.split(/\s+/).filter(Boolean).map(/** Verknüpft das Wort mit seinem fortlaufenden Animationsindex. */(word) => ({ text: word, index: index++ })))
+      .filter(/** Prüft, ob der Eintrag die Auswahlbedingung erfüllt. */(line) => line.length > 0);
   }
 
   /** Baut die Klassenliste für die eigentliche Überschrift. */
   protected headingClassList(): string {
-    const sizeClass = this.size === 'section' ? 'reveal__title--section' : '';
+
+    const sizeClass = this.size === 'section' ? 'reveal__title--section' : ''; // CSS-Größenklasse des visuellen Projektbereichs.
 
     return ['bp-title', 'reveal__title', sizeClass, this.headingClass].filter(Boolean).join(' ');
   }

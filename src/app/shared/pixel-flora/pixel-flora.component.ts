@@ -19,14 +19,11 @@ import { PIXEL_FLORA, PixelFloraVariant } from './pixel-flora.data';
   },
 })
 export class PixelFloraComponent {
-  /** Gewählte Pflanzengrafik. */
-  @Input({ required: true }) variant: PixelFloraVariant = 'flora-01';
+  @Input({ required: true }) variant: PixelFloraVariant = 'flora-01'; // Gewählte Pflanzengrafik.
 
-  /** Individuelle Winddauer für natürlichere Gruppenanimationen. */
-  @Input() windDuration = '4.8s';
+  @Input() windDuration = '4.8s';                                     // Individuelle Winddauer für natürlichere Gruppenanimationen.
 
-  /** Individuelle negative Verzögerung, damit Motive nicht synchron schwingen. */
-  @Input() windDelay = '0s';
+  @Input() windDelay = '0s';                                          // Individuelle negative Verzögerung, damit Motive nicht synchron schwingen.
 
   /** Legt die Variante als Hook für optionale Detailstyles auf den Host. */
   @HostBinding('attr.data-variant')
@@ -46,6 +43,8 @@ export class PixelFloraComponent {
     return this.windDelay;
   }
 
-  /** Aktive Vektordefinition. */
-  readonly definition = computed(() => PIXEL_FLORA[this.variant]);
+  readonly definition = computed( // Aktive Vektordefinition.
+    /** Aktive Vektordefinition. */
+    () => PIXEL_FLORA[this.variant]
+  );
 }

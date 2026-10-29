@@ -1,7 +1,8 @@
 <!-- src/app/shared/project-telemetry/project-telemetry.component.html -->
 @if (project.telemetry; as telemetry) {
 <section id="project-telemetry" class="project-telemetry" [attr.data-accent]="project.accent" bpReveal>
-  <div class="project-telemetry__shell" [class.project-telemetry__shell--archive]="project.slug === 'grafikdesign-katalog'">
+  <div class="project-telemetry__shell"
+    [class.project-telemetry__shell--archive]="project.slug === 'grafikdesign-katalog'">
     <header class="project-telemetry__head">
       <div>
         <p class="bp-eyebrow">{{ telemetry.eyebrow }}</p>
@@ -44,16 +45,10 @@
     } @else if (telemetry.charts.length > 0) {
     <div class="project-telemetry__charts">
       @for (chart of telemetry.charts; track chart.id; let index = $index) {
-      <bp-telemetry-chart
-        [class.project-telemetry__chart--radial]="chart.variant === 'radial'"
-        [class.project-telemetry__chart--wide]="chart.variant !== 'radial'"
-        [eyebrow]="chart.eyebrow"
-        [title]="chart.title"
-        [description]="chart.description"
-        [variant]="chart.variant"
-        [data]="chart.data"
-        [maxValue]="chart.maxValue"
-        [valueSuffix]="chart.valueSuffix ?? ''"
+      <bp-telemetry-chart [class.project-telemetry__chart--radial]="chart.variant === 'radial'"
+        [class.project-telemetry__chart--wide]="chart.variant !== 'radial'" [eyebrow]="chart.eyebrow"
+        [title]="chart.title" [description]="chart.description" [variant]="chart.variant" [data]="chart.data"
+        [maxValue]="chart.maxValue" [valueSuffix]="chart.valueSuffix ?? ''"
         [chartId]="project.slug + '-telemetry-' + index" />
       }
     </div>

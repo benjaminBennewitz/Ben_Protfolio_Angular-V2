@@ -24,11 +24,9 @@ export type PixelSpriteDirection = 'left' | 'right';
   },
 })
 export class PixelSpriteComponent {
-  /** Gewähltes 1-Bit-Motiv. */
-  @Input({ required: true }) kind: PixelSpriteKind = 'bird';
+  @Input({ required: true }) kind: PixelSpriteKind = 'bird'; // Gewähltes 1-Bit-Motiv.
 
-  /** Blick- oder Fahrtrichtung für asymmetrische Motive. */
-  @Input() direction: PixelSpriteDirection = 'right';
+  @Input() direction: PixelSpriteDirection = 'right';        // Blick- oder Fahrtrichtung für asymmetrische Motive.
 
   /** Spiegelt das Motiv als Data-Attribut für motivspezifische Styles. */
   @HostBinding('attr.data-kind')

@@ -1,8 +1,8 @@
 /*###############################
 ###
 ###     contact-form.component.scss
-###     Produktion App
-###     BASED ON: Angular  21.02.0, SCSS,
+###     CONTACT-FORM — Shared Component
+###     BASED ON: Angular, TypeScript, SCSS
 ###     AUTHOR: Benjamin Bennewitz
 ###
 ###
@@ -13,10 +13,9 @@
 ###       ██████╦╝
 ###       ╚═════╝
 ###
-###
 #################################*/
 
-/* ===========================================================================
+/* ==========================================================================
    INHALTSVERZEICHNIS
 
    01   Formular
@@ -25,9 +24,10 @@
    04   Felder
    05   Status
    06   Responsive
+   07   Arcade-Tech
    ========================================================================== */
 
-/* ===========================================================================
+/* ==========================================================================
    01   Formular
    ========================================================================== */
 
@@ -96,7 +96,7 @@
   gap: 0.52rem;
 }
 
-/* ===========================================================================
+/* ==========================================================================
    02   Fensterkopf
    ========================================================================== */
 
@@ -117,7 +117,7 @@
   text-transform: uppercase;
 }
 
-/* ===========================================================================
+/* ==========================================================================
    03   Themenauswahl
    ========================================================================== */
 
@@ -195,7 +195,7 @@
   color: var(--bp-color-on-accent);
 }
 
-/* ===========================================================================
+/* ==========================================================================
    04   Felder
    ========================================================================== */
 
@@ -256,7 +256,7 @@
   line-height: 1.35;
 }
 
-/* ===========================================================================
+/* ==========================================================================
    05   Status
    ========================================================================== */
 
@@ -305,18 +305,18 @@
   transition: opacity 120ms var(--bp-ease-step), transform 120ms var(--bp-ease-step);
 }
 
-.contact-form__consent input:checked + .contact-form__checkbox {
+.contact-form__consent input:checked+.contact-form__checkbox {
   border-color: var(--bp-color-accent);
   background: var(--bp-color-accent);
   box-shadow: 3px 3px 0 color-mix(in srgb, var(--bp-color-accent) 30%, transparent);
 }
 
-.contact-form__consent input:checked + .contact-form__checkbox::after {
+.contact-form__consent input:checked+.contact-form__checkbox::after {
   opacity: 1;
   transform: translateY(-0.06rem) rotate(45deg) scale(1);
 }
 
-.contact-form__consent input:focus-visible + .contact-form__checkbox {
+.contact-form__consent input:focus-visible+.contact-form__checkbox {
   border-color: var(--bp-color-accent);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--bp-color-accent) 28%, transparent), 3px 3px 0 color-mix(in srgb, var(--bp-color-accent) 34%, transparent);
   transform: translate(-1px, -1px);
@@ -386,7 +386,7 @@
   font-weight: 800;
 }
 
-/* ===========================================================================
+/* ==========================================================================
    06   Responsive
    ========================================================================== */
 
@@ -429,12 +429,12 @@
   }
 }
 
-/* ===========================================================================
+/* ==========================================================================
    07   Arcade-Tech
    ========================================================================== */
 
 .contact-form::before,
-.contact-form label > span,
+.contact-form label>span,
 .contact-form__topics legend,
 .contact-form__topic,
 .contact-form input,

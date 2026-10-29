@@ -21,69 +21,67 @@ import { ViewportActivityDirective } from '../viewport-activity.directive';
   styleUrl: './built-without.component.scss',
 })
 export class BuiltWithoutComponent implements AfterViewInit, OnDestroy {
-  /** Sprachservice für übersetzte Section-Inhalte. */
-  private readonly languageService = inject(LanguageService);
+  private readonly languageService = inject(LanguageService);                  // Sprachservice für übersetzte Section-Inhalte.
+  private readonly hostRef = inject<ElementRef<HTMLElement>>(ElementRef);      // Host-Element zum Messen der 100vh-Bühne.
+  readonly content = computed(                                                 // Übersetzter Section-Inhalt.
+    /** Übersetzter Section-Inhalt. */
+    () => this.languageService.content().builtWithout
+  );
 
-  /** Host-Element zum Messen der 100vh-Bühne. */
-  private readonly hostRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly projects = computed(                                        // Aktuelle Case Studies als Quelle der automatisch abgeleiteten Chart-Werte.
+    /** Aktuelle Case Studies als Quelle der automatisch abgeleiteten Chart-Werte. */
+    () => PORTFOLIO_PROJECTS[this.languageService.language()]
+  );
 
-  /** Übersetzter Section-Inhalt. */
-  readonly content = computed(() => this.languageService.content().builtWithout);
+  readonly telemetryStageActive = signal(false);                               // Aktiviert die zweite, über die erste Bühne fahrende Telemetrie-Ebene.
+  readonly stageCueLabels = computed(                                          // Übersetzte Hinweise für die beiden Scroll-Stufen.
+    /** Übersetzte Hinweise für die beiden Scroll-Stufen. */
+    () => this.languageService.language() === 'de' // Übersetzte Hinweise für die beiden Scroll-Stufen.
+      ? { telemetry: 'SCROLL / TELEMETRIE LADEN', continue: 'SCROLL / WEITER' }
+      : { telemetry: 'SCROLL / LOAD TELEMETRY', continue: 'SCROLL / CONTINUE' }
+  );
 
-  /** Aktuelle Case Studies als Quelle der automatisch abgeleiteten Chart-Werte. */
-  private readonly projects = computed(() => PORTFOLIO_PROJECTS[this.languageService.language()]);
-
-  /** Aktiviert die zweite, über die erste Bühne fahrende Telemetrie-Ebene. */
-  readonly telemetryStageActive = signal(false);
-
-  /** Übersetzte Hinweise für die beiden Scroll-Stufen. */
-  readonly stageCueLabels = computed(() => this.languageService.language() === 'de'
-    ? { telemetry: 'SCROLL / TELEMETRIE LADEN', continue: 'SCROLL / WEITER' }
-    : { telemetry: 'SCROLL / LOAD TELEMETRY', continue: 'SCROLL / CONTINUE' });
-
-  /** Verhindert mehrfaches Umschalten durch ein einzelnes hochauflösendes Wheel-Gesture. */
-  private stageWheelLockedUntil = 0;
-
-  /** Mindeststärke eines Wheel-Impulses für einen Bühnenwechsel. */
-  private readonly stageWheelThreshold = 8;
-
-  /** Kurzer Cooldown zwischen zwei Bühnenwechseln. */
-  private readonly stageWheelCooldownMs = 900;
-
-  /** Blockiert die Restimpulse desselben Trackpad-/Wheel-Gestures nach einem Bühnenwechsel. */
-  private stageWheelRequiresRelease = false;
-
-  /** Timer zum Erkennen des Endes eines zusammenhängenden Wheel-Gestures. */
-  private stageWheelReleaseTimer: ReturnType<typeof setTimeout> | null = null;
+  private stageWheelLockedUntil = 0;                                           // Verhindert mehrfaches Umschalten durch ein einzelnes hochauflösendes Wheel-Gesture.
+  private readonly stageWheelThreshold = 8;                                    // Mindeststärke eines Wheel-Impulses für einen Bühnenwechsel.
+  private readonly stageWheelCooldownMs = 900;                                 // Kurzer Cooldown zwischen zwei Bühnenwechseln.
+  private stageWheelRequiresRelease = false;                                   // Blockiert die Restimpulse desselben Trackpad-/Wheel-Gestures nach einem Bühnenwechsel.
+  private stageWheelReleaseTimer: ReturnType<typeof setTimeout> | null = null; // Timer zum Erkennen des Endes eines zusammenhängenden Wheel-Gestures.
 
   /** Gebundener Wheel-Handler, damit er beim Destroy zuverlässig entfernt werden kann. */
   private readonly stageWheelHandler = (event: WheelEvent): void => this.handleStageWheel(event);
 
-  /** Häufigste Technologien über alle dokumentierten Projekt-Stacks hinweg. */
-  readonly recurringTechData = computed<readonly TelemetryChartDataPoint[]>(() => {
-    const counts = new Map<string, { label: string; value: number }>();
+  readonly recurringTechData = computed<readonly TelemetryChartDataPoint[]>(   // Häufigste Technologien über alle dokumentierten Projekt-Stacks hinweg.
+    /** Häufigste Technologien über alle dokumentierten Projekt-Stacks hinweg. */
+    () => {
 
-    for (const project of this.projects()) {
-      for (const technology of project.techStack) {
-        const key = technology.trim().toLocaleLowerCase();
-        const current = counts.get(key);
-        counts.set(key, {
-          label: current?.label ?? technology,
-          value: (current?.value ?? 0) + 1,
-        });
+      const counts = new Map<string, { label: string; value: number }>(); // Gezählte Technologien für das Einsatzprofil.
+
+      for (const project of this.projects()) {
+        for (const technology of project.techStack) {
+
+          const key = technology.trim().toLocaleLowerCase(); // Normalisierte Technologiekennung für die Häufigkeitszählung.
+          const current = counts.get(key);                   // Aktueller Zähl-, Animations- oder Messwert.
+
+          counts.set(key, {
+            label: current?.label ?? technology,
+            value: (current?.value ?? 0) + 1,
+          });
+        }
       }
+
+      return [...counts.values()]
+        .sort(/** Häufigste Technologien über alle dokumentierten Projekt-Stacks hinweg. */(left, right) => right.value - left.value || left.label.localeCompare(right.label))
+        .slice(0, 5);
     }
+  );
 
-    return [...counts.values()]
-      .sort((left, right) => right.value - left.value || left.label.localeCompare(right.label))
-      .slice(0, 5);
-  });
-
-  /** Anzahl der dokumentierten Stack-Bausteine pro Case Study. */
-  readonly stackBreadthData = computed<readonly TelemetryChartDataPoint[]>(() => this.projects().map((project) => ({
-    label: this.shortProjectLabel(project.name),
-    value: project.techStack.length,
-  })));
+  readonly stackBreadthData = computed<readonly TelemetryChartDataPoint[]>(    // Anzahl der dokumentierten Stack-Bausteine pro Case Study.
+    /** Anzahl der dokumentierten Stack-Bausteine pro Case Study. */
+    () => this.projects().map(/** Erstellt den Technologie-Datenpunkt des Projekts. */(project) => ({ // Anzahl der dokumentierten Stack-Bausteine pro Case Study.
+      label: this.shortProjectLabel(project.name),
+      value: project.techStack.length,
+    }))
+  );
 
   /** Registriert den nicht-passiven Wheel-Guard global, verarbeitet aber ausschließlich die exakt gesnappte Section. */
   ngAfterViewInit(): void {
@@ -109,9 +107,9 @@ export class BuiltWithoutComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const rect = this.sectionElement().getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const outsideTolerance = 2;
+    const rect = this.sectionElement().getBoundingClientRect(); // Gemessene Grenzen des aktuellen Elements.
+    const viewportHeight = window.innerHeight;                  // Aktuelle Höhe des Browserfensters in Pixeln.
+    const outsideTolerance = 2;                                 // Zulässiger Abstand außerhalb des sichtbaren Bereichs.
 
     if (rect.top >= viewportHeight - outsideTolerance) {
       this.telemetryStageActive.set(false);
@@ -127,8 +125,8 @@ export class BuiltWithoutComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const forward = event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ';
-    const backward = event.key === 'ArrowUp' || event.key === 'PageUp';
+    const forward = event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' '; // Vorwärtsrichtung des Ablaufs ist aktiv.
+    const backward = event.key === 'ArrowUp' || event.key === 'PageUp';                         // Rückwärtsrichtung des Ablaufs ist aktiv.
 
     if ((forward || backward) && event.repeat) {
       event.preventDefault();
@@ -146,7 +144,8 @@ export class BuiltWithoutComponent implements AfterViewInit, OnDestroy {
 
   /** Kürzt lange Projektnamen für kompakte SVG-Achsen. */
   private shortProjectLabel(name: string): string {
-    const normalized = name
+
+    const normalized = name // Auf die erwartete Schreibweise normalisierter Text.
       .replace(' – Eine Welt reagiert', '')
       .replace(' – A World Reacts', '')
       .replace('Dein Fußabdruck', 'Fußabdruck');
@@ -156,7 +155,8 @@ export class BuiltWithoutComponent implements AfterViewInit, OnDestroy {
 
   /** Fängt Eintrittsimpulse und den Wechsel zwischen Integrity und Telemetrie symmetrisch ab. */
   private handleStageWheel(event: WheelEvent): void {
-    const deltaY = this.normalizedWheelDelta(event);
+
+    const deltaY = this.normalizedWheelDelta(event); // Vertikale Scroll- oder Pointer-Bewegung.
 
     if (!this.isUsableStageWheel(event, deltaY)) {
       return;
@@ -172,7 +172,7 @@ export class BuiltWithoutComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const now = performance.now();
+    const now = performance.now(); // Aktueller Zeitstempel des Animationsframes.
 
     if (this.stageWheelRequiresRelease) {
       event.preventDefault();
@@ -209,7 +209,7 @@ export class BuiltWithoutComponent implements AfterViewInit, OnDestroy {
       clearTimeout(this.stageWheelReleaseTimer);
     }
 
-    this.stageWheelReleaseTimer = setTimeout(() => {
+    this.stageWheelReleaseTimer = setTimeout(/** Gibt den Scroll frei, sobald für einen kurzen Moment kein Restimpuls mehr eingetroffen ist. */() => {
       this.stageWheelRequiresRelease = false;
       this.stageWheelReleaseTimer = null;
     }, 160);
@@ -230,13 +230,13 @@ export class BuiltWithoutComponent implements AfterViewInit, OnDestroy {
       return false;
     }
 
-    const rect = this.sectionElement().getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const tolerance = Math.max(12, viewportHeight * 0.03);
-    const enteringFromAbove = deltaY > 0
+    const rect = this.sectionElement().getBoundingClientRect(); // Gemessene Grenzen des aktuellen Elements.
+    const viewportHeight = window.innerHeight;                  // Aktuelle Höhe des Browserfensters in Pixeln.
+    const tolerance = Math.max(12, viewportHeight * 0.03);      // Zulässiger Abstand zum Einrastpunkt.
+    const enteringFromAbove = deltaY > 0                        // Bereich kommt von oben in den sichtbaren Ausschnitt.
       && rect.top > tolerance
       && rect.top <= viewportHeight * 1.18;
-    const enteringFromBelow = deltaY < 0
+    const enteringFromBelow = deltaY < 0                        // Bereich kommt von unten in den sichtbaren Ausschnitt.
       && rect.bottom < viewportHeight - tolerance
       && rect.bottom >= -viewportHeight * 0.18;
 
@@ -258,7 +258,8 @@ export class BuiltWithoutComponent implements AfterViewInit, OnDestroy {
 
   /** Prüft die systemseitige Motion-Präferenz für programmatische Snap-Bewegungen. */
   private prefersReducedMotion(): boolean {
-    const root = document.documentElement;
+
+    const root = document.documentElement; // Beobachteter übergeordneter Scroll- oder Layoutbereich.
 
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches
       || root.dataset['motion'] === 'reduced'
@@ -281,8 +282,9 @@ export class BuiltWithoutComponent implements AfterViewInit, OnDestroy {
 
   /** Prüft, ob die Section aktuell praktisch viewportfüllend am oberen Snap-Punkt steht. */
   private sectionIsSnapped(): boolean {
-    const rect = this.sectionElement().getBoundingClientRect();
-    const tolerance = Math.max(8, window.innerHeight * 0.025);
+
+    const rect = this.sectionElement().getBoundingClientRect(); // Gemessene Grenzen des aktuellen Elements.
+    const tolerance = Math.max(8, window.innerHeight * 0.025);  // Zulässiger Abstand zum Einrastpunkt.
 
     return Math.abs(rect.top) <= tolerance && Math.abs(rect.bottom - window.innerHeight) <= tolerance * 2;
   }

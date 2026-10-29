@@ -1,4 +1,35 @@
-/* src/app/shared/pixel-sprite/pixel-sprite.component.scss */
+/*###############################
+###
+###     pixel-sprite.component.scss
+###     PIXEL-SPRITE — Shared Component
+###     BASED ON: Angular, TypeScript, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Pixelraster und Sprite-Darstellung
+   02   Animation pixel-bird-wing-up
+   03   Animation pixel-bird-wing-down
+   04   Animation pixel-tree-wind
+   05   Animation pixel-flower-wind
+   06   Animation pixel-sun-pulse
+   07   Animation pixel-wheel-spin
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Pixelraster und Sprite-Darstellung
+   ========================================================================== */
 
 :host {
   --pixel-flap-duration: 420ms;
@@ -69,36 +100,105 @@ svg {
   transform: scaleX(-1);
 }
 
+/* ==========================================================================
+   02   Animation pixel-bird-wing-up
+   ========================================================================== */
+
 @keyframes pixel-bird-wing-up {
-  0%, 42% { opacity: 1; }
-  43%, 100% { opacity: 0; }
+
+  0%,
+  42% {
+    opacity: 1;
+  }
+
+  43%,
+  100% {
+    opacity: 0;
+  }
 }
+
+/* ==========================================================================
+   03   Animation pixel-bird-wing-down
+   ========================================================================== */
 
 @keyframes pixel-bird-wing-down {
-  0%, 42% { opacity: 0; }
-  43%, 100% { opacity: 1; }
+
+  0%,
+  42% {
+    opacity: 0;
+  }
+
+  43%,
+  100% {
+    opacity: 1;
+  }
 }
+
+/* ==========================================================================
+   04   Animation pixel-tree-wind
+   ========================================================================== */
 
 @keyframes pixel-tree-wind {
-  0% { transform: rotate(-1.5deg) skewX(-1deg); }
-  55% { transform: rotate(2.4deg) skewX(1.8deg); }
-  100% { transform: rotate(-0.6deg) skewX(-0.6deg); }
+  0% {
+    transform: rotate(-1.5deg) skewX(-1deg);
+  }
+
+  55% {
+    transform: rotate(2.4deg) skewX(1.8deg);
+  }
+
+  100% {
+    transform: rotate(-0.6deg) skewX(-0.6deg);
+  }
 }
+
+/* ==========================================================================
+   05   Animation pixel-flower-wind
+   ========================================================================== */
 
 @keyframes pixel-flower-wind {
-  0% { transform: rotate(-4deg); }
-  100% { transform: rotate(6deg); }
+  0% {
+    transform: rotate(-4deg);
+  }
+
+  100% {
+    transform: rotate(6deg);
+  }
 }
+
+/* ==========================================================================
+   06   Animation pixel-sun-pulse
+   ========================================================================== */
 
 @keyframes pixel-sun-pulse {
-  0%, 48% { opacity: 0.45; }
-  49%, 100% { opacity: 1; }
+
+  0%,
+  48% {
+    opacity: 0.45;
+  }
+
+  49%,
+  100% {
+    opacity: 1;
+  }
 }
 
 
+/* ==========================================================================
+   07   Animation pixel-wheel-spin
+   ========================================================================== */
+
 @keyframes pixel-wheel-spin {
-  0%, 48% { transform: rotate(0deg); }
-  49%, 100% { transform: rotate(90deg); }
+
+  0%,
+  48% {
+    transform: rotate(0deg);
+  }
+
+  49%,
+  100% {
+    transform: rotate(90deg);
+  }
 }
 
 :host-context(:root[data-motion='reduced']) *,

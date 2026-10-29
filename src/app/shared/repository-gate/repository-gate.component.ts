@@ -9,14 +9,11 @@ import { DOCUMENT } from '@angular/common';
 import { Component, computed, ElementRef, inject, input, signal, ViewChild } from '@angular/core';
 import type { RepositoryGateContent } from '../../core/models/pages.models';
 
-/** Maximale Zahl gleichzeitig sichtbarer Fehlversuch-Dialoge. */
-export const MAX_VISIBLE_REPOSITORY_FAILURES = 5;
+export const MAX_VISIBLE_REPOSITORY_FAILURES = 5; // Maximale Zahl gleichzeitig sichtbarer Fehlversuch-Dialoge.
 
-/** Zulässige, bereits auf Kleinschreibung normalisierte Antworten. */
-const ACCEPTED_REPOSITORY_ANSWERS = new Set(['fülli', 'fuelli', 'füles']);
+const ACCEPTED_REPOSITORY_ANSWERS = new Set(['fülli', 'fuelli', 'füles']); // Zulässige, bereits auf Kleinschreibung normalisierte Antworten.
 
-/** Direkter Zielpfad; wird bewusst erst nach erfolgreicher Antwort an den Browser übergeben. */
-const REPOSITORY_URL = 'https://github.com/benjaminBennewitz/Ben_Protfolio_Angular-V2';
+const REPOSITORY_URL = 'https://github.com/benjaminBennewitz/Ben_Protfolio_Angular-V2'; // Direkter Zielpfad; wird bewusst erst nach erfolgreicher Antwort an den Browser übergeben.
 
 /** Prüft eine Antwort tolerant gegenüber Leerzeichen, Großschreibung und Unicode-Darstellung. */
 export function isRepositoryAnswerAccepted(answer: string): boolean {
@@ -36,33 +33,27 @@ export function appendRepositoryFailure(failures: readonly number[], failureId: 
   styleUrl: './repository-gate.component.scss',
 })
 export class RepositoryGateComponent {
-  /** Dokumentzugriff für tab-sicheres Öffnen des externen Ziels. */
-  private readonly document = inject(DOCUMENT);
+  private readonly document = inject(DOCUMENT);                                                                         // Dokumentzugriff für tab-sicheres Öffnen des externen Ziels.
 
-  /** Native Dialogreferenz für Top-Layer, Fokus und Escape-Verhalten. */
-  @ViewChild('repositoryDialog', { static: true }) private readonly repositoryDialog!: ElementRef<HTMLDialogElement>;
+  @ViewChild('repositoryDialog', { static: true }) private readonly repositoryDialog!: ElementRef<HTMLDialogElement>;   // Native Dialogreferenz für Top-Layer, Fokus und Escape-Verhalten.
 
-  /** Eingabefeld für Fokussteuerung und Prüfung ohne zusätzliche Formularabhängigkeit. */
-  @ViewChild('answerInput', { static: true }) private readonly answerInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('answerInput', { static: true }) private readonly answerInput!: ElementRef<HTMLInputElement>;              // Eingabefeld für Fokussteuerung und Prüfung ohne zusätzliche Formularabhängigkeit.
 
-  /** Trigger für die Fokus-Rückgabe nach dem Schließen. */
-  @ViewChild('repositoryTrigger', { static: true }) private readonly repositoryTrigger!: ElementRef<HTMLButtonElement>;
+  @ViewChild('repositoryTrigger', { static: true }) private readonly repositoryTrigger!: ElementRef<HTMLButtonElement>; // Trigger für die Fokus-Rückgabe nach dem Schließen.
+  readonly copy = input.required<RepositoryGateContent>();                                                              // Vom zentralen Content-Modell gelieferte Dialogtexte.
+  readonly failures = signal<readonly number[]>([]);                                                                    // IDs der letzten maximal fünf falschen Antworten.
+  readonly hasFailed = computed(                                                                                        // Markiert das Antwortfeld nach mindestens einem Fehlversuch.
+    /** Markiert das Antwortfeld nach mindestens einem Fehlversuch. */
+    () => this.failures().length > 0
+  );
 
-  /** Vom zentralen Content-Modell gelieferte Dialogtexte. */
-  readonly copy = input.required<RepositoryGateContent>();
-
-  /** IDs der letzten maximal fünf falschen Antworten. */
-  readonly failures = signal<readonly number[]>([]);
-
-  /** Markiert das Antwortfeld nach mindestens einem Fehlversuch. */
-  readonly hasFailed = computed(() => this.failures().length > 0);
-
-  /** Fortlaufende ID für stabile Angular-Track-Keys. */
-  private failureId = 0;
+  private failureId = 0;                                                                                                // Fortlaufende ID für stabile Angular-Track-Keys.
 
   /** Öffnet die Sicherheitsfrage ohne ein Linkziel im Hover-Zustand preiszugeben. */
   openRepositoryGate(): void {
-    const dialog = this.repositoryDialog.nativeElement;
+
+    const dialog = this.repositoryDialog.nativeElement; // Aktives Dialogelement für die Tastatur-Fokussteuerung.
+
     this.failures.set([]);
     this.answerInput.nativeElement.value = '';
 
@@ -70,20 +61,21 @@ export class RepositoryGateComponent {
       dialog.showModal();
     }
 
-    queueMicrotask(() => this.answerInput.nativeElement.focus());
+    queueMicrotask(/** Öffnet die Sicherheitsfrage ohne ein Linkziel im Hover-Zustand preiszugeben. */() => this.answerInput.nativeElement.focus());
   }
 
   /** Schließt den Dialog, leert Fehlversuche und gibt den Fokus an den Auslöser zurück. */
   closeRepositoryGate(event?: Event): void {
     event?.preventDefault();
-    const dialog = this.repositoryDialog.nativeElement;
+
+    const dialog = this.repositoryDialog.nativeElement; // Aktives Dialogelement für die Tastatur-Fokussteuerung.
 
     if (dialog.open) {
       dialog.close();
     }
 
     this.failures.set([]);
-    queueMicrotask(() => this.repositoryTrigger.nativeElement.focus());
+    queueMicrotask(/** Schließt den Dialog, leert Fehlversuche und gibt den Fokus an den Auslöser zurück. */() => this.repositoryTrigger.nativeElement.focus());
   }
 
   /** Schließt nur bei einem Klick auf die native Dialogfläche außerhalb des Fensters. */
@@ -104,13 +96,13 @@ export class RepositoryGateComponent {
     }
 
     this.failureId += 1;
-    this.failures.update((failures) => appendRepositoryFailure(failures, this.failureId));
-    queueMicrotask(() => input.select());
+    this.failures.update(/** Prüft die Antwort, öffnet das Repository oder ergänzt den begrenzten Fehlerstapel. */(failures) => appendRepositoryFailure(failures, this.failureId));
+    queueMicrotask(/** Prüft die Antwort, öffnet das Repository oder ergänzt den begrenzten Fehlerstapel. */() => input.select());
   }
 
   /** Entfernt eine einzelne Fehlermeldung über deren Close-Button. */
   dismissFailure(failureId: number): void {
-    this.failures.update((failures) => failures.filter((id) => id !== failureId));
+    this.failures.update(/** Entfernt eine einzelne Fehlermeldung über deren Close-Button. */(failures) => failures.filter(/** Prüft, ob der Eintrag die Auswahlbedingung erfüllt. */(id) => id !== failureId));
   }
 
   /** Berechnet den diagonalen Abstand eines Fehlerfensters. */

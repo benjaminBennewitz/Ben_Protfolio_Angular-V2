@@ -1,8 +1,8 @@
 /*###############################
 ###
 ###     project-stack.component.scss
-###     Produktion App
-###     BASED ON: Angular  21.02.0, SCSS,
+###     PROJECT-STACK — Shared Component
+###     BASED ON: Angular, TypeScript, SCSS
 ###     AUTHOR: Benjamin Bennewitz
 ###
 ###
@@ -12,7 +12,6 @@
 ###       ██╔══██╗
 ###       ██████╦╝
 ###       ╚═════╝
-###
 ###
 #################################*/
 
@@ -31,6 +30,10 @@
    10   Typewriter Animationen
    11   Intro Variante
    12   Responsive
+   13   Mobile Feinschliff
+   14   Responsive Projekt-Navi Korrektur
+   15   Wide Screen Bühne
+   16   Wide Screen Projekt-Bühne
    ========================================================================== */
 
 /* ==========================================================================
@@ -862,6 +865,7 @@
 }
 
 @keyframes project-stack-availability-pulse {
+
   0%,
   100% {
     opacity: 0.58;
@@ -970,17 +974,17 @@
   }
 
   .project-stack__title-reveal {
-  --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
-  --bp-reveal-title-line-height: 0.82;
-  --bp-reveal-title-letter-spacing: -0.08em;
-}
+    --bp-reveal-title-size: clamp(2.55rem, 6vw, 7.2rem);
+    --bp-reveal-title-line-height: 0.82;
+    --bp-reveal-title-letter-spacing: -0.08em;
+  }
 
-.project-stack__copy h3 {
+  .project-stack__copy h3 {
     font-size: clamp(2.6rem, 16vw, 4.4rem);
   }
 
 
-.project-stack__copy h3 {
+  .project-stack__copy h3 {
     width: min-content;
     max-width: none;
   }
@@ -1183,7 +1187,7 @@
     inset-inline: 0;
   }
 
-.project-stack__decor {
+  .project-stack__decor {
     inset-inline: var(--bp-viewport-gutter);
   }
 
@@ -1194,7 +1198,7 @@
   }
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    16   Wide Screen Projekt-Bühne
    ========================================================================== */
 
@@ -1225,7 +1229,7 @@
   }
 
 
-.project-stack__copy h3 {
+  .project-stack__copy h3 {
     width: auto;
     max-width: 620px;
     overflow-wrap: normal;

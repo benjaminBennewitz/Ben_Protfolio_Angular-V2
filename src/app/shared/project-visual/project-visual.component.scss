@@ -1,8 +1,8 @@
 /*###############################
 ###
 ###     project-visual.component.scss
-###     Produktion App
-###     BASED ON: Angular  21.02.0, SCSS,
+###     PROJECT-VISUAL — Shared Component
+###     BASED ON: Angular, TypeScript, SCSS
 ###     AUTHOR: Benjamin Bennewitz
 ###
 ###
@@ -12,7 +12,6 @@
 ###       ██╔══██╗
 ###       ██████╦╝
 ###       ╚═════╝
-###
 ###
 #################################*/
 
@@ -472,11 +471,22 @@
   box-shadow: 12px 0 0 color-mix(in srgb, var(--visual-accent) 54%, transparent), 0 12px 0 color-mix(in srgb, var(--visual-accent) 30%, transparent);
 }
 
-.visual__ecosystem-node--one { top: 26%; left: 42%; }
-.visual__ecosystem-node--two { top: 49%; right: 26%; }
-.visual__ecosystem-node--three { bottom: 18%; left: 28%; }
+.visual__ecosystem-node--one {
+  top: 26%;
+  left: 42%;
+}
 
-.visual__ecosystem > strong {
+.visual__ecosystem-node--two {
+  top: 49%;
+  right: 26%;
+}
+
+.visual__ecosystem-node--three {
+  bottom: 18%;
+  left: 28%;
+}
+
+.visual__ecosystem>strong {
   position: absolute;
   left: 0;
   bottom: -0.35rem;
@@ -490,8 +500,15 @@
 }
 
 @keyframes footprint-orbit-float {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(0, -8px, 0); }
+
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
 }
 
 .visual[data-project='kanban-klon'] .visual__asset--primary {
@@ -1459,6 +1476,7 @@
 
 
 @media (max-width: 640px) {
+
   .visual-shell[data-project='blutanalyse'],
   .visual-shell[data-project='blutanalyse'].visual-shell--large {
     display: grid;
@@ -1579,6 +1597,7 @@
 }
 
 @media (max-width: 420px) {
+
   .visual-shell[data-project='blutanalyse'],
   .visual-shell[data-project='blutanalyse'].visual-shell--large {
     min-height: min(76svh, 500px);

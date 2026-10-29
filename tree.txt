@@ -54,6 +54,7 @@ folio/
 │   │   │   ├── accessibility-panel/
 │   │   │   │   ├── accessibility-panel.component.html
 │   │   │   │   ├── accessibility-panel.component.scss
+│   │   │   │   ├── accessibility-panel.component.spec.ts
 │   │   │   │   └── accessibility-panel.component.ts
 │   │   │   ├── accessibility-status/
 │   │   │   │   ├── accessibility-status.component.html
@@ -65,10 +66,12 @@ folio/
 │   │   │   │   └── achievement-toast.component.ts
 │   │   │   ├── app-runtime/
 │   │   │   │   ├── app-runtime.component.scss
+│   │   │   │   ├── app-runtime.component.spec.ts
 │   │   │   │   └── app-runtime.component.ts
 │   │   │   ├── cookie-banner/
 │   │   │   │   ├── cookie-banner.component.html
 │   │   │   │   ├── cookie-banner.component.scss
+│   │   │   │   ├── cookie-banner.component.spec.ts
 │   │   │   │   └── cookie-banner.component.ts
 │   │   │   ├── critical-styles/
 │   │   │   │   ├── critical-styles.component.scss
@@ -84,14 +87,17 @@ folio/
 │   │   │   ├── loader/
 │   │   │   │   ├── loader.component.html
 │   │   │   │   ├── loader.component.scss
+│   │   │   │   ├── loader.component.spec.ts
 │   │   │   │   └── loader.component.ts
 │   │   │   ├── navigation/
 │   │   │   │   ├── navigation.component.html
 │   │   │   │   ├── navigation.component.scss
+│   │   │   │   ├── navigation.component.spec.ts
 │   │   │   │   └── navigation.component.ts
 │   │   │   ├── platinum-discount-modal/
 │   │   │   │   ├── platinum-discount-modal.component.html
 │   │   │   │   ├── platinum-discount-modal.component.scss
+│   │   │   │   ├── platinum-discount-modal.component.spec.ts
 │   │   │   │   └── platinum-discount-modal.component.ts
 │   │   │   ├── scroll-to-top/
 │   │   │   │   ├── scroll-to-top.component.html

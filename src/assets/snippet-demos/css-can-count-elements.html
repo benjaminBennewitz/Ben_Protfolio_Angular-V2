@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="de">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CSS sibling-index Demo</title>
   <style>
-/*###############################
+    /*###############################
 ###
 ###     snippet-demo.css
 ###     Portfolio Snippet Demo
@@ -108,7 +109,7 @@
       gap: .8rem;
     }
 
-    .metric-grid > * {
+    .metric-grid>* {
       min-height: 6.5rem;
       border: 1px solid var(--accent);
       padding: 1rem;
@@ -117,13 +118,28 @@
       transition: background-color .2s ease, color .2s ease, transform .2s ease;
     }
 
-    .metric-grid--fallback > *:nth-child(1) { background: rgba(167, 255, 25, .24); color: #101010; }
-    .metric-grid--fallback > *:nth-child(2) { background: rgba(167, 255, 25, .42); color: #101010; }
-    .metric-grid--fallback > *:nth-child(3) { background: rgba(167, 255, 25, .62); color: #101010; }
-    .metric-grid--fallback > *:nth-child(4) { background: rgba(167, 255, 25, .82); color: #101010; }
+    .metric-grid--fallback>*:nth-child(1) {
+      background: rgba(167, 255, 25, .24);
+      color: #101010;
+    }
+
+    .metric-grid--fallback>*:nth-child(2) {
+      background: rgba(167, 255, 25, .42);
+      color: #101010;
+    }
+
+    .metric-grid--fallback>*:nth-child(3) {
+      background: rgba(167, 255, 25, .62);
+      color: #101010;
+    }
+
+    .metric-grid--fallback>*:nth-child(4) {
+      background: rgba(167, 255, 25, .82);
+      color: #101010;
+    }
 
     @supports (background: rgba(167, 255, 25, calc(sibling-index() / sibling-count()))) {
-      .metric-grid--dynamic > * {
+      .metric-grid--dynamic>* {
         --i: sibling-index();
         --count: sibling-count();
         background: rgba(167, 255, 25, calc(.20 + var(--i) / var(--count) * .70));
@@ -133,6 +149,7 @@
     }
 
     @media (max-width: 720px) {
+
       .compare,
       .metric-grid {
         grid-template-columns: 1fr;
@@ -140,6 +157,7 @@
     }
   </style>
 </head>
+
 <body>
   <main class="demo-shell">
     <header class="demo-header">
@@ -148,7 +166,8 @@
     </header>
     <article class="demo-note">
       <strong>Use-Case:</strong>
-      <p>Ein Kartenraster kann Staffelung oder visuelle Gewichtung aus seiner eigenen Position ableiten, ohne jede Karte manuell per nth-child zu pflegen.</p>
+      <p>Ein Kartenraster kann Staffelung oder visuelle Gewichtung aus seiner eigenen Position ableiten, ohne jede Karte
+        manuell per nth-child zu pflegen.</p>
     </article>
 
     <div class="compare">
@@ -174,4 +193,5 @@
     </div>
   </main>
 </body>
+
 </html>

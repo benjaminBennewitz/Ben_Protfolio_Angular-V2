@@ -6,6 +6,7 @@
  */
 
 import { Component, computed, ElementRef, HostListener, inject, signal, ViewChild } from '@angular/core';
+import { DESIGN_STUDIES } from '../../core/data/design-studies';
 import { PORTFOLIO_PROJECTS } from '../../core/data/portfolio-projects';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
@@ -21,51 +22,15 @@ import { ViewportActivityDirective } from '../../shared/viewport-activity.direct
 type PortfolioChocolateKey = 'default' | 'eaten';
 
 /** Konfiguration eines fallenden Schoko-Eis für die Portfolio-Bühne. */
-/** Konfiguration einer eigenständigen visuellen Designstudie. */
-interface DesignStudy {
-  /** Stabile Kennung der Studie. */
-  readonly id: string;
-
-  /** Sichtbarer Projektname. */
-  readonly name: string;
-
-  /** Kurze visuelle Einordnung. */
-  readonly subtitle: string;
-
-  /** Öffentlicher Pfad der statischen Microsite. */
-  readonly href: string;
-
-  /** Vorschaubild innerhalb der Portfolio-Section. */
-  readonly preview: string;
-
-  /** Kompakte Gestaltungsschwerpunkte. */
-  readonly tags: readonly string[];
-}
-
 interface PortfolioChocolateEgg {
-  /** Horizontale Endposition innerhalb des Portrait-Kastens. */
-  readonly left: string;
-
-  /** Vertikale Endposition innerhalb des Portrait-Kastens. */
-  readonly bottom: string;
-
-  /** Zielrotation nach dem Fallen. */
-  readonly rotate: string;
-
-  /** Startrotation beim Einflug von oben. */
-  readonly startRotate: string;
-
-  /** Skalierung für unterschiedlich große Eier. */
-  readonly scale: string;
-
-  /** Zeichenreihenfolge für glaubwürdige Stapelung. */
-  readonly zIndex: number;
-
-  /** Individuelle Startverzögerung der Fallanimation. */
-  readonly delayMs: number;
-
-  /** Individuelle Dauer der Fallanimation. */
-  readonly durationMs: number;
+  readonly left: string;        // Horizontale Endposition innerhalb des Portrait-Kastens.
+  readonly bottom: string;      // Vertikale Endposition innerhalb des Portrait-Kastens.
+  readonly rotate: string;      // Zielrotation nach dem Fallen.
+  readonly startRotate: string; // Startrotation beim Einflug von oben.
+  readonly scale: string;       // Skalierung für unterschiedlich große Eier.
+  readonly zIndex: number;      // Zeichenreihenfolge für glaubwürdige Stapelung.
+  readonly delayMs: number;     // Individuelle Startverzögerung der Fallanimation.
+  readonly durationMs: number;  // Individuelle Dauer der Fallanimation.
 }
 
 /** Eigenständige Portfolio-Seite für alle Projekt-Case-Studies. */
@@ -77,103 +42,28 @@ interface PortfolioChocolateEgg {
   styleUrl: './portfolio-page.component.scss',
 })
 export class PortfolioPageComponent {
-  /** Sprachservice für übersetzte Portfolio-Inhalte. */
-  private readonly languageService = inject(LanguageService);
+  private readonly languageService = inject(LanguageService);       // Sprachservice für übersetzte Portfolio-Inhalte.
+  private readonly seoService = inject(SeoService);                 // SEO-Service für die Meta-Daten der Portfolio-Route.
+  private readonly achievementService = inject(AchievementService); // Achievement-Service für versteckte Portfolio-Interaktionen.
+  readonly isProjectsDialogVisible = signal<boolean>(true);         // Sichtbarkeit des dekorativen Terminalfensters im Portfolio-Intro.
+  readonly designStudies = DESIGN_STUDIES;                          // Eigenständige visuelle Studien unterhalb der klassischen Case Studies.
 
-  /** SEO-Service für die Meta-Daten der Portfolio-Route. */
-  private readonly seoService = inject(SeoService);
-
-  /** Achievement-Service für versteckte Portfolio-Interaktionen. */
-  private readonly achievementService = inject(AchievementService);
-
-  /** Sichtbarkeit des dekorativen Terminalfensters im Portfolio-Intro. */
-  readonly isProjectsDialogVisible = signal<boolean>(true);
-
-  /** Eigenständige visuelle Studien unterhalb der klassischen Case Studies. */
-  readonly designStudies: readonly DesignStudy[] = [
-    {
-      id: 'raw-form',
-      name: 'RAW/FORM',
-      subtitle: 'Brutalist Festival Landingpage',
-      href: '/design-studies/brutalism/',
-      preview: '/design-studies/brutalism/assets/img/hero.webp',
-      tags: ['Brutalism', 'Editorial', 'Motion', 'HTML / CSS / JS'],
-    },
-    {
-      id: 'whatwesee',
-      name: '[WHATWESEE]',
-      subtitle: 'Swiss-inspired Photography Journal',
-      href: '/design-studies/swiss/',
-      preview: '/design-studies/swiss/assets/images/hero-landscape.webp',
-      tags: ['Swiss Style', 'Photography', 'Editorial', 'HTML / CSS / JS'],
-    },
-    {
-      id: 'ctrl-room',
-      name: 'CTRL//ROOM',
-      subtitle: 'Y2K Audiovisual Culture Platform',
-      href: '/design-studies/ctrl-room/',
-      preview: '/design-studies/ctrl-room/assets/preview.webp',
-      tags: ['Y2K', 'Chrome / Plastic', 'Web Audio', 'HTML / CSS / JS'],
-    },
-    {
-      id: 'type-break',
-      name: 'TYPE破BREAK',
-      subtitle: 'Interactive Typographic Manifesto',
-      href: '/design-studies/type-break/',
-      preview: '/design-studies/type-break/assets/preview.webp',
-      tags: ['Kinetic Type', 'Creative Coding', 'Interactive Poster', 'HTML / CSS / JS'],
-    },
-    {
-      id: 'scoop',
-      name: 'SCOOP!',
-      subtitle: 'Playful Ice Cream Shop',
-      href: '/design-studies/scoop/',
-      preview: '/design-studies/scoop/assets/preview.webp',
-      tags: ['Comic Design', 'SVG Animation', 'Illustrator', 'Interactive Shop', 'HTML / CSS / JS'],
-    },
-    {
-      id: 'fold',
-      name: 'FOLD.',
-      subtitle: 'Six Sides. One Perspective Experiment.',
-      href: '/design-studies/fold/',
-      preview: '/design-studies/fold/assets/preview.webp',
-      tags: ['3D CSS', 'Scroll Experience', 'Editorial', 'Vibe Coded'],
-    },
-    {
-      id: 'growth',
-      name: 'GROWTH.',
-      subtitle: 'A Living World — 50 Metres of Discovery',
-      href: '/design-studies/growth/',
-      preview: '/design-studies/growth/assets/preview.webp',
-      tags: ['Three.js', 'Procedural Nature', 'Scroll Experience', 'WebGL'],
-    },
-    {
-      id: 'bentendo',
-      name: 'BENTENDO™',
-      subtitle: 'A Playable Handheld — DUNGEON WANTED',
-      href: '/design-studies/bentendo/',
-      preview: '/design-studies/bentendo/assets/preview.svg',
-      tags: ['Three.js', 'Pixel RPG', 'Web Audio', 'Game Design'],
-    },
-  ];
-
-  /** Referenz auf die Scroll-Strecke der Design-Studies-Bühne. */
-  @ViewChild('designStudiesSection')
+  @ViewChild('designStudiesSection')                                // Referenz auf die Scroll-Strecke der Design-Studies-Bühne.
   private designStudiesSection?: ElementRef<HTMLElement>;
 
-  /** Scrollfortschritt innerhalb der fixierten Design-Studies-Bühne (0–1). */
-  readonly designStudiesProgress = signal<number>(0);
-
-  /** Die oberste sichtbare Karte erhält bereits beim Einflug die vollständige Klickfläche. */
-  readonly activeDesignStudyIndex = computed<number>(() => {
-    for (let index = this.designStudies.length - 1; index > 0; index--) {
-      if (this.designStudyCardProgress(index) > 0) {
-        return index;
+  readonly designStudiesProgress = signal<number>(0);               // Scrollfortschritt innerhalb der fixierten Design-Studies-Bühne (0–1).
+  readonly activeDesignStudyIndex = computed<number>(               // Die oberste sichtbare Karte erhält bereits beim Einflug die vollständige Klickfläche.
+    /** Die oberste sichtbare Karte erhält bereits beim Einflug die vollständige Klickfläche. */
+    () => {
+      for (let index = this.designStudies.length - 1; index > 0; index--) {
+        if (this.designStudyCardProgress(index) > 0) {
+          return index;
+        }
       }
-    }
 
-    return 0;
-  });
+      return 0;
+    }
+  );
 
   /** Mobile zeigt sämtliche Karten untereinander; auf Desktop ist nur die oberste bedienbar. */
   isDesignStudyCardInteractive(index: number): boolean {
@@ -184,14 +74,9 @@ export class PortfolioPageComponent {
     return this.activeDesignStudyIndex() === index;
   }
 
-  /** Zusätzlicher Scrollweg: pro weiterer Studie entsteht eine eigene Einflugstrecke. */
-  readonly designStudiesScrollHeight = `${100 + Math.max(0, this.designStudies.length - 1) * 120}svh`;
-
-  /** Aktuell sichtbarer Zustand des Schoko-Bildes im Portfolio-Intro. */
-  readonly activePortfolioChocolateImage = signal<PortfolioChocolateKey>('default');
-
-  /** Endpositionen und Timings für die fallenden Schoko-Eier. */
-  readonly portfolioChocolateEggs: readonly PortfolioChocolateEgg[] = [
+  readonly designStudiesScrollHeight = `${100 + Math.max(0, this.designStudies.length - 1) * 120}svh`; // Zusätzlicher Scrollweg: pro weiterer Studie entsteht eine eigene Einflugstrecke.
+  readonly activePortfolioChocolateImage = signal<PortfolioChocolateKey>('default');                   // Aktuell sichtbarer Zustand des Schoko-Bildes im Portfolio-Intro.
+  readonly portfolioChocolateEggs: readonly PortfolioChocolateEgg[] = [                                // Endpositionen und Timings für die fallenden Schoko-Eier.
     { left: '-6%', bottom: '-6%', rotate: '-26deg', startRotate: '-58deg', scale: '1.18', zIndex: 4, delayMs: 0, durationMs: 820 },
     { left: '6%', bottom: '-8%', rotate: '22deg', startRotate: '54deg', scale: '1.12', zIndex: 5, delayMs: 60, durationMs: 860 },
     { left: '17%', bottom: '-7%', rotate: '-14deg', startRotate: '-36deg', scale: '1.08', zIndex: 5, delayMs: 110, durationMs: 900 },
@@ -232,23 +117,27 @@ export class PortfolioPageComponent {
     { left: '71%', bottom: '59%', rotate: '-22deg', startRotate: '-53deg', scale: '0.72', zIndex: 3, delayMs: 1520, durationMs: 1620 },
   ];
 
-  /** Übersetzter Inhalt der aktuellen Sprache. */
-  readonly content = computed(() => this.languageService.content());
+  readonly content = computed(                                                                         // Übersetzter Inhalt der aktuellen Sprache.
+    /** Übersetzter Inhalt der aktuellen Sprache. */
+    () => this.languageService.content()
+  );
 
-  /** Case Studies der aktuell ausgewählten Sprache. */
-  readonly projects = computed(() => PORTFOLIO_PROJECTS[this.languageService.language()]);
+  readonly projects = computed(                                                                        // Case Studies der aktuell ausgewählten Sprache.
+    /** Case Studies der aktuell ausgewählten Sprache. */
+    () => PORTFOLIO_PROJECTS[this.languageService.language()]
+  );
 
-  /** Pfad des Standardportraits im Portfolio-Einstieg. */
-  readonly portfolioChocolateDefaultSrc = 'assets/images/me-with-chocolate.webp';
+  readonly portfolioChocolateDefaultSrc = 'assets/images/me-with-chocolate.webp';                      // Pfad des Standardportraits im Portfolio-Einstieg.
+  readonly portfolioChocolateEatenSrc = 'assets/images/me-after-chocolate.webp';                       // Pfad des Folgeportraits im Portfolio-Einstieg.
+  readonly isPortfolioChocolateEaten = computed(                                                       // Merkt, ob das Schoko-Finale bereits ausgelöst wurde.
+    /** Merkt, ob das Schoko-Finale bereits ausgelöst wurde. */
+    () => this.activePortfolioChocolateImage() === 'eaten'
+  );
 
-  /** Pfad des Folgeportraits im Portfolio-Einstieg. */
-  readonly portfolioChocolateEatenSrc = 'assets/images/me-after-chocolate.webp';
-
-  /** Merkt, ob das Schoko-Finale bereits ausgelöst wurde. */
-  readonly isPortfolioChocolateEaten = computed(() => this.activePortfolioChocolateImage() === 'eaten');
-
-  /** Beschriftung des Schoko-Buttons passend zum aktuellen Bildzustand. */
-  readonly portfolioChocolateActionLabel = computed(() => this.isPortfolioChocolateEaten() ? this.content().projectsIntro.imageActionActiveLabel : this.content().projectsIntro.imageActionLabel);
+  readonly portfolioChocolateActionLabel = computed(                                                   // Beschriftung des Schoko-Buttons passend zum aktuellen Bildzustand.
+    /** Beschriftung des Schoko-Buttons passend zum aktuellen Bildzustand. */
+    () => this.isPortfolioChocolateEaten() ? this.content().projectsIntro.imageActionActiveLabel : this.content().projectsIntro.imageActionLabel
+  );
 
   /** Initialisiert die Meta-Daten der ausgelagerten Portfolio-Seite. */
   constructor() {
@@ -259,8 +148,7 @@ export class PortfolioPageComponent {
     );
   }
 
-  /** RAF-ID für einen ruhigen, scroll-gekoppelten Design-Studies-Stack. */
-  private designStudiesScrollFrame = 0;
+  private designStudiesScrollFrame = 0; // RAF-ID für einen ruhigen, scroll-gekoppelten Design-Studies-Stack.
 
   /** Synchronisiert den Scrollfortschritt der eingerasteten Design-Studies-Bühne. */
   @HostListener('window:scroll')
@@ -270,7 +158,7 @@ export class PortfolioPageComponent {
       return;
     }
 
-    this.designStudiesScrollFrame = window.requestAnimationFrame(() => {
+    this.designStudiesScrollFrame = window.requestAnimationFrame(/** Synchronisiert den Scrollfortschritt der eingerasteten Design-Studies-Bühne. */() => {
       this.designStudiesScrollFrame = 0;
       this.syncDesignStudiesProgress();
     });
@@ -278,14 +166,17 @@ export class PortfolioPageComponent {
 
   /** Berechnet den Fortschritt erst ab dem Moment, in dem die Bühne im Viewport eingerastet ist. */
   private syncDesignStudiesProgress(): void {
-    const section = this.designStudiesSection?.nativeElement;
+
+    const section = this.designStudiesSection?.nativeElement; // Gerenderte Scroll-Strecke der Designstudien.
+
     if (!section || typeof window === 'undefined') {
       return;
     }
 
-    const rect = section.getBoundingClientRect();
-    const scrollDistance = Math.max(1, rect.height - window.innerHeight);
-    const progress = Math.min(1, Math.max(0, -rect.top / scrollDistance));
+    const rect = section.getBoundingClientRect();                          // Gemessene Grenzen des aktuellen Elements.
+    const scrollDistance = Math.max(1, rect.height - window.innerHeight);  // Verfügbare Scroll-Strecke der fixierten Bühne.
+    const progress = Math.min(1, Math.max(0, -rect.top / scrollDistance)); // Normalisierter Fortschritt des aktuellen Ablaufs.
+
     this.designStudiesProgress.set(progress);
   }
 
@@ -295,16 +186,16 @@ export class PortfolioPageComponent {
       return 1;
     }
 
-    const incomingCards = Math.max(1, this.designStudies.length - 1);
-    const segment = 1 / incomingCards;
-    const segmentStart = (index - 1) * segment;
+    const incomingCards = Math.max(1, this.designStudies.length - 1);                       // Anzahl der nacheinander einfliegenden Karten.
+    const segment = 1 / incomingCards;                                                      // Länge eines Kartensegments innerhalb der Scroll-Strecke.
+    const segmentStart = (index - 1) * segment;                                             // Startpunkt des aktuellen Kartensegments.
 
     // Die erste Karte bleibt nach dem Einrasten bewusst allein sichtbar.
     // Erst zusätzlicher Scrollweg startet den Sticker-Impact; danach bleibt
     // erneut Ruhe, damit der fertige Stack betrachtet werden kann.
-    const start = segmentStart + segment * 0.32;
-    const end = segmentStart + segment * 0.84;
-    const progress = (this.designStudiesProgress() - start) / Math.max(0.001, end - start);
+    const start = segmentStart + segment * 0.32;                                            // Startwert der Interpolation.
+    const end = segmentStart + segment * 0.84;                                              // Zielwert der Interpolation.
+    const progress = (this.designStudiesProgress() - start) / Math.max(0.001, end - start); // Normalisierter Fortschritt des aktuellen Ablaufs.
 
     return Math.min(1, Math.max(0, progress));
   }
@@ -315,31 +206,37 @@ export class PortfolioPageComponent {
       return 'translate3d(0, 0, 0) rotate(0deg) scale(1)';
     }
 
-    const progress = this.designStudyCardProgress(index);
-    const direction = index % 2 === 1 ? 1 : -1;
+    const progress = this.designStudyCardProgress(index); // Normalisierter Fortschritt des aktuellen Ablaufs.
+    const direction = index % 2 === 1 ? 1 : -1;           // Bewegungsrichtung des aktuellen Wechsels.
 
-    let x: number;
-    let y: number;
-    let z: number;
-    let rotation: number;
-    let scale: number;
+    let x: number;                                        // Horizontale Position oder berechneter Versatz.
+    let y: number;                                        // Vertikale Position oder berechneter Versatz.
+    let z: number;                                        // Tiefenposition der Karte in Pixeln.
+    let rotation: number;                                 // Berechneter Drehwinkel der Karte.
+    let scale: number;                                    // Skalierungsfaktor der aktuellen Karte.
 
     if (progress < 0.72) {
-      const phase = this.easeOutCubic(progress / 0.72);
+
+      const phase = this.easeOutCubic(progress / 0.72); // Aktuelle Phase des gestaffelten Karteneinflugs.
+
       x = this.lerp(direction * 4.6, direction * 0.45, phase);
       y = this.lerp(-4.8, 0.7, phase);
       z = this.lerp(320, 0, phase);
       rotation = this.lerp(direction * 5.5, direction * -1.8, phase);
       scale = this.lerp(1.58, 0.955, phase);
     } else if (progress < 0.9) {
-      const phase = this.easeOutCubic((progress - 0.72) / 0.18);
+
+      const phase = this.easeOutCubic((progress - 0.72) / 0.18); // Aktuelle Phase des gestaffelten Karteneinflugs.
+
       x = this.lerp(direction * 0.45, direction * -0.14, phase);
       y = this.lerp(0.7, -0.12, phase);
       z = 0;
       rotation = this.lerp(direction * -1.8, direction * 0.65, phase);
       scale = this.lerp(0.955, 1.035, phase);
     } else {
-      const phase = this.easeOutCubic((progress - 0.9) / 0.1);
+
+      const phase = this.easeOutCubic((progress - 0.9) / 0.1); // Aktuelle Phase des gestaffelten Karteneinflugs.
+
       x = this.lerp(direction * -0.14, 0, phase);
       y = this.lerp(-0.12, 0, phase);
       z = 0;
@@ -356,8 +253,9 @@ export class PortfolioPageComponent {
       return 'none';
     }
 
-    const progress = this.designStudyCardProgress(index);
-    const blur = Math.max(0, 5.5 * (1 - Math.min(1, progress / 0.68)));
+    const progress = this.designStudyCardProgress(index);               // Normalisierter Fortschritt des aktuellen Ablaufs.
+    const blur = Math.max(0, 5.5 * (1 - Math.min(1, progress / 0.68))); // Berechnete Unschärfe der Karte in Pixeln.
+
     return `blur(${blur.toFixed(2)}px)`;
   }
 
@@ -367,14 +265,17 @@ export class PortfolioPageComponent {
       return 1;
     }
 
-    const progress = this.designStudyCardProgress(index);
+    const progress = this.designStudyCardProgress(index); // Normalisierter Fortschritt des aktuellen Ablaufs.
+
     return Math.min(1, Math.max(0, progress / 0.12));
   }
 
+  /** Interpoliert linear zwischen Start- und Zielwert. */
   private lerp(from: number, to: number, progress: number): number {
     return from + (to - from) * progress;
   }
 
+  /** Bremst einen auf null bis eins begrenzten Fortschritt kubisch ab. */
   private easeOutCubic(progress: number): number {
     return 1 - Math.pow(1 - Math.min(1, Math.max(0, progress)), 3);
   }

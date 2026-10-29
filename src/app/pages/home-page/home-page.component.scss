@@ -1,8 +1,8 @@
 /*###############################
 ###
 ###     home-page.component.scss
-###     Produktion App
-###     BASED ON: Angular  21.02.0, SCSS,
+###     HOME-PAGE — Portfolio Page
+###     BASED ON: Angular, TypeScript, SCSS
 ###     AUTHOR: Benjamin Bennewitz
 ###
 ###
@@ -12,7 +12,6 @@
 ###       ██╔══██╗
 ###       ██████╦╝
 ###       ╚═════╝
-###
 ###
 #################################*/
 
@@ -31,11 +30,19 @@
    10   About
    11   Experience
    12   Skills
-   13   Pricing
+   13   Services Bridge
    14   Clients
    15   FAQ und Kontakt
    16   Kontakt Modal
    17   Responsive Anpassungen
+   18   Mobile Dialoge und Touch States
+   19   Wide Screens
+   20   Techstack Wide-Screen Zentrierung
+   21   Pixel-Szenen
+   22   Referenz-Merge 2026-08-13
+   23   Arcade-Tech / Skills
+   24   Deferred Content
+   25   Initial Rendering Performance
    ========================================================================== */
 
 /* ==========================================================================
@@ -1607,6 +1614,7 @@
 }
 
 @keyframes experience-metric-float {
+
   0%,
   100% {
     transform: translate3d(0, 0, 0) rotate(0deg);
@@ -1618,6 +1626,7 @@
 }
 
 @keyframes experience-metric-glitch-top {
+
   0%,
   78%,
   100% {
@@ -1642,6 +1651,7 @@
 }
 
 @keyframes experience-metric-glitch-bottom {
+
   0%,
   82%,
   100% {
@@ -1708,7 +1718,7 @@
   max-width: 880px;
 }
 
-.skills > .bp-container {
+.skills>.bp-container {
   width: min(calc(100% - clamp(1.5rem, 4vw, 3rem)), var(--bp-max-width));
 }
 
@@ -2002,9 +2012,9 @@
 }
 
 
-/* ============================================================================
+/* ==========================================================================
    13   Services Bridge
-   ============================================================================ */
+   ========================================================================== */
 
 .capabilities {
   position: relative;
@@ -2211,7 +2221,7 @@
   transition: transform 220ms var(--bp-ease-out);
 }
 
-.clients__card > .clients__label,
+.clients__card>.clients__label,
 .clients__card strong,
 .clients__card i,
 .clients__touch-hint,
@@ -2220,7 +2230,7 @@
   z-index: 1;
 }
 
-.clients__card > .clients__label {
+.clients__card>.clients__label {
   color: var(--bp-color-text-muted);
   font-family: var(--bp-font-mono);
   font-size: 0.72rem;
@@ -2280,7 +2290,7 @@
   min-height: auto;
 }
 
-.clients__stack .bp-dos-window__bar > span:first-child {
+.clients__stack .bp-dos-window__bar>span:first-child {
   color: #ffffff;
   text-shadow: 1px 1px 0 #111111;
 }
@@ -2631,6 +2641,7 @@
    ========================================================================== */
 
 @media (max-width: 1180px) {
+
   .about__layout,
   .experience__layout,
   .projects-kickoff__layout,
@@ -2729,6 +2740,7 @@
 }
 
 @media (max-width: 760px) {
+
   .experience__cards,
   .skills__groups,
   .skills__levels,
@@ -2781,6 +2793,7 @@
 }
 
 @media (max-width: 420px) {
+
   .about__layout,
   .experience__layout,
   .contact__layout {
@@ -2845,7 +2858,7 @@
 }
 
 
-/* ========================================================================== 
+/* ==========================================================================
    18   Mobile Dialoge und Touch States
    ========================================================================== */
 
@@ -2956,17 +2969,18 @@
 
 
 /* ==========================================================================
-   18   Wide Screens
+   19   Wide Screens
    ========================================================================== */
 
 @media (min-width: 1921px) {
+
   .hero__layout,
   .about__layout,
   .experience__layout,
-  .skills > .bp-container,
+  .skills>.bp-container,
   .projects-kickoff__layout,
-  .clients > .bp-container,
-  .faq > .bp-container,
+  .clients>.bp-container,
+  .faq>.bp-container,
   .contact__layout {
     justify-self: center;
     width: min(100%, var(--bp-content-max-width));
@@ -2986,7 +3000,7 @@
     justify-items: center;
   }
 
-  .skills > .bp-container {
+  .skills>.bp-container {
     padding-inline: 0;
   }
 }
@@ -2994,7 +3008,7 @@
 
 
 /* ==========================================================================
-   19   Techstack Wide-Screen Zentrierung
+   20   Techstack Wide-Screen Zentrierung
    ========================================================================== */
 
 @media (min-width: 1921px) {
@@ -3002,22 +3016,22 @@
     padding-inline: var(--bp-section-px);
   }
 
-  .skills > .bp-container {
+  .skills>.bp-container {
     justify-self: center;
     width: min(var(--bp-content-max-width), calc(100vw - (var(--bp-section-px) * 2)));
     max-width: var(--bp-content-max-width);
     margin-inline: auto;
   }
 
-  .skills > bp-tech-marquee {
+  .skills>bp-tech-marquee {
     justify-self: stretch;
     width: 100%;
     max-width: none;
   }
 }
 
-/* ========================================================================== 
-   20   Pixel-Szenen
+/* ==========================================================================
+   21   Pixel-Szenen
    ========================================================================== */
 
 .hero__pixel-birds {
@@ -3182,37 +3196,94 @@
 }
 
 @keyframes hero-pixel-bird-one {
-  0% { transform: translate3d(0, 0, 0); }
-  22% { transform: translate3d(28vw, -2.5vh, 0); }
-  52% { transform: translate3d(62vw, 2vh, 0); }
-  78% { transform: translate3d(91vw, -3vh, 0); }
-  100% { transform: translate3d(118vw, 0, 0); }
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  22% {
+    transform: translate3d(28vw, -2.5vh, 0);
+  }
+
+  52% {
+    transform: translate3d(62vw, 2vh, 0);
+  }
+
+  78% {
+    transform: translate3d(91vw, -3vh, 0);
+  }
+
+  100% {
+    transform: translate3d(118vw, 0, 0);
+  }
 }
 
 @keyframes hero-pixel-bird-two {
-  0% { transform: translate3d(0, 0, 0); }
-  28% { transform: translate3d(34vw, 3vh, 0); }
-  61% { transform: translate3d(71vw, -1.5vh, 0); }
-  100% { transform: translate3d(118vw, 2vh, 0); }
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  28% {
+    transform: translate3d(34vw, 3vh, 0);
+  }
+
+  61% {
+    transform: translate3d(71vw, -1.5vh, 0);
+  }
+
+  100% {
+    transform: translate3d(118vw, 2vh, 0);
+  }
 }
 
 @keyframes hero-pixel-bird-three {
-  0% { transform: translate3d(0, 0, 0); }
-  35% { transform: translate3d(42vw, -3vh, 0); }
-  72% { transform: translate3d(86vw, 1.5vh, 0); }
-  100% { transform: translate3d(118vw, -1vh, 0); }
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  35% {
+    transform: translate3d(42vw, -3vh, 0);
+  }
+
+  72% {
+    transform: translate3d(86vw, 1.5vh, 0);
+  }
+
+  100% {
+    transform: translate3d(118vw, -1vh, 0);
+  }
 }
 
 @keyframes experience-cloud-pass {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(126vw, 0, 0); }
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(126vw, 0, 0);
+  }
 }
 
 @keyframes clients-bird-cross {
-  0%, 8% { opacity: 0; transform: translate3d(0, 4rem, 0); }
-  14% { opacity: 0.58; }
-  72% { opacity: 0.58; }
-  82%, 100% { opacity: 0; transform: translate3d(34vw, -5rem, 0); }
+
+  0%,
+  8% {
+    opacity: 0;
+    transform: translate3d(0, 4rem, 0);
+  }
+
+  14% {
+    opacity: 0.58;
+  }
+
+  72% {
+    opacity: 0.58;
+  }
+
+  82%,
+  100% {
+    opacity: 0;
+    transform: translate3d(34vw, -5rem, 0);
+  }
 }
 
 @media (max-width: 1180px) {
@@ -3232,6 +3303,7 @@
 }
 
 @media (max-width: 760px) {
+
   .hero__pixel-bird--three,
   .experience__cloud--four,
   .experience__cloud--five,
@@ -3303,8 +3375,8 @@
 }
 
 
-/* ========================================================================== 
-   18   Referenz-Merge 2026-08-13
+/* ==========================================================================
+   22   Referenz-Merge 2026-08-13
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -3599,94 +3671,94 @@
 }
 
 @media (max-width: 1050px) {
-.hero__content {
+  .hero__content {
 
     max-width: 62vw;
-}
+  }
 
-.hero__head-stage {
+  .hero__head-stage {
 
     right: -6%;
     width: min(53vw, 680px);
-}
+  }
 }
 
 @media (max-width: 760px) {
-.hero {
+  .hero {
 
     height: auto;
     min-height: 100svh;
     padding-bottom: 0;
-}
+  }
 
-.hero__poster::before {
+  .hero__poster::before {
 
     right: -12%;
     width: 46%;
     opacity: 0.4;
-}
+  }
 
-.hero__poster::after {
+  .hero__poster::after {
 
     right: 2%;
     width: 10%;
-}
+  }
 
-.hero__head-stage {
+  .hero__head-stage {
 
     top: 16%;
     right: -18%;
     width: min(78vw, 540px);
     opacity: 0.5;
-}
+  }
 
-.hero__content {
+  .hero__content {
 
     max-width: 100%;
     min-height: calc(100svh - var(--bp-header-height));
     padding-top: 2rem;
     padding-bottom: 13rem;
-}
+  }
 
-.hero__headline {
+  .hero__headline {
 
     max-width: 10ch;
-}
+  }
 
-.hero__dos {
+  .hero__dos {
 
     display: none;
-}
+  }
 
-.hero__kpis {
+  .hero__kpis {
 
     grid-template-columns: repeat(2, minmax(0, 1fr));
-}
+  }
 
-.hero__kpi {
+  .hero__kpi {
 
     min-height: 54px;
     padding: 0.5rem 0.65rem;
     border-right: 1px solid #101010;
     border-bottom: 1px solid #101010;
-}
+  }
 
-.hero__kpi:nth-child(even) {
+  .hero__kpi:nth-child(even) {
 
     border-right: 0;
-}
+  }
 
-.hero__kpi:last-child {
+  .hero__kpi:last-child {
 
     grid-column: 1 / -1;
     border-right: 0;
     border-bottom: 0;
-}
+  }
 
-.hero__kpi:nth-last-child(2) {
+  .hero__kpi:nth-last-child(2) {
 
     border-bottom: 0;
-}
+  }
 }
 
 .hero {
@@ -3787,42 +3859,42 @@
 }
 
 @media (max-width: 1050px) {
-.hero__head-stage {
+  .hero__head-stage {
 
     right: calc(-6% + 50px);
-}
+  }
 }
 
 @media (max-width: 760px) {
-.hero__head-stage {
+  .hero__head-stage {
 
     right: calc(-46% + 50px);
     width: min(62.4vw, 432px);
-}
+  }
 
-.hero__headline {
+  .hero__headline {
 
     margin-top: clamp(7rem, 18vh, 10rem);
-}
+  }
 
-.hero__content {
+  .hero__content {
 
     padding-bottom: 17rem;
-}
+  }
 
-.hero__kpis {
+  .hero__kpis {
 
     bottom: 24px;
-}
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-.hero__kpis {
+  .hero__kpis {
 
     opacity: 1;
     transform: none;
     animation: none;
-}
+  }
 }
 
 :root[data-theme='light'] .hero,
@@ -4064,7 +4136,7 @@
   color: var(--bp-color-text);
 }
 
-.faq > .bp-container {
+.faq>.bp-container {
   position: relative;
   z-index: 2;
 }
@@ -4084,9 +4156,9 @@
   box-shadow: 7px 7px 0 color-mix(in srgb, var(--bp-color-accent) 28%, transparent);
 }
 
-/* ============================================================================
-   25   Arcade-Tech / Skills
-   ============================================================================ */
+/* ==========================================================================
+   23   Arcade-Tech / Skills
+   ========================================================================== */
 
 .skills__group {
   border-width: 2px;
@@ -4158,12 +4230,10 @@
 }
 
 .skills__level-track span {
-  background: repeating-linear-gradient(
-    90deg,
-    var(--bp-color-accent) 0 8px,
-    color-mix(in srgb, var(--bp-color-info) 88%, var(--bp-color-accent) 12%) 8px 10px,
-    transparent 10px 12px
-  );
+  background: repeating-linear-gradient(90deg,
+      var(--bp-color-accent) 0 8px,
+      color-mix(in srgb, var(--bp-color-info) 88%, var(--bp-color-accent) 12%) 8px 10px,
+      transparent 10px 12px);
 }
 
 .skills__level-panel.bp-reveal--visible .skills__level-track span {
@@ -4184,7 +4254,7 @@
 }
 
 /* ==========================================================================
-   21   Deferred Content
+   24   Deferred Content
    ========================================================================== */
 
 .home__defer-placeholder {
@@ -4217,17 +4287,17 @@
   min-height: min(34rem, 70svh);
 }
 
-/* ========================================================================== 
-   22   Initial Rendering Performance
+/* ==========================================================================
+   25   Initial Rendering Performance
    ========================================================================== */
 
-.home > section:not(.hero) {
+.home>section:not(.hero) {
   content-visibility: auto;
   contain-intrinsic-size: auto 900px;
 }
 
 @media (max-width: 720px) {
-  .home > section:not(.hero) {
+  .home>section:not(.hero) {
     contain-intrinsic-size: auto 1100px;
   }
 }

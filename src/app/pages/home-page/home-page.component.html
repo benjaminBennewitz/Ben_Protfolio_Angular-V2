@@ -5,8 +5,12 @@
     (pointermove)="onHeroPointerMove($event)" (pointerleave)="resetHeroPointer()">
     <div class="hero__poster" aria-hidden="true">
       <div class="hero__head-stage">
-        <img class="hero__head-image hero__head-image--ghost" [src]="currentHeroHeadSrc()" [attr.srcset]="currentHeroHeadSrcSet()" sizes="(max-width: 560px) 92vw, 560px" alt="" width="720" height="1140" loading="eager" decoding="async" fetchpriority="low" />
-        <img class="hero__head-image hero__head-image--main" [src]="currentHeroHeadSrc()" [attr.srcset]="currentHeroHeadSrcSet()" sizes="(max-width: 560px) 92vw, 560px" alt="" width="720" height="1140" loading="eager" decoding="async" fetchpriority="low" />
+        <img class="hero__head-image hero__head-image--ghost" [src]="currentHeroHeadSrc()"
+          [attr.srcset]="currentHeroHeadSrcSet()" sizes="(max-width: 560px) 92vw, 560px" alt="" width="720"
+          height="1140" loading="eager" decoding="async" fetchpriority="low" />
+        <img class="hero__head-image hero__head-image--main" [src]="currentHeroHeadSrc()"
+          [attr.srcset]="currentHeroHeadSrcSet()" sizes="(max-width: 560px) 92vw, 560px" alt="" width="720"
+          height="1140" loading="eager" decoding="async" fetchpriority="low" />
         <span class="hero__head-fade hero__head-fade--lower-right"></span>
         <span class="hero__head-distortion hero__head-distortion--one"></span>
         <span class="hero__head-distortion hero__head-distortion--two"></span>
@@ -58,12 +62,12 @@
           <div class="hero__dialog-icon" aria-hidden="true"><span>!</span></div>
           <p>{{ content().hero.dialogText }}</p>
           <div class="hero__dialog-actions">
-          <button type="button" [class.is-active]="activeHeroHead() === 'lol'"
-            (click)="setHeroHead('lol')">#LOL</button>
-          <button type="button" [class.is-active]="activeHeroHead() === 'insane'"
-            (click)="setHeroHead('insane')">YES</button>
-          <button type="button" [class.is-active]="activeHeroHead() === 'fck'"
-            (click)="setHeroHead('fck')">F*CK</button>
+            <button type="button" [class.is-active]="activeHeroHead() === 'lol'"
+              (click)="setHeroHead('lol')">#LOL</button>
+            <button type="button" [class.is-active]="activeHeroHead() === 'insane'"
+              (click)="setHeroHead('insane')">YES</button>
+            <button type="button" [class.is-active]="activeHeroHead() === 'fck'"
+              (click)="setHeroHead('fck')">F*CK</button>
           </div>
         </div>
       </bp-system-dialog>
@@ -87,11 +91,12 @@
   </section>
 
   <section class="about bp-section" id="about" bpViewportActivity>
-<div class="about__layout bp-container">
+    <div class="about__layout bp-container">
       <div class="about__comic" bpReveal>
         <figure class="about__visual" [attr.aria-label]="content().about.imageLabel">
-          <img class="about__image" [src]="currentAboutCoffeeSrc()" [attr.srcset]="currentAboutCoffeeSrcSet()" sizes="(max-width: 720px) 92vw, 560px" [attr.alt]="content().about.imageAlt" width="1122"
-            height="1402" loading="lazy" decoding="async" (error)="resetAboutCoffeeImage()" />
+          <img class="about__image" [src]="currentAboutCoffeeSrc()" [attr.srcset]="currentAboutCoffeeSrcSet()"
+            sizes="(max-width: 720px) 92vw, 560px" [attr.alt]="content().about.imageAlt" width="1122" height="1402"
+            loading="lazy" decoding="async" (error)="resetAboutCoffeeImage()" />
         </figure>
 
         @if (isAboutDialogVisible()) {
@@ -112,8 +117,7 @@
         <p class="bp-subtitle">{{ paragraph }}</p>
         }
         @defer (on viewport) {
-        <bp-about-metrics-window [content]="content().about.metrics"
-          (weirdModeSelected)="unlockMetricsAchievement()" />
+        <bp-about-metrics-window [content]="content().about.metrics" (weirdModeSelected)="unlockMetricsAchievement()" />
         } @placeholder {
         <div class="home__defer-placeholder home__defer-placeholder--metrics" aria-hidden="true"></div>
         }
@@ -133,7 +137,7 @@
   </section>
 
   <section class="experience bp-section" id="experience" bpViewportActivity>
-<div class="experience__pixel-sky" aria-hidden="true">
+    <div class="experience__pixel-sky" aria-hidden="true">
       <bp-pixel-sprite class="experience__cloud experience__cloud--one" kind="cloud-a" />
       <bp-pixel-sprite class="experience__cloud experience__cloud--two" kind="cloud-b" />
       <bp-pixel-sprite class="experience__cloud experience__cloud--three" kind="cloud-c" />
@@ -143,7 +147,8 @@
 
     <div class="experience__layout bp-container">
       <div class="experience__copy bp-motion-copy" bpReveal>
-        <bp-reveal-text class="experience__title-reveal" [eyebrow]="content().experience.eyebrow" [text]="content().experience.title" headingClass="experience__title" />
+        <bp-reveal-text class="experience__title-reveal" [eyebrow]="content().experience.eyebrow"
+          [text]="content().experience.title" headingClass="experience__title" />
         <p class="bp-subtitle">{{ content().experience.subtitle }}</p>
       </div>
 
@@ -170,7 +175,7 @@
   </section>
 
   <section class="skills bp-section" id="skills" bpViewportActivity>
-<div class="bp-container">
+    <div class="bp-container">
       <div class="skills__copy bp-motion-copy" bpReveal>
         <bp-reveal-text [eyebrow]="content().skills.eyebrow" [text]="content().skills.title" />
         <p class="bp-subtitle">{{ content().skills.subtitle }}</p>
@@ -206,7 +211,8 @@
 
         <div class="skills__levels">
           @for (level of content().skills.levels; track $index; let index = $index) {
-          <article class="skills__level" [style.--skill-depth]="level.depth + '%'" [style.--bp-stagger-delay.ms]="index * 85 + 180">
+          <article class="skills__level" [style.--skill-depth]="level.depth + '%'"
+            [style.--bp-stagger-delay.ms]="index * 85 + 180">
             <div class="skills__level-meta">
               <div>
                 <strong>{{ level.label }}</strong>
@@ -232,7 +238,7 @@
   </section>
 
   <section class="capabilities bp-section" id="capabilities" bpViewportActivity>
-<div class="capabilities__layout bp-container">
+    <div class="capabilities__layout bp-container">
       <div class="capabilities__copy bp-motion-copy" bpReveal>
         <bp-reveal-text class="capabilities__title-reveal" [eyebrow]="content().capabilities.eyebrow"
           [text]="content().capabilities.title" headingClass="capabilities__title" />
@@ -266,14 +272,15 @@
   }
 
   <section class="clients bp-section" id="clients" bpViewportActivity>
-<div class="clients__layout bp-container">
+    <div class="clients__layout bp-container">
       <div class="clients__copy bp-motion-copy" bpReveal>
         <div class="clients__pixel-birds" aria-hidden="true">
           <bp-pixel-sprite class="clients__pixel-bird clients__pixel-bird--one" kind="bird" />
           <bp-pixel-sprite class="clients__pixel-bird clients__pixel-bird--two" kind="bird" />
           <bp-pixel-sprite class="clients__pixel-bird clients__pixel-bird--three" kind="bird" />
         </div>
-        <bp-reveal-text class="clients__title-reveal" [eyebrow]="content().clients.eyebrow" [text]="content().clients.title" headingClass="clients__title" />
+        <bp-reveal-text class="clients__title-reveal" [eyebrow]="content().clients.eyebrow"
+          [text]="content().clients.title" headingClass="clients__title" />
         @if (content().clients.subtitle) {
         <p class="bp-subtitle">{{ content().clients.subtitle }}</p>
         }
@@ -281,7 +288,8 @@
 
       <div class="clients__grid bp-stagger-list bp-stagger-list--right" bpReveal>
         @for (client of content().clients.items; track client.name; let index = $index) {
-        <a class="clients__card bp-card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 120 + 120" [href]="client.url" target="_blank" rel="noopener noreferrer">
+        <a class="clients__card bp-card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 120 + 120"
+          [href]="client.url" target="_blank" rel="noopener noreferrer">
           <span class="clients__label">{{ client.label }}</span>
           <strong>{{ client.name }}</strong>
           <div class="bp-dos-window clients__stack" aria-hidden="true">
@@ -313,8 +321,8 @@
   }
 
   @defer (on viewport) {
-  <bp-chaos-cta bpViewportActivity [eyebrow]="content().cta.eyebrow" [title]="content().cta.title" [hint]="content().cta.hint" [contactLabel]="content().nav.contactAccessLabel"
-    [words]="content().cta.words" />
+  <bp-chaos-cta bpViewportActivity [eyebrow]="content().cta.eyebrow" [title]="content().cta.title"
+    [hint]="content().cta.hint" [contactLabel]="content().nav.contactAccessLabel" [words]="content().cta.words" />
   } @placeholder {
   <div class="home__defer-placeholder home__defer-placeholder--chaos" aria-hidden="true"></div>
   }
@@ -322,15 +330,8 @@
 
   <section class="faq bp-section" id="faq" bpViewportActivity>
     @defer (on viewport) {
-    <bp-dithering-shader
-      class="faq__background"
-      colorBack="transparent"
-      colorFront="var(--bp-color-accent)"
-      type="4x4"
-      [pxSize]="4"
-      [speed]="0.75"
-      [intensity]="1.12"
-      [zoom]="0.58">
+    <bp-dithering-shader class="faq__background" colorBack="transparent" colorFront="var(--bp-color-accent)" type="4x4"
+      [pxSize]="4" [speed]="0.75" [intensity]="1.12" [zoom]="0.58">
     </bp-dithering-shader>
     } @placeholder {
     <div class="faq__background" aria-hidden="true"></div>
@@ -343,7 +344,8 @@
 
       <div class="faq__list bp-stagger-list bp-stagger-list--soft" bpReveal>
         @for (faq of content().faqs; track $index; let index = $index) {
-        <details class="faq__item bp-card bp-stagger-item" name="portfolio-faq" [style.--bp-stagger-delay.ms]="index * 90 + 110">
+        <details class="faq__item bp-card bp-stagger-item" name="portfolio-faq"
+          [style.--bp-stagger-delay.ms]="index * 90 + 110">
           <summary>{{ faq.question }}</summary>
           <p>{{ faq.answer }}</p>
         </details>
@@ -354,9 +356,10 @@
 
 
   <section class="contact bp-section" id="contact" bpViewportActivity>
-<div class="bp-container contact__layout">
+    <div class="bp-container contact__layout">
       <div class="contact__copy bp-motion-copy" bpReveal>
-        <bp-reveal-text class="contact__title-reveal" [eyebrow]="content().contact.eyebrow" [text]="content().contact.title" headingClass="contact__title" />
+        <bp-reveal-text class="contact__title-reveal" [eyebrow]="content().contact.eyebrow"
+          [text]="content().contact.title" headingClass="contact__title" />
         @if (content().contact.subtitle) {
         <p class="bp-subtitle">{{ content().contact.subtitle }}</p>
         }

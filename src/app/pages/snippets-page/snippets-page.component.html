@@ -74,7 +74,8 @@
       }
 
       @for (item of visibleWindows(); track trackWindow(item)) {
-      <article class="snippet-window" [attr.data-window-slug]="item.entry.slug" [class.snippet-window--stable]="item.entry.supportTone === 'stable'"
+      <article class="snippet-window" [attr.data-window-slug]="item.entry.slug"
+        [class.snippet-window--stable]="item.entry.supportTone === 'stable'"
         [class.snippet-window--experimental]="item.entry.supportTone === 'experimental'"
         [class.snippet-window--workflow]="item.entry.supportTone === 'workflow'"
         [style.--snippet-window-x]="item.window.x + 'px'" [style.--snippet-window-y]="item.window.y + 'px'"
@@ -226,8 +227,8 @@
           </section>
 
           @if (item.entry.demoHref) {
-          <a class="snippet-window__demo-link" [href]="item.entry.demoHref" download target="_blank" rel="noopener noreferrer"
-            (click)="$event.stopPropagation()">
+          <a class="snippet-window__demo-link" [href]="item.entry.demoHref" download target="_blank"
+            rel="noopener noreferrer" (click)="$event.stopPropagation()">
             <span class="material-symbols-outlined" aria-hidden="true">download</span>
             <span>{{ texts().demoLabel }}</span>
           </a>
@@ -243,8 +244,9 @@
           </section>
         </div>
 
-        <button class="snippet-window__resize" type="button" [attr.aria-label]="texts().resizeLabel + ': ' + item.entry.title"
-          [attr.title]="texts().resizeLabel" (pointerdown)="startWindowResize(item.entry.slug, $event)"
+        <button class="snippet-window__resize" type="button"
+          [attr.aria-label]="texts().resizeLabel + ': ' + item.entry.title" [attr.title]="texts().resizeLabel"
+          (pointerdown)="startWindowResize(item.entry.slug, $event)"
           (keydown)="resizeWindowWithKeyboard(item.entry.slug, $event)">
           <span aria-hidden="true">↘</span>
         </button>

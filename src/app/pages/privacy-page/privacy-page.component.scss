@@ -1,4 +1,38 @@
-/* src/app/pages/privacy-page/privacy-page.component.scss */
+/*###############################
+###
+###     privacy-page.component.scss
+###     PRIVACY-PAGE — Portfolio Page
+###     BASED ON: Angular, TypeScript, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Seitengerüst
+   02   Kopfzeile und Fortschritt
+   03   Horizontales Snap-Deck
+   04   Intro und Datenschutzstatus
+   05   Kapitelkarten
+   06   Abschluss und Kontakt
+   07   Deck-Navigation
+   08   Animation und reduzierte Bewegung
+   09   Responsive Anpassungen
+   10   Große Bildschirme
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Seitengerüst
+   ========================================================================== */
 
 :host {
   display: block;
@@ -30,6 +64,10 @@
   background-size: 28px 28px;
   mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 88%, transparent);
 }
+
+/* ==========================================================================
+   02   Kopfzeile und Fortschritt
+   ========================================================================== */
 
 .privacy-page__hud {
   position: absolute;
@@ -114,6 +152,10 @@
   text-align: right;
 }
 
+/* ==========================================================================
+   03   Horizontales Snap-Deck
+   ========================================================================== */
+
 .privacy-deck,
 .privacy-deck__track {
   width: 100%;
@@ -157,6 +199,10 @@
   opacity: 0.7;
   background: var(--bp-color-border);
 }
+
+/* ==========================================================================
+   04   Intro und Datenschutzstatus
+   ========================================================================== */
 
 .privacy-deck__panel--hero {
   flex-basis: min(88vw, 1320px);
@@ -301,6 +347,10 @@
   animation: privacy-arrow 900ms steps(3, end) infinite alternate;
 }
 
+/* ==========================================================================
+   05   Kapitelkarten
+   ========================================================================== */
+
 .privacy-deck__panel--bento {
   grid-template-rows: auto minmax(0, 1fr);
   gap: 0.65rem;
@@ -359,12 +409,12 @@
   grid-row: 1 / 2 !important;
 }
 
-.privacy-deck__card--full + .privacy-deck__card {
+.privacy-deck__card--full+.privacy-deck__card {
   grid-row: 2 / 3;
   grid-column: span 5;
 }
 
-.privacy-deck__card--full + .privacy-deck__card + .privacy-deck__card {
+.privacy-deck__card--full+.privacy-deck__card+.privacy-deck__card {
   grid-row: 2 / 3;
   grid-column: span 7;
 }
@@ -449,6 +499,10 @@
   line-height: 1.5;
 }
 
+/* ==========================================================================
+   06   Abschluss und Kontakt
+   ========================================================================== */
+
 .privacy-deck__panel--end {
   flex-basis: min(70vw, 980px);
   place-items: center;
@@ -466,7 +520,7 @@
   text-align: center;
 }
 
-.privacy-deck__end-window .bp-dos-window__body > .material-symbols-outlined {
+.privacy-deck__end-window .bp-dos-window__body>.material-symbols-outlined {
   color: var(--bp-color-accent-text);
   font-size: clamp(3rem, 7vw, 6rem);
 }
@@ -478,6 +532,10 @@
   font-weight: 900;
   letter-spacing: 0.08em;
 }
+
+/* ==========================================================================
+   07   Deck-Navigation
+   ========================================================================== */
 
 .privacy-page__controls {
   position: absolute;
@@ -515,6 +573,10 @@
   box-shadow: none;
 }
 
+/* ==========================================================================
+   08   Animation und reduzierte Bewegung
+   ========================================================================== */
+
 @keyframes privacy-arrow {
   from {
     transform: translateX(0);
@@ -535,12 +597,16 @@
   scroll-behavior: auto;
 }
 
+/* ==========================================================================
+   09   Responsive Anpassungen
+   ========================================================================== */
+
 @media (max-width: 980px) {
   .privacy-page__hud {
     width: calc(100% - 2rem);
   }
 
-  .privacy-page__progress > span {
+  .privacy-page__progress>span {
     display: none;
   }
 
@@ -679,6 +745,10 @@
     margin-left: 5.6rem;
   }
 }
+
+/* ==========================================================================
+   10   Große Bildschirme
+   ========================================================================== */
 
 @media (min-width: 1921px) {
   .privacy-deck__panel {

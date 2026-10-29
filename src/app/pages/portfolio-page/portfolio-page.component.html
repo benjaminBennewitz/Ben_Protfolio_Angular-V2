@@ -8,7 +8,8 @@
           {{ content().projectsIntro.homeBackLabel }}
         </a>
 
-        <bp-reveal-text class="projects-kickoff__title-reveal" [eyebrow]="content().projectsIntro.eyebrow" [text]="content().projectsIntro.title" headingClass="projects-kickoff__title" level="h1" />
+        <bp-reveal-text class="projects-kickoff__title-reveal" [eyebrow]="content().projectsIntro.eyebrow"
+          [text]="content().projectsIntro.title" headingClass="projects-kickoff__title" level="h1" />
         @if (content().projectsIntro.subtitle) {
         <p class="projects-kickoff__lead">{{ content().projectsIntro.subtitle }}</p>
         }
@@ -41,7 +42,8 @@
         </bp-system-dialog>
         }
 
-        <figure class="projects-kickoff__portrait" [class.is-eaten]="isPortfolioChocolateEaten()" [attr.aria-label]="content().projectsIntro.imageLabel">
+        <figure class="projects-kickoff__portrait" [class.is-eaten]="isPortfolioChocolateEaten()"
+          [attr.aria-label]="content().projectsIntro.imageLabel">
           <img class="projects-kickoff__portrait-image projects-kickoff__portrait-image--default"
             [class.is-hidden]="isPortfolioChocolateEaten()" [src]="portfolioChocolateDefaultSrc"
             [attr.alt]="content().projectsIntro.imageAlt" width="1122" height="1402" loading="lazy" decoding="async" />
@@ -55,7 +57,8 @@
               [style.--egg-rotate]="egg.rotate" [style.--egg-start-rotate]="egg.startRotate"
               [style.--egg-scale]="egg.scale" [style.--egg-z-index]="egg.zIndex"
               [style.--egg-delay]="egg.delayMs + 'ms'" [style.--egg-duration]="egg.durationMs + 'ms'">
-              <img src="assets/images/chocolate-egg.webp" alt="" width="256" height="191" loading="lazy" decoding="async" />
+              <img src="assets/images/chocolate-egg.webp" alt="" width="256" height="191" loading="lazy"
+                decoding="async" />
             </span>
             }
           </div>
@@ -68,7 +71,8 @@
     </div>
   </section>
 
-  <bp-project-stack id="case-studies" bpViewportActivity [detailLabel]="content().projectsIntro.detailLabel" [labels]="content().projectsIntro" [projects]="projects()" />
+  <bp-project-stack id="case-studies" bpViewportActivity [detailLabel]="content().projectsIntro.detailLabel"
+    [labels]="content().projectsIntro" [projects]="projects()" />
 
   <section #designStudiesSection class="design-studies" id="design-studies" bpViewportActivity
     aria-labelledby="design-studies-title" [style.min-height]="designStudiesScrollHeight">
@@ -79,38 +83,42 @@
           <bp-reveal-text id="design-studies-title" class="design-studies__title-reveal"
             [text]="content().projectsIntro.designStudiesTitle" headingClass="design-studies__title" level="h2" />
           <p class="design-studies__lead">{{ content().projectsIntro.designStudiesText }}</p>
-        <div class="design-studies__shortcuts">
-          @if (designStudies.length > 1) {
-          <div class="design-studies__scroll-indicator" [class.is-complete]="designStudiesProgress() > 0.82" aria-hidden="true">
-            <span>Scroll</span>
-            <span class="design-studies__scroll-line"></span>
-            <span>More studies</span>
-            <span class="design-studies__scroll-arrow">↓</span>
-          </div>
-          }
-          <nav class="design-studies__quicklinks" [attr.aria-label]="content().projectsIntro.designStudiesAriaLabel + ' – Quicklinks'">
-            @for (study of designStudies; track study.id) {
-            <a [href]="study.href" target="_blank" rel="noopener noreferrer"
-              [attr.aria-label]="content().projectsIntro.designStudiesOpenLabel + ': ' + study.name">
-              <span>{{ study.name }}</span><span aria-hidden="true">↗</span>
-            </a>
+          <div class="design-studies__shortcuts">
+            @if (designStudies.length > 1) {
+            <div class="design-studies__scroll-indicator" [class.is-complete]="designStudiesProgress() > 0.82"
+              aria-hidden="true">
+              <span>Scroll</span>
+              <span class="design-studies__scroll-line"></span>
+              <span>More studies</span>
+              <span class="design-studies__scroll-arrow">↓</span>
+            </div>
             }
-          </nav>
-        </div>
+            <nav class="design-studies__quicklinks"
+              [attr.aria-label]="content().projectsIntro.designStudiesAriaLabel + ' – Quicklinks'">
+              @for (study of designStudies; track study.id) {
+              <a [href]="study.href" target="_blank" rel="noopener noreferrer"
+                [attr.aria-label]="content().projectsIntro.designStudiesOpenLabel + ': ' + study.name">
+                <span>{{ study.name }}</span><span aria-hidden="true">↗</span>
+              </a>
+              }
+            </nav>
+          </div>
         </header>
 
         <div class="design-studies__stack" [attr.aria-label]="content().projectsIntro.designStudiesAriaLabel">
           @for (study of designStudies; track study.id; let index = $index) {
           <article class="design-study" [class.design-study--even]="index % 2 === 1" [style.z-index]="index + 1"
             [style.opacity]="designStudyOpacity(index)" [style.transform]="designStudyTransform(index)"
-            [style.filter]="designStudyFilter(index)" [style.pointer-events]="isDesignStudyCardInteractive(index) ? 'auto' : 'none'"
+            [style.filter]="designStudyFilter(index)"
+            [style.pointer-events]="isDesignStudyCardInteractive(index) ? 'auto' : 'none'"
             [attr.inert]="isDesignStudyCardInteractive(index) ? null : ''">
             <a class="design-study__link" [href]="study.href" target="_blank" rel="noopener noreferrer"
               [attr.aria-label]="content().projectsIntro.designStudiesOpenLabel + ': ' + study.name">
               <div class="design-study__visual">
                 <img [src]="study.preview" [alt]="study.name + ' — ' + study.subtitle" width="1448" height="1086"
                   loading="lazy" decoding="async" />
-                <span class="design-study__index" aria-hidden="true">DS/{{ (index + 1).toString().padStart(2, '0') }}</span>
+                <span class="design-study__index" aria-hidden="true">DS/{{ (index + 1).toString().padStart(2, '0')
+                  }}</span>
                 <span class="design-study__open" aria-hidden="true">↗</span>
               </div>
 

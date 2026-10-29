@@ -31,35 +31,38 @@
           <p>{{ group.description }}</p>
         </header>
         <div class="achievements__list">
-      @for (achievement of group.items; track achievement.id) {
-      <article class="achievement-card bp-card" [class.achievement-card--unlocked]="achievement.unlocked"
-        [class.achievement-card--interactive]="achievementIsInteractive(achievement)" [attr.role]="achievementIsInteractive(achievement) ? 'button' : null"
-        [attr.tabindex]="achievementIsInteractive(achievement) ? 0 : null" (click)="openAchievement(achievement)"
-        (keydown.enter)="openAchievement(achievement)" (keydown.space)="$event.preventDefault(); openAchievement(achievement)">
-        <div class="achievement-card__visual" aria-hidden="true">
-          @if (achievement.unlocked) {
-          <span class="material-symbols-outlined">{{ achievement.icon }}</span>
-          } @else {
-          <strong>?</strong>
-          }
-        </div>
+          @for (achievement of group.items; track achievement.id) {
+          <article class="achievement-card bp-card" [class.achievement-card--unlocked]="achievement.unlocked"
+            [class.achievement-card--interactive]="achievementIsInteractive(achievement)"
+            [attr.role]="achievementIsInteractive(achievement) ? 'button' : null"
+            [attr.tabindex]="achievementIsInteractive(achievement) ? 0 : null" (click)="openAchievement(achievement)"
+            (keydown.enter)="openAchievement(achievement)"
+            (keydown.space)="$event.preventDefault(); openAchievement(achievement)">
+            <div class="achievement-card__visual" aria-hidden="true">
+              @if (achievement.unlocked) {
+              <span class="material-symbols-outlined">{{ achievement.icon }}</span>
+              } @else {
+              <strong>?</strong>
+              }
+            </div>
 
-        <div class="achievement-card__copy">
-          <span>{{ achievement.category }}</span>
-          <h3>{{ achievement.unlocked ? achievement.title : texts().lockedTitle }}</h3>
+            <div class="achievement-card__copy">
+              <span>{{ achievement.category }}</span>
+              <h3>{{ achievement.unlocked ? achievement.title : texts().lockedTitle }}</h3>
 
-          @if (achievement.unlocked) {
-          <p>{{ achievement.description }}</p>
-          } @else {
-          @if (achievement.hintVisible) {
-          <p>{{ achievement.hint }}</p>
-          } @else {
-          <button type="button" (click)="$event.stopPropagation(); revealHint(achievement.id)">{{ texts().hintButton }}</button>
+              @if (achievement.unlocked) {
+              <p>{{ achievement.description }}</p>
+              } @else {
+              @if (achievement.hintVisible) {
+              <p>{{ achievement.hint }}</p>
+              } @else {
+              <button type="button" (click)="$event.stopPropagation(); revealHint(achievement.id)">{{ texts().hintButton
+                }}</button>
+              }
+              }
+            </div>
+          </article>
           }
-          }
-        </div>
-      </article>
-      }
         </div>
       </section>
       }

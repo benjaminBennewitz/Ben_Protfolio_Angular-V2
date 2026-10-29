@@ -13,9 +13,13 @@ folio/
 │   │   ├── core/
 │   │   │   ├── data/
 │   │   │   │   ├── achievement-data.ts
+│   │   │   │   ├── achievement-page-data.ts
+│   │   │   │   ├── design-studies.ts
 │   │   │   │   ├── portfolio-content.spec.ts
 │   │   │   │   ├── portfolio-content.ts
-│   │   │   │   └── portfolio-projects.ts
+│   │   │   │   ├── portfolio-projects.ts
+│   │   │   │   ├── privacy-data.ts
+│   │   │   │   └── snippets-data.ts
 │   │   │   ├── models/
 │   │   │   │   ├── achievement.models.ts
 │   │   │   │   ├── blood.models.ts
@@ -23,6 +27,7 @@ folio/
 │   │   │   │   ├── catalog.models.ts
 │   │   │   │   ├── content.models.ts
 │   │   │   │   ├── home.models.ts
+│   │   │   │   ├── page-content.models.ts
 │   │   │   │   ├── pages.models.ts
 │   │   │   │   ├── pricing.models.ts
 │   │   │   │   ├── projects.models.ts
@@ -111,6 +116,7 @@ folio/
 │   │   │   ├── achievements-page/
 │   │   │   │   ├── achievements-page.component.html
 │   │   │   │   ├── achievements-page.component.scss
+│   │   │   │   ├── achievements-page.component.spec.ts
 │   │   │   │   └── achievements-page.component.ts
 │   │   │   ├── home-entry-page/
 │   │   │   │   ├── home-entry-page.component.html
@@ -119,6 +125,7 @@ folio/
 │   │   │   ├── home-page/
 │   │   │   │   ├── home-page.component.html
 │   │   │   │   ├── home-page.component.scss
+│   │   │   │   ├── home-page.component.spec.ts
 │   │   │   │   └── home-page.component.ts
 │   │   │   ├── imprint-page/
 │   │   │   │   ├── imprint-page.component.html
@@ -127,22 +134,27 @@ folio/
 │   │   │   ├── not-found-page/
 │   │   │   │   ├── not-found-page.component.html
 │   │   │   │   ├── not-found-page.component.scss
+│   │   │   │   ├── not-found-page.component.spec.ts
 │   │   │   │   └── not-found-page.component.ts
 │   │   │   ├── portfolio-page/
 │   │   │   │   ├── portfolio-page.component.html
 │   │   │   │   ├── portfolio-page.component.scss
+│   │   │   │   ├── portfolio-page.component.spec.ts
 │   │   │   │   └── portfolio-page.component.ts
 │   │   │   ├── privacy-page/
 │   │   │   │   ├── privacy-page.component.html
 │   │   │   │   ├── privacy-page.component.scss
+│   │   │   │   ├── privacy-page.component.spec.ts
 │   │   │   │   └── privacy-page.component.ts
 │   │   │   ├── project-detail-page/
 │   │   │   │   ├── project-detail-page.component.html
 │   │   │   │   ├── project-detail-page.component.scss
+│   │   │   │   ├── project-detail-page.component.spec.ts
 │   │   │   │   └── project-detail-page.component.ts
 │   │   │   ├── snippets-page/
 │   │   │   │   ├── snippets-page.component.html
 │   │   │   │   ├── snippets-page.component.scss
+│   │   │   │   ├── snippets-page.component.spec.ts
 │   │   │   │   └── snippets-page.component.ts
 │   │   │   └── thank-you-page/
 │   │   │       ├── thank-you-page.component.html

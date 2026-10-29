@@ -35,29 +35,14 @@ type ProjectsChocolateKey = 'default' | 'eaten' | 'fallback';
 
 /** Konfiguration eines fallenden Schoko-Eis für die Projektbühne. */
 interface ProjectsChocolateEgg {
-  /** Horizontale Endposition innerhalb des Portrait-Kastens. */
-  readonly left: string;
-
-  /** Vertikale Endposition innerhalb des Portrait-Kastens. */
-  readonly bottom: string;
-
-  /** Zielrotation nach dem Fallen. */
-  readonly rotate: string;
-
-  /** Startrotation beim Einflug von oben. */
-  readonly startRotate: string;
-
-  /** Skalierung für unterschiedlich große Eier. */
-  readonly scale: string;
-
-  /** Zeichenreihenfolge für glaubwürdige Stapelung. */
-  readonly zIndex: number;
-
-  /** Individuelle Startverzögerung der Fallanimation. */
-  readonly delayMs: number;
-
-  /** Individuelle Dauer der Fallanimation. */
-  readonly durationMs: number;
+  readonly left: string;        // Horizontale Endposition innerhalb des Portrait-Kastens.
+  readonly bottom: string;      // Vertikale Endposition innerhalb des Portrait-Kastens.
+  readonly rotate: string;      // Zielrotation nach dem Fallen.
+  readonly startRotate: string; // Startrotation beim Einflug von oben.
+  readonly scale: string;       // Skalierung für unterschiedlich große Eier.
+  readonly zIndex: number;      // Zeichenreihenfolge für glaubwürdige Stapelung.
+  readonly delayMs: number;     // Individuelle Startverzögerung der Fallanimation.
+  readonly durationMs: number;  // Individuelle Dauer der Fallanimation.
 }
 
 /** Hauptseite der Portfolio-Experience. */
@@ -69,87 +54,52 @@ interface ProjectsChocolateEgg {
   styleUrl: './home-page.component.scss',
 })
 export class HomePageComponent implements AfterViewInit, OnDestroy {
-  /** Sprachservice für alle sichtbaren Inhalte. */
-  private readonly languageService = inject(LanguageService);
+  private readonly languageService = inject(LanguageService);                          // Sprachservice für alle sichtbaren Inhalte.
+  private readonly seoService = inject(SeoService);                                    // SEO-Service für Startseiten-Meta-Daten.
+  private readonly achievementService = inject(AchievementService);                    // Achievement-Service für versteckte Interaktionen auf der Startseite.
+  private readonly heroShiftX = signal(0);                                             // X-Versatz für den Hero-Parallax-Effekt.
+  private readonly heroShiftY = signal(0);                                             // Y-Versatz für den Hero-Parallax-Effekt.
+  private readonly heroScrollOffset = signal(0);                                       // Scroll-Versatz für den Hero-Hintergrund.
+  private skillLevelsObserver?: IntersectionObserver;                                  // IntersectionObserver für das verzögerte Laden der Skill-Balken.
 
-  /** SEO-Service für Startseiten-Meta-Daten. */
-  private readonly seoService = inject(SeoService);
-
-  /** Achievement-Service für versteckte Interaktionen auf der Startseite. */
-  private readonly achievementService = inject(AchievementService);
-
-  /** X-Versatz für den Hero-Parallax-Effekt. */
-  private readonly heroShiftX = signal(0);
-
-  /** Y-Versatz für den Hero-Parallax-Effekt. */
-  private readonly heroShiftY = signal(0);
-
-  /** Scroll-Versatz für den Hero-Hintergrund. */
-  private readonly heroScrollOffset = signal(0);
-
-  /** IntersectionObserver für das verzögerte Laden der Skill-Balken. */
-  private skillLevelsObserver?: IntersectionObserver;
-
-  /** Panel-Referenz für die Skill-Level-Balken. */
-  @ViewChild('skillLevelPanel')
+  @ViewChild('skillLevelPanel')                                                        // Panel-Referenz für die Skill-Level-Balken.
   private readonly skillLevelPanel?: ElementRef<HTMLElement>;
 
-
-  /** Aktuell ausgewählter Hero-Kopf. */
-  readonly activeHeroHead = signal<HeroHeadKey>('default');
-
-  /** Sichtbarkeit des interaktiven Hero-Dialogfensters. */
-  readonly isHeroDialogVisible = signal<boolean>(true);
-
-  /** Aktuell sichtbarer Zustand des About-Kaffeebildes. */
-  readonly activeAboutCoffeeImage = signal<AboutCoffeeKey>('default');
-
-  /** Sichtbarkeit des interaktiven About-Dialogfensters. */
-  readonly isAboutDialogVisible = signal<boolean>(true);
-
-  /** Sichtbarkeit des Skill-Level-Dialogfensters. */
-  readonly isSkillsDialogVisible = signal<boolean>(true);
-
-  /** Sichtbarkeit des Projekt-Einstieg-Dialogfensters. */
-  readonly isProjectsDialogVisible = signal<boolean>(true);
-
-  /** Aktuell sichtbarer Zustand des Schoko-Bildes im Projekt-Einstieg. */
-  readonly activeProjectsChocolateImage = signal<ProjectsChocolateKey>('default');
-
-
-  /** Aktiviert die Wachstumsanimation der Skill-Level-Balken. */
-  readonly areSkillLevelsLoaded = signal<boolean>(false);
-
-  /** Asset-Zuordnung für die Hero-Köpfe. */
-  private readonly heroHeadAssetMap: Record<HeroHeadKey, string> = {
+  readonly activeHeroHead = signal<HeroHeadKey>('default');                            // Aktuell ausgewählter Hero-Kopf.
+  readonly isHeroDialogVisible = signal<boolean>(true);                                // Sichtbarkeit des interaktiven Hero-Dialogfensters.
+  readonly activeAboutCoffeeImage = signal<AboutCoffeeKey>('default');                 // Aktuell sichtbarer Zustand des About-Kaffeebildes.
+  readonly isAboutDialogVisible = signal<boolean>(true);                               // Sichtbarkeit des interaktiven About-Dialogfensters.
+  readonly isSkillsDialogVisible = signal<boolean>(true);                              // Sichtbarkeit des Skill-Level-Dialogfensters.
+  readonly isProjectsDialogVisible = signal<boolean>(true);                            // Sichtbarkeit des Projekt-Einstieg-Dialogfensters.
+  readonly activeProjectsChocolateImage = signal<ProjectsChocolateKey>('default');     // Aktuell sichtbarer Zustand des Schoko-Bildes im Projekt-Einstieg.
+  readonly areSkillLevelsLoaded = signal<boolean>(false);                              // Aktiviert die Wachstumsanimation der Skill-Level-Balken.
+  private readonly heroHeadAssetMap: Record<HeroHeadKey, string> = {                   // Asset-Zuordnung für die Hero-Köpfe.
     default: 'assets/images/default-hero-head.webp',
     lol: 'assets/images/hero-head-lol.webp',
     insane: 'assets/images/hero-head-insane.webp',
     fck: 'assets/images/hero-head-fck.webp',
   };
 
-  /** Responsive Varianten des Standard-Hero-Kopfes für kleine Viewports. */
-  readonly currentHeroHeadSrcSet = computed(() =>
-    this.activeHeroHead() === 'default'
-      ? 'assets/images/default-hero-head-360.webp 360w, assets/images/default-hero-head-480.webp 480w, assets/images/default-hero-head-560.webp 560w, assets/images/default-hero-head.webp 720w'
-      : undefined,
+  readonly currentHeroHeadSrcSet = computed(                                           // Responsive Varianten des Standard-Hero-Kopfes für kleine Viewports.
+    /** Responsive Varianten des Standard-Hero-Kopfes für kleine Viewports. */
+    () => // Responsive Varianten des Standard-Hero-Kopfes für kleine Viewports.
+      this.activeHeroHead() === 'default'
+        ? 'assets/images/default-hero-head-360.webp 360w, assets/images/default-hero-head-480.webp 480w, assets/images/default-hero-head-560.webp 560w, assets/images/default-hero-head.webp 720w'
+        : undefined
   );
 
-  /** Asset-Zuordnung für das About-Kaffeebild. */
-  private readonly aboutCoffeeAssetMap: Record<AboutCoffeeKey, string> = {
+  private readonly aboutCoffeeAssetMap: Record<AboutCoffeeKey, string> = {             // Asset-Zuordnung für das About-Kaffeebild.
     default: 'assets/images/me-and-coffee.webp',
     error: 'assets/images/me-and-coffee-error.webp',
   };
 
-  /** Asset-Zuordnung für das Schoko-Bild im Projekt-Einstieg. */
-  private readonly projectsChocolateAssetMap: Record<ProjectsChocolateKey, string> = {
+  private readonly projectsChocolateAssetMap: Record<ProjectsChocolateKey, string> = { // Asset-Zuordnung für das Schoko-Bild im Projekt-Einstieg.
     default: 'assets/images/me-with-chocolate.webp',
     eaten: 'assets/images/me-after-chocolate.webp',
     fallback: 'assets/images/me-and-coffee.webp',
   };
 
-  /** Endpositionen und Timings für die fallenden Schoko-Eier. */
-  readonly projectChocolateEggs: readonly ProjectsChocolateEgg[] = [
+  readonly projectChocolateEggs: readonly ProjectsChocolateEgg[] = [                   // Endpositionen und Timings für die fallenden Schoko-Eier.
     { left: '-6%', bottom: '-6%', rotate: '-26deg', startRotate: '-58deg', scale: '1.18', zIndex: 4, delayMs: 0, durationMs: 820 },
     { left: '6%', bottom: '-8%', rotate: '22deg', startRotate: '54deg', scale: '1.12', zIndex: 5, delayMs: 60, durationMs: 860 },
     { left: '17%', bottom: '-7%', rotate: '-14deg', startRotate: '-36deg', scale: '1.08', zIndex: 5, delayMs: 110, durationMs: 900 },
@@ -194,49 +144,64 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
     { left: '71%', bottom: '59%', rotate: '-22deg', startRotate: '-53deg', scale: '0.72', zIndex: 3, delayMs: 1520, durationMs: 1620 },
   ];
 
-  /** Übersetzter Inhalt der aktuellen Sprache. */
-  readonly content = computed(() => this.languageService.content());
-
-  /** CSS-Wert für den horizontalen Parallax-Versatz. */
-  readonly heroShiftXStyle = computed(() => `${this.heroShiftX()}px`);
-
-  /** CSS-Wert für den vertikalen Parallax-Versatz. */
-  readonly heroShiftYStyle = computed(() => `${this.heroShiftY()}px`);
-
-  /** CSS-Wert für den Scroll-Versatz des Hero-Hintergrunds. */
-  readonly heroScrollOffsetStyle = computed(() => `${this.heroScrollOffset()}px`);
-
-  /** Pfad des aktuell sichtbaren Hero-Kopfes. */
-  readonly currentHeroHeadSrc = computed(() => this.heroHeadAssetMap[this.activeHeroHead()]);
-
-  /** Pfad des aktuell sichtbaren About-Kaffeebildes. */
-  readonly currentAboutCoffeeSrc = computed(() => this.aboutCoffeeAssetMap[this.activeAboutCoffeeImage()]);
-
-  /** Responsive Varianten des About-Portraits. */
-  readonly currentAboutCoffeeSrcSet = computed(() =>
-    this.activeAboutCoffeeImage() === 'default'
-      ? 'assets/images/me-and-coffee-480.webp 480w, assets/images/me-and-coffee-720.webp 720w, assets/images/me-and-coffee.webp 1122w'
-      : 'assets/images/me-and-coffee-error-480.webp 480w, assets/images/me-and-coffee-error.webp 655w',
+  readonly content = computed(                                                         // Übersetzter Inhalt der aktuellen Sprache.
+    /** Übersetzter Inhalt der aktuellen Sprache. */
+    () => this.languageService.content()
   );
 
-  /** Beschriftung des About-Buttons passend zum aktuellen Bildzustand. */
-  readonly aboutDialogActionLabel = computed(() => this.activeAboutCoffeeImage() === 'error' ? this.content().about.dialogActionAfterClick : this.content().about.dialogAction);
+  readonly heroShiftXStyle = computed(                                                 // CSS-Wert für den horizontalen Parallax-Versatz.
+    /** CSS-Wert für den horizontalen Parallax-Versatz. */
+    () => `${this.heroShiftX()}px`
+  );
 
-  /** Pfad des Standardportraits im Projekt-Einstieg. */
-  readonly projectsChocolateDefaultSrc = this.projectsChocolateAssetMap.default;
+  readonly heroShiftYStyle = computed(                                                 // CSS-Wert für den vertikalen Parallax-Versatz.
+    /** CSS-Wert für den vertikalen Parallax-Versatz. */
+    () => `${this.heroShiftY()}px`
+  );
 
-  /** Pfad des Folgeportraits im Projekt-Einstieg. */
-  readonly projectsChocolateEatenSrc = this.projectsChocolateAssetMap.eaten;
+  readonly heroScrollOffsetStyle = computed(                                           // CSS-Wert für den Scroll-Versatz des Hero-Hintergrunds.
+    /** CSS-Wert für den Scroll-Versatz des Hero-Hintergrunds. */
+    () => `${this.heroScrollOffset()}px`
+  );
 
-  /** Merkt, ob das Schoko-Finale bereits ausgelöst wurde. */
-  readonly isProjectsChocolateEaten = computed(() => this.activeProjectsChocolateImage() === 'eaten');
+  readonly currentHeroHeadSrc = computed(                                              // Pfad des aktuell sichtbaren Hero-Kopfes.
+    /** Pfad des aktuell sichtbaren Hero-Kopfes. */
+    () => this.heroHeadAssetMap[this.activeHeroHead()]
+  );
 
-  /** Beschriftung des Schoko-Buttons passend zum aktuellen Bildzustand. */
-  readonly projectsChocolateActionLabel = computed(() => this.isProjectsChocolateEaten() ? this.content().projectsIntro.imageActionActiveLabel : this.content().projectsIntro.imageActionLabel);
+  readonly currentAboutCoffeeSrc = computed(                                           // Pfad des aktuell sichtbaren About-Kaffeebildes.
+    /** Pfad des aktuell sichtbaren About-Kaffeebildes. */
+    () => this.aboutCoffeeAssetMap[this.activeAboutCoffeeImage()]
+  );
+
+  readonly currentAboutCoffeeSrcSet = computed(                                        // Responsive Varianten des About-Portraits.
+    /** Responsive Varianten des About-Portraits. */
+    () => // Responsive Varianten des About-Portraits.
+      this.activeAboutCoffeeImage() === 'default'
+        ? 'assets/images/me-and-coffee-480.webp 480w, assets/images/me-and-coffee-720.webp 720w, assets/images/me-and-coffee.webp 1122w'
+        : 'assets/images/me-and-coffee-error-480.webp 480w, assets/images/me-and-coffee-error.webp 655w'
+  );
+
+  readonly aboutDialogActionLabel = computed(                                          // Beschriftung des About-Buttons passend zum aktuellen Bildzustand.
+    /** Beschriftung des About-Buttons passend zum aktuellen Bildzustand. */
+    () => this.activeAboutCoffeeImage() === 'error' ? this.content().about.dialogActionAfterClick : this.content().about.dialogAction
+  );
+
+  readonly projectsChocolateDefaultSrc = this.projectsChocolateAssetMap.default;       // Pfad des Standardportraits im Projekt-Einstieg.
+  readonly projectsChocolateEatenSrc = this.projectsChocolateAssetMap.eaten;           // Pfad des Folgeportraits im Projekt-Einstieg.
+  readonly isProjectsChocolateEaten = computed(                                        // Merkt, ob das Schoko-Finale bereits ausgelöst wurde.
+    /** Merkt, ob das Schoko-Finale bereits ausgelöst wurde. */
+    () => this.activeProjectsChocolateImage() === 'eaten'
+  );
+
+  readonly projectsChocolateActionLabel = computed(                                    // Beschriftung des Schoko-Buttons passend zum aktuellen Bildzustand.
+    /** Beschriftung des Schoko-Buttons passend zum aktuellen Bildzustand. */
+    () => this.isProjectsChocolateEaten() ? this.content().projectsIntro.imageActionActiveLabel : this.content().projectsIntro.imageActionLabel
+  );
 
   /** Initialisiert SEO-Daten reaktiv zur Sprache. */
   constructor() {
-    effect(() => this.seoService.setHomeSeo(this.content().meta));
+    effect(/** Synchronisiert Meta-Daten und abhängige Seitenzustände. */() => this.seoService.setHomeSeo(this.content().meta));
     this.updateHeroScrollOffset();
   }
 
@@ -255,15 +220,16 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
    * @param event PointerEvent aus der Hero-Section.
    */
   onHeroPointerMove(event: PointerEvent): void {
-    const target = event.currentTarget;
+
+    const target = event.currentTarget; // Ziel-Element für Scrollen oder Pointer-Auswertung.
 
     if (!(target instanceof HTMLElement)) {
       return;
     }
 
-    const rect = target.getBoundingClientRect();
-    const relativeX = (event.clientX - rect.left) / rect.width - 0.5;
-    const relativeY = (event.clientY - rect.top) / rect.height - 0.5;
+    const rect = target.getBoundingClientRect();                      // Gemessene Grenzen des aktuellen Elements.
+    const relativeX = (event.clientX - rect.left) / rect.width - 0.5; // Relative horizontale Pointer-Position im Hero.
+    const relativeY = (event.clientY - rect.top) / rect.height - 0.5; // Relative vertikale Pointer-Position im Hero.
 
     this.heroShiftX.set(relativeX * 60);
     this.heroShiftY.set(relativeY * 48);
@@ -347,23 +313,26 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   /** Aktualisiert den scrollabhängigen Offset für den Hero-Hintergrund. */
   @HostListener('window:scroll')
   updateHeroScrollOffset(): void {
-    const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
+
+    const scrollY = typeof window !== 'undefined' ? window.scrollY : 0; // Aktuelle vertikale Scrollposition.
+
     this.heroScrollOffset.set(Math.min(scrollY * 0.18, 140));
   }
 
   /** Beobachtet das Skill-Level-Panel und startet Balken erst bei nahezu voller Sichtbarkeit. */
   private observeSkillLevels(): void {
-    const panel = this.skillLevelPanel?.nativeElement;
+
+    const panel = this.skillLevelPanel?.nativeElement; // Gerenderter Bereich für Messung oder Fokussteuerung.
 
     if (!panel || typeof window === 'undefined' || !('IntersectionObserver' in window)) {
       this.areSkillLevelsLoaded.set(true);
       return;
     }
 
-    const threshold = this.skillLevelThreshold(panel);
+    const threshold = this.skillLevelThreshold(panel); // Eintrittsschwelle für die verzögerte Skill-Freigabe.
 
     this.skillLevelsObserver = new IntersectionObserver(
-      ([entry]) => {
+      /** Beobachtet das Skill-Level-Panel und startet Balken erst bei nahezu voller Sichtbarkeit. */([entry]) => {
         if (!entry || entry.intersectionRatio < threshold) {
           return;
         }

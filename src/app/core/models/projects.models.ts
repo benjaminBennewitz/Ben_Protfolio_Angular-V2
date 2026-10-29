@@ -216,3 +216,13 @@ export interface PortfolioProject {
   readonly liveDemo?: ProjectLiveDemo;                             // Optionaler Live-Demo-Status oder externer Demo-Link.
   readonly requirements: readonly string[];                        // Anforderungen an das Projekt.
 }
+
+/** Konfiguration einer eigenständigen visuellen Designstudie. */
+export interface DesignStudy {
+  readonly id: string;              // Stabile Kennung der Studie.
+  readonly name: string;            // Sichtbarer Projektname.
+  readonly subtitle: string;        // Kurze visuelle Einordnung.
+  readonly href: string;            // Öffentlicher Pfad der statischen Microsite.
+  readonly preview: string;         // Vorschaubild innerhalb der Portfolio-Section.
+  readonly tags: readonly string[]; // Kompakte Gestaltungsschwerpunkte.
+}

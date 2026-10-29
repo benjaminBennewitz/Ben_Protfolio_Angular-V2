@@ -18,6 +18,5 @@ import { HomePageComponent } from '../home-page/home-page.component';
   styleUrl: './home-entry-page.component.scss',
 })
 export class HomeEntryPageComponent {
-  /** Globaler Freigabezustand der Portfolio-Experience. */
-  readonly experienceGate = inject(ExperienceGateService);
+  readonly experienceGate = inject(ExperienceGateService); // Globaler Freigabezustand der Portfolio-Experience.
 }

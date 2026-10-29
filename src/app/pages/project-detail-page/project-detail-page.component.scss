@@ -1,8 +1,8 @@
 /*###############################
 ###
 ###     project-detail-page.component.scss
-###     Portfolio App
-###     BASED ON: Angular  21.02.0, SCSS
+###     PROJECT-DETAIL-PAGE — Portfolio Page
+###     BASED ON: Angular, TypeScript, SCSS
 ###     AUTHOR: Benjamin Bennewitz
 ###
 ###
@@ -13,10 +13,9 @@
 ###       ██████╦╝
 ###       ╚═════╝
 ###
-###
 #################################*/
 
-/* ========================================================================== 
+/* ==========================================================================
    INHALTSVERZEICHNIS
 
    01   Projekt-Akzent
@@ -32,15 +31,17 @@
    11   Case Note
    12   Kapitelkarten
    13   App-Landschaft
-   14   Demo Panel
+   14   Presentation note
    15   Evidence Board
    16   Missing State
    17   Accessibility Modes
    18   Responsive
-   19   Board Detail Showcase
+   19   Hero Showcase
+   20   Board Detail Showcase
+   21   Wide Screens
    ========================================================================== */
 
-/* ========================================================================== 
+/* ==========================================================================
    01   Projekt-Akzent
    ========================================================================== */
 
@@ -106,7 +107,7 @@
   --project-detail-hero-tag-fg: #ffffff;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    02   Hero
    ========================================================================== */
 
@@ -243,7 +244,7 @@
   margin-bottom: var(--bp-space-5);
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    03   Hero App Stack
    ========================================================================== */
 
@@ -394,7 +395,7 @@
 }
 
 
-/* ========================================================================== 
+/* ==========================================================================
    04   Terminalfenster
    ========================================================================== */
 
@@ -493,7 +494,7 @@
   transform: translate(-1px, -1px);
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    05   Highlights
    ========================================================================== */
 
@@ -542,8 +543,8 @@
 
 .project-detail__highlight-card .material-symbols-outlined,
 .project-detail__map-node .material-symbols-outlined,
-.project-detail__app-card > .material-symbols-outlined,
-.project-detail__metric > .material-symbols-outlined {
+.project-detail__app-card>.material-symbols-outlined,
+.project-detail__metric>.material-symbols-outlined {
   display: inline-flex;
   width: 48px;
   height: 48px;
@@ -576,7 +577,7 @@
   line-height: 1.58;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    06   Kennzahlen
    ========================================================================== */
 
@@ -613,7 +614,7 @@
   border-right: 0;
 }
 
-.project-detail__metric > .material-symbols-outlined {
+.project-detail__metric>.material-symbols-outlined {
   width: 34px;
   height: 34px;
   border-radius: 0;
@@ -657,7 +658,7 @@
   -webkit-line-clamp: 3;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    07   Info Layout
    ========================================================================== */
 
@@ -715,7 +716,7 @@
   overflow-wrap: anywhere;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    08   Content
    ========================================================================== */
 
@@ -771,7 +772,7 @@
   margin-bottom: var(--bp-space-5);
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    09   Detailmodule
    ========================================================================== */
 
@@ -799,12 +800,12 @@
   transform: rotate(18deg);
 }
 
-.project-detail__mode > .bp-container {
+.project-detail__mode>.bp-container {
   position: relative;
   z-index: 1;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    10   Architektur-Blueprint
    ========================================================================== */
 
@@ -1040,7 +1041,7 @@
   text-shadow: 0 0 10px color-mix(in srgb, var(--bp-color-accent) 58%, transparent);
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    11   Case Note
    ========================================================================== */
 
@@ -1085,7 +1086,7 @@
   text-transform: uppercase;
 }
 
-.project-detail__capabilities-head > p {
+.project-detail__capabilities-head>p {
   margin: 0;
   color: var(--bp-color-text-muted);
   line-height: 1.65;
@@ -1142,7 +1143,7 @@
   overflow-wrap: anywhere;
 }
 
-.project-detail__capability-row > p {
+.project-detail__capability-row>p {
   max-width: 86ch;
   margin: 0;
   color: var(--bp-color-text-muted);
@@ -1169,7 +1170,7 @@
     grid-template-columns: 2.75rem minmax(0, 1fr);
   }
 
-  .project-detail__capability-row > p {
+  .project-detail__capability-row>p {
     grid-column: 2;
   }
 }
@@ -1181,13 +1182,13 @@
     padding-block: 1.15rem;
   }
 
-  .project-detail__capability-row > p {
+  .project-detail__capability-row>p {
     font-size: 0.82rem;
     line-height: 1.55;
   }
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    12   Kapitelkarten
    ========================================================================== */
 
@@ -1219,7 +1220,7 @@
   line-height: 1.68;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    13   App-Landschaft
    ========================================================================== */
 
@@ -1286,7 +1287,7 @@
 }
 
 
-/* ========================================================================== 
+/* ==========================================================================
    14   Presentation note
    ========================================================================== */
 
@@ -1406,7 +1407,7 @@
   pointer-events: none;
 }
 
-.project-detail__live-access-panel > * {
+.project-detail__live-access-panel>* {
   position: relative;
   z-index: 1;
 }
@@ -1487,7 +1488,7 @@
   }
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    15   Evidence Board
    ========================================================================== */
 
@@ -1651,7 +1652,7 @@
   line-height: 1.58;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    16   Missing State
    ========================================================================== */
 
@@ -1659,7 +1660,7 @@
   margin-top: var(--bp-space-5);
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    17   Accessibility Modes
    ========================================================================== */
 
@@ -1667,8 +1668,8 @@
 :host-context(:root[data-color-vision='achromatopsia']) .project-detail__highlight-card .material-symbols-outlined,
 :root[data-color-vision='achromatopsia'] .project-detail__map-node .material-symbols-outlined,
 :host-context(:root[data-color-vision='achromatopsia']) .project-detail__map-node .material-symbols-outlined,
-:root[data-color-vision='achromatopsia'] .project-detail__app-card > .material-symbols-outlined,
-:host-context(:root[data-color-vision='achromatopsia']) .project-detail__app-card > .material-symbols-outlined {
+:root[data-color-vision='achromatopsia'] .project-detail__app-card>.material-symbols-outlined,
+:host-context(:root[data-color-vision='achromatopsia']) .project-detail__app-card>.material-symbols-outlined {
   background: #111111;
   color: #f6f0e8;
 }
@@ -1680,7 +1681,7 @@
   transition: none;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    18   Responsive
    ========================================================================== */
 
@@ -1699,6 +1700,7 @@
 }
 
 @media (max-width: 1180px) {
+
   .project-detail__hero-grid,
   .project-detail__map,
   .project-detail__architecture-head {
@@ -1865,7 +1867,7 @@
   }
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    19   Hero Showcase
    ========================================================================== */
 
@@ -2051,19 +2053,19 @@
 
 .project-detail__hero-actions .bp-button:hover,
 .project-detail__hero-actions .bp-button:focus-visible,
-.project-detail__hero-actions .bp-button:hover > *,
-.project-detail__hero-actions .bp-button:focus-visible > * {
+.project-detail__hero-actions .bp-button:hover>*,
+.project-detail__hero-actions .bp-button:focus-visible>* {
   color: #111111 !important;
 }
 
 :root[data-theme='light'] .project-detail__hero-actions .bp-button:hover,
 :root[data-theme='light'] .project-detail__hero-actions .bp-button:focus-visible,
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:hover > *,
-:root[data-theme='light'] .project-detail__hero-actions .bp-button:focus-visible > *,
+:root[data-theme='light'] .project-detail__hero-actions .bp-button:hover>*,
+:root[data-theme='light'] .project-detail__hero-actions .bp-button:focus-visible>*,
 :host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:hover,
 :host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:focus-visible,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:hover > *,
-:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:focus-visible > * {
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:hover>*,
+:host-context(:root[data-theme='light']) .project-detail__hero-actions .bp-button:focus-visible>* {
   color: #f6f0e8 !important;
 }
 
@@ -2398,7 +2400,7 @@
   transition: opacity 170ms ease;
 }
 
-.project-detail__metric > * {
+.project-detail__metric>* {
   position: relative;
   z-index: 1;
 }
@@ -2922,12 +2924,12 @@
 }
 
 
-/* ========================================================================== 
-   19   Board Detail Showcase
+/* ==========================================================================
+   20   Board Detail Showcase
    ========================================================================== */
 
 /* ==========================================================================
-   20   Wide Screens
+   21   Wide Screens
    ========================================================================== */
 
 @media (min-width: 1921px) {
@@ -2992,7 +2994,7 @@
   padding: 0.68rem 0.58rem;
 }
 
-.project-detail[data-project='blutanalyse'] .project-detail__metric > .material-symbols-outlined {
+.project-detail[data-project='blutanalyse'] .project-detail__metric>.material-symbols-outlined {
   width: 30px;
   height: 30px;
   font-size: 1rem;

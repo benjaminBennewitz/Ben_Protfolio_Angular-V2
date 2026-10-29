@@ -323,7 +323,6 @@
           <h2>{{ content().projectsIntro.insightsLabel }}</h2>
         </div>
 
-        @if (activeProject.architecture?.length) {
         <section class="project-detail__architecture" [attr.aria-label]="content().projectsIntro.architectureLabel">
           <div class="project-detail__architecture-head">
             <h3>{{ content().projectsIntro.architectureLabel }}</h3>
@@ -467,7 +466,6 @@
             </article>
           </div>
         </section>
-        }
 
       </div>
     </section>

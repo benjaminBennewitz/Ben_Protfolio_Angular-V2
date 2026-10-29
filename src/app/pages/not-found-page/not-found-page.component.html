@@ -36,12 +36,12 @@
         [closeLabel]="content().terminalCloseLabel" (closed)="closeTerminal()">
         <div class="bp-dos-window__body not-found__terminal-body">
           <p class="not-found__request">
-          <span>{{ content().requestedPathLabel }} &gt;</span>
-          <strong>{{ requestedPath() }}</strong>
-        </p>
-        @for (line of content().terminalLines; track line) {
-        <p class="not-found__terminal-line">{{ line }}</p>
-        }
+            <span>{{ content().requestedPathLabel }} &gt;</span>
+            <strong>{{ requestedPath() }}</strong>
+          </p>
+          @for (line of content().terminalLines; track line) {
+          <p class="not-found__terminal-line">{{ line }}</p>
+          }
           <p class="not-found__prompt" aria-hidden="true">C:\PORTFOLIO\RECOVERY&gt;<span></span></p>
         </div>
       </bp-system-dialog>

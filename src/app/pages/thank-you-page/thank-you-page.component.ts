@@ -21,24 +21,19 @@ import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.
   styleUrl: './thank-you-page.component.scss',
 })
 export class ThankYouPageComponent {
-  /** Sprachservice für übersetzte Dankeseiten-Inhalte. */
-  private readonly languageService = inject(LanguageService);
+  private readonly languageService = inject(LanguageService);       // Sprachservice für übersetzte Dankeseiten-Inhalte.
+  private readonly seoService = inject(SeoService);                 // SEO-Service für noindex-Meta-Daten der Dankeseite.
+  private readonly achievementService = inject(AchievementService); // Achievement-Service für geschlossene MS-DOS-Fenster.
+  readonly content = computed(                                      // Übersetzter Inhalt der Dankeseite.
+    /** Übersetzter Inhalt der Dankeseite. */
+    () => this.languageService.content().thankYou
+  );
 
-  /** SEO-Service für noindex-Meta-Daten der Dankeseite. */
-  private readonly seoService = inject(SeoService);
-
-  /** Achievement-Service für geschlossene MS-DOS-Fenster. */
-  private readonly achievementService = inject(AchievementService);
-
-  /** Übersetzter Inhalt der Dankeseite. */
-  readonly content = computed(() => this.languageService.content().thankYou);
-
-  /** Sichtbarkeit des kleinen Statusfensters. */
-  readonly isDialogVisible = signal<boolean>(true);
+  readonly isDialogVisible = signal<boolean>(true);                 // Sichtbarkeit des kleinen Statusfensters.
 
   /** Synchronisiert noindex-Meta-Daten mit der aktiven Sprache. */
   constructor() {
-    effect(() => this.seoService.setNoIndexPageSeo(this.content().metaTitle, this.content().metaDescription, '/danke'));
+    effect(/** Synchronisiert Meta-Daten und abhängige Seitenzustände. */() => this.seoService.setNoIndexPageSeo(this.content().metaTitle, this.content().metaDescription, '/danke'));
   }
 
   /** Schließt das dekorative Statusfenster. */

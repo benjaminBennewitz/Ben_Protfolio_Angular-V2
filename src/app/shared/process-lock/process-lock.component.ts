@@ -6,7 +6,7 @@
  */
 
 import { Component, ElementRef, HostListener, Input, ViewChild, computed, signal } from '@angular/core';
-import { ProcessStep } from '../../core/models/portfolio.models';
+import type { ProcessStep } from '../../core/models/home.models';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 import { RevealTextComponent } from '../reveal-text/reveal-text.component';
 

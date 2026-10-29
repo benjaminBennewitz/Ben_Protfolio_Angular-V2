@@ -9,55 +9,33 @@ import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
-import { PortfolioProject, SeoContent } from '../models/portfolio.models';
+import type { PortfolioProject } from '../models/projects.models';
+import type { SeoContent } from '../models/pages.models';
 import { TabTitleService } from './tab-title.service';
 
 /** Optionen für eine einzelne SEO-Aktualisierung. */
 interface SeoApplyOptions {
-  /** Vollständiger Seitentitel. */
-  readonly title: string;
-  /** Meta-Description der aktuellen Seite. */
-  readonly description: string;
-  /** Suchbegriffe für Meta- und JSON-LD-Daten. */
-  readonly keywords: string;
-  /** Alternativtext für Social-Preview-Bilder. */
-  readonly imageAlt: string;
-  /** Relativer Pfad für Canonical und OpenGraph-URL. */
-  readonly path: string;
-  /** OpenGraph-Typ der aktuellen Seite. */
-  readonly type: 'website' | 'article';
-  /** Robots-Anweisung für Suchmaschinen. */
-  readonly robots: 'index, follow' | 'noindex, follow';
-  /** Strukturierte Daten als JSON-LD-Objekt. */
-  readonly structuredData: Record<string, unknown> | readonly Record<string, unknown>[];
+  readonly title: string;                                                                // Vollständiger Seitentitel.
+  readonly description: string;                                                          // Meta-Description der aktuellen Seite.
+  readonly keywords: string;                                                             // Suchbegriffe für Meta- und JSON-LD-Daten.
+  readonly imageAlt: string;                                                             // Alternativtext für Social-Preview-Bilder.
+  readonly path: string;                                                                 // Relativer Pfad für Canonical und OpenGraph-URL.
+  readonly type: 'website' | 'article';                                                  // OpenGraph-Typ der aktuellen Seite.
+  readonly robots: 'index, follow' | 'noindex, follow';                                  // Robots-Anweisung für Suchmaschinen.
+  readonly structuredData: Record<string, unknown> | readonly Record<string, unknown>[]; // Strukturierte Daten als JSON-LD-Objekt.
 }
 
 /** Zentraler Service für routenabhängige SEO-Daten. */
 @Injectable({ providedIn: 'root' })
 export class SeoService {
-  /** Primäre Domain für Canonical, OpenGraph und JSON-LD. */
-  private readonly siteUrl: string = environment.siteUrl;
-
-  /** Social-Preview-Bild für OpenGraph und Twitter Cards. */
-  private readonly socialImage = '/assets/social/og-portfolio-preview.svg';
-
-  /** Fallback-Keywords für Seiten ohne eigene Keywordliste. */
-  private readonly fallbackKeywords = 'Benjamin Bennewitz, Full Stack Webentwicklung, Angular Portfolio, Django, UI UX Design, Grafikdesign, Web Apps, Intranet, Accessibility, SEO';
-
-  /** Fallback-Alternativtext für Social-Preview-Bilder. */
-  private readonly fallbackImageAlt = 'B² Portfolio Preview von Benjamin Bennewitz';
-
-  /** ID des dynamisch verwalteten JSON-LD-Scripts. */
-  private readonly structuredDataId = 'bp-structured-data';
-
-  /** Angular Meta-Service. */
-  private readonly meta = inject(Meta);
-
-  /** Dokumentreferenz für Canonical-Link und JSON-LD-Script. */
-  private readonly document = inject(DOCUMENT);
-
-  /** Service für aktive und inaktive Tab-Titel. */
-  private readonly tabTitle = inject(TabTitleService);
+  private readonly siteUrl: string = environment.siteUrl;                                                                                                                             // Primäre Domain für Canonical, OpenGraph und JSON-LD.
+  private readonly socialImage = '/assets/social/og-portfolio-preview.svg';                                                                                                           // Social-Preview-Bild für OpenGraph und Twitter Cards.
+  private readonly fallbackKeywords = 'Benjamin Bennewitz, Full Stack Webentwicklung, Angular Portfolio, Django, UI UX Design, Grafikdesign, Web Apps, Intranet, Accessibility, SEO'; // Fallback-Keywords für Seiten ohne eigene Keywordliste.
+  private readonly fallbackImageAlt = 'B² Portfolio Preview von Benjamin Bennewitz';                                                                                                  // Fallback-Alternativtext für Social-Preview-Bilder.
+  private readonly structuredDataId = 'bp-structured-data';                                                                                                                           // ID des dynamisch verwalteten JSON-LD-Scripts.
+  private readonly meta = inject(Meta);                                                                                                                                               // Angular Meta-Service.
+  private readonly document = inject(DOCUMENT);                                                                                                                                       // Dokumentreferenz für Canonical-Link und JSON-LD-Script.
+  private readonly tabTitle = inject(TabTitleService);                                                                                                                                // Service für aktive und inaktive Tab-Titel.
 
   /** Setzt die Meta-Daten der Startseite. */
   setHomeSeo(content: SeoContent): void {
@@ -111,10 +89,11 @@ export class SeoService {
 
   /** Setzt die Meta-Daten für eine Projekt-Detailseite. */
   setProjectSeo(project: PortfolioProject): void {
-    const title = `${project.name} | Benjamin Bennewitz Portfolio`;
-    const description = project.summary;
-    const path = `/projects/${project.slug}`;
-    const keywords = [...project.techStack, project.type, project.name, 'Benjamin Bennewitz Portfolio'].join(', ');
+
+    const title = `${project.name} | Benjamin Bennewitz Portfolio`;                                                 // Projekttitel für Browser-Tab und Social-Metadaten.
+    const description = project.summary;                                                                            // Kurzbeschreibung des Projekts für Suchmaschinen.
+    const path = `/projects/${project.slug}`;                                                                       // Relativer Pfad der Projekt-Detailseite.
+    const keywords = [...project.techStack, project.type, project.name, 'Benjamin Bennewitz Portfolio'].join(', '); // Suchbegriffe aus Technologien, Projekttyp und Name.
 
     this.applySeo({
       title,
@@ -148,9 +127,10 @@ export class SeoService {
 
   /** Aktualisiert Titel, Description, Canonical, OpenGraph, Twitter und JSON-LD. */
   private applySeo(options: SeoApplyOptions): void {
-    const canonicalUrl = this.absoluteUrl(options.path);
-    const imageUrl = this.absoluteUrl(this.socialImage);
-    const locale = this.currentLocale();
+
+    const canonicalUrl = this.absoluteUrl(options.path); // Absolute kanonische URL der aktuellen Seite.
+    const imageUrl = this.absoluteUrl(this.socialImage); // Absolute URL des gemeinsamen Social-Preview-Bildes.
+    const locale = this.currentLocale();                 // OpenGraph-Locale der aktiven Sprache.
 
     this.tabTitle.setActiveTitle(options.title);
     this.meta.updateTag({ name: 'description', content: options.description });
@@ -182,14 +162,15 @@ export class SeoService {
       return path;
     }
 
-    const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+    const normalizedPath = path.startsWith('/') ? path : `/${path}`; // Relativer URL-Pfad mit führendem Schrägstrich.
 
     return `${this.siteUrl}${normalizedPath}`;
   }
 
   /** Aktualisiert oder erzeugt den Canonical-Link im Dokumentkopf. */
   private setCanonical(url: string): void {
-    let link = this.document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+
+    let link = this.document.querySelector<HTMLLinkElement>('link[rel="canonical"]'); // Vorhandener oder neu erzeugter Canonical-Link.
 
     if (!link) {
       link = this.document.createElement('link');
@@ -202,7 +183,8 @@ export class SeoService {
 
   /** Aktualisiert das JSON-LD-Script im Dokumentkopf. */
   private setStructuredData(data: Record<string, unknown> | readonly Record<string, unknown>[]): void {
-    let script = this.document.getElementById(this.structuredDataId) as HTMLScriptElement | null;
+
+    let script = this.document.getElementById(this.structuredDataId) as HTMLScriptElement | null; // Vorhandenes oder neu erzeugtes JSON-LD-Script.
 
     if (!script) {
       script = this.document.createElement('script');
@@ -284,8 +266,9 @@ export class SeoService {
 
   /** Erstellt strukturierte Breadcrumb-Daten für Projekt- und Unterseiten. */
   private createBreadcrumbSchema(path: string, currentName: string): Record<string, unknown> {
-    const isProject = path.startsWith('/projects/');
-    const list = [
+
+    const isProject = path.startsWith('/projects/'); // Aktueller Pfad gehört zu einer Projekt-Detailseite.
+    const list = [                                   // Geordnete Breadcrumb-Einträge mit absoluten URLs.
       { '@type': 'ListItem', position: 1, name: 'Portfolio', item: this.siteUrl },
     ];
 

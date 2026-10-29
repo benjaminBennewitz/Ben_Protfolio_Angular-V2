@@ -13,52 +13,31 @@ import { GlobalOverlayService } from '../../core/services/global-overlay.service
 
 /** Einzelner Eintrag im Privacy-Control-Panel. */
 interface PrivacyControlItem {
-  /** Material-Symbol des Eintrags. */
-  readonly icon: string;
-  /** Sichtbarer Titel des Eintrags. */
-  readonly title: string;
-  /** Kurzstatus des Eintrags. */
-  readonly status: string;
-  /** Beschreibung des Eintrags. */
-  readonly text: string;
-  /** Visueller Status für die Darstellung. */
-  readonly state: 'locked' | 'local' | 'off';
+  readonly icon: string;                      // Material-Symbol des Eintrags.
+  readonly title: string;                     // Sichtbarer Titel des Eintrags.
+  readonly status: string;                    // Kurzstatus des Eintrags.
+  readonly text: string;                      // Beschreibung des Eintrags.
+  readonly state: 'locked' | 'local' | 'off'; // Visueller Status für die Darstellung.
 }
 
 /** Übersetzte Texte des Cookie-Banners. */
 interface CookieBannerTexts {
-  /** Zugängliche Beschriftung des Banners. */
-  readonly ariaLabel: string;
-  /** Kleine technische Beschriftung. */
-  readonly eyebrow: string;
-  /** Titel des Banners. */
-  readonly title: string;
-  /** Erklärender Haupttext. */
-  readonly text: string;
-  /** Label für notwendige Technologien. */
-  readonly necessaryLabel: string;
-  /** Label für Tracking-Status. */
-  readonly trackingLabel: string;
-  /** Label für externe Anbieter. */
-  readonly externalLabel: string;
-  /** Beschriftung zum Öffnen der Details. */
-  readonly detailsLabel: string;
-  /** Beschriftung zum Zurückkehren zur Übersicht. */
-  readonly overviewLabel: string;
-  /** Beschriftung des Bestätigungsbuttons. */
-  readonly acceptLabel: string;
-  /** Zugängliche Beschriftung des globalen Cookie-Buttons. */
-  readonly toggleLabel: string;
-  /** Toast-Titel beim Öffnen über den globalen Button. */
-  readonly openToastTitle: string;
-  /** Toast-Text beim Öffnen über den globalen Button. */
-  readonly openToastText: string;
-  /** Toast-Titel nach Bestätigung. */
-  readonly acceptToastTitle: string;
-  /** Toast-Text nach Bestätigung. */
-  readonly acceptToastText: string;
-  /** Privacy-Control-Einträge. */
-  readonly controls: readonly PrivacyControlItem[];
+  readonly ariaLabel: string;                       // Zugängliche Beschriftung des Banners.
+  readonly eyebrow: string;                         // Kleine technische Beschriftung.
+  readonly title: string;                           // Titel des Banners.
+  readonly text: string;                            // Erklärender Haupttext.
+  readonly necessaryLabel: string;                  // Label für notwendige Technologien.
+  readonly trackingLabel: string;                   // Label für Tracking-Status.
+  readonly externalLabel: string;                   // Label für externe Anbieter.
+  readonly detailsLabel: string;                    // Beschriftung zum Öffnen der Details.
+  readonly overviewLabel: string;                   // Beschriftung zum Zurückkehren zur Übersicht.
+  readonly acceptLabel: string;                     // Beschriftung des Bestätigungsbuttons.
+  readonly toggleLabel: string;                     // Zugängliche Beschriftung des globalen Cookie-Buttons.
+  readonly openToastTitle: string;                  // Toast-Titel beim Öffnen über den globalen Button.
+  readonly openToastText: string;                   // Toast-Text beim Öffnen über den globalen Button.
+  readonly acceptToastTitle: string;                // Toast-Titel nach Bestätigung.
+  readonly acceptToastText: string;                 // Toast-Text nach Bestätigung.
+  readonly controls: readonly PrivacyControlItem[]; // Privacy-Control-Einträge.
 }
 
 /** Minimaler eigener Cookie-Hinweis ohne externe Anbieter. */
@@ -69,35 +48,23 @@ interface CookieBannerTexts {
   styleUrl: './cookie-banner.component.scss',
 })
 export class CookieBannerComponent {
-  /** Sprachservice für übersetzte Bannertexte. */
-  private readonly languageService = inject(LanguageService);
-
-  /** Toast-Service für kurze Privacy-Hinweise. */
-  private readonly toastService = inject(SystemToastService);
-
-  /** Lifecycle-Referenz für externe Öffnen-Events. */
-  private readonly destroyRef = inject(DestroyRef);
-
-  /** Overlay-Service für globale Privacy-Auslöser. */
-  private readonly overlayService = inject(GlobalOverlayService);
-
-  /** Schlüssel für die lokale Bestätigung des Hinweises. */
-  private readonly storageKey = 'bp-cookie-consent-v1';
-
-  /** Sichtbarkeit des Banners. */
-  readonly visible = signal<boolean>(this.shouldShowBanner());
-
-  /** Sichtbarkeit der Detailansicht. */
-  readonly detailsOpen = signal<boolean>(false);
-
-  /** Übersetzte Bannertexte der aktiven Sprache. */
-  readonly texts = computed<CookieBannerTexts>(() => COOKIE_BANNER_TEXTS[this.languageService.language()]);
+  private readonly languageService = inject(LanguageService);     // Sprachservice für übersetzte Bannertexte.
+  private readonly toastService = inject(SystemToastService);     // Toast-Service für kurze Privacy-Hinweise.
+  private readonly destroyRef = inject(DestroyRef);               // Lifecycle-Referenz für externe Öffnen-Events.
+  private readonly overlayService = inject(GlobalOverlayService); // Overlay-Service für globale Privacy-Auslöser.
+  private readonly storageKey = 'bp-cookie-consent-v1';           // Schlüssel für die lokale Bestätigung des Hinweises.
+  readonly visible = signal<boolean>(this.shouldShowBanner());    // Sichtbarkeit des Banners.
+  readonly detailsOpen = signal<boolean>(false);                  // Sichtbarkeit der Detailansicht.
+  readonly texts = computed<CookieBannerTexts>(                   // Übersetzte Bannertexte der aktiven Sprache.
+    /** Übersetzte Bannertexte der aktiven Sprache. */
+    () => COOKIE_BANNER_TEXTS[this.languageService.language()]
+  );
 
   /** Verbindet Footer-Auslöser mit dem lokalen Banner-Zustand. */
   constructor() {
     this.overlayService.privacyPanelRequested$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.reopenBanner());
+      .subscribe(/** Öffnet die Privacy-Details nach einem globalen Auslöser erneut. */() => this.reopenBanner());
   }
 
   /** Öffnet den Hinweis erneut über den Footer-Eintrag. */
@@ -109,7 +76,7 @@ export class CookieBannerComponent {
 
   /** Schaltet zwischen kurzer Übersicht und Privacy-Control-Details um. */
   toggleDetails(): void {
-    this.detailsOpen.update((isOpen) => !isOpen);
+    this.detailsOpen.update(/** Kehrt den aktuellen Öffnungszustand der Detailansicht um. */(isOpen) => !isOpen);
   }
 
   /** Speichert die Zustimmung zu notwendigen Technologien und blendet das Banner aus. */
@@ -139,8 +106,7 @@ export class CookieBannerComponent {
   }
 }
 
-/** Übersetzte Inhalte des Cookie-Banners. */
-const COOKIE_BANNER_TEXTS: Record<'de' | 'en', CookieBannerTexts> = {
+const COOKIE_BANNER_TEXTS: Record<'de' | 'en', CookieBannerTexts> = { // Übersetzte Inhalte des Cookie-Banners.
   de: {
     ariaLabel: 'Privacy-Control-Panel zu notwendigen Technologien',
     eyebrow: 'privacy_controls.exe',

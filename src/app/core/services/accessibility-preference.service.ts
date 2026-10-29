@@ -22,56 +22,63 @@ export type ColorVisionMode = 'default' | 'deuteranopia' | 'protanopia' | 'trita
 
 /** Persistierte Accessibility-Einstellungen. */
 export interface AccessibilityPreferences {
-  /** Bewegungsstufe für Animationen und JavaScript-Simulationen. */
-  readonly motion: MotionMode;
-  /** Komplexitätsstufe für eine ruhigere Oberfläche. */
-  readonly comfort: ComfortMode;
-  /** Kontraststufe für stärkere Lesbarkeit. */
-  readonly contrast: ContrastMode;
-  /** Farbseh-Modus für robustere Akzentfarben. */
-  readonly colorVision: ColorVisionMode;
+  readonly motion: MotionMode;           // Bewegungsstufe für Animationen und JavaScript-Simulationen.
+  readonly comfort: ComfortMode;         // Komplexitätsstufe für eine ruhigere Oberfläche.
+  readonly contrast: ContrastMode;       // Kontraststufe für stärkere Lesbarkeit.
+  readonly colorVision: ColorVisionMode; // Farbseh-Modus für robustere Akzentfarben.
 }
 
 /** Verwaltet globale Accessibility- und Comfort-Einstellungen. */
 @Injectable({ providedIn: 'root' })
 export class AccessibilityPreferenceService {
-  /** Schlüssel für persistierte Einstellungen im LocalStorage. */
-  private readonly storageKey = 'bp-accessibility-preferences-v1';
+  private readonly storageKey = 'bp-accessibility-preferences-v1';                                      // Schlüssel für persistierte Einstellungen im LocalStorage.
+  private readonly document = inject(DOCUMENT);                                                         // Dokumentreferenz für globale Data-Attribute.
+  private readonly preferencesSignal = signal<AccessibilityPreferences>(this.readInitialPreferences()); // Interner Zustand der Accessibility-Einstellungen.
+  readonly preferences = computed<AccessibilityPreferences>(                                            // Aktuelle Accessibility-Einstellungen.
+    /** Aktuelle Accessibility-Einstellungen. */
+    () => this.preferencesSignal()
+  );
 
-  /** Dokumentreferenz für globale Data-Attribute. */
-  private readonly document = inject(DOCUMENT);
+  readonly motionMode = computed<MotionMode>(                                                           // Aktueller Bewegungsmodus.
+    /** Aktueller Bewegungsmodus. */
+    () => this.preferences().motion
+  );
 
-  /** Interner Zustand der Accessibility-Einstellungen. */
-  private readonly preferencesSignal = signal<AccessibilityPreferences>(this.readInitialPreferences());
+  readonly comfortMode = computed<ComfortMode>(                                                         // Aktueller Comfort-Modus.
+    /** Aktueller Comfort-Modus. */
+    () => this.preferences().comfort
+  );
 
-  /** Aktuelle Accessibility-Einstellungen. */
-  readonly preferences = computed<AccessibilityPreferences>(() => this.preferencesSignal());
+  readonly contrastMode = computed<ContrastMode>(                                                       // Aktueller Kontrastmodus.
+    /** Aktueller Kontrastmodus. */
+    () => this.preferences().contrast
+  );
 
-  /** Aktueller Bewegungsmodus. */
-  readonly motionMode = computed<MotionMode>(() => this.preferences().motion);
+  readonly colorVisionMode = computed<ColorVisionMode>(                                                 // Aktueller Farbseh-Modus.
+    /** Aktueller Farbseh-Modus. */
+    () => this.preferences().colorVision
+  );
 
-  /** Aktueller Comfort-Modus. */
-  readonly comfortMode = computed<ComfortMode>(() => this.preferences().comfort);
+  readonly allowsMotion = computed<boolean>(                                                            // Gibt true zurück, wenn JS-Animationen normal laufen dürfen.
+    /** Gibt true zurück, wenn JS-Animationen normal laufen dürfen. */
+    () => this.motionMode() === 'full'
+  );
 
-  /** Aktueller Kontrastmodus. */
-  readonly contrastMode = computed<ContrastMode>(() => this.preferences().contrast);
+  readonly reducesMotion = computed<boolean>(                                                           // Gibt true zurück, wenn Animationen reduziert oder deaktiviert werden sollen.
+    /** Gibt true zurück, wenn Animationen reduziert oder deaktiviert werden sollen. */
+    () => this.motionMode() !== 'full'
+  );
 
-  /** Aktueller Farbseh-Modus. */
-  readonly colorVisionMode = computed<ColorVisionMode>(() => this.preferences().colorVision);
-
-  /** Gibt true zurück, wenn JS-Animationen normal laufen dürfen. */
-  readonly allowsMotion = computed<boolean>(() => this.motionMode() === 'full');
-
-  /** Gibt true zurück, wenn Animationen reduziert oder deaktiviert werden sollen. */
-  readonly reducesMotion = computed<boolean>(() => this.motionMode() !== 'full');
-
-  /** Gibt true zurück, wenn die Oberfläche bewusst ruhiger sein soll. */
-  readonly usesSimpleMode = computed<boolean>(() => this.comfortMode() === 'simple');
+  readonly usesSimpleMode = computed<boolean>(                                                          // Gibt true zurück, wenn die Oberfläche bewusst ruhiger sein soll.
+    /** Gibt true zurück, wenn die Oberfläche bewusst ruhiger sein soll. */
+    () => this.comfortMode() === 'simple'
+  );
 
   /** Synchronisiert die Einstellungen mit HTML-Attributen und LocalStorage. */
   constructor() {
-    effect(() => {
-      const preferences = this.preferences();
+    effect(/** Synchronisiert den aktuellen Signalzustand mit Dokument und Persistenz. */() => {
+
+      const preferences = this.preferences(); // Aktuelle Einstellungen für DOM-Synchronisierung und Persistenz.
 
       this.document.documentElement.dataset['motion'] = preferences.motion;
       this.document.documentElement.dataset['comfort'] = preferences.comfort;
@@ -123,12 +130,13 @@ export class AccessibilityPreferenceService {
 
   /** Aktualisiert einzelne Einstellungen ohne die restlichen Werte zu verlieren. */
   private patchPreferences(patch: Partial<AccessibilityPreferences>): void {
-    this.preferencesSignal.update((preferences) => ({ ...preferences, ...patch }));
+    this.preferencesSignal.update(/** Übernimmt geänderte Einstellungen unter Erhalt der übrigen Werte. */(preferences) => ({ ...preferences, ...patch }));
   }
 
   /** Ermittelt initiale Einstellungen aus Persistenz und Systemeinstellung. */
   private readInitialPreferences(): AccessibilityPreferences {
-    const fallback: AccessibilityPreferences = {
+
+    const fallback: AccessibilityPreferences = { // Standardwerte unter Berücksichtigung der Systemeinstellung.
       motion: this.systemPrefersReducedMotion() ? 'reduced' : 'full',
       comfort: 'expressive',
       contrast: 'normal',
@@ -136,8 +144,9 @@ export class AccessibilityPreferenceService {
     };
 
     try {
-      const savedValue = localStorage.getItem(this.storageKey);
-      const parsedValue = savedValue ? JSON.parse(savedValue) as Partial<AccessibilityPreferences> : null;
+
+      const savedValue = localStorage.getItem(this.storageKey);                                            // Unveränderter Speicherwert der Accessibility-Einstellungen.
+      const parsedValue = savedValue ? JSON.parse(savedValue) as Partial<AccessibilityPreferences> : null; // Eingelesene, noch zu validierende Einstellungen.
 
       return {
         motion: this.validMotionMode(parsedValue?.motion) ? parsedValue.motion : fallback.motion,

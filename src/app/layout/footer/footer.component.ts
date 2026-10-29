@@ -21,29 +21,27 @@ import { RepositoryGateComponent } from '../../shared/repository-gate/repository
   styleUrl: './footer.component.scss',
 })
 export class FooterComponent {
-  /** Sprachservice für Footer-Inhalte. */
-  private readonly languageService = inject(LanguageService);
+  private readonly languageService = inject(LanguageService);       // Sprachservice für Footer-Inhalte.
+  private readonly achievementService = inject(AchievementService); // Achievement-Service für die versteckte Fülli-Trophäe.
+  private readonly overlayService = inject(GlobalOverlayService);   // Overlay-Service für Footer-Auslöser.
+  readonly footer = computed(                                       // Aktueller Footer-Inhalt.
+    /** Aktueller Footer-Inhalt. */
+    () => this.languageService.content().footer
+  );
 
-  /** Achievement-Service für die versteckte Fülli-Trophäe. */
-  private readonly achievementService = inject(AchievementService);
+  readonly privacyControlLabel = computed(                          // Beschriftung des Privacy-Control-Eintrags.
+    /** Beschriftung des Privacy-Control-Eintrags. */
+    () => this.languageService.language() === 'de' ? 'Cookie-Einstellungen' : 'Cookie settings'
+  );
 
-  /** Overlay-Service für Footer-Auslöser. */
-  private readonly overlayService = inject(GlobalOverlayService);
+  readonly legalLabels = computed(                                  // Rechtliche Footer-Labels für dezente Meta-Navigation.
+    /** Rechtliche Footer-Labels für dezente Meta-Navigation. */
+    () => this.languageService.language() === 'de' // Rechtliche Footer-Labels für dezente Meta-Navigation.
+      ? { ariaLabel: 'Rechtliche Hinweise', imprint: 'Impressum', privacy: 'Datenschutz' }
+      : { ariaLabel: 'Legal information', imprint: 'Legal notice', privacy: 'Privacy' }
+  );
 
-  /** Aktueller Footer-Inhalt. */
-  readonly footer = computed(() => this.languageService.content().footer);
-
-  /** Beschriftung des Privacy-Control-Eintrags. */
-  readonly privacyControlLabel = computed(() => this.languageService.language() === 'de' ? 'Cookie-Einstellungen' : 'Cookie settings');
-
-
-  /** Rechtliche Footer-Labels für dezente Meta-Navigation. */
-  readonly legalLabels = computed(() => this.languageService.language() === 'de'
-    ? { ariaLabel: 'Rechtliche Hinweise', imprint: 'Impressum', privacy: 'Datenschutz' }
-    : { ariaLabel: 'Legal information', imprint: 'Legal notice', privacy: 'Privacy' });
-
-  /** Aktuelles Jahr für Copyright-Ausgabe. */
-  readonly year = new Date().getFullYear();
+  readonly year = new Date().getFullYear();                         // Aktuelles Jahr für Copyright-Ausgabe.
   /** Schaltet die versteckte Fülli-Trophäe frei. */
   unlockPetAchievement(): void {
     this.achievementService.unlock('loyal-companion');
@@ -71,7 +69,8 @@ export class FooterComponent {
 
   /** Liefert den kompakten Social-Typ für die Icon-Ausgabe. */
   socialIconName(label: string): 'linkedin' | 'xing' | 'github' {
-    const normalizedLabel = label.toLowerCase();
+
+    const normalizedLabel = label.toLowerCase(); // Social-Label in Kleinschreibung für die Icon-Zuordnung.
 
     if (normalizedLabel.includes('linkedin')) {
       return 'linkedin';

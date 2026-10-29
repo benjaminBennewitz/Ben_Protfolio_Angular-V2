@@ -19,25 +19,18 @@ import { TabTitleService } from '../../core/services/tab-title.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class AppRuntimeComponent {
-  /** Achievement-Service wird erst mit der Experience geladen. */
-  private readonly achievementService = inject(AchievementService);
-
-  /** Sprachservice wird bewusst aus dem initialen Loader-Bundle herausgehalten. */
-  private readonly languageService = inject(LanguageService);
-
-  /** Service für den spielerischen Titel eines inaktiven Browser-Tabs. */
-  private readonly tabTitleService = inject(TabTitleService);
-
-  /** Kennzeichnet einen manuellen Einstieg über den Loader-Button. */
-  readonly loaderHumanConfirmed = input(false);
+  private readonly achievementService = inject(AchievementService); // Achievement-Service wird erst mit der Experience geladen.
+  private readonly languageService = inject(LanguageService);       // Sprachservice wird bewusst aus dem initialen Loader-Bundle herausgehalten.
+  private readonly tabTitleService = inject(TabTitleService);       // Service für den spielerischen Titel eines inaktiven Browser-Tabs.
+  readonly loaderHumanConfirmed = input(false);                     // Kennzeichnet einen manuellen Einstieg über den Loader-Button.
 
   /** Initialisiert nicht kritische globale Reaktionen erst nach der Loader-Freigabe. */
   constructor() {
-    effect(() => {
+    effect(/** Synchronisiert den Rückkehrtitel mit der aktiven Sprache. */() => {
       this.tabTitleService.setHiddenTitle(this.languageService.content().meta.hiddenTitle);
     });
 
-    effect(() => {
+    effect(/** Vergibt die Loader-Trophäe nach einer manuellen Startbestätigung. */() => {
       if (this.loaderHumanConfirmed()) {
         this.achievementService.unlock('loader-human');
       }

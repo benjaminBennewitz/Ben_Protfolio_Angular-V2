@@ -7,7 +7,7 @@
 
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PortfolioProject } from '../../core/models/portfolio.models';
+import type { PortfolioProject } from '../../core/models/projects.models';
 import { ProjectVisualComponent } from '../project-visual/project-visual.component';
 
 /** Interaktive Projektkarte mit Preview und Tags. */

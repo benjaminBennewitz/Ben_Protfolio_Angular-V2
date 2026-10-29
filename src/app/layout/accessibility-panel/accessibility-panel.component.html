@@ -1,7 +1,8 @@
 <!-- src/app/layout/accessibility-panel/accessibility-panel.component.html -->
 <aside class="access-panel" [class.access-panel--open]="open()" [attr.aria-label]="texts().landmarkLabel">
   @if (open()) {
-  <button class="access-panel__backdrop" type="button" [attr.aria-label]="texts().closeLabel" (click)="close()"></button>
+  <button class="access-panel__backdrop" type="button" [attr.aria-label]="texts().closeLabel"
+    (click)="close()"></button>
   }
 
   @if (!open()) {
@@ -11,15 +12,16 @@
       <span>{{ statusText() }}</span>
     </div>
 
-    <button class="access-panel__toggle" type="button" [attr.aria-label]="texts().toggleLabel" [attr.aria-expanded]="open()"
-      (click)="toggleOpen()">
+    <button class="access-panel__toggle" type="button" [attr.aria-label]="texts().toggleLabel"
+      [attr.aria-expanded]="open()" (click)="toggleOpen()">
       <span class="material-symbols-outlined" aria-hidden="true">accessibility_new</span>
     </button>
   </div>
   }
 
   @if (open()) {
-  <section #panelWindow class="access-panel__window bp-card" role="dialog" aria-modal="true" tabindex="-1" [attr.aria-label]="texts().title" (keydown)="handlePanelKeydown($event)">
+  <section #panelWindow class="access-panel__window bp-card" role="dialog" aria-modal="true" tabindex="-1"
+    [attr.aria-label]="texts().title" (keydown)="handlePanelKeydown($event)">
     <header class="access-panel__head">
       <div>
         <p>accessibility.exe</p>
@@ -42,8 +44,8 @@
       <h3>{{ texts().motionTitle }}</h3>
       <div class="access-panel__chips">
         @for (mode of motionModes; track mode) {
-        <button type="button" [class.is-active]="accessibility.motionMode() === mode"
-          (click)="setMotionMode(mode)">{{ texts().motion[mode] }}</button>
+        <button type="button" [class.is-active]="accessibility.motionMode() === mode" (click)="setMotionMode(mode)">{{
+          texts().motion[mode] }}</button>
         }
       </div>
     </div>
@@ -52,8 +54,8 @@
       <h3>{{ texts().comfortTitle }}</h3>
       <div class="access-panel__chips">
         @for (mode of comfortModes; track mode) {
-        <button type="button" [class.is-active]="accessibility.comfortMode() === mode"
-          (click)="setComfortMode(mode)">{{ texts().comfort[mode] }}</button>
+        <button type="button" [class.is-active]="accessibility.comfortMode() === mode" (click)="setComfortMode(mode)">{{
+          texts().comfort[mode] }}</button>
         }
       </div>
     </div>

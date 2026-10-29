@@ -10,16 +10,16 @@ import { environment } from '../../../environments/environment';
 
 /** Erlaubter Request-Body der zentralen Contact API. */
 export interface ContactRequest {
-  readonly name: string;
-  readonly email: string;
-  readonly message: string;
-  readonly website: string;
+  readonly name: string;    // Name der kontaktierenden Person.
+  readonly email: string;   // E-Mail-Adresse für die Rückantwort.
+  readonly message: string; // Inhalt der Kontaktanfrage.
+  readonly website: string; // Unsichtbares Honeypot-Feld zur Spam-Erkennung.
 }
 
 /** Vom CSRF-Endpunkt erwartete Antwort. */
 interface CsrfResponse {
-  readonly csrfToken: string;
-  readonly requestId?: string;
+  readonly csrfToken: string;  // Vom Server bereitgestellter CSRF-Token.
+  readonly requestId?: string; // Optionale Kennung des CSRF-Requests.
 }
 
 /** Fachlich relevante Fehlerklassen für nutzerfreundliches UI-Feedback. */
@@ -34,9 +34,10 @@ export type ContactApiErrorKind =
 
 /** Typisierter API-Fehler ohne Offenlegung technischer Backend-Details. */
 export class ContactApiError extends Error {
+  /** Erzeugt den typisierten Kontaktfehler mit Fehlerklasse und HTTP-Status. */
   constructor(
-    readonly kind: ContactApiErrorKind,
-    readonly status?: number,
+    readonly kind: ContactApiErrorKind, // Fachliche Fehlerklasse für das UI.
+    readonly status?: number,          // Optionaler HTTP-Status der Antwort.
   ) {
     super(`Contact API request failed: ${kind}`);
     this.name = 'ContactApiError';
@@ -46,11 +47,8 @@ export class ContactApiError extends Error {
 /** Kapselt CSRF-Lifecycle, Request-Whitelist und einen begrenzten CSRF-Retry. */
 @Injectable({ providedIn: 'root' })
 export class ContactApiService {
-  /** Im Arbeitsspeicher gehaltener CSRF-Token; niemals in Web Storage persistieren. */
-  private csrfToken: string | null = null;
-
-  /** Teilt einen laufenden Versand zwischen parallelen Submit-Versuchen. */
-  private pendingRequest: Promise<void> | null = null;
+  private csrfToken: string | null = null;             // Im Arbeitsspeicher gehaltener CSRF-Token; niemals in Web Storage persistieren.
+  private pendingRequest: Promise<void> | null = null; // Teilt einen laufenden Versand zwischen parallelen Submit-Versuchen.
 
   /** Sendet eine Kontaktanfrage und verhindert parallele Doppel-POSTs. */
   sendContactMessage(request: ContactRequest): Promise<void> {
@@ -58,7 +56,7 @@ export class ContactApiService {
       return this.pendingRequest;
     }
 
-    const pendingRequest = this.sendWithCsrfRetry(request).finally(() => {
+    const pendingRequest = this.sendWithCsrfRetry(request).finally(/** Gibt den abgeschlossenen Versand für nachfolgende Anfragen frei. */() => { // Gemeinsam verwendetes Promise des laufenden Versands.
       if (this.pendingRequest === pendingRequest) {
         this.pendingRequest = null;
       }
@@ -70,8 +68,9 @@ export class ContactApiService {
 
   /** Führt den POST aus und erneuert bei genau einem 403 den CSRF-Token einmalig. */
   private async sendWithCsrfRetry(request: ContactRequest): Promise<void> {
-    let token = await this.getCsrfToken();
-    let response = await this.postContact(request, token);
+
+    let token = await this.getCsrfToken();                 // CSRF-Token für den aktuellen Versandversuch.
+    let response = await this.postContact(request, token); // HTTP-Antwort des aktuellen API-Aufrufs.
 
     if (response.status === 403) {
       this.csrfToken = null;
@@ -92,7 +91,7 @@ export class ContactApiService {
       return this.csrfToken;
     }
 
-    const response = await this.safeFetch(environment.csrfEndpoint, {
+    const response = await this.safeFetch(environment.csrfEndpoint, { // HTTP-Antwort des aktuellen API-Aufrufs.
       method: 'GET',
       credentials: 'same-origin',
       headers: { Accept: 'application/json' },
@@ -102,7 +101,7 @@ export class ContactApiService {
       throw this.createApiError(response.status);
     }
 
-    let payload: CsrfResponse;
+    let payload: CsrfResponse; // Geprüfte JSON-Antwort des CSRF-Endpunkts.
 
     try {
       payload = (await response.json()) as CsrfResponse;

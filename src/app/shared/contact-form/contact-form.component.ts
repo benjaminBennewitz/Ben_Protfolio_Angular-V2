@@ -8,7 +8,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ContactTopic } from '../../core/models/portfolio.models';
+import type { ContactTopic } from '../../core/models/pages.models';
 import { ContactApiError, ContactApiService, ContactRequest } from '../../core/services/contact-api.service';
 import { LanguageService } from '../../core/services/language.service';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';

@@ -8,30 +8,31 @@
 import { DOCUMENT } from '@angular/common';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { PORTFOLIO_TRANSLATIONS } from '../data/portfolio-content';
-import { PortfolioBaseContent, PortfolioLanguage } from '../models/portfolio.models';
+import type { PortfolioBaseContent } from '../models/content.models';
+import type { PortfolioLanguage } from '../models/shared.models';
 
 /** Verwaltet Sprache, Persistenz und HTML-Lang-Attribut. */
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
-  /** Schlüssel für die Persistenz im LocalStorage. */
-  private readonly storageKey = 'bp-language';
+  private readonly storageKey = 'bp-language';                                             // Schlüssel für die Persistenz im LocalStorage.
+  private readonly document = inject(DOCUMENT);                                            // Dokumentreferenz für das lang-Attribut.
+  private readonly languageSignal = signal<PortfolioLanguage>(this.readInitialLanguage()); // Interner Sprachzustand.
+  readonly language = computed<PortfolioLanguage>(                                         // Aktuell ausgewählte Sprache.
+    /** Aktuell ausgewählte Sprache. */
+    () => this.languageSignal()
+  );
 
-  /** Dokumentreferenz für das lang-Attribut. */
-  private readonly document = inject(DOCUMENT);
-
-  /** Interner Sprachzustand. */
-  private readonly languageSignal = signal<PortfolioLanguage>(this.readInitialLanguage());
-
-  /** Aktuell ausgewählte Sprache. */
-  readonly language = computed<PortfolioLanguage>(() => this.languageSignal());
-
-  /** Übersetzter Inhalt der aktuell ausgewählten Sprache. */
-  readonly content = computed<PortfolioBaseContent>(() => PORTFOLIO_TRANSLATIONS[this.language()]);
+  readonly content = computed<PortfolioBaseContent>(                                       // Übersetzter Inhalt der aktuell ausgewählten Sprache.
+    /** Übersetzter Inhalt der aktuell ausgewählten Sprache. */
+    () => PORTFOLIO_TRANSLATIONS[this.language()]
+  );
 
   /** Initialisiert die Synchronisierung von Sprache und Dokument. */
   constructor() {
-    effect(() => {
-      const language = this.language();
+    effect(/** Synchronisiert den aktuellen Signalzustand mit Dokument und Persistenz. */() => {
+
+      const language = this.language(); // Aktive Sprache für HTML-Attribut und Persistenz.
+
       this.document.documentElement.lang = language;
       localStorage.setItem(this.storageKey, language);
     });
@@ -39,7 +40,7 @@ export class LanguageService {
 
   /** Schaltet zwischen Deutsch und Englisch um. */
   toggleLanguage(): void {
-    this.languageSignal.update((language) => (language === 'de' ? 'en' : 'de'));
+    this.languageSignal.update(/** Wählt die jeweils andere unterstützte Sprache. */(language) => (language === 'de' ? 'en' : 'de'));
   }
 
   /** Setzt eine konkrete Sprache, sofern diese unterstützt wird. */
@@ -49,7 +50,8 @@ export class LanguageService {
 
   /** Liest die initiale Sprache aus LocalStorage oder verwendet Deutsch als Standardsprache. */
   private readInitialLanguage(): PortfolioLanguage {
-    const savedLanguage = localStorage.getItem(this.storageKey);
+
+    const savedLanguage = localStorage.getItem(this.storageKey); // Gespeicherte Sprachkennung vor der Validierung.
 
     if (savedLanguage === 'de' || savedLanguage === 'en') {
       return savedLanguage;

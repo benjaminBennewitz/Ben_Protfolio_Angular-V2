@@ -13,14 +13,14 @@ import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Rout
 /** Hält Route und Scrollposition vor der ersten Reveal-Messung zusammen. */
 @Injectable({ providedIn: 'root' })
 export class RouteScrollService {
-  private readonly document = inject(DOCUMENT);
-  private readonly router = inject(Router);
-  private activeNavigation: number | null = null;
-  private frame: number | null = null;
+  private readonly document = inject(DOCUMENT);   // Dokumentreferenz für globale DOM-Zustände.
+  private readonly router = inject(Router);       // Router für Navigationsereignisse.
+  private activeNavigation: number | null = null; // ID des laufenden Seitenwechsels oder null.
+  private frame: number | null = null;            // Geplante Freigabe nach dem Layout oder null.
 
   /** Begleitet nur Seitenwechsel; reine Ankerwechsel behalten das native Smooth-Scrolling. */
   constructor() {
-    this.router.events.pipe(takeUntilDestroyed()).subscribe((event) => {
+    this.router.events.pipe(takeUntilDestroyed()).subscribe(/** Verarbeitet den aktuellen Schritt des Routenwechsels. */(event) => {
       if (event instanceof NavigationStart) {
         if (this.path(event.url) === this.path(this.router.url) && this.activeNavigation === null) return;
         this.cancelFrame();
@@ -38,7 +38,7 @@ export class RouteScrollService {
         this.release();
       }
     });
-    inject(DestroyRef).onDestroy(() => {
+    inject(DestroyRef).onDestroy(/** Entfernt registrierte Listener und noch ausstehende Browser-Aufgaben. */() => {
       this.cancelFrame();
       this.document.documentElement.classList.remove('bp-route-scroll-reset');
     });
@@ -46,7 +46,9 @@ export class RouteScrollService {
 
   /** Vergleicht den Routenpfad unabhängig von Query-Parametern und Fragmenten. */
   private path(url: string): string {
-    const tree = this.router.parseUrl(url);
+
+    const tree = this.router.parseUrl(url); // Routenbaum ohne Query-Parameter und Fragment für den Vergleich.
+
     tree.queryParams = {};
     tree.fragment = null;
     return this.router.serializeUrl(tree);
@@ -59,11 +61,13 @@ export class RouteScrollService {
 
   /** Gibt Reveals erst nach der Router-Scrollposition und einem vollständigen Layout frei. */
   private releaseAfterLayout(): void {
-    const view = this.document.defaultView;
+
+    const view = this.document.defaultView; // Browserfenster des aktuellen Dokuments.
+
     if (!view) { this.release(); return; }
     this.cancelFrame();
-    this.frame = view.requestAnimationFrame(() => {
-      this.frame = view.requestAnimationFrame(() => this.release());
+    this.frame = view.requestAnimationFrame(/** Gibt die Scrollsperre nach dem nächsten Layout-Schritt frei. */() => {
+      this.frame = view.requestAnimationFrame(/** Gibt die Scrollsperre nach dem nächsten Layout-Schritt frei. */() => this.release());
     });
   }
 

@@ -1,13 +1,23 @@
 /*###############################
 ###
 ###     loader.component.scss
-###     B² Portfolio
-###     BASED ON: Angular 21, SCSS
+###     LOADER — Portfolio Layout
+###     BASED ON: Angular, TypeScript, SCSS
 ###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
 ###
 #################################*/
 
-/* ========================================================================== 
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
    01   Bühne
    02   Boot
    03   Storm / Dialoge
@@ -16,6 +26,11 @@
    06   Calm Mode
    07   Animationen
    08   Responsive / Reduced Motion
+   09   Arcade-Tech
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Bühne
    ========================================================================== */
 
 .loader {
@@ -116,7 +131,7 @@
   transform: translateY(-2px);
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    02   Boot
    ========================================================================== */
 
@@ -158,7 +173,7 @@
   animation: loader-blink 1s steps(1) infinite;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    03   Storm / Dialoge
    ========================================================================== */
 
@@ -264,7 +279,7 @@
   letter-spacing: 0.14em;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    04   Ready / Launch
    ========================================================================== */
 
@@ -335,7 +350,7 @@
   line-height: 1;
 }
 
-.loader__ready > p {
+.loader__ready>p {
   max-width: 520px;
   margin: 0;
   padding: 12px 18px;
@@ -348,7 +363,7 @@
   animation: loader-rise 550ms cubic-bezier(0.16, 1, 0.3, 1) 340ms both;
 }
 
-.loader__ready > button {
+.loader__ready>button {
   border: 2px solid #b8ff2e;
   padding: 20px 52px;
   background: #050505;
@@ -364,14 +379,14 @@
   transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
-.loader__ready > button:hover,
-.loader__ready > button:focus-visible {
+.loader__ready>button:hover,
+.loader__ready>button:focus-visible {
   background: #b8ff2e;
   color: #050505;
   transform: rotate(0deg) translateY(-2px);
 }
 
-.loader__ready > button:disabled {
+.loader__ready>button:disabled {
   cursor: default;
   opacity: 0.5;
 }
@@ -393,7 +408,7 @@
   animation: loader-ready-kick 360ms steps(2, end) 180ms both;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    05   Progress
    ========================================================================== */
 
@@ -435,7 +450,7 @@
   background: #b8ff2e;
 }
 
-.loader__progress > strong {
+.loader__progress>strong {
   width: 52px;
   color: #b8ff2e;
   font-size: 13px;
@@ -443,7 +458,7 @@
   text-align: right;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    06   Calm Mode
    ========================================================================== */
 
@@ -471,7 +486,7 @@
   margin: 0;
 }
 
-.loader__simple-panel > p:first-child {
+.loader__simple-panel>p:first-child {
   color: #b8ff2e;
   font-size: 0.72rem;
   font-weight: 800;
@@ -505,46 +520,95 @@
   text-transform: uppercase;
 }
 
-.loader__simple-panel > p:last-child {
+.loader__simple-panel>p:last-child {
   color: #a8a8a8;
   line-height: 1.55;
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    07   Animationen
    ========================================================================== */
 
 @keyframes loader-blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes loader-scan {
-  from { transform: translateY(-100%); }
-  to { transform: translateY(1200%); }
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(1200%);
+  }
 }
 
 @keyframes loader-glitch {
-  0%, 88%, 100% { transform: none; }
-  90% { transform: translate3d(-6px, 0, 0); }
-  92% { transform: translate3d(5px, -2px, 0); }
-  94% { transform: translate3d(-3px, 1px, 0); }
+
+  0%,
+  88%,
+  100% {
+    transform: none;
+  }
+
+  90% {
+    transform: translate3d(-6px, 0, 0);
+  }
+
+  92% {
+    transform: translate3d(5px, -2px, 0);
+  }
+
+  94% {
+    transform: translate3d(-3px, 1px, 0);
+  }
 }
 
 @keyframes loader-tear {
-  from { transform: translate3d(-120%, 0, 0) skewX(-14deg); }
-  to { transform: translate3d(0, 0, 0) skewX(-14deg); }
+  from {
+    transform: translate3d(-120%, 0, 0) skewX(-14deg);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0) skewX(-14deg);
+  }
 }
 
 @keyframes loader-dialog-in {
-  0% { opacity: 0; transform: translate3d(0, 26px, 0) scale(0.9) rotate(var(--dialog-rotate)); }
-  55% { opacity: 1; transform: translate3d(0, -4px, 0) scale(1.03) rotate(var(--dialog-rotate)); }
-  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) rotate(var(--dialog-rotate)); }
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0) scale(0.9) rotate(var(--dialog-rotate));
+  }
+
+  55% {
+    opacity: 1;
+    transform: translate3d(0, -4px, 0) scale(1.03) rotate(var(--dialog-rotate));
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1) rotate(var(--dialog-rotate));
+  }
 }
 
 @keyframes loader-rise {
-  from { opacity: 0; transform: translate3d(0, 90px, 0) rotate(0deg); }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+    transform: translate3d(0, 90px, 0) rotate(0deg);
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes loader-head-flight {
@@ -552,19 +616,26 @@
     opacity: 0;
     transform: translate3d(86vw, 30vh, 0) rotate(1080deg) scale(0.48);
   }
-  12% { opacity: 1; }
+
+  12% {
+    opacity: 1;
+  }
+
   58% {
     opacity: 1;
     transform: translate3d(-34%, -43%, 0) rotate(360deg) scale(0.9);
   }
+
   76% {
     opacity: 1;
     transform: translate3d(-52%, -50%, 0) rotate(28deg) scale(1.02);
   }
+
   88% {
     opacity: 1;
     transform: translate3d(-49%, -48%, 0) rotate(-10deg) scale(0.98);
   }
+
   100% {
     opacity: 0;
     transform: translate3d(-50%, -58%, 0) rotate(0deg) scale(1.08);
@@ -572,16 +643,32 @@
 }
 
 @keyframes loader-ready-kick {
-  0%, 100% { transform: none; filter: none; }
-  40% { transform: translateX(-7px); filter: contrast(1.18); }
-  70% { transform: translateX(5px); }
+
+  0%,
+  100% {
+    transform: none;
+    filter: none;
+  }
+
+  40% {
+    transform: translateX(-7px);
+    filter: contrast(1.18);
+  }
+
+  70% {
+    transform: translateX(5px);
+  }
 }
 
 @keyframes loader-exit {
-  to { opacity: 0; transform: scale(1.025); filter: contrast(1.18); }
+  to {
+    opacity: 0;
+    transform: scale(1.025);
+    filter: contrast(1.18);
+  }
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    08   Responsive / Reduced Motion
    ========================================================================== */
 
@@ -634,12 +721,12 @@
     animation-delay: 80ms;
   }
 
-  .loader__ready > p {
+  .loader__ready>p {
     animation-duration: 340ms;
     animation-delay: 130ms;
   }
 
-  .loader__ready > button {
+  .loader__ready>button {
     animation-duration: 340ms;
     animation-delay: 180ms;
   }
@@ -672,12 +759,32 @@
     right: auto !important;
   }
 
-  .loader-dialog:nth-child(1) { top: 18vh !important; }
-  .loader-dialog:nth-child(2) { top: 26vh !important; left: 11vw !important; }
-  .loader-dialog:nth-child(3) { top: 34vh !important; }
-  .loader-dialog:nth-child(4) { top: 42vh !important; left: 11vw !important; }
-  .loader-dialog:nth-child(5) { top: 50vh !important; }
-  .loader-dialog:nth-child(6) { top: 58vh !important; left: 11vw !important; }
+  .loader-dialog:nth-child(1) {
+    top: 18vh !important;
+  }
+
+  .loader-dialog:nth-child(2) {
+    top: 26vh !important;
+    left: 11vw !important;
+  }
+
+  .loader-dialog:nth-child(3) {
+    top: 34vh !important;
+  }
+
+  .loader-dialog:nth-child(4) {
+    top: 42vh !important;
+    left: 11vw !important;
+  }
+
+  .loader-dialog:nth-child(5) {
+    top: 50vh !important;
+  }
+
+  .loader-dialog:nth-child(6) {
+    top: 58vh !important;
+    left: 11vw !important;
+  }
 
   .loader__ready {
     gap: 22px;
@@ -689,7 +796,7 @@
     padding: 12px 18px;
   }
 
-  .loader__ready > button {
+  .loader__ready>button {
     width: min(100%, 320px);
     padding: 16px 18px;
     font-size: 12px;
@@ -699,13 +806,14 @@
     gap: 2px;
   }
 
-  .loader__progress > strong {
+  .loader__progress>strong {
     width: 42px;
     font-size: 11px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .loader__scanner,
   .loader__boot-logo,
   .loader__boot p span {
@@ -713,7 +821,7 @@
   }
 }
 
-/* ========================================================================== 
+/* ==========================================================================
    09   Arcade-Tech
    ========================================================================== */
 

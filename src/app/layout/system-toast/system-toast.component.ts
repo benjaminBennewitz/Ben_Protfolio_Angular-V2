@@ -16,6 +16,5 @@ import { SystemToastService } from '../../core/services/system-toast.service';
   styleUrl: './system-toast.component.scss',
 })
 export class SystemToastComponent {
-  /** Toast-Service mit aktivem Hinweis und Dismiss-Funktion. */
-  readonly toastService = inject(SystemToastService);
+  readonly toastService = inject(SystemToastService); // Toast-Service mit aktivem Hinweis und Dismiss-Funktion.
 }

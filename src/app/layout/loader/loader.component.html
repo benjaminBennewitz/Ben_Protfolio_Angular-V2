@@ -42,8 +42,9 @@
 
   <div class="loader__dialogs">
     @for (dialog of openDialogs(); track dialog.percent) {
-    <article class="loader-dialog" [style.left]="dialog.left" [style.top]="dialog.top" [style.--dialog-rotate]="dialog.rotate"
-      [style.z-index]="dialog.z" [attr.aria-label]="dialog.percent + '%: ' + dialog.message">
+    <article class="loader-dialog" [style.left]="dialog.left" [style.top]="dialog.top"
+      [style.--dialog-rotate]="dialog.rotate" [style.z-index]="dialog.z"
+      [attr.aria-label]="dialog.percent + '%: ' + dialog.message">
       <header>
         <span>{{ dialog.title }}</span>
         <span class="loader-dialog__controls" aria-hidden="true"><i></i><i></i><i></i></span>

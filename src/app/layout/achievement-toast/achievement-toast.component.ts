@@ -11,10 +11,8 @@ import { LanguageService } from '../../core/services/language.service';
 
 /** Kurze Übersetzungen für die Trophy-Notification. */
 interface AchievementToastTexts {
-  /** Label oberhalb der Trophy. */
-  readonly unlocked: string;
-  /** Aria-Label für den Schließen-Button. */
-  readonly closeLabel: string;
+  readonly unlocked: string;   // Label oberhalb der Trophy.
+  readonly closeLabel: string; // Aria-Label für den Schließen-Button.
 }
 
 /** Rendert freigeschaltete Achievements als kurze globale Overlay-Benachrichtigung. */
@@ -25,18 +23,15 @@ interface AchievementToastTexts {
   styleUrl: './achievement-toast.component.scss',
 })
 export class AchievementToastComponent {
-  /** Achievement-Service mit aktiver Notification. */
-  readonly achievementService = inject(AchievementService);
-
-  /** Sprachservice für die kleine Systemmeldung. */
-  private readonly languageService = inject(LanguageService);
-
-  /** Übersetzte UI-Texte der Notification. */
-  readonly texts = computed<AchievementToastTexts>(() => TOAST_TEXTS[this.languageService.language()]);
+  readonly achievementService = inject(AchievementService);   // Achievement-Service mit aktiver Notification.
+  private readonly languageService = inject(LanguageService); // Sprachservice für die kleine Systemmeldung.
+  readonly texts = computed<AchievementToastTexts>(           // Übersetzte UI-Texte der Notification.
+    /** Übersetzte UI-Texte der Notification. */
+    () => TOAST_TEXTS[this.languageService.language()]
+  );
 }
 
-/** Übersetzungen der globalen Trophy-Notification. */
-const TOAST_TEXTS: Record<'de' | 'en', AchievementToastTexts> = {
+const TOAST_TEXTS: Record<'de' | 'en', AchievementToastTexts> = { // Übersetzungen der globalen Trophy-Notification.
   de: {
     unlocked: 'trophäe freigeschaltet',
     closeLabel: 'Achievement-Notification schließen',

@@ -16,23 +16,16 @@ import { AccessibilityPreferenceService } from '../../core/services/accessibilit
   styleUrl: './custom-cursor.component.scss',
 })
 export class CustomCursorComponent {
-  /** Accessibility-Service für ruhige oder bewegungsreduzierte Modi. */
-  private readonly accessibility = inject(AccessibilityPreferenceService);
+  private readonly accessibility = inject(AccessibilityPreferenceService); // Accessibility-Service für ruhige oder bewegungsreduzierte Modi.
+  readonly disabled = computed<boolean>(                                   // Gibt true zurück, wenn der Custom Cursor deaktiviert werden soll.
+    /** Gibt true zurück, wenn der Custom Cursor deaktiviert werden soll. */
+    () => this.accessibility.usesSimpleMode() || this.accessibility.reducesMotion()
+  );
 
-  /** Gibt true zurück, wenn der Custom Cursor deaktiviert werden soll. */
-  readonly disabled = computed<boolean>(() => this.accessibility.usesSimpleMode() || this.accessibility.reducesMotion());
-
-  /** Aktuelle X-Position des Cursors. */
-  readonly x = signal<number>(-120);
-
-  /** Aktuelle Y-Position des Cursors. */
-  readonly y = signal<number>(-120);
-
-  /** Markiert Hover über interaktiven Elementen. */
-  readonly interactive = signal<boolean>(false);
-
-  /** Markiert einen aktiven Klick. */
-  readonly pressed = signal<boolean>(false);
+  readonly x = signal<number>(-120);                                       // Aktuelle X-Position des Cursors.
+  readonly y = signal<number>(-120);                                       // Aktuelle Y-Position des Cursors.
+  readonly interactive = signal<boolean>(false);                           // Markiert Hover über interaktiven Elementen.
+  readonly pressed = signal<boolean>(false);                               // Markiert einen aktiven Klick.
 
   /** Aktualisiert Cursorposition und Hover-Zustand. */
   @HostListener('document:mousemove', ['$event'])
@@ -41,8 +34,8 @@ export class CustomCursorComponent {
       return;
     }
 
-    const target = event.target instanceof Element ? event.target : null;
-    const isInteractive = Boolean(target?.closest('a, button, input, textarea, select, summary, [data-cursor]'));
+    const target = event.target instanceof Element ? event.target : null;                                         // Element unter dem Mauszeiger oder null.
+    const isInteractive = Boolean(target?.closest('a, button, input, textarea, select, summary, [data-cursor]')); // Zeiger befindet sich über einem bedienbaren Element.
 
     this.x.set(event.clientX);
     this.y.set(event.clientY);

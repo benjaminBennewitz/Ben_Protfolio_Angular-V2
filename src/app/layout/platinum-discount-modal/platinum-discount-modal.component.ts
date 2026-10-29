@@ -12,26 +12,16 @@ import { LanguageService } from '../../core/services/language.service';
 
 /** Übersetzbare Texte des Platin-Abschluss-Popups. */
 interface PlatinumCompletionTexts {
-  /** Kleine technische Beschriftung über dem Titel. */
-  readonly eyebrow: string;
-  /** Haupttitel des Dialogs. */
-  readonly title: string;
-  /** Erste erklärende Zeile. */
-  readonly intro: string;
-  /** Zweite spielerische Zeile. */
-  readonly blink: string;
-  /** Zusammenfassung des erreichten Portfolio-Fortschritts. */
-  readonly reward: string;
-  /** Label für den technischen Abschlussstatus. */
-  readonly statusLabel: string;
-  /** Kompakter technischer Statuswert. */
-  readonly status: string;
-  /** Ergänzender Hinweis zur vollständig erkundeten Experience. */
-  readonly note: string;
-  /** CTA zu den Case Studies. */
-  readonly ctaLabel: string;
-  /** Zugängliche Beschriftung zum Schließen des Dialogs. */
-  readonly closeLabel: string;
+  readonly eyebrow: string;     // Kleine technische Beschriftung über dem Titel.
+  readonly title: string;       // Haupttitel des Dialogs.
+  readonly intro: string;       // Erste erklärende Zeile.
+  readonly blink: string;       // Zweite spielerische Zeile.
+  readonly reward: string;      // Zusammenfassung des erreichten Portfolio-Fortschritts.
+  readonly statusLabel: string; // Label für den technischen Abschlussstatus.
+  readonly status: string;      // Kompakter technischer Statuswert.
+  readonly note: string;        // Ergänzender Hinweis zur vollständig erkundeten Experience.
+  readonly ctaLabel: string;    // CTA zu den Case Studies.
+  readonly closeLabel: string;  // Zugängliche Beschriftung zum Schließen des Dialogs.
 }
 
 /** Großes Abschluss-Popup für die vollständig erkundete Portfolio-Experience. */
@@ -42,28 +32,18 @@ interface PlatinumCompletionTexts {
   styleUrl: './platinum-discount-modal.component.scss',
 })
 export class PlatinumCompletionModalComponent {
-  /** Dialogelement für initialen Fokus und Fokusfalle. */
-  @ViewChild('modalWindow') private modalWindow?: ElementRef<HTMLElement>;
+  @ViewChild('modalWindow') private modalWindow?: ElementRef<HTMLElement>;                                                           // Dialogelement für initialen Fokus und Fokusfalle.
+  private modalReturnFocus: HTMLElement | null = null;                                                                               // Element, das vor dem Öffnen des Popups fokussiert war.
+  private modalFocusFrameId = 0;                                                                                                     // Geplanter Frame für Fokuswechsel des Popups.
+  readonly achievementService = inject(AchievementService);                                                                          // Achievement-Service mit Sichtbarkeitszustand des Platin-Popups.
+  private readonly languageService = inject(LanguageService);                                                                        // Sprachservice für lokalisierte Popup-Texte.
+  private readonly router = inject(Router);                                                                                          // Router für den Sprung zu den Case Studies.
+  readonly texts = computed<PlatinumCompletionTexts>(                                                                                // Aktive Popup-Texte passend zur Sprache.
+    /** Aktive Popup-Texte passend zur Sprache. */
+    () => PLATINUM_TEXTS[this.languageService.language()]
+  );
 
-  /** Element, das vor dem Öffnen des Popups fokussiert war. */
-  private modalReturnFocus: HTMLElement | null = null;
-
-  /** Geplanter Frame für Fokuswechsel des Popups. */
-  private modalFocusFrameId = 0;
-  /** Achievement-Service mit Sichtbarkeitszustand des Platin-Popups. */
-  readonly achievementService = inject(AchievementService);
-
-  /** Sprachservice für lokalisierte Popup-Texte. */
-  private readonly languageService = inject(LanguageService);
-
-  /** Router für den Sprung zu den Case Studies. */
-  private readonly router = inject(Router);
-
-  /** Aktive Popup-Texte passend zur Sprache. */
-  readonly texts = computed<PlatinumCompletionTexts>(() => PLATINUM_TEXTS[this.languageService.language()]);
-
-  /** Synchronisiert Tastaturfokus mit dem globalen Sichtbarkeitszustand des Popups. */
-  private readonly modalFocusEffect = effect(() => {
+  private readonly modalFocusEffect = effect(/** Synchronisiert Dialogsichtbarkeit, initialen Fokus und Fokusrückführung. */() => { // Synchronisiert Tastaturfokus mit dem globalen Sichtbarkeitszustand des Popups.
     if (this.achievementService.isPlatinumModalVisible()) {
       this.handleModalOpen();
       return;
@@ -96,7 +76,7 @@ export class PlatinumCompletionModalComponent {
     }
 
     this.cancelModalFocusFrame();
-    this.modalFocusFrameId = window.requestAnimationFrame(() => {
+    this.modalFocusFrameId = window.requestAnimationFrame(/** Fokussiert nach dem Rendern das erste verfügbare Bedienelement. */() => {
       this.modalFocusFrameId = 0;
       this.modalWindow?.nativeElement.querySelector<HTMLElement>('button:not([disabled])')?.focus({ preventScroll: true });
     });
@@ -104,7 +84,8 @@ export class PlatinumCompletionModalComponent {
 
   /** Stellt nach dem Schließen den Fokus auf das zuvor aktive Element zurück. */
   private handleModalClose(): void {
-    const returnFocus = this.modalReturnFocus;
+
+    const returnFocus = this.modalReturnFocus; // Vor dem Öffnen aktives Element für die Fokusrückführung.
 
     if (!returnFocus) {
       return;
@@ -112,7 +93,7 @@ export class PlatinumCompletionModalComponent {
 
     this.modalReturnFocus = null;
     this.cancelModalFocusFrame();
-    this.modalFocusFrameId = window.requestAnimationFrame(() => {
+    this.modalFocusFrameId = window.requestAnimationFrame(/** Stellt nach dem Schließen den verfügbaren Auslöserfokus wieder her. */() => {
       this.modalFocusFrameId = 0;
 
       if (returnFocus.isConnected) {
@@ -123,13 +104,14 @@ export class PlatinumCompletionModalComponent {
 
   /** Begrenzt die Tab-Reihenfolge auf das sichtbare Platin-Popup. */
   private trapModalFocus(event: KeyboardEvent): void {
-    const panel = this.modalWindow?.nativeElement;
+
+    const panel = this.modalWindow?.nativeElement; // Gerendertes Dialogfenster für die Fokussteuerung.
 
     if (!panel) {
       return;
     }
 
-    const focusableElements = Array.from(panel.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')) as HTMLElement[];
+    const focusableElements = Array.from(panel.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')) as HTMLElement[]; // Innerhalb des Dialogs erreichbare Bedienelemente.
 
     if (!focusableElements.length) {
       event.preventDefault();
@@ -137,9 +119,9 @@ export class PlatinumCompletionModalComponent {
       return;
     }
 
-    const first = focusableElements[0];
-    const last = focusableElements[focusableElements.length - 1];
-    const activeElement = document.activeElement;
+    const first = focusableElements[0];                           // Erstes fokussierbares Element im Dialog.
+    const last = focusableElements[focusableElements.length - 1]; // Letztes fokussierbares Element im Dialog.
+    const activeElement = document.activeElement;                 // Aktuell fokussiertes Element des Dokuments.
 
     if (event.shiftKey && (activeElement === first || !panel.contains(activeElement))) {
       event.preventDefault();
@@ -170,8 +152,7 @@ export class PlatinumCompletionModalComponent {
   }
 }
 
-/** Übersetzungen des Platin-Abschluss-Popups. */
-const PLATINUM_TEXTS: Record<'de' | 'en', PlatinumCompletionTexts> = {
+const PLATINUM_TEXTS: Record<'de' | 'en', PlatinumCompletionTexts> = { // Übersetzungen des Platin-Abschluss-Popups.
   de: {
     eyebrow: 'platinum_complete.exe',
     title: 'Platin',

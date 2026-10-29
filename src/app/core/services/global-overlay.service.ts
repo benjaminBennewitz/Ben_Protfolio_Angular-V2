@@ -11,17 +11,10 @@ import { Subject } from 'rxjs';
 /** Verwaltet reine Öffnen-Events für globale UI-Overlays. */
 @Injectable({ providedIn: 'root' })
 export class GlobalOverlayService {
-  /** Interner Event-Stream für das Accessibility-Panel. */
-  private readonly accessibilityPanelRequests = new Subject<void>();
-
-  /** Interner Event-Stream für das Cookie-/Privacy-Panel. */
-  private readonly privacyPanelRequests = new Subject<void>();
-
-  /** Öffnen-Events für das Accessibility-Panel. */
-  readonly accessibilityPanelRequested$ = this.accessibilityPanelRequests.asObservable();
-
-  /** Öffnen-Events für das Cookie-/Privacy-Panel. */
-  readonly privacyPanelRequested$ = this.privacyPanelRequests.asObservable();
+  private readonly accessibilityPanelRequests = new Subject<void>();                      // Interner Event-Stream für das Accessibility-Panel.
+  private readonly privacyPanelRequests = new Subject<void>();                            // Interner Event-Stream für das Cookie-/Privacy-Panel.
+  readonly accessibilityPanelRequested$ = this.accessibilityPanelRequests.asObservable(); // Öffnen-Events für das Accessibility-Panel.
+  readonly privacyPanelRequested$ = this.privacyPanelRequests.asObservable();             // Öffnen-Events für das Cookie-/Privacy-Panel.
 
   /** Fordert das Öffnen des Accessibility-Panels an. */
   requestAccessibilityPanel(): void {

@@ -15,44 +15,25 @@ import { AchievementService } from '../../core/services/achievement.service';
 
 /** Übersetzte Beschriftungen des Accessibility-Panels. */
 interface AccessibilityPanelTexts {
-  /** Aria-Label des Öffnen-Buttons. */
-  readonly toggleLabel: string;
-  /** Label des globalen Accessibility-Bereichs. */
-  readonly landmarkLabel: string;
-  /** Fenstertitel. */
-  readonly title: string;
-  /** Zugängliche Beschriftung zum Schließen des Panels. */
-  readonly closeLabel: string;
-  /** Kurzbeschreibung. */
-  readonly intro: string;
-  /** Titel des Hover-Status am globalen Button. */
-  readonly statusTitle: string;
-  /** Schnellaktion für neuro-sensitiven Modus. */
-  readonly calmMode: string;
-  /** Reset-Button. */
-  readonly reset: string;
-  /** Titel für Motion-Auswahl. */
-  readonly motionTitle: string;
-  /** Titel für Darstellungs-Auswahl. */
-  readonly comfortTitle: string;
-  /** Titel für Kontrast-Auswahl. */
-  readonly contrastTitle: string;
-  /** Titel für Farbseh-Auswahl. */
-  readonly colorTitle: string;
-  /** Hinweis zur lokalen Speicherung. */
-  readonly storageHint: string;
-  /** Toast-Titel nach Änderungen. */
-  readonly toastTitle: string;
-  /** Toast-Text nach Änderungen. */
-  readonly toastText: string;
-  /** Labels der Motion-Modi. */
-  readonly motion: Record<MotionMode, string>;
-  /** Labels der Comfort-Modi. */
-  readonly comfort: Record<ComfortMode, string>;
-  /** Labels der Kontrast-Modi. */
-  readonly contrast: Record<ContrastMode, string>;
-  /** Labels der Farbseh-Modi. */
-  readonly color: Record<ColorVisionMode, string>;
+  readonly toggleLabel: string;                    // Aria-Label des Öffnen-Buttons.
+  readonly landmarkLabel: string;                  // Label des globalen Accessibility-Bereichs.
+  readonly title: string;                          // Fenstertitel.
+  readonly closeLabel: string;                     // Zugängliche Beschriftung zum Schließen des Panels.
+  readonly intro: string;                          // Kurzbeschreibung.
+  readonly statusTitle: string;                    // Titel des Hover-Status am globalen Button.
+  readonly calmMode: string;                       // Schnellaktion für neuro-sensitiven Modus.
+  readonly reset: string;                          // Reset-Button.
+  readonly motionTitle: string;                    // Titel für Motion-Auswahl.
+  readonly comfortTitle: string;                   // Titel für Darstellungs-Auswahl.
+  readonly contrastTitle: string;                  // Titel für Kontrast-Auswahl.
+  readonly colorTitle: string;                     // Titel für Farbseh-Auswahl.
+  readonly storageHint: string;                    // Hinweis zur lokalen Speicherung.
+  readonly toastTitle: string;                     // Toast-Titel nach Änderungen.
+  readonly toastText: string;                      // Toast-Text nach Änderungen.
+  readonly motion: Record<MotionMode, string>;     // Labels der Motion-Modi.
+  readonly comfort: Record<ComfortMode, string>;   // Labels der Comfort-Modi.
+  readonly contrast: Record<ContrastMode, string>; // Labels der Kontrast-Modi.
+  readonly color: Record<ColorVisionMode, string>; // Labels der Farbseh-Modi.
 }
 
 /** Kompaktes Overlay für globale Accessibility-Einstellungen. */
@@ -63,68 +44,46 @@ interface AccessibilityPanelTexts {
   styleUrl: './accessibility-panel.component.scss',
 })
 export class AccessibilityPanelComponent {
-  /** Dialogelement für initialen Fokus und Fokusfalle. */
-  @ViewChild('panelWindow') private panelWindow?: ElementRef<HTMLElement>;
+  @ViewChild('panelWindow') private panelWindow?: ElementRef<HTMLElement>;                                                    // Dialogelement für initialen Fokus und Fokusfalle.
+  private panelReturnFocus: HTMLElement | null = null;                                                                        // Element, das das Panel geöffnet hat.
+  private panelFocusFrameId = 0;                                                                                              // Geplanter Frame für Fokuswechsel beim Öffnen und Schließen.
+  readonly accessibility = inject(AccessibilityPreferenceService);                                                            // Accessibility-Service mit persistierten Modi.
+  private readonly languageService = inject(LanguageService);                                                                 // Sprachservice für Panel-Labels.
+  private readonly toastService = inject(SystemToastService);                                                                 // Toast-Service für kurze Accessibility-Hinweise.
+  private readonly destroyRef = inject(DestroyRef);                                                                           // Lifecycle-Referenz für externe Öffnen-Events.
+  private readonly overlayService = inject(GlobalOverlayService);                                                             // Overlay-Service für globale Öffnen-Events.
+  private readonly achievementService = inject(AchievementService);                                                           // Achievement-Service für Access-Mode-Trophäen.
+  readonly open = signal<boolean>(false);                                                                                     // Sichtbarkeit des Panels.
+  readonly motionModes: readonly MotionMode[] = ['full', 'reduced', 'off'];                                                   // Verfügbare Motion-Optionen.
+  readonly comfortModes: readonly ComfortMode[] = ['expressive', 'simple'];                                                   // Verfügbare Comfort-Optionen.
+  readonly contrastModes: readonly ContrastMode[] = ['normal', 'high'];                                                       // Verfügbare Kontrast-Optionen.
+  readonly colorModes: readonly ColorVisionMode[] = ['default', 'deuteranopia', 'protanopia', 'tritanopia', 'achromatopsia']; // Verfügbare Farbseh-Optionen.
+  readonly texts = computed<AccessibilityPanelTexts>(                                                                         // Übersetzte Panel-Texte der aktiven Sprache.
+    /** Übersetzte Panel-Texte der aktiven Sprache. */
+    () => PANEL_TEXTS[this.languageService.language()]
+  );
 
-  /** Element, das das Panel geöffnet hat. */
-  private panelReturnFocus: HTMLElement | null = null;
+  readonly statusText = computed<string>(                                                                                     // Kompakter Status der aktuellen Barrierefreiheits-Einstellungen.
+    /** Kompakter Status der aktuellen Barrierefreiheits-Einstellungen. */
+    () => {
 
-  /** Geplanter Frame für Fokuswechsel beim Öffnen und Schließen. */
-  private panelFocusFrameId = 0;
-  /** Accessibility-Service mit persistierten Modi. */
-  readonly accessibility = inject(AccessibilityPreferenceService);
+      const texts = this.texts();                           // Übersetzte Texte der aktuellen Oberfläche.
+      const preferences = this.accessibility.preferences(); // Aktuelle Einstellungen der Barrierefreiheit.
 
-  /** Sprachservice für Panel-Labels. */
-  private readonly languageService = inject(LanguageService);
-
-  /** Toast-Service für kurze Accessibility-Hinweise. */
-  private readonly toastService = inject(SystemToastService);
-
-  /** Lifecycle-Referenz für externe Öffnen-Events. */
-  private readonly destroyRef = inject(DestroyRef);
-
-  /** Overlay-Service für globale Öffnen-Events. */
-  private readonly overlayService = inject(GlobalOverlayService);
-
-  /** Achievement-Service für Access-Mode-Trophäen. */
-  private readonly achievementService = inject(AchievementService);
-
-  /** Sichtbarkeit des Panels. */
-  readonly open = signal<boolean>(false);
-
-  /** Verfügbare Motion-Optionen. */
-  readonly motionModes: readonly MotionMode[] = ['full', 'reduced', 'off'];
-
-  /** Verfügbare Comfort-Optionen. */
-  readonly comfortModes: readonly ComfortMode[] = ['expressive', 'simple'];
-
-  /** Verfügbare Kontrast-Optionen. */
-  readonly contrastModes: readonly ContrastMode[] = ['normal', 'high'];
-
-  /** Verfügbare Farbseh-Optionen. */
-  readonly colorModes: readonly ColorVisionMode[] = ['default', 'deuteranopia', 'protanopia', 'tritanopia', 'achromatopsia'];
-
-  /** Übersetzte Panel-Texte der aktiven Sprache. */
-  readonly texts = computed<AccessibilityPanelTexts>(() => PANEL_TEXTS[this.languageService.language()]);
-
-  /** Kompakter Status der aktuellen Barrierefreiheits-Einstellungen. */
-  readonly statusText = computed<string>(() => {
-    const texts = this.texts();
-    const preferences = this.accessibility.preferences();
-
-    return [
-      texts.motion[preferences.motion],
-      texts.comfort[preferences.comfort],
-      texts.contrast[preferences.contrast],
-      texts.color[preferences.colorVision],
-    ].join(' · ');
-  });
+      return [
+        texts.motion[preferences.motion],
+        texts.comfort[preferences.comfort],
+        texts.contrast[preferences.contrast],
+        texts.color[preferences.colorVision],
+      ].join(' · ');
+    }
+  );
 
   /** Verbindet externe Öffnen-Events mit dem lokalen Panel-Zustand. */
   constructor() {
     this.overlayService.accessibilityPanelRequested$
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.openPanel());
+      .subscribe(/** Öffnet das Accessibility-Panel nach dem globalen Auslöser. */() => this.openPanel());
   }
 
   /** Öffnet oder schließt das Panel. */
@@ -143,7 +102,8 @@ export class AccessibilityPanelComponent {
       return;
     }
 
-    const returnFocus = this.panelReturnFocus;
+    const returnFocus = this.panelReturnFocus; // Vor dem Öffnen aktives Element für die Fokusrückführung.
+
     this.open.set(false);
     this.panelReturnFocus = null;
     this.schedulePanelFocusReturn(returnFocus);
@@ -216,7 +176,7 @@ export class AccessibilityPanelComponent {
     this.panelReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     this.open.set(true);
     this.cancelPanelFocusFrame();
-    this.panelFocusFrameId = window.requestAnimationFrame(() => {
+    this.panelFocusFrameId = window.requestAnimationFrame(/** Fokussiert nach dem Rendern das erste verfügbare Bedienelement. */() => {
       this.panelFocusFrameId = 0;
       this.panelWindow?.nativeElement.querySelector<HTMLElement>('button:not([disabled])')?.focus({ preventScroll: true });
     });
@@ -224,13 +184,14 @@ export class AccessibilityPanelComponent {
 
   /** Begrenzt die Tab-Reihenfolge auf die Bedienelemente des geöffneten Panels. */
   private trapPanelFocus(event: KeyboardEvent): void {
-    const panel = this.panelWindow?.nativeElement;
+
+    const panel = this.panelWindow?.nativeElement; // Gerendertes Dialogfenster für die Fokussteuerung.
 
     if (!panel) {
       return;
     }
 
-    const focusableElements = Array.from(panel.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')) as HTMLElement[];
+    const focusableElements = Array.from(panel.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')) as HTMLElement[]; // Innerhalb des Dialogs erreichbare Bedienelemente.
 
     if (!focusableElements.length) {
       event.preventDefault();
@@ -238,9 +199,9 @@ export class AccessibilityPanelComponent {
       return;
     }
 
-    const first = focusableElements[0];
-    const last = focusableElements[focusableElements.length - 1];
-    const activeElement = document.activeElement;
+    const first = focusableElements[0];                           // Erstes fokussierbares Element im Dialog.
+    const last = focusableElements[focusableElements.length - 1]; // Letztes fokussierbares Element im Dialog.
+    const activeElement = document.activeElement;                 // Aktuell fokussiertes Element des Dokuments.
 
     if (event.shiftKey && (activeElement === first || !panel.contains(activeElement))) {
       event.preventDefault();
@@ -257,10 +218,12 @@ export class AccessibilityPanelComponent {
   /** Stellt nach dem Schließen den Fokus auf Auslöser oder globalen Trigger zurück. */
   private schedulePanelFocusReturn(target: HTMLElement | null): void {
     this.cancelPanelFocusFrame();
-    this.panelFocusFrameId = window.requestAnimationFrame(() => {
+    this.panelFocusFrameId = window.requestAnimationFrame(/** Fokussiert nach dem Rendern das erste verfügbare Bedienelement. */() => {
       this.panelFocusFrameId = 0;
-      const fallback = document.querySelector<HTMLElement>('.access-panel__toggle');
-      const focusTarget = target?.isConnected ? target : fallback;
+
+      const fallback = document.querySelector<HTMLElement>('.access-panel__toggle'); // Ersatz-Auslöser, falls der ursprüngliche Fokus fehlt.
+      const focusTarget = target?.isConnected ? target : fallback;                   // Verfügbares Ziel für die Fokusrückführung.
+
       focusTarget?.focus({ preventScroll: true });
     });
   }
@@ -286,8 +249,7 @@ export class AccessibilityPanelComponent {
   }
 }
 
-/** Übersetzungen des Accessibility-Panels. */
-const PANEL_TEXTS: Record<'de' | 'en', AccessibilityPanelTexts> = {
+const PANEL_TEXTS: Record<'de' | 'en', AccessibilityPanelTexts> = { // Übersetzungen des Accessibility-Panels.
   de: {
     toggleLabel: 'Accessibility-Modi öffnen',
     landmarkLabel: 'Accessibility-Einstellungen',

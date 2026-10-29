@@ -9,7 +9,9 @@ import { Component, ElementRef, HostListener, NgZone, OnDestroy, ViewChild, comp
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PORTFOLIO_PROJECTS } from '../../core/data/portfolio-projects';
-import { ProjectAppModule, ProjectBloodGuideModeKey, ProjectCatalogPage, ProjectCatalogSpread, ProjectGalleryItem } from '../../core/models/portfolio.models';
+import type { ProjectAppModule, ProjectGalleryItem } from '../../core/models/projects.models';
+import type { ProjectBloodGuideModeKey } from '../../core/models/blood.models';
+import type { ProjectCatalogPage, ProjectCatalogSpread } from '../../core/models/catalog.models';
 import { RevealOnScrollDirective } from '../../shared/reveal-on-scroll.directive';
 import { SystemDialogComponent } from '../../shared/system-dialog/system-dialog.component';
 import { ProjectTelemetryComponent } from '../../shared/project-telemetry/project-telemetry.component';

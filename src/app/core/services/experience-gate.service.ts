@@ -10,11 +10,8 @@ import { Injectable, signal } from '@angular/core';
 /** Zentraler, einmaliger Freigabezustand nach Loader-Interaktion. */
 @Injectable({ providedIn: 'root' })
 export class ExperienceGateService {
-  /** Interner Freigabezustand. */
-  private readonly readySignal = signal(false);
-
-  /** Readonly-Signal für verzögert geladene Seiteninhalte. */
-  readonly ready = this.readySignal.asReadonly();
+  private readonly readySignal = signal(false);   // Interner Freigabezustand.
+  readonly ready = this.readySignal.asReadonly(); // Readonly-Signal für verzögert geladene Seiteninhalte.
 
   /** Gibt die eigentliche Portfolio-Experience dauerhaft frei. */
   release(): void {

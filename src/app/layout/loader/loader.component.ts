@@ -16,46 +16,45 @@ type LoaderLanguage = 'de' | 'en';
 
 /** Einzelnes DOS-Dialogfenster der Entschlüsselungsphase. */
 interface LoaderDialog {
-  readonly percent: number;
-  readonly title: string;
-  readonly message: string;
-  readonly action: string;
-  readonly left: string;
-  readonly top: string;
-  readonly rotate: string;
-  readonly z: number;
+  readonly percent: number; // Fortschritt der Dialogphase in Prozent.
+  readonly title: string;   // Sichtbarer Dialogtitel.
+  readonly message: string; // Meldung des DOS-Dialogfensters.
+  readonly action: string;  // Beschriftung der Dialogaktion.
+  readonly left: string;    // Horizontale Position auf der Loader-Bühne.
+  readonly top: string;     // Vertikale Position auf der Loader-Bühne.
+  readonly rotate: string;  // Drehwinkel des Dialogfensters.
+  readonly z: number;       // Stapelreihenfolge des Dialogfensters.
 }
 
 /** Diagonaler Farbschnitt der Storm- und Ready-Bühne. */
 interface LoaderSlice {
-  readonly left: string;
-  readonly width: string;
-  readonly fill: string;
-  readonly delay: string;
+  readonly left: string;  // Horizontale Position auf der Loader-Bühne.
+  readonly width: string; // Breite des diagonalen Farbschnitts.
+  readonly fill: string;  // Farbe des diagonalen Farbschnitts.
+  readonly delay: string; // Verzögerung der Einblendanimation.
 }
 
 /** Übersetzte Inhalte der Bootsequenz. */
 interface LoaderTranslation {
-  readonly ariaLabel: string;
-  readonly bootLabel: string;
-  readonly skipLabel: string;
-  readonly typeLine: string;
-  readonly terminalTitle: string;
-  readonly decryptedLabel: string;
-  readonly readyTop: string;
-  readonly readyAccent: string;
-  readonly readyText: string;
-  readonly buttonLabel: string;
-  readonly openLabel: string;
-  readonly launchImageAlt: string;
-  readonly calmEyebrow: string;
-  readonly calmTitle: string;
-  readonly calmText: string;
-  readonly dialogs: readonly LoaderDialog[];
+  readonly ariaLabel: string;                // Zugängliche Beschriftung der Bootsequenz.
+  readonly bootLabel: string;                // Technisches Statuslabel während des Starts.
+  readonly skipLabel: string;                // Beschriftung zum Überspringen der Sequenz.
+  readonly typeLine: string;                 // Zeichenweise eingeblendete Terminalzeile.
+  readonly terminalTitle: string;            // Titelleiste des Loader-Terminals.
+  readonly decryptedLabel: string;           // Statuslabel der abgeschlossenen Entschlüsselung.
+  readonly readyTop: string;                 // Erste Zeile der Freigabeüberschrift.
+  readonly readyAccent: string;              // Hervorgehobene Zeile der Freigabeüberschrift.
+  readonly readyText: string;                // Hinweis auf die ausstehende manuelle Freigabe.
+  readonly buttonLabel: string;              // Sichtbare Beschriftung des Startbuttons.
+  readonly openLabel: string;                // Zugängliche Beschriftung zum Betreten des Portfolios.
+  readonly launchImageAlt: string;           // Alternativtext des einfliegenden Portraits.
+  readonly calmEyebrow: string;              // Kleine Beschriftung der ruhigen Loader-Variante.
+  readonly calmTitle: string;                // Überschrift der ruhigen Loader-Variante.
+  readonly calmText: string;                 // Hinweis zur bewegungsreduzierten Startsequenz.
+  readonly dialogs: readonly LoaderDialog[]; // Geordnete Dialogfenster der Storm-Phase.
 }
 
-/** Runtime-Fallback für Umgebungen ohne verfügbaren SessionStorage. */
-let loaderStartedInCurrentRuntime = false;
+let loaderStartedInCurrentRuntime = false; // Runtime-Fallback für Umgebungen ohne verfügbaren SessionStorage.
 
 /** Animierte B²-Bootsequenz mit ruhiger Accessibility-Alternative. */
 @Component({
@@ -65,128 +64,86 @@ let loaderStartedInCurrentRuntime = false;
   styleUrl: './loader.component.scss',
 })
 export class LoaderComponent implements OnInit, OnDestroy {
-  /** Browser-Dokument für SessionStorage und globale Loader-Klassen. */
-  private readonly document = inject(DOCUMENT);
+  private readonly document = inject(DOCUMENT);                                                                    // Browser-Dokument für SessionStorage und globale Loader-Klassen.
+  private readonly loaderActiveClass = 'bp-loader-active';                                                         // CSS-Klasse, die Hero-Reveals bis zum Ende der Sequenz sperrt.
+  private readonly sessionStorageKey = 'bp.boot-sequence.played.v2';                                               // Session-Key gegen erneutes Abspielen bei interner Navigation.
+  readonly shellRequested = output<void>();                                                                        // Fordert das Nachladen der nicht kritischen App-Shell an.
+  readonly humanConfirmed = output<void>();                                                                        // Meldet die manuelle Bestätigung über den regulären Loader-Button.
+  readonly visible = signal(false);                                                                                // Sichtbarkeit des Loaders.
+  readonly phase = signal<LoaderPhase>('boot');                                                                    // Aktuelle visuelle Phase.
+  readonly typed = signal('');                                                                                     // Aktuell ausgeschriebener Typewriter-Text.
+  readonly openDialogCount = signal(0);                                                                            // Anzahl bereits geöffneter Storm-Dialoge.
+  readonly launching = signal(false);                                                                              // Aktiviert den finalen Kopf-Einflug.
+  readonly leaving = signal(false);                                                                                // Aktiviert die abschließende Loader-Ausblendung.
+  readonly calmProgress = signal(0);                                                                               // Fortschritt des ruhigen Loaders.
+  private readonly loaderLanguage = this.readInitialLanguage();                                                    // Einmalig gelesene Sprache ohne Abhängigkeit vom umfangreichen Portfolio-Content.
+  readonly loaderContent = computed<LoaderTranslation>(                                                            // Sprachabhängiger Loader-Inhalt.
+    /** Sprachabhängiger Loader-Inhalt. */
+    () => LOADER_TRANSLATIONS[this.loaderLanguage]
+  );
 
-  /** CSS-Klasse, die Hero-Reveals bis zum Ende der Sequenz sperrt. */
-  private readonly loaderActiveClass = 'bp-loader-active';
+  readonly useCalmLoader = signal(this.readCalmPreference());                                                      // Schaltet bei gespeicherten oder systemseitigen Motion-Präferenzen auf die ruhige Variante.
+  readonly openDialogs = computed(                                                                                 // Sichtbare Dialoge der aktuellen Storm-Phase.
+    /** Sichtbare Dialoge der aktuellen Storm-Phase. */
+    () => this.loaderContent().dialogs.slice(0, this.openDialogCount())
+  );
 
-  /** Session-Key gegen erneutes Abspielen bei interner Navigation. */
-  private readonly sessionStorageKey = 'bp.boot-sequence.played.v2';
+  readonly percent = computed(                                                                                     // Simulierter Fortschritt der aktuellen Sequenz.
+    /** Simulierter Fortschritt der aktuellen Sequenz. */
+    () => {
+      if (this.useCalmLoader()) {
+        return this.calmProgress();
+      }
 
-  /** Fordert das Nachladen der nicht kritischen App-Shell an. */
-  readonly shellRequested = output<void>();
+      if (this.phase() === 'boot') {
 
-  /** Meldet die manuelle Bestätigung über den regulären Loader-Button. */
-  readonly humanConfirmed = output<void>();
+        const lineLength = Math.max(1, this.loaderContent().typeLine.length); // Mindestens ein Zeichen als Basis des Boot-Fortschritts.
 
-  /** Sichtbarkeit des Loaders. */
-  readonly visible = signal(false);
+        return Math.min(8, Math.round((this.typed().length / lineLength) * 8));
+      }
 
-  /** Aktuelle visuelle Phase. */
-  readonly phase = signal<LoaderPhase>('boot');
+      if (this.phase() === 'storm') {
 
-  /** Aktuell ausgeschriebener Typewriter-Text. */
-  readonly typed = signal('');
+        const dialogIndex = Math.max(0, this.openDialogCount() - 1); // Index des zuletzt geöffneten Storm-Dialogs.
 
-  /** Anzahl bereits geöffneter Storm-Dialoge. */
-  readonly openDialogCount = signal(0);
+        return this.loaderContent().dialogs[dialogIndex]?.percent ?? 4;
+      }
 
-  /** Aktiviert den finalen Kopf-Einflug. */
-  readonly launching = signal(false);
-
-  /** Aktiviert die abschließende Loader-Ausblendung. */
-  readonly leaving = signal(false);
-
-  /** Fortschritt des ruhigen Loaders. */
-  readonly calmProgress = signal(0);
-
-  /** Einmalig gelesene Sprache ohne Abhängigkeit vom umfangreichen Portfolio-Content. */
-  private readonly loaderLanguage = this.readInitialLanguage();
-
-  /** Sprachabhängiger Loader-Inhalt. */
-  readonly loaderContent = computed<LoaderTranslation>(() => LOADER_TRANSLATIONS[this.loaderLanguage]);
-
-  /** Schaltet bei gespeicherten oder systemseitigen Motion-Präferenzen auf die ruhige Variante. */
-  readonly useCalmLoader = signal(this.readCalmPreference());
-
-  /** Sichtbare Dialoge der aktuellen Storm-Phase. */
-  readonly openDialogs = computed(() => this.loaderContent().dialogs.slice(0, this.openDialogCount()));
-
-  /** Simulierter Fortschritt der aktuellen Sequenz. */
-  readonly percent = computed(() => {
-    if (this.useCalmLoader()) {
-      return this.calmProgress();
+      return 100;
     }
+  );
 
-    if (this.phase() === 'boot') {
-      const lineLength = Math.max(1, this.loaderContent().typeLine.length);
-      return Math.min(8, Math.round((this.typed().length / lineLength) * 8));
+  readonly progressCells = computed(                                                                               // Segmentzustand der unteren Fortschrittsleiste.
+    /** Segmentzustand der unteren Fortschrittsleiste. */
+    () => {
+
+      const filled = Math.round((this.percent() / 100) * 26); // Anzahl der gefüllten Fortschrittssegmente.
+
+      return Array.from({ length: 26 }, /** Bestimmt, ob das Fortschrittssegment bereits gefüllt ist. */(_, index) => index < filled);
     }
+  );
 
-    if (this.phase() === 'storm') {
-      const dialogIndex = Math.max(0, this.openDialogCount() - 1);
-      return this.loaderContent().dialogs[dialogIndex]?.percent ?? 4;
-    }
-
-    return 100;
-  });
-
-  /** Segmentzustand der unteren Fortschrittsleiste. */
-  readonly progressCells = computed(() => {
-    const filled = Math.round((this.percent() / 100) * 26);
-    return Array.from({ length: 26 }, (_, index) => index < filled);
-  });
-
-  /** Diagonale Schnitte der Storm-Phase. */
-  readonly stormSlices: readonly LoaderSlice[] = [
+  readonly stormSlices: readonly LoaderSlice[] = [                                                                 // Diagonale Schnitte der Storm-Phase.
     { left: '4%', width: '10%', fill: '#b8ff2e', delay: '0ms' },
     { left: '30%', width: '4%', fill: '#ff2e88', delay: '80ms' },
     { left: '72%', width: '13%', fill: '#9d2eff', delay: '150ms' },
     { left: '92%', width: '5%', fill: '#b8ff2e', delay: '220ms' },
   ];
 
-  /** Erkennt die kompakte mobile Loader-Variante für eine schnellere First-Visit-Experience. */
-  private readonly compactSequence = this.document.defaultView?.matchMedia('(max-width: 760px)').matches ?? false;
-
-  /** Dauer bis zum Wechsel von Typewriter zur Dialogphase. */
-  private readonly bootDurationMs = this.compactSequence ? 420 : 1900;
-
-  /** Abstand zwischen zwei Dialogfenstern. */
-  private readonly dialogIntervalMs = this.compactSequence ? 105 : 620;
-
-  /** Pause nach dem letzten Dialog vor der Freigabe. */
-  private readonly readyDelayMs = this.compactSequence ? 70 : 900;
-
-  /** Mindestdauer der ruhigen Alternative. */
-  private readonly calmSequenceDurationMs = 3200;
-
-  /** Dauer des finalen Kopf-Einflugs. */
-  private readonly launchDurationMs = 1450;
-
-  /** Dauer der Loader-Ausblendung. */
-  private readonly exitDurationMs = 560;
-
-  /** Typewriter-Intervall. */
-  private typeTimer?: number;
-
-  /** Timer für den Wechsel zur Storm-Phase. */
-  private bootTimer?: number;
-
-  /** Intervall für die DOS-Dialoge. */
-  private stormTimer?: number;
-
-  /** Timer für den Wechsel zur Ready-Phase. */
-  private readyTimer?: number;
-
-  /** Timer des Kopf-Einflugs. */
-  private launchTimer?: number;
-
-  /** Timer zum Entfernen des Loaders. */
-  private removeTimer?: number;
-
-  /** Fortschrittsintervall der ruhigen Variante. */
-  private calmProgressTimer?: number;
+  private readonly compactSequence = this.document.defaultView?.matchMedia('(max-width: 760px)').matches ?? false; // Erkennt die kompakte mobile Loader-Variante für eine schnellere First-Visit-Experience.
+  private readonly bootDurationMs = this.compactSequence ? 420 : 1900;                                             // Dauer bis zum Wechsel von Typewriter zur Dialogphase.
+  private readonly dialogIntervalMs = this.compactSequence ? 105 : 620;                                            // Abstand zwischen zwei Dialogfenstern.
+  private readonly readyDelayMs = this.compactSequence ? 70 : 900;                                                 // Pause nach dem letzten Dialog vor der Freigabe.
+  private readonly calmSequenceDurationMs = 3200;                                                                  // Mindestdauer der ruhigen Alternative.
+  private readonly launchDurationMs = 1450;                                                                        // Dauer des finalen Kopf-Einflugs.
+  private readonly exitDurationMs = 560;                                                                           // Dauer der Loader-Ausblendung.
+  private typeTimer?: number;                                                                                      // Typewriter-Intervall.
+  private bootTimer?: number;                                                                                      // Timer für den Wechsel zur Storm-Phase.
+  private stormTimer?: number;                                                                                     // Intervall für die DOS-Dialoge.
+  private readyTimer?: number;                                                                                     // Timer für den Wechsel zur Ready-Phase.
+  private launchTimer?: number;                                                                                    // Timer des Kopf-Einflugs.
+  private removeTimer?: number;                                                                                    // Timer zum Entfernen des Loaders.
+  private calmProgressTimer?: number;                                                                              // Fortschrittsintervall der ruhigen Variante.
 
   /** Startet die passende Loader-Variante genau einmal pro Browser-Tab. */
   ngOnInit(): void {
@@ -215,13 +172,13 @@ export class LoaderComponent implements OnInit, OnDestroy {
     this.typed.set('');
     this.openDialogCount.set(0);
 
-    const line = this.loaderContent().typeLine;
-    const typeStepMs = this.compactSequence
+    const line = this.loaderContent().typeLine; // Vollständige Terminalzeile für den Typewriter.
+    const typeStepMs = this.compactSequence     // Zeit zwischen zwei Typewriter-Zeichen in Millisekunden.
       ? Math.max(16, Math.floor((this.bootDurationMs - 80) / Math.max(1, line.length)))
       : 55;
-    let index = 0;
+    let index = 0;                              // Anzahl bereits eingeblendeter Zeichen.
 
-    this.typeTimer = window.setInterval(() => {
+    this.typeTimer = window.setInterval(/** Blendet das nächste Terminalzeichen ein und beendet den vollständigen Typewriter. */() => {
       index += 1;
       this.typed.set(line.slice(0, index));
 
@@ -231,7 +188,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
       }
     }, typeStepMs);
 
-    this.bootTimer = window.setTimeout(() => this.startStorm(), this.bootDurationMs);
+    this.bootTimer = window.setTimeout(/** Wechselt nach der Boot-Dauer zur Dialogphase. */() => this.startStorm(), this.bootDurationMs);
   }
 
   /** Öffnet die DOS-Fenster nacheinander und wechselt danach in den Ready-Zustand. */
@@ -239,8 +196,10 @@ export class LoaderComponent implements OnInit, OnDestroy {
     this.phase.set('storm');
     this.openDialogCount.set(0);
 
-    this.stormTimer = window.setInterval(() => {
-      const nextCount = Math.min(this.loaderContent().dialogs.length, this.openDialogCount() + 1);
+    this.stormTimer = window.setInterval(/** Öffnet das nächste DOS-Fenster und plant anschließend die Freigabephase. */() => {
+
+      const nextCount = Math.min(this.loaderContent().dialogs.length, this.openDialogCount() + 1); // Anzahl der im nächsten Schritt sichtbaren Dialoge.
+
       this.openDialogCount.set(nextCount);
 
       if (nextCount < this.loaderContent().dialogs.length) {
@@ -249,7 +208,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
       window.clearInterval(this.stormTimer);
       this.stormTimer = undefined;
-      this.readyTimer = window.setTimeout(() => this.phase.set('ready'), this.readyDelayMs);
+      this.readyTimer = window.setTimeout(/** Aktiviert nach der Dialogpause die Freigabephase. */() => this.phase.set('ready'), this.readyDelayMs);
     }, this.dialogIntervalMs);
   }
 
@@ -280,20 +239,24 @@ export class LoaderComponent implements OnInit, OnDestroy {
     this.launching.set(true);
     this.shellRequested.emit();
 
-    this.launchTimer = window.setTimeout(() => {
+    this.launchTimer = window.setTimeout(/** Entfernt nach der Ausblenddauer den Loader. */() => {
       this.leaving.set(true);
-      this.removeTimer = window.setTimeout(() => this.finishExit(), this.exitDurationMs);
+      this.removeTimer = window.setTimeout(/** Entfernt nach der Ausblenddauer den Loader. */() => this.finishExit(), this.exitDurationMs);
     }, this.launchDurationMs);
   }
 
   /** Startet die ruhige 3,2-Sekunden-Alternative mit automatischer Freigabe. */
   private startCalmLoader(): void {
-    const startedAt = performance.now();
-    const stepMs = 48;
 
+    const startedAt = performance.now(); // Startzeit der ruhigen Sequenz in Millisekunden.
+    const stepMs = 48;                   // Intervall der Fortschrittsberechnung in Millisekunden.
+
+    /** Entfernt nach der Ausblenddauer den Loader. */
     const updateProgress = (): void => {
-      const elapsed = performance.now() - startedAt;
-      const progress = Math.min(100, Math.round((elapsed / this.calmSequenceDurationMs) * 100));
+
+      const elapsed = performance.now() - startedAt;                                             // Seit dem Start vergangene Zeit in Millisekunden.
+      const progress = Math.min(100, Math.round((elapsed / this.calmSequenceDurationMs) * 100)); // Auf maximal 100 begrenzter Fortschritt in Prozent.
+
       this.calmProgress.set(progress);
 
       if (progress < 100) {
@@ -304,18 +267,18 @@ export class LoaderComponent implements OnInit, OnDestroy {
       this.calmProgressTimer = undefined;
       this.shellRequested.emit();
       this.leaving.set(true);
-      this.removeTimer = window.setTimeout(() => this.finishExit(), 220);
+      this.removeTimer = window.setTimeout(/** Entfernt nach der Ausblenddauer den Loader. */() => this.finishExit(), 220);
     };
 
     updateProgress();
     this.calmProgressTimer = window.setInterval(updateProgress, stepMs);
   }
 
-
   /** Liest die Loader-Sprache direkt aus der bestehenden Persistenz, ohne den Content-Service zu initialisieren. */
   private readInitialLanguage(): LoaderLanguage {
     try {
-      const savedLanguage = this.document.defaultView?.localStorage.getItem('bp-language');
+
+      const savedLanguage = this.document.defaultView?.localStorage.getItem('bp-language'); // Gespeicherte Sprachkennung des Browsers.
 
       if (savedLanguage === 'de' || savedLanguage === 'en') {
         return savedLanguage;
@@ -329,20 +292,22 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
   /** Liest nur die für den Loader relevanten Accessibility-Werte aus der bestehenden Persistenz. */
   private readCalmPreference(): boolean {
-    const prefersReducedMotion = this.document.defaultView?.matchMedia('(prefers-reduced-motion: reduce)').matches ?? false;
+
+    const prefersReducedMotion = this.document.defaultView?.matchMedia('(prefers-reduced-motion: reduce)').matches ?? false; // Systemseitiger Wunsch nach reduzierter Bewegung.
 
     try {
-      const storedValue = this.document.defaultView?.localStorage.getItem('bp-accessibility-preferences-v1');
+
+      const storedValue = this.document.defaultView?.localStorage.getItem('bp-accessibility-preferences-v1'); // Gespeicherte Accessibility-Einstellungen als JSON-Text.
 
       if (!storedValue) {
         return prefersReducedMotion;
       }
 
-      const preferences = JSON.parse(storedValue) as { motion?: unknown; comfort?: unknown };
-      const motion = preferences.motion === 'full' || preferences.motion === 'reduced' || preferences.motion === 'off'
+      const preferences = JSON.parse(storedValue) as { motion?: unknown; comfort?: unknown };                          // Aktuelle Einstellungen der Barrierefreiheit.
+      const motion = preferences.motion === 'full' || preferences.motion === 'reduced' || preferences.motion === 'off' // Validierter Bewegungsmodus mit System-Fallback.
         ? preferences.motion
         : prefersReducedMotion ? 'reduced' : 'full';
-      const comfort = preferences.comfort === 'simple' || preferences.comfort === 'expressive'
+      const comfort = preferences.comfort === 'simple' || preferences.comfort === 'expressive'                         // Validierter Modus für die Oberflächenkomplexität.
         ? preferences.comfort
         : 'expressive';
 
@@ -404,8 +369,7 @@ export class LoaderComponent implements OnInit, OnDestroy {
   }
 }
 
-/** Übersetzungen der B²-Bootsequenz. */
-const LOADER_TRANSLATIONS: Record<'de' | 'en', LoaderTranslation> = {
+const LOADER_TRANSLATIONS: Record<'de' | 'en', LoaderTranslation> = { // Übersetzungen der B²-Bootsequenz.
   de: {
     ariaLabel: 'Portfolio wird initialisiert',
     bootLabel: 'boot_sequence',

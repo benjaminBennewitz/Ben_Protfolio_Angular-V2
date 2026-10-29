@@ -1,4 +1,30 @@
-/* src/app/layout/critical-styles/critical-styles.component.scss */
+/*###############################
+###
+###     critical-styles.component.scss
+###     CRITICAL-STYLES — Portfolio Layout
+###     BASED ON: Angular, TypeScript, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Kritische Design Tokens
+   02   Sichtbarer Tastaturfokus
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Kritische Design Tokens
+   ========================================================================== */
 
 :root {
   --bp-color-bg: #0b0b0d;
@@ -24,6 +50,10 @@ body {
 button {
   font: inherit;
 }
+
+/* ==========================================================================
+   02   Sichtbarer Tastaturfokus
+   ========================================================================== */
 
 :focus-visible {
   outline: 3px solid #b8ff2e;

@@ -6,7 +6,7 @@
  */
 
 import { Component, ElementRef, HostListener, OnDestroy, QueryList, ViewChild, ViewChildren, computed, inject, input, output, signal } from '@angular/core';
-import { AboutMetricFact, AboutMetricsCalculatorUnitKey, AboutMetricsContent } from '../../core/models/portfolio.models';
+import type { AboutMetricFact, AboutMetricsCalculatorUnitKey, AboutMetricsContent } from '../../core/models/home.models';
 import { AchievementService } from '../../core/services/achievement.service';
 
 /** Verfügbare Darstellungsmodi für die About-Kennzahlen. */

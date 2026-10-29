@@ -29,11 +29,15 @@ describe('RouteScrollService', () => {
       return nextFrame;
     });
     vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => { frames.delete(id); });
-    TestBed.configureTestingModule({ providers: [{ provide: Router, useValue: {
-      url: '/', events,
-      parseUrl: (url: string) => ({ path: url.split(/[?#]/)[0], queryParams: {}, fragment: null }),
-      serializeUrl: (tree: { path: string }) => tree.path,
-    } }] });
+    TestBed.configureTestingModule({
+      providers: [{
+        provide: Router, useValue: {
+          url: '/', events,
+          parseUrl: (url: string) => ({ path: url.split(/[?#]/)[0], queryParams: {}, fragment: null }),
+          serializeUrl: (tree: { path: string }) => tree.path,
+        }
+      }]
+    });
     TestBed.inject(RouteScrollService);
   });
 

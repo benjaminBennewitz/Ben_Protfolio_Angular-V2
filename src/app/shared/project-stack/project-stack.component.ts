@@ -7,7 +7,7 @@
 
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, QueryList, ViewChildren, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PortfolioProject, ProjectsContent } from '../../core/models/portfolio.models';
+import type { PortfolioProject, ProjectsContent } from '../../core/models/projects.models';
 import { AccessibilityPreferenceService } from '../../core/services/accessibility-preference.service';
 import { AchievementService } from '../../core/services/achievement.service';
 import { ProjectVisualComponent } from '../project-visual/project-visual.component';

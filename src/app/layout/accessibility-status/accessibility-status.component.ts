@@ -11,18 +11,12 @@ import { LanguageService } from '../../core/services/language.service';
 
 /** Übersetzte Labels für den Accessibility-Status. */
 interface AccessibilityStatusTexts {
-  /** Sichtbarer Titel der Statusanzeige. */
-  readonly title: string;
-  /** Zugängliche Beschriftung der Statusanzeige. */
-  readonly ariaLabel: string;
-  /** Labels der Bewegungsmodi. */
-  readonly motion: Record<MotionMode, string>;
-  /** Labels der Comfort-Modi. */
-  readonly comfort: Record<ComfortMode, string>;
-  /** Labels der Kontrastmodi. */
-  readonly contrast: Record<ContrastMode, string>;
-  /** Labels der Farbseh-Modi. */
-  readonly color: Record<ColorVisionMode, string>;
+  readonly title: string;                          // Sichtbarer Titel der Statusanzeige.
+  readonly ariaLabel: string;                      // Zugängliche Beschriftung der Statusanzeige.
+  readonly motion: Record<MotionMode, string>;     // Labels der Bewegungsmodi.
+  readonly comfort: Record<ComfortMode, string>;   // Labels der Comfort-Modi.
+  readonly contrast: Record<ContrastMode, string>; // Labels der Kontrastmodi.
+  readonly color: Record<ColorVisionMode, string>; // Labels der Farbseh-Modi.
 }
 
 /** Kompakte globale Anzeige für aktive Accessibility-Einstellungen. */
@@ -33,31 +27,31 @@ interface AccessibilityStatusTexts {
   styleUrl: './accessibility-status.component.scss',
 })
 export class AccessibilityStatusComponent {
-  /** Accessibility-Service mit aktuellen Modi. */
-  private readonly accessibility = inject(AccessibilityPreferenceService);
+  private readonly accessibility = inject(AccessibilityPreferenceService); // Accessibility-Service mit aktuellen Modi.
+  private readonly languageService = inject(LanguageService);              // Sprachservice für übersetzte Labels.
+  readonly texts = computed<AccessibilityStatusTexts>(                     // Übersetzte Status-Texte.
+    /** Übersetzte Status-Texte. */
+    () => STATUS_TEXTS[this.languageService.language()]
+  );
 
-  /** Sprachservice für übersetzte Labels. */
-  private readonly languageService = inject(LanguageService);
+  readonly statusText = computed<string>(                                  // Kompakte Zusammenfassung der aktuellen Accessibility-Einstellungen.
+    /** Kompakte Zusammenfassung der aktuellen Accessibility-Einstellungen. */
+    () => {
 
-  /** Übersetzte Status-Texte. */
-  readonly texts = computed<AccessibilityStatusTexts>(() => STATUS_TEXTS[this.languageService.language()]);
+      const texts = this.texts();                           // Übersetzte Texte der aktuellen Oberfläche.
+      const preferences = this.accessibility.preferences(); // Aktuelle Einstellungen der Barrierefreiheit.
 
-  /** Kompakte Zusammenfassung der aktuellen Accessibility-Einstellungen. */
-  readonly statusText = computed<string>(() => {
-    const texts = this.texts();
-    const preferences = this.accessibility.preferences();
-
-    return [
-      texts.motion[preferences.motion],
-      texts.comfort[preferences.comfort],
-      texts.contrast[preferences.contrast],
-      texts.color[preferences.colorVision],
-    ].join(' · ');
-  });
+      return [
+        texts.motion[preferences.motion],
+        texts.comfort[preferences.comfort],
+        texts.contrast[preferences.contrast],
+        texts.color[preferences.colorVision],
+      ].join(' · ');
+    }
+  );
 }
 
-/** Übersetzungen der globalen Accessibility-Statusanzeige. */
-const STATUS_TEXTS: Record<'de' | 'en', AccessibilityStatusTexts> = {
+const STATUS_TEXTS: Record<'de' | 'en', AccessibilityStatusTexts> = { // Übersetzungen der globalen Accessibility-Statusanzeige.
   de: {
     title: 'Barrierefreiheit',
     ariaLabel: 'Aktueller Barrierefreiheitsstatus',

@@ -4,7 +4,7 @@
  */
 
 import { Component, Input } from '@angular/core';
-import { TelemetryChartDataPoint, TelemetryChartVariant } from '../../core/models/portfolio.models';
+import type { TelemetryChartDataPoint, TelemetryChartVariant } from '../../core/models/projects.models';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 
 /** SVG-Punkt für intern berechnete Linienpfade. */

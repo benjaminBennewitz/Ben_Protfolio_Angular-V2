@@ -5,7 +5,7 @@
 
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, computed, inject, signal } from '@angular/core';
 import { PORTFOLIO_PROJECTS } from '../../core/data/portfolio-projects';
-import { TelemetryChartDataPoint } from '../../core/models/portfolio.models';
+import type { TelemetryChartDataPoint } from '../../core/models/projects.models';
 import { LanguageService } from '../../core/services/language.service';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 import { RevealTextComponent } from '../reveal-text/reveal-text.component';

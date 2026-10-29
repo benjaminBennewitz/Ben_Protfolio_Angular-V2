@@ -11,39 +11,33 @@ import { AccessibilityPreferenceService } from './accessibility-preference.servi
 
 /** Element mit seinen einmalig freizugebenden Darstellungen. */
 interface RevealTarget {
-  /** Beobachteter Inhalt und sein Layoutbereich. */
-  readonly element: HTMLElement;
-  readonly section: HTMLElement | null;
-  /** true bedeutet: direkt anzeigen, ohne eine verpasste Animation nachzuholen. */
-  readonly callbacks: Set<(instant: boolean) => void>;
+  readonly element: HTMLElement;                       // Beobachteter Inhalt und sein Layoutbereich.
+  readonly section: HTMLElement | null;                // Zugehöriger Layout- oder Snap-Bereich.
+  readonly callbacks: Set<(instant: boolean) => void>; // true bedeutet: direkt anzeigen, ohne eine verpasste Animation nachzuholen.
 }
 
 /** Verhindert frühe Reveals während des Snap-Vorgangs und unsichtbare übersprungene Inhalte. */
 @Injectable({ providedIn: 'root' })
 export class RevealObserverService {
-  /** Dokument und vorhandene zentrale Motion-Einstellungen. */
-  private readonly document = inject(DOCUMENT);
-  private readonly accessibility = inject(AccessibilityPreferenceService);
-  private readonly zone = inject(NgZone);
-  /** Noch nicht eingeblendete Ziele. */
-  private readonly targets = new Map<HTMLElement, RevealTarget>();
-  /** Gemeinsame Browser-Observer und aktive Messung. */
-  private intersectionObserver: IntersectionObserver | null = null;
-  private resizeObserver: ResizeObserver | null = null;
-  private frameId: number | null = null;
-  /** Ein gemeinsamer Fallback, falls der Browser kein scrollend liefert. */
-  private settledTimer: number | null = null;
-  private scrolling = false;
-  private watching = false;
+  private readonly document = inject(DOCUMENT);                            // Dokument und vorhandene zentrale Motion-Einstellungen.
+  private readonly accessibility = inject(AccessibilityPreferenceService); // Zentrale Einstellungen für reduzierte Bewegung und ruhige Darstellung.
+  private readonly zone = inject(NgZone);                                  // Angular-Zone zum Bündeln der Browser-Beobachtung.
+  private readonly targets = new Map<HTMLElement, RevealTarget>();         // Noch nicht eingeblendete Ziele.
+  private intersectionObserver: IntersectionObserver | null = null;        // Gemeinsame Browser-Observer und aktive Messung.
+  private resizeObserver: ResizeObserver | null = null;                    // Beobachter für Layoutänderungen am Dokument.
+  private frameId: number | null = null;                                   // ID der ausstehenden Layoutmessung.
+  private settledTimer: number | null = null;                              // Ein gemeinsamer Fallback, falls der Browser kein scrollend liefert.
+  private scrolling = false;                                               // Aktiver Scroll- oder Snap-Vorgang.
+  private watching = false;                                                // Kennzeichnet registrierte Observer und Ereignisse.
 
   /** Gibt wartende Inhalte bei einem Motion-Wechsel frei und räumt die Anwendung auf. */
   constructor() {
-    effect(() => {
+    effect(/** Gibt wartende Inhalte bei reduzierter Bewegung sofort frei. */() => {
       if (this.accessibility.reducesMotion() || this.accessibility.usesSimpleMode()) {
-        this.finish([...this.targets.values()].map((target) => ({ target, instant: true })));
+        this.finish([...this.targets.values()].map(/** Markiert den wartenden Inhalt zur sofortigen Freigabe. */(target) => ({ target, instant: true })));
       }
     });
-    inject(DestroyRef).onDestroy(() => {
+    inject(DestroyRef).onDestroy(/** Entfernt registrierte Listener und noch ausstehende Browser-Aufgaben. */() => {
       this.targets.clear();
       this.stopWatching();
     });
@@ -58,21 +52,23 @@ export class RevealObserverService {
   observe(element: HTMLElement, reveal: (instant: boolean) => void): () => void {
     if (!this.document.defaultView || this.accessibility.reducesMotion() || this.accessibility.usesSimpleMode()) {
       reveal(true);
-      return () => undefined;
+      return /** Beendet die bereits sofort erledigte Beobachtung ohne weitere Aktion. */ () => undefined;
     }
-    const target = this.targets.get(element) ?? {
+
+    const target = this.targets.get(element) ?? { // Beobachteter Inhalt mit Layoutkontext und Freigaben.
       element,
       section: element.closest<HTMLElement>('.project-stack__panel, .bp-section, .process-lock, section, bp-project-stack, bp-process-lock, bp-chaos-cta, bp-built-without'),
       callbacks: new Set<(instant: boolean) => void>(),
     };
+
     target.callbacks.add(reveal);
     this.targets.set(element, target);
-    this.zone.runOutsideAngular(() => {
+    this.zone.runOutsideAngular(/** Startet die gemeinsame Reveal-Beobachtung außerhalb der Angular-Zone. */() => {
       this.startWatching();
       this.intersectionObserver?.observe(element);
       this.requestCheck();
     });
-    return () => {
+    return /** Meldet die Freigabe ab und entfernt nicht mehr benötigte Beobachtung. */ () => {
       if (this.targets.get(element) !== target) return;
       target.callbacks.delete(reveal);
       if (target.callbacks.size === 0) this.remove(target);
@@ -82,7 +78,9 @@ export class RevealObserverService {
 
   /** Registriert die gemeinsamen Ereignisse, solange noch Ziele ausstehen. */
   private startWatching(): void {
-    const view = this.document.defaultView;
+
+    const view = this.document.defaultView; // Browserfenster des aktuellen Dokuments.
+
     if (!view || this.watching) return;
     this.watching = true;
     view.addEventListener('scroll', this.onScroll, { passive: true });
@@ -101,7 +99,9 @@ export class RevealObserverService {
 
   /** Wartet wie die ursprüngliche Logik auf Scrollruhe, ohne Timer pro Element anzulegen. */
   private readonly onScroll = (): void => {
-    const view = this.document.defaultView;
+
+    const view = this.document.defaultView; // Browserfenster des aktuellen Dokuments.
+
     if (!view) return;
     this.scrolling = true;
     if (this.settledTimer !== null) view.clearTimeout(this.settledTimer);
@@ -110,7 +110,9 @@ export class RevealObserverService {
 
   /** Prüft nach dem nativen Snap-Ende oder nach der gemeinsamen Ruhephase. */
   private readonly onScrollSettled = (): void => {
-    const view = this.document.defaultView;
+
+    const view = this.document.defaultView; // Browserfenster des aktuellen Dokuments.
+
     if (view && this.settledTimer !== null) view.clearTimeout(this.settledTimer);
     this.settledTimer = null;
     this.scrolling = false;
@@ -119,9 +121,11 @@ export class RevealObserverService {
 
   /** Bündelt Messungen; Observer dürfen einen laufenden Scroll-/Snap-Vorgang nicht freigeben. */
   private readonly requestCheck = (): void => {
-    const view = this.document.defaultView;
+
+    const view = this.document.defaultView; // Browserfenster des aktuellen Dokuments.
+
     if (!view || this.scrolling || this.frameId !== null || this.targets.size === 0) return;
-    this.frameId = view.requestAnimationFrame(() => {
+    this.frameId = view.requestAnimationFrame(/** Prüft nach dem Layout wartende Ziele außerhalb aktiver Scrollvorgänge. */() => {
       this.frameId = null;
       if (!this.scrolling) this.checkTargets();
     });
@@ -130,32 +134,46 @@ export class RevealObserverService {
   /** Liest Layouts gesammelt und trennt reguläre Animationen von übersprungenen Inhalten. */
   private checkTargets(): void {
     if (this.document.documentElement.classList.contains('bp-route-scroll-reset')) return;
-    const height = this.document.defaultView?.innerHeight ?? this.document.documentElement.clientHeight;
-    const sections = new Map<HTMLElement, { rect: DOMRect; snap: boolean }>();
-    const ready: { target: RevealTarget; instant: boolean }[] = [];
-    for (const target of this.targets.values()) {
+
+    const height = this.document.defaultView?.innerHeight ?? this.document.documentElement.clientHeight; // Aktuelle Viewporthöhe in Pixeln.
+    const sections = new Map<HTMLElement, { rect: DOMRect; snap: boolean }>();                           // Pro Messdurchlauf wiederverwendete Section-Geometrien.
+    const ready: { target: RevealTarget; instant: boolean }[] = [];                                      // Nach Abschluss der Messung freizugebende Inhalte.
+
+    for (const target of this.targets.values()) { // Noch nicht freigegebenes Beobachtungsziel.
       if (!target.element.isConnected) { this.remove(target); continue; }
-      const section = target.section;
-      let context = section ? sections.get(section) : undefined;
+
+      const section = target.section;                            // Zugehöriger Layout- oder Snap-Bereich.
+      let context = section ? sections.get(section) : undefined; // Geometrie und Snap-Eigenschaft der zugehörigen Section.
+
       if (section && !context) {
-        const rect = section.getBoundingClientRect();
-        const snap = section.classList.contains('project-stack__panel')
+
+        const rect = section.getBoundingClientRect();                   // Gemessene Grenzen des Elements oder seiner Section.
+        const snap = section.classList.contains('project-stack__panel') // Section wird als bildschirmfüllender Snap-Bereich behandelt.
           || (rect.height >= height * .78 && rect.height <= height * 1.48);
+
         context = { rect, snap };
         sections.set(section, context);
       }
       if (context && (context.rect.top > height || (context.rect.width === 0 && context.rect.height === 0))) continue;
       if (context && context.rect.bottom <= 0) { ready.push({ target, instant: true }); continue; }
-      const rect = section === target.element && context ? context.rect : target.element.getBoundingClientRect();
+
+      const rect = section === target.element && context ? context.rect : target.element.getBoundingClientRect(); // Gemessene Grenzen des Elements oder seiner Section.
+
       if (rect.width === 0 && rect.height === 0) continue;
       if (rect.bottom <= height * .1) { ready.push({ target, instant: true }); continue; }
-      const readable = rect.bottom >= height * .12 && rect.top <= height * .9;
+
+      const readable = rect.bottom >= height * .12 && rect.top <= height * .9; // Inhalt liegt im lesbaren Bereich des Viewports.
+
       if (context?.snap) {
-        const tolerance = this.snapTolerance(section, height);
+
+        const tolerance = this.snapTolerance(section, height); // Zulässiger Abstand zum Snap-Punkt in Pixeln.
+
         if (context.rect.top < -tolerance * 1.28 && readable) ready.push({ target, instant: true });
         else if (context.rect.top <= tolerance && context.rect.top >= -tolerance * 1.28 && readable) ready.push({ target, instant: false });
       } else {
-        const point = rect.top + Math.min(Math.max(rect.height * .28, 58), 180);
+
+        const point = rect.top + Math.min(Math.max(rect.height * .28, 58), 180); // Gewichteter Eintrittspunkt für nicht eingerastete Inhalte.
+
         if (readable && point <= height * .72) ready.push({ target, instant: point < height * -.08 });
       }
     }
@@ -179,10 +197,10 @@ export class RevealObserverService {
    * @param ready Regulär oder ohne Animation freizugebende Inhalte.
    */
   private finish(ready: readonly { target: RevealTarget; instant: boolean }[]): void {
-    for (const { target, instant } of ready) {
+    for (const { target, instant } of ready) { // Freizugebendes Ziel und gewünschter Animationsmodus.
       if (this.targets.get(target.element) !== target) continue;
       this.remove(target);
-      for (const reveal of target.callbacks) reveal(instant);
+      for (const reveal of target.callbacks) reveal(instant); // Registrierte Freigabe des aktuellen Ziels.
     }
     if (this.targets.size === 0) this.stopWatching();
   }
@@ -198,7 +216,9 @@ export class RevealObserverService {
 
   /** Räumt Observer, Listener, Messung und Scrollruhe-Fallback gemeinsam auf. */
   private stopWatching(): void {
-    const view = this.document.defaultView;
+
+    const view = this.document.defaultView; // Browserfenster des aktuellen Dokuments.
+
     view?.removeEventListener('scroll', this.onScroll);
     view?.removeEventListener('scrollend', this.onScrollSettled);
     view?.removeEventListener('resize', this.requestCheck);

@@ -17,14 +17,9 @@ import { SystemToastService } from '../../core/services/system-toast.service';
   styleUrl: './scroll-to-top.component.scss',
 })
 export class ScrollToTopComponent {
-  /** Sprachservice für übersetzte Scroll-Hinweise. */
-  private readonly languageService = inject(LanguageService);
-
-  /** Toast-Service für kurze Systemmeldungen. */
-  private readonly toastService = inject(SystemToastService);
-
-  /** Markiert, ob der Button sichtbar sein soll. */
-  readonly visible = signal<boolean>(false);
+  private readonly languageService = inject(LanguageService); // Sprachservice für übersetzte Scroll-Hinweise.
+  private readonly toastService = inject(SystemToastService); // Toast-Service für kurze Systemmeldungen.
+  readonly visible = signal<boolean>(false);                  // Markiert, ob der Button sichtbar sein soll.
 
   /** Aktualisiert die Sichtbarkeit abhängig von der aktuellen Scrollposition. */
   @HostListener('window:scroll')

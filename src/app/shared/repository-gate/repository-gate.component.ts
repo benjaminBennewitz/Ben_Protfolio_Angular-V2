@@ -7,7 +7,7 @@
 
 import { DOCUMENT } from '@angular/common';
 import { Component, computed, ElementRef, inject, input, signal, ViewChild } from '@angular/core';
-import { RepositoryGateContent } from '../../core/models/portfolio.models';
+import type { RepositoryGateContent } from '../../core/models/pages.models';
 
 /** Maximale Zahl gleichzeitig sichtbarer Fehlversuch-Dialoge. */
 export const MAX_VISIBLE_REPOSITORY_FAILURES = 5;

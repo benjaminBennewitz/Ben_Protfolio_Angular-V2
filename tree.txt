@@ -12,12 +12,23 @@ folio/
 │   ├── app/
 │   │   ├── core/
 │   │   │   ├── data/
+│   │   │   │   ├── achievement-data.ts
 │   │   │   │   ├── portfolio-content.spec.ts
 │   │   │   │   ├── portfolio-content.ts
 │   │   │   │   └── portfolio-projects.ts
 │   │   │   ├── models/
-│   │   │   │   └── portfolio.models.ts
+│   │   │   │   ├── achievement.models.ts
+│   │   │   │   ├── blood.models.ts
+│   │   │   │   ├── board.models.ts
+│   │   │   │   ├── catalog.models.ts
+│   │   │   │   ├── content.models.ts
+│   │   │   │   ├── home.models.ts
+│   │   │   │   ├── pages.models.ts
+│   │   │   │   ├── pricing.models.ts
+│   │   │   │   ├── projects.models.ts
+│   │   │   │   └── shared.models.ts
 │   │   │   └── services/
+│   │   │       ├── accessibility-preference.service.spec.ts
 │   │   │       ├── accessibility-preference.service.ts
 │   │   │       ├── achievement.service.spec.ts
 │   │   │       ├── achievement.service.ts
@@ -25,14 +36,19 @@ folio/
 │   │   │       ├── contact-api.service.ts
 │   │   │       ├── experience-gate.service.ts
 │   │   │       ├── global-overlay.service.ts
+│   │   │       ├── language.service.spec.ts
 │   │   │       ├── language.service.ts
 │   │   │       ├── reveal-observer.service.spec.ts
 │   │   │       ├── reveal-observer.service.ts
 │   │   │       ├── route-scroll.service.spec.ts
 │   │   │       ├── route-scroll.service.ts
+│   │   │       ├── seo.service.spec.ts
 │   │   │       ├── seo.service.ts
+│   │   │       ├── system-toast.service.spec.ts
 │   │   │       ├── system-toast.service.ts
+│   │   │       ├── tab-title.service.spec.ts
 │   │   │       ├── tab-title.service.ts
+│   │   │       ├── theme.service.spec.ts
 │   │   │       └── theme.service.ts
 │   │   ├── layout/
 │   │   │   ├── accessibility-panel/

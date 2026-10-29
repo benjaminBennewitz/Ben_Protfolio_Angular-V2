@@ -5,7 +5,8 @@
  * @description Enthält globale und seitenbezogene Texte ohne die lazy geladenen Case-Study-Daten.
  */
 
-import { PortfolioBaseContent, PortfolioLanguage } from '../models/portfolio.models';
+import type { PortfolioBaseContent } from '../models/content.models';
+import type { PortfolioLanguage } from '../models/shared.models';
 
 /** Übersetzte Portfolio-Inhalte für Deutsch und Englisch. */
 export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseContent> = {
@@ -478,6 +479,9 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
     notFoundTitle: 'Projekt nicht gefunden',
     notFoundText: 'Der gewünschte Eintrag ist nicht vorhanden oder wurde verschoben.',
   },
+  /** --------------------------------------------------------------------------------------------------------------
+   * --------------------- ENGLISCH --------------------------------------------------------------------------------
+   */
   en: {
     meta: {
       title: 'Benjamin Bennewitz | Full Stack Web Development & Graphic Design',

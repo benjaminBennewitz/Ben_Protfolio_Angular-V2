@@ -4,7 +4,7 @@
  */
 
 import { Component, Input } from '@angular/core';
-import { PortfolioProject } from '../../core/models/portfolio.models';
+import type { PortfolioProject } from '../../core/models/projects.models';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 import { TelemetryChartComponent } from '../telemetry-chart/telemetry-chart.component';
 

@@ -6,7 +6,7 @@
  */
 
 import { AfterViewInit, Component, ElementRef, HostListener, Input, OnDestroy, ViewChild, inject, signal } from '@angular/core';
-import { PortfolioProject, ProjectsContent } from '../../core/models/portfolio.models';
+import type { PortfolioProject, ProjectsContent } from '../../core/models/projects.models';
 import { AchievementService } from '../../core/services/achievement.service';
 
 /** Zustand der interaktiven Bombe. */

@@ -7,39 +7,33 @@
 
 import { DOCUMENT } from '@angular/common';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
-import { PortfolioTheme } from '../models/portfolio.models';
+import type { PortfolioTheme } from '../models/shared.models';
 
 /** Verwaltet das visuelle Theme der Anwendung. */
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
-  /** Schlüssel für die Persistenz im LocalStorage. */
-  private readonly storageKey = 'bp-theme';
+  private readonly storageKey = 'bp-theme';                                       // Schlüssel für die Persistenz im LocalStorage.
+  private readonly transitionClass = 'bp-theme-is-switching';                     // Root-Klasse für die kurze Theme-Übergangsanimation.
+  private readonly transitionDurationMs = 720;                                    // Dauer der Theme-Übergangsanimation in Millisekunden.
+  private readonly document = inject(DOCUMENT);                                   // Dokumentreferenz für das data-theme-Attribut.
+  private readonly themeSignal = signal<PortfolioTheme>(this.readInitialTheme()); // Interner Theme-Zustand.
+  private transitionTimer?: number;                                               // Timer zum Aufräumen der Übergangsklasse.
+  readonly currentTheme = computed<PortfolioTheme>(                               // Aktuell ausgewähltes Theme.
+    /** Aktuell ausgewähltes Theme. */
+    () => this.themeSignal()
+  );
 
-  /** Root-Klasse für die kurze Theme-Übergangsanimation. */
-  private readonly transitionClass = 'bp-theme-is-switching';
-
-  /** Dauer der Theme-Übergangsanimation in Millisekunden. */
-  private readonly transitionDurationMs = 720;
-
-  /** Dokumentreferenz für das data-theme-Attribut. */
-  private readonly document = inject(DOCUMENT);
-
-  /** Interner Theme-Zustand. */
-  private readonly themeSignal = signal<PortfolioTheme>(this.readInitialTheme());
-
-  /** Timer zum Aufräumen der Übergangsklasse. */
-  private transitionTimer?: number;
-
-  /** Aktuell ausgewähltes Theme. */
-  readonly currentTheme = computed<PortfolioTheme>(() => this.themeSignal());
-
-  /** Gibt true zurück, wenn der Light Mode aktiv ist. */
-  readonly isLight = computed<boolean>(() => this.currentTheme() === 'light');
+  readonly isLight = computed<boolean>(                                           // Gibt true zurück, wenn der Light Mode aktiv ist.
+    /** Gibt true zurück, wenn der Light Mode aktiv ist. */
+    () => this.currentTheme() === 'light'
+  );
 
   /** Initialisiert die Synchronisierung von Theme und Dokument. */
   constructor() {
-    effect(() => {
-      const theme = this.currentTheme();
+    effect(/** Synchronisiert den aktuellen Signalzustand mit Dokument und Persistenz. */() => {
+
+      const theme = this.currentTheme(); // Aktives Theme für DOM-Synchronisierung und Persistenz.
+
       this.document.documentElement.dataset['theme'] = theme;
       this.updateThemeColor(theme);
       localStorage.setItem(this.storageKey, theme);
@@ -49,7 +43,7 @@ export class ThemeService {
   /** Wechselt zwischen Dark und Light Mode. */
   toggleTheme(): void {
     this.startTransition();
-    this.themeSignal.update((theme) => (theme === 'dark' ? 'light' : 'dark'));
+    this.themeSignal.update(/** Wählt die jeweils andere Theme-Variante. */(theme) => (theme === 'dark' ? 'light' : 'dark'));
   }
 
   /** Setzt eine konkrete Theme-Variante. */
@@ -60,7 +54,8 @@ export class ThemeService {
 
   /** Ermittelt das initiale Theme aus Persistenz oder Systemeinstellung. */
   private readInitialTheme(): PortfolioTheme {
-    const savedTheme = localStorage.getItem(this.storageKey);
+
+    const savedTheme = localStorage.getItem(this.storageKey); // Gespeicherte Theme-Kennung vor der Validierung.
 
     if (savedTheme === 'light' || savedTheme === 'dark') {
       return savedTheme;
@@ -77,7 +72,7 @@ export class ThemeService {
       window.clearTimeout(this.transitionTimer);
     }
 
-    this.transitionTimer = window.setTimeout(() => {
+    this.transitionTimer = window.setTimeout(/** Entfernt nach dem Theme-Wechsel die temporäre Übergangsklasse. */() => {
       this.document.documentElement.classList.remove(this.transitionClass);
       this.transitionTimer = undefined;
     }, this.transitionDurationMs);
@@ -85,7 +80,8 @@ export class ThemeService {
 
   /** Aktualisiert die mobile Browserfarbe passend zum aktiven Theme. */
   private updateThemeColor(theme: PortfolioTheme): void {
-    const tag = this.document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+
+    const tag = this.document.querySelector<HTMLMetaElement>('meta[name="theme-color"]'); // Vorhandenes Meta-Tag für die Browserfarbe.
 
     if (!tag) {
       return;

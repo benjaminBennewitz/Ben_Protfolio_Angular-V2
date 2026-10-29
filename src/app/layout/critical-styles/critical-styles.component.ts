@@ -15,4 +15,4 @@ import { Component, ViewEncapsulation } from '@angular/core';
   styleUrl: './critical-styles.component.scss',
   encapsulation: ViewEncapsulation.None,
 })
-export class CriticalStylesComponent {}
+export class CriticalStylesComponent { }

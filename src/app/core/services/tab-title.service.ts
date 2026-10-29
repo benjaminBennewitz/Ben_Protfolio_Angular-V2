@@ -11,18 +11,13 @@ import { inject, Injectable, signal } from '@angular/core';
 /** Verwaltet aktive und inaktive Dokumenttitel. */
 @Injectable({ providedIn: 'root' })
 export class TabTitleService {
-  /** Dokumentreferenz zur Titelsteuerung. */
-  private readonly document = inject(DOCUMENT);
-
-  /** Regulärer Seitentitel. */
-  private readonly activeTitleSignal = signal<string>('Benjamin Bennewitz | Portfolio');
-
-  /** Titel für den inaktiven Browser-Tab. */
-  private readonly hiddenTitleSignal = signal<string>('psst... komm zurück 👀');
+  private readonly document = inject(DOCUMENT);                                          // Dokumentreferenz zur Titelsteuerung.
+  private readonly activeTitleSignal = signal<string>('Benjamin Bennewitz | Portfolio'); // Regulärer Seitentitel.
+  private readonly hiddenTitleSignal = signal<string>('psst... komm zurück 👀');         // Titel für den inaktiven Browser-Tab.
 
   /** Registriert den Visibility-Listener genau einmal. */
   constructor() {
-    this.document.addEventListener('visibilitychange', () => this.applyCurrentTitle());
+    this.document.addEventListener('visibilitychange', /** Passt den Tab-Titel an die aktuelle Dokument-Sichtbarkeit an. */() => this.applyCurrentTitle());
   }
 
   /** Setzt den regulären Titel der aktuellen Route. */

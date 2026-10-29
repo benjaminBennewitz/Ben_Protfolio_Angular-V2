@@ -7,7 +7,8 @@
 
 import { Component, computed, effect, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AchievementId, AchievementService, AchievementView } from '../../core/services/achievement.service';
+import { AchievementService } from '../../core/services/achievement.service';
+import type { AchievementId, AchievementView } from '../../core/models/achievement.models';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
 

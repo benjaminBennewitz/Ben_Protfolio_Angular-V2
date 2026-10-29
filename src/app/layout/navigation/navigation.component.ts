@@ -21,56 +21,46 @@ import { GlobalOverlayService } from '../../core/services/global-overlay.service
   styleUrl: './navigation.component.scss',
 })
 export class NavigationComponent {
-  /** Fokusrückführung und Cleanup bei Navigation über Tastatur. */
-  @ViewChild('mobileLinks') private readonly mobileLinks?: ElementRef<HTMLElement>;
+  @ViewChild('mobileLinks') private readonly mobileLinks?: ElementRef<HTMLElement>;     // Fokusrückführung und Cleanup bei Navigation über Tastatur.
 
-  @ViewChild('menuToggle') private readonly menuToggle?: ElementRef<HTMLButtonElement>;
+  @ViewChild('menuToggle') private readonly menuToggle?: ElementRef<HTMLButtonElement>; // Menübutton für die Fokusrückführung nach Escape.
+  private readonly destroyRef = inject(DestroyRef);                                     // Entfernt den Scroll-Lock, wenn die Navigation zerstört wird.
 
-  /** Entfernt den Scroll-Lock, wenn die Navigation zerstört wird. */
-  private readonly destroyRef = inject(DestroyRef);
-
+  /** Registriert das Cleanup für den globalen Scroll-Lock des mobilen Menüs. */
   constructor() {
-    this.destroyRef.onDestroy(() => {
+    this.destroyRef.onDestroy(/** Entfernt beim Zerstören den globalen Scroll-Lock des mobilen Menüs. */() => {
       if (typeof document !== 'undefined') {
         document.documentElement.classList.remove('bp-mobile-menu-open');
       }
     });
   }
 
-  /** Sprachservice für Labels und Sprachwechsel. */
-  readonly languageService = inject(LanguageService);
+  readonly languageService = inject(LanguageService);             // Sprachservice für Labels und Sprachwechsel.
+  readonly themeService = inject(ThemeService);                   // Theme-Service für Dark-/Light-Mode.
+  private readonly toastService = inject(SystemToastService);     // Toast-Service für kurze Systemmeldungen.
+  private readonly overlayService = inject(GlobalOverlayService); // Overlay-Service für globale Panels aus der Navigation.
+  readonly menuOpen = signal<boolean>(false);                     // Sichtbarkeit des mobilen Menüs.
+  readonly themeIsSwitching = signal<boolean>(false);             // Sichtbarkeit der Theme-Umschaltanimation im Button.
+  readonly languageIsSwitching = signal<boolean>(false);          // Sichtbarkeit eines kurzen Sprachwechselzustands im Button.
+  readonly content = computed(                                    // Übersetzter Navigationsinhalt.
+    /** Übersetzter Navigationsinhalt. */
+    () => this.languageService.content().nav
+  );
 
-  /** Theme-Service für Dark-/Light-Mode. */
-  readonly themeService = inject(ThemeService);
-
-  /** Toast-Service für kurze Systemmeldungen. */
-  private readonly toastService = inject(SystemToastService);
-
-  /** Overlay-Service für globale Panels aus der Navigation. */
-  private readonly overlayService = inject(GlobalOverlayService);
-
-  /** Sichtbarkeit des mobilen Menüs. */
-  readonly menuOpen = signal<boolean>(false);
-
-  /** Sichtbarkeit der Theme-Umschaltanimation im Button. */
-  readonly themeIsSwitching = signal<boolean>(false);
-
-  /** Sichtbarkeit eines kurzen Sprachwechselzustands im Button. */
-  readonly languageIsSwitching = signal<boolean>(false);
-
-  /** Übersetzter Navigationsinhalt. */
-  readonly content = computed(() => this.languageService.content().nav);
-
-  /** Beschriftung des mobilen Access-Buttons. */
-  readonly accessLabel = computed(() => this.languageService.language() === 'de' ? 'Access-Modus öffnen' : 'Open access mode');
+  readonly accessLabel = computed(                                // Beschriftung des mobilen Access-Buttons.
+    /** Beschriftung des mobilen Access-Buttons. */
+    () => this.languageService.language() === 'de' ? 'Access-Modus öffnen' : 'Open access mode'
+  );
 
   /** Öffnet oder schließt das mobile Menü. */
   toggleMenu(): void {
-    const shouldOpen = !this.menuOpen();
+
+    const shouldOpen = !this.menuOpen(); // Gewünschter Öffnungszustand des mobilen Menüs.
+
     this.setMenuOpen(shouldOpen);
 
     if (shouldOpen && typeof window !== 'undefined') {
-      window.requestAnimationFrame(() => this.mobileLinks?.nativeElement.querySelector('a')?.focus());
+      window.requestAnimationFrame(/** Fokussiert nach dem Rendern das erste verfügbare Bedienelement. */() => this.mobileLinks?.nativeElement.querySelector('a')?.focus());
     }
   }
 
@@ -105,10 +95,10 @@ export class NavigationComponent {
       return;
     }
 
-    const header = this.menuToggle?.nativeElement.closest('header');
-    const elements = Array.from(header?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? [])
-      .filter((element) => element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden');
-    const currentIndex = elements.indexOf(document.activeElement as HTMLElement);
+    const header = this.menuToggle?.nativeElement.closest('header');                                            // Header mit den Bedienelementen des mobilen Menüs.
+    const elements = Array.from(header?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? []) // Sichtbare, fokussierbare Links und Buttons des Headers.
+      .filter(/** Behält sichtbare Bedienelemente für die Tastatur-Fokusreihenfolge. */(element) => element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden');
+    const currentIndex = elements.indexOf(document.activeElement as HTMLElement);                               // Position des aktiven Elements in der Fokusreihenfolge.
 
     if (!elements.length) {
       return;
@@ -145,7 +135,8 @@ export class NavigationComponent {
 
   /** Wechselt die Sprache und zeigt eine kurze Systemmeldung. */
   toggleLanguage(): void {
-    const nextLanguage = this.languageService.language() === 'de' ? 'en' : 'de';
+
+    const nextLanguage = this.languageService.language() === 'de' ? 'en' : 'de'; // Zielsprache des nächsten Sprachwechsels.
 
     this.playButtonAnimation(this.languageIsSwitching);
     this.languageService.setLanguage(nextLanguage);
@@ -157,9 +148,9 @@ export class NavigationComponent {
   /** Startet eine kurze Button-Animation erneut, auch wenn schnell mehrfach geklickt wird. */
   private playButtonAnimation(state: WritableSignal<boolean>): void {
     state.set(false);
-    window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(/** Startet die Button-Animation im nächsten Frame und plant ihr Ende. */() => {
       state.set(true);
-      window.setTimeout(() => state.set(false), 760);
+      window.setTimeout(/** Beendet den kurzen Umschaltzustand des Buttons. */() => state.set(false), 760);
     });
   }
 }

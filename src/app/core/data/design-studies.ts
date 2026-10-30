@@ -69,6 +69,14 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       preview: '/design-studies/bentendo/assets/preview.svg',
       tags: ['Three.js', 'Pixel RPG', 'Web Audio', 'Game Design'],
     },
+    {
+      id: 'phase',
+      name: 'PHASE.',
+      subtitle: 'A Living Microcosm — Seven Generative Creatures',
+      href: '/design-studies/phase/',
+      preview: '/design-studies/phase/assets/preview.webp',
+      tags: ['Generative Art', 'p5.js', 'Canvas', 'Creative Coding'],
+    },
   ]; // Reihenfolge und öffentliche Ziele der Designstudien.
 
 /** Deutsche Karteninhalte; Marken und technische Eigennamen bleiben erhalten. */
@@ -80,5 +88,6 @@ export const DESIGN_STUDY_TRANSLATIONS_DE: Readonly<Record<string, Pick<DesignSt
   scoop: { subtitle: 'Verspielter Eisshop', tags: ['Comic-Design', 'SVG-Animation', 'Illustrator', 'Interaktiver Shop', 'HTML / CSS / JS'] },
   fold: { subtitle: 'Sechs Seiten. Ein Perspektivexperiment.', tags: ['3D CSS', 'Scroll-Erlebnis', 'Editorial', 'KI-gestützte Entwicklung'] },
   growth: { subtitle: 'Eine lebendige Welt – 50 Meter voller Entdeckungen', tags: ['Three.js', 'Prozedurale Natur', 'Scroll-Erlebnis', 'WebGL'] },
+  phase: { subtitle: 'Ein lebendiger Mikrokosmos – sieben generative Wesen', tags: ['Generative Kunst', 'p5.js', 'Canvas', 'Kreative Programmierung'] },
   bentendo: { subtitle: 'Ein spielbarer Handheld – DUNGEON WANTED', tags: ['Three.js', 'Pixel-Rollenspiel', 'Web Audio', 'Spieldesign'] },
 };

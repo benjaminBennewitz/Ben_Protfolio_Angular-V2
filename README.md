@@ -76,7 +76,7 @@ The goal is a website that remains technically controlled while making a strong 
 | **`/`** | Homepage with hero, about section, experience, skills, process, projects, FAQ, and contact form |
 | **`/portfolio`** | Overview of the selected case studies |
 | **`/projects/:slug`** | Dynamic project detail pages with individual visual direction |
-| **`/design-studies/:study/`** | Eight independent interactive studies, served as static pages alongside Angular |
+| **`/design-studies/:study/`** | Nine independent interactive studies, served as static pages alongside Angular |
 | **`/snippets`** | Short technical examples with isolated demo assets |
 | **`/achievements`** | Unlockable interactions and portfolio achievements |
 | **`/danke`** | Confirmation page after a successful contact request |
@@ -101,7 +101,7 @@ The goal is a website that remains technically controlled while making a strong 
 > [!NOTE]
 > The standalone design studies are non-commercial experiments in graphic design and web development. Some begin with a visual language or illustrated identity; others begin with a theme or a technical interaction. Their READMEs explain that intent before the implementation details. They are not production products or commercial services. Accessibility and production readiness are not their primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed for these studies.
 
-Eight independent experiences explore distinct visual directions and interaction models. Cards and quicklinks live on `/portfolio#design-studies`. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
+Nine independent experiences explore distinct visual directions and interaction models. Cards and quicklinks live on `/portfolio#design-studies`. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
 
 ### RAW/FORM
 
@@ -150,6 +150,12 @@ An interactive manifesto about pressure, destruction, and creative transformatio
 **OOP and 3D study.** BENTENDO combines a simulated handheld with a playable Canvas RPG to explore object-oriented composition, state ownership, and cooperation between device, input, display, audio, and game systems. The nostalgic visual setting gives the technical experiment a concrete purpose.
 
 [Study README](src/design-studies/bentendo/README.md) · [Open study](https://b2folio.de/design-studies/bentendo/)
+
+### PHASE.
+
+**Generative-art and creative-coding study.** Seven biologically inspired point creatures explore how mathematical waves, phase shifts, and selective light impulses can suggest living motion. A specimen archive, shared controls, and independent renderers connect the organic forms through one p5.js Canvas experience.
+
+[Study README](src/design-studies/phase/README.md) · [Open study](https://b2folio.de/design-studies/phase/)
 
 ### Shared integration
 
@@ -205,7 +211,8 @@ src/
 │  ├─ scoop/                  # SCOOP!
 │  ├─ fold/                   # FOLD.
 │  ├─ growth/                 # GROWTH.
-│  └─ bentendo/               # BENTENDO / DUNGEON WANTED
+│  ├─ bentendo/               # BENTENDO / DUNGEON WANTED
+│  └─ phase/                  # PHASE. / generative microcosm
 ├─ environments/              # Public frontend configuration by environment
 ├─ styles/                    # Tokens, base styles, utilities, and case-study styles
 ├─ styles.scss                # Global SCSS entry point
@@ -234,7 +241,7 @@ Material Symbols are bundled as a reduced local font, so icon rendering does not
 
 The portfolio is an Angular application with lazy-loaded pages, centralized services, shared components, and a token-based SCSS system. Production configuration includes optimization, hashed application bundles, public environment configuration, and size budgets.
 
-The `angular.json` asset rules publish all eight standalone studies alongside the application. Selected source-only material is excluded, including SCOOP artwork masters and BENTENDO tests, generators, Blender sources, and internal documentation. Static delivery also includes `.htaccess`, crawler configuration, the sitemap, fonts, and study assets.
+The `angular.json` asset rules publish all nine standalone studies alongside the application. Selected source-only material is excluded, including SCOOP artwork masters and BENTENDO tests, generators, Blender sources, and internal documentation. Static delivery also includes `.htaccess`, crawler configuration, the sitemap, fonts, and study assets.
 
 Local deployment utilities are kept outside Git tracking in the root-level `scripts/` directory. Nested study runtime scripts remain versioned. These implementation notes document the work for review; they are not installation instructions or permission to reproduce, execute, deploy, or reuse it.
 

@@ -1,13 +1,10 @@
-folio/
+B2Folio/
 ├── .angular/
 │   └── ...
 ├── dist/
 │   └── ...
 ├── node_modules/
 │   └── ...
-├── scripts/
-│   ├── deploy-portfolio-local.cmd
-│   └── deploy-portfolio-server.sh
 ├── src/
 │   ├── app/
 │   │   ├── core/
@@ -1051,6 +1048,32 @@ folio/
 │   │   │   │   └── trunk.js
 │   │   │   ├── favicon.svg
 │   │   │   ├── growth-2-preset.json
+│   │   │   ├── index.html
+│   │   │   ├── README.md
+│   │   │   └── styles.css
+│   │   ├── phase/
+│   │   │   ├── assets/
+│   │   │   │   └── preview.webp
+│   │   │   ├── scripts/
+│   │   │   │   ├── organisms/
+│   │   │   │   │   ├── amoeba.js
+│   │   │   │   │   ├── ciliate.js
+│   │   │   │   │   ├── colony.js
+│   │   │   │   │   ├── medusa.js
+│   │   │   │   │   ├── spirillum.js
+│   │   │   │   │   ├── sun.js
+│   │   │   │   │   └── worm.js
+│   │   │   │   ├── app.js
+│   │   │   │   ├── archive.js
+│   │   │   │   ├── canvas-renderer.js
+│   │   │   │   ├── content.js
+│   │   │   │   ├── organisms.js
+│   │   │   │   ├── phase-study.js
+│   │   │   │   ├── study-observers.js
+│   │   │   │   └── view.js
+│   │   │   ├── vendor/
+│   │   │   │   ├── p5.min.js
+│   │   │   │   └── p5-LICENSE.txt
 │   │   │   ├── index.html
 │   │   │   ├── README.md
 │   │   │   └── styles.css

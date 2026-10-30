@@ -112,6 +112,17 @@ describe('CatalogReader', /** Gruppiert die unabhängigen Reader-Vertragstests. 
     expect(/** Navigiert auch ohne Katalogdaten ohne Fehler. */() => reader.selectAdjacentCatalogSpread(1)).not.toThrow();
   });
 
+  it('schaltet die Lupe aus, entfernt sie und erlaubt erneutes Einschalten', () => {
+    reader.catalogLoupe.set({ isVisible: true, pageNumber: '1', x: 0, y: 0, width: 230, height: 156, asset: 'page.webp', backgroundSize: '', backgroundPosition: '' });
+    reader.toggleCatalogLoupe();
+    expect(reader.isCatalogLoupeEnabled()).toBe(false);
+    expect(reader.catalogLoupe().isVisible).toBe(false);
+    reader.updateCatalogLoupe({ pointerType: 'mouse' } as PointerEvent, { number: '1', asset: 'page.webp' } as Parameters<CatalogReader['updateCatalogLoupe']>[1]);
+    expect(reader.catalogLoupe().isVisible).toBe(false);
+    reader.toggleCatalogLoupe();
+    expect(reader.isCatalogLoupeEnabled()).toBe(true);
+  });
+
   it('hält Tab und Shift-Tab im Menü und gibt den Fokus beim Schließen zurück', /** Prüft Fokusgrenzen des ausgelagerten Inhaltsverzeichnisses. */() => {
 
     const buttons = panel.querySelectorAll('button');                                            // Erster und letzter Menübutton für die Fokusgrenzen.

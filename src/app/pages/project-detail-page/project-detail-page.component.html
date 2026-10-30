@@ -769,6 +769,12 @@
       <div class="project-detail__catalog-reader">
         @if (catalogReader.activeCatalogSpread(); as spread) {
         <div class="project-detail__catalog-reader-frame" [attr.aria-label]="catalogShowcase.readerLabel">
+          <button type="button" class="project-detail__catalog-menu-button project-detail__catalog-loupe-toggle"
+            [attr.aria-pressed]="catalogReader.isCatalogLoupeEnabled()"
+            (click)="catalogReader.toggleCatalogLoupe()">
+            <span class="material-symbols-outlined" aria-hidden="true">zoom_in</span>
+            <strong>{{ catalogLoupeLabel() }}</strong>
+          </button>
           <button #catalogMenuTrigger type="button" class="project-detail__catalog-menu-button"
             [attr.aria-label]="catalogShowcase.tocOpenLabel" [attr.aria-expanded]="catalogReader.isCatalogMenuOpen()"
             (pointerenter)="catalogReader.hideCatalogLoupe()" (focusin)="catalogReader.hideCatalogLoupe()"

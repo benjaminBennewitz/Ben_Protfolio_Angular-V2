@@ -117,6 +117,9 @@
             <div class="snippet-preview__head">{{ texts().previewLabel }}</div>
 
             @switch (item.entry.previewType) {
+            @case ('svg') { <bp-snippet-lab kind="svg" /> }
+            @case ('tokens') { <bp-snippet-lab kind="tokens" /> }
+            @case ('container') { <bp-snippet-lab kind="container" /> }
             @case ('layout') {
             <div class="snippet-preview__layout-compare">
               <article>

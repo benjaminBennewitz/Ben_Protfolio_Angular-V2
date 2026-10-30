@@ -39,6 +39,7 @@ export class CatalogReader {
   readonly activeCatalogSpreadIndex = signal<number>(0);                                                                                                                           // Aktuell ausgewählte Doppelseite im Designkatalog.
   readonly catalogSpreadDirection = signal<1 | -1 | 0>(0);                                                                                                                         // Bewegungsrichtung der aktuellen Katalogseiten-Animation.
   readonly isCatalogReaderBusy = signal<boolean>(false);                                                                                                                           // Ladezustand während eine Ziel-Doppelseite vor dem sichtbaren Wechsel decodiert wird.
+  readonly isCatalogLoupeEnabled = signal(true); // Aktivierung der optionalen Kataloglupe.
   readonly isCatalogMenuOpen = signal<boolean>(false);                                                                                                                             // Sichtbarkeit des Inhaltsverzeichnis-Overlays im Designkatalog.
   readonly catalogLoupe = signal<CatalogLoupeState>({ isVisible: false, pageNumber: '', x: 0, y: 0, width: 0, height: 0, asset: '', backgroundSize: '', backgroundPosition: '' }); // Bewegliche Hover-Lupe für echte Katalogseitenbilder.
   readonly activeCatalogSpread = computed<CatalogReaderSpread | undefined>(                                                                                                        // Aktive Doppelseite des digitalen Designkatalogs mit stabilen Asset-Bindings.
@@ -101,9 +102,15 @@ export class CatalogReader {
     void this.setCatalogSpreadIndex(this.getNormalizedCatalogSpreadIndex() + direction, direction);
   }
 
+  /** Schaltet die Lupe um und entfernt eine noch sichtbare Vergrößerung. */
+  toggleCatalogLoupe(): void {
+    this.isCatalogLoupeEnabled.update(enabled => !enabled);
+    this.hideCatalogLoupe();
+  }
+
   /** Aktualisiert die rechteckige Hover-Lupe innerhalb einer Katalogseite. */
   updateCatalogLoupe(event: PointerEvent, page: CatalogReaderPage): void {
-    if (!page.asset || event.pointerType === 'touch' || this.isCatalogMenuOpen()) {
+    if (!this.isCatalogLoupeEnabled() || !page.asset || event.pointerType === 'touch' || this.isCatalogMenuOpen()) {
       this.hideCatalogLoupe();
       return;
     }

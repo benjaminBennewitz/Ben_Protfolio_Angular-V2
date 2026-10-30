@@ -6,6 +6,7 @@
  */
 
 import { Component, HostListener, computed, effect, inject, signal } from '@angular/core';
+import { SnippetLabComponent } from '../../shared/snippet-lab/snippet-lab.component';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -55,7 +56,7 @@ interface RenderedSnippetWindow {
 @Component({
   selector: 'bp-snippets-page',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, SnippetLabComponent],
   templateUrl: './snippets-page.component.html',
   styleUrl: './snippets-page.component.scss',
 })

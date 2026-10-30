@@ -1,0 +1,63 @@
+@switch (kind()) {
+  @case ('svg') {
+    <p>{{ english() ? 'Drag the control points or adjust their coordinates with the sliders.' : 'Ziehe die Kontrollpunkte oder ändere ihre Koordinaten über die Regler.' }}</p>
+    <svg class="curve" viewBox="0 0 300 180" role="img"
+      [attr.aria-label]="english() ? 'Cubic Bézier curve with two adjustable control points' : 'Kubische Bézierkurve mit zwei verstellbaren Kontrollpunkten'"
+      (pointermove)="movePoint($event)" (pointerup)="stopPointDrag()" (pointercancel)="stopPointDrag()"
+      (lostpointercapture)="stopPointDrag()">
+      <g class="curve__grid" aria-hidden="true">
+        <path d="M 0 30 H 300 M 0 60 H 300 M 0 90 H 300 M 0 120 H 300 M 0 150 H 300 M 50 0 V 180 M 100 0 V 180 M 150 0 V 180 M 200 0 V 180 M 250 0 V 180" />
+      </g>
+      <path class="curve__guide" [attr.d]="'M 25 140 L ' + curve().x1 + ' ' + curve().y1 + ' M 275 140 L ' + curve().x2 + ' ' + curve().y2" />
+      <path class="curve__path" [attr.d]="path()" />
+      <circle cx="25" cy="140" r="4" /><circle cx="275" cy="140" r="4" />
+      <circle class="curve__handle" [attr.cx]="curve().x1" [attr.cy]="curve().y1" r="8" (pointerdown)="startPointDrag(1, $event)" />
+      <circle class="curve__handle" [attr.cx]="curve().x2" [attr.cy]="curve().y2" r="8" (pointerdown)="startPointDrag(2, $event)" />
+      <text [attr.x]="curve().x1 > 260 ? curve().x1 - 30 : curve().x1 + 12" [attr.y]="curve().y1 < 18 ? 18 : curve().y1 - 10">C1</text>
+      <text [attr.x]="curve().x2 > 260 ? curve().x2 - 30 : curve().x2 + 12" [attr.y]="curve().y2 < 18 ? 18 : curve().y2 - 10">C2</text>
+    </svg>
+    <code class="lab-code">{{ path() }}</code>
+    <div class="controls">
+      @for (key of coordinates; track key) {
+        <label>{{ key }}: {{ curve()[key] }}
+          <input type="range" min="0" [max]="key.startsWith('x') ? 300 : 180" step="1" [value]="curve()[key]" (input)="setCoordinate(key, $event)">
+        </label>
+      }
+    </div>
+    <p>{{ english() ? 'M sets the start. C defines two control points and the end. Uppercase is absolute; lowercase is relative to the current point.' : 'M setzt den Start. C definiert zwei Kontrollpunkte und das Ende. Großbuchstaben sind absolut, Kleinbuchstaben relativ zum aktuellen Punkt.' }}</p>
+  }
+  @case ('tokens') {
+    <div class="theme-controls" role="group" [attr.aria-label]="english() ? 'Preview theme' : 'Theme der Vorschau'">
+      <button type="button" [attr.aria-pressed]="theme() === 'light'" (click)="theme.set('light')">{{ english() ? 'Light' : 'Hell' }}</button>
+      <button type="button" [attr.aria-pressed]="theme() === 'dark'" (click)="theme.set('dark')">{{ english() ? 'Dark' : 'Dunkel' }}</button>
+    </div>
+    <div class="theme-card" [attr.data-theme]="theme()">
+      <strong>{{ english() ? 'One component. Two themes.' : 'Eine Komponente. Zwei Themes.' }}</strong>
+      <p>{{ english() ? 'The component uses semantic tokens for surface, text, border and accent.' : 'Die Komponente verwendet semantische Tokens für Fläche, Text, Rahmen und Akzent.' }}</p>
+      <label>{{ english() ? 'Project name' : 'Projektname' }}<input type="text" [placeholder]="english() ? 'Your project' : 'Dein Projekt'"></label>
+      <label>{{ english() ? 'Email (error example)' : 'E-Mail (Fehlerbeispiel)' }}<input type="email" value="ben@" aria-invalid="true" aria-describedby="token-email-error"></label>
+      <small id="token-email-error">{{ english() ? 'Error: enter a complete email address.' : 'Fehler: Gib eine vollständige E-Mail-Adresse ein.' }}</small>
+      <div class="theme-controls">
+        <button type="button">{{ english() ? 'Test hover / focus' : 'Hover / Fokus testen' }}</button>
+        <button type="button" disabled>{{ english() ? 'Disabled' : 'Deaktiviert' }}</button>
+      </div>
+    </div>
+    <code class="lab-code">--surface · --text · --muted · --border · --accent · --on-accent · --error</code>
+  }
+  @case ('container') {
+    <label>{{ english() ? 'Available width' : 'Verfügbare Breite' }}: {{ containerWidth() }} %
+      <input type="range" min="35" max="100" step="1" [value]="containerWidth()" (input)="setContainerWidth($event)">
+    </label>
+    <p>{{ english() ? 'Same viewport, different space: only the lower card responds to its container.' : 'Gleicher Viewport, anderer Platz: Nur die untere Karte reagiert auf ihren Container.' }}</p>
+    @for (modern of [false, true]; track modern) {
+      <strong>{{ modern ? '@container (360px)' : '@media (700px)' }}</strong>
+      <div class="card-space" [style.width.%]="containerWidth()" [class.card-space--query]="modern">
+        <article class="responsive-card" [class.responsive-card--viewport]="!modern">
+          <span class="responsive-card__art" aria-hidden="true">B²</span>
+          <div><strong>{{ english() ? 'Project card' : 'Projektkarte' }}</strong><p>{{ english() ? 'Layout follows available space.' : 'Layout folgt dem verfügbaren Platz.' }}</p></div>
+        </article>
+      </div>
+    }
+    <p>{{ english() ? 'Below 360px, the container card stacks. Without query support, the readable single-column base layout remains.' : 'Unter 360px stapelt sich die Container-Karte. Ohne Query-Support bleibt das lesbare einspaltige Basislayout erhalten.' }}</p>
+  }
+}

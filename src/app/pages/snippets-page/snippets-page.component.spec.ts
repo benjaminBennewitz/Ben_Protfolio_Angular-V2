@@ -46,6 +46,19 @@ describe('SnippetsPageComponent', /** Gruppiert die Verhaltensprüfungen der Lay
     expect(page.filteredEntries()).toHaveLength(page.texts().entries.length);
   });
 
+  it('integriert alle drei Lernbeispiele in Suche, Fenster und Sprachwechsel', () => {
+    const slugs = ['svg-paths', 'theme-tokens', 'container-queries'];
+    expect(page.texts().entries.slice(-3).map(entry => entry.slug)).toEqual(slugs);
+    for (const slug of slugs) page.openEntry(slug);
+    expect(slugs.every(slug => page.isEntryOpen(slug))).toBe(true);
+    page.searchQuery.set('Bézier');
+    expect(page.filteredEntries().map(entry => entry.slug)).toContain('svg-paths');
+    language.set('en');
+    fixture.detectChanges();
+    expect(page.texts().entries.find(entry => entry.slug === 'theme-tokens')?.title).toBe('Theming with tokens');
+    expect(slugs.every(slug => page.isEntryOpen(slug))).toBe(true);
+  });
+
   it('öffnet einen Slug nur einmal und hebt ein vorhandenes Fenster nach vorne', /** Öffnet einen Slug nur einmal und hebt ein vorhandenes Fenster nach vorne. */() => {
     page.closeAllEntries();
 

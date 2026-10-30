@@ -591,7 +591,7 @@ body.bp-lightbox-open {
   right: clamp(1rem, 3vw, 2rem);
   display: grid;
   gap: 0.85rem;
-  width: min(323px, calc(100vw - 2rem));
+  width: min(410px, calc(100vw - 2rem));
   max-height: calc(100svh - var(--bp-header-height) - 2rem);
   overflow-y: auto;
   overflow-x: hidden;
@@ -600,6 +600,9 @@ body.bp-lightbox-open {
 }
 
 .project-detail__catalog-reader-meta h3 {
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
   margin: 0;
   padding-right: 2.8rem;
   font-size: clamp(1.18rem, 2vw, 1.85rem);
@@ -1649,4 +1652,18 @@ body.bp-lightbox-open {
   .project-detail__lightbox-panel.is-lightbox-fading-in .project-detail__lightbox-copy {
     animation: none;
   }
+}
+.project-detail__catalog-loupe-toggle {
+  right: auto;
+  left: clamp(0.8rem, 1.8vw, 1.25rem);
+}
+
+.project-detail__catalog-loupe-toggle[aria-pressed='true'] {
+  background: var(--bp-color-accent);
+  color: var(--bp-color-accent-text);
+}
+
+.project-detail__catalog-loupe-toggle:focus-visible {
+  outline: 2px solid var(--bp-color-text);
+  outline-offset: 3px;
 }

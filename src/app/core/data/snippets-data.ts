@@ -2,6 +2,7 @@
 
 /** @file Sprachabhängige Inhalte der snippets-page-Route. */
 
+import { SNIPPET_LAB_ENTRIES } from './snippets-labs-data';
 import type { SnippetPageTexts } from '../models/page-content.models';
 
 export const SNIPPET_PAGE_TEXTS: Record<'de' | 'en', SnippetPageTexts> = { // Übersetzte Seitentexte und vollständige Code-Beispiele.
@@ -131,7 +132,7 @@ export const SNIPPET_PAGE_TEXTS: Record<'de' | 'en', SnippetPageTexts> = { // Ü
         tags: ['CSS', 'Forms', 'A11y'],
         support: 'Eingeschränkter Support, progressiv einsetzen',
         supportTone: 'experimental',
-        codeLanguage: 'css',
+        codeLanguage: 'HTML / CSS',
         previewType: 'select',
         code: `select.custom-select,
 select.custom-select::picker(select) {
@@ -145,7 +146,15 @@ select.custom-select::picker(select) {
     <option>Web-App</option>
   </select>
 </label>`,
-        newCode: `select.custom-select,
+        newCode: `<label>Projektart
+  <select class="custom-select">
+    <option>Website</option>
+    <option>Web-App</option>
+  </select>
+</label>
+
+/* CSS */
+select.custom-select,
 select.custom-select::picker(select) {
   appearance: base-select;
 }
@@ -242,6 +251,7 @@ select.custom-select:open {
           'Optische Konsolenmarker helfen bei komplexen Frontends enorm.',
         ],
       },
+      ...SNIPPET_LAB_ENTRIES.de,
     ],
   },
   en: {
@@ -361,7 +371,7 @@ select.custom-select:open {
         tags: ['CSS', 'Forms', 'A11y'],
         support: 'Limited availability, use progressively',
         supportTone: 'experimental',
-        codeLanguage: 'css',
+        codeLanguage: 'HTML / CSS',
         previewType: 'select',
         code: `select.custom-select,
 select.custom-select::picker(select) {
@@ -375,7 +385,15 @@ select.custom-select::picker(select) {
     <option>Web app</option>
   </select>
 </label>`,
-        newCode: `select.custom-select,
+        newCode: `<label>Project type
+  <select class="custom-select">
+    <option>Website</option>
+    <option>Web app</option>
+  </select>
+</label>
+
+/* CSS */
+select.custom-select,
 select.custom-select::picker(select) {
   appearance: base-select;
 }
@@ -456,6 +474,7 @@ select.custom-select:open {
         demoHref: 'assets/snippet-demos/devmode-console-style.html',
         notes: ['Good for local debug hints, but not a replacement for logging architecture.', 'Do not write sensitive data into the console.', 'Visual console markers help a lot in complex frontends.'],
       },
+      ...SNIPPET_LAB_ENTRIES.en,
     ],
   },
 };

@@ -242,11 +242,11 @@
 }
 
 .project-stack__decor-asset--shocked {
-  left: calc(50% - 100px);
+  left: calc(50% - 150px);
   bottom: 0;
   z-index: 9;
   width: clamp(150px, 17vw, 250px);
-  transform: translateX(-50%) scaleX(-1);
+  transform: translateX(-50%);
 }
 
 .project-stack__panel--intro .project-stack__decor-asset {
@@ -921,10 +921,10 @@
   }
 
   .project-stack__decor-asset--shocked {
-    left: calc(50% + 10px);
+    left: calc(50% - 40px);
     bottom: 0;
     width: 120px;
-    transform: translateX(-50%) scaleX(-1);
+    transform: translateX(-50%);
   }
 
   .project-stack__trash-scene {

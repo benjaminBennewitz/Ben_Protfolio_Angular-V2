@@ -655,7 +655,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
       technicalHighlights: [
         { icon: 'upload_file', title: 'Lokaler Import', text: 'Synthetische Test-PDFs werden validiert, als Celery-Job verarbeitet und ohne externe Analyse-API in den lokalen Workflow übernommen.' },
         { icon: 'document_scanner', title: 'OCR-Fallback', text: 'Poppler bereitet Dokumentseiten auf; Tesseract erkennt Inhalte, wenn keine verwertbare PDF-Textschicht vorhanden ist.' },
-        { icon: 'security', title: 'Gehärteter Upload-Pfad', text: 'Dateien werden nach Größe, Signatur und MIME-Typ geprüft, privat quarantänisiert und vor dem Parser lokal per ClamAV gescannt. Originale werden niemals über ein öffentliches Media-Verzeichnis ausgeliefert.' },
+        { icon: 'admin_panel_settings', title: 'Gehärteter Upload-Pfad', text: 'Dateien werden nach Größe, Signatur und MIME-Typ geprüft, privat quarantänisiert und vor dem Parser lokal per ClamAV gescannt. Originale werden niemals über ein öffentliches Media-Verzeichnis ausgeliefert.' },
         { icon: 'shield_lock', title: 'Session-Isolation & CSRF', text: 'Private Uploads, Befunde und Berichte sind serverseitig an die jeweilige Session gebunden; mutierende Requests bleiben auch im anonymen Demo-Modus CSRF-geschützt.' },
         { icon: 'memory', title: 'Begrenzte Dokumentverarbeitung', text: 'Celery verarbeitet Imports in einer eigenen Queue; der Parser läuft als separater Prozess mit Zeitlimits, anschließend räumt ein Cleanup-Timer temporäre Dateien auf.' },
         { icon: 'fact_check', title: 'Review statt Blackbox', text: 'Confidence Scores markieren unsichere Werte und führen sie in eine ärztliche Korrekturansicht mit nachvollziehbarem Originalbezug.' },
@@ -1199,7 +1199,7 @@ export const PORTFOLIO_PROJECTS: Record<PortfolioLanguage, readonly PortfolioPro
       technicalHighlights: [
         { icon: 'upload_file', title: 'Local import', text: 'Synthetic test PDFs are validated, processed as Celery jobs and added to the local workflow without an external analysis API.' },
         { icon: 'document_scanner', title: 'OCR fallback', text: 'Poppler prepares document pages while Tesseract reads content when no usable PDF text layer is available.' },
-        { icon: 'security', title: 'Hardened upload path', text: 'Files are checked by size, signature and MIME type, moved into private quarantine and scanned locally by ClamAV before parsing. Originals are never exposed through a public media directory.' },
+        { icon: 'admin_panel_settings', title: 'Hardened upload path', text: 'Files are checked by size, signature and MIME type, moved into private quarantine and scanned locally by ClamAV before parsing. Originals are never exposed through a public media directory.' },
         { icon: 'shield_lock', title: 'Session isolation & CSRF', text: 'Private uploads, reports and derived data are bound to the current server-side session; mutating requests remain CSRF-protected even in the anonymous demo flow.' },
         { icon: 'memory', title: 'Bounded document processing', text: 'Celery handles imports in a dedicated queue; parsing runs in a separate process with time limits, followed by scheduled cleanup of temporary files.' },
         { icon: 'fact_check', title: 'Review instead of black box', text: 'Confidence scores flag uncertain values and route them into a physician review with traceable source context.' },

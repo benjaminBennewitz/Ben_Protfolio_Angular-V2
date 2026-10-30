@@ -72,6 +72,42 @@ describe('RouteScrollService', () => {
     expect(scroll).not.toHaveBeenCalled();
   });
 
+  it('springt zu Ankern ohne von dazwischenliegenden Snap-Stopps abgefangen zu werden', () => {
+    const target = document.createElement('section');
+    target.id = 'faq';
+    const jump = vi.fn();
+    target.scrollIntoView = jump;
+    document.body.appendChild(target);
+    events.next(new Scroll(new NavigationEnd(1, '/#faq', '/#faq'), null, 'faq'));
+    expect(locked()).toBe(true);
+    expect(jump).toHaveBeenCalledWith({ behavior: 'instant', block: 'start' });
+    flush();
+    flush();
+    expect(locked()).toBe(false);
+    target.remove();
+  });
+
+  it('korrigiert nachgeladene Layouts und beendet die Beobachtung bei Nutzereingaben', () => {
+    let resize: ResizeObserverCallback = () => undefined;
+    const disconnect = vi.fn();
+    vi.stubGlobal('ResizeObserver', class {
+      constructor(callback: ResizeObserverCallback) { resize = callback; }
+      observe = vi.fn();
+      disconnect = disconnect;
+    });
+    const target = document.createElement('section');
+    target.id = 'faq';
+    target.scrollIntoView = vi.fn();
+    document.body.appendChild(target);
+    events.next(new Scroll(new NavigationEnd(1, '/#faq', '/#faq'), null, 'faq'));
+    resize([], {} as ResizeObserver);
+    expect(target.scrollIntoView).toHaveBeenCalledTimes(2);
+    document.dispatchEvent(new Event('wheel'));
+    expect(disconnect).toHaveBeenCalledOnce();
+    target.remove();
+    vi.unstubAllGlobals();
+  });
+
   it('verwirft alte Layout-Freigaben bei schneller Folgenavigation', () => {
     const end = new NavigationEnd(1, '/portfolio', '/portfolio');
     events.next(new NavigationStart(1, '/portfolio'));

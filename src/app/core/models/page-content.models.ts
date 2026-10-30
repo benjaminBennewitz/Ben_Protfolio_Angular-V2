@@ -62,7 +62,7 @@ export interface SnippetEntry {
   readonly oldCodeLabel?: string;                                                          // Optionales Label für die linke Vergleichsspalte.
   readonly newCodeLabel?: string;                                                          // Optionales Label für die rechte Vergleichsspalte.
   readonly demoHref?: string;                                                              // Optionaler Downloadpfad für eine eigenständige Demo-Datei.
-  readonly previewType: 'layout' | 'count' | 'select' | 'spinner' | 'signals' | 'console'; // Visueller Vorschau-Typ des Eintrags.
+  readonly previewType: 'layout' | 'count' | 'select' | 'spinner' | 'signals' | 'console' | 'svg' | 'tokens' | 'container'; // Visueller Vorschau-Typ des Eintrags.
   readonly notes: readonly string[];                                                       // Kurze Hinweise zum Eintrag.
 }
 

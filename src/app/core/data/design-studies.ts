@@ -70,3 +70,15 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       tags: ['Three.js', 'Pixel RPG', 'Web Audio', 'Game Design'],
     },
   ]; // Reihenfolge und öffentliche Ziele der Designstudien.
+
+/** Deutsche Karteninhalte; Marken und technische Eigennamen bleiben erhalten. */
+export const DESIGN_STUDY_TRANSLATIONS_DE: Readonly<Record<string, Pick<DesignStudy, 'subtitle' | 'tags'>>> = {
+  'raw-form': { subtitle: 'Brutalistische Festival-Landingpage', tags: ['Brutalismus', 'Editorial', 'Animation', 'HTML / CSS / JS'] },
+  whatwesee: { subtitle: 'Fotografie-Journal im Schweizer Stil', tags: ['Schweizer Typografie', 'Fotografie', 'Editorial', 'HTML / CSS / JS'] },
+  'ctrl-room': { subtitle: 'Audiovisuelle Kulturplattform im Y2K-Stil', tags: ['Y2K', 'Chrom / Kunststoff', 'Web Audio', 'HTML / CSS / JS'] },
+  'type-break': { subtitle: 'Interaktives typografisches Manifest', tags: ['Kinetische Typografie', 'Kreative Programmierung', 'Interaktives Plakat', 'HTML / CSS / JS'] },
+  scoop: { subtitle: 'Verspielter Eisshop', tags: ['Comic-Design', 'SVG-Animation', 'Illustrator', 'Interaktiver Shop', 'HTML / CSS / JS'] },
+  fold: { subtitle: 'Sechs Seiten. Ein Perspektivexperiment.', tags: ['3D CSS', 'Scroll-Erlebnis', 'Editorial', 'KI-gestützte Entwicklung'] },
+  growth: { subtitle: 'Eine lebendige Welt – 50 Meter voller Entdeckungen', tags: ['Three.js', 'Prozedurale Natur', 'Scroll-Erlebnis', 'WebGL'] },
+  bentendo: { subtitle: 'Ein spielbarer Handheld – DUNGEON WANTED', tags: ['Three.js', 'Pixel-Rollenspiel', 'Web Audio', 'Spieldesign'] },
+};

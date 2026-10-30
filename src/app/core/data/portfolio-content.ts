@@ -255,7 +255,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
     },
     cta: {
       eyebrow: 'cta_physics.exe',
-      title: 'Noch Fragen? Terminal ist offen.',
+      title: 'Jetzt Kontakt aufnehmen.',
       hint: 'Austausch, Feedback, Bewerbung oder einfach Hallo.',
       words: ['get', 'in', 'touch', 'icon:arrow_forward'],
     },
@@ -727,7 +727,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
     },
     cta: {
       eyebrow: 'cta_physics.exe',
-      title: 'Still curious? The terminal is open.',
+      title: 'Get in touch.',
       hint: 'Feedback, recruiting, tech talk or simply hello.',
       words: ['get', 'in', 'touch', 'icon:arrow_forward'],
     },

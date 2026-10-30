@@ -6,7 +6,7 @@
  */
 
 import { Component, computed, ElementRef, HostListener, inject, signal, ViewChild } from '@angular/core';
-import { DESIGN_STUDIES } from '../../core/data/design-studies';
+import { DESIGN_STUDIES, DESIGN_STUDY_TRANSLATIONS_DE } from '../../core/data/design-studies';
 import { PORTFOLIO_PROJECTS } from '../../core/data/portfolio-projects';
 import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
@@ -47,6 +47,12 @@ export class PortfolioPageComponent {
   private readonly achievementService = inject(AchievementService); // Achievement-Service für versteckte Portfolio-Interaktionen.
   readonly isProjectsDialogVisible = signal<boolean>(true);         // Sichtbarkeit des dekorativen Terminalfensters im Portfolio-Intro.
   readonly designStudies = DESIGN_STUDIES;                          // Eigenständige visuelle Studien unterhalb der klassischen Case Studies.
+
+  readonly localizedDesignStudies = computed(/** Übersetzt Karteninhalte bei jedem Sprachwechsel. */
+    () => this.languageService.language() === 'de'
+      ? this.designStudies.map(study => ({ ...study, ...DESIGN_STUDY_TRANSLATIONS_DE[study.id] }))
+      : this.designStudies
+  );
 
   @ViewChild('designStudiesSection')                                // Referenz auf die Scroll-Strecke der Design-Studies-Bühne.
   private designStudiesSection?: ElementRef<HTMLElement>;

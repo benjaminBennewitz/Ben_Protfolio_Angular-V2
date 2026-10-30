@@ -740,7 +740,9 @@
 }
 
 .visual__blood-drop.is-sucked {
-  animation: visual-blood-drop-suck 820ms ease-in forwards;
+  animation: visual-blood-drop-suck 980ms ease-in infinite;
+  animation-delay: 350ms;
+  opacity: 0;
 }
 
 /* ==========================================================================
@@ -1059,7 +1061,12 @@
 }
 
 @keyframes visual-blood-drop-suck {
-  0% {
+  0%, 25% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.08);
+  }
+
+  35% {
     opacity: 0.95;
     transform: translate3d(0, 0, 0) scale(1);
   }

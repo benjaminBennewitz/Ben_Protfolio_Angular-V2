@@ -71,6 +71,9 @@ export class ProjectDetailPageComponent implements OnDestroy {
     this.catalogFlow.setCanvas(canvasRef?.nativeElement);
   }
 
+  readonly catalogLoupeLabel = computed(/** Übersetzte Beschriftung des Lupenschalters. */
+    () => this.languageService.language() === 'de' ? 'Lupe' : 'Magnifier'
+  );
   readonly content = computed(                                                   // Übersetzter Inhalt der aktuellen Sprache.
     /** Übersetzter Inhalt der aktuellen Sprache. */
     () => this.languageService.content()

@@ -95,6 +95,31 @@ describe('AccessibilityPanelComponent', /** Gruppiert die Verhaltensprüfungen d
     expect(document.activeElement).toBe(fixture.nativeElement.querySelector('.access-panel__toggle'));
   });
 
+  it('bündelt mehrere Änderungen zu einem Toast beim Schließen', () => {
+    openPanel();
+    const component = fixture.componentInstance;
+    const toast = TestBed.inject(SystemToastService).show;
+    component.setMotionMode('off');
+    component.setComfortMode('simple');
+    component.setContrastMode('high');
+    component.setColorVisionMode('deuteranopia');
+    component.setMotionMode('reduced');
+    expect(toast).not.toHaveBeenCalled();
+    component.close();
+    expect(toast).toHaveBeenCalledOnce();
+    component.close();
+    expect(toast).toHaveBeenCalledOnce();
+  });
+
+  it('meldet unveränderte oder zurückgesetzte Einstellungen nicht erneut', () => {
+    openPanel();
+    const component = fixture.componentInstance;
+    component.setMotionMode('off');
+    component.resetPreferences();
+    component.close();
+    expect(TestBed.inject(SystemToastService).show).not.toHaveBeenCalled();
+  });
+
   it('meldet den globalen Auslöser beim Zerstören ab', /** Meldet den globalen Auslöser beim Zerstören ab. */ () => {
 
     const component = fixture.componentInstance; // Zu prüfende Komponenteninstanz.

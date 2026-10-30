@@ -95,7 +95,7 @@
             }
             <nav class="design-studies__quicklinks"
               [attr.aria-label]="content().projectsIntro.designStudiesAriaLabel + ' – Quicklinks'">
-              @for (study of designStudies; track study.id) {
+              @for (study of localizedDesignStudies(); track study.id) {
               <a [href]="study.href" target="_blank" rel="noopener noreferrer"
                 [attr.aria-label]="content().projectsIntro.designStudiesOpenLabel + ': ' + study.name">
                 <span>{{ study.name }}</span><span aria-hidden="true">↗</span>
@@ -106,7 +106,7 @@
         </header>
 
         <div class="design-studies__stack" [attr.aria-label]="content().projectsIntro.designStudiesAriaLabel">
-          @for (study of designStudies; track study.id; let index = $index) {
+          @for (study of localizedDesignStudies(); track study.id; let index = $index) {
           <article class="design-study" [class.design-study--even]="index % 2 === 1" [style.z-index]="index + 1"
             [style.opacity]="designStudyOpacity(index)" [style.transform]="designStudyTransform(index)"
             [style.filter]="designStudyFilter(index)"

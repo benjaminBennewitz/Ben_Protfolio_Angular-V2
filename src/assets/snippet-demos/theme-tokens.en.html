@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Theming with tokens – Demo</title><style>* { box-sizing: border-box; }
+:root { --bp-color-text: #f2f5ff; --bp-color-text-muted: #bcc6dd; --bp-color-border: #91a1bd; --bp-color-accent: #b7caff; --bp-color-accent-text: #142347; --bp-color-surface-solid: #121c30; color-scheme: dark; }
+body { margin: 0; padding: clamp(1rem, 4vw, 2rem); background: var(--bp-color-surface-solid); color: var(--bp-color-text); font: 16px/1.6 system-ui, sans-serif; }
+main { max-width: 48rem; margin: auto; }
+h1 { line-height: 1.15; }
+pre { overflow: auto; padding: 1rem; border: 1px solid var(--bp-color-border); font-size: .8rem; }
+.summary { margin-block: 1rem; }
+@media (prefers-color-scheme: light) { :root { --bp-color-text: #172033; --bp-color-text-muted: #465369; --bp-color-border: #69778c; --bp-color-accent: #2148b2; --bp-color-accent-text: #fff; --bp-color-surface-solid: #fff; color-scheme: light; } }
+
+.lab {
+  display: grid;
+  gap: 0.8rem;
+  min-width: 0;
+  color: var(--bp-color-text);
+}
+p { margin: 0; line-height: 1.6; }
+label { display: grid; gap: 0.4rem; font-size: 0.85rem; }
+input[type='range'] { width: 100%; min-width: 0; accent-color: var(--bp-color-accent); }
+button { border: 1px solid var(--bp-color-border); padding: 0.55rem 0.75rem; background: var(--bp-color-surface-solid); color: var(--bp-color-text); cursor: pointer; font: inherit; }
+button:hover { border-color: var(--bp-color-text); }
+button[aria-pressed='true'] { background: var(--bp-color-accent); color: var(--bp-color-accent-text); }
+button:active { transform: translateY(1px); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--bp-color-text); outline-offset: 3px; }
+.lab-code { display: block; overflow-wrap: anywhere; padding: 0.65rem; border: 1px solid var(--bp-color-border); font-size: 0.8rem; }
+.controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+.curve { display: block; width: 100%; height: auto; aspect-ratio: 5 / 3; overflow: visible; fill: var(--bp-color-text); border: 1px solid var(--bp-color-border); }
+.curve path { fill: none; }
+.curve__grid { stroke: var(--bp-color-border); stroke-width: 0.5; }
+.curve__guide { stroke: var(--bp-color-text-muted); stroke-dasharray: 3 3; }
+.curve__path { stroke: var(--bp-color-accent); stroke-width: 3; }
+.curve__handle { fill: var(--bp-color-accent); stroke: var(--bp-color-text); stroke-width: 2; cursor: grab; touch-action: none; }
+.curve__handle:active { cursor: grabbing; }
+.curve text { font-size: 11px; pointer-events: none; }
+.theme-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.theme-card {
+  --surface: #fff; --text: #172033; --muted: #465369; --border: #69778c;
+  --accent: #2148b2; --on-accent: #fff; --error: #ac1731;
+  display: grid; gap: 0.85rem; padding: 1rem; background: var(--surface); color: var(--text); border: 1px solid var(--border); color-scheme: light;
+}
+.theme-card[data-theme='dark'] {
+  --surface: #121c30; --text: #f2f5ff; --muted: #bcc6dd; --border: #91a1bd;
+  --accent: #b7caff; --on-accent: #142347; --error: #ffb3c1;
+  color-scheme: dark;
+}
+.theme-card p { color: var(--muted); }
+.theme-card input { width: 100%; min-width: 0; box-sizing: border-box; padding: 0.65rem; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; }
+.theme-card input::placeholder { color: var(--muted); opacity: 1; }
+.theme-card [aria-invalid='true'] { border: 2px solid var(--error); }
+.theme-card small { color: var(--error); }
+.theme-card button { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.theme-card button:hover:not(:disabled) { background: var(--surface); color: var(--accent); }
+.theme-card button:disabled { background: var(--surface); color: var(--muted); border-color: var(--border); cursor: not-allowed; }
+.theme-card :is(button, input):focus-visible { outline-color: var(--text); }
+.card-space { min-width: min(100%, 160px); max-width: 100%; }
+.card-space--query { container: snippet-card / inline-size; }
+.responsive-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--bp-color-border); overflow-wrap: anywhere; }
+.responsive-card > div { min-width: 0; }
+.responsive-card__art { display: grid; place-items: center; min-height: 4rem; background: var(--bp-color-accent); color: var(--bp-color-accent-text); font-size: 2rem; font-weight: 900; }
+@media (min-width: 700px) { .responsive-card--viewport { grid-template-columns: 4rem minmax(0, 1fr); } }
+@container snippet-card (min-width: 360px) {
+  .responsive-card { grid-template-columns: 5rem minmax(0, 1fr); }
+  .responsive-card strong { font-size: clamp(1rem, 4cqi, 1.3rem); }
+}
+</style></head>
+<body><main><h1>Theming with tokens</h1><p class="summary">Instead of repeating colors in every component, semantic tokens describe their purpose: surface, text, border or accent. The theme replaces their values while the component and its states keep the same rules.</p><section class="lab" aria-label="Interactive demo"><div class="theme-controls" role="group" aria-label="Preview theme">
+<button type="button" data-theme-choice="light" aria-pressed="false">Light</button><button type="button" data-theme-choice="dark" aria-pressed="true">Dark</button></div>
+<div class="theme-card" data-theme="dark"><strong>One component. Two themes.</strong>
+<p>Semantic tokens define surface, text, borders and accent.</p>
+<label>Project name<input type="text" placeholder="Your project"></label>
+<label>Email (error example)<input type="email" value="ben@" aria-invalid="true" aria-describedby="token-email-error"></label>
+<small id="token-email-error">Error: enter a complete email address.</small>
+<div class="theme-controls"><button type="button">Test hover / focus</button><button type="button" disabled>Disabled</button></div></div>
+<code class="lab-code">--surface · --text · --muted · --border · --accent · --on-accent · --error</code></section>
+<h2>Remember</h2><ul><li>Primitive tokens describe concrete values (such as blue 700); semantic tokens describe their purpose (--accent). Small examples can start with the semantic layer.</li><li>prefers-color-scheme follows the system preference. An explicit data-theme selection takes priority; System removes the override.</li><li>color-scheme affects native controls, among other things. It does not replace your color tokens.</li><li>Focus, hover, active, disabled and error states need suitable values in both themes. Check text contrast, borders and focus separately.</li><li>Errors use text and aria-invalid rather than color alone.</li><li>The switch here only changes this preview. The portfolio theme stays independent.</li></ul>
+<h2>Before: hard-coded colors</h2><pre><code>&lt;style&gt;
+  .card { background: #fff; color: #172033; padding: 1rem; }
+  .card button { background: #2148b2; color: #fff; }
+  .card input { background: #fff; color: #172033; }
+&lt;/style&gt;
+&lt;article class=&quot;card&quot;&gt;
+  &lt;h2&gt;Project&lt;/h2&gt;
+  &lt;label&gt;Name &lt;input type=&quot;text&quot;&gt;&lt;/label&gt;
+  &lt;button type=&quot;button&quot;&gt;Open&lt;/button&gt;
+&lt;/article&gt;</code></pre>
+<h2>After: semantic tokens</h2><pre><code>&lt;style&gt;
+  :root {
+    color-scheme: light;
+    --surface: #fff; --text: #172033; --muted: #465369;
+    --border: #69778c; --accent: #2148b2; --on-accent: #fff;
+    --error: #ac1731;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+      color-scheme: dark;
+      --surface: #121c30; --text: #f2f5ff; --muted: #bcc6dd;
+      --border: #91a1bd; --accent: #b7caff; --on-accent: #142347;
+      --error: #ffb3c1;
+    }
+  }
+  :root[data-theme=&quot;dark&quot;] {
+    color-scheme: dark;
+    --surface: #121c30; --text: #f2f5ff; --muted: #bcc6dd;
+    --border: #91a1bd; --accent: #b7caff; --on-accent: #142347;
+    --error: #ffb3c1;
+  }
+  .card { padding: 1rem; background: var(--surface); color: var(--text); }
+  .card input { padding: .5rem; background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  .card button { padding: .5rem; background: var(--accent); color: var(--on-accent); border: 1px solid var(--accent); }
+  .card button:hover:not(:disabled) { background: var(--surface); color: var(--accent); }
+  .card button:active:not(:disabled) { transform: translateY(1px); }
+  .card button:disabled { color: var(--muted); background: var(--surface); border-color: var(--border); }
+  .card :is(input, button):focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+  .card [aria-invalid=&quot;true&quot;] { border: 2px solid var(--error); }
+  .error { color: var(--error); }
+&lt;/style&gt;
+&lt;button type=&quot;button&quot; data-theme-choice=&quot;light&quot;&gt;Light&lt;/button&gt;
+&lt;button type=&quot;button&quot; data-theme-choice=&quot;dark&quot;&gt;Dark&lt;/button&gt;
+&lt;button type=&quot;button&quot; data-theme-choice=&quot;system&quot;&gt;System&lt;/button&gt;
+&lt;article class=&quot;card&quot;&gt;
+  &lt;h2&gt;Project&lt;/h2&gt;
+  &lt;label&gt;Name &lt;input type=&quot;text&quot;&gt;&lt;/label&gt;
+  &lt;label&gt;E-Mail &lt;input type=&quot;email&quot; value=&quot;ben@&quot; aria-invalid=&quot;true&quot; aria-describedby=&quot;email-error&quot;&gt;&lt;/label&gt;
+  &lt;p id=&quot;email-error&quot; class=&quot;error&quot;&gt;Error: incomplete email address.&lt;/p&gt;
+  &lt;button type=&quot;button&quot;&gt;Open&lt;/button&gt;
+  &lt;button type=&quot;button&quot; disabled&gt;Disabled&lt;/button&gt;
+&lt;/article&gt;
+&lt;script&gt;
+  document.querySelectorAll(&#x27;[data-theme-choice]&#x27;).forEach(button =&gt; {
+    button.addEventListener(&#x27;click&#x27;, () =&gt; {
+      const theme = button.dataset.themeChoice;
+      if (theme === &#x27;system&#x27;) delete document.documentElement.dataset.theme;
+      else document.documentElement.dataset.theme = theme;
+    });
+  });
+&lt;/script&gt;</code></pre></main><script>/** Ändert nur die Beispielkarte und aktualisiert die Schalterzustände. */
+document.querySelectorAll('[data-theme-choice]').forEach(button => button.addEventListener('click', () => {
+  const theme = button.dataset.themeChoice;
+  document.querySelector('.theme-card').dataset.theme = theme;
+  document.querySelectorAll('[data-theme-choice]').forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
+}));</script></body></html>

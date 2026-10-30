@@ -45,6 +45,7 @@ interface AccessibilityPanelTexts {
 })
 export class AccessibilityPanelComponent {
   @ViewChild('panelWindow') private panelWindow?: ElementRef<HTMLElement>;                                                    // Dialogelement für initialen Fokus und Fokusfalle.
+  private initialPreferences = ''; // Zustand beim Öffnen für eine gebündelte Änderungsmeldung.
   private panelReturnFocus: HTMLElement | null = null;                                                                        // Element, das das Panel geöffnet hat.
   private panelFocusFrameId = 0;                                                                                              // Geplanter Frame für Fokuswechsel beim Öffnen und Schließen.
   readonly accessibility = inject(AccessibilityPreferenceService);                                                            // Accessibility-Service mit persistierten Modi.
@@ -105,6 +106,9 @@ export class AccessibilityPanelComponent {
     const returnFocus = this.panelReturnFocus; // Vor dem Öffnen aktives Element für die Fokusrückführung.
 
     this.open.set(false);
+    if (JSON.stringify(this.accessibility.preferences()) !== this.initialPreferences) {
+      this.showAccessibilityToast();
+    }
     this.panelReturnFocus = null;
     this.schedulePanelFocusReturn(returnFocus);
   }
@@ -126,45 +130,39 @@ export class AccessibilityPanelComponent {
     }
   }
 
-  /** Aktiviert den neuro-sensitiven Modus und zeigt einen kurzen Statushinweis. */
+  /** Aktiviert den neuro-sensitiven Modus und meldet Änderungen gesammelt beim Schließen. */
   enableCalmMode(): void {
     this.accessibility.enableCalmMode();
     this.unlockAccessAchievement();
-    this.showAccessibilityToast();
   }
 
-  /** Setzt alle Accessibility-Einstellungen zurück und zeigt einen kurzen Statushinweis. */
+  /** Setzt alle Accessibility-Einstellungen zurück und meldet Änderungen gesammelt beim Schließen. */
   resetPreferences(): void {
     this.accessibility.resetPreferences();
-    this.showAccessibilityToast();
   }
 
-  /** Setzt den Bewegungsmodus und zeigt einen kurzen Statushinweis. */
+  /** Setzt den Bewegungsmodus und meldet Änderungen gesammelt beim Schließen. */
   setMotionMode(mode: MotionMode): void {
     this.accessibility.setMotionMode(mode);
     this.unlockAccessAchievement();
-    this.showAccessibilityToast();
   }
 
-  /** Setzt den Oberflächenmodus und zeigt einen kurzen Statushinweis. */
+  /** Setzt den Oberflächenmodus und meldet Änderungen gesammelt beim Schließen. */
   setComfortMode(mode: ComfortMode): void {
     this.accessibility.setComfortMode(mode);
     this.unlockAccessAchievement();
-    this.showAccessibilityToast();
   }
 
-  /** Setzt den Kontrastmodus und zeigt einen kurzen Statushinweis. */
+  /** Setzt den Kontrastmodus und meldet Änderungen gesammelt beim Schließen. */
   setContrastMode(mode: ContrastMode): void {
     this.accessibility.setContrastMode(mode);
     this.unlockAccessAchievement();
-    this.showAccessibilityToast();
   }
 
-  /** Setzt den Farbsehmodus und zeigt einen kurzen Statushinweis. */
+  /** Setzt den Farbsehmodus und meldet Änderungen gesammelt beim Schließen. */
   setColorVisionMode(mode: ColorVisionMode): void {
     this.accessibility.setColorVisionMode(mode);
     this.unlockAccessAchievement();
-    this.showAccessibilityToast();
   }
 
   /** Öffnet das Panel und setzt den Fokus auf die erste Bedienaktion. */
@@ -174,6 +172,7 @@ export class AccessibilityPanelComponent {
     }
 
     this.panelReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    this.initialPreferences = JSON.stringify(this.accessibility.preferences());
     this.open.set(true);
     this.cancelPanelFocusFrame();
     this.panelFocusFrameId = window.requestAnimationFrame(/** Fokussiert nach dem Rendern das erste verfügbare Bedienelement. */() => {
@@ -264,7 +263,7 @@ const PANEL_TEXTS: Record<'de' | 'en', AccessibilityPanelTexts> = { // Übersetz
     contrastTitle: 'Kontrast',
     colorTitle: 'Farbseh-Anpassungen',
     storageHint: 'Die Auswahl wird nur lokal im Browser gespeichert.',
-    toastTitle: 'accessibility updated',
+    toastTitle: 'Barrierefreiheit aktualisiert',
     toastText: 'Barrierefreiheit bleibt aktiv, ohne das Design auf rudimentär zu reduzieren.',
     motion: {
       full: 'Voll animiert',

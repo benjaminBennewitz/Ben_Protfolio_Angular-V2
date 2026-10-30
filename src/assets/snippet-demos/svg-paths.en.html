@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Understanding SVG paths – Demo</title><style>* { box-sizing: border-box; }
+:root { --bp-color-text: #f2f5ff; --bp-color-text-muted: #bcc6dd; --bp-color-border: #91a1bd; --bp-color-accent: #b7caff; --bp-color-accent-text: #142347; --bp-color-surface-solid: #121c30; color-scheme: dark; }
+body { margin: 0; padding: clamp(1rem, 4vw, 2rem); background: var(--bp-color-surface-solid); color: var(--bp-color-text); font: 16px/1.6 system-ui, sans-serif; }
+main { max-width: 48rem; margin: auto; }
+h1 { line-height: 1.15; }
+pre { overflow: auto; padding: 1rem; border: 1px solid var(--bp-color-border); font-size: .8rem; }
+.summary { margin-block: 1rem; }
+@media (prefers-color-scheme: light) { :root { --bp-color-text: #172033; --bp-color-text-muted: #465369; --bp-color-border: #69778c; --bp-color-accent: #2148b2; --bp-color-accent-text: #fff; --bp-color-surface-solid: #fff; color-scheme: light; } }
+
+.lab {
+  display: grid;
+  gap: 0.8rem;
+  min-width: 0;
+  color: var(--bp-color-text);
+}
+p { margin: 0; line-height: 1.6; }
+label { display: grid; gap: 0.4rem; font-size: 0.85rem; }
+input[type='range'] { width: 100%; min-width: 0; accent-color: var(--bp-color-accent); }
+button { border: 1px solid var(--bp-color-border); padding: 0.55rem 0.75rem; background: var(--bp-color-surface-solid); color: var(--bp-color-text); cursor: pointer; font: inherit; }
+button:hover { border-color: var(--bp-color-text); }
+button[aria-pressed='true'] { background: var(--bp-color-accent); color: var(--bp-color-accent-text); }
+button:active { transform: translateY(1px); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--bp-color-text); outline-offset: 3px; }
+.lab-code { display: block; overflow-wrap: anywhere; padding: 0.65rem; border: 1px solid var(--bp-color-border); font-size: 0.8rem; }
+.controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; }
+.curve { display: block; width: 100%; height: auto; aspect-ratio: 5 / 3; overflow: visible; fill: var(--bp-color-text); border: 1px solid var(--bp-color-border); }
+.curve path { fill: none; }
+.curve__grid { stroke: var(--bp-color-border); stroke-width: 0.5; }
+.curve__guide { stroke: var(--bp-color-text-muted); stroke-dasharray: 3 3; }
+.curve__path { stroke: var(--bp-color-accent); stroke-width: 3; }
+.curve__handle { fill: var(--bp-color-accent); stroke: var(--bp-color-text); stroke-width: 2; cursor: grab; touch-action: none; }
+.curve__handle:active { cursor: grabbing; }
+.curve text { font-size: 11px; pointer-events: none; }
+.theme-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.theme-card {
+  --surface: #fff; --text: #172033; --muted: #465369; --border: #69778c;
+  --accent: #2148b2; --on-accent: #fff; --error: #ac1731;
+  display: grid; gap: 0.85rem; padding: 1rem; background: var(--surface); color: var(--text); border: 1px solid var(--border); color-scheme: light;
+}
+.theme-card[data-theme='dark'] {
+  --surface: #121c30; --text: #f2f5ff; --muted: #bcc6dd; --border: #91a1bd;
+  --accent: #b7caff; --on-accent: #142347; --error: #ffb3c1;
+  color-scheme: dark;
+}
+.theme-card p { color: var(--muted); }
+.theme-card input { width: 100%; min-width: 0; box-sizing: border-box; padding: 0.65rem; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; }
+.theme-card input::placeholder { color: var(--muted); opacity: 1; }
+.theme-card [aria-invalid='true'] { border: 2px solid var(--error); }
+.theme-card small { color: var(--error); }
+.theme-card button { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+.theme-card button:hover:not(:disabled) { background: var(--surface); color: var(--accent); }
+.theme-card button:disabled { background: var(--surface); color: var(--muted); border-color: var(--border); cursor: not-allowed; }
+.theme-card :is(button, input):focus-visible { outline-color: var(--text); }
+.card-space { min-width: min(100%, 160px); max-width: 100%; }
+.card-space--query { container: snippet-card / inline-size; }
+.responsive-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--bp-color-border); overflow-wrap: anywhere; }
+.responsive-card > div { min-width: 0; }
+.responsive-card__art { display: grid; place-items: center; min-height: 4rem; background: var(--bp-color-accent); color: var(--bp-color-accent-text); font-size: 2rem; font-weight: 900; }
+@media (min-width: 700px) { .responsive-card--viewport { grid-template-columns: 4rem minmax(0, 1fr); } }
+@container snippet-card (min-width: 360px) {
+  .responsive-card { grid-template-columns: 5rem minmax(0, 1fr); }
+  .responsive-card strong { font-size: clamp(1rem, 4cqi, 1.3rem); }
+}
+</style></head>
+<body><main><h1>Understanding SVG paths</h1><p class="summary">An SVG path is a sequence of drawing commands. The preview connects the d attribute to two movable control points, showing how tangents affect the curve direction and shape.</p><section class="lab" aria-label="Interactive demo"><p>Drag the control points or use the sliders.</p>
+<svg class="curve" viewBox="0 0 300 180" role="img" aria-labelledby="curve-label">
+<title id="curve-label">Cubic Bézier curve with two adjustable control points</title>
+<g class="curve__grid" aria-hidden="true"><path d="M 0 30 H 300 M 0 60 H 300 M 0 90 H 300 M 0 120 H 300 M 0 150 H 300 M 50 0 V 180 M 100 0 V 180 M 150 0 V 180 M 200 0 V 180 M 250 0 V 180"/></g>
+<path id="guide" class="curve__guide" d="M 25 140 L 80 20 M 275 140 L 220 20"/>
+<path id="path" class="curve__path" d="M 25 140 C 80 20, 220 20, 275 140"/>
+<circle cx="25" cy="140" r="4"/><circle cx="275" cy="140" r="4"/>
+<circle id="point1" class="curve__handle" cx="80" cy="20" r="8"/><circle id="point2" class="curve__handle" cx="220" cy="20" r="8"/>
+<text id="label1" x="92" y="10">C1</text><text id="label2" x="232" y="10">C2</text>
+</svg><code id="path-code" class="lab-code">M 25 140 C 80 20, 220 20, 275 140</code><div class="controls"><label>x1: <output id="value-x1">80</output><input data-coordinate="x1" type="range" min="0" max="300" value="80" step="1"></label><label>y1: <output id="value-y1">20</output><input data-coordinate="y1" type="range" min="0" max="180" value="20" step="1"></label><label>x2: <output id="value-x2">220</output><input data-coordinate="x2" type="range" min="0" max="300" value="220" step="1"></label><label>y2: <output id="value-y2">20</output><input data-coordinate="y2" type="range" min="0" max="180" value="20" step="1"></label></div></section>
+<h2>Remember</h2><ul><li>viewBox=&quot;0 0 300 180&quot; defines the internal coordinate system. X grows to the right and Y downwards.</li><li>M moves the pen, L draws a line, H/V draw horizontally/vertically and Z closes the path.</li><li>C uses two control points; Q defines a quadratic Bézier curve with one control point.</li><li>Uppercase commands use absolute coordinates. m/l/c/q are relative to the current point; the initial m is relative to the origin.</li><li>Control points usually do not lie on the curve. They set the start and end tangents.</li><li>Decorative SVGs use aria-hidden=&quot;true&quot;. Informative SVGs need role=&quot;img&quot; and an accessible name. Sliders provide a keyboard alternative to dragging.</li></ul>
+<h2>Before: compact path</h2><pre><code>&lt;svg viewBox=&quot;0 0 300 180&quot;&gt;
+  &lt;path d=&quot;M25 140C80 20 220 20 275 140&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot;/&gt;
+&lt;/svg&gt;</code></pre>
+<h2>After: path and guides</h2><pre><code>&lt;svg viewBox=&quot;0 0 300 180&quot; role=&quot;img&quot; aria-labelledby=&quot;curve-title&quot;&gt;
+  &lt;title id=&quot;curve-title&quot;&gt;Bézier curve with control points&lt;/title&gt;
+  &lt;!-- M: start. C: control point 1, control point 2, end. --&gt;
+  &lt;path d=&quot;M 25 140
+           C 80 20, 220 20, 275 140&quot;
+        fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;3&quot; /&gt;
+  &lt;!-- Guides from start/end to their control points. --&gt;
+  &lt;path d=&quot;M 25 140 L 80 20 M 275 140 L 220 20&quot;
+        fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-dasharray=&quot;3 3&quot; /&gt;
+  &lt;circle cx=&quot;80&quot; cy=&quot;20&quot; r=&quot;4&quot; fill=&quot;currentColor&quot; /&gt;
+  &lt;circle cx=&quot;220&quot; cy=&quot;20&quot; r=&quot;4&quot; fill=&quot;currentColor&quot; /&gt;
+&lt;/svg&gt;</code></pre></main><script>const curve = { x1: 80, y1: 20, x2: 220, y2: 20 };
+const svg = document.querySelector('svg');
+let draggedPoint = null;
+/** Aktualisiert Pfad, Hilfslinien und die zugänglichen Koordinatenregler gemeinsam. */
+function renderCurve() {
+  const path = `M 25 140 C ${curve.x1} ${curve.y1}, ${curve.x2} ${curve.y2}, 275 140`;
+  document.querySelector('#path').setAttribute('d', path);
+  document.querySelector('#path-code').textContent = path;
+  document.querySelector('#guide').setAttribute('d', `M 25 140 L ${curve.x1} ${curve.y1} M 275 140 L ${curve.x2} ${curve.y2}`);
+  for (const point of [1, 2]) {
+    document.querySelector(`#point${point}`).setAttribute('cx', curve[`x${point}`]);
+    document.querySelector(`#point${point}`).setAttribute('cy', curve[`y${point}`]);
+    document.querySelector(`#label${point}`).setAttribute('x', curve[`x${point}`] > 260 ? curve[`x${point}`] - 30 : curve[`x${point}`] + 12);
+    document.querySelector(`#label${point}`).setAttribute('y', Math.max(18, curve[`y${point}`] - 10));
+  }
+  document.querySelectorAll('[data-coordinate]').forEach(input => {
+    input.value = curve[input.dataset.coordinate];
+    document.querySelector(`#value-${input.dataset.coordinate}`).textContent = input.value;
+  });
+}
+document.querySelectorAll('[data-coordinate]').forEach(input => input.addEventListener('input', () => {
+  curve[input.dataset.coordinate] = Number(input.value);
+  renderCurve();
+}));
+for (const point of [1, 2]) document.querySelector(`#point${point}`).addEventListener('pointerdown', event => {
+  event.preventDefault();
+  draggedPoint = point;
+  event.currentTarget.setPointerCapture(event.pointerId);
+});
+svg.addEventListener('pointermove', event => {
+  if (!draggedPoint) return;
+  const rect = svg.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  curve[`x${draggedPoint}`] = Math.round(Math.max(0, Math.min(300, (event.clientX - rect.left) / rect.width * 300)));
+  curve[`y${draggedPoint}`] = Math.round(Math.max(0, Math.min(180, (event.clientY - rect.top) / rect.height * 180)));
+  renderCurve();
+});
+for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) svg.addEventListener(event, () => { draggedPoint = null; });</script></body></html>

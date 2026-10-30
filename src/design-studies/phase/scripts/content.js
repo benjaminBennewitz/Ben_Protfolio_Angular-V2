@@ -1,7 +1,7 @@
 /** @file Zweisprachige Oberfläche und lokale SVG-Silhouetten. */
 export const texts = {
   de: {
-    footerCopy: 'Sieben Formen. Ein unsichtbarer Rhythmus.',
+    footerCopy: 'Zwölf Formen. Ein unsichtbarer Rhythmus.',
     allStudies: 'Alle Designstudien ↗',
     imprint: 'Impressum',
     privacy: 'Datenschutz',
@@ -31,7 +31,7 @@ export const texts = {
     error: 'Die Zeichenfläche konnte nicht geladen werden. Bitte lade die Seite erneut.',
   },
   en: {
-    footerCopy: 'Seven forms. One invisible rhythm.',
+    footerCopy: 'Twelve forms. One invisible rhythm.',
     allStudies: 'All design studies ↗',
     imprint: 'Legal notice',
     privacy: 'Privacy',
@@ -71,4 +71,10 @@ export const silhouettes = {
   amoeba: 'M17 6C25-5 24 10 32 9S43 17 34 22 42 37 30 34 26 46 19 36 4 43 7 30-4 24 7 18 5 5 17 6ZM25 23a5 5 0 1 1-10 0 5 5 0 1 1 10 0Z',
   colony:
     'M17 20 10 12m13 7 7-9m-7 14 8 7m-14-6-8 9M16 22a6 6 0 1 0 12 0 6 6 0 1 0-12 0ZM5 11a5 5 0 1 0 10 0 5 5 0 1 0-10 0ZM25 9a5 5 0 1 0 10 0 5 5 0 1 0-10 0ZM3 35a6 6 0 1 0 12 0 6 6 0 1 0-12 0ZM25 33a6 6 0 1 0 12 0 6 6 0 1 0-12 0Z',
+  rotifer:
+    'M16 15C8 26 14 36 20 39 29 32 31 23 24 15M13 7a6 6 0 1 1-12 0 6 6 0 1 1 12 0ZM39 7a6 6 0 1 1-12 0 6 6 0 1 1 12 0ZM7 2v10m-5-5h10m21-5v10m-5-5h10M20 39l-4 5m4-5 4 5',
+  ctenophore: 'M20 4C2 4 2 35 20 37 38 35 38 4 20 4ZM20 4c-10 8-10 25 0 33m0-33c10 8 10 25 0 33m0-33v33m-8 1-3 6m11-7v7m8-6 3 6',
+  euglena: 'M22 11C7 13 7 36 20 42 34 35 32 17 22 11ZM22 11C38 2 9 5 26 0M23 18h1m-8 8 8 7',
+  diatom: 'M20 2C2 18 2 29 20 42 38 29 38 18 20 2ZM20 2v40M11 13h18m-21 6h24m-25 6h26m-22 6h18m-14 6h10',
+  'brittle-larva': 'M20 20l-9-18m9 18 9-18m-9 18L2 10m18 10 18-10m-18 10L5 39m15-19 15 19M20 16c-8 0-8 12 0 12s8-12 0-12Z',
 };

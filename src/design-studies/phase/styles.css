@@ -46,12 +46,12 @@
 }
 :root[data-theme='light'] {
   color-scheme: light;
-  --bg: #eeeee7;
-  --text: #202421;
-  --muted: #62665f;
-  --line: #c4c7bf;
-  --accent: #c42631;
-  --panel: rgba(238, 238, 231, 0.9);
+  --bg: #ddd2be;
+  --text: #29271f;
+  --muted: #625b4e;
+  --line: #b6aa96;
+  --accent: #b32734;
+  --panel: rgba(215, 203, 181, 0.94);
 }
 /* 02   Basis und Fokus */
 
@@ -200,8 +200,11 @@ h1 {
   position: relative;
   z-index: 1;
   background: var(--panel);
-  width: 236px;
-  padding: 23px 0 20px 23px;
+  width: 260px;
+  max-width: 100%;
+  min-width: 0;
+  flex-shrink: 0;
+  padding: 23px 23px 20px;
   border-left: 1px solid var(--line);
 }
 .panel-heading {
@@ -313,8 +316,8 @@ input[type='range'] {
     right: 140px;
   }
   .controls {
-    width: 205px;
-    padding-left: 16px;
+    width: 221px;
+    padding-inline: 16px;
   }
   .annotation {
     right: 225px;

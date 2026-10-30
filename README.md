@@ -153,7 +153,7 @@ An interactive manifesto about pressure, destruction, and creative transformatio
 
 ### PHASE.
 
-**Generative-art and creative-coding study.** Seven biologically inspired point creatures explore how mathematical waves, phase shifts, and selective light impulses can suggest living motion. A specimen archive, shared controls, and independent renderers connect the organic forms through one p5.js Canvas experience.
+**Generative-art and creative-coding study.** Twelve biologically inspired point creatures explore how mathematical waves, phase shifts, and selective light impulses can suggest living motion. A specimen archive, shared controls, and independent renderers connect the organic forms through one p5.js Canvas experience.
 
 [Study README](src/design-studies/phase/README.md) · [Open study](https://b2folio.de/design-studies/phase/)
 

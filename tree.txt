@@ -1057,9 +1057,15 @@ B2Folio/
 │   │   │   ├── scripts/
 │   │   │   │   ├── organisms/
 │   │   │   │   │   ├── amoeba.js
+│   │   │   │   │   ├── brittle-larva.js
 │   │   │   │   │   ├── ciliate.js
 │   │   │   │   │   ├── colony.js
+│   │   │   │   │   ├── ctenophore.js
+│   │   │   │   │   ├── diatom.js
+│   │   │   │   │   ├── euglena.js
+│   │   │   │   │   ├── geometry.js
 │   │   │   │   │   ├── medusa.js
+│   │   │   │   │   ├── rotifer.js
 │   │   │   │   │   ├── spirillum.js
 │   │   │   │   │   ├── sun.js
 │   │   │   │   │   └── worm.js

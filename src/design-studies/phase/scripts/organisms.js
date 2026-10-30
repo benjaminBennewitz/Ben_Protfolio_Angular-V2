@@ -1,3 +1,8 @@
+import { drawRotifer } from './organisms/rotifer.js';
+import { drawCtenophore } from './organisms/ctenophore.js';
+import { drawEuglena } from './organisms/euglena.js';
+import { drawDiatom } from './organisms/diatom.js';
+import { drawBrittleLarva } from './organisms/brittle-larva.js';
 import { drawColony } from './organisms/colony.js';
 import { drawAmoeba } from './organisms/amoeba.js';
 import { drawSpirillum } from './organisms/spirillum.js';
@@ -132,5 +137,95 @@ export const SPECIMENS = Object.freeze([
       canvas: 'Nine connected pulsing cells with pale membranes, internal nuclei and red light impulses.',
     },
     render: drawColony,
+  },
+  {
+    id: 'rotifer',
+    number: '008',
+    fitWidth: 1.3,
+    de: {
+      name: 'Rädertierchen',
+      description: 'Zwei Wimpernräder. Ein gemeinsamer Sog.',
+      parameter: 'Wimpernschlag',
+      canvas: 'Tropfenförmiges Rädertierchen mit zwei schlagenden Wimpernkränzen, inneren Organen und schmalem Fuß.',
+    },
+    en: {
+      name: 'Rotifer',
+      description: 'Two ciliary wheels. One shared current.',
+      parameter: 'Ciliary beat',
+      canvas: 'Teardrop-shaped rotifer with two beating ciliary crowns, internal organs and a slender foot.',
+    },
+    render: drawRotifer,
+  },
+  {
+    id: 'ctenophore',
+    number: '009',
+    fitWidth: 1.2,
+    de: {
+      name: 'Rippenqualle',
+      description: 'Acht Lichtkämme wandern durch einen gläsernen Körper.',
+      parameter: 'Kammfrequenz',
+      canvas: 'Transparente ovale Rippenqualle mit acht pulsierenden Wimpernbändern und innerem Kanal.',
+    },
+    en: {
+      name: 'Comb jelly',
+      description: 'Eight luminous comb rows travel over a glass-like body.',
+      parameter: 'Comb frequency',
+      canvas: 'Transparent oval comb jelly with eight pulsing ciliary bands and an internal canal.',
+    },
+    render: drawCtenophore,
+  },
+  {
+    id: 'euglena',
+    number: '010',
+    fitWidth: 1.3,
+    de: {
+      name: 'Augentierchen',
+      description: 'Ein roter Fleck. Eine Geißel zeichnet den Weg.',
+      parameter: 'Geißelschlag',
+      canvas: 'Schlankes Augentierchen mit rotem Augenfleck, inneren Fasern und langer schwingender Geißel.',
+    },
+    en: {
+      name: 'Euglena',
+      description: 'A red spot. A flagellum traces the path.',
+      parameter: 'Flagellar beat',
+      canvas: 'Slender euglena with a red eyespot, internal fibres and a long beating flagellum.',
+    },
+    render: drawEuglena,
+  },
+  {
+    id: 'diatom',
+    number: '011',
+    fitWidth: 1.2,
+    de: {
+      name: 'Kieselalge',
+      description: 'Eine filigrane Schale. Ordnung bis in die kleinste Pore.',
+      parameter: 'Schalendrehung',
+      canvas: 'Symmetrische bootsförmige Kieselalge mit Porenreihen, Doppelschale und zentralem Lichtimpuls.',
+    },
+    en: {
+      name: 'Diatom',
+      description: 'A delicate shell. Order down to the smallest pore.',
+      parameter: 'Shell rotation',
+      canvas: 'Symmetrical boat-shaped diatom with rows of pores, a double shell and a central light impulse.',
+    },
+    render: drawDiatom,
+  },
+  {
+    id: 'brittle-larva',
+    number: '012',
+    fitWidth: 1.04,
+    de: {
+      name: 'Schlangenstern-Larve',
+      description: 'Ein kleiner Körper. Sechs Arme folgen unsichtbaren Strömungen.',
+      parameter: 'Armwelle',
+      canvas: 'Künstlerische Schlangenstern-Larve mit kleinem Körper und sechs langen, bewimperten Armen.',
+    },
+    en: {
+      name: 'Brittle star larva',
+      description: 'A tiny body. Six arms follow invisible currents.',
+      parameter: 'Arm wave',
+      canvas: 'Artistic brittle star larva with a tiny body and six long ciliated arms.',
+    },
+    render: drawBrittleLarva,
   },
 ]);

@@ -2,7 +2,7 @@
 
 [← Study overview](../../../README.md#standalone-design-studies) · [View live study](https://b2folio.de/design-studies/phase/)
 
-A generative-art study in organic motion, point-cloud composition, and coordinated wave patterns. Seven biologically inspired creatures share one restrained visual language while retaining distinct mathematical forms and movement.
+A generative-art study in organic motion, point-cloud composition, and coordinated wave patterns. Twelve biologically inspired creatures share one restrained visual language while retaining distinct mathematical forms and movement.
 
 > [!NOTE]
 > This is a non-commercial, experimental study in graphic design and web development, created for personal learning. It is not a production product or a commercial service. Accessibility and production readiness are not the primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed. The creatures are artistic abstractions, not scientifically accurate biological simulations.
@@ -16,7 +16,7 @@ A generative-art study in organic motion, point-cloud composition, and coordinat
 
 The starting point is a visual experiment with a worm-like form, lateral ribs, and phase-shifted oscillation. The learning question is how point placement, deformation, timing, and selective red accents can suggest a living organism without relying on a pre-rendered video or a modeled asset.
 
-The same question is explored through seven different bodies. A worm carries an undulating wave, a medusa contracts its bell, and a colony passes impulses between cells. Each form uses its own geometry while sharing projection, rendering, controls, and lifecycle behavior.
+The same question is explored through twelve different bodies. A worm carries an undulating wave, a medusa contracts its bell, and a colony passes impulses between cells. Each form uses its own geometry while sharing projection, rendering, controls, and lifecycle behavior.
 
 ## Concept and visual direction
 
@@ -35,6 +35,11 @@ The archive presents numbered silhouettes. The selected creature receives the ce
 | Spirillum | Rotating helical body and trailing flagella | Coiling |
 | Amoeba | Deforming pseudopods, flowing cytoplasm, softly pulsing nucleus | Morphing |
 | Cell colony | Nine connected cells with coordinated pulses | Pulse offset |
+| Rotifer | Two phase-shifted ciliary crowns around a teardrop body | Ciliary beat |
+| Comb jelly | Eight travelling comb bands around a transparent body | Comb frequency |
+| Euglena | A spindle-shaped cell with an eyespot and long flagellum | Flagellar beat |
+| Diatom | A slowly rotating porous double shell | Shell rotation |
+| Brittle star larva | A small body with six gently swaying ciliated arms | Arm wave |
 
 Speed and movement strength are shared. Switching specimens preserves the control values, theme, language, and pause state; the new specimen starts at time zero. Reset preserves the selected specimen and pause state. Native buttons and sliders support keyboard interaction.
 
@@ -77,13 +82,19 @@ The preview is rendered from the actual procedural medusa geometry and composed 
 
 ## Verification
 
-The integration checks the Angular production build, module paths, source syntax, documentation coverage, and script/function sizes. Deterministic point output is compared with the uploaded prototype across all seven specimens, multiple times, quality profiles, and parameter values. Browser checks cover the integrated study, archive, controls, translations, themes, and footer links. These checks do not constitute a complete WCAG audit or a real-device mobile test.
+The integration checks the Angular production build, module paths, source syntax, documentation coverage, and script/function sizes. Deterministic point output is compared with the uploaded prototype across the original seven specimens, multiple times, quality profiles, and parameter values. Browser checks cover the integrated study, archive, controls, translations, themes, and footer links. These checks do not constitute a complete WCAG audit or a real-device mobile test.
 
 ### Integration check results
 
 - `npm run build:production`: passed.
 - Existing `portfolio-page.component.spec.ts`: both tests passed, including dynamic last-card selection.
-- All 125 original application functions have JSDoc and remain at or below 20 lines including their attached documentation; the largest application script has 199 lines.
+- All 152 application functions have JSDoc and remain at or below 20 lines including their attached documentation; the largest application script has 232 lines.
 - 560,520 point records match the uploaded prototype exactly across seven specimens, three sample times, both quality profiles, and two movement-strength values.
 - The integrated Angular overview exposes PHASE as its ninth study and quicklink. Browser checks cover the new card, the static study, medusa selection, theme/language/pause states, and the translated footer.
 - The existing Apache SPA fallback remains responsible for direct requests to Angular routes. The static QA server does not implement that fallback; portfolio navigation was checked from the running Angular application.
+
+### Expanded specimen archive
+
+The archive contains twelve specimens. The five retained additions—rotifer, ctenophore, euglena, diatom, and brittle-star larva—share small pose, ellipsoid, and ring helpers in `scripts/organisms/geometry.js`. The seven original renderer files remain unchanged. Each creature has German and English descriptions, its own local silhouette, and an appropriate third parameter. The warm light theme and corrected control-panel spacing remain in place.
+
+The retained additions were inspected in the desktop browser during expansion. Archive selection, English labels, warm light mode, pause, and a parameter change while paused were checked. Sampled geometry checks covered both quality profiles, multiple times, and parameter extremes; positions were finite and fitted the viewport. The rigid diatom shell additionally rocks according to movement strength. Vorticella and tardigrade were subsequently removed from the archive, renderer imports, and documentation. Real-device mobile testing and a comprehensive accessibility audit are outside these checks.

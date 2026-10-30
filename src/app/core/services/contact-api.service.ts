@@ -16,6 +16,25 @@ export interface ContactRequest {
   readonly website: string; // Unsichtbares Honeypot-Feld zur Spam-Erkennung.
 }
 
+/** Mit der Contact API abgestimmte Feld-, Body- und Zeitlimits. */
+export const CONTACT_LIMITS = {
+  name: 120,
+  email: 254,
+  message: 5000,
+  bodyBytes: 16 * 1024,
+  timeoutMs: 20_000,
+} as const;
+
+/** Serialisiert ausschließlich die vier freigegebenen Felder, auch bei zusätzlichen Laufzeiteigenschaften. */
+export function serializeContactRequest(request: ContactRequest): string {
+  return JSON.stringify({
+    name: request.name,
+    email: request.email,
+    message: request.message,
+    website: request.website,
+  });
+}
+
 /** Vom CSRF-Endpunkt erwartete Antwort. */
 interface CsrfResponse {
   readonly csrfToken: string;  // Vom Server bereitgestellter CSRF-Token.
@@ -30,7 +49,8 @@ export type ContactApiErrorKind =
   | 'rate-limit'
   | 'unavailable'
   | 'server'
-  | 'network';
+  | 'network'
+  | 'timeout';
 
 /** Typisierter API-Fehler ohne Offenlegung technischer Backend-Details. */
 export class ContactApiError extends Error {
@@ -38,6 +58,7 @@ export class ContactApiError extends Error {
   constructor(
     readonly kind: ContactApiErrorKind, // Fachliche Fehlerklasse für das UI.
     readonly status?: number,          // Optionaler HTTP-Status der Antwort.
+    readonly retryAfterSeconds?: number,
   ) {
     super(`Contact API request failed: ${kind}`);
     this.name = 'ContactApiError';
@@ -47,6 +68,8 @@ export class ContactApiError extends Error {
 /** Kapselt CSRF-Lifecycle, Request-Whitelist und einen begrenzten CSRF-Retry. */
 @Injectable({ providedIn: 'root' })
 export class ContactApiService {
+  /** Ende der vom Server vorgegebenen Wartezeit, auch bei neu erstelltem Formular. */
+  private retryAfterUntil = 0;
   private csrfToken: string | null = null;             // Im Arbeitsspeicher gehaltener CSRF-Token; niemals in Web Storage persistieren.
   private pendingRequest: Promise<void> | null = null; // Teilt einen laufenden Versand zwischen parallelen Submit-Versuchen.
 
@@ -56,7 +79,18 @@ export class ContactApiService {
       return this.pendingRequest;
     }
 
-    const pendingRequest = this.sendWithCsrfRetry(request).finally(/** Gibt den abgeschlossenen Versand für nachfolgende Anfragen frei. */() => { // Gemeinsam verwendetes Promise des laufenden Versands.
+    if (Date.now() < this.retryAfterUntil) {
+      return Promise.reject(new ContactApiError(
+        'rate-limit', 429, Math.ceil((this.retryAfterUntil - Date.now()) / 1000),
+      ));
+    }
+
+    const body = serializeContactRequest(request);
+    if (new TextEncoder().encode(body).byteLength > CONTACT_LIMITS.bodyBytes) {
+      return Promise.reject(new ContactApiError('payload-too-large'));
+    }
+
+    const pendingRequest = this.sendWithTimeout(body).finally(/** Gibt den abgeschlossenen Versand für nachfolgende Anfragen frei. */() => { // Gemeinsam verwendetes Promise des laufenden Versands.
       if (this.pendingRequest === pendingRequest) {
         this.pendingRequest = null;
       }
@@ -66,39 +100,58 @@ export class ContactApiService {
     return pendingRequest;
   }
 
-  /** Führt den POST aus und erneuert bei genau einem 403 den CSRF-Token einmalig. */
-  private async sendWithCsrfRetry(request: ContactRequest): Promise<void> {
+  /** Begrenzt den gesamten Ablauf einschließlich CSRF-Body; ein Timeout wiederholt keinen POST. */
+  private async sendWithTimeout(body: string): Promise<void> {
+    const controller = new AbortController();
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+      timeoutId = setTimeout(() => {
+        reject(new ContactApiError('timeout'));
+        controller.abort();
+      }, CONTACT_LIMITS.timeoutMs);
+    });
 
-    let token = await this.getCsrfToken();                 // CSRF-Token für den aktuellen Versandversuch.
-    let response = await this.postContact(request, token); // HTTP-Antwort des aktuellen API-Aufrufs.
+    try {
+      await Promise.race([this.sendWithCsrfRetry(body, controller.signal), timeout]);
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  }
+
+  /** Führt den POST aus und erneuert bei genau einem 403 den CSRF-Token einmalig. */
+  private async sendWithCsrfRetry(body: string, signal: AbortSignal): Promise<void> {
+
+    let token = await this.getCsrfToken(signal);                 // CSRF-Token für den aktuellen Versandversuch.
+    let response = await this.postContact(body, token, signal); // HTTP-Antwort des aktuellen API-Aufrufs.
 
     if (response.status === 403) {
       this.csrfToken = null;
-      token = await this.getCsrfToken();
-      response = await this.postContact(request, token);
+      token = await this.getCsrfToken(signal);
+      response = await this.postContact(body, token, signal);
     }
 
     if (response.status === 202) {
       return;
     }
 
-    throw this.createApiError(response.status);
+    throw this.createApiError(response);
   }
 
   /** Lädt den CSRF-Token aus der JSON-Antwort; der HttpOnly-Cookie bleibt Browser-Aufgabe. */
-  private async getCsrfToken(): Promise<string> {
+  private async getCsrfToken(signal: AbortSignal): Promise<string> {
     if (this.csrfToken) {
       return this.csrfToken;
     }
 
     const response = await this.safeFetch(environment.csrfEndpoint, { // HTTP-Antwort des aktuellen API-Aufrufs.
       method: 'GET',
+      signal,
       credentials: 'same-origin',
       headers: { Accept: 'application/json' },
     });
 
     if (!response.ok) {
-      throw this.createApiError(response.status);
+      throw this.createApiError(response);
     }
 
     let payload: CsrfResponse; // Geprüfte JSON-Antwort des CSRF-Endpunkts.
@@ -109,30 +162,33 @@ export class ContactApiService {
       throw new ContactApiError('server', response.status);
     }
 
-    if (typeof payload.csrfToken !== 'string' || !payload.csrfToken.trim()) {
+    if (!payload || typeof payload.csrfToken !== 'string' || !payload.csrfToken.trim()) {
       throw new ContactApiError('server', response.status);
     }
 
+    signal.throwIfAborted();
     this.csrfToken = payload.csrfToken;
     return payload.csrfToken;
   }
 
   /** Sendet ausschließlich den freigegebenen Contact-Request mit dem JSON-CSRF-Token. */
-  private postContact(request: ContactRequest, csrfToken: string): Promise<Response> {
+  private postContact(body: string, csrfToken: string, signal: AbortSignal): Promise<Response> {
     return this.safeFetch(environment.contactEndpoint, {
       method: 'POST',
+      signal,
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken,
       },
-      body: JSON.stringify(request),
+      body,
     });
   }
 
   /** Normalisiert reine Netzwerkfehler, ohne Request-Inhalte zu protokollieren. */
   private async safeFetch(input: RequestInfo | URL, init: RequestInit): Promise<Response> {
     try {
+      init.signal?.throwIfAborted();
       return await fetch(input, init);
     } catch {
       throw new ContactApiError('network');
@@ -140,7 +196,8 @@ export class ContactApiService {
   }
 
   /** Ordnet HTTP-Statuscodes stabilen UI-Fehlerklassen zu. */
-  private createApiError(status: number): ContactApiError {
+  private createApiError(response: Response): ContactApiError {
+    const status = response.status;
     if (status === 400) {
       return new ContactApiError('validation', status);
     }
@@ -154,7 +211,17 @@ export class ContactApiService {
     }
 
     if (status === 429) {
-      return new ContactApiError('rate-limit', status);
+      const header = response.headers.get('Retry-After')?.trim() ?? '';
+      const seconds = /^\d+$/.test(header)
+        ? Number(header)
+        : (Date.parse(header) - Date.now()) / 1000;
+      const retryAfter = Number.isFinite(seconds) && seconds > 0
+        ? Math.ceil(seconds)
+        : undefined;
+      if (retryAfter) {
+        this.retryAfterUntil = Date.now() + retryAfter * 1000;
+      }
+      return new ContactApiError('rate-limit', status, retryAfter);
     }
 
     if (status === 503) {

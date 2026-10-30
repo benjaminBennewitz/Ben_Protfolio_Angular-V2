@@ -34,7 +34,7 @@ describe('ContactFormComponent', /** Gruppiert die Verhaltensprüfungen der Shar
     form = TestBed.createComponent(ContactFormComponent).componentInstance;
   });
 
-  afterEach(/** Entfernt Testkomponenten und stellt den Browserzustand wieder her. */() => { TestBed.resetTestingModule(); });
+  afterEach(/** Entfernt Testkomponenten und stellt den Browserzustand wieder her. */() => { TestBed.resetTestingModule(); vi.useRealTimers(); });
 
   it('zeigt Fehler erst nach Submit, blockiert ungültige Eingaben und verknüpft Error-IDs', /** Zeigt Fehler erst nach Submit, blockiert ungültige Eingaben und verknüpft Error-IDs. */ async () => {
     expect(form.fieldError('name')).toBe('');
@@ -104,7 +104,7 @@ describe('ContactFormComponent', /** Gruppiert die Verhaltensprüfungen der Shar
   it.each([
     ['validation', 'validationErrorMessage'], ['csrf', 'csrfErrorMessage'],
     ['payload-too-large', 'payloadTooLargeErrorMessage'], ['rate-limit', 'rateLimitErrorMessage'],
-    ['unavailable', 'temporaryErrorMessage'], ['network', 'networkErrorMessage'], ['server', 'serverErrorMessage'],
+    ['timeout', 'timeoutErrorMessage'], ['unavailable', 'temporaryErrorMessage'], ['network', 'networkErrorMessage'], ['server', 'serverErrorMessage'],
   ] as const)('übersetzt den Fehler %s und bewahrt die Eingaben für einen erneuten Versuch', /** Stellt den für den Test benötigten Zustand bereit. */ async (kind, key) => {
     vi.mocked(TestBed.inject(ContactApiService).sendContactMessage).mockRejectedValueOnce(new ContactApiError(kind as ContactApiErrorKind));
     fillForm();
@@ -114,4 +114,54 @@ describe('ContactFormComponent', /** Gruppiert die Verhaltensprüfungen der Shar
     expect(form.isSubmitting()).toBe(false);
     expect(TestBed.inject(Router).navigate).not.toHaveBeenCalled();
   });
+  it.each([
+    ['name', 121, 'nameTooLongError'],
+    ['email', 255, 'emailTooLongError'],
+    ['message', 5001, 'messageTooLongError'],
+  ] as const)('blockiert das überlange Feld %s vor dem Versand', async (field, length, errorKey) => {
+    fillForm();
+    form[field].set('x'.repeat(length));
+    await form.submit();
+    expect(form.fieldError(field)).toBe(content[errorKey]);
+    expect(TestBed.inject(ContactApiService).sendContactMessage).not.toHaveBeenCalled();
+  });
+
+  it('berücksichtigt Themen bei der maximalen Nachrichtenlänge und erhält den Text', async () => {
+    fillForm();
+    form.message.set('x'.repeat(5000));
+    form.toggleTopic(content.topics[0]);
+    await form.submit();
+    expect(form.fieldError('message')).toBe(content.messageTooLongError);
+    expect(form.message()).toHaveLength(5000);
+    expect(TestBed.inject(ContactApiService).sendContactMessage).not.toHaveBeenCalled();
+    form.toggleTopic(content.topics[0]);
+    await form.submit();
+    expect(TestBed.inject(ContactApiService).sendContactMessage).toHaveBeenCalledOnce();
+  });
+
+  it('begrenzt den UTF-8-Body unabhängig von der Zeichenzahl', async () => {
+    fillForm();
+    form.message.set('😀'.repeat(4500));
+    await form.submit();
+    expect(form.status()).toBe(content.payloadTooLargeErrorMessage);
+    expect(TestBed.inject(ContactApiService).sendContactMessage).not.toHaveBeenCalled();
+    expect(form.message()).toBe('😀'.repeat(4500));
+  });
+
+  it('blockiert Submits während der Serverwartezeit und beendet den Countdown', async () => {
+    vi.useFakeTimers();
+    fillForm();
+    const send = vi.mocked(TestBed.inject(ContactApiService).sendContactMessage);
+    send.mockRejectedValueOnce(new ContactApiError('rate-limit', 429, 2));
+    await form.submit();
+    expect(form.retryAfterSeconds()).toBe(2);
+    expect(form.retryCountdownLabel()).toContain('2');
+    await form.submit();
+    expect(send).toHaveBeenCalledOnce();
+    await vi.advanceTimersByTimeAsync(2000);
+    expect(form.retryAfterSeconds()).toBe(0);
+    await form.submit();
+    expect(send).toHaveBeenCalledTimes(2);
+  });
+
 });

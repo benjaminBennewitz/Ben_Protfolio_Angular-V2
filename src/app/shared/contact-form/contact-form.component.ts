@@ -5,11 +5,11 @@
  * @description Validiert Eingaben clientseitig und sendet freigegebene Kontaktdaten über die zentrale Infrastructure API.
  */
 
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import type { ContactTopic } from '../../core/models/pages.models';
-import { ContactApiError, ContactApiService, ContactRequest } from '../../core/services/contact-api.service';
+import { CONTACT_LIMITS, serializeContactRequest, ContactApiError, ContactApiService, ContactRequest } from '../../core/services/contact-api.service';
 import { LanguageService } from '../../core/services/language.service';
 import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 
@@ -25,6 +25,16 @@ type ContactField = 'name' | 'email' | 'message';
   styleUrl: './contact-form.component.scss',
 })
 export class ContactFormComponent {
+  private readonly destroyRef = inject(DestroyRef);
+  private retryTimer: ReturnType<typeof setInterval> | undefined;
+  readonly limits = CONTACT_LIMITS;
+  readonly retryAfterSeconds = signal(0);
+
+  /** Entfernt den Countdown beim Verlassen der Seite. */
+  constructor() {
+    this.destroyRef.onDestroy(() => clearInterval(this.retryTimer));
+  }
+
   private static nextInstanceId = 0;                                         // Laufender Zähler für eindeutige Formular-IDs bei mehreren Formularinstanzen.
   private readonly contactApiService = inject(ContactApiService);            // API-Service für CSRF-Handshake und Contact-Request.
   private readonly languageService = inject(LanguageService);                // Sprachservice für Labels und Meldungen.
@@ -134,7 +144,7 @@ export class ContactFormComponent {
 
   /** Sendet valide Formulardaten über die zentrale Infrastructure API. */
   async submit(): Promise<void> {
-    if (this.isSubmitting()) {
+    if (this.isSubmitting() || this.retryAfterSeconds() > 0) {
       return;
     }
 
@@ -146,13 +156,22 @@ export class ContactFormComponent {
       return;
     }
 
+    const payload = this.createPayload();
+    if (new TextEncoder().encode(serializeContactRequest(payload)).byteLength > this.limits.bodyBytes) {
+      this.status.set(this.content().payloadTooLargeErrorMessage);
+      return;
+    }
+
     this.isSubmitting.set(true);
 
     try {
-      await this.contactApiService.sendContactMessage(this.createPayload());
+      await this.contactApiService.sendContactMessage(payload);
       this.resetForm();
       await this.router.navigate(['/danke']);
     } catch (error: unknown) {
+      if (error instanceof ContactApiError && error.kind === 'rate-limit' && error.retryAfterSeconds) {
+        this.startRetryCountdown(error.retryAfterSeconds);
+      }
       this.status.set(this.apiErrorMessage(error));
     } finally {
       this.isSubmitting.set(false);
@@ -198,10 +217,30 @@ export class ContactFormComponent {
       'rate-limit': content.rateLimitErrorMessage,
       unavailable: content.temporaryErrorMessage,
       network: content.networkErrorMessage,
+      timeout: content.timeoutErrorMessage,
       server: content.serverErrorMessage,
     };
 
     return messages[error.kind];
+  }
+
+  /** Zeigt die verbleibende Serverwartezeit ohne sekündliche Screenreader-Meldungen. */
+  retryCountdownLabel(): string {
+    return this.content().retryAfterLabel.replace('{seconds}', String(this.retryAfterSeconds()));
+  }
+
+  /** Berechnet die Wartezeit anhand der Uhr, auch nach inaktiven Browser-Tabs. */
+  private startRetryCountdown(seconds: number): void {
+    clearInterval(this.retryTimer);
+    const until = Date.now() + seconds * 1000;
+    this.retryAfterSeconds.set(seconds);
+    this.retryTimer = setInterval(() => {
+      const remaining = Math.max(0, Math.ceil((until - Date.now()) / 1000));
+      this.retryAfterSeconds.set(remaining);
+      if (!remaining) {
+        clearInterval(this.retryTimer);
+      }
+    }, 1000);
   }
 
   /** Setzt nach erfolgreichem Versand alle Formularwerte inklusive Honeypot zurück. */
@@ -230,6 +269,10 @@ export class ContactFormComponent {
       return this.content().nameRequiredError;
     }
 
+    if (Array.from(value).length > this.limits.name) {
+      return this.content().nameTooLongError;
+    }
+
     if (value.length < 2) {
       return this.content().nameLengthError;
     }
@@ -246,6 +289,10 @@ export class ContactFormComponent {
       return this.content().emailRequiredError;
     }
 
+    if (Array.from(value).length > this.limits.email) {
+      return this.content().emailTooLongError;
+    }
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
       return this.content().emailFormatError;
     }
@@ -260,6 +307,10 @@ export class ContactFormComponent {
 
     if (!value) {
       return this.content().messageRequiredError;
+    }
+
+    if (Array.from(this.messageWithTopics()).length > this.limits.message) {
+      return this.content().messageTooLongError;
     }
 
     if (value.length < 10) {

@@ -271,3 +271,11 @@ Full-Stack Web Development · UI/UX · Graphic Design
 ```txt
 clean structure / loud visuals / controlled chaos
 ```
+
+
+## Contact form
+
+The contact form uses client-side input validation and a CSRF-protected connection
+to the central API. Server-side validation and abuse protection enforce the
+security boundaries. Accessible feedback and German/English messages cover
+validation errors, temporary failures and retry guidance.

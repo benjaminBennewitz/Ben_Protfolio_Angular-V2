@@ -5,7 +5,7 @@
   <div class="contact-form__honeypot" aria-hidden="true">
     <label>
       <span>{{ content().honeypotLabel }}</span>
-      <input type="text" tabindex="-1" autocomplete="off" [value]="website()" (input)="updateField('website', $event)">
+      <input type="text" name="website" tabindex="-1" autocomplete="off" [value]="website()" (input)="updateField('website', $event)">
     </label>
   </div>
 
@@ -17,7 +17,7 @@
               content().requiredMarkLabel }}</span></span>
           <input [id]="nameId" type="text" autocomplete="name" [value]="name()" (input)="updateField('name', $event)"
             [attr.aria-invalid]="fieldHasError('name')" [attr.aria-describedby]="fieldDescribedBy('name')"
-            aria-required="true" required minlength="2">
+            aria-required="true" required minlength="2" [attr.maxlength]="limits.name">
           @if (fieldHasError('name')) {
           <small [id]="nameErrorId" class="contact-form__error">{{ fieldError('name') }}</small>
           }
@@ -28,7 +28,7 @@
               content().requiredMarkLabel }}</span></span>
           <input [id]="emailId" type="email" autocomplete="email" [value]="email()"
             (input)="updateField('email', $event)" [attr.aria-invalid]="fieldHasError('email')"
-            [attr.aria-describedby]="fieldDescribedBy('email')" aria-required="true" required>
+            [attr.aria-describedby]="fieldDescribedBy('email')" aria-required="true" required [attr.maxlength]="limits.email">
           @if (fieldHasError('email')) {
           <small [id]="emailErrorId" class="contact-form__error">{{ fieldError('email') }}</small>
           }
@@ -40,7 +40,7 @@
             content().requiredMarkLabel }}</span></span>
         <textarea [id]="messageId" rows="5" [value]="message()" (input)="updateField('message', $event)"
           [attr.aria-invalid]="fieldHasError('message')" [attr.aria-describedby]="fieldDescribedBy('message')"
-          aria-required="true" required minlength="10"></textarea>
+          aria-required="true" required minlength="10" [attr.maxlength]="limits.message"></textarea>
         @if (fieldHasError('message')) {
         <small [id]="messageErrorId" class="contact-form__error">{{ fieldError('message') }}</small>
         }
@@ -82,10 +82,14 @@
     </fieldset>
 
     <div class="contact-form__actions">
-      <button class="bp-button bp-button--accent" type="submit" [disabled]="isSubmitting()">
+      <button class="bp-button bp-button--accent" type="submit" [disabled]="isSubmitting() || retryAfterSeconds() > 0">
         <span>{{ isSubmitting() ? content().sendingLabel : content().submitLabel }}</span>
         <span class="material-symbols-outlined" aria-hidden="true">send</span>
       </button>
+
+      @if (retryAfterSeconds() > 0) {
+      <p class="contact-form__status">{{ retryCountdownLabel() }}</p>
+      }
 
       @if (status()) {
       <p class="contact-form__status" role="status" aria-live="polite" aria-atomic="true">{{ status() }}</p>

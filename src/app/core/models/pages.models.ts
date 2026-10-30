@@ -70,6 +70,16 @@ export interface ContactContent {
   readonly emailFormatError: string;            // Fehlermeldung für ein ungültiges E-Mail-Format.
   readonly messageRequiredError: string;        // Fehlermeldung für eine fehlende Nachricht.
   readonly messageLengthError: string;          // Fehlermeldung für eine zu kurze Nachricht.
+  /** Übersetzter Hinweis für timeoutErrorMessage. */
+  readonly timeoutErrorMessage: string;
+  /** Übersetzter Hinweis für retryAfterLabel. */
+  readonly retryAfterLabel: string;
+  /** Übersetzter Hinweis für nameTooLongError. */
+  readonly nameTooLongError: string;
+  /** Übersetzter Hinweis für emailTooLongError. */
+  readonly emailTooLongError: string;
+  /** Übersetzter Hinweis für messageTooLongError. */
+  readonly messageTooLongError: string;
   readonly honeypotLabel: string;               // Beschriftung des unsichtbaren Honeypot-Felds.
   readonly privacy: string;                     // Hinweistext zur Kenntnisnahme der Datenschutzerklärung.
   readonly privacyLinkLabel: string;            // Linktext zur Datenschutzerklärung.

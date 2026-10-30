@@ -7,7 +7,7 @@
 
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { environment } from '../../../environments/environment';
-import { ContactApiError, ContactApiService, ContactRequest } from './contact-api.service';
+import { CONTACT_LIMITS, ContactApiError, ContactApiService, ContactRequest } from './contact-api.service';
 
 /** Gültiger Test-Request inklusive leerem Honeypot. */
 const REQUEST: ContactRequest = {
@@ -31,6 +31,7 @@ async function expectApiError(promise: Promise<void>, kind: ContactApiError['kin
 }
 
 afterEach(() => {
+  vi.useRealTimers();
   vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
@@ -173,4 +174,85 @@ describe('ContactApiService', () => {
     resolvePost(jsonResponse(202, { status: 'accepted' }));
     await expect(Promise.all([firstRequest, secondRequest])).resolves.toEqual([undefined, undefined]);
   });
+  it('entfernt zusätzliche Laufzeitfelder aus dem tatsächlichen Request', async () => {
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(jsonResponse(200, { csrfToken: 'token' }))
+      .mockResolvedValueOnce(jsonResponse(202, { status: 'accepted' }));
+    vi.stubGlobal('fetch', fetchMock);
+    const extended = { ...REQUEST, recipient: 'other@example.com', tenant: 'other' };
+    await new ContactApiService().sendContactMessage(extended);
+    expect(JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body))).toEqual(REQUEST);
+  });
+
+  it('weist einen zu großen UTF-8-Body bereits vor dem CSRF-Handshake ab', async () => {
+    const fetchMock = vi.fn<typeof fetch>();
+    vi.stubGlobal('fetch', fetchMock);
+    await expectApiError(new ContactApiService().sendContactMessage({
+      ...REQUEST, message: '😀'.repeat(4500),
+    }), 'payload-too-large');
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it.each(['csrf', 'post'] as const)('beendet einen hängenden %s ohne automatischen POST-Retry', async stage => {
+    vi.useFakeTimers();
+    const fetchMock = vi.fn<typeof fetch>();
+    if (stage === 'post') {
+      fetchMock.mockResolvedValueOnce(jsonResponse(200, { csrfToken: 'token' }));
+    }
+    fetchMock.mockImplementationOnce(() => new Promise<Response>(() => {}));
+    vi.stubGlobal('fetch', fetchMock);
+    const service = new ContactApiService();
+    const pending = service.sendContactMessage(REQUEST);
+    const assertion = expectApiError(pending, 'timeout');
+    await vi.advanceTimersByTimeAsync(CONTACT_LIMITS.timeoutMs);
+    await assertion;
+    const lastInit = fetchMock.mock.calls.at(-1)?.[1];
+    expect(lastInit?.signal?.aborted).toBe(true);
+    expect(fetchMock).toHaveBeenCalledTimes(stage === 'post' ? 2 : 1);
+    fetchMock.mockResolvedValueOnce(jsonResponse(200, { csrfToken: 'new-token' }))
+      .mockResolvedValueOnce(jsonResponse(202, { status: 'accepted' }));
+    if (stage === 'post') {
+      fetchMock.mockReset().mockResolvedValueOnce(jsonResponse(202, { status: 'accepted' }));
+    }
+    await expect(service.sendContactMessage(REQUEST)).resolves.toBeUndefined();
+  });
+
+  it('begrenzt auch einen hängenden CSRF-Response-Body', async () => {
+    vi.useFakeTimers();
+    const response = jsonResponse(200, {});
+    vi.spyOn(response, 'json').mockImplementation(() => new Promise(() => {}));
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValueOnce(response);
+    vi.stubGlobal('fetch', fetchMock);
+    const assertion = expectApiError(new ContactApiService().sendContactMessage(REQUEST), 'timeout');
+    await vi.advanceTimersByTimeAsync(CONTACT_LIMITS.timeoutMs);
+    await assertion;
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['2', 'date'] as const)('beachtet Retry-After als %s auch bei erneutem Submit', async header => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-10-30T12:00:00Z'));
+    const response = jsonResponse(429, {});
+    response.headers.set('Retry-After', header === 'date'
+      ? new Date(Date.now() + 2000).toUTCString() : header);
+    const fetchMock = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(jsonResponse(200, { csrfToken: 'token' }))
+      .mockResolvedValueOnce(response)
+      .mockResolvedValueOnce(jsonResponse(202, { status: 'accepted' }));
+    vi.stubGlobal('fetch', fetchMock);
+    const service = new ContactApiService();
+    await expect(service.sendContactMessage(REQUEST)).rejects.toMatchObject({ retryAfterSeconds: 2 });
+    await expectApiError(service.sendContactMessage(REQUEST), 'rate-limit');
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    await vi.advanceTimersByTimeAsync(2000);
+    await service.sendContactMessage(REQUEST);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+
+  it('behandelt ungültige CSRF-JSON-Werte als typisierten Fehler', async () => {
+    vi.stubGlobal('fetch', vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response('null', { status: 200 })));
+    await expectApiError(new ContactApiService().sendContactMessage(REQUEST), 'server');
+  });
+
 });

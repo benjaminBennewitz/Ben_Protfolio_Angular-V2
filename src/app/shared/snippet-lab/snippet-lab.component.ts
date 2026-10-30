@@ -1,5 +1,6 @@
 /** @file Interaktive, lokal gekapselte Lernbeispiele für SVG, Tokens und Container Queries. */
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, signal } from '@angular/core';
+import { ThemeService } from '../../core/services/theme.service';
 import { LanguageService } from '../../core/services/language.service';
 
 /** Koordinaten der beiden Bézier-Kontrollpunkte. */
@@ -15,6 +16,7 @@ type CurveCoordinate = 'x1' | 'y1' | 'x2' | 'y2';
 export class SnippetLabComponent {
   readonly kind = input.required<'svg' | 'tokens' | 'container'>(); // Vom Snippet-Eintrag gewählte Vorschau.
   private readonly languageService = inject(LanguageService); // Bestehende globale Sprachauswahl.
+  private readonly themeService = inject(ThemeService); // Globale Theme-Auswahl als Ausgangspunkt der Vorschau.
   readonly english = computed(() => this.languageService.language() === 'en'); // Reaktive Sprache ohne Zustandsverlust.
   readonly curve = signal({ x1: 80, y1: 20, x2: 220, y2: 20 }); // Kontrollpunkte im internen SVG-Koordinatensystem.
   readonly coordinates: readonly CurveCoordinate[] = ['x1', 'y1', 'x2', 'y2'];
@@ -22,7 +24,7 @@ export class SnippetLabComponent {
     const { x1, y1, x2, y2 } = this.curve();
     return `M 25 140 C ${x1} ${y1}, ${x2} ${y2}, 275 140`;
   });
-  readonly theme = signal<'light' | 'dark'>('dark'); // Ausschließlich auf die Beispielkarte begrenztes Theme.
+  readonly theme = linkedSignal(() => this.themeService.currentTheme()); // Lokal testbar; jeder globale Wechsel synchronisiert die Vorschau erneut.
   readonly containerWidth = signal(100); // Verfügbarer Kartenplatz in Prozent der Vorschau.
   private draggedPoint: 1 | 2 | null = null; // Kontrollpunkt der laufenden Pointer-Interaktion.
 

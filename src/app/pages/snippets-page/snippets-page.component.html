@@ -107,7 +107,8 @@
             }
           </div>
 
-          <section class="snippet-preview" [class.snippet-preview--layout]="item.entry.previewType === 'layout'"
+          <section class="snippet-preview"
+            [class.snippet-preview--lab]="item.entry.previewType === 'svg' || item.entry.previewType === 'tokens' || item.entry.previewType === 'container'" [class.snippet-preview--layout]="item.entry.previewType === 'layout'"
             [class.snippet-preview--count]="item.entry.previewType === 'count'"
             [class.snippet-preview--select]="item.entry.previewType === 'select'"
             [class.snippet-preview--spinner]="item.entry.previewType === 'spinner'"

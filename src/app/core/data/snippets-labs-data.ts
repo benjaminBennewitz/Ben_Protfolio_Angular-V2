@@ -114,7 +114,7 @@ export const SNIPPET_LAB_ENTRIES: Record<'de' | 'en', readonly SnippetEntry[]> =
       oldCodeLabel: "Vorher: feste Farbwerte",
       newCodeLabel: "Nachher: semantische Tokens",
       demoHref: "assets/snippet-demos/theme-tokens.html",
-      notes: ["Primitive Tokens beschreiben konkrete Werte (z. B. Blau 700); semantische Tokens beschreiben deren Aufgabe (--accent). Für kleine Beispiele reicht die semantische Ebene.", "prefers-color-scheme berücksichtigt die Systempräferenz. Eine explizite data-theme-Auswahl hat Vorrang; System entfernt den Override.", "color-scheme steuert unter anderem native Formularelemente. Es ersetzt keine eigenen Farb-Tokens.", "Fokus, Hover, Active, Disabled und Fehler brauchen passende Werte in beiden Themes. Prüfe Textkontrast, Rahmen und Fokus getrennt.", "Fehler werden durch Text und aria-invalid vermittelt, nicht nur durch eine rote Farbe.", "Der Theme-Schalter hier verändert nur die Vorschau. Das Portfolio-Theme bleibt unabhängig."],
+      notes: ["Primitive Tokens beschreiben konkrete Werte (z. B. Blau 700); semantische Tokens beschreiben deren Aufgabe (--accent). Für kleine Beispiele reicht die semantische Ebene.", "prefers-color-scheme berücksichtigt die Systempräferenz. Eine explizite data-theme-Auswahl hat Vorrang; System entfernt den Override.", "color-scheme steuert unter anderem native Formularelemente. Es ersetzt keine eigenen Farb-Tokens.", "Fokus, Hover, Active, Disabled und Fehler brauchen passende Werte in beiden Themes. Prüfe Textkontrast, Rahmen und Fokus getrennt.", "Fehler werden durch Text und aria-invalid vermittelt, nicht nur durch eine rote Farbe.", "Die lokalen Buttons verändern nur die Vorschau. Jeder globale Theme-Wechsel synchronisiert sie wieder mit dem Portfolio."],
     },
     {
       slug: "container-queries",
@@ -275,7 +275,7 @@ export const SNIPPET_LAB_ENTRIES: Record<'de' | 'en', readonly SnippetEntry[]> =
       oldCodeLabel: "Before: hard-coded colors",
       newCodeLabel: "After: semantic tokens",
       demoHref: "assets/snippet-demos/theme-tokens.en.html",
-      notes: ["Primitive tokens describe concrete values (such as blue 700); semantic tokens describe their purpose (--accent). Small examples can start with the semantic layer.", "prefers-color-scheme follows the system preference. An explicit data-theme selection takes priority; System removes the override.", "color-scheme affects native controls, among other things. It does not replace your color tokens.", "Focus, hover, active, disabled and error states need suitable values in both themes. Check text contrast, borders and focus separately.", "Errors use text and aria-invalid rather than color alone.", "The switch here only changes this preview. The portfolio theme stays independent."],
+      notes: ["Primitive tokens describe concrete values (such as blue 700); semantic tokens describe their purpose (--accent). Small examples can start with the semantic layer.", "prefers-color-scheme follows the system preference. An explicit data-theme selection takes priority; System removes the override.", "color-scheme affects native controls, among other things. It does not replace your color tokens.", "Focus, hover, active, disabled and error states need suitable values in both themes. Check text contrast, borders and focus separately.", "Errors use text and aria-invalid rather than color alone.", "Local buttons only change this preview. Every global theme switch synchronizes it with the portfolio again."],
     },
     {
       slug: "container-queries",

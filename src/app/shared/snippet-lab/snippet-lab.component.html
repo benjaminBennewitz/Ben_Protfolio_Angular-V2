@@ -27,6 +27,7 @@
     <p>{{ english() ? 'M sets the start. C defines two control points and the end. Uppercase is absolute; lowercase is relative to the current point.' : 'M setzt den Start. C definiert zwei Kontrollpunkte und das Ende. Großbuchstaben sind absolut, Kleinbuchstaben relativ zum aktuellen Punkt.' }}</p>
   }
   @case ('tokens') {
+    <p>{{ english() ? 'The preview follows the global theme switch. Use these buttons to compare locally; the next global switch synchronizes it again.' : 'Die Vorschau folgt dem globalen Theme-Schalter. Hier kannst du lokal vergleichen; beim nächsten globalen Wechsel wird sie wieder synchronisiert.' }}</p>
     <div class="theme-controls" role="group" [attr.aria-label]="english() ? 'Preview theme' : 'Theme der Vorschau'">
       <button type="button" [attr.aria-pressed]="theme() === 'light'" (click)="theme.set('light')">{{ english() ? 'Light' : 'Hell' }}</button>
       <button type="button" [attr.aria-pressed]="theme() === 'dark'" (click)="theme.set('dark')">{{ english() ? 'Dark' : 'Dunkel' }}</button>

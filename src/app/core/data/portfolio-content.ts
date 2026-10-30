@@ -255,7 +255,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
     },
     cta: {
       eyebrow: 'cta_physics.exe',
-      title: 'Jetzt Kontakt aufnehmen.',
+      title: 'Ein Hallo kann viel bewegen.',
       hint: 'Austausch, Feedback, Bewerbung oder einfach Hallo.',
       words: ['get', 'in', 'touch', 'icon:arrow_forward'],
     },
@@ -727,7 +727,7 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
     },
     cta: {
       eyebrow: 'cta_physics.exe',
-      title: 'Get in touch.',
+      title: 'A hello can set things in motion.',
       hint: 'Feedback, recruiting, tech talk or simply hello.',
       words: ['get', 'in', 'touch', 'icon:arrow_forward'],
     },

@@ -757,6 +757,17 @@
   text-transform: uppercase;
 }
 
+.snippet-preview.snippet-preview--lab {
+  background: var(--bp-color-surface-solid);
+  color: var(--bp-color-text);
+  border-color: var(--bp-color-border-strong);
+}
+
+.snippet-preview--lab .snippet-preview__head {
+  border-bottom-color: var(--bp-color-border);
+  color: var(--bp-color-accent-text);
+}
+
 .snippet-preview article {
   display: grid;
   gap: 0.42rem;

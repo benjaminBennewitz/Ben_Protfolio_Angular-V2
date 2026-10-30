@@ -1,6 +1,7 @@
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { ThemeService } from '../../core/services/theme.service';
 import { LanguageService } from '../../core/services/language.service';
 import { SnippetLabComponent } from './snippet-lab.component';
 
@@ -8,10 +9,12 @@ import { SnippetLabComponent } from './snippet-lab.component';
 describe('SnippetLabComponent', () => {
   let fixture: ComponentFixture<SnippetLabComponent>;
   const language = signal<'de' | 'en'>('de');
+  const globalTheme = signal<'light' | 'dark'>('dark');
 
   beforeEach(() => {
     language.set('de');
-    TestBed.configureTestingModule({ providers: [{ provide: LanguageService, useValue: { language } }] });
+    globalTheme.set('dark');
+    TestBed.configureTestingModule({ providers: [{ provide: LanguageService, useValue: { language } }, { provide: ThemeService, useValue: { currentTheme: globalTheme } }] });
     fixture = TestBed.createComponent(SnippetLabComponent);
   });
   afterEach(() => { TestBed.resetTestingModule(); vi.restoreAllMocks(); });
@@ -57,6 +60,26 @@ describe('SnippetLabComponent', () => {
     const errorInput = fixture.nativeElement.querySelector('[aria-invalid]');
     expect(fixture.nativeElement.querySelector('#' + errorInput.getAttribute('aria-describedby')).textContent).toContain('Fehler');
     expect(fixture.nativeElement.querySelector('button:disabled')).not.toBeNull();
+  });
+
+  it('folgt globalen Theme-Wechseln auch nach einer lokalen Auswahl', () => {
+    globalTheme.set('light');
+    fixture.componentRef.setInput('kind', 'tokens');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.theme-card').dataset.theme).toBe('light');
+    fixture.componentInstance.theme.set('dark');
+    fixture.detectChanges();
+    expect(globalTheme()).toBe('light');
+    globalTheme.set('dark');
+    fixture.detectChanges();
+    fixture.componentInstance.theme.set('light');
+    fixture.detectChanges();
+    globalTheme.set('light');
+    fixture.detectChanges();
+    expect(fixture.componentInstance.theme()).toBe('light');
+    globalTheme.set('dark');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.theme-card').dataset.theme).toBe('dark');
   });
 
   it('verändert beide Kartencontainer bei unverändertem Viewport', () => {

@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Understanding SVG paths – Demo</title><style>* { box-sizing: border-box; }
-:root { --bp-color-text: #f2f5ff; --bp-color-text-muted: #bcc6dd; --bp-color-border: #91a1bd; --bp-color-accent: #b7caff; --bp-color-accent-text: #142347; --bp-color-surface-solid: #121c30; color-scheme: dark; }
+:root { --bp-color-text: #f2f5ff; --bp-color-text-muted: #bcc6dd; --bp-color-border: #91a1bd; --bp-color-accent: #b7caff; --bp-color-on-accent: #142347; --bp-color-surface-solid: #121c30; --bp-color-surface: #1b2942; --bp-color-border-strong: #91a1bd; color-scheme: dark; }
 body { margin: 0; padding: clamp(1rem, 4vw, 2rem); background: var(--bp-color-surface-solid); color: var(--bp-color-text); font: 16px/1.6 system-ui, sans-serif; }
 main { max-width: 48rem; margin: auto; }
 h1 { line-height: 1.15; }
 pre { overflow: auto; padding: 1rem; border: 1px solid var(--bp-color-border); font-size: .8rem; }
 .summary { margin-block: 1rem; }
-@media (prefers-color-scheme: light) { :root { --bp-color-text: #172033; --bp-color-text-muted: #465369; --bp-color-border: #69778c; --bp-color-accent: #2148b2; --bp-color-accent-text: #fff; --bp-color-surface-solid: #fff; color-scheme: light; } }
+@media (prefers-color-scheme: light) { :root { --bp-color-text: #172033; --bp-color-text-muted: #465369; --bp-color-border: #69778c; --bp-color-accent: #2148b2; --bp-color-on-accent: #fff; --bp-color-surface-solid: #fff; --bp-color-surface: #f4f7ff; --bp-color-border-strong: #69778c; color-scheme: light; } }
 
 .lab {
   display: grid;
@@ -20,7 +20,7 @@ label { display: grid; gap: 0.4rem; font-size: 0.85rem; }
 input[type='range'] { width: 100%; min-width: 0; accent-color: var(--bp-color-accent); }
 button { border: 1px solid var(--bp-color-border); padding: 0.55rem 0.75rem; background: var(--bp-color-surface-solid); color: var(--bp-color-text); cursor: pointer; font: inherit; }
 button:hover { border-color: var(--bp-color-text); }
-button[aria-pressed='true'] { background: var(--bp-color-accent); color: var(--bp-color-accent-text); }
+button[aria-pressed='true'] { background: var(--bp-color-accent); color: var(--bp-color-on-accent); }
 button:active { transform: translateY(1px); }
 button:focus-visible, input:focus-visible { outline: 2px solid var(--bp-color-text); outline-offset: 3px; }
 .lab-code { display: block; overflow-wrap: anywhere; padding: 0.65rem; border: 1px solid var(--bp-color-border); font-size: 0.8rem; }
@@ -55,9 +55,9 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--bp-color-te
 .theme-card :is(button, input):focus-visible { outline-color: var(--text); }
 .card-space { min-width: min(100%, 160px); max-width: 100%; }
 .card-space--query { container: snippet-card / inline-size; }
-.responsive-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--bp-color-border); overflow-wrap: anywhere; }
+.responsive-card { background: var(--bp-color-surface); color: var(--bp-color-text); display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--bp-color-border-strong); overflow-wrap: anywhere; }
 .responsive-card > div { min-width: 0; }
-.responsive-card__art { display: grid; place-items: center; min-height: 4rem; background: var(--bp-color-accent); color: var(--bp-color-accent-text); font-size: 2rem; font-weight: 900; }
+.responsive-card__art { display: grid; place-items: center; min-height: 4rem; background: var(--bp-color-accent); color: var(--bp-color-on-accent); font-size: 2rem; font-weight: 900; }
 @media (min-width: 700px) { .responsive-card--viewport { grid-template-columns: 4rem minmax(0, 1fr); } }
 @container snippet-card (min-width: 360px) {
   .responsive-card { grid-template-columns: 5rem minmax(0, 1fr); }

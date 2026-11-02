@@ -1,91 +1,108 @@
 <!doctype html>
 <html lang="de" data-theme="dark">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="color-scheme" content="dark light" />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://b2folio.de/design-studies/phase/" />
-    <meta property="og:title" content="PHASE. — A Living Microcosm" />
-    <meta property="og:description" content="Zwölf generative Wesen. Ein interaktiver Mikrokosmos aus Punkten, Wellen und wandernden Impulsen." />
-    <meta property="og:image" content="https://b2folio.de/design-studies/phase/assets/preview.webp" />
-    <meta property="og:url" content="https://b2folio.de/design-studies/phase/" />
-    <meta name="description" content="PHASE. – Eine interaktive Studie über Wellen, Rhythmus und generative Formen." />
-    <title>PHASE. — Generative Studie</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <main class="phase" id="top">
-      <header class="phase-header">
-        <a class="wordmark" href="./" aria-label="PHASE Start">PHASE<span>.</span></a
-        ><span class="edition">GENERATIVE STUDY / 001</span>
-        <div class="header-actions">
-          <button id="theme" aria-label="Helles Theme aktivieren">Hell</button><button id="language" aria-label="Switch to English">EN</button>
-        </div>
-      </header>
-      <section class="exhibit" aria-labelledby="title">
-        <div class="intro">
-          <p class="eyebrow" data-i18n="eyebrow">MATHEMATIK IN BEWEGUNG</p>
-          <h1 id="title"><span data-i18n="heading1">Ein Rhythmus.</span><br /><span class="quiet" data-i18n="heading2">Tausend Impulse.</span></h1>
-          <p class="description" data-i18n="description">Eine Form aus Punkten. Zusammengehalten von Wellen. Immer in Bewegung.</p>
-          <nav class="archive" aria-labelledby="archive-title">
-            <div class="archive-heading">
-              <h2 id="archive-title" data-i18n="archive">Probenarchiv</h2>
-              <span id="archive-count">01—12</span>
-            </div>
-            <ol id="specimen-list" class="specimen-list"></ol>
-          </nav>
-          <div class="specimen-info">
-            <h2 id="specimen-name">Borstenwurm</h2>
-            <p id="specimen-description" aria-live="polite">Eine Welle wandert vom Kopf bis in die feinsten Fortsätze.</p>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://b2folio.de/design-studies/phase/" />
+  <meta property="og:title" content="PHASE. — A Living Microcosm" />
+  <meta property="og:description"
+    content="Zwölf generative Wesen. Ein interaktiver Mikrokosmos aus Punkten, Wellen und wandernden Impulsen." />
+  <meta property="og:image" content="https://b2folio.de/design-studies/phase/assets/preview.webp" />
+  <meta property="og:url" content="https://b2folio.de/design-studies/phase/" />
+  <meta name="description" content="PHASE. – Eine interaktive Studie über Wellen, Rhythmus und generative Formen." />
+  <title>PHASE. — Generative Studie</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <main class="phase" id="top">
+    <header class="phase-header">
+      <a class="wordmark" href="./" aria-label="PHASE Start">PHASE<span>.</span></a><span class="edition">GENERATIVE
+        STUDY / 001</span>
+      <div class="header-actions">
+        <button id="theme" aria-label="Helles Theme aktivieren">Hell</button><button id="language"
+          aria-label="Switch to English">EN</button>
+      </div>
+    </header>
+    <section class="exhibit" aria-labelledby="title">
+      <div class="intro">
+        <p class="eyebrow" data-i18n="eyebrow">MATHEMATIK IN BEWEGUNG</p>
+        <h1 id="title"><span data-i18n="heading1">Ein Rhythmus.</span><br /><span class="quiet"
+            data-i18n="heading2">Tausend Impulse.</span></h1>
+        <p class="description" data-i18n="description">Eine Form aus Punkten. Zusammengehalten von Wellen. Immer in
+          Bewegung.</p>
+        <nav class="archive" aria-labelledby="archive-title">
+          <div class="archive-heading">
+            <h2 id="archive-title" data-i18n="archive">Probenarchiv</h2>
+            <span id="archive-count">01—12</span>
           </div>
+          <ol id="specimen-list" class="specimen-list"></ol>
+        </nav>
+        <div class="specimen-info">
+          <h2 id="specimen-name">Borstenwurm</h2>
+          <p id="specimen-description" aria-live="polite">Eine Welle wandert vom Kopf bis in die feinsten Fortsätze.</p>
         </div>
-        <div class="stage" id="stage" role="img" aria-label="Generatives Punktwesen mit wellenförmigem Körper, feinen weißen Rippen und roten Spitzen.">
-          <p class="fallback" id="fallback" hidden>Die Zeichenfläche konnte nicht geladen werden. Bitte lade die Seite erneut.</p>
+      </div>
+      <div class="stage" id="stage" role="img"
+        aria-label="Generatives Punktwesen mit wellenförmigem Körper, feinen weißen Rippen und roten Spitzen.">
+        <p class="fallback" id="fallback" hidden>Die Zeichenfläche konnte nicht geladen werden. Bitte lade die Seite
+          erneut.</p>
+      </div>
+      <div class="annotation">
+        <span class="signal" aria-hidden="true"></span><span data-i18n="annotation">SINUS / KOSINUS /
+          PHASENVERSATZ</span><span class="specimen">SPECIMEN 001</span>
+      </div>
+      <aside class="controls" aria-labelledby="controls-title">
+        <div class="panel-heading">
+          <h2 id="controls-title" data-i18n="controls">Wellenlabor</h2>
+          <span class="index">01—03</span>
         </div>
-        <div class="annotation">
-          <span class="signal" aria-hidden="true"></span><span data-i18n="annotation">SINUS / KOSINUS / PHASENVERSATZ</span
-          ><span class="specimen">SPECIMEN 001</span>
+        <label for="speed"><span data-i18n="speed">Tempo</span><output for="speed"
+            id="speed-value">0.80×</output></label><input id="speed" type="range" min="0.1" max="2" step="0.05"
+          value="0.8" />
+        <label for="amplitude"><span data-i18n="amplitude">Auslenkung</span><output for="amplitude"
+            id="amplitude-value">100%</output></label><input id="amplitude" type="range" min="0.2" max="1.5" step="0.05"
+          value="1" />
+        <label for="frequency"><span data-i18n="frequency">Wellenfrequenz</span><output for="frequency"
+            id="frequency-value">1.20</output></label><input id="frequency" type="range" min="0.5" max="2" step="0.05"
+          value="1.2" />
+        <div class="panel-actions">
+          <button id="pause" class="primary" aria-pressed="false" data-i18n="pause">Pause</button><button id="reset"
+            data-i18n="reset">Zurücksetzen</button>
         </div>
-        <aside class="controls" aria-labelledby="controls-title">
-          <div class="panel-heading">
-            <h2 id="controls-title" data-i18n="controls">Wellenlabor</h2>
-            <span class="index">01—03</span>
-          </div>
-          <label for="speed"><span data-i18n="speed">Tempo</span><output for="speed" id="speed-value">0.80×</output></label
-          ><input id="speed" type="range" min="0.1" max="2" step="0.05" value="0.8" />
-          <label for="amplitude"><span data-i18n="amplitude">Auslenkung</span><output for="amplitude" id="amplitude-value">100%</output></label
-          ><input id="amplitude" type="range" min="0.2" max="1.5" step="0.05" value="1" />
-          <label for="frequency"><span data-i18n="frequency">Wellenfrequenz</span><output for="frequency" id="frequency-value">1.20</output></label
-          ><input id="frequency" type="range" min="0.5" max="2" step="0.05" value="1.2" />
-          <div class="panel-actions">
-            <button id="pause" class="primary" aria-pressed="false" data-i18n="pause">Pause</button><button id="reset" data-i18n="reset">Zurücksetzen</button>
-          </div>
-          <p class="panel-note" data-i18n="note">Verschiebe die Regler. Beobachte den Rhythmus.</p>
-        </aside>
-      </section>
-      <footer class="study-footer" aria-labelledby="footer-title">
-        <div class="phase-footer">
-          <span>DESIGN EXPERIMENT / B²</span><span data-i18n="footer">KEIN MODELL. NUR MATHEMATIK.</span><span>P5.JS / GENERATIVE ART</span>
+        <p class="panel-note" data-i18n="note">Verschiebe die Regler. Beobachte den Rhythmus.</p>
+      </aside>
+    </section>
+    <footer class="study-footer" aria-labelledby="footer-title">
+      <div class="phase-footer">
+        <span>DESIGN EXPERIMENT / B²</span><span data-i18n="footer">KEIN MODELL. NUR MATHEMATIK.</span><span>P5.JS /
+          GENERATIVE ART</span>
+      </div>
+      <div class="footer-content">
+        <div>
+          <h2 id="footer-title">PHASE<span>.</span></h2>
+          <p data-i18n="footerCopy">Zwölf Formen. Ein unsichtbarer Rhythmus.</p>
         </div>
-        <div class="footer-content">
-          <div>
-            <h2 id="footer-title">PHASE<span>.</span></h2>
-            <p data-i18n="footerCopy">Zwölf Formen. Ein unsichtbarer Rhythmus.</p>
-          </div>
-          <nav aria-label="Portfolio">
-            <a href="/portfolio#design-studies" data-i18n="allStudies">Alle Designstudien ↗</a><a href="/impressum" data-i18n="imprint">Impressum</a
-            ><a href="/datenschutz" data-i18n="privacy">Datenschutz</a><a href="#top" data-i18n="backTop">Nach oben ↑</a>
-          </nav>
-        </div>
-        <p class="footer-disclaimer" data-i18n="disclaimer">
-          Nicht kommerzielle Design- und Programmierstudie. Die Wesen sind künstlerische, biologisch inspirierte Abstraktionen – keine wissenschaftlichen
-          Simulationen. Keine vollständige WCAG-Prüfung.
-        </p>
-        <div class="footer-colophon"><span>© 2026 BENJAMIN BENNEWITZ / B²</span><a href="vendor/p5-LICENSE.txt">p5.js 1.11.11 / LGPL-2.1</a></div>
-      </footer>
-    </main>
-    <script src="vendor/p5.min.js"></script>
-    <script type="module" src="scripts/app.js"></script>
-  </body>
+        <nav aria-label="Portfolio">
+          <a href="/portfolio#design-studies" data-i18n="allStudies">Alle Designstudien ↗</a><a href="/impressum"
+            data-i18n="imprint">Impressum</a><a href="/datenschutz" data-i18n="privacy">Datenschutz</a><a href="#top"
+            data-i18n="backTop">Nach oben ↑</a>
+        </nav>
+      </div>
+      <p class="footer-disclaimer" data-i18n="disclaimer">
+        Nicht kommerzielle Design- und Programmierstudie. Die Wesen sind künstlerische, biologisch inspirierte
+        Abstraktionen – keine wissenschaftlichen
+        Simulationen. Keine vollständige WCAG-Prüfung.
+      </p>
+      <div class="footer-colophon"><span>© 2026 BENJAMIN BENNEWITZ / B²</span><a href="vendor/p5-LICENSE.txt">p5.js
+          1.11.11 / LGPL-2.1</a></div>
+    </footer>
+  </main>
+  <script src="vendor/p5.min.js"></script>
+  <script type="module" src="scripts/app.js"></script>
+</body>
+
 </html>

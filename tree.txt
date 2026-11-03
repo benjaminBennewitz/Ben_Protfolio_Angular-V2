@@ -1013,6 +1013,8 @@ folio/
 │   │   │   └── styles.css
 │   │   ├── dead-air/
 │   │   │   ├── assets/
+│   │   │   │   ├── beam-erase.webp
+│   │   │   │   ├── beam-sweep.webp
 │   │   │   │   ├── coast-loop.mp4
 │   │   │   │   ├── favicon.svg
 │   │   │   │   ├── lighthouse-dim.webp

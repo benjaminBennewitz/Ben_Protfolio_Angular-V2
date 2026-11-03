@@ -23,9 +23,9 @@ The fictional North Coast Broadcasting System (NCBS) is framed as a decommission
 - Manual FM tuning from 87.5 to 108.0 MHz in 0.1 MHz increments; no developer-only channel presets or interference-strength control.
 - Three automatically detected signal states, `normal` (87.6 MHz), `interference` (91.3 MHz), and `unknown` (103.7 MHz). Other frequencies report `NO CARRIER` rather than triggering story events.
 - Fixed interference values of 15%, 60%, and 91% respectively; UNKNOWN darkens the camera image by ~30% relative to the previous implementation.
-- The inaccurate, added lighthouse beam and beacon have been removed. The original photographed light remains untouched.
+- The inaccurate artificial lighthouse beam has been removed. CAM 01 now uses the owner-corrected scene image without the original baked-in beam.
 - Three independent, tightly masked photographic window passes on CAM 01 switch between the original warm-color glazing and a desaturated dark variant. The alpha-masked WebP crops align with the 1280×720 scene master; no artificial light dots or full-scene grayscale effects are used. Surrounding bloom in the concept image is still embedded and cannot be fully removed without a genuinely unlit master.
-- CAM 01 also includes a muted lantern lens pass (subtle, slow breathing in NORMAL; short outages in INTERFERENCE/UNKNOWN) and a separate obstacle-light mask on the radio mast (regular red flash, then irregular or interrupted flashes by signal state). Both use exactly aligned photographic crops rather than artificial dots or light beams. The lighthouse beam itself remains embedded in the still; a truly rotating beam requires a clean, unlit master and a separate beam layer.
+- CAM 01 also includes a muted lantern lens pass (subtle, slow breathing in NORMAL; short outages in INTERFERENCE/UNKNOWN) and a separate obstacle-light mask on the radio mast (regular red flash, then irregular or interrupted flashes by signal state). Both use exactly aligned photographic crops rather than artificial dots or light beams. The owner-corrected image no longer contains the original beam. A physically convincing rotating light could be developed later from this cleaner master.
 - Two selectable sources and the pause button share one compact receiver row under the frequency dial; the monitor gains back the former toolbar height. The video loads only when requested.
 - `deadair:frequencychange` and `deadair:signalacquired` events on `window` provide `{ frequency, channel, reception, interference }` for future Web Audio and story triggers. The latter fires only upon acquiring a new named station. No sound is played or fetched yet.
 - A ±0.35 MHz capture range makes manual station scanning manageable on touch displays, while the tuner still displays the actual frequency in 0.1 MHz steps.
@@ -60,7 +60,7 @@ dead-air/
 │   ├── station-mark.svg    # Editable broadcast tower signet
 │   ├── favicon.svg         # Reduced signet for browser tabs
 │   ├── coast-loop.mp4      # Optimized short footage excerpt, video only
-│   ├── scene-poster.webp   # AI-generated art-direction scene crop
+│   ├── scene-poster.webp   # Owner-corrected scene without the original beam
 │   ├── window-off-a.webp   # Precisely masked desaturated left window
 │   ├── window-off-b.webp   # Precisely masked desaturated centre window
 │   ├── window-off-c.webp   # Precisely masked desaturated right window
@@ -75,7 +75,7 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 ## Assets and credits
 
 - **Video:** [Pexels — Sea Waves Crashing on Rocky Coast (#5161508)](https://www.pexels.com/video/sea-waves-crashing-on-rocky-coast-5161508/). Supplied by the project owner, cropped in time, downscaled to 1280×720, converted to 24 fps, stripped of audio, and H.264 encoded for the prototype. Source availability and licensing must be checked prior to any external reuse; see [Pexels License](https://www.pexels.com/license/).
-- **Art direction:** AI-generated DEAD//AIR scene concept from the project's design phase. `scene-poster.webp` and `preview.webp` are crops of the concept board, not photographic evidence of a real station.
+- **Art direction:** AI-generated DEAD//AIR scene concept from the project's design phase. `scene-poster.webp` is the owner-corrected master without the baked-in lighthouse beam; `preview.webp` is the existing archive crop. Neither depicts a real station.
 - **Typography:** Reuses `BarlowCondensed-Black.ttf` already shipped in the portfolio's existing `/assets/fonts/studies/` directory; falls back to system fonts. No new external font or third-party library is loaded.
 
 ## Follow-up work

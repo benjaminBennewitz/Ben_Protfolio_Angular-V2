@@ -1011,6 +1011,16 @@ folio/
 │   │   │   ├── index.html
 │   │   │   ├── README.md
 │   │   │   └── styles.css
+│   │   ├── dead-air/
+│   │   │   ├── assets/
+│   │   │   │   ├── coast-loop.mp4
+│   │   │   │   ├── preview.webp
+│   │   │   │   └── scene-poster.webp
+│   │   │   ├── scripts/
+│   │   │   │   └── app.js
+│   │   │   ├── index.html
+│   │   │   ├── README.md
+│   │   │   └── styles.css
 │   │   ├── fold/
 │   │   │   ├── assets/
 │   │   │   │   ├── favicon.svg

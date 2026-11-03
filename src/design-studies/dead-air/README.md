@@ -20,10 +20,15 @@ The fictional North Coast Broadcasting System (NCBS) is framed as a decommission
 
 - Native HTML, CSS and JavaScript ES module; no app framework, bundler or runtime dependencies.
 - English and German translations of all control instructions and descriptions; broadcast branding remains in English.
-- Three explicit *test* states, `normal`, `interference`, `unknown`, that change atmosphere and readouts without imposing story mechanics.
+- Three selectable signal states, `normal`, `interference`, `unknown`, that change atmosphere and readouts without imposing story mechanics.
 - Two selectable sources: generated photographic art-direction still and original live-action coastline video (only loaded when requested).
 - Interference-strength range input adjusts visible signal artefacts.
 - Pause / resume freezes CSS animations and playback, with reduced-motion enabled by default for visitors requesting it.
+- Scrollfreie Broadcast-Oberfläche (`100dvh` einschließlich Header): Monitor, Quellensteuerung und Signaltelemetrie bleiben auch bei niedriger Fensterhöhe sichtbar.
+- Auf schmalen oder besonders niedrigen Displays wird der Empfänger als eigene, tastaturbedienbare Bedienfläche geöffnet. Die Kanalauswahl schließt sie automatisch und zeigt die aktualisierte Kameraansicht.
+- Dedicated, keyboard-accessible information dialog containing imprint, privacy and video source links instead of a permanent footer.
+- Local station-mark SVG (broadcast tower with red/orange signal waveform) and simplified SVG favicon; the wordmark is typeset directly in the interface.
+- Broadcast-specific user-facing copy; technical prototype notes are documented here rather than displayed in the interface.
 - Semantic control groups, visible keyboard focus and controls that work without pointing-device gestures.
 
 The art-direction still is a flattened concept visualization. It is **not** a working parallax scene or a replacement for the upcoming separately isolated photographic assets. The ocean video is a moving visual reference; matching the concept still to the video perspective, tracking, compositing and loop continuity remain separate production tasks.
@@ -42,13 +47,15 @@ These are visual placeholders. The visitor's objectives, event progression, freq
 
 ```text
 dead-air/
-├── index.html            # Static microsite + semantic broadcast interface
-├── styles.css            # Design tokens, TV styling, states, responsive, reduced motion
-├── scripts/app.js        # Single source of truth for UI and visual state
+├── index.html              # Broadcast workstation and accessible information dialog
+├── styles.css              # Design tokens, viewport layout, states, responsive, reduced motion
+├── scripts/app.js          # Central UI, language, signal and dialog controls
 ├── assets/
-│   ├── coast-loop.mp4    # Optimized short footage excerpt, video only
-│   ├── scene-poster.webp # AI-generated art-direction scene crop
-│   └── preview.webp      # Archive card crop
+│   ├── station-mark.svg    # Editable broadcast tower signet
+│   ├── favicon.svg         # Reduced signet for browser tabs
+│   ├── coast-loop.mp4      # Optimized short footage excerpt, video only
+│   ├── scene-poster.webp   # AI-generated art-direction scene crop
+│   └── preview.webp        # Archive card crop
 └── README.md
 ```
 

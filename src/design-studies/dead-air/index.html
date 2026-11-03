@@ -15,6 +15,7 @@
   <meta property="og:image" content="https://b2folio.de/design-studies/dead-air/assets/preview.webp">
   <meta property="og:url" content="https://b2folio.de/design-studies/dead-air/">
   <title>DEAD//AIR — The Coast Is Still Transmitting</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" as="image" href="assets/scene-poster.webp" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="scripts/app.js"></script>
@@ -25,20 +26,23 @@
   <div class="broadcast-shell">
     <header class="topbar">
       <a class="station-brand" href="#main" aria-label="DEAD//AIR — North Coast Broadcasting System">
-        <span class="station-brand__mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-        <span class="station-brand__copy"><strong>NCBS<span class="mark-accent">//</span>93</strong><small>NORTH COAST BROADCASTING SYSTEM</small></span>
+        <img class="station-brand__mark" src="assets/station-mark.svg" width="58" height="58" alt="">
+        <span class="station-brand__copy"><strong>DEAD<span class="mark-accent">//</span>AIR</strong><small>NORTH COAST BROADCASTING SYSTEM</small></span>
       </a>
-      <div class="topbar__ident" aria-hidden="true">FIELD UNIT / 01 <span class="topbar__dash"></span> ANALOGUE SIGNAL RESEARCH</div>
+      <div class="topbar__ident" aria-hidden="true">NCBS / 1993 <span class="topbar__dash"></span> NORTH COAST STATION</div>
       <nav class="topbar__actions" id="top-nav" aria-label="Portfolio und Sprache">
+        <button id="receiver-toggle" class="topbar__receiver" type="button" aria-controls="receiver-panel" aria-expanded="false" data-i18n-aria="openReceiver" data-i18n="receiverButton">EMPFANG</button>
+        <button id="info-toggle" class="topbar__info" type="button" aria-haspopup="dialog" aria-controls="info-dialog" aria-label="Informationen und Rechtliches" title="Informationen und Rechtliches"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v6M12 7.3v.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="info">INFO</span></button>
         <button id="language-toggle" class="topbar__language" type="button" aria-label="Switch to English">EN</button>
-        <a href="/archive" class="topbar__back" data-i18n="back">ZURÜCK ZUM ARCHIV <span aria-hidden="true">↗</span></a>
+        <a href="/archive" class="topbar__back" aria-label="Zurück zum Archiv" data-i18n-aria="back"><span class="back-label" data-i18n="back">ZURÜCK ZUM ARCHIV</span><span aria-hidden="true">↗</span></a>
       </nav>
     </header>
 
     <main id="main" class="workstation">
-      <section class="control-panel" aria-labelledby="page-title">
+      <section class="control-panel" id="receiver-panel" aria-labelledby="page-title">
+        <button class="control-panel__close" id="receiver-close" type="button" data-i18n-aria="closeReceiver" data-i18n="closeReceiver">SCHLIESSEN ×</button>
         <div class="control-panel__heading">
-          <div class="eyebrow"><span class="indicator indicator--red" aria-hidden="true"></span> <span data-i18n="eyebrow">SIGNAL LABORATORY / PROTOTYP 0.1</span></div>
+          <div class="eyebrow"><span class="indicator indicator--red" aria-hidden="true"></span> <span data-i18n="eyebrow">NCBS / EMPFANGSSTATION 01</span></div>
           <h1 id="page-title">DEAD<span>//</span>AIR</h1>
           <p class="tagline">THE COAST IS STILL TRANSMITTING.</p>
           <p class="lead" data-i18n="intro">Eine verlassene Küstenstation. Drei Signale. Eine Übertragung, die nicht existieren dürfte.</p>
@@ -52,7 +56,7 @@
             <div class="receiver__scale" aria-hidden="true"><span>87</span><span>90</span><span>94</span><span>98</span><span>102</span></div>
           </div>
           <fieldset class="channel-select">
-            <legend class="eyebrow" data-i18n="channels">TESTFREQUENZEN</legend>
+            <legend class="eyebrow" data-i18n="channels">GESPEICHERTE FREQUENZEN</legend>
             <button type="button" class="channel-select__button is-active" data-channel="normal" aria-pressed="true"><span>01 / <span data-i18n="normal">NORMAL</span></span><small>87.6 MHz</small></button>
             <button type="button" class="channel-select__button" data-channel="interference" aria-pressed="false"><span>02 / INTERFERENCE</span><small>91.3 MHz</small></button>
             <button type="button" class="channel-select__button" data-channel="unknown" aria-pressed="false"><span>03 / UNKNOWN</span><small>??? MHz</small></button>
@@ -64,10 +68,6 @@
           </div>
         </div>
 
-        <div class="control-panel__note">
-          <span class="eyebrow" data-i18n="experimentLabel">GESTALTUNGSEXPERIMENT / DS–010</span>
-          <p data-i18n="experiment">Fotografische Küstenlandschaft trifft auf analoge Broadcast-Ästhetik. Die Zustände sind vorläufige Szenentests, noch keine fertige Erzählung.</p>
-        </div>
       </section>
 
       <section class="monitor-area" aria-labelledby="monitor-title">
@@ -91,13 +91,13 @@
               <div class="scene__signal-line" aria-hidden="true"></div>
             </figure>
           </div>
-          <div class="television__footer"><span class="television__power"><i></i> POWER</span><span id="visual-credit">AI GENERATED / SCENE CONCEPT</span><span class="television__vents" aria-hidden="true"></span></div>
+          <div class="television__footer"><span class="television__power"><i></i> POWER</span><span>NCBS / VIDEO TRANSCEIVER</span><span class="television__vents" aria-hidden="true"></span></div>
         </div>
 
         <div class="monitor-toolbar" aria-label="Szenenansichten und Animation">
           <div class="source-switch" id="source-switch" role="group" aria-label="Bildquelle wählen">
-            <button type="button" data-source="artwork" class="is-active" aria-pressed="true" data-i18n="artwork">SZENENENTWURF</button>
-            <button type="button" data-source="video" aria-pressed="false" data-i18n="footage">ORIGINALAUFNAHME</button>
+            <button type="button" data-source="artwork" class="is-active" aria-pressed="true" data-i18n="artwork">STATION / CAM 01</button>
+            <button type="button" data-source="video" aria-pressed="false" data-i18n="footage">KÜSTE / CAM 02</button>
           </div>
           <button id="pause-toggle" type="button" class="pause-toggle" aria-pressed="false"><span id="pause-icon" aria-hidden="true">Ⅱ</span> <span id="pause-label" data-i18n="pause">PAUSE</span></button>
         </div>
@@ -110,11 +110,21 @@
       </section>
     </main>
 
-    <footer class="site-footer">
-      <div><strong>DEAD//AIR</strong><span>DESIGN STUDY 010 / B² © 2026</span></div>
-      <p data-i18n="prototype">INTERAKTIVER SZENENPROTOTYP — STORY UND EREIGNISSE FOLGEN IN DER NÄCHSTEN PHASE.</p>
-      <nav aria-label="Rechtliches und Bildnachweise"><a href="/impressum" data-i18n="imprint">Impressum</a><a href="/datenschutz" data-i18n="privacy">Datenschutz</a><a href="https://www.pexels.com/video/sea-waves-crashing-on-rocky-coast-5161508/" target="_blank" rel="noopener noreferrer" data-i18n="credits">Video: Pexels ↗</a></nav>
-    </footer>
+    <dialog class="info-dialog" id="info-dialog" aria-labelledby="info-title" aria-describedby="info-description">
+      <div class="info-dialog__header">
+        <span class="eyebrow">NCBS / INFORMATION DESK</span>
+        <button class="info-dialog__close" id="info-close" type="button" aria-label="Schließen" data-i18n-aria="close">×</button>
+      </div>
+      <img class="info-dialog__logo" src="assets/station-mark.svg" width="72" height="72" alt="">
+      <h2 id="info-title">DEAD<span class="mark-accent">//</span>AIR</h2>
+      <p id="info-description" data-i18n="infoDescription">North Coast Broadcasting System. Die Küste sendet noch immer.</p>
+      <div class="info-dialog__meta"><span>NCBS / 1993</span><span>© B² 2026</span></div>
+      <nav class="info-dialog__links" aria-label="Rechtliches und Bildnachweise" data-i18n-aria="legalNav">
+        <a href="/impressum" data-i18n="imprint">Impressum</a>
+        <a href="/datenschutz" data-i18n="privacy">Datenschutz</a>
+        <a href="https://www.pexels.com/video/sea-waves-crashing-on-rocky-coast-5161508/" target="_blank" rel="noopener noreferrer" data-i18n="credits">Video: Pexels ↗</a>
+      </nav>
+    </dialog>
   </div>
 </body>
 </html>

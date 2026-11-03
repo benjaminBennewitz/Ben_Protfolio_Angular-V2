@@ -24,7 +24,7 @@
    04   Receiver und Frequenzsteuerung
    05   Analoger Bildschirm und Szene
    06   Monitor-Toolbar und Telemetrie
-   07   Footer und Quellenhinweise
+   07   Informationsdialog und Quellenhinweise
    08   Zustandswechsel und Animationen
    09   Responsive Verhalten
    10   Reduced Motion
@@ -70,10 +70,14 @@
 }
 
 html {
+  height: 100%;
   scroll-behavior: smooth;
+  overflow: hidden;
 }
 
 body {
+  height: 100%;
+  overflow: hidden;
   min-width: 320px;
   margin: 0;
   background: radial-gradient(ellipse at 67% 0%, #203337 0%, transparent 54%), var(--background);
@@ -149,14 +153,13 @@ figure {
 .receiver__display,
 .channel-select,
 .strength-control,
-.control-panel__note,
 .monitor-area__header,
 .scene__osd,
 .television__badge,
 .television__footer,
 .monitor-toolbar,
 .monitor-extras,
-.site-footer {
+.info-dialog {
   font-family: var(--font-mono);
 }
 
@@ -171,14 +174,22 @@ figure {
 /* 03   Seitenrahmen und Masthead */
 
 .broadcast-shell {
+  display: flex;
+  flex-direction: column;
   width: min(100%, 1920px);
+  height: 100vh;
+  height: 100svh;
+  height: 100dvh;
+  max-height: 100dvh;
   margin: 0 auto;
   padding: 0 clamp(16px, 2.3vw, 46px);
+  overflow: hidden;
 }
 
 .topbar {
   display: flex;
-  min-height: 80px;
+  flex: 0 0 72px;
+  min-height: 0;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
@@ -194,33 +205,11 @@ figure {
 }
 
 .station-brand__mark {
-  display: flex;
-  width: 42px;
-  height: 40px;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 3px;
-  padding: 9px 4px 8px;
-  border: 1px solid var(--edge);
-}
-
-.station-brand__mark span {
-  width: 4px;
-  background: var(--secondary);
-}
-
-.station-brand__mark span:nth-child(1),
-.station-brand__mark span:nth-child(4) {
-  height: 11px;
-}
-
-.station-brand__mark span:nth-child(2) {
-  height: 21px;
-}
-
-.station-brand__mark span:nth-child(3) {
-  height: 16px;
-  background: var(--signal);
+  display: block;
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
 }
 
 .station-brand__copy {
@@ -229,8 +218,9 @@ figure {
 }
 
 .station-brand__copy strong {
-  font-size: 17px;
-  letter-spacing: -0.035em;
+  font-family: 'B2 Condensed', Impact, 'Arial Narrow', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.035em;
 }
 
 .mark-accent,
@@ -266,8 +256,12 @@ figure {
 
 .topbar__actions button,
 .topbar__actions a {
+  display: inline-flex;
   min-height: 38px;
-  padding: 11px 14px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
   border: 1px solid var(--edge);
   background: transparent;
   color: var(--chalk);
@@ -276,6 +270,10 @@ figure {
   letter-spacing: 0.08em;
   text-decoration: none;
   white-space: nowrap;
+}
+
+.topbar__receiver {
+  display: none;
 }
 
 .topbar__actions a {
@@ -292,14 +290,29 @@ figure {
 
 .workstation {
   display: grid;
+  flex: 1 1 auto;
+  min-height: 0;
   grid-template-columns: minmax(300px, 0.82fr) minmax(0, 1.85fr);
-  align-items: start;
+  align-items: stretch;
   gap: clamp(20px, 3.1vw, 62px);
-  padding: clamp(28px, 4vw, 68px) 0 clamp(24px, 3vw, 46px);
+  padding: clamp(12px, 2vh, 24px) 0;
+  overflow: hidden;
 }
 
-.control-panel {
+.control-panel,
+.monitor-area {
   min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.monitor-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.control-panel__close {
+  display: none;
 }
 
 .control-panel__heading {
@@ -532,25 +545,7 @@ figure {
   font-size: 9px;
 }
 
-.control-panel__note {
-  margin-top: 26px;
-  padding: 15px 0 0 14px;
-  border-left: 2px solid var(--signal);
-}
-
-.control-panel__note p {
-  max-width: 48ch;
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.75;
-}
-
 /* 05   Analoger Bildschirm und Szene */
-
-.monitor-area {
-  min-width: 0;
-}
 
 .monitor-area__header {
   display: flex;
@@ -573,6 +568,9 @@ figure {
 }
 
 .television {
+  flex: 0 1 auto;
+  align-self: center;
+  width: min(100%, max(240px, calc((100dvh - 315px) * 1.6)));
   overflow: hidden;
   padding: clamp(10px, 1.55vw, 23px) clamp(10px, 1.5vw, 22px) 0;
   border: 1px solid #889392;
@@ -843,10 +841,10 @@ figure {
 .monitor-extras {
   display: grid;
   grid-template-columns: minmax(150px, 0.9fr) minmax(190px, 1.2fr) auto;
-  gap: 20px;
+  gap: 12px;
   align-items: center;
-  margin-top: 18px;
-  padding-top: 17px;
+  margin-top: 12px;
+  padding-top: 11px;
   border-top: 1px solid var(--edge);
   font-size: 10px;
 }
@@ -905,49 +903,103 @@ figure {
   animation-delay: -900ms;
 }
 
-/* 07   Footer und Quellenhinweise */
+/* 07   Informationsdialog und Quellenhinweise */
 
-.site-footer {
+.info-dialog {
+  position: fixed;
+  width: min(440px, calc(100% - 32px));
+  max-height: min(680px, calc(100svh - 32px));
+  padding: 24px;
+  overflow-y: auto;
+  border: 1px solid #78908b;
+  border-radius: 2px;
+  background: linear-gradient(132deg, #253438, #111b1d 65%);
+  color: var(--chalk);
+  box-shadow: 12px 12px 0 #03080988, 0 30px 80px #0009;
+}
+
+.info-dialog::backdrop {
+  background: #030709bb;
+  backdrop-filter: blur(5px);
+}
+
+.info-dialog__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 15px 26px;
-  min-height: 92px;
-  padding: 23px 0 25px;
-  border-top: 1px solid var(--edge);
-  color: var(--muted);
-  font-size: 9px;
-  letter-spacing: .04em;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--edge);
 }
 
-.site-footer > div {
+.info-dialog__close {
   display: grid;
-  gap: 6px;
-}
-
-.site-footer strong {
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--edge);
+  background: var(--surface);
   color: var(--chalk);
-  letter-spacing: .12em;
+  font-size: 25px;
+  line-height: 1;
 }
 
-.site-footer p {
-  max-width: 42ch;
-  line-height: 1.5;
+.info-dialog__close:hover {
+  border-color: var(--secondary);
+  background: var(--surface-raised);
 }
 
-.site-footer nav {
+.info-dialog__logo {
+  display: block;
+  width: 72px;
+  height: 72px;
+  margin: 20px 0 8px;
+}
+
+.info-dialog h2 {
+  font-family: 'B2 Condensed', Impact, 'Arial Narrow', sans-serif;
+  font-size: clamp(48px, 10vw, 66px);
+  letter-spacing: -.035em;
+  line-height: 1;
+}
+
+.info-dialog p {
+  max-width: 35ch;
+  margin-top: 12px;
+  color: var(--secondary);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.info-dialog__meta {
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 25px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--edge);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
 }
 
-.site-footer nav a {
-  text-underline-offset: 3px;
+.info-dialog__links {
+  display: grid;
+  gap: 0;
+  margin-top: 8px;
 }
 
-.site-footer nav a:hover {
+.info-dialog__links a {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--edge-soft);
   color: var(--chalk);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.info-dialog__links a:hover {
+  color: var(--signal-light);
 }
 
 /* 08   Zustandswechsel und Animationen */
@@ -1033,99 +1085,232 @@ figure {
   }
 
   .workstation {
-    grid-template-columns: minmax(290px, 0.83fr) minmax(0, 1.7fr);
-    gap: 25px;
+    grid-template-columns: minmax(280px, .83fr) minmax(0, 1.7fr);
+    gap: 24px;
   }
 
   .control-panel h1 {
-    font-size: clamp(73px, 8.2vw, 105px);
+    font-size: clamp(68px, 7.7vw, 105px);
   }
 
   .monitor-extras {
-    grid-template-columns: minmax(140px, 1fr) minmax(170px, 1.3fr);
+    grid-template-columns: minmax(110px, .85fr) minmax(130px, 1.2fr) auto;
+    gap: 9px;
   }
 
-  .monitor-extras__readout {
+  .readout-bars {
+    gap: 2px;
+  }
+}
+
+@media (max-width: 1050px) and (min-width: 751px) {
+  .workstation {
+    grid-template-columns: minmax(260px, .82fr) minmax(0, 1.62fr);
+    gap: 18px;
+  }
+
+  .control-panel h1 {
+    font-size: clamp(64px, 7.2vw, 86px);
+  }
+
+  .monitor-extras__message {
+    font-size: 10px;
+  }
+
+  .monitor-extras__readout .readout-bars {
     display: none;
   }
 }
 
-@media (max-width: 950px) {
+@media (max-height: 850px) and (min-width: 751px) {
   .workstation {
-    grid-template-columns: 1fr;
-    gap: 35px;
-  }
-
-  .control-panel {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, .88fr);
-    align-items: center;
-    gap: 20px;
-  }
-
-  .control-panel h1 {
-    font-size: clamp(74px, 12vw, 110px);
-  }
-
-  .control-panel__note {
-    grid-column: 1 / -1;
-    margin: 0;
-  }
-
-  .monitor-extras {
-    grid-template-columns: minmax(170px, 1fr) minmax(200px, 1.4fr) auto;
-  }
-
-  .monitor-extras__readout {
-    display: flex;
-  }
-}
-
-@media (max-width: 650px) {
-  .topbar {
-    min-height: 69px;
-  }
-
-  .station-brand__copy small {
-    max-width: 95px;
-    line-height: 1.35;
-  }
-
-  .topbar__actions a {
-    max-width: 125px;
-    padding: 10px;
-    font-size: 9px;
-  }
-
-  .topbar__language {
-    min-width: 40px;
-  }
-
-  .workstation {
-    padding-top: 32px;
-  }
-
-  .control-panel {
-    display: block;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
   .control-panel__heading {
-    padding-bottom: 23px;
+    padding-bottom: 12px;
   }
 
   .control-panel h1 {
-    font-size: clamp(78px, 18vw, 112px);
+    font-size: clamp(62px, 7vw, 100px);
   }
 
-  .control-panel__note {
-    margin-top: 20px;
+  .tagline {
+    margin: 7px 0;
+    font-size: 10px;
+  }
+
+  .lead {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .receiver__display {
+    margin: 10px 12px;
+    padding: 11px 13px 8px;
   }
 
   .receiver__freq {
-    font-size: 70px;
+    font-size: clamp(39px, 4vw, 59px);
+  }
+
+  .receiver__scale {
+    margin-top: 9px;
+    padding-top: 7px;
+  }
+
+  .channel-select {
+    gap: 5px;
+    margin: 0 12px 12px;
+  }
+
+  .channel-select__button {
+    min-height: 35px;
+  }
+
+  .strength-control {
+    margin: 0 12px 11px;
+    padding-top: 9px;
+  }
+
+  .strength-control input {
+    margin: 11px 0 10px;
+  }
+
+  .monitor-toolbar {
+    margin-top: 9px;
+  }
+
+  .monitor-extras {
+    margin-top: 9px;
+    padding-top: 9px;
+  }
+}
+
+@media (max-height: 680px) and (min-width: 751px) {
+  .topbar {
+    flex-basis: 56px;
+  }
+
+  .control-panel__heading {
+    padding-bottom: 8px;
+  }
+
+  .control-panel h1 {
+    margin-block: 3px;
+    font-size: clamp(55px, 6vw, 78px);
+  }
+
+  .lead {
+    display: none;
+  }
+
+  .panel-bar {
+    min-height: 30px;
+  }
+
+  .receiver__display {
+    margin: 7px 10px;
+    padding: 7px 10px;
+  }
+
+  .receiver__status {
+    margin-top: 5px;
+  }
+
+  .receiver__scale {
+    margin-top: 7px;
+    padding-top: 5px;
+  }
+
+  .channel-select__button {
+    min-height: 30px;
+  }
+
+  .strength-control {
+    padding-top: 6px;
+  }
+
+  .strength-control input {
+    margin-block: 8px;
+  }
+
+  .television__footer {
+    min-height: 33px;
+  }
+
+  .source-switch button,
+  .pause-toggle {
+    min-height: 36px;
+  }
+}
+
+@media (max-width: 750px), (max-height: 520px) {
+  .broadcast-shell {
+    padding-inline: 12px;
+  }
+
+  .topbar {
+    flex-basis: 58px;
+    gap: 8px;
+  }
+
+  .topbar__receiver {
+    display: inline-flex;
+  }
+
+  .topbar__actions {
+    gap: 5px;
+  }
+
+  .topbar__actions button,
+  .topbar__actions a {
+    min-height: 35px;
+    padding: 7px 9px;
+  }
+
+  .station-brand {
+    gap: 6px;
+  }
+
+  .station-brand__mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .station-brand__copy strong {
+    font-size: 18px;
+  }
+
+  .station-brand__copy small {
+    max-width: 90px;
+    font-size: 7px;
+    line-height: 1.2;
+  }
+
+  .topbar__info span,
+  .topbar__back .back-label {
+    display: none;
+  }
+
+  .topbar__back {
+    min-width: 34px;
+  }
+
+  .workstation {
+    display: block;
+    padding: 10px 0;
+  }
+
+  .monitor-area {
+    height: 100%;
+    justify-content: center;
   }
 
   .monitor-area__header {
+    flex: 0 0 auto;
+    min-height: 25px;
     font-size: 9px;
   }
 
@@ -1133,8 +1318,13 @@ figure {
     display: none;
   }
 
+  .television {
+    flex: 0 1 auto;
+    width: min(100%, max(220px, calc((100dvh - 260px) * 1.48)));
+  }
+
   .television__footer {
-    min-height: 35px;
+    min-height: 30px;
   }
 
   .television__footer > span:nth-child(2) {
@@ -1142,24 +1332,319 @@ figure {
   }
 
   .monitor-toolbar {
-    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 9px;
   }
 
-  .source-switch {
-    flex-basis: 100%;
+  .source-switch button,
+  .pause-toggle {
+    min-height: 38px;
+    padding-inline: 7px;
+    font-size: 9px;
   }
 
   .pause-toggle {
-    width: 100%;
+    min-width: 64px;
+  }
+
+  .pause-toggle span:first-child {
+    margin-right: 2px;
   }
 
   .monitor-extras {
-    grid-template-columns: 1fr;
-    gap: 11px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 8px;
+    margin-top: 10px;
+    padding-top: 9px;
+  }
+
+  .monitor-extras__caption {
+    gap: 3px;
+    font-size: 9px;
+  }
+
+  .monitor-extras__message {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    font-size: 10px;
+    line-height: 1.3;
   }
 
   .monitor-extras__readout {
+    grid-column: 2;
+    grid-row: 1;
+    gap: 5px;
+    font-size: 9px;
+  }
+
+  .readout-bars {
+    height: 16px;
+    gap: 2px;
+  }
+
+  .readout-bars i {
+    width: 2px;
+  }
+
+  .control-panel {
+    position: fixed;
+    z-index: 20;
+    top: 58px;
+    right: 0;
+    bottom: 0;
+    left: 0;
     display: none;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    height: calc(100dvh - 58px);
+    padding: 12px clamp(12px, 6vw, 32px);
+    overflow: hidden;
+    background: var(--background);
+    box-shadow: 0 -6px 36px #030809aa;
+  }
+
+  .control-panel.is-open {
+    display: flex;
+  }
+
+  .control-panel__close {
+    display: inline-flex;
+    align-self: flex-end;
+    flex: 0 0 auto;
+    min-height: 32px;
+    align-items: center;
+    padding: 5px 10px;
+    border: 1px solid var(--edge);
+    background: var(--surface);
+    color: var(--chalk);
+    font-family: var(--font-mono);
+    font-size: 10px;
+  }
+
+  .control-panel__heading {
+    flex: 0 0 auto;
+    padding-bottom: 12px;
+  }
+
+  .control-panel h1 {
+    margin: 5px 0 3px;
+    font-size: clamp(58px, 15vw, 100px);
+  }
+
+  .tagline {
+    margin: 7px 0 0;
+    font-size: 10px;
+  }
+
+  .lead {
+    display: none;
+  }
+
+  .receiver {
+    flex: 0 1 auto;
+    min-height: 0;
+  }
+
+  .panel-bar {
+    min-height: 30px;
+  }
+
+  .receiver__display {
+    margin: 9px 11px;
+    padding: 9px 11px 6px;
+  }
+
+  .receiver__freq {
+    font-size: clamp(40px, 11vw, 58px);
+  }
+
+  .receiver__status {
+    margin-top: 5px;
+  }
+
+  .receiver__scale {
+    margin-top: 8px;
+    padding-top: 6px;
+  }
+
+  .channel-select {
+    gap: 5px;
+    margin: 0 11px 10px;
+  }
+
+  .channel-select legend {
+    margin-bottom: 6px;
+  }
+
+  .channel-select__button {
+    min-height: 34px;
+  }
+
+  .strength-control {
+    margin: 0 11px 10px;
+    padding-top: 9px;
+  }
+
+  .strength-control input {
+    margin-block: 10px 8px;
+  }
+}
+
+@media (max-height: 620px) and (max-width: 750px) {
+  .control-panel {
+    padding-block: 7px;
+  }
+
+  .control-panel__close {
+    min-height: 28px;
+  }
+
+  .control-panel__heading {
+    padding-bottom: 6px;
+  }
+
+  .control-panel h1 {
+    font-size: 55px;
+  }
+
+  .control-panel__heading .eyebrow,
+  .control-panel__heading .tagline {
+    display: none;
+  }
+
+  .receiver__display {
+    margin-block: 5px;
+    padding-block: 5px;
+  }
+
+  .receiver__scale {
+    margin-top: 5px;
+    padding-top: 3px;
+  }
+
+  .channel-select {
+    gap: 3px;
+    margin-bottom: 6px;
+  }
+
+  .channel-select__button {
+    min-height: 30px;
+  }
+
+  .strength-control {
+    margin-bottom: 6px;
+    padding-top: 6px;
+  }
+
+  .strength-control input {
+    margin-block: 6px;
+  }
+}
+
+@media (max-width: 380px) {
+  .station-brand__mark {
+    width: 28px;
+    height: 28px;
+  }
+
+  .station-brand__copy strong {
+    font-size: 15px;
+  }
+
+  .topbar__receiver {
+    font-size: 9px;
+  }
+
+  .station-brand__copy small {
+    display: none;
+  }
+
+  .topbar__actions button,
+  .topbar__actions a {
+    padding-inline: 7px;
+  }
+
+  .monitor-extras__readout .readout-bars {
+    display: none;
+  }
+}
+
+@media (max-height: 430px) and (min-width: 501px) {
+  .control-panel.is-open {
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+    grid-template-rows: 28px minmax(0, 1fr);
+    gap: 6px 12px;
+    padding: 7px 14px;
+  }
+
+  .control-panel__close {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  .control-panel__heading {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: center;
+  }
+
+  .control-panel h1 {
+    font-size: clamp(42px, 7.5vw, 76px);
+  }
+
+  .receiver {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+
+  .receiver__freq {
+    font-size: 31px;
+  }
+
+  .receiver__display {
+    margin: 5px 8px;
+    padding: 5px 8px;
+  }
+
+  .receiver__scale {
+    display: none;
+  }
+
+  .receiver__status {
+    margin-top: 2px;
+    font-size: 9px;
+  }
+
+  .panel-bar {
+    min-height: 24px;
+  }
+
+  .channel-select {
+    gap: 2px;
+    margin: 0 8px 5px;
+  }
+
+  .channel-select legend {
+    margin-bottom: 2px;
+  }
+
+  .channel-select__button {
+    min-height: 25px;
+    padding-inline: 7px;
+    font-size: 9px;
+  }
+
+  .strength-control {
+    margin: 0 8px 5px;
+    padding-top: 4px;
+  }
+
+  .strength-control input {
+    margin: 4px 0 5px;
   }
 }
 

@@ -1014,8 +1014,10 @@ folio/
 │   │   ├── dead-air/
 │   │   │   ├── assets/
 │   │   │   │   ├── coast-loop.mp4
+│   │   │   │   ├── favicon.svg
 │   │   │   │   ├── preview.webp
-│   │   │   │   └── scene-poster.webp
+│   │   │   │   ├── scene-poster.webp
+│   │   │   │   └── station-mark.svg
 │   │   │   ├── scripts/
 │   │   │   │   └── app.js
 │   │   │   ├── index.html

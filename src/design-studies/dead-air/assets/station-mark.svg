@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 112" fill="none" role="img" aria-labelledby="title">
+  <title id="title">DEAD//AIR — Sendeturm mit gestörtem Funksignal</title>
+  <g stroke="#dce0d7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 19a29 29 0 0 0 0 43M76 19a29 29 0 0 1 0 43M25 10a43 43 0 0 0 0 61M87 10a43 43 0 0 1 0 61" stroke-width="3.2"/>
+    <circle cx="56" cy="31" r="5" fill="#dce0d7" stroke="none"/>
+    <path d="M56 36 36 99h40L56 36ZM45 71h22M41 84h30M50 52l16 30M62 52 46 83M30 100h52" stroke-width="3.4"/>
+  </g>
+  <path d="M9 87h18l5-7 5 14 6-7h8" stroke="#87a8a2" stroke-width="3.2" stroke-linecap="square" stroke-linejoin="bevel"/>
+  <path d="M70 87h7l5-11 6 22 5-11h10" stroke="#cf604c" stroke-width="3.2" stroke-linecap="square" stroke-linejoin="bevel"/>
+</svg>

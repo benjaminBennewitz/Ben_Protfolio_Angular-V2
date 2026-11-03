@@ -723,13 +723,13 @@ figure {
 
 .scene__beam--lighthouse {
   z-index: 1;
-  top: 2.222222%;
+  top: 1.527778%;
   left: 9.84375%;
-  width: 49.375%;
-  height: 21.944444%;
+  width: 52.4%;
+  height: 24.6%;
   mix-blend-mode: screen;
   opacity: 0;
-  transform-origin: 98.5% 43.8%;
+  transform-origin: 98.9% 46%;
   animation: lighthouse-beam-horizontal 9.4s linear infinite;
 }
 
@@ -741,31 +741,41 @@ figure {
 }
 
 .scene__beam--lighthouse::before {
-  clip-path: polygon(0 10%, 100% 43%, 100% 57%, 0 90%);
+  clip-path: polygon(0 5%, 100% 34%, 100% 66%, 0 95%);
   background:
-    radial-gradient(ellipse 90% 30% at 100% 50%,
-      rgba(255, 252, 237, .3) 0%,
-      rgba(255, 246, 216, .13) 48%,
-      transparent 100%),
+    radial-gradient(ellipse 96% 34% at 100% 50%,
+      rgba(255, 246, 198, .74) 0%,
+      rgba(255, 235, 162, .46) 10%,
+      rgba(255, 228, 142, .22) 22%,
+      rgba(255, 224, 146, 0) 36%),
     linear-gradient(90deg,
-    rgba(255, 244, 210, 0) 0%,
-    rgba(255, 245, 216, .035) 17%,
-    rgba(255, 246, 218, .085) 38%,
-    rgba(255, 247, 222, .17) 61%,
-    rgba(255, 250, 230, .38) 84%,
-    rgba(255, 252, 238, .64) 100%);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 16%, #000 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 16%, #000 100%);
-  filter: blur(clamp(9px, 1.15vw, 16px));
+      rgba(255, 238, 176, 0) 0%,
+      rgba(255, 239, 180, .025) 16%,
+      rgba(255, 240, 186, .08) 35%,
+      rgba(255, 241, 191, .16) 56%,
+      rgba(255, 244, 201, .28) 76%,
+      rgba(255, 248, 214, .48) 92%,
+      rgba(255, 250, 224, .68) 100%),
+    linear-gradient(180deg,
+      rgba(255, 244, 190, 0) 0%,
+      rgba(255, 244, 190, .03) 18%,
+      rgba(255, 245, 197, .11) 34%,
+      rgba(255, 247, 205, .2) 50%,
+      rgba(255, 245, 197, .11) 66%,
+      rgba(255, 244, 190, .03) 82%,
+      rgba(255, 244, 190, 0) 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.72) 14%, #000 36%, rgba(0,0,0,.84) 64%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.72) 14%, #000 36%, rgba(0,0,0,.84) 64%, transparent 100%);
+  filter: blur(clamp(14px, 1.6vw, 22px));
 }
 
 .scene__beam--lighthouse::after {
-  inset: 32.8% auto auto 87.2%;
-  width: 11.2%;
-  height: 22%;
+  inset: 16% auto auto 58%;
+  width: 36%;
+  height: 68%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 252, 238, .7) 0%, rgba(255, 244, 204, .38) 34%, rgba(255, 234, 176, .09) 62%, rgba(255, 234, 176, 0) 100%);
-  filter: blur(5px);
+  background: radial-gradient(ellipse at 82% 50%, rgba(255, 239, 176, .16) 0%, rgba(255, 234, 166, .11) 28%, rgba(255, 232, 170, .06) 52%, rgba(255, 232, 170, 0) 100%);
+  filter: blur(18px);
 }
 
 /* Das rote Hindernislicht wird als CSS-Licht an der Mastspitze erzeugt. */
@@ -773,7 +783,7 @@ figure {
   position: absolute;
   z-index: 5;
   top: 8.055556%;
-  left: 77.486875%;
+  left: 77.09625%;
   width: .625%;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -1177,35 +1187,35 @@ figure {
 }
 
 @keyframes lighthouse-beam-horizontal {
-  0%, 8%, 100% { opacity: 0; transform: perspective(850px) rotateY(-80deg); }
-  15% { opacity: .16; transform: perspective(850px) rotateY(-60deg); }
-  26% { opacity: .46; transform: perspective(850px) rotateY(-30deg); }
-  35% { opacity: .78; transform: perspective(850px) rotateY(0deg); }
-  45% { opacity: .4; transform: perspective(850px) rotateY(38deg); }
-  55% { opacity: .1; transform: perspective(850px) rotateY(66deg); }
-  63%, 93% { opacity: 0; transform: perspective(850px) rotateY(80deg); }
+  0%, 10%, 100% { opacity: 0; transform: scaleX(.28) scaleY(.78); }
+  18% { opacity: .18; transform: scaleX(.52) scaleY(.84); }
+  30% { opacity: .42; transform: scaleX(.78) scaleY(.92); }
+  40% { opacity: .62; transform: scaleX(1) scaleY(1); }
+  52% { opacity: .38; transform: scaleX(1.12) scaleY(1.03); }
+  64% { opacity: .14; transform: scaleX(1.2) scaleY(1.05); }
+  74%, 92% { opacity: 0; transform: scaleX(1.26) scaleY(1.08); }
 }
 
 @keyframes lighthouse-beam-fault {
-  0%, 11%, 36%, 59%, 100% { opacity: 0; transform: perspective(850px) rotateY(-80deg); }
-  12%, 18% { opacity: .19; transform: perspective(850px) rotateY(-55deg); }
-  19%, 26% { opacity: .65; transform: perspective(850px) rotateY(-8deg); }
-  27%, 35% { opacity: .04; transform: perspective(850px) rotateY(28deg); }
-  37%, 46% { opacity: .34; transform: perspective(850px) rotateY(53deg); }
-  47%, 58% { opacity: 0; transform: perspective(850px) rotateY(80deg); }
-  60%, 67% { opacity: .22; transform: perspective(850px) rotateY(-25deg); }
-  68%, 99% { opacity: 0; transform: perspective(850px) rotateY(-80deg); }
+  0%, 12%, 34%, 58%, 100% { opacity: 0; transform: scaleX(.24) scaleY(.78); }
+  13%, 19% { opacity: .22; transform: scaleX(.48) scaleY(.84); }
+  20%, 27% { opacity: .58; transform: scaleX(.88) scaleY(.96); }
+  28%, 33% { opacity: .07; transform: scaleX(1.02) scaleY(1); }
+  35%, 44% { opacity: .34; transform: scaleX(1.12) scaleY(1.04); }
+  45%, 57% { opacity: 0; transform: scaleX(1.24) scaleY(1.08); }
+  58%, 67% { opacity: .18; transform: scaleX(.72) scaleY(.9); }
+  68%, 99% { opacity: 0; transform: scaleX(1.28) scaleY(1.08); }
 }
 
 @keyframes lighthouse-beam-unknown {
-  0%, 14%, 40%, 56%, 100% { opacity: 0; transform: perspective(850px) rotateY(-80deg); }
-  15%, 22% { opacity: .16; transform: perspective(850px) rotateY(-48deg); }
-  23%, 32% { opacity: .54; transform: perspective(850px) rotateY(4deg); }
-  33%, 39% { opacity: .05; transform: perspective(850px) rotateY(47deg); }
-  41%, 54% { opacity: .38; transform: perspective(850px) rotateY(70deg); }
-  55%, 72% { opacity: 0; transform: perspective(850px) rotateY(80deg); }
-  73%, 81% { opacity: .2; transform: perspective(850px) rotateY(-22deg); }
-  82%, 99% { opacity: 0; transform: perspective(850px) rotateY(-80deg); }
+  0%, 14%, 38%, 56%, 100% { opacity: 0; transform: scaleX(.2) scaleY(.76); }
+  15%, 21% { opacity: .18; transform: scaleX(.44) scaleY(.82); }
+  22%, 31% { opacity: .48; transform: scaleX(.84) scaleY(.94); }
+  32%, 37% { opacity: .08; transform: scaleX(1.02) scaleY(1.02); }
+  39%, 53% { opacity: .3; transform: scaleX(1.18) scaleY(1.06); }
+  54%, 71% { opacity: 0; transform: scaleX(1.3) scaleY(1.1); }
+  72%, 81% { opacity: .14; transform: scaleX(.68) scaleY(.88); }
+  82%, 99% { opacity: 0; transform: scaleX(1.28) scaleY(1.1); }
 }
 
 @keyframes signal-drift {

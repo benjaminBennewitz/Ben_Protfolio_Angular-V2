@@ -105,3 +105,11 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 - Mastlicht um weitere 15 Originalbild-Pixel nach links und 5 Pixel nach oben versetzt (1280 × 720 als Bezug, proportional bei responsiver Skalierung).
 - Den horizontalen Leuchtturm-Beam wieder als gerichteten, konischen Lichtkegel angelegt; weiche Blur-Kanten und Alpha-Auslauf bleiben erhalten.
 - Empfangszustände, Blinkrhythmen, Pause und Reduced-Motion-Verhalten bleiben unverändert. CAM 02 schaltet alle stationsbezogenen Licht-Layer auch nach einem Zustandswechsel sicher ab.
+
+
+## Patch 16 – Diffuse Beacon Beam
+
+- Mastlicht weitere 5 Bildpixel nach links verschoben.
+- Beam-Startpunkt 5 Bildpixel nach oben verlagert und farblich gelber abgestimmt.
+- Der Leuchtturm-Beam rotiert nicht mehr, sondern wächst diffuser in die neblige Distanz.
+- Breitere Streuung und weichere Alpha-Kanten für glaubwürdigeren Dunst im Himmel.

@@ -21,9 +21,9 @@
    01   Fonts und Design Tokens
    02   Reset, Fokus und Typografie
    03   Seitenrahmen und Masthead
-   04   Receiver und Frequenzsteuerung
-   05   Analoger Bildschirm und Szene
-   06   Monitor-Toolbar und Telemetrie
+   04   Receiver, Frequenzregler und Kameras
+   05   Analoger Bildschirm, Lichtquellen und Szene
+   06   Wiedergabe und Telemetrie
    07   Informationsdialog und Quellenhinweise
    08   Zustandswechsel und Animationen
    09   Responsive Verhalten
@@ -52,8 +52,8 @@
   --secondary: #b4c7bd;
   --signal: #d76854;
   --signal-light: #f4a28b;
-  --noise-opacity: 0.09;
-  --flicker-opacity: 0.13;
+  --noise-opacity: 0.058;
+  --flicker-opacity: 0.083;
   --font-mono: 'Courier New', Courier, monospace;
   font-family: Arial, Helvetica, sans-serif;
   background: var(--background);
@@ -151,8 +151,8 @@ figure {
 .topbar,
 .panel-bar,
 .receiver__display,
-.channel-select,
-.strength-control,
+.tuning-control,
+.source-switch,
 .monitor-area__header,
 .scene__osd,
 .television__badge,
@@ -364,7 +364,7 @@ figure {
   line-height: 1.65;
 }
 
-/* 04   Receiver und Frequenzsteuerung */
+/* 04   Receiver, Frequenzregler und Kameras */
 
 .receiver {
   overflow: hidden;
@@ -443,109 +443,97 @@ figure {
   font-size: 9px;
 }
 
-.channel-select {
-  display: grid;
-  gap: 6px;
-  margin: 0 15px 18px;
-}
-
-.channel-select legend {
-  margin-bottom: 8px;
-}
-
-.channel-select__button {
-  display: flex;
-  min-height: 42px;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 0 12px;
-  border: 1px solid var(--edge);
-  background: #172225;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.035em;
-  text-align: left;
-}
-
-.channel-select__button small {
-  color: var(--muted);
-  font-size: 10px;
-  white-space: nowrap;
-}
-
-.channel-select__button:hover {
-  background: #2a3b3e;
-}
-
-.channel-select__button.is-active {
-  border-color: var(--signal);
-  background: #48312c;
-  color: #fff0e9;
-  box-shadow: inset 3px 0 var(--signal);
-}
-
-.channel-select__button.is-active small {
-  color: #f4bbaa;
-}
-
-.strength-control {
-  margin: 0 15px 17px;
-  padding-top: 15px;
+/* Nativer FM-Regler: die Empfangszustände werden ausschließlich durch Tuning ausgelöst. */
+.tuning-control {
+  margin: 0 15px 15px;
+  padding-top: 13px;
   border-top: 1px solid var(--edge);
 }
 
-.strength-control label,
-.strength-control__caption {
+.tuning-control label,
+.tuning-control__scale {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-}
-
-.strength-control label {
   color: var(--secondary);
+  font-family: var(--font-mono);
   font-size: 10px;
-  letter-spacing: 0.05em;
+  font-weight: 700;
+  letter-spacing: .05em;
 }
 
-.strength-control output {
-  color: var(--signal-light);
-}
-
-.strength-control input {
+.tuning-control input {
   width: 100%;
   height: 6px;
   margin: 17px 0 14px;
+  padding: 0;
   border: 0;
   border-radius: 0;
   appearance: none;
-  background: linear-gradient(90deg, var(--signal) var(--range-progress, 24%), #435558 var(--range-progress, 24%));
+  background: linear-gradient(90deg, var(--signal) var(--range-progress, .5%), #435558 var(--range-progress, .5%));
   cursor: pointer;
+  touch-action: pan-y;
 }
 
-.strength-control input::-webkit-slider-thumb {
+.tuning-control input::-webkit-slider-thumb {
   width: 13px;
-  height: 20px;
+  height: 22px;
   border: 2px solid #e3e6d9;
   border-radius: 1px;
   appearance: none;
   background: var(--black);
 }
 
-.strength-control input::-moz-range-thumb {
+.tuning-control input::-moz-range-thumb {
   width: 11px;
-  height: 18px;
+  height: 20px;
   border: 2px solid #e3e6d9;
   border-radius: 1px;
   background: var(--black);
 }
 
-.strength-control__caption {
+.tuning-control__scale {
   color: #829b98;
   font-size: 9px;
+  font-weight: 400;
 }
 
-/* 05   Analoger Bildschirm und Szene */
+.source-switch {
+  display: flex;
+  min-width: 0;
+  margin: 0 15px 15px;
+  border: 1px solid var(--edge);
+}
+
+.source-switch button {
+  flex: 1;
+  min-width: 0;
+  min-height: 43px;
+  padding: 0 8px;
+  border: 0;
+  background: #162224;
+  color: #a9c0b9;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.source-switch button + button {
+  border-left: 1px solid var(--edge);
+}
+
+.source-switch button.is-active {
+  background: var(--chalk);
+  color: #152022;
+}
+
+.source-switch button:hover:not(.is-active) {
+  background: #304246;
+  color: white;
+}
+
+/* 05   Analoger Bildschirm, Lichtquellen und Szene */
 
 .monitor-area__header {
   display: flex;
@@ -623,7 +611,8 @@ figure {
 .scene__scanlines,
 .scene__vignette,
 .scene__signal-bleed,
-.scene__anomaly {
+.scene__anomaly,
+.scene__window-lights {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -657,13 +646,31 @@ figure {
   animation: fog-drift 20s ease-in-out infinite alternate;
 }
 
-.scene__beacon {
+/* Der Lichtkegel sitzt am Leuchtfeuer; er ist ein Effekt über dem fotografischen Master. */
+.scene__beam {
   position: absolute;
   z-index: 3;
-  top: 9.7%;
-  left: 54.8%;
+  top: 11.9%;
+  left: 56.2%;
+  width: 41%;
+  height: 36%;
+  transform-origin: 0 50%;
+  opacity: .16;
+  clip-path: polygon(0 48%, 100% 0, 100% 100%, 0 52%);
+  background: linear-gradient(90deg, #ffe5ad83, #f8dba744 39%, transparent 100%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: lighthouse-sweep 8s ease-in-out infinite;
+}
+
+.scene__beacon {
+  position: absolute;
+  z-index: 4;
+  top: 11.7%;
+  left: 56.1%;
   width: 5px;
   height: 5px;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
   background: #fff1bd;
   box-shadow: 0 0 7px 5px #f5c884aa, 0 0 29px 16px #fbc78f44;
@@ -671,7 +678,43 @@ figure {
   animation: beacon 5s ease-in-out infinite;
 }
 
-[data-source='video'] .scene__beacon {
+.scene__window-lights {
+  z-index: 4;
+  pointer-events: none;
+}
+
+.scene__window-light {
+  position: absolute;
+  display: block;
+  width: 2.3%;
+  height: 4.1%;
+  border-radius: 30%;
+  background: radial-gradient(ellipse, #fff2cc9e, #ffd58b65 32%, transparent 75%);
+  mix-blend-mode: screen;
+  animation: window-flicker 9s steps(1, end) infinite;
+}
+
+.scene__window-light--a {
+  top: 38.1%;
+  left: 62.8%;
+  animation-delay: -1.8s;
+}
+
+.scene__window-light--b {
+  top: 36.7%;
+  left: 65.7%;
+  animation-delay: -4s;
+}
+
+.scene__window-light--c {
+  top: 37.3%;
+  left: 75.4%;
+  animation-delay: -6.3s;
+}
+
+[data-source='video'] .scene__beacon,
+[data-source='video'] .scene__beam,
+[data-source='video'] .scene__window-lights {
   opacity: 0;
 }
 
@@ -781,57 +824,31 @@ figure {
   background: repeating-linear-gradient(90deg, #070c0d 0 2px, transparent 2px 5px);
 }
 
-/* 06   Monitor-Toolbar und Telemetrie */
+/* 06   Wiedergabe und Telemetrie */
 
+/* Der Pausenknopf bleibt beim Monitor, die Kameraauswahl sitzt beim Receiver. */
 .monitor-toolbar {
   display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 16px;
+  justify-content: flex-end;
+  margin-top: 10px;
 }
 
-.source-switch {
-  display: inline-flex;
-  flex: 1;
-  min-width: 0;
-  border: 1px solid var(--edge);
-}
-
-.source-switch button,
 .pause-toggle {
-  min-height: 43px;
+  min-width: 104px;
+  min-height: 40px;
   padding: 0 17px;
-  border: 0;
+  border: 1px solid var(--edge);
   background: #162224;
   color: #a9c0b9;
+  font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: .05em;
 }
 
-.source-switch button {
-  flex: 1;
-}
-
-.source-switch button + button {
-  border-left: 1px solid var(--edge);
-}
-
-.source-switch button.is-active {
-  background: var(--chalk);
-  color: #152022;
-}
-
-.source-switch button:hover:not(.is-active),
 .pause-toggle:hover {
   background: #304246;
   color: white;
-}
-
-.pause-toggle {
-  min-width: 104px;
-  border: 1px solid var(--edge);
 }
 
 .pause-toggle span:first-child {
@@ -1023,12 +1040,35 @@ figure {
 
 [data-state='unknown'] .scene__artwork,
 [data-state='unknown'] .scene__video {
-  filter: saturate(.63) sepia(.15) hue-rotate(313deg) contrast(1.17) brightness(.7);
+  filter: saturate(.63) sepia(.15) hue-rotate(313deg) contrast(1.17) brightness(.49);
+}
+
+[data-state='offair'] .scene__artwork,
+[data-state='offair'] .scene__video {
+  filter: saturate(.45) contrast(1.2) brightness(.63);
+}
+
+[data-state='offair'] .scene__fog {
+  opacity: .68;
 }
 
 [data-state='interference'] .scene__beacon {
   animation-duration: 1.3s;
   background: #f4b892;
+}
+
+[data-state='unknown'] .scene__window-light {
+  background: radial-gradient(ellipse, #eb8466c0, #c84c5070 30%, transparent 75%);
+  animation-duration: 3s;
+}
+
+[data-state='interference'] .scene__window-light {
+  animation-duration: 5s;
+}
+
+[data-state='unknown'] .scene__beam {
+  background: linear-gradient(90deg, #f5747466, #cc646633 39%, transparent 100%);
+  animation-duration: 5s;
 }
 
 [data-state='unknown'] .scene__beacon {
@@ -1037,6 +1077,7 @@ figure {
   animation-duration: .7s;
 }
 
+[data-state='offair'] .receiver__status-led,
 [data-state='interference'] .receiver__status-led,
 [data-state='unknown'] .receiver__status-led {
   background: var(--signal);
@@ -1055,6 +1096,20 @@ figure {
 @keyframes fog-drift {
   from { transform: translateX(-4%) scale(1.04); }
   to { transform: translateX(4%) scale(1.09); }
+}
+
+@keyframes lighthouse-sweep {
+  0%, 100% { transform: rotate(-28deg); opacity: 0; }
+  22% { opacity: .16; }
+  45% { transform: rotate(24deg); opacity: .19; }
+  65%, 90% { transform: rotate(38deg); opacity: 0; }
+}
+
+@keyframes window-flicker {
+  0%, 24%, 35%, 63%, 85%, 100% { opacity: .55; }
+  25%, 34% { opacity: .09; }
+  64%, 68% { opacity: 1; }
+  86%, 91% { opacity: .2; }
 }
 
 @keyframes beacon {
@@ -1160,22 +1215,21 @@ figure {
     padding-top: 7px;
   }
 
-  .channel-select {
-    gap: 5px;
-    margin: 0 12px 12px;
-  }
-
-  .channel-select__button {
-    min-height: 35px;
-  }
-
-  .strength-control {
-    margin: 0 12px 11px;
+  .tuning-control {
+    margin: 0 12px 10px;
     padding-top: 9px;
   }
 
-  .strength-control input {
+  .tuning-control input {
     margin: 11px 0 10px;
+  }
+
+  .source-switch {
+    margin: 0 12px 10px;
+  }
+
+  .source-switch button {
+    min-height: 36px;
   }
 
   .monitor-toolbar {
@@ -1224,15 +1278,11 @@ figure {
     padding-top: 5px;
   }
 
-  .channel-select__button {
-    min-height: 30px;
-  }
-
-  .strength-control {
+  .tuning-control {
     padding-top: 6px;
   }
 
-  .strength-control input {
+  .tuning-control input {
     margin-block: 8px;
   }
 
@@ -1468,26 +1518,21 @@ figure {
     padding-top: 6px;
   }
 
-  .channel-select {
-    gap: 5px;
-    margin: 0 11px 10px;
-  }
-
-  .channel-select legend {
-    margin-bottom: 6px;
-  }
-
-  .channel-select__button {
-    min-height: 34px;
-  }
-
-  .strength-control {
+  .tuning-control {
     margin: 0 11px 10px;
     padding-top: 9px;
   }
 
-  .strength-control input {
+  .tuning-control input {
     margin-block: 10px 8px;
+  }
+
+  .source-switch {
+    margin: 0 11px 10px;
+  }
+
+  .source-switch button {
+    min-height: 34px;
   }
 }
 
@@ -1523,22 +1568,21 @@ figure {
     padding-top: 3px;
   }
 
-  .channel-select {
-    gap: 3px;
-    margin-bottom: 6px;
-  }
-
-  .channel-select__button {
-    min-height: 30px;
-  }
-
-  .strength-control {
+  .tuning-control {
     margin-bottom: 6px;
     padding-top: 6px;
   }
 
-  .strength-control input {
+  .tuning-control input {
     margin-block: 6px;
+  }
+
+  .source-switch {
+    margin-bottom: 6px;
+  }
+
+  .source-switch button {
+    min-height: 30px;
   }
 }
 
@@ -1623,28 +1667,22 @@ figure {
     min-height: 24px;
   }
 
-  .channel-select {
-    gap: 2px;
-    margin: 0 8px 5px;
-  }
-
-  .channel-select legend {
-    margin-bottom: 2px;
-  }
-
-  .channel-select__button {
-    min-height: 25px;
-    padding-inline: 7px;
-    font-size: 9px;
-  }
-
-  .strength-control {
+  .tuning-control {
     margin: 0 8px 5px;
     padding-top: 4px;
   }
 
-  .strength-control input {
+  .tuning-control input {
     margin: 4px 0 5px;
+  }
+
+  .source-switch {
+    margin: 0 8px 5px;
+  }
+
+  .source-switch button {
+    min-height: 28px;
+    font-size: 9px;
   }
 }
 

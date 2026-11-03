@@ -20,12 +20,16 @@ The fictional North Coast Broadcasting System (NCBS) is framed as a decommission
 
 - Native HTML, CSS and JavaScript ES module; no app framework, bundler or runtime dependencies.
 - English and German translations of all control instructions and descriptions; broadcast branding remains in English.
-- Three selectable signal states, `normal`, `interference`, `unknown`, that change atmosphere and readouts without imposing story mechanics.
-- Two selectable sources: generated photographic art-direction still and original live-action coastline video (only loaded when requested).
-- Interference-strength range input adjusts visible signal artefacts.
+- Manual FM tuning from 87.5 to 108.0 MHz in 0.1 MHz increments; no developer-only channel presets or interference-strength control.
+- Three automatically detected signal states, `normal` (87.6 MHz), `interference` (91.3 MHz), and `unknown` (103.7 MHz). Other frequencies report `NO CARRIER` rather than triggering story events.
+- Fixed interference values of 15%, 60%, and 91% respectively; UNKNOWN darkens the camera image by ~30% relative to the previous implementation.
+- Animated overlaid lighthouse beam and independent window glows on CAM 01, built with CSS and disabled on CAM 02. The photographed lights in the concept artwork are still baked into the bitmap; physically accurate on/off lighting requires a dark master plus separate masked light passes.
+- Two selectable sources, placed under the frequency dial: generated photographic art-direction still and original live-action coastline video (only loaded when requested).
+- `deadair:frequencychange` and `deadair:signalacquired` events on `window` provide `{ frequency, channel, reception, interference }` for future Web Audio and story triggers. The latter fires only upon acquiring a new named station. No sound is played or fetched yet.
+- A ±0.35 MHz capture range makes manual station scanning manageable on touch displays, while the tuner still displays the actual frequency in 0.1 MHz steps.
 - Pause / resume freezes CSS animations and playback, with reduced-motion enabled by default for visitors requesting it.
 - Scrollfreie Broadcast-Oberfläche (`100dvh` einschließlich Header): Monitor, Quellensteuerung und Signaltelemetrie bleiben auch bei niedriger Fensterhöhe sichtbar.
-- Auf schmalen oder besonders niedrigen Displays wird der Empfänger als eigene, tastaturbedienbare Bedienfläche geöffnet. Die Kanalauswahl schließt sie automatisch und zeigt die aktualisierte Kameraansicht.
+- Auf schmalen oder besonders niedrigen Displays wird der Empfänger als eigene, tastaturbedienbare Bedienfläche geöffnet. Der Regler und beide Kameratasten bleiben im Dialog erreichbar; der Besucher schließt ihn bei Bedarf über SCHLIESSEN oder Escape.
 - Dedicated, keyboard-accessible information dialog containing imprint, privacy and video source links instead of a permanent footer.
 - Local station-mark SVG (broadcast tower with red/orange signal waveform) and simplified SVG favicon; the wordmark is typeset directly in the interface.
 - Broadcast-specific user-facing copy; technical prototype notes are documented here rather than displayed in the interface.
@@ -37,11 +41,11 @@ The art-direction still is a flattened concept visualization. It is **not** a wo
 
 | State | Frequency | Current proof of concept | Later possibilities (not implemented) |
 | --- | --- | --- | --- |
-| NORMAL | 87.6 MHz | Soft fog, stable signal, beacon | Natural birds, calm station lights |
-| INTERFERENCE | 91.3 MHz | Dense haze, muted colors, unstable readout | Unusual flashes, unpredictable lighthouse patterns |
-| UNKNOWN | ???.? MHz | Red-tinted anomaly, degraded image | Additional structure at horizon, altered architecture |
+| NORMAL | 87.6 MHz | 15% signal disturbance; stable light sweep and window glow | Natural birds, calm station lights |
+| INTERFERENCE | 91.3 MHz | 60% signal disturbance; dense haze and faster light flicker | Unusual flashes, unpredictable lighthouse patterns |
+| UNKNOWN | 103.7 MHz | 91% signal disturbance; darker image, red anomaly and unsteady lights | Additional structure at horizon, altered architecture |
 
-These are visual placeholders. The visitor's objectives, event progression, frequency tuning mechanics, audio system and any ending will be designed in a later iteration.
+These remain visual states. The three frequencies are initial gameplay candidates, not a final puzzle design. The visitor's objectives, event progression, clickable clues, recorded voices, unlock conditions and any ending will be defined in a later iteration. An untuned frequency is a technical `offair` state, not a fourth story chapter.
 
 ## Technical architecture
 
@@ -49,7 +53,7 @@ These are visual placeholders. The visitor's objectives, event progression, freq
 dead-air/
 ├── index.html              # Broadcast workstation and accessible information dialog
 ├── styles.css              # Design tokens, viewport layout, states, responsive, reduced motion
-├── scripts/app.js          # Central UI, language, signal and dialog controls
+├── scripts/app.js          # FM tuning, automatic states, language, audio-event hook and dialog controls
 ├── assets/
 │   ├── station-mark.svg    # Editable broadcast tower signet
 │   ├── favicon.svg         # Reduced signet for browser tabs
@@ -72,5 +76,6 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 1. Validate the scene's true location and scale against a stabilized video master.
 2. Produce and isolate tower, station, aerials, mist and anomaly photo assets at matching light and perspective.
 3. Replace the flattened still with controllable photographic layers and coordinate-tracked movement.
-4. Design user intention, interaction rules, events, sound and potential endings before adding story code.
-5. Audit keyboard and screen-reader paths, performance, reduced-motion and mobile readability as the concept matures.
+4. Define the discoverable frequencies and their prerequisites (clues, cameras, interaction), then bind player events to the existing receiver instead of creating UI-only state buttons.
+5. Record original voice lines and add an opt-in Web Audio signal chain (band-pass filtering, noise, mild distortion). No audio autoplay or microphone permissions required.
+6. Audit keyboard and screen-reader paths, performance, reduced-motion and mobile readability as the concept matures.

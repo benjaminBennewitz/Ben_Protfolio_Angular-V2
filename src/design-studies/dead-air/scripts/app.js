@@ -1,19 +1,23 @@
 /**
  * @file Interaktive Rundfunkkonsole für DEAD//AIR.
- * @description Steuert die fotografische Szene, drei Empfangsfrequenzen, Bildquelle,
- * Signalintensität, Wiedergabe, Sprachwechsel und den Informationsdialog.
+ * @description Steuert die fotografische Szene, den analogen FM-Frequenzregler,
+ * automatische Signalzustände, Kamera, Wiedergabe, Licht und Sprachwechsel.
  * @author Benjamin Bennewitz
  */
 
 /** @typedef {'normal' | 'interference' | 'unknown'} SignalState */
 /** @typedef {'artwork' | 'video'} SceneSource */
 
-/** Empfangbare Kanäle als zentrale Datenquelle statt verteilter Sonderfälle. */
+/** Fest definierte Frequenzen und ihre Bildstörung; kein Bedienregler für den Nutzer. */
 const CHANNELS = Object.freeze({
-  normal: { frequency: '87.6', unit: 'MHz', reception: 76, label: 'STABLE FEED' },
-  interference: { frequency: '91.3', unit: 'MHz', reception: 38, label: 'SIGNAL DRIFT' },
-  unknown: { frequency: '???.?', unit: 'MHz', reception: 8, label: 'SOURCE UNKNOWN' },
+  normal: { frequency: 87.6, channel: '01', reception: 76, interference: 15, label: 'STABLE FEED' },
+  interference: { frequency: 91.3, channel: '02', reception: 38, interference: 60, label: 'SIGNAL DRIFT' },
+  unknown: { frequency: 103.7, channel: '03', reception: 8, interference: 91, label: 'SOURCE UNKNOWN' },
 });
+
+const FM_MIN = 87.5;
+const FM_MAX = 108;
+const TUNING_TOLERANCE = 0.35;
 
 /** Sämtliche sichtbaren UI- und Status-Texte der Microsite. */
 const TRANSLATIONS = Object.freeze({
@@ -21,8 +25,7 @@ const TRANSLATIONS = Object.freeze({
     skip: 'Zum Empfangsbereich springen', back: 'ZURÜCK ZUM ARCHIV',
     eyebrow: 'NCBS / EMPFANGSSTATION 01',
     intro: 'Eine verlassene Küstenstation. Drei Signale. Eine Übertragung, die nicht existieren dürfte.',
-    channels: 'GESPEICHERTE FREQUENZEN', normal: 'NORMAL', signal: 'STÖRINTENSITÄT',
-    clear: 'KLARES BILD', distortion: 'SIGNALVERLUST',
+    tune: 'FREQUENZ EINSTELLEN', offAir: 'KEIN EMPFANG', offAirDescription: 'Nur Rauschen. Auf dieser Frequenz antwortet niemand.',
     transmitting: 'ÜBERTRAGUNG AKTIV', artwork: 'STATION / CAM 01', footage: 'KÜSTE / CAM 02',
     pause: 'PAUSE', resume: 'FORTSETZEN', sceneStatus: 'AKTUELLER SIGNALZUSTAND',
     imprint: 'Impressum', privacy: 'Datenschutz', credits: 'Video: Pexels ↗',
@@ -41,8 +44,7 @@ const TRANSLATIONS = Object.freeze({
     skip: 'Skip to receiver', back: 'BACK TO ARCHIVE',
     eyebrow: 'NCBS / RECEIVER STATION 01',
     intro: 'An abandoned coastal station. Three signals. A transmission that should not exist.',
-    channels: 'PRESET FREQUENCIES', normal: 'NORMAL', signal: 'INTERFERENCE LEVEL',
-    clear: 'CLEAR PICTURE', distortion: 'SIGNAL LOSS',
+    tune: 'TUNE FREQUENCY', offAir: 'NO CARRIER', offAirDescription: 'Only static. No one answers on this frequency.',
     transmitting: 'TRANSMISSION ACTIVE', artwork: 'STATION / CAM 01', footage: 'COAST / CAM 02',
     pause: 'PAUSE', resume: 'RESUME', sceneStatus: 'CURRENT SIGNAL STATE',
     imprint: 'Legal notice', privacy: 'Privacy', credits: 'Footage: Pexels ↗',
@@ -67,8 +69,7 @@ const pauseButton = document.querySelector('#pause-toggle');
 const infoDialog = document.querySelector('#info-dialog');
 const infoToggle = document.querySelector('#info-toggle');
 const pauseLabel = document.querySelector('#pause-label');
-const signalInput = document.querySelector('#signal-strength');
-const signalOutput = document.querySelector('#signal-strength-output');
+const frequencyInput = document.querySelector('#frequency-tuning');
 const receiverPanel = document.querySelector('#receiver-panel');
 const receiverToggle = document.querySelector('#receiver-toggle');
 const receiverClose = document.querySelector('#receiver-close');
@@ -76,11 +77,11 @@ const compactViewport = window.matchMedia('(max-width: 750px), (max-height: 520p
 
 /** Laufzeitzustand der Microsite ohne unnötige Persistenz. */
 const scene = {
-  channel: /** @type {SignalState} */ ('normal'),
+  channel: /** @type {SignalState | null} */ ('normal'),
+  frequency: CHANNELS.normal.frequency,
   source: /** @type {SceneSource} */ ('artwork'),
   language: 'de',
   paused: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-  strength: 24,
 };
 
 /** Synchronisiert die übersetzten Texte ohne doppelte Markup-Strukturen. */
@@ -103,43 +104,65 @@ function updateTranslations() {
   });
   infoToggle.setAttribute('aria-label', scene.language === 'de' ? 'Informationen und Rechtliches' : 'Information and legal notices');
   infoToggle.title = infoToggle.getAttribute('aria-label');
-  document.querySelector('#state-description').textContent = texts.stateDescriptions[scene.channel];
+  stateDescription.textContent = scene.channel ? texts.stateDescriptions[scene.channel] : texts.offAirDescription;
   languageToggle.textContent = scene.language === 'de' ? 'EN' : 'DE';
   languageToggle.setAttribute('aria-label', scene.language === 'de' ? 'Switch to English' : 'Zu Deutsch wechseln');
   document.querySelector('#top-nav').setAttribute('aria-label', texts.topNavAria);
   document.querySelector('#source-switch').setAttribute('aria-label', texts.sourceAria);
   updateSourceDescription();
   updatePlaybackLabel();
+  const label = scene.channel ? CHANNELS[scene.channel].label : texts.offAir;
+  frequencyInput.setAttribute('aria-valuetext', `${scene.frequency.toFixed(1)} MHz – ${label}`);
 }
 
-/** Stellt den gewählten Empfangskanal und dessen Anzeige ein. */
-function setChannel(channel) {
-  if (!Object.hasOwn(CHANNELS, channel)) return;
+/** Ordnet einer manuell gewählten Frequenz höchstens einen tatsächlichen Empfang zu. */
+function findChannel(frequency) {
+  return Object.keys(CHANNELS).find(channel =>
+    Math.abs(CHANNELS[channel].frequency - frequency) <= TUNING_TOLERANCE
+  ) ?? null;
+}
 
+/** Leitet die sichtbare Störung ausschließlich aus dem Empfangszustand ab. */
+function applyInterference(amount) {
+  const strength = Math.max(0, Math.min(100, amount));
+  root.style.setProperty('--noise-opacity', String(strength / 260));
+  root.style.setProperty('--flicker-opacity', String(strength / 180));
+}
+
+/** Aktualisiert Empfänger, Bild und Telemetrie bei jeder Frequenzänderung. */
+function setFrequency(value) {
+  const frequency = Math.round(Math.max(FM_MIN, Math.min(FM_MAX, Number(value))) * 10) / 10;
+  if (!Number.isFinite(frequency)) return;
+
+  const channel = findChannel(frequency);
+  const previousChannel = scene.channel;
+  const config = channel ? CHANNELS[channel] : null;
+  const texts = TRANSLATIONS[scene.language];
+  scene.frequency = frequency;
   scene.channel = channel;
-  const config = CHANNELS[channel];
-  root.dataset.state = channel;
-  document.querySelector('#frequency-output').textContent = config.frequency;
-  document.querySelector('#frequency-unit').textContent = config.unit;
-  document.querySelector('#status-output').textContent = config.label;
-  document.querySelector('#scene-state').textContent = `${channel.toUpperCase()} / ${config.frequency} ${config.unit}`;
-  document.querySelector('#screen-frequency').textContent = `${config.frequency} ${config.unit}`;
-  document.querySelector('#rx-output').textContent = `${config.reception}%`;
-  document.querySelectorAll('[data-channel]').forEach(button => {
-    const active = button.dataset.channel === channel;
-    button.classList.toggle('is-active', active);
-    button.setAttribute('aria-pressed', String(active));
-  });
-  stateDescription.textContent = TRANSLATIONS[scene.language].stateDescriptions[channel];
-}
+  root.dataset.state = channel ?? 'offair';
+  frequencyInput.value = frequency.toFixed(1);
+  frequencyInput.style.setProperty('--range-progress', `${(frequency - FM_MIN) / (FM_MAX - FM_MIN) * 100}%`);
+  frequencyInput.setAttribute('aria-valuetext', `${frequency.toFixed(1)} MHz – ${config?.label ?? texts.offAir}`);
 
-/** Verändert ausschließlich die Darstellung, nicht den Zustand der Geschichte. */
-function setSignalStrength(value) {
-  scene.strength = Math.max(0, Math.min(100, Number(value) || 0));
-  signalOutput.value = `${scene.strength}%`;
-  root.style.setProperty('--noise-opacity', String(scene.strength / 260));
-  root.style.setProperty('--flicker-opacity', String(scene.strength / 180));
-  signalInput.style.setProperty('--range-progress', `${scene.strength}%`);
+  const display = frequency.toFixed(1);
+  document.querySelector('#frequency-output').textContent = display;
+  document.querySelector('#frequency-unit').textContent = 'MHz';
+  document.querySelector('#status-output').textContent = config?.label ?? texts.offAir;
+  document.querySelector('#scene-state').textContent = `${channel?.toUpperCase() ?? 'OFF AIR'} / ${display} MHz`;
+  document.querySelector('#screen-frequency').textContent = `${display} MHz`;
+  document.querySelector('#screen-channel').textContent = `NCBS / CH-${config?.channel ?? '--'}`;
+  document.querySelector('#readout-channel').textContent = `CH–${config?.channel ?? '--'}`;
+  document.querySelector('#rx-output').textContent = `${config?.reception ?? 0}%`;
+  stateDescription.textContent = channel ? texts.stateDescriptions[channel] : texts.offAirDescription;
+  applyInterference(config?.interference ?? 91);
+
+  /** Ein zentraler Hook für eine spätere Web-Audio-Anbindung ohne Audio-Autoplay. */
+  const detail = { frequency, channel, reception: config?.reception ?? 0, interference: config?.interference ?? 91 };
+  window.dispatchEvent(new CustomEvent('deadair:frequencychange', { detail }));
+  if (channel && channel !== previousChannel) {
+    window.dispatchEvent(new CustomEvent('deadair:signalacquired', { detail }));
+  }
 }
 
 /** Lädt das reale Video erst bei Auswahl der Kameraquelle. */
@@ -238,16 +261,10 @@ function handleReceiverKeyboard(event) {
 
 /** Bindet schlanke native Controls ohne Fremdbibliotheken. */
 function init() {
-  document.querySelectorAll('[data-channel]').forEach(button => {
-    button.addEventListener('click', () => {
-      setChannel(button.dataset.channel);
-      if (compactViewport.matches) setReceiverOpen(false);
-    });
-  });
+  frequencyInput.addEventListener('input', () => setFrequency(frequencyInput.value));
   document.querySelectorAll('[data-source]').forEach(button => {
     button.addEventListener('click', () => setSource(button.dataset.source));
   });
-  signalInput.addEventListener('input', () => setSignalStrength(signalInput.value));
   languageToggle.addEventListener('click', () => {
     scene.language = scene.language === 'de' ? 'en' : 'de';
     updateTranslations();
@@ -268,8 +285,7 @@ function init() {
   document.addEventListener('visibilitychange', () => void syncVideo());
   window.addEventListener('pagehide', () => coastVideo.pause());
 
-  setSignalStrength(signalInput.value);
-  setChannel(scene.channel);
+  setFrequency(scene.frequency);
   setSource(scene.source);
   updateTranslations();
   setReceiverOpen(false);

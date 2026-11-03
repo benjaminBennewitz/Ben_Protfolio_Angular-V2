@@ -23,9 +23,9 @@ The fictional North Coast Broadcasting System (NCBS) is framed as a decommission
 - Manual FM tuning from 87.5 to 108.0 MHz in 0.1 MHz increments; no developer-only channel presets or interference-strength control.
 - Three automatically detected signal states, `normal` (87.6 MHz), `interference` (91.3 MHz), and `unknown` (103.7 MHz). Other frequencies report `NO CARRIER` rather than triggering story events.
 - Fixed interference values of 15%, 60%, and 91% respectively; UNKNOWN darkens the camera image by ~30% relative to the previous implementation.
-- The inaccurate artificial lighthouse beam has been removed. CAM 01 now uses the owner-corrected scene image without the original baked-in beam.
+- CAM 01 uses the owner-corrected scene image without the original baked-in beam; the beam is generated independently by CSS as an animated, softly feathered light source.
 - Three independent, tightly masked photographic window passes on CAM 01 switch between the original warm-color glazing and a desaturated dark variant. The alpha-masked WebP crops align with the 1280×720 scene master; no artificial light dots or full-scene grayscale effects are used. Surrounding bloom in the concept image is still embedded and cannot be fully removed without a genuinely unlit master.
-- CAM 01 also includes a muted lantern lens pass (subtle, slow breathing in NORMAL; short outages in INTERFERENCE/UNKNOWN) and a separate obstacle-light mask on the radio mast (regular red flash, then irregular or interrupted flashes by signal state). Both use exactly aligned photographic crops rather than artificial dots or light beams. The owner-corrected image no longer contains the original beam. A physically convincing rotating light could be developed later from this cleaner master.
+- CAM 01 has a softened CSS lighthouse beam with horizontal-axis sweep and a separate CSS obstacle light on the radio mast (regular red flash, then irregular or interrupted flashes by signal state). The owner-corrected image no longer contains the original beam. A local lighthouse sweep is anchored to the lantern; it uses a soft gradient, feathered alpha mask, and 3D Y-axis rotation rather than a baked-in beam.
 - Two selectable sources and the pause button share one compact receiver row under the frequency dial; the monitor gains back the former toolbar height. The video loads only when requested.
 - `deadair:frequencychange` and `deadair:signalacquired` events on `window` provide `{ frequency, channel, reception, interference }` for future Web Audio and story triggers. The latter fires only upon acquiring a new named station. No sound is played or fetched yet.
 - A ±0.35 MHz capture range makes manual station scanning manageable on touch displays, while the tuner still displays the actual frequency in 0.1 MHz steps.
@@ -64,8 +64,6 @@ dead-air/
 │   ├── window-off-a.webp   # Precisely masked desaturated left window
 │   ├── window-off-b.webp   # Precisely masked desaturated centre window
 │   ├── window-off-c.webp   # Precisely masked desaturated right window
-│   ├── lighthouse-dim.webp # Dimmed photographic lantern glazing
-│   ├── mast-light-off.webp # Red mast beacon removed by local image retouch
 │   └── preview.webp        # Archive card crop
 └── README.md
 ```
@@ -88,8 +86,22 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 6. Audit keyboard and screen-reader paths, performance, reduced-motion and mobile readability as the concept matures.
 
 
-## Patch 12 – Horizontal Rotating Beacon
+## Patch 13 – CSS Mast LED & Visible Lighthouse Beam
 
-- Neuer Asset-Layer `assets/lighthouse-beam.webp` für das Leuchtfeuer.
-- Horizontaler Sweep um die Leuchtturm-Laterne in NORMAL, mit fehlerhaften Varianten für INTERFERENCE und UNKNOWN.
-- OFF AIR blendet den Strahl vollständig aus.
+- `scene-poster.webp` durch die vom Nutzer korrigierte Motivversion ersetzt.
+- Rotes Mastsignal als CSS-Licht an der Mastspitze umgesetzt.
+- Neuer CSS-Beam direkt an der Leuchtturm-Laterne, ohne externes Beam-Asset.
+
+## Patch 14 – Beacon Refinement
+
+- Entfernte `lighthouse-dim.webp`-Referenz und zugehörige Fotomasken-/Keyframe-Regeln vollständig entfernt.
+- Horizontalen Beacon von einer hart beschnittenen Polygonform auf einen weich maskierten CSS-Lichtgradienten umgestellt.
+- Leuchtfeuer-Pivot auf die Laterne ausgerichtet und die bisherige 2D-Neigung durch horizontale Rotation (`rotateY`) ersetzt.
+- Rotes Mastlicht bei unveränderter Höhe um 10 Pixel nach links verschoben.
+- Zwei in Patch 13 beschädigte Selektoren für die dritte Fenstergruppe und den Anomalie-Layer wiederhergestellt.
+
+## Patch 15 – Mast position and light cone
+
+- Mastlicht um weitere 15 Originalbild-Pixel nach links und 5 Pixel nach oben versetzt (1280 × 720 als Bezug, proportional bei responsiver Skalierung).
+- Den horizontalen Leuchtturm-Beam wieder als gerichteten, konischen Lichtkegel angelegt; weiche Blur-Kanten und Alpha-Auslauf bleiben erhalten.
+- Empfangszustände, Blinkrhythmen, Pause und Reduced-Motion-Verhalten bleiben unverändert. CAM 02 schaltet alle stationsbezogenen Licht-Layer auch nach einem Zustandswechsel sicher ab.

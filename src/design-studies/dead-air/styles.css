@@ -723,14 +723,14 @@ figure {
 
 .scene__beam--lighthouse {
   z-index: 1;
-  top: 1.527778%;
-  left: 9.84375%;
-  width: 52.4%;
-  height: 24.6%;
+  top: 2.222222%;
+  left: 10.15625%;
+  width: 47.8%;
+  height: 20.8%;
   mix-blend-mode: screen;
-  opacity: 0;
-  transform-origin: 98.9% 46%;
-  animation: lighthouse-beam-horizontal 9.4s linear infinite;
+  opacity: .26;
+  transform-origin: 98.6% 50%;
+  animation: none;
 }
 
 .scene__beam--lighthouse::before,
@@ -741,41 +741,41 @@ figure {
 }
 
 .scene__beam--lighthouse::before {
-  clip-path: polygon(0 5%, 100% 34%, 100% 66%, 0 95%);
+  clip-path: polygon(0 12%, 100% 46%, 100% 54%, 0 88%);
   background:
-    radial-gradient(ellipse 96% 34% at 100% 50%,
-      rgba(255, 246, 198, .74) 0%,
-      rgba(255, 235, 162, .46) 10%,
-      rgba(255, 228, 142, .22) 22%,
-      rgba(255, 224, 146, 0) 36%),
+    radial-gradient(ellipse 118% 40% at 100% 50%,
+      rgba(255, 236, 166, .54) 0%,
+      rgba(255, 228, 140, .36) 12%,
+      rgba(255, 220, 128, .18) 24%,
+      rgba(255, 216, 128, 0) 40%),
     linear-gradient(90deg,
-      rgba(255, 238, 176, 0) 0%,
-      rgba(255, 239, 180, .025) 16%,
-      rgba(255, 240, 186, .08) 35%,
-      rgba(255, 241, 191, .16) 56%,
-      rgba(255, 244, 201, .28) 76%,
-      rgba(255, 248, 214, .48) 92%,
-      rgba(255, 250, 224, .68) 100%),
+      rgba(255, 226, 140, 0) 0%,
+      rgba(255, 228, 144, .015) 18%,
+      rgba(255, 230, 148, .05) 38%,
+      rgba(255, 232, 154, .10) 56%,
+      rgba(255, 235, 164, .18) 76%,
+      rgba(255, 239, 176, .30) 92%,
+      rgba(255, 243, 188, .42) 100%),
     linear-gradient(180deg,
-      rgba(255, 244, 190, 0) 0%,
-      rgba(255, 244, 190, .03) 18%,
-      rgba(255, 245, 197, .11) 34%,
-      rgba(255, 247, 205, .2) 50%,
-      rgba(255, 245, 197, .11) 66%,
-      rgba(255, 244, 190, .03) 82%,
-      rgba(255, 244, 190, 0) 100%);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.72) 14%, #000 36%, rgba(0,0,0,.84) 64%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.72) 14%, #000 36%, rgba(0,0,0,.84) 64%, transparent 100%);
-  filter: blur(clamp(14px, 1.6vw, 22px));
+      rgba(255, 233, 156, 0) 0%,
+      rgba(255, 234, 160, .03) 20%,
+      rgba(255, 236, 168, .08) 38%,
+      rgba(255, 238, 176, .14) 50%,
+      rgba(255, 236, 168, .08) 62%,
+      rgba(255, 234, 160, .03) 80%,
+      rgba(255, 233, 156, 0) 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.42) 20%, rgba(0,0,0,.78) 42%, rgba(0,0,0,.66) 72%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.42) 20%, rgba(0,0,0,.78) 42%, rgba(0,0,0,.66) 72%, transparent 100%);
+  filter: blur(clamp(18px, 1.9vw, 28px));
 }
 
 .scene__beam--lighthouse::after {
-  inset: 16% auto auto 58%;
-  width: 36%;
-  height: 68%;
+  inset: 37% auto auto 90.6%;
+  width: 7.8%;
+  height: 15%;
   border-radius: 50%;
-  background: radial-gradient(ellipse at 82% 50%, rgba(255, 239, 176, .16) 0%, rgba(255, 234, 166, .11) 28%, rgba(255, 232, 170, .06) 52%, rgba(255, 232, 170, 0) 100%);
-  filter: blur(18px);
+  background: radial-gradient(circle, rgba(255, 236, 164, .42) 0%, rgba(255, 228, 140, .22) 34%, rgba(255, 218, 126, .06) 62%, rgba(255, 218, 126, 0) 100%);
+  filter: blur(7px);
 }
 
 /* Das rote Hindernislicht wird als CSS-Licht an der Mastspitze erzeugt. */
@@ -783,7 +783,7 @@ figure {
   position: absolute;
   z-index: 5;
   top: 8.055556%;
-  left: 77.09625%;
+  left: 77.2525%;
   width: .625%;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -1109,7 +1109,8 @@ figure {
 }
 
 [data-state='interference'] .scene__beam--lighthouse {
-  animation: lighthouse-beam-fault 7.6s steps(18, end) infinite;
+  opacity: .22;
+  filter: saturate(.95) brightness(.94);
 }
 
 [data-state='unknown'] .scene__window-light {
@@ -1117,8 +1118,8 @@ figure {
 }
 
 [data-state='unknown'] .scene__beam--lighthouse {
-  filter: saturate(.9) brightness(.9);
-  animation: lighthouse-beam-unknown 6.2s steps(20, end) infinite;
+  opacity: .18;
+  filter: saturate(.9) brightness(.88);
 }
 
 [data-state='interference'] .scene__mast-led {

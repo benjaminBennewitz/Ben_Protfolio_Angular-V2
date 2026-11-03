@@ -113,3 +113,11 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 - Beam-Startpunkt 5 Bildpixel nach oben verlagert und farblich gelber abgestimmt.
 - Der Leuchtturm-Beam rotiert nicht mehr, sondern wächst diffuser in die neblige Distanz.
 - Breitere Streuung und weichere Alpha-Kanten für glaubwürdigeren Dunst im Himmel.
+
+
+## Patch 17 – Static Diffuse Beam
+
+- Mastlicht 2 Bildpixel nach rechts verschoben.
+- Beam nicht mehr animiert, sondern als statischer Lichtkegel belassen.
+- Beam-Startpunkt abgesenkt und schmaler gesetzt.
+- Wärmerer, gelblicher Farbton und weichere, diffusere Kanten im Nebel.

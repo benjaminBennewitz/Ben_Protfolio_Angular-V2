@@ -60,9 +60,12 @@
             <input id="frequency-tuning" type="range" min="87.5" max="108" step="0.1" value="87.6" aria-valuetext="87.6 MHz – STABLE FEED">
             <div class="tuning-control__scale" aria-hidden="true"><span>87.5 MHz</span><span>FM BAND</span><span>108.0 MHz</span></div>
           </div>
-          <div class="source-switch" id="source-switch" role="group" aria-label="Kamera wählen">
-            <button type="button" data-source="artwork" class="is-active" aria-pressed="true" data-i18n="artwork">STATION / CAM 01</button>
-            <button type="button" data-source="video" aria-pressed="false" data-i18n="footage">KÜSTE / CAM 02</button>
+          <div class="receiver-actions">
+            <div class="source-switch" id="source-switch" role="group" aria-label="Kamera wählen">
+              <button type="button" data-source="artwork" class="is-active" aria-pressed="true" data-i18n="artwork">STATION / CAM 01</button>
+              <button type="button" data-source="video" aria-pressed="false" data-i18n="footage">KÜSTE / CAM 02</button>
+            </div>
+            <button id="pause-toggle" type="button" class="pause-toggle" aria-pressed="false"><span id="pause-icon" aria-hidden="true">Ⅱ</span> <span id="pause-label" data-i18n="pause">PAUSE</span></button>
           </div>
         </div>
 
@@ -79,12 +82,10 @@
                 <source src="assets/coast-loop.mp4" type="video/mp4">
               </video>
               <div class="scene__fog" aria-hidden="true"></div>
-              <div class="scene__beam" aria-hidden="true"></div>
-              <div class="scene__beacon" aria-hidden="true"></div>
               <div class="scene__window-lights" aria-hidden="true">
-                <i class="scene__window-light scene__window-light--a"></i>
-                <i class="scene__window-light scene__window-light--b"></i>
-                <i class="scene__window-light scene__window-light--c"></i>
+                <img class="scene__window-light scene__window-light--a" src="assets/window-off-a.webp" width="31" height="47" alt="">
+                <img class="scene__window-light scene__window-light--b" src="assets/window-off-b.webp" width="37" height="50" alt="">
+                <img class="scene__window-light scene__window-light--c" src="assets/window-off-c.webp" width="38" height="50" alt="">
               </div>
               <div class="scene__anomaly" aria-hidden="true"></div>
               <div class="scene__signal-bleed" aria-hidden="true"></div>
@@ -98,9 +99,6 @@
           <div class="television__footer"><span class="television__power"><i></i> POWER</span><span>NCBS / VIDEO TRANSCEIVER</span><span class="television__vents" aria-hidden="true"></span></div>
         </div>
 
-        <div class="monitor-toolbar" aria-label="Szenenansichten und Animation">
-          <button id="pause-toggle" type="button" class="pause-toggle" aria-pressed="false"><span id="pause-icon" aria-hidden="true">Ⅱ</span> <span id="pause-label" data-i18n="pause">PAUSE</span></button>
-        </div>
 
         <div class="monitor-extras">
           <div class="monitor-extras__caption"><span data-i18n="sceneStatus">AKTUELLER SIGNALZUSTAND</span><strong id="scene-state">NORMAL / 87.6 MHz</strong></div>

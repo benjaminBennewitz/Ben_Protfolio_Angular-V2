@@ -23,8 +23,9 @@ The fictional North Coast Broadcasting System (NCBS) is framed as a decommission
 - Manual FM tuning from 87.5 to 108.0 MHz in 0.1 MHz increments; no developer-only channel presets or interference-strength control.
 - Three automatically detected signal states, `normal` (87.6 MHz), `interference` (91.3 MHz), and `unknown` (103.7 MHz). Other frequencies report `NO CARRIER` rather than triggering story events.
 - Fixed interference values of 15%, 60%, and 91% respectively; UNKNOWN darkens the camera image by ~30% relative to the previous implementation.
-- Animated overlaid lighthouse beam and independent window glows on CAM 01, built with CSS and disabled on CAM 02. The photographed lights in the concept artwork are still baked into the bitmap; physically accurate on/off lighting requires a dark master plus separate masked light passes.
-- Two selectable sources, placed under the frequency dial: generated photographic art-direction still and original live-action coastline video (only loaded when requested).
+- The inaccurate, added lighthouse beam and beacon have been removed. The original photographed light remains untouched.
+- Three independent, tightly masked photographic window passes on CAM 01 switch between the original warm-color glazing and a desaturated dark variant. The alpha-masked WebP crops align with the 1280×720 scene master; no artificial light dots or full-scene grayscale effects are used. Surrounding bloom in the concept image is still embedded and cannot be fully removed without a genuinely unlit master.
+- Two selectable sources and the pause button share one compact receiver row under the frequency dial; the monitor gains back the former toolbar height. The video loads only when requested.
 - `deadair:frequencychange` and `deadair:signalacquired` events on `window` provide `{ frequency, channel, reception, interference }` for future Web Audio and story triggers. The latter fires only upon acquiring a new named station. No sound is played or fetched yet.
 - A ±0.35 MHz capture range makes manual station scanning manageable on touch displays, while the tuner still displays the actual frequency in 0.1 MHz steps.
 - Pause / resume freezes CSS animations and playback, with reduced-motion enabled by default for visitors requesting it.
@@ -41,9 +42,9 @@ The art-direction still is a flattened concept visualization. It is **not** a wo
 
 | State | Frequency | Current proof of concept | Later possibilities (not implemented) |
 | --- | --- | --- | --- |
-| NORMAL | 87.6 MHz | 15% signal disturbance; stable light sweep and window glow | Natural birds, calm station lights |
-| INTERFERENCE | 91.3 MHz | 60% signal disturbance; dense haze and faster light flicker | Unusual flashes, unpredictable lighthouse patterns |
-| UNKNOWN | 103.7 MHz | 91% signal disturbance; darker image, red anomaly and unsteady lights | Additional structure at horizon, altered architecture |
+| NORMAL | 87.6 MHz | 15% signal disturbance; original lighthouse and subtle independent window changes | Natural birds, calm station lights |
+| INTERFERENCE | 91.3 MHz | 60% signal disturbance; dense haze and faster window fluctuations | Unusual flashes, unpredictable lamp patterns |
+| UNKNOWN | 103.7 MHz | 91% signal disturbance; darker image, red anomaly and unsteady windows | Additional structure at horizon, altered architecture |
 
 These remain visual states. The three frequencies are initial gameplay candidates, not a final puzzle design. The visitor's objectives, event progression, clickable clues, recorded voices, unlock conditions and any ending will be defined in a later iteration. An untuned frequency is a technical `offair` state, not a fourth story chapter.
 
@@ -59,6 +60,9 @@ dead-air/
 │   ├── favicon.svg         # Reduced signet for browser tabs
 │   ├── coast-loop.mp4      # Optimized short footage excerpt, video only
 │   ├── scene-poster.webp   # AI-generated art-direction scene crop
+│   ├── window-off-a.webp   # Precisely masked desaturated left window
+│   ├── window-off-b.webp   # Precisely masked desaturated centre window
+│   ├── window-off-c.webp   # Precisely masked desaturated right window
 │   └── preview.webp        # Archive card crop
 └── README.md
 ```

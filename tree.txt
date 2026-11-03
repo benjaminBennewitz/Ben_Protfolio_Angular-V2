@@ -1017,7 +1017,10 @@ folio/
 │   │   │   │   ├── favicon.svg
 │   │   │   │   ├── preview.webp
 │   │   │   │   ├── scene-poster.webp
-│   │   │   │   └── station-mark.svg
+│   │   │   │   ├── station-mark.svg
+│   │   │   │   ├── window-off-a.webp
+│   │   │   │   ├── window-off-b.webp
+│   │   │   │   └── window-off-c.webp
 │   │   │   ├── scripts/
 │   │   │   │   └── app.js
 │   │   │   ├── index.html

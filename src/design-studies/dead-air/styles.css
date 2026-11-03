@@ -157,7 +157,6 @@ figure {
 .scene__osd,
 .television__badge,
 .television__footer,
-.monitor-toolbar,
 .monitor-extras,
 .info-dialog {
   font-family: var(--font-mono);
@@ -364,7 +363,7 @@ figure {
   line-height: 1.65;
 }
 
-/* 04   Receiver, Frequenzregler und Kameras */
+/* 04   Receiver, Frequenzregler, Kameras und Wiedergabe */
 
 .receiver {
   overflow: hidden;
@@ -498,25 +497,34 @@ figure {
   font-weight: 400;
 }
 
-.source-switch {
+/* Kamera und Pause teilen sich eine kompakte Bedienzeile direkt unter dem Tuner. */
+.receiver-actions {
   display: flex;
   min-width: 0;
+  gap: 7px;
   margin: 0 15px 15px;
+}
+
+.source-switch {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
   border: 1px solid var(--edge);
 }
 
 .source-switch button {
-  flex: 1;
+  flex: 1 1 50%;
   min-width: 0;
   min-height: 43px;
-  padding: 0 8px;
+  padding: 0 4px;
   border: 0;
   background: #162224;
   color: #a9c0b9;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: clamp(8px, .65vw, 10px);
   font-weight: 700;
-  letter-spacing: .02em;
+  letter-spacing: 0;
+  white-space: nowrap;
 }
 
 .source-switch button + button {
@@ -528,12 +536,35 @@ figure {
   color: #152022;
 }
 
-.source-switch button:hover:not(.is-active) {
+.source-switch button:hover:not(.is-active),
+.pause-toggle:hover {
   background: #304246;
   color: white;
 }
 
-/* 05   Analoger Bildschirm, Lichtquellen und Szene */
+.pause-toggle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  min-width: 69px;
+  min-height: 43px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 6px;
+  border: 1px solid var(--edge);
+  background: #162224;
+  color: #a9c0b9;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.pause-toggle span:first-child {
+  font-size: 12px;
+}
+
+/* 05   Analoger Bildschirm, fotografische Lichtmasken und Szene */
 
 .monitor-area__header {
   display: flex;
@@ -558,7 +589,7 @@ figure {
 .television {
   flex: 0 1 auto;
   align-self: center;
-  width: min(100%, max(240px, calc((100dvh - 315px) * 1.6)));
+  width: min(100%, max(240px, calc((100dvh - 265px) * 1.6)));
   overflow: hidden;
   padding: clamp(10px, 1.55vw, 23px) clamp(10px, 1.5vw, 22px) 0;
   border: 1px solid #889392;
@@ -646,38 +677,8 @@ figure {
   animation: fog-drift 20s ease-in-out infinite alternate;
 }
 
-/* Der Lichtkegel sitzt am Leuchtfeuer; er ist ein Effekt über dem fotografischen Master. */
-.scene__beam {
-  position: absolute;
-  z-index: 3;
-  top: 11.9%;
-  left: 56.2%;
-  width: 41%;
-  height: 36%;
-  transform-origin: 0 50%;
-  opacity: .16;
-  clip-path: polygon(0 48%, 100% 0, 100% 100%, 0 52%);
-  background: linear-gradient(90deg, #ffe5ad83, #f8dba744 39%, transparent 100%);
-  mix-blend-mode: screen;
-  pointer-events: none;
-  animation: lighthouse-sweep 8s ease-in-out infinite;
-}
-
-.scene__beacon {
-  position: absolute;
-  z-index: 4;
-  top: 11.7%;
-  left: 56.1%;
-  width: 5px;
-  height: 5px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: #fff1bd;
-  box-shadow: 0 0 7px 5px #f5c884aa, 0 0 29px 16px #fbc78f44;
-  transition: opacity 350ms ease;
-  animation: beacon 5s ease-in-out infinite;
-}
-
+/* Transparente Fotoausschnitte dämpfen nur die echten Fensterscheiben.
+   Die farbigen Lampen stammen unverändert aus der Basisfotografie. */
 .scene__window-lights {
   z-index: 4;
   pointer-events: none;
@@ -686,34 +687,33 @@ figure {
 .scene__window-light {
   position: absolute;
   display: block;
-  width: 2.3%;
-  height: 4.1%;
-  border-radius: 30%;
-  background: radial-gradient(ellipse, #fff2cc9e, #ffd58b65 32%, transparent 75%);
-  mix-blend-mode: screen;
-  animation: window-flicker 9s steps(1, end) infinite;
+  height: auto;
+  object-fit: contain;
+  opacity: 0;
+  animation: window-dim 8s steps(1, end) infinite;
 }
 
 .scene__window-light--a {
-  top: 38.1%;
-  left: 62.8%;
+  top: 35.97%;
+  left: 62.5%;
+  width: 2.421875%;
   animation-delay: -1.8s;
 }
 
 .scene__window-light--b {
-  top: 36.7%;
-  left: 65.7%;
+  top: 35%;
+  left: 64.765625%;
+  width: 2.890625%;
   animation-delay: -4s;
 }
 
 .scene__window-light--c {
-  top: 37.3%;
-  left: 75.4%;
+  top: 34.72%;
+  left: 75.0%;
+  width: 2.96875%;
   animation-delay: -6.3s;
 }
 
-[data-source='video'] .scene__beacon,
-[data-source='video'] .scene__beam,
 [data-source='video'] .scene__window-lights {
   opacity: 0;
 }
@@ -825,35 +825,6 @@ figure {
 }
 
 /* 06   Wiedergabe und Telemetrie */
-
-/* Der Pausenknopf bleibt beim Monitor, die Kameraauswahl sitzt beim Receiver. */
-.monitor-toolbar {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
-.pause-toggle {
-  min-width: 104px;
-  min-height: 40px;
-  padding: 0 17px;
-  border: 1px solid var(--edge);
-  background: #162224;
-  color: #a9c0b9;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .05em;
-}
-
-.pause-toggle:hover {
-  background: #304246;
-  color: white;
-}
-
-.pause-toggle span:first-child {
-  margin-right: 9px;
-}
 
 .monitor-extras {
   display: grid;
@@ -1034,17 +1005,20 @@ figure {
 }
 
 [data-state='interference'] .scene__artwork,
-[data-state='interference'] .scene__video {
+[data-state='interference'] .scene__video,
+[data-state='interference'] .scene__window-lights {
   filter: saturate(.67) contrast(1.1) brightness(.83);
 }
 
 [data-state='unknown'] .scene__artwork,
-[data-state='unknown'] .scene__video {
+[data-state='unknown'] .scene__video,
+[data-state='unknown'] .scene__window-lights {
   filter: saturate(.63) sepia(.15) hue-rotate(313deg) contrast(1.17) brightness(.49);
 }
 
 [data-state='offair'] .scene__artwork,
-[data-state='offair'] .scene__video {
+[data-state='offair'] .scene__video,
+[data-state='offair'] .scene__window-lights {
   filter: saturate(.45) contrast(1.2) brightness(.63);
 }
 
@@ -1052,29 +1026,12 @@ figure {
   opacity: .68;
 }
 
-[data-state='interference'] .scene__beacon {
-  animation-duration: 1.3s;
-  background: #f4b892;
+[data-state='interference'] .scene__window-light {
+  animation-duration: 4.5s;
 }
 
 [data-state='unknown'] .scene__window-light {
-  background: radial-gradient(ellipse, #eb8466c0, #c84c5070 30%, transparent 75%);
-  animation-duration: 3s;
-}
-
-[data-state='interference'] .scene__window-light {
-  animation-duration: 5s;
-}
-
-[data-state='unknown'] .scene__beam {
-  background: linear-gradient(90deg, #f5747466, #cc646633 39%, transparent 100%);
-  animation-duration: 5s;
-}
-
-[data-state='unknown'] .scene__beacon {
-  background: var(--signal);
-  box-shadow: 0 0 7px 5px #fc5d5c99, 0 0 29px 17px #e9505033;
-  animation-duration: .7s;
+  animation-duration: 2.7s;
 }
 
 [data-state='offair'] .receiver__status-led,
@@ -1098,23 +1055,11 @@ figure {
   to { transform: translateX(4%) scale(1.09); }
 }
 
-@keyframes lighthouse-sweep {
-  0%, 100% { transform: rotate(-28deg); opacity: 0; }
-  22% { opacity: .16; }
-  45% { transform: rotate(24deg); opacity: .19; }
-  65%, 90% { transform: rotate(38deg); opacity: 0; }
-}
-
-@keyframes window-flicker {
-  0%, 24%, 35%, 63%, 85%, 100% { opacity: .55; }
-  25%, 34% { opacity: .09; }
-  64%, 68% { opacity: 1; }
-  86%, 91% { opacity: .2; }
-}
-
-@keyframes beacon {
-  0%, 55%, 100% { opacity: .4; }
-  67%, 82% { opacity: 1; }
+@keyframes window-dim {
+  0%, 20%, 25%, 48%, 54%, 74%, 78%, 100% { opacity: 0; }
+  21%, 24% { opacity: .92; }
+  49%, 53% { opacity: .68; }
+  75%, 77% { opacity: .97; }
 }
 
 @keyframes signal-drift {
@@ -1175,6 +1120,11 @@ figure {
   .monitor-extras__readout .readout-bars {
     display: none;
   }
+
+  .source-switch button {
+    padding-inline: 2px;
+    font-size: 8px;
+  }
 }
 
 @media (max-height: 850px) and (min-width: 751px) {
@@ -1224,16 +1174,13 @@ figure {
     margin: 11px 0 10px;
   }
 
-  .source-switch {
+  .receiver-actions {
     margin: 0 12px 10px;
   }
 
-  .source-switch button {
+  .source-switch button,
+  .pause-toggle {
     min-height: 36px;
-  }
-
-  .monitor-toolbar {
-    margin-top: 9px;
   }
 
   .monitor-extras {
@@ -1370,7 +1317,7 @@ figure {
 
   .television {
     flex: 0 1 auto;
-    width: min(100%, max(220px, calc((100dvh - 260px) * 1.48)));
+    width: min(100%, max(220px, calc((100dvh - 215px) * 1.48)));
   }
 
   .television__footer {
@@ -1381,24 +1328,14 @@ figure {
     display: none;
   }
 
-  .monitor-toolbar {
-    gap: 6px;
-    margin-top: 9px;
-  }
-
   .source-switch button,
   .pause-toggle {
     min-height: 38px;
-    padding-inline: 7px;
     font-size: 9px;
   }
 
   .pause-toggle {
     min-width: 64px;
-  }
-
-  .pause-toggle span:first-child {
-    margin-right: 2px;
   }
 
   .monitor-extras {
@@ -1527,11 +1464,12 @@ figure {
     margin-block: 10px 8px;
   }
 
-  .source-switch {
+  .receiver-actions {
     margin: 0 11px 10px;
   }
 
-  .source-switch button {
+  .source-switch button,
+  .pause-toggle {
     min-height: 34px;
   }
 }
@@ -1577,11 +1515,12 @@ figure {
     margin-block: 6px;
   }
 
-  .source-switch {
+  .receiver-actions {
     margin-bottom: 6px;
   }
 
-  .source-switch button {
+  .source-switch button,
+  .pause-toggle {
     min-height: 30px;
   }
 }
@@ -1611,6 +1550,11 @@ figure {
 
   .monitor-extras__readout .readout-bars {
     display: none;
+  }
+
+  .source-switch button {
+    padding-inline: 2px;
+    font-size: 8px;
   }
 }
 
@@ -1676,11 +1620,12 @@ figure {
     margin: 4px 0 5px;
   }
 
-  .source-switch {
+  .receiver-actions {
     margin: 0 8px 5px;
   }
 
-  .source-switch button {
+  .source-switch button,
+  .pause-toggle {
     min-height: 28px;
     font-size: 9px;
   }

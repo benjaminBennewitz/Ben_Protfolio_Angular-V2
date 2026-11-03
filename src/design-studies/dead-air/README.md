@@ -86,3 +86,10 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 4. Define the discoverable frequencies and their prerequisites (clues, cameras, interaction), then bind player events to the existing receiver instead of creating UI-only state buttons.
 5. Record original voice lines and add an opt-in Web Audio signal chain (band-pass filtering, noise, mild distortion). No audio autoplay or microphone permissions required.
 6. Audit keyboard and screen-reader paths, performance, reduced-motion and mobile readability as the concept matures.
+
+
+## Patch 12 – Horizontal Rotating Beacon
+
+- Neuer Asset-Layer `assets/lighthouse-beam.webp` für das Leuchtfeuer.
+- Horizontaler Sweep um die Leuchtturm-Laterne in NORMAL, mit fehlerhaften Varianten für INTERFERENCE und UNKNOWN.
+- OFF AIR blendet den Strahl vollständig aus.

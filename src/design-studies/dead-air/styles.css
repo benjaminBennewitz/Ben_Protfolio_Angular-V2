@@ -643,7 +643,8 @@ figure {
 .scene__vignette,
 .scene__signal-bleed,
 .scene__anomaly,
-.scene__window-lights {
+.scene__window-lights,
+.scene__beam {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -714,6 +715,26 @@ figure {
   animation-delay: -6.3s;
 }
 
+/* Separater horizontaler Beacon-Layer des Leuchtturms. Der Strahl rotiert horizontal
+   um die Laterne und bleibt in OFF AIR vollständig unsichtbar. */
+.scene__beam {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  object-fit: cover;
+}
+
+.scene__beam--lighthouse {
+  z-index: 1;
+  opacity: .08;
+  mix-blend-mode: screen;
+  transform-origin: 59.0625% 15.416667%;
+  animation: lighthouse-beam-horizontal 9.6s linear infinite;
+}
+
 /* Leuchtturm und Sendemast verwenden dieselbe passgenaue Fotoebene wie die Fenster.
    Off-Masken reduzieren ausschließlich vorhandene Lichtquellen; kein neuer Lichtkegel. */
 .scene__practical-light {
@@ -739,7 +760,8 @@ figure {
   animation: mast-blink 3.2s steps(1, end) infinite;
 }
 
-[data-source='video'] .scene__window-lights {
+[data-source='video'] .scene__window-lights,
+[data-source='video'] .scene__beam--lighthouse {
   opacity: 0;
 }
 
@@ -1055,8 +1077,19 @@ figure {
   animation-duration: 4.5s;
 }
 
+[data-state='interference'] .scene__beam--lighthouse {
+  opacity: .12;
+  animation: lighthouse-beam-fault 7.6s steps(18, end) infinite;
+}
+
 [data-state='unknown'] .scene__window-light {
   animation-duration: 2.7s;
+}
+
+[data-state='unknown'] .scene__beam--lighthouse {
+  opacity: .1;
+  filter: saturate(.9) brightness(.9);
+  animation: lighthouse-beam-unknown 6.2s steps(20, end) infinite;
 }
 
 [data-state='interference'] .scene__practical-light--lighthouse {
@@ -1073,6 +1106,11 @@ figure {
 
 [data-state='unknown'] .scene__practical-light--mast {
   animation: mast-unknown 5.3s steps(1, end) infinite;
+}
+
+[data-state='offair'] .scene__beam--lighthouse {
+  opacity: 0;
+  animation: none;
 }
 
 [data-state='offair'] .receiver__status-led,
@@ -1128,6 +1166,39 @@ figure {
 @keyframes mast-unknown {
   0%, 12%, 51%, 56%, 92%, 100% { opacity: 1; }
   13%, 50%, 57%, 91% { opacity: 0; }
+}
+
+@keyframes lighthouse-beam-horizontal {
+  0%, 100% { opacity: 0; transform: rotate(-9deg) scaleX(.88) scaleY(.96); }
+  8% { opacity: .03; transform: rotate(-6deg) scaleX(.93) scaleY(.98); }
+  18% { opacity: .08; transform: rotate(-3deg) scaleX(1); }
+  30% { opacity: .16; transform: rotate(0deg) scaleX(1.04) scaleY(1); }
+  42% { opacity: .08; transform: rotate(3deg) scaleX(1); }
+  50% { opacity: .03; transform: rotate(6deg) scaleX(.95) scaleY(.98); }
+  58%, 84% { opacity: 0; transform: rotate(9deg) scaleX(.9) scaleY(.96); }
+  92% { opacity: .02; transform: rotate(-7deg) scaleX(.9) scaleY(.97); }
+}
+
+@keyframes lighthouse-beam-fault {
+  0%, 12%, 38%, 62%, 100% { opacity: 0; transform: rotate(-8deg) scaleX(.9); }
+  13%, 20% { opacity: .1; transform: rotate(-4deg) scaleX(.98); }
+  21%, 27% { opacity: .18; transform: rotate(0deg) scaleX(1.06); }
+  28%, 37% { opacity: .04; transform: rotate(4deg) scaleX(.97); }
+  39%, 45% { opacity: .14; transform: rotate(7deg) scaleX(.94); }
+  46%, 61% { opacity: 0; transform: rotate(10deg) scaleX(.9); }
+  63%, 70% { opacity: .09; transform: rotate(-2deg) scaleX(1.01); }
+  71%, 99% { opacity: 0; transform: rotate(-9deg) scaleX(.88); }
+}
+
+@keyframes lighthouse-beam-unknown {
+  0%, 14%, 41%, 55%, 100% { opacity: 0; transform: rotate(-10deg) scaleX(.86); }
+  15%, 22% { opacity: .08; transform: rotate(-6deg) scaleX(.94); }
+  23%, 31% { opacity: .2; transform: rotate(1deg) scaleX(1.08); }
+  32%, 40% { opacity: .05; transform: rotate(6deg) scaleX(.98); }
+  42%, 54% { opacity: .16; transform: rotate(10deg) scaleX(.92); }
+  56%, 73% { opacity: 0; transform: rotate(12deg) scaleX(.88); }
+  74%, 82% { opacity: .11; transform: rotate(-1deg) scaleX(1.04); }
+  83%, 99% { opacity: 0; transform: rotate(-10deg) scaleX(.86); }
 }
 
 @keyframes signal-drift {

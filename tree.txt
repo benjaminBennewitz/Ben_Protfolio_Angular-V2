@@ -1013,12 +1013,9 @@ folio/
 │   │   │   └── styles.css
 │   │   ├── dead-air/
 │   │   │   ├── assets/
-│   │   │   │   ├── beam-erase.webp
-│   │   │   │   ├── beam-sweep.webp
 │   │   │   │   ├── coast-loop.mp4
 │   │   │   │   ├── favicon.svg
-│   │   │   │   ├── lighthouse-dim.webp
-│   │   │   │   ├── mast-light-off.webp
+│   │   │   │   ├── lighthouse-beam.webp
 │   │   │   │   ├── preview.webp
 │   │   │   │   ├── scene-poster.webp
 │   │   │   │   ├── station-mark.svg

@@ -714,6 +714,31 @@ figure {
   animation-delay: -6.3s;
 }
 
+/* Leuchtturm und Sendemast verwenden dieselbe passgenaue Fotoebene wie die Fenster.
+   Off-Masken reduzieren ausschließlich vorhandene Lichtquellen; kein neuer Lichtkegel. */
+.scene__practical-light {
+  position: absolute;
+  display: block;
+  height: auto;
+  pointer-events: none;
+}
+
+.scene__practical-light--lighthouse {
+  top: 7.916667%;
+  left: 55.3125%;
+  width: 6.640625%;
+  opacity: .12;
+  animation: lighthouse-dim 9s ease-in-out infinite;
+}
+
+.scene__practical-light--mast {
+  top: 5.416667%;
+  left: 75.234375%;
+  width: 4.453125%;
+  opacity: 0;
+  animation: mast-blink 3.2s steps(1, end) infinite;
+}
+
 [data-source='video'] .scene__window-lights {
   opacity: 0;
 }
@@ -1034,6 +1059,22 @@ figure {
   animation-duration: 2.7s;
 }
 
+[data-state='interference'] .scene__practical-light--lighthouse {
+  animation: lighthouse-fault 4.2s steps(1, end) infinite;
+}
+
+[data-state='unknown'] .scene__practical-light--lighthouse {
+  animation: lighthouse-fault 3s steps(1, end) infinite;
+}
+
+[data-state='interference'] .scene__practical-light--mast {
+  animation: mast-fault 4s steps(1, end) infinite;
+}
+
+[data-state='unknown'] .scene__practical-light--mast {
+  animation: mast-unknown 5.3s steps(1, end) infinite;
+}
+
 [data-state='offair'] .receiver__status-led,
 [data-state='interference'] .receiver__status-led,
 [data-state='unknown'] .receiver__status-led {
@@ -1060,6 +1101,33 @@ figure {
   21%, 24% { opacity: .92; }
   49%, 53% { opacity: .68; }
   75%, 77% { opacity: .97; }
+}
+
+@keyframes lighthouse-dim {
+  0%, 100% { opacity: .06; }
+  30%, 50% { opacity: .24; }
+  65% { opacity: .12; }
+}
+
+@keyframes lighthouse-fault {
+  0%, 14%, 31%, 49%, 73%, 100% { opacity: .06; }
+  15%, 18%, 50%, 54% { opacity: .7; }
+  32%, 35%, 74%, 80% { opacity: .36; }
+}
+
+@keyframes mast-blink {
+  0%, 28%, 96%, 100% { opacity: 0; }
+  29%, 95% { opacity: 1; }
+}
+
+@keyframes mast-fault {
+  0%, 17%, 23%, 48%, 55%, 92%, 100% { opacity: 0; }
+  18%, 22%, 49%, 54%, 93%, 99% { opacity: 1; }
+}
+
+@keyframes mast-unknown {
+  0%, 12%, 51%, 56%, 92%, 100% { opacity: 1; }
+  13%, 50%, 57%, 91% { opacity: 0; }
 }
 
 @keyframes signal-drift {

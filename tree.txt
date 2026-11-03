@@ -1015,6 +1015,8 @@ folio/
 │   │   │   ├── assets/
 │   │   │   │   ├── coast-loop.mp4
 │   │   │   │   ├── favicon.svg
+│   │   │   │   ├── lighthouse-dim.webp
+│   │   │   │   ├── mast-light-off.webp
 │   │   │   │   ├── preview.webp
 │   │   │   │   ├── scene-poster.webp
 │   │   │   │   ├── station-mark.svg

@@ -26,62 +26,72 @@
 
     <div class="archive-page__workspace">
       <aside class="archive-page__sidebar" [attr.aria-label]="texts().active">
-        <section class="archive-page__filters" [attr.aria-label]="texts().filterTitle">
-          <div class="archive-page__section-head">
+        <details class="archive-page__filters">
+          <summary class="archive-page__section-head archive-page__fold-toggle">
             <span class="archive-page__section-code">01 / SEARCH_INDEX</span>
-            <span class="archive-page__counter">{{ filteredStudies().length.toString().padStart(2, '0') }} / {{ studies().length.toString().padStart(2, '0') }}</span>
+            <span class="archive-page__fold-meta">
+              <span class="archive-page__counter">{{ filteredStudies().length.toString().padStart(2, '0') }} / {{ studies().length.toString().padStart(2, '0') }}</span>
+              <span class="material-symbols-outlined archive-page__fold-icon" aria-hidden="true">expand_more</span>
+            </span>
+          </summary>
+          <div class="archive-page__fold-content">
+            <label class="archive-page__search-label" for="archive-search">{{ texts().searchLabel }}</label>
+            <div class="archive-page__search-field">
+              <span class="material-symbols-outlined" aria-hidden="true">manage_search</span>
+              <input id="archive-search" #searchInput type="search" [value]="searchQuery()"
+                [placeholder]="texts().searchPlaceholder" autocomplete="off"
+                (input)="setSearch(searchInput.value)" />
+            </div>
+            <div class="archive-page__filter-header">
+              <span>{{ texts().categoryLabel }}</span>
+              <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+            </div>
+            <div class="archive-page__categories" role="group" [attr.aria-label]="texts().categoryLabel">
+              @for (category of categories; track category.id) {
+              <button type="button" class="archive-page__category"
+                [class.is-active]="selectedCategory() === category.id"
+                [attr.aria-pressed]="selectedCategory() === category.id"
+                (click)="setCategory(category.id)">
+                <span>{{ categoryLabel(category.id) }}</span>
+                <span>{{ categoryCount(category.id).toString().padStart(2, '0') }}</span>
+              </button>
+              }
+            </div>
           </div>
-          <label class="archive-page__search-label" for="archive-search">{{ texts().searchLabel }}</label>
-          <div class="archive-page__search-field">
-            <span class="material-symbols-outlined" aria-hidden="true">search</span>
-            <input id="archive-search" #searchInput type="search" [value]="searchQuery()"
-              [placeholder]="texts().searchPlaceholder" autocomplete="off"
-              (input)="setSearch(searchInput.value)" />
-          </div>
-          <div class="archive-page__filter-header">
-            <span>{{ texts().categoryLabel }}</span>
-            <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
-          </div>
-          <div class="archive-page__categories" role="group" [attr.aria-label]="texts().categoryLabel">
-            @for (category of categories; track category.id) {
-            <button type="button" class="archive-page__category"
-              [class.is-active]="selectedCategory() === category.id"
-              [attr.aria-pressed]="selectedCategory() === category.id"
-              (click)="setCategory(category.id)">
-              <span>{{ categoryLabel(category.id) }}</span>
-              <span>{{ categoryCount(category.id).toString().padStart(2, '0') }}</span>
-            </button>
-            }
-          </div>
-        </section>
+        </details>
 
-        <section class="archive-page__catalog" [attr.aria-label]="texts().catalogTitle">
-          <div class="archive-page__section-head">
+        <details class="archive-page__catalog">
+          <summary class="archive-page__section-head archive-page__fold-toggle">
             <span class="archive-page__section-code">02 / {{ texts().catalogTitle }}</span>
-            <span class="archive-page__counter" aria-live="polite">{{ texts().results }}: {{ filteredStudies().length }}</span>
-          </div>
-          @if (filteredStudies().length) {
-          <p class="archive-page__catalog-hint">{{ texts().catalogHint }}</p>
-          <div class="archive-page__catalog-list">
-            @for (study of filteredStudies(); track study.id) {
-            <button class="archive-page__catalog-entry" type="button"
-              [class.is-active]="activeStudy()?.id === study.id"
-              [attr.aria-pressed]="activeStudy()?.id === study.id"
-              (click)="focusStudy(study.id)">
-              <span class="archive-page__catalog-number">{{ studyNumber(study.id) }}</span>
-              <span class="archive-page__catalog-name">{{ study.name }}</span>
-              <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
-            </button>
+            <span class="archive-page__fold-meta">
+              <span class="archive-page__counter" aria-live="polite">{{ texts().results }}: {{ filteredStudies().length }}</span>
+              <span class="material-symbols-outlined archive-page__fold-icon" aria-hidden="true">expand_more</span>
+            </span>
+          </summary>
+          <div class="archive-page__fold-content">
+            @if (filteredStudies().length) {
+            <p class="archive-page__catalog-hint">{{ texts().catalogHint }}</p>
+            <div class="archive-page__catalog-list">
+              @for (study of filteredStudies(); track study.id) {
+              <button class="archive-page__catalog-entry" type="button"
+                [class.is-active]="activeStudy()?.id === study.id"
+                [attr.aria-pressed]="activeStudy()?.id === study.id"
+                (click)="focusStudy(study.id)">
+                <span class="archive-page__catalog-number">{{ studyNumber(study.id) }}</span>
+                <span class="archive-page__catalog-name">{{ study.name }}</span>
+                <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+              </button>
+              }
+            </div>
+            } @else {
+            <div class="archive-page__no-results" role="status">
+              <span class="material-symbols-outlined" aria-hidden="true">manage_search</span>
+              <p>{{ texts().empty }}</p>
+              <button type="button" (click)="clearFilters()">{{ texts().clear }}</button>
+            </div>
             }
           </div>
-          } @else {
-          <div class="archive-page__no-results" role="status">
-            <span class="material-symbols-outlined" aria-hidden="true">search_off</span>
-            <p>{{ texts().empty }}</p>
-            <button type="button" (click)="clearFilters()">{{ texts().clear }}</button>
-          </div>
-          }
-        </section>
+        </details>
 
         <section class="archive-page__inspector" [attr.aria-label]="texts().active">
           <div class="archive-page__section-head">
@@ -117,7 +127,7 @@
           <a class="archive-page__open" [href]="study.href" target="_blank" rel="noopener noreferrer"
             [attr.aria-label]="texts().open + ': ' + study.name + '. ' + texts().newTab">
             {{ texts().open }}
-            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
           </a>
           }
         </section>
@@ -132,7 +142,7 @@
           </div>
           <div class="archive-page__tools" role="group" [attr.aria-label]="texts().controls">
             <button type="button" (click)="shuffleLayout()" [attr.aria-label]="texts().scatter" [title]="texts().scatter">
-              <span class="material-symbols-outlined" aria-hidden="true">shuffle</span><span>{{ texts().scatter }}</span>
+              <span class="material-symbols-outlined" aria-hidden="true">sync_alt</span><span>{{ texts().scatter }}</span>
             </button>
             <button type="button" (click)="tileLayout()" [attr.aria-label]="texts().tile" [title]="texts().tile">
               <span class="material-symbols-outlined" aria-hidden="true">grid_view</span><span>{{ texts().tile }}</span>
@@ -168,7 +178,7 @@
                 <button type="button" [attr.aria-label]="(item.state.maximized ? texts().restore : texts().maximize) + ': ' + item.study.name"
                   [title]="item.state.maximized ? texts().restore : texts().maximize"
                   (click)="toggleMaximize(item.study.id, $event)">
-                  <span class="material-symbols-outlined" aria-hidden="true">{{ item.state.maximized ? 'filter_none' : 'crop_square' }}</span>
+                  <span class="material-symbols-outlined" aria-hidden="true">{{ item.state.maximized ? 'view_carousel' : 'select_all' }}</span>
                 </button>
                 <button type="button" [attr.aria-label]="texts().minimized + ': ' + item.study.name"
                   [title]="texts().minimized" (click)="closeWindow(item.study.id, $event)">
@@ -181,7 +191,7 @@
               <img [src]="item.study.preview" [alt]="item.study.name + ' — ' + item.study.subtitle"
                 width="800" height="600" loading="lazy" decoding="async" draggable="false" />
               <span class="archive-window__preview-overlay" aria-hidden="true">
-                <span>{{ item.study.archive.concept }}</span><span class="material-symbols-outlined">north_east</span>
+                <span>{{ item.study.archive.concept }}</span><span class="material-symbols-outlined">arrow_outward</span>
               </span>
             </button>
             <div class="archive-window__foot">
@@ -196,7 +206,7 @@
               [attr.aria-label]="texts().resize + ': ' + item.study.name"
               (pointerdown)="startInteraction(item.study.id, 'resize', $event)"
               (keydown)="onWindowKeydown(item.study.id, 'resize', $event)">
-              <span class="material-symbols-outlined" aria-hidden="true">south_east</span>
+              <span class="material-symbols-outlined" aria-hidden="true">straighten</span>
             </div>
             }
           </article>

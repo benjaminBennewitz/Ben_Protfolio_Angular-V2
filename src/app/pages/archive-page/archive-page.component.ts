@@ -163,6 +163,7 @@ export class ArchivePageComponent {
   private zCounter = DESIGN_STUDIES.length + 10; // Steigende Zeichenreihenfolge für fokussierte Fenster.
   private scatterSequence = 0;                    // Verändert die reproduzierbaren Ausgangspositionen.
   private wasDesktop = false;                   // Merkt den Modus für ein sauberes Layout beim Breakpoint-Wechsel.
+  private canvasSize: { width: number; height: number } | null = null; // Letzte Canvas-Größe für proportionale Viewport-Anpassungen.
 
   readonly searchQuery = signal<string>('');                        // Textsuche über sämtliche lokalisierten Felder.
   readonly selectedCategory = signal<ArchiveCategory>('all');      // Aktiver Kategorienfilter.
@@ -267,7 +268,7 @@ export class ArchivePageComponent {
     this.selectFirstMatch();
   }
 
-  /** Entfernt beide Filter, ohne die individuell verschobenen Fenster zurückzusetzen. */
+  /** Entfernt beide Filter und verteilt die wieder sichtbaren Studien neu. */
   clearFilters(): void {
     this.searchQuery.set('');
     this.selectedCategory.set('all');
@@ -329,37 +330,39 @@ export class ArchivePageComponent {
   /** Ordnet sämtliche Studien in einer kuratiert unregelmäßigen Fenster-Collage an. */
   resetLayout(): void {
     this.scatterSequence = 0;
-    this.setScatteredLayout();
+    this.setScatteredLayout(false);
   }
 
   /** Verteilt die geöffneten Fenster auf neue, reproduzierbare Zufallspositionen. */
   shuffleLayout(): void {
     this.scatterSequence += 1;
-    this.setScatteredLayout();
+    this.setScatteredLayout(true);
   }
 
-  /** Legt die Fenster ohne Überlappungen in ein Raster und passt die Bühne an. */
+  /** Legt alle gefilterten Fenster innerhalb der vorhandenen Canvas-Höhe in ein Raster. */
   tileLayout(): void {
-    const canvas = this.canvas?.nativeElement; // Messbare Arbeitsfläche.
+    const canvas = this.canvas?.nativeElement; // Sichtbare Arbeitsfläche ohne künstliche Höhenverlängerung.
 
     if (!canvas) {
       return;
     }
 
-    const gap = 14;                                                        // Rasterabstand in Pixeln.
-    const columns = Math.max(1, Math.floor((canvas.clientWidth - gap) / 310)); // Anzahl sinnvoller Fenster pro Reihe.
-    const width = Math.floor((canvas.clientWidth - gap * (columns + 1)) / columns); // Gleichmäßige Fensterbreite.
-    const height = Math.max(185, Math.round(width * 0.65));                 // Höhe mit ausreichend Bildfläche.
-    const rowCount = Math.ceil(this.filteredStudies().length / columns);     // Benötigte Reihen.
+    const gap = 12; // Abstand zwischen den Fenstern.
+    const count = this.filteredStudies().length; // Aktuell sichtbare Studien.
+    const rowsForLegibility = Math.max(1, Math.floor((canvas.clientHeight - gap) / 155)); // Sinnvolle Fensterhöhe.
+    const columnsByHeight = Math.ceil(count / rowsForLegibility); // Benötigte Spalten für die feste Bühne.
+    const columnsByWidth = Math.max(1, Math.floor((canvas.clientWidth + gap) / 205)); // Mögliche Spaltenbreite.
+    const columns = Math.max(1, Math.min(4, Math.max(1, count), Math.max(columnsByHeight, columnsByWidth))); // Passende Anzahl ohne Leerspalten.
+    const rows = Math.max(1, Math.ceil(count / columns)); // Gleichmäßige Reihen.
+    const width = Math.floor((canvas.clientWidth - gap * (columns + 1)) / columns); // Sichtbare Fensterbreite.
+    const height = Math.floor((canvas.clientHeight - gap * (rows + 1)) / rows); // Sichtbare Fensterhöhe.
+    const position = new Map(this.filteredStudies().map((study, index) => [study.id, index])); // Index der Treffer.
 
-    canvas.style.minHeight = `${Math.max(680, rowCount * (height + gap) + gap)}px`;
     this.originalGeometry.clear();
+    this.canvasSize = { width: canvas.clientWidth, height: canvas.clientHeight };
     this.isTiled.set(true);
-
-    const position = new Map(this.filteredStudies().map((study, index) => [study.id, index])); // Rasterposition der Treffer.
-
     this.windows.update(states => states.map(state => {
-      const index = position.get(state.id); // Index innerhalb der gefilterten Reihe.
+      const index = position.get(state.id); // Fensterposition im Raster.
 
       return index === undefined ? { ...state, maximized: false }
         : {
@@ -480,44 +483,119 @@ export class ArchivePageComponent {
       return;
     }
 
-    this.windows.update(states => states.map(state => state.maximized
-      ? { ...state, x: 8, y: 8, width: canvas.clientWidth - 16, height: canvas.clientHeight - 16 }
-      : {
-        ...state,
-        width: Math.min(state.width, canvas.clientWidth),
-        height: Math.min(state.height, canvas.clientHeight),
-        x: this.clamp(state.x, 0, Math.max(0, canvas.clientWidth - Math.min(state.width, canvas.clientWidth))),
-        y: this.clamp(state.y, 0, Math.max(0, canvas.clientHeight - Math.min(state.height, canvas.clientHeight))),
-      }));
+    const previousSize = this.canvasSize ?? { width: canvas.clientWidth, height: canvas.clientHeight }; // Vorherige Abmessungen.
+    const scaleX = canvas.clientWidth / Math.max(1, previousSize.width); // Horizontaler Skalierungsfaktor.
+    const scaleY = canvas.clientHeight / Math.max(1, previousSize.height); // Vertikaler Skalierungsfaktor.
+
+    this.pointerInteraction.set(null);
+    this.canvasSize = { width: canvas.clientWidth, height: canvas.clientHeight };
+
+    this.windows.update(states => states.map(state => {
+      if (state.maximized) {
+        return { ...state, x: 8, y: 8, width: canvas.clientWidth - 16, height: canvas.clientHeight - 16 };
+      }
+
+      const width = Math.min(state.width * scaleX, canvas.clientWidth); // Breite proportional zur neuen Bühne.
+      const height = Math.min(state.height * scaleY, canvas.clientHeight); // Höhe proportional zur neuen Bühne.
+
+      return {
+        ...state, width, height,
+        x: this.clamp(state.x * scaleX, 0, Math.max(0, canvas.clientWidth - width)),
+        y: this.clamp(state.y * scaleY, 0, Math.max(0, canvas.clientHeight - height)),
+      };
+    }));
+
+    for (const [id, original] of this.originalGeometry) {
+      this.originalGeometry.set(id, {
+        x: original.x * scaleX, y: original.y * scaleY,
+        width: original.width * scaleX, height: original.height * scaleY,
+      });
+    }
   }
 
-  /** Verteilt sämtliche Fenster auf eine begrenzte, absichtlich lockere Arbeitsfläche. */
-  private setScatteredLayout(): void {
-    const canvas = this.canvas?.nativeElement; // Gemessene Arbeitsfläche.
+  /** Verteilt Fenster frei und zufällig, ohne starke Überlagerungen an einer einzigen Stelle. */
+  private setScatteredLayout(preserveClosed: boolean): void {
+    const canvas = this.canvas?.nativeElement; // Tatsächlich sichtbare Arbeitsfläche.
 
     if (!canvas) {
       return;
     }
 
-    canvas.style.minHeight = '';
     this.isTiled.set(false);
     this.originalGeometry.clear();
-    const width = Math.min(390, Math.max(260, canvas.clientWidth * 0.43)); // Einheitliche Startbreite.
-    const height = Math.min(295, Math.max(210, width * 0.72));           // Einheitliche Starthöhe.
-    const spaceX = Math.max(0, canvas.clientWidth - width - 18);        // Verfügbarer horizontaler Versatz.
-    const spaceY = Math.max(0, canvas.clientHeight - height - 18);      // Verfügbarer vertikaler Versatz.
-    const previous = new Map(this.windows().map(state => [state.id, state])); // Vorherige Sichtbarkeit für Shuffle.
+    this.canvasSize = { width: canvas.clientWidth, height: canvas.clientHeight };
+
+    const studies = this.filteredStudies(); // Nur Treffer werden auf der Bühne neu angeordnet.
+    const gutter = 12; // Sicherheitsabstand zur Canvas-Kante.
+    const baseWidth = Math.min(360, Math.max(235, canvas.clientWidth * 0.3)); // Großzügige Vorschaufenster statt Miniatur-Raster.
+    const placed: WindowGeometry[] = []; // Bereits verteilte Fenster für die Kollisionsbewertung.
+    const positions = new Map<string, WindowGeometry>(); // Gewählte freie Positionen pro Studienkennung.
+    const previous = new Map(this.windows().map(state => [state.id, state])); // Bisherige Zustände geschlossener Fenster.
+    const order = studies.map((_, index) => index); // Mischreihenfolge verhindert eine geordnete Kartenfolge.
+    const preferredId = studies.some(study => study.id === this.activeId()) ? this.activeId() : studies[0]?.id; // Bevorzugter Inspector-Eintrag.
+
+    for (let index = order.length - 1; index > 0; index--) {
+      const target = Math.floor(this.randomizedOffset(index, 2) * (index + 1)); // Reproduzierbares Fisher-Yates-Mischen.
+      [order[index], order[target]] = [order[target], order[index]];
+    }
+
+    order.forEach(index => {
+      const study = studies[index]; // Eintrag in gemischter Reihenfolge.
+      const width = Math.min(canvas.clientWidth - gutter * 2, baseWidth * (0.88 + this.randomizedOffset(index, 3) * 0.22)); // Individuelle Fensterbreite.
+      const height = Math.min(canvas.clientHeight - gutter * 2, width * (0.68 + this.randomizedOffset(index, 4) * 0.12)); // Leicht variierende 4:3-nahe Proportion.
+      const travelX = Math.max(0, canvas.clientWidth - width - gutter * 2); // Frei nutzbare horizontale Strecke.
+      const travelY = Math.max(0, canvas.clientHeight - height - gutter * 2); // Frei nutzbare vertikale Strecke.
+      let best: WindowGeometry = { x: gutter, y: gutter, width, height }; // Fallback für kleine Arbeitsflächen.
+      let bestScore = Number.POSITIVE_INFINITY; // Niedrigster bisheriger Ballungswert.
+
+      for (let attempt = 0; attempt < 64; attempt++) {
+        const candidate: WindowGeometry = {
+          x: gutter + this.randomizedOffset(index, 10 + attempt * 2) * travelX,
+          y: gutter + this.randomizedOffset(index, 11 + attempt * 2) * travelY,
+          width, height,
+        }; // Vollständig freie, nicht gerasterte Zufallsposition.
+        let score = 0; // Kollisions- und Ballungswert der Position.
+
+        for (const other of placed) {
+          const intersectionWidth = Math.max(0, Math.min(candidate.x + width, other.x + other.width) - Math.max(candidate.x, other.x)); // Horizontale Schnittfläche.
+          const intersectionHeight = Math.max(0, Math.min(candidate.y + height, other.y + other.height) - Math.max(candidate.y, other.y)); // Vertikale Schnittfläche.
+          const overlap = intersectionWidth * intersectionHeight / Math.min(width * height, other.width * other.height); // Anteil des kleineren Fensters.
+          const dx = (candidate.x + width / 2 - other.x - other.width / 2) / Math.max(1, canvas.clientWidth); // Normierter Mittenabstand X.
+          const dy = (candidate.y + height / 2 - other.y - other.height / 2) / Math.max(1, canvas.clientHeight); // Normierter Mittenabstand Y.
+
+          score += overlap * 5 + Math.max(0, 0.29 - Math.hypot(dx, dy)); // Überdeckung deutlich stärker bestrafen als Nähe.
+        }
+
+        score += this.randomizedOffset(index, 200 + attempt) * 0.04; // Kleine Varianz lässt die Collage natürlich wirken.
+
+        if (score < bestScore) {
+          bestScore = score;
+          best = candidate;
+        }
+      }
+
+      placed.push(best);
+      positions.set(study.id, best);
+    });
 
     this.windows.set(DESIGN_STUDIES.map((study, index) => ({
       id: study.id,
-      x: 9 + this.randomizedOffset(index, 0) * spaceX,
-      y: 9 + this.randomizedOffset(index, 1) * spaceY,
-      width, height,
+      ...(positions.get(study.id) ?? previous.get(study.id) ?? { x: gutter, y: gutter, width: baseWidth, height: baseWidth * 0.75 }),
       zIndex: index + 1,
-      closed: this.scatterSequence > 0 ? (previous.get(study.id)?.closed ?? false) : false,
+      closed: preserveClosed ? (previous.get(study.id)?.closed ?? false) : false,
       maximized: false,
     })));
-    this.focusStudy(this.filteredStudies()[0]?.id ?? DESIGN_STUDIES[0].id);
+
+    if (preferredId) {
+      const preferredWasClosed = preserveClosed && previous.get(preferredId)?.closed; // Geschlossenen Eintrag nicht ungewollt öffnen.
+      const firstOpen = studies.find(study => !previous.get(study.id)?.closed); // Nächste offene Studie bei geschlossenem Inspector-Fenster.
+
+      if (preferredWasClosed && firstOpen) this.focusStudy(firstOpen.id);
+      else if (preferredWasClosed) this.activeId.set(preferredId);
+      else this.focusStudy(preferredId);
+    } else {
+      this.activeId.set('');
+    }
   }
 
   /** Liefert eine stabile zufallsähnliche Position ohne flackernde Neuverteilung bei Change Detection. */
@@ -541,9 +619,7 @@ export class ArchivePageComponent {
       else this.activeId.set('');
     }
 
-    if (this.isTiled()) {
-      this.tileLayout();
-    }
+    if (this.isTiled()) this.tileLayout(); // Freie Fenster behalten beim Filtern ihre manuell gewählten Positionen.
   }
 
   /** Vereinheitlicht Suchtexte ohne Groß-/Klein- und Akzentunterschiede. */

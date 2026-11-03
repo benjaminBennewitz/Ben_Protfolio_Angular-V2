@@ -359,29 +359,40 @@
 
 .design-studies {
   position: relative;
-  min-height: 72svh;
+  display: flex;
+  align-items: stretch;
+  height: 100svh;
+  min-height: 100svh;
+  padding: var(--bp-header-height) var(--bp-stage-gutter) 0;
+  overflow: hidden;
   border-top: 1px solid var(--bp-color-border);
-  background: radial-gradient(circle at 86% 20%, color-mix(in srgb, var(--bp-color-accent) 12%, transparent), transparent 35%), var(--bp-color-bg);
+  background:
+    radial-gradient(circle at 83% 49%, color-mix(in srgb, var(--bp-color-accent) 11%, transparent), transparent 40%),
+    color-mix(in srgb, var(--bp-color-bg) 88%, black 12%);
   scroll-snap-align: start;
-  scroll-margin-top: var(--bp-header-height);
+  scroll-margin-top: 0;
 }
 
 .design-studies__layout {
   display: grid;
-  grid-template-columns: minmax(250px, 0.7fr) minmax(0, 1.3fr);
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
   align-items: center;
-  gap: clamp(1.5rem, 4vw, 5rem);
-  padding-block: clamp(3.5rem, 7vw, 7rem);
+  gap: clamp(1rem, 3vw, 4rem);
+  width: 100%;
+  min-height: 0;
+  padding-block: clamp(1rem, 2.5vh, 2.3rem);
 }
 
 .design-studies__intro {
   display: grid;
   justify-items: start;
-  gap: 1.35rem;
+  align-content: center;
+  gap: clamp(1rem, 2.2vh, 1.7rem);
+  min-width: 0;
 }
 
 .design-studies__eyebrow {
-  margin: 0 0 1rem;
+  margin: 0 0 0.6rem;
   color: var(--bp-color-accent-text);
   font-family: var(--bp-font-mono);
   font-size: 0.72rem;
@@ -392,23 +403,26 @@
 
 .design-studies__title-reveal {
   --bp-reveal-title-max-width: 100%;
-  --bp-reveal-title-size: clamp(2.3rem, 3.8vw, 4.8rem);
-  --bp-reveal-title-line-height: 0.95;
+  --bp-reveal-title-size: clamp(2rem, 2.7vw, 3.9rem);
+  --bp-reveal-title-line-height: 0.96;
   --bp-reveal-title-letter-spacing: -0.055em;
+  min-width: 0;
   max-width: 100%;
 }
 
 .design-studies__lead {
-  max-width: 44ch;
+  max-width: 49ch;
   margin: 0;
   color: var(--bp-color-text-muted);
-  line-height: 1.65;
+  font-size: clamp(0.85rem, 1vw, 1rem);
+  line-height: 1.6;
 }
 
 .design-studies__archive-link {
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
+  max-width: 100%;
 }
 
 .design-studies__archive-link .material-symbols-outlined {
@@ -418,13 +432,19 @@
 .design-studies__gallery {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  align-self: stretch;
   gap: clamp(0.65rem, 1vw, 1rem);
+  min-width: 0;
+  min-height: 0;
 }
 
 .design-study {
+  position: relative;
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
   overflow: hidden;
   border: 1px solid var(--bp-color-border-strong);
   background: var(--bp-color-surface-solid);
@@ -437,24 +457,29 @@
 
 .design-study:hover,
 .design-study:focus-visible {
+  z-index: 1;
   transform: translate(-3px, -3px);
   box-shadow: 6px 6px 0 var(--bp-color-accent);
 }
 
 .design-study__visual {
   position: relative;
-  flex: 1;
-  min-height: 145px;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: hidden;
   background: var(--bp-color-bg);
 }
 
 .design-study__visual img {
+  display: block;
   width: 100%;
   height: 100%;
-  min-height: 145px;
   object-fit: cover;
   transition: transform 350ms var(--bp-ease-out);
+}
+
+.design-study:nth-child(3) .design-study__visual img {
+  object-position: 28% center;
 }
 
 .design-study:hover img,
@@ -464,8 +489,8 @@
 
 .design-study__index {
   position: absolute;
-  top: 0.7rem;
-  left: 0.7rem;
+  top: 0.6rem;
+  left: 0.6rem;
   padding: 0.3rem 0.4rem;
   color: #ffffff;
   background: rgba(10, 10, 10, 0.85);
@@ -479,7 +504,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.6rem;
-  padding: 0.8rem;
+  flex: 0 0 auto;
+  min-height: 53px;
+  padding: 0.55rem 0.8rem;
   border-top: 1px solid var(--bp-color-border-strong);
 }
 
@@ -489,50 +516,21 @@
 
 .design-study__caption div > span {
   display: block;
-  margin-bottom: 0.25rem;
+  overflow: hidden;
+  margin-bottom: 0.2rem;
   color: var(--bp-color-text-muted);
   font-family: var(--bp-font-mono);
-  font-size: 0.62rem;
+  font-size: 0.6rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .design-study__caption h3 {
   margin: 0;
   font-family: var(--bp-font-display);
-  font-size: clamp(1.35rem, 1.9vw, 2.2rem);
+  font-size: clamp(1.2rem, 1.5vw, 1.8rem);
   letter-spacing: -0.045em;
   overflow-wrap: anywhere;
-}
-
-.design-studies__more {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.6rem;
-  min-height: 160px;
-  padding: 1.4rem;
-  border: 1px dashed var(--bp-color-border-strong);
-  color: var(--bp-color-text);
-  background: color-mix(in srgb, var(--bp-color-accent) 9%, var(--bp-color-bg));
-  font-family: var(--bp-font-mono);
-  font-size: 0.75rem;
-  font-weight: 900;
-  transition: border-color 160ms ease, background 160ms ease;
-}
-
-.design-studies__more:hover,
-.design-studies__more:focus-visible {
-  border-color: var(--bp-color-accent-text);
-  background: color-mix(in srgb, var(--bp-color-accent) 17%, var(--bp-color-bg));
-}
-
-.design-studies__more-symbol {
-  font-size: 2rem;
-  line-height: 1;
-}
-
-.design-studies__more span:last-child {
-  color: var(--bp-color-text-muted);
-  font-size: 0.61rem;
 }
 
 /* ==========================================================================
@@ -602,19 +600,42 @@
 
 
 
-@media (max-width: 1120px) {
+@media (max-width: 950px) {
+  .design-studies {
+    height: auto;
+    min-height: 100svh;
+    overflow: visible;
+  }
+
   .design-studies__layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.8rem, 4vw, 3rem);
+    padding-block: clamp(2rem, 6vw, 4rem);
   }
 
   .design-studies__intro {
     max-width: 70ch;
   }
+
+  .design-studies__title-reveal {
+    --bp-reveal-title-size: clamp(1.85rem, 4.2vw, 3.7rem);
+  }
+
+  .design-studies__gallery {
+    min-height: clamp(410px, 70vw, 650px);
+  }
 }
 
 @media (max-width: 650px) {
+  .design-studies__title-reveal {
+    --bp-reveal-title-size: clamp(1.65rem, 5.6vw, 2.8rem);
+  }
+
   .design-studies__gallery {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 1rem;
+    min-height: 0;
   }
 
   .design-study:first-child {
@@ -623,6 +644,21 @@
 
   .design-study__visual {
     aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-height: 700px) and (min-width: 951px) {
+  .design-studies__layout {
+    gap: 1.5rem;
+    padding-block: 0.75rem;
+  }
+
+  .design-studies__intro {
+    gap: 0.8rem;
+  }
+
+  .design-studies__title-reveal {
+    --bp-reveal-title-size: clamp(1.8rem, 2.5vw, 3rem);
   }
 }
 

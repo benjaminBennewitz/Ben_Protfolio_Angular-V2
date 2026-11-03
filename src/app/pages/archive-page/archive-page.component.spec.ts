@@ -1,6 +1,6 @@
 /* src/app/pages/archive-page/archive-page.component.spec.ts */
 
-import { signal } from '@angular/core';
+import { ElementRef, signal } from '@angular/core';
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DESIGN_STUDIES } from '../../core/data/design-studies';
@@ -71,5 +71,57 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     expect(page.visibleWindows().map(item => item.study.id)).not.toContain('raw-form');
     page.focusStudy('raw-form');
     expect(page.visibleWindows().map(item => item.study.id)).toContain('raw-form');
+  });
+
+  it('verteilt frei skalierte Fenster über die Bühne, ohne sie an einer Stelle zu ballen', /** Prüft die freie Startgeometrie. */() => {
+    const stage = { clientWidth: 1170, clientHeight: 702 } as HTMLElement; // Unabhängiger Test-Canvas.
+
+    Object.defineProperty(page, 'canvas', { configurable: true, value: new ElementRef(stage) });
+    page.resetLayout();
+
+    const placed = page.visibleWindows(); // Die neun anfänglich geöffneten Fenster.
+    const centerX = placed.map(({ state }) => state.x + state.width / 2); // Horizontale Mittelpunkte.
+    const centerY = placed.map(({ state }) => state.y + state.height / 2); // Vertikale Mittelpunkte.
+    const widths = new Set(placed.map(({ state }) => Math.round(state.width))); // Unterschiedliche Fensterformate.
+
+    expect(placed).toHaveLength(9);
+    expect(widths.size).toBeGreaterThan(3);
+    expect(Math.max(...centerX) - Math.min(...centerX)).toBeGreaterThan(stage.clientWidth * 0.55);
+    expect(Math.max(...centerY) - Math.min(...centerY)).toBeGreaterThan(stage.clientHeight * 0.45);
+
+    for (const { state } of placed) {
+      expect(state.x).toBeGreaterThanOrEqual(0);
+      expect(state.y).toBeGreaterThanOrEqual(0);
+      expect(state.x + state.width).toBeLessThanOrEqual(stage.clientWidth);
+      expect(state.y + state.height).toBeLessThanOrEqual(stage.clientHeight);
+    }
+  });
+
+  it('behält freie Fensterpositionen beim Filtern bei', /** Verhindert unerwartete Neupositionierungen während der Suche. */() => {
+    const stage = { clientWidth: 1170, clientHeight: 702 } as HTMLElement; // Konstant große Testarbeitsfläche.
+
+    Object.defineProperty(page, 'canvas', { configurable: true, value: new ElementRef(stage) });
+    page.resetLayout();
+    const original = page.windows().find(state => state.id === 'ctrl-room'); // Position vor dem Filterwechsel.
+
+    page.setCategory('retro');
+    expect(page.visibleWindows()).toHaveLength(1);
+    expect(page.windows().find(state => state.id === 'ctrl-room')).toMatchObject({
+      x: original?.x, y: original?.y, width: original?.width, height: original?.height,
+    });
+  });
+
+  it('erhält geschlossene Fenster beim Neuverteilen und passt die Anordnung an Filter an', /** Prüft die Reset-Semantik. */() => {
+    const stage = { clientWidth: 1170, clientHeight: 702 } as HTMLElement; // Desktopgröße für deterministische Tests.
+
+    Object.defineProperty(page, 'canvas', { configurable: true, value: new ElementRef(stage) });
+    page.resetLayout();
+    page.closeWindow('phase', new Event('click'));
+    page.shuffleLayout();
+    expect(page.windows().find(state => state.id === 'phase')?.closed).toBe(true);
+    page.setCategory('editorial');
+    expect(page.visibleWindows()).toHaveLength(2);
+    page.resetLayout();
+    expect(page.windows().find(state => state.id === 'phase')?.closed).toBe(false);
   });
 });

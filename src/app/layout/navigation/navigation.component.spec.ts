@@ -88,7 +88,7 @@ describe('NavigationComponent', /** Gruppiert die Verhaltensprüfungen der Layou
     expect(overlay).toHaveBeenCalledOnce();
     expect(fixture.componentInstance.menuOpen()).toBe(false);
     openMenu();
-    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1200 });
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1300 });
     window.dispatchEvent(new Event('resize'));
     expect(fixture.componentInstance.menuOpen()).toBe(false);
     expect(document.documentElement.classList.contains('bp-mobile-menu-open')).toBe(false);

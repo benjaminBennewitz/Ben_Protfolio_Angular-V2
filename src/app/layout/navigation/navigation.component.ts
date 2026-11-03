@@ -113,7 +113,7 @@ export class NavigationComponent {
   /** Stellt beim Wechsel zum Desktop die ursprüngliche Navigation wieder her. */
   @HostListener('window:resize')
   onWindowResize(): void {
-    if (this.menuOpen() && window.innerWidth > 980) {
+    if (this.menuOpen() && window.innerWidth > 1250) {
       this.closeMenu();
     }
   }

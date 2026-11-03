@@ -31,15 +31,12 @@ describe('PortfolioPageComponent', /** Gruppiert die Verhaltensprüfungen der La
   });
   afterEach(/** Entfernt Testkomponenten, Browser-Stubs und ausstehende Timer. */() => { TestBed.resetTestingModule(); });
 
-  it('begrenzt Kartenfortschritte und aktiviert jeweils nur die oberste eingeflogene Karte', /** Begrenzt Kartenfortschritte und aktiviert jeweils nur die oberste eingeflogene Karte. */() => {
-    expect(page.designStudies).toBe(DESIGN_STUDIES);
-    expect(page.activeDesignStudyIndex()).toBe(0);
-    page.designStudiesProgress.set(1);
-    expect(page.activeDesignStudyIndex()).toBe(DESIGN_STUDIES.length - 1);
-    expect(page.designStudyCardProgress(0)).toBe(1);
-    expect(page.designStudyCardProgress(DESIGN_STUDIES.length - 1)).toBe(1);
-    expect(page.isDesignStudyCardInteractive(0)).toBe(false);
-    expect(page.isDesignStudyCardInteractive(DESIGN_STUDIES.length - 1)).toBe(true);
+  it('zeigt drei kuratierte Studien und verweist über stabile Nummern auf das Gesamtarchiv', /** Prüft die unveränderlichen Archivnummern der Portfolio-Vorschau. */() => {
+    expect(page.featuredDesignStudies().map(study => study.id)).toEqual(['raw-form', 'ctrl-room', 'phase']);
+    expect(page.designStudyNumber('raw-form')).toBe('DS/001');
+    expect(page.designStudyNumber('ctrl-room')).toBe('DS/003');
+    expect(page.designStudyNumber('phase')).toBe('DS/009');
+    expect(DESIGN_STUDIES).toHaveLength(9);
   });
 
   it('setzt den Schoko-Zustand nur einmal und schließt das dekorative Terminal', /** Setzt den Schoko-Zustand nur einmal und schließt das dekorative Terminal. */() => {

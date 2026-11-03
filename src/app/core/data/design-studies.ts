@@ -12,6 +12,8 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       href: '/design-studies/brutalism/',
       preview: '/design-studies/brutalism/assets/img/hero.webp',
       tags: ['Brutalism', 'Editorial', 'Motion', 'HTML / CSS / JS'],
+      category: 'editorial',
+      archive: { concept: 'Brutalism / Editorial', subject: 'Festival culture', idea: 'How far can a festival website push visual hierarchy, raw typography and deliberately uncompromising composition?' },
     },
     {
       id: 'whatwesee',
@@ -20,6 +22,8 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       href: '/design-studies/swiss/',
       preview: '/design-studies/swiss/assets/images/hero-landscape.webp',
       tags: ['Swiss Style', 'Photography', 'Editorial', 'HTML / CSS / JS'],
+      category: 'editorial',
+      archive: { concept: 'Swiss Style / Editorial', subject: 'Photography journal', idea: 'Can a rigorous typographic grid make photography feel more expressive rather than restrictive?' },
     },
     {
       id: 'ctrl-room',
@@ -28,6 +32,8 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       href: '/design-studies/ctrl-room/',
       preview: '/design-studies/ctrl-room/assets/preview.webp',
       tags: ['Y2K', 'Chrome / Plastic', 'Web Audio', 'HTML / CSS / JS'],
+      category: 'retro',
+      archive: { concept: 'Y2K / Chrome / Plastic', subject: 'Audiovisual underground culture', idea: 'What happens when the excessive chrome-and-plastic language of the early web becomes a usable cultural platform?' },
     },
     {
       id: 'type-break',
@@ -36,6 +42,8 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       href: '/design-studies/type-break/',
       preview: '/design-studies/type-break/assets/preview.webp',
       tags: ['Kinetic Type', 'Creative Coding', 'Interactive Poster', 'HTML / CSS / JS'],
+      category: 'typography',
+      archive: { concept: 'Kinetic Typography', subject: 'Digital manifesto', idea: 'Can typography itself become the interface and lead an entire experience through movement and rhythm?' },
     },
     {
       id: 'scoop',
@@ -44,6 +52,8 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       href: '/design-studies/scoop/',
       preview: '/design-studies/scoop/assets/preview.webp',
       tags: ['Comic Design', 'SVG Animation', 'Illustrator', 'Interactive Shop', 'HTML / CSS / JS'],
+      category: 'playful',
+      archive: { concept: 'Comic / Pop Illustration', subject: 'Ice cream shop', idea: 'Can an illustrated comic world still support clear product choices and a playful shopping flow?' },
     },
     {
       id: 'fold',
@@ -52,6 +62,8 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       href: '/design-studies/fold/',
       preview: '/design-studies/fold/assets/preview.webp',
       tags: ['3D CSS', 'Scroll Experience', 'Editorial', 'Vibe Coded'],
+      category: 'spatial',
+      archive: { concept: 'CSS 3D / Editorial', subject: 'Perspective experiment', idea: 'How can a simple form, its six sides and the act of scrolling turn layout into a spatial narrative?' },
     },
     {
       id: 'growth',
@@ -60,6 +72,8 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       href: '/design-studies/growth/',
       preview: '/design-studies/growth/assets/preview.webp',
       tags: ['Three.js', 'Procedural Nature', 'Scroll Experience', 'WebGL'],
+      category: 'spatial',
+      archive: { concept: 'Procedural WebGL', subject: 'Living ecosystem', idea: 'Can a procedural natural world invite exploration without sacrificing the structure of a website?' },
     },
     {
       id: 'bentendo',
@@ -68,6 +82,8 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       href: '/design-studies/bentendo/',
       preview: '/design-studies/bentendo/assets/preview.svg',
       tags: ['Three.js', 'Pixel RPG', 'Web Audio', 'Game Design'],
+      category: 'playful',
+      archive: { concept: 'Retro Handheld / Pixel Art', subject: 'Playable browser adventure', idea: 'How convincingly can a fictional handheld merge product presentation, physical interface and an actual playable game?' },
     },
     {
       id: 'phase',
@@ -76,18 +92,20 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       href: '/design-studies/phase/',
       preview: '/design-studies/phase/assets/preview.webp',
       tags: ['Generative Art', 'p5.js', 'Canvas', 'Creative Coding'],
+      category: 'generative',
+      archive: { concept: 'Generative Art / Creative Coding', subject: 'Organic digital creatures', idea: 'How can mathematical rules become a living, expressive visual system rather than a static animation?' },
     },
   ]; // Reihenfolge und öffentliche Ziele der Designstudien.
 
 /** Deutsche Karteninhalte; Marken und technische Eigennamen bleiben erhalten. */
-export const DESIGN_STUDY_TRANSLATIONS_DE: Readonly<Record<string, Pick<DesignStudy, 'subtitle' | 'tags'>>> = {
-  'raw-form': { subtitle: 'Brutalistische Festival-Landingpage', tags: ['Brutalismus', 'Editorial', 'Animation', 'HTML / CSS / JS'] },
-  whatwesee: { subtitle: 'Fotografie-Journal im Schweizer Stil', tags: ['Schweizer Typografie', 'Fotografie', 'Editorial', 'HTML / CSS / JS'] },
-  'ctrl-room': { subtitle: 'Audiovisuelle Kulturplattform im Y2K-Stil', tags: ['Y2K', 'Chrom / Kunststoff', 'Web Audio', 'HTML / CSS / JS'] },
-  'type-break': { subtitle: 'Interaktives typografisches Manifest', tags: ['Kinetische Typografie', 'Kreative Programmierung', 'Interaktives Plakat', 'HTML / CSS / JS'] },
-  scoop: { subtitle: 'Verspielter Eisshop', tags: ['Comic-Design', 'SVG-Animation', 'Illustrator', 'Interaktiver Shop', 'HTML / CSS / JS'] },
-  fold: { subtitle: 'Sechs Seiten. Ein Perspektivexperiment.', tags: ['3D CSS', 'Scroll-Erlebnis', 'Editorial', 'KI-gestützte Entwicklung'] },
-  growth: { subtitle: 'Eine lebendige Welt – 50 Meter voller Entdeckungen', tags: ['Three.js', 'Prozedurale Natur', 'Scroll-Erlebnis', 'WebGL'] },
-  phase: { subtitle: 'Ein lebendiger Mikrokosmos – zwölf generative Wesen', tags: ['Generative Kunst', 'p5.js', 'Canvas', 'Kreative Programmierung'] },
-  bentendo: { subtitle: 'Ein spielbarer Handheld – DUNGEON WANTED', tags: ['Three.js', 'Pixel-Rollenspiel', 'Web Audio', 'Spieldesign'] },
+export const DESIGN_STUDY_TRANSLATIONS_DE: Readonly<Record<string, Pick<DesignStudy, 'subtitle' | 'tags' | 'archive'>>> = {
+  'raw-form': { subtitle: 'Brutalistische Festival-Landingpage', tags: ['Brutalismus', 'Editorial', 'Animation', 'HTML / CSS / JS'], archive: { concept: 'Brutalismus / Editorial', subject: 'Festivalkultur', idea: 'Wie weit darf eine Festivalwebsite visuelle Hierarchie, rohe Typografie und bewusst kompromisslose Komposition ausreizen?' } },
+  whatwesee: { subtitle: 'Fotografie-Journal im Schweizer Stil', tags: ['Schweizer Typografie', 'Fotografie', 'Editorial', 'HTML / CSS / JS'], archive: { concept: 'Schweizer Stil / Editorial', subject: 'Fotografie-Journal', idea: 'Kann ein strenges typografisches Raster Fotografie stärker inszenieren, statt sie einzuengen?' } },
+  'ctrl-room': { subtitle: 'Audiovisuelle Kulturplattform im Y2K-Stil', tags: ['Y2K', 'Chrom / Kunststoff', 'Web Audio', 'HTML / CSS / JS'], archive: { concept: 'Y2K / Chrom / Kunststoff', subject: 'Audiovisuelle Underground-Kultur', idea: 'Was passiert, wenn die überladene Chrom- und Kunststoffästhetik des frühen Webs zur nutzbaren Kulturplattform wird?' } },
+  'type-break': { subtitle: 'Interaktives typografisches Manifest', tags: ['Kinetische Typografie', 'Kreative Programmierung', 'Interaktives Plakat', 'HTML / CSS / JS'], archive: { concept: 'Kinetische Typografie', subject: 'Digitales Manifest', idea: 'Kann Typografie selbst zum Interface werden und ein ganzes Erlebnis durch Bewegung und Rhythmus tragen?' } },
+  scoop: { subtitle: 'Verspielter Eisshop', tags: ['Comic-Design', 'SVG-Animation', 'Illustrator', 'Interaktiver Shop', 'HTML / CSS / JS'], archive: { concept: 'Comic / Pop-Illustration', subject: 'Eisshop', idea: 'Kann eine illustrierte Comicwelt klare Produktentscheidungen und einen spielerischen Einkaufsablauf unterstützen?' } },
+  fold: { subtitle: 'Sechs Seiten. Ein Perspektivexperiment.', tags: ['3D CSS', 'Scroll-Erlebnis', 'Editorial', 'KI-gestützte Entwicklung'], archive: { concept: 'CSS 3D / Editorial', subject: 'Perspektivexperiment', idea: 'Wie werden eine einfache Form, ihre sechs Seiten und das Scrollen zu einer räumlichen Erzählung?' } },
+  growth: { subtitle: 'Eine lebendige Welt – 50 Meter voller Entdeckungen', tags: ['Three.js', 'Prozedurale Natur', 'Scroll-Erlebnis', 'WebGL'], archive: { concept: 'Prozedurales WebGL', subject: 'Lebendiges Ökosystem', idea: 'Kann eine prozedurale Naturwelt zum Erkunden einladen, ohne die Struktur einer Website zu verlieren?' } },
+  phase: { subtitle: 'Ein lebendiger Mikrokosmos – zwölf generative Wesen', tags: ['Generative Kunst', 'p5.js', 'Canvas', 'Kreative Programmierung'], archive: { concept: 'Generative Kunst / Creative Coding', subject: 'Organische digitale Wesen', idea: 'Wie entstehen aus mathematischen Regeln lebendige, ausdrucksstarke visuelle Systeme statt bloßer Animationen?' } },
+  bentendo: { subtitle: 'Ein spielbarer Handheld – DUNGEON WANTED', tags: ['Three.js', 'Pixel-Rollenspiel', 'Web Audio', 'Spieldesign'], archive: { concept: 'Retro-Handheld / Pixel-Art', subject: 'Spielbares Browserabenteuer', idea: 'Wie überzeugend verschmelzen ein fiktiver Handheld, seine Geräteoberfläche und ein tatsächlich spielbares Spiel?' } },
 };

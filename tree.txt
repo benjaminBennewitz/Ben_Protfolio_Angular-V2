@@ -1,10 +1,13 @@
-B2Folio/
+folio/
 ├── .angular/
 │   └── ...
 ├── dist/
 │   └── ...
 ├── node_modules/
 │   └── ...
+├── scripts/
+│   ├── deploy-portfolio-local.cmd
+│   └── deploy-portfolio-server.sh
 ├── src/
 │   ├── app/
 │   │   ├── core/
@@ -116,6 +119,11 @@ B2Folio/
 │   │   │   │   ├── achievements-page.component.scss
 │   │   │   │   ├── achievements-page.component.spec.ts
 │   │   │   │   └── achievements-page.component.ts
+│   │   │   ├── archive-page/
+│   │   │   │   ├── archive-page.component.html
+│   │   │   │   ├── archive-page.component.scss
+│   │   │   │   ├── archive-page.component.spec.ts
+│   │   │   │   └── archive-page.component.ts
 │   │   │   ├── home-entry-page/
 │   │   │   │   ├── home-entry-page.component.html
 │   │   │   │   ├── home-entry-page.component.scss

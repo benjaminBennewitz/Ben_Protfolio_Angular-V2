@@ -2,10 +2,10 @@
 
 /**
  * @file Portfolio-Übersichtsseite.
- * @description Rendert die ausgelagerte Projektübersicht inklusive Schoko-Intro als eigene Portfolio-Route.
+ * @description Rendert die Case Studies, das Schoko-Intro und einen kuratierten Einstieg in das eigenständige Designarchiv.
  */
 
-import { Component, computed, ElementRef, HostListener, inject, signal, ViewChild } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { DESIGN_STUDIES, DESIGN_STUDY_TRANSLATIONS_DE } from '../../core/data/design-studies';
 import { PORTFOLIO_PROJECTS } from '../../core/data/portfolio-projects';
 import { RouterLink } from '@angular/router';
@@ -46,41 +46,12 @@ export class PortfolioPageComponent {
   private readonly seoService = inject(SeoService);                 // SEO-Service für die Meta-Daten der Portfolio-Route.
   private readonly achievementService = inject(AchievementService); // Achievement-Service für versteckte Portfolio-Interaktionen.
   readonly isProjectsDialogVisible = signal<boolean>(true);         // Sichtbarkeit des dekorativen Terminalfensters im Portfolio-Intro.
-  readonly designStudies = DESIGN_STUDIES;                          // Eigenständige visuelle Studien unterhalb der klassischen Case Studies.
-
-  readonly localizedDesignStudies = computed(/** Übersetzt Karteninhalte bei jedem Sprachwechsel. */
-    () => this.languageService.language() === 'de'
-      ? this.designStudies.map(study => ({ ...study, ...DESIGN_STUDY_TRANSLATIONS_DE[study.id] }))
-      : this.designStudies
+  readonly featuredDesignStudies = computed(/** Drei kuratierte Designstudien als kurzer Einstieg ins eigenständige Archiv. */
+    () => DESIGN_STUDIES.filter(study => ['raw-form', 'ctrl-room', 'phase'].includes(study.id))
+      .map(study => this.languageService.language() === 'de'
+        ? { ...study, ...DESIGN_STUDY_TRANSLATIONS_DE[study.id] }
+        : study)
   );
-
-  @ViewChild('designStudiesSection')                                // Referenz auf die Scroll-Strecke der Design-Studies-Bühne.
-  private designStudiesSection?: ElementRef<HTMLElement>;
-
-  readonly designStudiesProgress = signal<number>(0);               // Scrollfortschritt innerhalb der fixierten Design-Studies-Bühne (0–1).
-  readonly activeDesignStudyIndex = computed<number>(               // Die oberste sichtbare Karte erhält bereits beim Einflug die vollständige Klickfläche.
-    /** Die oberste sichtbare Karte erhält bereits beim Einflug die vollständige Klickfläche. */
-    () => {
-      for (let index = this.designStudies.length - 1; index > 0; index--) {
-        if (this.designStudyCardProgress(index) > 0) {
-          return index;
-        }
-      }
-
-      return 0;
-    }
-  );
-
-  /** Mobile zeigt sämtliche Karten untereinander; auf Desktop ist nur die oberste bedienbar. */
-  isDesignStudyCardInteractive(index: number): boolean {
-    if (typeof window !== 'undefined' && window.innerWidth <= 900) {
-      return true;
-    }
-
-    return this.activeDesignStudyIndex() === index;
-  }
-
-  readonly designStudiesScrollHeight = `${100 + Math.max(0, this.designStudies.length - 1) * 120}svh`; // Zusätzlicher Scrollweg: pro weiterer Studie entsteht eine eigene Einflugstrecke.
   readonly activePortfolioChocolateImage = signal<PortfolioChocolateKey>('default');                   // Aktuell sichtbarer Zustand des Schoko-Bildes im Portfolio-Intro.
   readonly portfolioChocolateEggs: readonly PortfolioChocolateEgg[] = [                                // Endpositionen und Timings für die fallenden Schoko-Eier.
     { left: '-6%', bottom: '-6%', rotate: '-26deg', startRotate: '-58deg', scale: '1.18', zIndex: 4, delayMs: 0, durationMs: 820 },
@@ -154,136 +125,11 @@ export class PortfolioPageComponent {
     );
   }
 
-  private designStudiesScrollFrame = 0; // RAF-ID für einen ruhigen, scroll-gekoppelten Design-Studies-Stack.
+  /** Ermittelt die stabile Nummer einer ausgewählten Studie im Gesamtarchiv. */
+  designStudyNumber(id: string): string {
+    const index = DESIGN_STUDIES.findIndex(study => study.id === id); // Originalposition im Designarchiv.
 
-  /** Synchronisiert den Scrollfortschritt der eingerasteten Design-Studies-Bühne. */
-  @HostListener('window:scroll')
-  @HostListener('window:resize')
-  queueDesignStudiesProgressSync(): void {
-    if (typeof window === 'undefined' || this.designStudiesScrollFrame !== 0) {
-      return;
-    }
-
-    this.designStudiesScrollFrame = window.requestAnimationFrame(/** Synchronisiert den Scrollfortschritt der eingerasteten Design-Studies-Bühne. */() => {
-      this.designStudiesScrollFrame = 0;
-      this.syncDesignStudiesProgress();
-    });
-  }
-
-  /** Berechnet den Fortschritt erst ab dem Moment, in dem die Bühne im Viewport eingerastet ist. */
-  private syncDesignStudiesProgress(): void {
-
-    const section = this.designStudiesSection?.nativeElement; // Gerenderte Scroll-Strecke der Designstudien.
-
-    if (!section || typeof window === 'undefined') {
-      return;
-    }
-
-    const rect = section.getBoundingClientRect();                          // Gemessene Grenzen des aktuellen Elements.
-    const scrollDistance = Math.max(1, rect.height - window.innerHeight);  // Verfügbare Scroll-Strecke der fixierten Bühne.
-    const progress = Math.min(1, Math.max(0, -rect.top / scrollDistance)); // Normalisierter Fortschritt des aktuellen Ablaufs.
-
-    this.designStudiesProgress.set(progress);
-  }
-
-  /** Liefert den individuellen Aufklebe-Fortschritt einer Study-Karte. */
-  designStudyCardProgress(index: number): number {
-    if (index === 0) {
-      return 1;
-    }
-
-    const incomingCards = Math.max(1, this.designStudies.length - 1);                       // Anzahl der nacheinander einfliegenden Karten.
-    const segment = 1 / incomingCards;                                                      // Länge eines Kartensegments innerhalb der Scroll-Strecke.
-    const segmentStart = (index - 1) * segment;                                             // Startpunkt des aktuellen Kartensegments.
-
-    // Die erste Karte bleibt nach dem Einrasten bewusst allein sichtbar.
-    // Erst zusätzlicher Scrollweg startet den Sticker-Impact; danach bleibt
-    // erneut Ruhe, damit der fertige Stack betrachtet werden kann.
-    const start = segmentStart + segment * 0.32;                                            // Startwert der Interpolation.
-    const end = segmentStart + segment * 0.84;                                              // Zielwert der Interpolation.
-    const progress = (this.designStudiesProgress() - start) / Math.max(0.001, end - start); // Normalisierter Fortschritt des aktuellen Ablaufs.
-
-    return Math.min(1, Math.max(0, progress));
-  }
-
-  /** Berechnet einen Sticker-Impact: aus der Tiefe, kurzer Schlag, dann Settle. */
-  designStudyTransform(index: number): string {
-    if (index === 0) {
-      return 'translate3d(0, 0, 0) rotate(0deg) scale(1)';
-    }
-
-    const progress = this.designStudyCardProgress(index); // Normalisierter Fortschritt des aktuellen Ablaufs.
-    const direction = index % 2 === 1 ? 1 : -1;           // Bewegungsrichtung des aktuellen Wechsels.
-
-    let x: number;                                        // Horizontale Position oder berechneter Versatz.
-    let y: number;                                        // Vertikale Position oder berechneter Versatz.
-    let z: number;                                        // Tiefenposition der Karte in Pixeln.
-    let rotation: number;                                 // Berechneter Drehwinkel der Karte.
-    let scale: number;                                    // Skalierungsfaktor der aktuellen Karte.
-
-    if (progress < 0.72) {
-
-      const phase = this.easeOutCubic(progress / 0.72); // Aktuelle Phase des gestaffelten Karteneinflugs.
-
-      x = this.lerp(direction * 4.6, direction * 0.45, phase);
-      y = this.lerp(-4.8, 0.7, phase);
-      z = this.lerp(320, 0, phase);
-      rotation = this.lerp(direction * 5.5, direction * -1.8, phase);
-      scale = this.lerp(1.58, 0.955, phase);
-    } else if (progress < 0.9) {
-
-      const phase = this.easeOutCubic((progress - 0.72) / 0.18); // Aktuelle Phase des gestaffelten Karteneinflugs.
-
-      x = this.lerp(direction * 0.45, direction * -0.14, phase);
-      y = this.lerp(0.7, -0.12, phase);
-      z = 0;
-      rotation = this.lerp(direction * -1.8, direction * 0.65, phase);
-      scale = this.lerp(0.955, 1.035, phase);
-    } else {
-
-      const phase = this.easeOutCubic((progress - 0.9) / 0.1); // Aktuelle Phase des gestaffelten Karteneinflugs.
-
-      x = this.lerp(direction * -0.14, 0, phase);
-      y = this.lerp(-0.12, 0, phase);
-      z = 0;
-      rotation = this.lerp(direction * 0.65, 0, phase);
-      scale = this.lerp(1.035, 1, phase);
-    }
-
-    return `translate3d(${x.toFixed(3)}vw, ${y.toFixed(3)}vh, ${z.toFixed(1)}px) rotate(${rotation.toFixed(3)}deg) scale(${scale.toFixed(4)})`;
-  }
-
-  /** Tiefenunschärfe für den kurzen Anflug aus dem Vordergrund. */
-  designStudyFilter(index: number): string {
-    if (index === 0) {
-      return 'none';
-    }
-
-    const progress = this.designStudyCardProgress(index);               // Normalisierter Fortschritt des aktuellen Ablaufs.
-    const blur = Math.max(0, 5.5 * (1 - Math.min(1, progress / 0.68))); // Berechnete Unschärfe der Karte in Pixeln.
-
-    return `blur(${blur.toFixed(2)}px)`;
-  }
-
-  /** Blendet die Karte erst kurz vor ihrem sichtbaren Anflug ein. */
-  designStudyOpacity(index: number): number {
-    if (index === 0) {
-      return 1;
-    }
-
-    const progress = this.designStudyCardProgress(index); // Normalisierter Fortschritt des aktuellen Ablaufs.
-
-    return Math.min(1, Math.max(0, progress / 0.12));
-  }
-
-  /** Interpoliert linear zwischen Start- und Zielwert. */
-  private lerp(from: number, to: number, progress: number): number {
-    return from + (to - from) * progress;
-  }
-
-  /** Bremst einen auf null bis eins begrenzten Fortschritt kubisch ab. */
-  private easeOutCubic(progress: number): number {
-    return 1 - Math.pow(1 - Math.min(1, Math.max(0, progress)), 3);
+    return `DS/${String(index + 1).padStart(3, '0')}`;
   }
 
   /** Wechselt im Portfolio-Einstieg auf das vorbereitete Schoko-Folgeportrait. */

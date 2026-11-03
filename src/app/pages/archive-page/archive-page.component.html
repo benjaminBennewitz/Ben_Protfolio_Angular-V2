@@ -1,0 +1,219 @@
+<!-- src/app/pages/archive-page/archive-page.component.html -->
+<main class="archive-page">
+  <div class="archive-page__frame">
+    <header class="archive-page__intro">
+      <div class="archive-page__masthead">
+        <a class="archive-page__back" routerLink="/portfolio">
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+          {{ texts().back }}
+        </a>
+        <span class="archive-page__volume" aria-hidden="true">INDEX / {{ studies().length.toString().padStart(2, '0') }} — 2026</span>
+      </div>
+      <div class="archive-page__heading">
+        <div>
+          <p class="archive-page__eyebrow">{{ texts().eyebrow }}</p>
+          <h1>{{ texts().title }}</h1>
+        </div>
+        <p class="archive-page__lead">{{ texts().intro }}</p>
+      </div>
+      <div class="archive-page__ticker" aria-hidden="true">
+        <span>STYLE × SUBJECT = EXPERIMENT</span>
+        <span>DESIGN / CODE / REPEAT</span>
+        <span>{{ studies().length.toString().padStart(2, '0') }} ENTRIES IN CATALOGUE</span>
+        <span>EST. 2026 — ONGOING</span>
+      </div>
+    </header>
+
+    <div class="archive-page__workspace">
+      <aside class="archive-page__sidebar" [attr.aria-label]="texts().active">
+        <section class="archive-page__filters" [attr.aria-label]="texts().filterTitle">
+          <div class="archive-page__section-head">
+            <span class="archive-page__section-code">01 / SEARCH_INDEX</span>
+            <span class="archive-page__counter">{{ filteredStudies().length.toString().padStart(2, '0') }} / {{ studies().length.toString().padStart(2, '0') }}</span>
+          </div>
+          <label class="archive-page__search-label" for="archive-search">{{ texts().searchLabel }}</label>
+          <div class="archive-page__search-field">
+            <span class="material-symbols-outlined" aria-hidden="true">search</span>
+            <input id="archive-search" #searchInput type="search" [value]="searchQuery()"
+              [placeholder]="texts().searchPlaceholder" autocomplete="off"
+              (input)="setSearch(searchInput.value)" />
+          </div>
+          <div class="archive-page__filter-header">
+            <span>{{ texts().categoryLabel }}</span>
+            <span class="material-symbols-outlined" aria-hidden="true">filter_list</span>
+          </div>
+          <div class="archive-page__categories" role="group" [attr.aria-label]="texts().categoryLabel">
+            @for (category of categories; track category.id) {
+            <button type="button" class="archive-page__category"
+              [class.is-active]="selectedCategory() === category.id"
+              [attr.aria-pressed]="selectedCategory() === category.id"
+              (click)="setCategory(category.id)">
+              <span>{{ categoryLabel(category.id) }}</span>
+              <span>{{ categoryCount(category.id).toString().padStart(2, '0') }}</span>
+            </button>
+            }
+          </div>
+        </section>
+
+        <section class="archive-page__catalog" [attr.aria-label]="texts().catalogTitle">
+          <div class="archive-page__section-head">
+            <span class="archive-page__section-code">02 / {{ texts().catalogTitle }}</span>
+            <span class="archive-page__counter" aria-live="polite">{{ texts().results }}: {{ filteredStudies().length }}</span>
+          </div>
+          @if (filteredStudies().length) {
+          <p class="archive-page__catalog-hint">{{ texts().catalogHint }}</p>
+          <div class="archive-page__catalog-list">
+            @for (study of filteredStudies(); track study.id) {
+            <button class="archive-page__catalog-entry" type="button"
+              [class.is-active]="activeStudy()?.id === study.id"
+              [attr.aria-pressed]="activeStudy()?.id === study.id"
+              (click)="focusStudy(study.id)">
+              <span class="archive-page__catalog-number">{{ studyNumber(study.id) }}</span>
+              <span class="archive-page__catalog-name">{{ study.name }}</span>
+              <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
+            </button>
+            }
+          </div>
+          } @else {
+          <div class="archive-page__no-results" role="status">
+            <span class="material-symbols-outlined" aria-hidden="true">search_off</span>
+            <p>{{ texts().empty }}</p>
+            <button type="button" (click)="clearFilters()">{{ texts().clear }}</button>
+          </div>
+          }
+        </section>
+
+        <section class="archive-page__inspector" [attr.aria-label]="texts().active">
+          <div class="archive-page__section-head">
+            <span class="archive-page__section-code">03 / {{ texts().active }}</span>
+            <span class="archive-page__live"><span aria-hidden="true"></span> {{ texts().featured }}</span>
+          </div>
+          @if (activeStudy(); as study) {
+          <span class="archive-page__selected-index">{{ activeNumber() }}</span>
+          <h2>{{ study.name }}</h2>
+          <p class="archive-page__subtitle">{{ study.subtitle }}</p>
+          <dl class="archive-page__details">
+            <div>
+              <dt>{{ texts().concept }}</dt>
+              <dd>{{ study.archive.concept }}</dd>
+            </div>
+            <div>
+              <dt>{{ texts().subject }}</dt>
+              <dd>{{ study.archive.subject }}</dd>
+            </div>
+            <div class="archive-page__idea">
+              <dt>{{ texts().idea }}</dt>
+              <dd>{{ study.archive.idea }}</dd>
+            </div>
+          </dl>
+          <div class="archive-page__tech">
+            <span>{{ texts().tech }}</span>
+            <ul>
+              @for (tag of study.tags; track tag) {
+              <li>{{ tag }}</li>
+              }
+            </ul>
+          </div>
+          <a class="archive-page__open" [href]="study.href" target="_blank" rel="noopener noreferrer"
+            [attr.aria-label]="texts().open + ': ' + study.name + '. ' + texts().newTab">
+            {{ texts().open }}
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+          </a>
+          }
+        </section>
+      </aside>
+
+      <section class="archive-page__desk" [attr.aria-label]="texts().canvasTitle">
+        <div class="archive-page__toolbar">
+          <div class="archive-page__desk-title">
+            <span class="archive-page__desk-status" aria-hidden="true"></span>
+            <span>{{ texts().canvasTitle }}</span>
+            <span class="archive-page__desk-counter">{{ visibleWindows().length }} / {{ studies().length }}</span>
+          </div>
+          <div class="archive-page__tools" role="group" [attr.aria-label]="texts().controls">
+            <button type="button" (click)="shuffleLayout()" [attr.aria-label]="texts().scatter" [title]="texts().scatter">
+              <span class="material-symbols-outlined" aria-hidden="true">shuffle</span><span>{{ texts().scatter }}</span>
+            </button>
+            <button type="button" (click)="tileLayout()" [attr.aria-label]="texts().tile" [title]="texts().tile">
+              <span class="material-symbols-outlined" aria-hidden="true">grid_view</span><span>{{ texts().tile }}</span>
+            </button>
+            <button type="button" (click)="resetLayout()" [attr.aria-label]="texts().reset" [title]="texts().reset">
+              <span class="material-symbols-outlined" aria-hidden="true">restart_alt</span><span>{{ texts().reset }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div #archiveCanvas class="archive-page__canvas" [class.is-tiled]="isTiled()">
+          <div class="archive-page__canvas-grid" aria-hidden="true"></div>
+          <div class="archive-page__canvas-label" aria-hidden="true">B² / ARTEFACT WORKSPACE_</div>
+
+          @for (item of visibleWindows(); track item.study.id) {
+          <article class="archive-window" [class.is-active]="activeStudy()?.id === item.study.id"
+            [class.is-maximized]="item.state.maximized"
+            [style.left.px]="item.state.x" [style.top.px]="item.state.y"
+            [style.width.px]="item.state.width" [style.height.px]="item.state.height"
+            [style.z-index]="item.state.zIndex"
+            [attr.aria-label]="item.number + ': ' + item.study.name"
+            (pointerdown)="focusStudy(item.study.id)">
+            <div class="archive-window__bar" tabindex="0"
+              [attr.aria-label]="texts().drag + ': ' + item.study.name"
+              (pointerdown)="startInteraction(item.study.id, 'drag', $event)"
+              (keydown)="onWindowKeydown(item.study.id, 'drag', $event)">
+              <div class="archive-window__identity">
+                <span class="archive-window__indicator" aria-hidden="true"></span>
+                <span>{{ item.number }}</span>
+                <span class="archive-window__name">{{ item.study.name }}</span>
+              </div>
+              <div class="archive-window__actions">
+                <button type="button" [attr.aria-label]="(item.state.maximized ? texts().restore : texts().maximize) + ': ' + item.study.name"
+                  [title]="item.state.maximized ? texts().restore : texts().maximize"
+                  (click)="toggleMaximize(item.study.id, $event)">
+                  <span class="material-symbols-outlined" aria-hidden="true">{{ item.state.maximized ? 'filter_none' : 'crop_square' }}</span>
+                </button>
+                <button type="button" [attr.aria-label]="texts().minimized + ': ' + item.study.name"
+                  [title]="texts().minimized" (click)="closeWindow(item.study.id, $event)">
+                  <span class="material-symbols-outlined" aria-hidden="true">close</span>
+                </button>
+              </div>
+            </div>
+            <button class="archive-window__preview" type="button" (click)="focusStudy(item.study.id)"
+              [attr.aria-label]="texts().active + ': ' + item.study.name">
+              <img [src]="item.study.preview" [alt]="item.study.name + ' — ' + item.study.subtitle"
+                width="800" height="600" loading="lazy" decoding="async" draggable="false" />
+              <span class="archive-window__preview-overlay" aria-hidden="true">
+                <span>{{ item.study.archive.concept }}</span><span class="material-symbols-outlined">north_east</span>
+              </span>
+            </button>
+            <div class="archive-window__foot">
+              <span>{{ categoryLabel(item.study.category) }}</span>
+              <a [href]="item.study.href" target="_blank" rel="noopener noreferrer"
+                [attr.aria-label]="texts().open + ': ' + item.study.name + '. ' + texts().newTab">
+                {{ texts().open }} <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+            @if (!item.state.maximized) {
+            <div class="archive-window__resize" role="button" tabindex="0"
+              [attr.aria-label]="texts().resize + ': ' + item.study.name"
+              (pointerdown)="startInteraction(item.study.id, 'resize', $event)"
+              (keydown)="onWindowKeydown(item.study.id, 'resize', $event)">
+              <span class="material-symbols-outlined" aria-hidden="true">south_east</span>
+            </div>
+            }
+          </article>
+          }
+          @if (visibleWindows().length === 0 && filteredStudies().length > 0) {
+          <div class="archive-page__canvas-empty" role="status">{{ texts().emptyCanvas }}</div>
+          }
+          @if (filteredStudies().length === 0) {
+          <div class="archive-page__canvas-empty" role="status">{{ texts().empty }}</div>
+          }
+        </div>
+        <div class="archive-page__statusbar">
+          <span class="archive-page__desktop-hint">{{ texts().canvasHint }}</span>
+          <span class="archive-page__mobile-hint">{{ texts().mobileHint }}</span>
+          <span>DESIGN.CODE.REPEAT / <span aria-hidden="true">●</span> SYSTEM ONLINE</span>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>

@@ -74,7 +74,8 @@ The goal is a website that remains technically controlled while making a strong 
 | Route / Area | Description |
 | --- | --- |
 | **`/`** | Homepage with hero, about section, experience, skills, process, projects, FAQ, and contact form |
-| **`/portfolio`** | Overview of the selected case studies |
+| **`/portfolio`** | Selected case studies and a short curated preview of the design archive |
+| **`/archive`** | Interactive design archive: filterable study catalogue, inspector, and movable/resizable desktop windows |
 | **`/projects/:slug`** | Dynamic project detail pages with individual visual direction |
 | **`/design-studies/:study/`** | Nine independent interactive studies, served as static pages alongside Angular |
 | **`/snippets`** | Short technical examples with isolated demo assets |
@@ -101,7 +102,7 @@ The goal is a website that remains technically controlled while making a strong 
 > [!NOTE]
 > The standalone design studies are non-commercial experiments in graphic design and web development. Some begin with a visual language or illustrated identity; others begin with a theme or a technical interaction. Their READMEs explain that intent before the implementation details. They are not production products or commercial services. Accessibility and production readiness are not their primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed for these studies.
 
-Nine independent experiences explore distinct visual directions and interaction models. Cards and quicklinks live on `/portfolio#design-studies`. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
+Nine independent experiences explore distinct visual directions and interaction models. The complete catalogue lives on `/archive`; `/portfolio#design-studies` shows three curated previews and links to it. The archive combines keyword search, visual categories, a bilingual concept/subject/idea inspector and a freely arranged window canvas. On desktop, windows can be dragged and resized (including keyboard arrow controls), focused, closed/reopened, shuffled or tiled; on smaller devices the same catalogue becomes a responsive card gallery. Study assets and independent study source code remain unchanged. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
 
 ### RAW/FORM
 

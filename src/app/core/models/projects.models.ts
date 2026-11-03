@@ -25,6 +25,7 @@ export interface ProjectsContent {
   readonly designStudiesEyebrow: string;   // Kleine Beschriftung der eigenständigen visuellen Designstudien.
   readonly designStudiesTitle: string;     // Überschrift der Design-Study-Section.
   readonly designStudiesText: string;      // Einordnung der Designstudien als visuelle Experimente außerhalb der Case Studies.
+  readonly designStudiesArchiveLabel: string; // Verweis auf die separate Archivseite.
   readonly designStudiesOpenLabel: string; // Beschriftung des Links zur eigenständigen Designstudie.
   readonly designStudiesAriaLabel: string; // Zugängliche Beschriftung der Design-Study-Liste.
   readonly overviewLabel: string;          // Beschriftung der Projektübersicht.
@@ -217,6 +218,16 @@ export interface PortfolioProject {
   readonly requirements: readonly string[];                        // Anforderungen an das Projekt.
 }
 
+/** Inhaltliche Kategorie einer Designstudie für die Archivfilter. */
+export type DesignStudyCategory = 'editorial' | 'retro' | 'typography' | 'playful' | 'spatial' | 'generative';
+
+/** Gestalterische Einordnung einer Designstudie im Archiv. */
+export interface DesignStudyArchiveInfo {
+  readonly concept: string; // Untersuchte Designrichtung.
+  readonly subject: string; // Thema, auf das die Designrichtung angewendet wird.
+  readonly idea: string;    // Leitgedanke hinter der Kombination.
+}
+
 /** Konfiguration einer eigenständigen visuellen Designstudie. */
 export interface DesignStudy {
   readonly id: string;              // Stabile Kennung der Studie.
@@ -224,5 +235,7 @@ export interface DesignStudy {
   readonly subtitle: string;        // Kurze visuelle Einordnung.
   readonly href: string;            // Öffentlicher Pfad der statischen Microsite.
   readonly preview: string;         // Vorschaubild innerhalb der Portfolio-Section.
-  readonly tags: readonly string[]; // Kompakte Gestaltungsschwerpunkte.
+  readonly tags: readonly string[];  // Kompakte Gestaltungsschwerpunkte.
+  readonly category: DesignStudyCategory; // Primäre Kategorie für die Archivfilter.
+  readonly archive: DesignStudyArchiveInfo; // Designkonzept, Thema und Leitgedanke.
 }

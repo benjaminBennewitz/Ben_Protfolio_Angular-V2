@@ -18,6 +18,7 @@ export interface NavigationContent {
   readonly skills: string;             // Navigations- oder Bedienlabel für „Skills“.
   readonly projects: string;           // Navigations- oder Bedienlabel für „Projekte“.
   readonly portfolio: string;          // Navigationslabel für die ausgelagerte Portfolio-Route.
+  readonly archive: string;           // Navigationslabel des Designarchivs.
   readonly snippets: string;           // Navigations- oder Bedienlabel für „Code-Snippets“.
   readonly process: string;            // Navigations- oder Bedienlabel für „Arbeitsprozess“.
   readonly faq: string;                // Navigations- oder Bedienlabel für „FAQ“.

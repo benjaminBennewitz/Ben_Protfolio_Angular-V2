@@ -21,6 +21,11 @@ export const routes: Routes = [
     title: 'Case Studies | Design. Code. Repeat.',
   },
   {
+    path: 'archive',
+    loadComponent: () => import('./pages/archive-page/archive-page.component').then((component) => component.ArchivePageComponent),
+    title: 'Design Archive | Design. Code. Repeat.',
+  },
+  {
     path: 'projects/:slug',
     loadComponent: () => import('./pages/project-detail-page/project-detail-page.component').then((component) => component.ProjectDetailPageComponent),
     title: 'Projekt | Benjamin Bennewitz Portfolio',

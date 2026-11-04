@@ -1303,8 +1303,8 @@ figure {
   gap: 3px;
 }
 
-/* Die Balken folgen der Story-Anomalie statt einer permanenten Zufallsanimation.
-   Ruhiger Kamerastart, wachsender Vorbote auf CAM 02 und steigende Aktivität danach. */
+/* Die Balken zeigen ausschließlich die momentane Präsenz in der aktiven Kamera.
+   Nach einem Ereignis oder Kameraschnitt kehren sie in den Ruhezustand zurück. */
 .readout-bars i {
   width: 3px;
   height: 8%;
@@ -1313,12 +1313,11 @@ figure {
   transition: height 320ms ease-out, background-color 480ms ease;
 }
 
-[data-story='message-found'] .readout-bars i:nth-child(4n) {
+[data-anomaly='active'] .readout-bars i:nth-child(4n) {
   background: #b5b88e;
 }
 
-[data-story='morse-active'] .readout-bars i:nth-child(4n),
-[data-story='windows-event'] .readout-bars i:nth-child(3n) {
+[data-anomaly='high'] .readout-bars i:nth-child(3n) {
   background: var(--signal);
 }
 

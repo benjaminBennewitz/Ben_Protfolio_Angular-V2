@@ -55,7 +55,7 @@ const TRANSLATIONS = Object.freeze({
     sceneVideoAria: 'Küstenkamera mit felsigem Ufer, Brandung und Signalstörungen',
     examineBottle: 'Flaschenpost untersuchen',
     cameraBlocked: 'Signal unterbrochen. Kamera 01 bleibt aktiv.',
-    anomalyMeter: 'Anomalieaktivität',
+    anomalyMeter: 'Anomalieaktivität in der aktuellen Kamera',
     evidenceLog: 'AKTE / 01',
     evidenceLogAria: 'Gesicherte Flaschenpost erneut lesen',
     messageMeta: 'FUNDSTÜCK / 001',
@@ -101,7 +101,7 @@ const TRANSLATIONS = Object.freeze({
     sceneVideoAria: 'Coastal camera with a rocky shoreline, rolling waves and signal interference',
     examineBottle: 'Inspect the message bottle',
     cameraBlocked: 'Signal lost. Camera 01 remains active.',
-    anomalyMeter: 'Anomaly activity',
+    anomalyMeter: 'Anomaly activity in the current camera',
     evidenceLog: 'FILE / 01',
     evidenceLogAria: 'Read the recovered message again',
     messageMeta: 'RECOVERED OBJECT / 001',
@@ -152,6 +152,9 @@ const scene = {
   anomaly: {
     activeMs: 0,
     displayedLevel: -1,
+    appearanceAtMs: 0,
+    morseStartedAtMs: 0,
+    windowsStartedAtMs: 0,
   },
   story: {
     stage: /** @type {StoryStage} */ ('routine'),
@@ -236,31 +239,58 @@ function syncSignalVisuals() {
     : 'normal';
 }
 
-/** Bestimmt die Anomalieintensität ausschließlich aus dem Spielfortschritt.
- * In der Routine bleibt CAM 01 ruhig. CAM 02 wird bis zur ersten Erscheinung
- * langsam unruhiger. Spätere Phasen halten erreichte Intensitätsstufen. */
+/** Glättet einen Wert zwischen 0 und 1, ohne abrupte Intensitätssprünge. */
+function smoothStep(value) {
+  const progress = Math.max(0, Math.min(1, value));
+  return progress * progress * (3 - 2 * progress);
+}
+
+/** Reagiert ausschließlich auf Präsenz im aktuell sichtbaren Kamerabild.
+ * Die erreichte Story-Stufe ist nur Voraussetzung für bestimmte Ereignisse,
+ * niemals eine dauerhaft erhöhte Anzeige des Spielfortschritts. */
 function getAnomalyProfile() {
-  const stage = scene.story.stage;
-  if (stage === 'routine') {
-    if (scene.source === 'artwork') {
-      return { level: 0, amplitude: 0, speed: 0 };
+  const { stage, elapsedMs, bottleVisible, bottleCollected } = scene.story;
+
+  if (scene.source === 'video') {
+    if (!bottleVisible) {
+      const approach = smoothStep(elapsedMs / BOTTLE_APPEAR_AFTER_MS);
+      return {
+        level: 0.04 + approach * 0.55,
+        amplitude: 0.015 + approach * 0.1,
+        speed: 0.4 + approach * 1.4,
+      };
     }
 
-    const progress = Math.min(scene.story.elapsedMs / BOTTLE_APPEAR_AFTER_MS, 1);
+    if (!bottleCollected) {
+      const ageMs = Math.max(0, scene.anomaly.activeMs - scene.anomaly.appearanceAtMs);
+      const apparition = Math.exp(-ageMs / 3200);
+      return {
+        level: 0.19 + 0.65 * apparition,
+        amplitude: 0.04 + 0.13 * apparition,
+        speed: 0.75 + apparition * 2.25,
+      };
+    }
+
+    return { level: 0, amplitude: 0, speed: 0 };
+  }
+
+  if (stage === 'morse-active' && scene.channel === 'interference') {
+    const time = (scene.anomaly.activeMs - scene.anomaly.morseStartedAtMs) / 1000;
+    const pulse = (1 + Math.sin(time * 2.8)) / 2;
+    return { level: 0.47 + pulse * 0.26, amplitude: 0.15, speed: 2.4 };
+  }
+
+  if (stage === 'windows-event') {
+    const ageMs = Math.max(0, scene.anomaly.activeMs - scene.anomaly.windowsStartedAtMs);
+    const burst = Math.exp(-ageMs / 5500);
     return {
-      level: 0.07 + progress * 0.33,
-      amplitude: 0.012 + progress * 0.095,
-      speed: 0.52 + progress * 1.18,
+      level: 0.37 + 0.53 * burst,
+      amplitude: 0.09 + 0.11 * burst,
+      speed: 1.75 + burst * 1.1,
     };
   }
 
-  if (stage === 'message-found') {
-    return { level: 0.48, amplitude: 0.11, speed: 1.35 };
-  }
-  if (stage === 'morse-active') {
-    return { level: 0.69, amplitude: 0.17, speed: 2.15 };
-  }
-  return { level: 0.87, amplitude: 0.22, speed: 2.9 };
+  return { level: 0, amplitude: 0, speed: 0 };
 }
 
 /** Zeichnet die Monitorbalken als ruhige oder leicht fluktuierende Anomalieanzeige.
@@ -283,6 +313,7 @@ function updateAnomalyMeter() {
   const percent = Math.round(level * 100);
   if (scene.anomaly.displayedLevel !== percent) {
     anomalyMeter.setAttribute('aria-valuenow', String(percent));
+    root.dataset.anomaly = level >= 0.7 ? 'high' : (level >= 0.28 ? 'active' : 'quiet');
     scene.anomaly.displayedLevel = percent;
   }
 }
@@ -295,6 +326,13 @@ function progressStory() {
     scene.story.stage = 'morse-active';
   } else if (previous === 'morse-active' && scene.source === 'artwork' && scene.channel === 'unknown') {
     scene.story.stage = 'windows-event';
+  }
+  if (previous !== scene.story.stage) {
+    if (scene.story.stage === 'morse-active') {
+      scene.anomaly.morseStartedAtMs = scene.anomaly.activeMs;
+    } else if (scene.story.stage === 'windows-event') {
+      scene.anomaly.windowsStartedAtMs = scene.anomaly.activeMs;
+    }
   }
   syncSignalVisuals();
   updateAnomalyMeter();
@@ -487,6 +525,7 @@ function revealBottle() {
   if (scene.story.bottleVisible) return;
 
   scene.story.bottleVisible = true;
+  scene.anomaly.appearanceAtMs = scene.anomaly.activeMs;
   bottleArtifact.hidden = false;
   syncStoryState();
   maybeStartBottleReveal();
@@ -549,9 +588,8 @@ function collectBottle() {
   }));
 }
 
-/** Taktet die Story-Uhr und Anomalieanzeige sparsam mit 200 ms.
- * Die Flasche wird einmalig nach 15 Sekunden aktivem Spiel freigegeben; die
- * Anomalieanzeige bleibt auch danach an die Story gebunden in Bewegung. */
+/** Taktet die Story-Uhr und die sichtbare Anomalie sparsam mit 200 ms.
+ * Jede Kamera zeigt nur ihre gegenwärtige Aktivität und keine Fortschrittsstufe. */
 function runStoryClock() {
   const now = performance.now();
   if (scene.story.lastTick && !scene.paused && !document.hidden) {

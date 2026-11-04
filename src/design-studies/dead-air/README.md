@@ -228,3 +228,14 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 - Nach dem Einsammeln der Flaschenpost steigt die Aktivität mit den Stufen **message-found → morse-active → windows-event** und bleibt als Fortschrittssignal erhalten – unabhängig von der gerade eingestellten Frequenz.
 - Der Anomalie-Indikator ist von der Empfangsqualität (`RX`) getrennt. Er wird bei PAUSE oder einem inaktiven Tab eingefroren und besitzt eine übersetzte, nicht permanent vorlesende Meter-Beschreibung für Assistenztechnologien.
 - Kein neues Framework, keine Assets, kein zusätzlicher Animationsloop: Die Anzeige verwendet den bereits vorhandenen Story-Takt.
+
+
+## Patch 30 – Screen-local anomaly presence
+
+- Die Monitorbalken zeigen nicht mehr den Spielfortschritt, sondern ausschließlich aktuelle Anomalien in der ausgewählten Kamera.
+- CAM 01 startet und bleibt außerhalb aktivierter Signale vollständig ruhig.
+- CAM 02 baut vor der Flaschenpost über 15 Sekunden langsam Aktivität auf, erreicht bei der Erscheinung einen Peak und fällt danach wieder ab. Nach dem Einsammeln bleibt die Küste ruhig.
+- Während des Morsecodes zeigt CAM 01 Aktivität nur auf 91.3 MHz; beim Verlassen der Frequenz beruhigt sich die Anzeige sofort.
+- Das Fensterereignis auf CAM 01 / 103.7 MHz verursacht einen starken Ausschlag, der langsam abklingt. Bei CAM 02 bleibt sie null; auf CAM 01 zeigt sie das weiterhin sichtbare Fensterflackern an, auch wenn die Frequenz gewechselt wird.
+- Die visuelle Farbcodierung richtet sich ebenfalls nach der momentanen Intensität und nicht nach der erreichten Story-Stufe.
+- Phase 03 (neuer Fund nach der Fensteranomalie) ist noch nicht implementiert und muss erzählerisch/visuell ausgearbeitet werden.

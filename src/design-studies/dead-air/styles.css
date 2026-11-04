@@ -1358,8 +1358,7 @@ figure {
   transition: none;
 }
 
-/* Empfangsarchiv für die erste Tonaufzeichnung. Ohne Fake-Audio-Steuerung,
-   solange noch keine echte Sprecherdatei vorliegt. */
+/* Empfangsarchiv mit echter Funkaufnahme, Player und DE/EN-Mitschrift. */
 .transmission-dialog {
   width: min(540px, calc(100% - 32px));
   padding: 22px;
@@ -1400,6 +1399,18 @@ figure {
   -webkit-mask-image: linear-gradient(180deg, transparent 2%, #000 47%, transparent 98%);
   mask-image: linear-gradient(180deg, transparent 2%, #000 47%, transparent 98%);
   opacity: .6;
+}
+
+/* Nativer Player: echte Funkaufnahme mit direkter Wiederholung aus der Akte. */
+.transmission-dialog__audio {
+  display: block;
+  width: 100%;
+  min-height: 42px;
+  margin: 0 0 20px;
+  border: 1px solid #395350;
+  border-radius: 4px;
+  background: #121c1e;
+  color-scheme: dark;
 }
 
 .transmission-dialog__content h2 {

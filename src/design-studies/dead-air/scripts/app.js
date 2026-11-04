@@ -74,15 +74,21 @@ const TRANSLATIONS = Object.freeze({
     transmissionDescription: 'Eine fremde Übertragung wurde auf 96.4 MHz empfangen.',
     transmissionButton: 'AUDIO / 001',
     transmissionButtonAria: 'Empfangene Tonübertragung 001 untersuchen',
-    transmissionMeta: 'NCBS / UNBEKANNTER EMPFANG',
-    transmissionTitle: 'EINE STIMME IM RAUSCHEN.',
+    transmissionMeta: 'NCBS / NOTFUNK · NACHTSCHICHT',
+    transmissionTitle: 'WIR SIND NOCH HIER.',
     transmissionFrequency: '96.4 MHz / AUFZEICHNUNG 001',
-    transmissionTranscriptLabel: 'TRANSKRIPT / EMPFANGENES FRAGMENT',
-    transmissionLine1: '…hier ist die Küstenleitstelle. Ist noch jemand an der Station?',
-    transmissionLine2: 'Wir haben den letzten Funkspruch gefunden. Es fehlt nur die Rückmeldung.',
-    transmissionLine3: 'Halten Sie die Frequenz frei. Wir versuchen, den Rest zu übertragen.',
-    transmissionFooter: 'ABSENDER UNBESTÄTIGT · TRANSKRIPT REKONSTRUIERT',
+    transmissionTranscriptLabel: 'MITSCHRIFT / NOTFUNK 001',
+    transmissionLine1: 'Hallo? Hört mich jemand? Hier ist Alex, Nachtschicht der Küstenstation. Wir sind noch hier.',
+    transmissionLine2: 'Unser Notruf ist raus, aber niemand antwortet. Das Peilsystem ist ausgefallen.',
+    transmissionLine3: 'Vor der Küste liegen drei Relaisbojen. Wenn ihre Signale wieder verbunden sind, kann uns die Küstenwache finden. Bitte versucht das. Wir bleiben auf Empfang.',
+    transmissionFooter: 'SENDERKENNUNG: NCBS · NICHT VERIFIZIERT',
     transmissionReceivedAnnouncement: 'Neue Tonübertragung auf 96.4 Megahertz empfangen.',
+    transmissionPlayingAnnouncement: 'Tonübertragung 001 wird abgespielt.',
+    transmissionBlockedAnnouncement: 'Wiedergabe blockiert. AUDIO / 001 auswählen, um die Aufnahme zu starten.',
+    transmissionErrorAnnouncement: 'Tonübertragung konnte nicht geladen werden. Bitte erneut versuchen.',
+    transmissionFinishedAnnouncement: 'Ende der Tonübertragung 001.',
+    transmissionPlayAction: 'AUDIO / 001 · STARTEN',
+    transmissionAudioAria: 'Empfangene Funkaufnahme 001 abspielen und pausieren',
     messageMeta: 'FUNDSTÜCK / 001',
     messageSubtitle: 'FUNDSTÜCK / FLASCHENPOST',
     messageTitle: 'EINE MINUTE FEHLT.',
@@ -136,15 +142,21 @@ const TRANSLATIONS = Object.freeze({
     transmissionDescription: 'An unidentified transmission was received on 96.4 MHz.',
     transmissionButton: 'AUDIO / 001',
     transmissionButtonAria: 'Inspect incoming voice transmission 001',
-    transmissionMeta: 'NCBS / UNKNOWN RECEPTION',
-    transmissionTitle: 'A VOICE IN THE STATIC.',
+    transmissionMeta: 'NCBS / DISTRESS RADIO · NIGHT SHIFT',
+    transmissionTitle: 'WE ARE STILL HERE.',
     transmissionFrequency: '96.4 MHz / RECORDING 001',
-    transmissionTranscriptLabel: 'TRANSCRIPT / RECEIVED FRAGMENT',
-    transmissionLine1: '…coast control here. Is anyone still at the station?',
-    transmissionLine2: 'We found the last distress call. All that is missing is the reply.',
-    transmissionLine3: 'Keep this frequency clear. We are trying to send the rest through.',
-    transmissionFooter: 'SENDER UNVERIFIED · TRANSCRIPT RECONSTRUCTED',
+    transmissionTranscriptLabel: 'TRANSCRIPT / DISTRESS RADIO 001',
+    transmissionLine1: 'Hello? Can anybody hear me? This is Alex, night shift at North Coast Station. We are still here.',
+    transmissionLine2: 'We sent the distress call, but nobody answered. The direction finder is down.',
+    transmissionLine3: 'There are three relay buoys offshore. If their signals are linked again, the coast guard can find us. Please try. We will keep listening.',
+    transmissionFooter: 'SENDER ID: NCBS · UNVERIFIED',
     transmissionReceivedAnnouncement: 'New voice transmission received on 96.4 megahertz.',
+    transmissionPlayingAnnouncement: 'Voice transmission 001 is playing.',
+    transmissionBlockedAnnouncement: 'Playback blocked. Select AUDIO / 001 to start the recording.',
+    transmissionErrorAnnouncement: 'Voice recording could not be loaded. Please try again.',
+    transmissionFinishedAnnouncement: 'End of voice transmission 001.',
+    transmissionPlayAction: 'AUDIO / 001 · PLAY',
+    transmissionAudioAria: 'Play and pause received radio recording 001',
     messageMeta: 'RECOVERED OBJECT / 001',
     messageSubtitle: 'RECOVERED / MESSAGE BOTTLE',
     messageTitle: 'ONE MINUTE IS MISSING.',
@@ -184,6 +196,7 @@ const anomalyBars = [...document.querySelectorAll('.readout-bars i')];
 const transmissionToggle = document.querySelector('#transmission-toggle');
 const transmissionDialog = document.querySelector('#transmission-dialog');
 const transmissionClose = document.querySelector('#transmission-close');
+const transmissionAudio = document.querySelector('#transmission-audio');
 const receiverEventStatus = document.querySelector('#receiver-event-status');
 const compactViewport = window.matchMedia('(max-width: 750px), (max-height: 520px)');
 
@@ -205,6 +218,12 @@ const scene = {
   },
   autoScan: {
     startedAtMs: 0,
+  },
+  audio: {
+    blocked: false,
+    resumeAfterPause: false,
+    resumeAfterVisibility: false,
+    requestId: 0,
   },
   story: {
     stage: /** @type {StoryStage} */ ('routine'),
@@ -252,9 +271,10 @@ function updateTranslations() {
   evidenceLog.setAttribute('aria-label', texts.evidenceLogAria);
   messageClose.setAttribute('aria-label', texts.close);
   anomalyMeter.setAttribute('aria-label', texts.anomalyMeter);
-  transmissionToggle.textContent = texts.transmissionButton;
+  transmissionToggle.textContent = scene.audio.blocked ? texts.transmissionPlayAction : texts.transmissionButton;
   transmissionToggle.setAttribute('aria-label', texts.transmissionButtonAria);
   transmissionClose.setAttribute('aria-label', texts.close);
+  transmissionAudio.setAttribute('aria-label', texts.transmissionAudioAria);
   document.querySelector('#transmission-meta').textContent = texts.transmissionMeta;
   document.querySelector('#transmission-title').textContent = texts.transmissionTitle;
   document.querySelector('#transmission-frequency').textContent = texts.transmissionFrequency;
@@ -522,6 +542,8 @@ function finishAutoScan() {
   receiverEventStatus.textContent = TRANSLATIONS[scene.language].transmissionReceivedAnnouncement;
   updateAnomalyMeter();
 
+  // Der erste Empfang beginnt automatisch; das Archiv bleibt zum erneuten Hören erhalten.
+  void playTransmission({ restart: true });
   window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
   window.dispatchEvent(new CustomEvent('deadair:transmissionreceived', {
     detail: { frequency: CHANNELS.voice.frequency, recording: '001' },
@@ -542,10 +564,51 @@ function updateAutoScan() {
   setFrequency(getAutoScanFrequency(progress), { automated: true });
 }
 
-/** Öffnet das empfangene Transkript; Audio bleibt bis zur echten Aufnahme deaktiviert. */
+/** Spielt den lokalen Funkmitschnitt ab und fängt Browser-Autoplay-Sperren ab.
+ * Der Dialog bleibt beim ersten Empfang geschlossen; die Aufnahme ist dennoch hörbar.
+ * Auf erneuten Archivaufruf wird die vorhandene Aufnahme verwendet. */
+async function playTransmission({ restart = false } = {}) {
+  if (scene.story.stage !== 'transmission-ready') return;
+
+  const source = `assets/transmission-001-${scene.language}.mp3`;
+  if (transmissionAudio.getAttribute('src') !== source) {
+    transmissionAudio.setAttribute('src', source);
+    transmissionAudio.load();
+    restart = true;
+  }
+
+  if (restart) transmissionAudio.currentTime = 0;
+  if (scene.paused || document.hidden) {
+    scene.audio.resumeAfterPause = scene.paused;
+    scene.audio.resumeAfterVisibility = document.hidden;
+    return;
+  }
+
+  const requestId = ++scene.audio.requestId;
+  try {
+    await transmissionAudio.play();
+    if (requestId !== scene.audio.requestId) return;
+    scene.audio.blocked = false;
+    transmissionToggle.textContent = TRANSLATIONS[scene.language].transmissionButton;
+    receiverEventStatus.textContent = TRANSLATIONS[scene.language].transmissionPlayingAnnouncement;
+  } catch (error) {
+    if (requestId !== scene.audio.requestId) return;
+    scene.audio.blocked = true;
+    const texts = TRANSLATIONS[scene.language];
+    transmissionToggle.textContent = texts.transmissionPlayAction;
+    receiverEventStatus.textContent = error.name === 'NotAllowedError'
+      ? texts.transmissionBlockedAnnouncement
+      : texts.transmissionErrorAnnouncement;
+  }
+}
+
+/** Öffnet das Archiv; wurde die Aufnahme beendet, beginnt sie erneut. */
 function openTransmission() {
   setReceiverOpen(false);
   if (!transmissionDialog.open) transmissionDialog.showModal();
+  if (transmissionAudio.paused || transmissionAudio.ended) {
+    void playTransmission({ restart: true });
+  }
 }
 
 /** Lädt das reale Video erst bei Auswahl der Kameraquelle. */
@@ -631,6 +694,13 @@ function updatePlaybackLabel() {
 function togglePause() {
   scene.paused = !scene.paused;
   scene.story.lastTick = performance.now();
+  if (scene.paused) {
+    scene.audio.resumeAfterPause = !transmissionAudio.paused;
+    transmissionAudio.pause();
+  } else if (scene.audio.resumeAfterPause) {
+    scene.audio.resumeAfterPause = false;
+    void playTransmission();
+  }
   updatePlaybackLabel();
   updateAnomalyMeter();
   void syncVideo();
@@ -815,8 +885,18 @@ function init() {
     button.addEventListener('click', () => setSource(button.dataset.source));
   });
   languageToggle.addEventListener('click', () => {
+    const wasPlaying = !transmissionAudio.paused;
     scene.language = scene.language === 'de' ? 'en' : 'de';
     updateTranslations();
+    if (scene.story.stage === 'transmission-ready') {
+      if (wasPlaying) {
+        void playTransmission({ restart: true });
+      } else {
+        transmissionAudio.pause();
+        transmissionAudio.setAttribute('src', `assets/transmission-001-${scene.language}.mp3`);
+        transmissionAudio.load();
+      }
+    }
   });
   pauseButton.addEventListener('click', togglePause);
   receiverToggle.addEventListener('click', () => setReceiverOpen(true));
@@ -837,7 +917,17 @@ function init() {
   messageClose.addEventListener('click', () => messageDialog.close());
   messageDialog.addEventListener('close', collectBottle);
   transmissionToggle.addEventListener('click', openTransmission);
+  transmissionAudio.addEventListener('ended', () => {
+    scene.audio.resumeAfterPause = false;
+    scene.audio.resumeAfterVisibility = false;
+    receiverEventStatus.textContent = TRANSLATIONS[scene.language].transmissionFinishedAnnouncement;
+  });
   transmissionClose.addEventListener('click', () => transmissionDialog.close());
+  transmissionDialog.addEventListener('close', () => {
+    transmissionAudio.pause();
+    scene.audio.resumeAfterPause = false;
+    scene.audio.resumeAfterVisibility = false;
+  });
   transmissionDialog.addEventListener('click', event => {
     if (event.target === transmissionDialog) transmissionDialog.close();
   });
@@ -847,10 +937,18 @@ function init() {
 
   document.addEventListener('visibilitychange', () => {
     scene.story.lastTick = performance.now();
+    if (document.hidden) {
+      scene.audio.resumeAfterVisibility = !transmissionAudio.paused;
+      transmissionAudio.pause();
+    } else if (scene.audio.resumeAfterVisibility && !scene.paused) {
+      scene.audio.resumeAfterVisibility = false;
+      void playTransmission();
+    }
     void syncVideo();
   });
   window.addEventListener('pagehide', () => {
     coastVideo.pause();
+    transmissionAudio.pause();
     window.clearTimeout(scene.story.clockTimeoutId);
     window.clearTimeout(scene.story.revealTimeoutId);
     window.clearTimeout(scene.cameraBlackoutTimerId);

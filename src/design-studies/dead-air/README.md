@@ -27,7 +27,7 @@ The fictional North Coast Broadcasting System (NCBS) is framed as a decommission
 - Three independent, tightly masked photographic window passes on CAM 01 switch between the original warm-color glazing and a desaturated dark variant. The alpha-masked WebP crops align with the 1280×720 scene master; no artificial light dots or full-scene grayscale effects are used. Surrounding bloom in the concept image is still embedded and cannot be fully removed without a genuinely unlit master.
 - CAM 01 has a static, softened CSS lighthouse beam and a CSS mast light. At the beginning the windows are dark and the mast light stays continuously on; only the later story stages enable Morse flashes and window flicker.
 - Two selectable sources and the pause button share one compact receiver row under the frequency dial; the monitor gains back the former toolbar height. The video loads only when requested.
-- `deadair:frequencychange` and `deadair:signalacquired` events on `window` provide `{ frequency, channel, reception, interference }` for future Web Audio and story triggers. The latter fires only upon acquiring a new named station. No sound is played or fetched yet.
+- `deadair:frequencychange` and `deadair:signalacquired` events on `window` provide `{ frequency, channel, reception, interference }` for story and audio triggers. The latter fires only upon acquiring a new named station. Since Patch 32, the first received transmission plays from a locally bundled MP3.
 - A ±0.35 MHz capture range makes manual station scanning manageable on touch displays, while the tuner still displays the actual frequency in 0.1 MHz steps.
 - Pause / resume freezes CSS animations and playback, with reduced-motion enabled by default for visitors requesting it.
 - Scrollfreie Broadcast-Oberfläche (`100dvh` einschließlich Header): Monitor, Quellensteuerung und Signaltelemetrie bleiben auch bei niedriger Fensterhöhe sichtbar.
@@ -83,7 +83,7 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 2. Produce and isolate tower, station, aerials, mist and anomaly photo assets at matching light and perspective.
 3. Replace the flattened still with controllable photographic layers and coordinate-tracked movement.
 4. Define the discoverable frequencies and their prerequisites (clues, cameras, interaction), then bind player events to the existing receiver instead of creating UI-only state buttons.
-5. Record original voice lines and add an opt-in Web Audio signal chain (band-pass filtering, noise, mild distortion). No audio autoplay or microphone permissions required.
+5. Replace the synthetic demo recordings with original, naturally spoken DE/EN shift-worker voices and professionally designed radio interference. The current audio plays automatically when permitted by the browser; no microphone permissions are used.
 6. Audit keyboard and screen-reader paths, performance, reduced-motion and mobile readability as the concept matures.
 
 
@@ -247,6 +247,28 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 - Der Regler läuft ca. 4,8 Sekunden über 103.7 → 93.8 → 102.6 → 89.9 → **96.4 MHz**; das sind drei Richtungswechsel.
 - Manuelles Tuning und CAM 02 sind während des automatischen Suchlaufs gesperrt. Die Story-Uhr hält beim Pausieren, bei inaktiven Tabs und geöffneten Dialogen an.
 - Nach Empfang erscheint **AUDIO / 001**. Der Dialog zeigt das erste harmlose, scheinbar hilfsbereite Funkfragment mit zunächst unbekanntem Absender. Die Stimme stammt erzählerisch von den dimensionsfremden Wesen; das bleibt dem Spieler verborgen.
-- **Audio selbst ist noch nicht enthalten:** Der Dialog zeigt vorerst nur das Transkript. Keine vorgetäuschte Wiedergabe oder defekter Download. Eine originale Sprecheraufnahme wird in einem späteren Schritt integriert.
+- **Stand Patch 31:** Es lag zunächst nur ein Transkript vor. **Seit Patch 32** sind lokal erzeugte Audio-Demos enthalten, die beim Empfang automatisch abgespielt werden.
 - Neue Hooks: `deadair:autoscanstarted` und `deadair:transmissionreceived`.
 - Fenster-, Morse-, Flaschen- und CAM-Cut-Mechaniken bleiben unverändert; nur die neuen Story-Stufen und dazugehörige Empfangsanzeige wurden ergänzt.
+
+
+## Patch 32 – Automatischer Funkempfang und Portal-Mechanik (Konzept)
+
+### Erste Funkaufnahme / AUDIO 001
+
+- Bei erfolgreichem automatischem Tuning auf **96.4 MHz** beginnt die erste Nachricht ohne weiteren Klick zu spielen; ein Dialog wird dabei **nicht automatisch geöffnet**.
+- Aus dem Off meldet sich angeblich **Alex von der verschwundenen NCBS-Nachtschicht**. Sie bittet um Unterstützung bei einer vermeintlich defekten Küstenpeilung. Der tatsächliche Absender sind die dimensionsfremden Wesen.
+- Das Archiv (`AUDIO / 001`) öffnet das Transkript und erlaubt die erneute Wiedergabe über einen nativen, barrierefreien Audio-Player. Die MP3-Dateien sind lokal unter `assets/transmission-001-de.mp3` und `assets/transmission-001-en.mp3` abgelegt.
+- Tonfassungen sind **vorläufige synthetische Funk-Demos** (eSpeak und analoger Bandpass/Rauschen), damit Story und Audio technisch bereits vollständig funktionieren. Für das finale Erlebnis sollen sie durch glaubwürdig eingesprochene, professionell bearbeitete Aufnahmen mit gleichem Namen ersetzt werden.
+- Ist das automatische Abspielen durch Browser-Autoplay-Regeln blockiert, wird der Archivbutton zur klar sichtbaren manuellen Startaktion. Keine Falschanzeige einer laufenden Wiedergabe.
+- Pause und unsichtbare Browser-Tabs halten die Aufnahme an. Ein Sprachwechsel während der Wiedergabe startet die Aufnahme in der gewählten Sprache neu.
+
+### Erzähl- und Rätselkonzept: vermeintliche Rettungspeilung
+
+Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder späteren Spieleraktion einen plausiblen technischen Grund, bevor die Dimensionstor-Auflösung erfolgt.
+
+1. **Drei Relaisbojen auffinden:** Nach AUDIO 001 tauchen nach und nach drei unterschiedliche Peilsignale auf CAM 02 auf; ihre Kennungen müssen über Kamera- und Funkhinweise entschlüsselt werden. Die Nachtwache stellt sie als ausgefallene Küstenpeilung dar. Die drei Punkte bilden in Wahrheit die Ecken des späteren Meer-Dreiecks.
+2. **Rücklauf/Phasenabgleich:** Die drei empfangenen Signale müssen anhand unterschiedlicher Hinweise aufeinander synchronisiert werden (kein bloßes dreimaliges Frequenzraten). Die Nachtwache behauptet, nur so könne die Küstenwache ein Ortungssignal erhalten. Tatsächlich stabilisiert der Spieler die räumliche Resonanz zwischen den Ecken.
+3. **Rückkanal freigeben:** Erst nach bestätigter Peilung und Synchronisation erscheint die Aufforderung, einen einmaligen **Ortungsimpuls** über den Stationssender zu schicken. Der angebliche Rettungsruf schließt den Stromkreis des dreieckigen Resonanzsystems; das Dimensionstor öffnet sich als Bermuda-Dreieck-Erscheinung im Meer.
+
+**Dramaturgie:** Jede Bedingung verdient eine eigene beobachtbare Veränderung auf CAM 01/02 und optional eine zunehmende Täuschung in den Funkaufzeichnungen. Es gibt keinen vorzeitigen Tor-Trigger und keine sofortige Erklärung der Wesen.

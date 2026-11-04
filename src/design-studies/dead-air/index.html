@@ -144,7 +144,7 @@
 
     <dialog class="artifact-dialog transmission-dialog" id="transmission-dialog" aria-labelledby="transmission-title" aria-describedby="transmission-line-1">
       <div class="artifact-dialog__header">
-        <span class="eyebrow" id="transmission-meta">NCBS / UNBEKANNTER EMPFANG</span>
+        <span class="eyebrow" id="transmission-meta">NCBS / NOTFUNK · NACHTSCHICHT</span>
         <button class="artifact-dialog__close" id="transmission-close" type="button" aria-label="Schließen">×</button>
       </div>
       <div class="transmission-dialog__display" aria-hidden="true">
@@ -152,13 +152,14 @@
         <span id="transmission-frequency">96.4 MHz / AUFZEICHNUNG 001</span>
         <span class="transmission-dialog__wave"></span>
       </div>
+      <audio class="transmission-dialog__audio" id="transmission-audio" controls preload="none" aria-label="Empfangene Funkaufnahme 001 abspielen und pausieren"></audio>
       <div class="transmission-dialog__content">
-        <span class="eyebrow" id="transmission-transcript-label">TRANSKRIPT / EMPFANGENES FRAGMENT</span>
-        <h2 id="transmission-title">EINE STIMME IM RAUSCHEN.</h2>
-        <p id="transmission-line-1">…hier ist die Küstenleitstelle. Ist noch jemand an der Station?</p>
-        <p id="transmission-line-2">Wir haben den letzten Funkspruch gefunden. Es fehlt nur die Rückmeldung.</p>
-        <p id="transmission-line-3">Halten Sie die Frequenz frei. Wir versuchen, den Rest zu übertragen.</p>
-        <p id="transmission-footer" class="transmission-dialog__footer">ABSENDER UNBESTÄTIGT · TRANSKRIPT REKONSTRUIERT</p>
+        <span class="eyebrow" id="transmission-transcript-label">MITSCHRIFT / NOTFUNK 001</span>
+        <h2 id="transmission-title">WIR SIND NOCH HIER.</h2>
+        <p id="transmission-line-1">Hallo? Hört mich jemand? Hier ist Alex, Nachtschicht der Küstenstation. Wir sind noch hier.</p>
+        <p id="transmission-line-2">Unser Notruf ist raus, aber niemand antwortet. Das Peilsystem ist ausgefallen.</p>
+        <p id="transmission-line-3">Vor der Küste liegen drei Relaisbojen. Wenn ihre Signale wieder verbunden sind, kann uns die Küstenwache finden. Bitte versucht das. Wir bleiben auf Empfang.</p>
+        <p id="transmission-footer" class="transmission-dialog__footer">SENDERKENNUNG: NCBS · NICHT VERIFIZIERT</p>
       </div>
     </dialog>
 

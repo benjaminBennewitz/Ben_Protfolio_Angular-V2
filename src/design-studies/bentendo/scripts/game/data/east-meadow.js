@@ -53,7 +53,7 @@ function meadow() {
     prop('meadow-frog','Wiesenfrosch',12,9,'wildlife','inspect',{animal:'frog',spriteSet:'awakening',passable:true,walkThrough:true,route:[[12,9],[13,9],[13,8],[12,8]],text:'Der Frosch zieht winzige Kreise auf dem Wasser.'}),
     prop('meadow-hedgehog','Igel',6,15,'wildlife','inspect',{animal:'hedgehog',route:[[6,15],[7,15],[7,14],[6,14]],text:'Zwischen den Halmen raschelt ein kleiner Igel.'}),
   ];
-  return openForestPassages({id:'east-meadow',title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,trees:[[1,2,'pine'],[4,1],[24,1],[2,16],[23,17,'pine'],[26,15]],gardens:BEDS,buildings:[],birds:[{x:24,y:1,treeY:1,facing:'left'}],music:'forest-canopy',objects});
+  return openForestPassages({id:'east-meadow',title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,trees:[[1,2,'pine'],[4,1],[24,1],[2,16],[23,17,'pine'],[26,15]],gardens:BEDS,buildings:[],birds:[{x:24,y:1,treeY:1,facing:'left'}],music:'east-meadow-day',objects});
 }
 
 /** Legt sandige Wege, flache Tümpel und weiche Pflanzkonturen übereinander. @param {number} x Spalte. @param {number} y Zeile. */

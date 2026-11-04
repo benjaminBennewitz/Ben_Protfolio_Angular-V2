@@ -18,6 +18,8 @@ B² / Benjamin Bennewitz: Konzept, Gestaltung und Entwicklung des Projekts mit C
 
 ## Projektspezifische Inhalte
 
+„Wo das Wasser den Himmel hält“ (Tag und Nacht) ist eine eigene Chiptune-Komposition für die Ostwiesen. Beide Fassungen werden ohne fremde Samples mit `scripts/audio/tools/build_meadow_music.py` erzeugt.
+
 Die Gegner im Quellgewölbe (Spinne, Käfer und Schlange) sind eigene Pixelzeichnungen. Die bereitgestellten Beispiele aus JugglingDinos Gameboy RPG Asset Pack dienten als Stilreferenz. Aus dem Paket wurden dafür keine Sprites übernommen.
 
 Cartridge-Gestaltung, Charakterporträts und Titelgrafiken enthalten für das Projekt mit Bildgenerierung erstellte Inhalte. Eigene Musikgeneratoren und Web-Audio-Effekte sind unter `scripts/audio/` dokumentiert. Die detaillierte Herkunft der übrigen vorhandenen Musikdateien ist über die Entwicklungsunterlagen zu vervollständigen; es wird keine pauschale Fremd- oder Eigenurheberschaft behauptet.

@@ -537,6 +537,8 @@ folio/
 │   │   │   │   │   │   └── CREDITS.txt
 │   │   │   │   │   ├── bruchstein-night.mp3
 │   │   │   │   │   ├── dungeon-loop.mp3
+│   │   │   │   │   ├── east-meadow-day.mp3
+│   │   │   │   │   ├── east-meadow-night.mp3
 │   │   │   │   │   ├── forest-canopy.mp3
 │   │   │   │   │   ├── forest-night.mp3
 │   │   │   │   │   ├── maras-quellplan.mp3
@@ -661,6 +663,7 @@ folio/
 │   │   │   │   ├── audio/
 │   │   │   │   │   ├── tools/
 │   │   │   │   │   │   ├── build_forest_music.py
+│   │   │   │   │   │   ├── build_meadow_music.py
 │   │   │   │   │   │   ├── build_night_music.py
 │   │   │   │   │   │   └── build_quell_music.py
 │   │   │   │   │   ├── animal-calls.js

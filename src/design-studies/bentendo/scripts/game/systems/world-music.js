@@ -4,6 +4,7 @@ import { minuteOfDay } from './world-clock.js';
 export function worldMusic(game) {
   const minute=minuteOfDay(game),dark=minute>=1140 || minute<360;
   if (dark && (game.room.id==='village' || game.room.id.startsWith('village-') && game.room.furnished)) return 'bruchstein-night';
+  if (dark && game.room.music==='east-meadow-day') return 'east-meadow-night';
   if (dark && game.room.villageLandscape && game.room.music==='forest-canopy') return 'forest-night';
   return game.room.music;
 }

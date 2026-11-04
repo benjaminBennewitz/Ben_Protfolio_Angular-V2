@@ -17,7 +17,7 @@ function selection() {
 }
 
 /** Erkennt die sechs Waldaußenräume. @param {object} room Raum. */
-function isForest(room) { return room.villageLandscape; }
+function isForest(room) { return room.villageLandscape && room.music==='forest-canopy'; }
 
 /** Bewahrt Innenraum-, Werkstations- und Dungeonmusik auch während der Nacht. */
 function preserveRooms() {
@@ -31,9 +31,9 @@ function preserveRooms() {
 /** Erkennt die Werkstation. @param {object} room Raum. */
 function isInterior(room) { return !room.villageLandscape; }
 
-/** Prüft die beiden tatsächlich ausgelieferten Klangdateien. */
+/** Prüft die tatsächlich ausgelieferten Klangdateien. */
 function assets() {
-  for (const track of ['forest-night','bruchstein-night']) {
+  for (const track of ['forest-night','bruchstein-night','east-meadow-day','east-meadow-night']) {
     const file=new URL(`../assets/sounds/${track}.mp3`,import.meta.url);
     assert.ok(fs.statSync(file).size>100000);
   }
@@ -41,4 +41,14 @@ function assets() {
 
 test('Nachtmusik: sechs Waldgebiete und Bruchstein wechseln bei Dunkelheit',selection);
 test('Nachtmusik: Dorfhäuser nutzen Nachtmusik, Dungeons behalten ihren Track',preserveRooms);
-test('Nachtmusik: beide eigenen Tracks sind vorhanden',assets);
+test('Nachtmusik: alle regionalen Tracks sind vorhanden',assets);
+
+/** Wechselt das Wiesenthema exakt an den bestehenden Zeitgrenzen. */
+function meadowMusic() {
+  const room=createEastRooms().find(/** Erkennt die Ostwiesen. @param {object} entry Raum. */ entry=>entry.id==='east-meadow');
+  for (const [worldMinutes,phase] of [[359,'night'],[360,'day'],[1139,'day'],[1140,'night']]) {
+    assert.equal(worldMusic({room,worldMinutes}),`east-meadow-${phase}`);
+  }
+}
+
+test('Ostwiesen: eigenes Thema wechselt bei Abend und Morgen',meadowMusic);

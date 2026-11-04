@@ -1,3 +1,5 @@
+import { useWaystone } from './waystones.js';
+import { offerSharpening } from './smith.js';
 import { tryRootMark,viewEastMeadow,inspectMeadowStream,inspectMeadowStone,talkMeadowResident,tryLowlandGate } from './east-meadow.js';
 import { openRestMenu } from './rest-menu.js';
 import { respectNightRest } from './daily-life.js';
@@ -20,6 +22,7 @@ function inspect(game, object) {
   if (object.sleeping) return game.say(object.name,object.text);
   if (object.id==='mara') return talkMara(game);
   if (object.id==='workshop-helper' && game.flags.eastPumpSurveyed && !game.flags.eastSpareTaken) return game.say(object.name,'Die Bögen für die alte Druckleitung? Die habe ich nicht weggeworfen. Alles, was noch dicht war, kam zu den Beschlägen. Die kleinen Kisten lohnen oft den zweiten Blick.');
+  if (object.id==='workshop-helper' && offerSharpening(game,object)) return;
   if (object.kind==='dog' && tryFetch(game,object)) return;
   if (object.action==='talk' && villageTaskConversation(game,object)) return;
   if (object.action==='talk' && discoveryConversation(game,object)) return;
@@ -33,6 +36,7 @@ function inspect(game, object) {
 function travel(game, object) { if (object.requiresFlag && !game.flags[object.requiresFlag]) return game.say(object.name,'Der Weg ist von hier aus noch nicht erreichbar.','ui-denied'); if (respectNightRest(game,object)) return; game.travel(object.to, object.spawn); }
 
 export const ACTIONS = {
+  waystone:useWaystone,
   'lowland-gate':tryLowlandGate,
   'meadow-stream-look':inspectMeadowStream,'meadow-stream-stone':inspectMeadowStone,'meadow-stream-talk':talkMeadowResident,
   'east-root-mark':tryRootMark,'east-meadow-view':viewEastMeadow,

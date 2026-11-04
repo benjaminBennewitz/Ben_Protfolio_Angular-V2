@@ -1,6 +1,7 @@
 import { playSynthCall } from './synth-calls.js';
 
 const INTERACTION_CALLS={
+  'waystone-ride':{wave:'noise',duration:0.095,pitches:[],count:3,gap:0.11,level:0.48},
   door:{wave:'triangle',duration:0.32,pitches:[420,180,320,130],count:2,gap:0.12,level:1.6},
   chest:{wave:'triangle',duration:0.3,pitches:[240,160,480,720],count:1,gap:0,level:2},
   treasure:{wave:'triangle',duration:0.24,pitches:[523,659,784,1047],count:1,gap:0,delay:0.34,level:1.6},

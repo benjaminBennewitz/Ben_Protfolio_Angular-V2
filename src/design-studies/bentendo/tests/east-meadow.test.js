@@ -1,3 +1,6 @@
+import { confirmRest } from '../scripts/game/systems/rest-menu.js';
+import { createHouseRoom } from '../scripts/game/data/house-rooms.js';
+import { heroStats } from '../scripts/game/systems/health.js';
 import { startDebugRun } from '../scripts/game/data/debug-starts.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -183,11 +186,43 @@ function lowlandGate() {
   assert.equal(game.flags.eastLowlandGateOpen,undefined);
   assert.equal(game.occupied(16,9),true);
   assert.ok(game.sounds.includes('ui-denied'));
-  game.inventory[0]='Geschärftes Schwert';
+  sharpenAtWorkshop(game);
+  game.travel('east-lowland');
   useObject(game,'lowland-gate'); dismiss(game);
   assert.equal(game.flags.eastLowlandGateOpen,true);
   assert.equal(game.occupied(16,9),false);
   assert.deepEqual(game.inventory,['Geschärftes Schwert']);
+  useObject(game,'lowland-overlook'); dismiss(game);
+}
+
+/** Prüft Abbruch, kostenlosen Schliff im selben Fach und den neuen Kampfwert. @param {object} game Spiel. */
+function sharpenAtWorkshop(game) {
+  const workshop=createHouseRoom('workshop'); game.rooms.set(workshop.id,workshop);
+  game.travel(workshop.id); game.worldMinutes=720;
+  const coins=game.coins;
+  useObject(game,'workshop-helper'); game.back();
+  assert.deepEqual(game.inventory,['Rostiges Schwert']);
+  useObject(game,'workshop-helper'); dismiss(game);
+  assert.deepEqual(game.inventory,[]);
+  useObject(game,'workshop-helper'); dismiss(game); assert.deepEqual(game.inventory,[]);
+  sleepForSmith(game);
+  useObject(game,'workshop-helper'); dismiss(game);
+  assert.deepEqual(game.inventory,['Geschärftes Schwert']);
+  assert.equal(game.coins,coins);
+  assert.equal(heroStats(game).attack,3);
+}
+
+/** Übernachtet im echten Schenkenbett und prüft den gespeicherten Auftrag. @param {object} game Spiel. */
+function sleepForSmith(game) {
+  const inn=createHouseRoom('inn-upper'); game.rooms.set(inn.id,inn);
+  assert.equal(restoreGame(game,captureGame(game)),true);
+  game.travel(inn.id); useObject(game,'bed-west');
+  assert.equal(game.systemMenu.kind,'rest');
+  game.systemMenu.choice=1; confirmRest(game); game.update(2,false); dismiss(game);
+  assert.equal(game.flags.smithRested,undefined);
+  useObject(game,'bed-west'); confirmRest(game); game.update(2,false); dismiss(game);
+  assert.equal(game.flags.smithRested,true);
+  game.travel('village-workshop');
 }
 
 test('Bachniederung: nur eine geschärfte Klinge öffnet das verschnürte Weggitter',lowlandGate);

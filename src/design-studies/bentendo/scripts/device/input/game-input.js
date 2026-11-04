@@ -43,6 +43,7 @@ export class GameInput {
     this.app.device?.buttons?.direction(direction,held); this.app.audio.playMechanical?.('dpad');
     if (this.app.phase !== 'on') { this.app.request(); return; }
     const game = this.app.game;
+    if (game.waystoneRide) return;
     if (game.systemMenu) { this.app.audio.unlock(); navigateSystemMenu(game,direction,this.app.audio); }
     else if (game.mode==='title' && game.resumeData) { this.app.audio.unlock(); navigateTitle(game,direction); }
     else if (game.mode==='character') { this.app.audio.unlock(); navigateCharacter(game,direction); }

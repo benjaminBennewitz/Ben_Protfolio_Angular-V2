@@ -1,3 +1,4 @@
+import { waystoneFade } from '../game/systems/waystones.js';
 import { canvas } from '../core/dom.js';
 import { PALETTE } from '../core/config.js';
 import { pixelText } from './font.js';
@@ -20,6 +21,12 @@ export class Display {
     if (app.game.mode === 'title') return this.drawTitle(app.time,app.game);
     if (app.game.mode==='character') return drawCharacterSelection({ctx:this.ctx,game:app.game,assets:this.assets});
     drawWorld({ ctx: this.ctx, game: app.game, assets: this.assets });
+    if (app.game.waystoneRide) this.drawRide(app.game.waystoneRide);
+  }
+  /** Blendet das LCD während des Ortswechsels ab und wieder auf. @param {object} ride Laufende Fahrt. */
+  drawRide(ride) {
+    this.ctx.save(); this.ctx.globalAlpha=waystoneFade(ride);
+    rect(this.ctx,3,0,0,160,144); this.ctx.restore();
   }
   /** Zeichnet den wandernden Startschriftzug. @param {object} app Anwendung. */
   drawBoot(app) {

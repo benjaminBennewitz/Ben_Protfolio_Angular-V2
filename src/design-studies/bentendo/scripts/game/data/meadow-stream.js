@@ -43,6 +43,7 @@ function lowland() {
   const objects=[
     prop('lowland-return','Zurück zu den Ostwiesen',1,9,'trail','travel',{to:'east-meadow',spawn:[31,9],trailFacing:'left'}),
     prop('lowland-gate','Verschnürtes Weggitter',16,9,'lowland-gate','lowland-gate',{hint:'Seil prüfen',hiddenBy:'eastLowlandGateOpen'}),
+    prop('lowland-overlook','Alter Grenzpfahl',20,9,'sign','inspect',{text:'Von hier siehst du, wie der Bach zwischen den Hügeln verschwindet. Am Grenzpfahl ist ein verblasstes Wegzeichen eingeritzt.'}),
     prop('lowland-tracks','Alter Landesteg',13,10,'sign','inspect',{text:'Eine Schleifspur endet an einem losen Tau. Auf dem Holz liegt derselbe helle Staub wie auf den Pfählen der Wiese.'}),
   ];
   const trees=[[2,2],[6,2,'pine'],[12,2],[15,3],[2,14],[14,12,'pine']];
@@ -53,7 +54,7 @@ function lowland() {
 
 /** Baut die anschließenden Landschaftsausschnitte mit der vorhandenen Wiesenpalette. @param {string} id Kennung. @param {string} title Ortsname. @param {number} height Höhe. @param {number[]} spawn Einstieg. @param {Array} trees Baumstandorte. @param {object[]} objects Requisiten. @param {Array} channel Bachlauf. */
 function outskirts(id,title,height,spawn,trees,objects,channel=[]) {
-  const width=18,ground=[];
+  const width=id==='east-lowland'?22:18,ground=[];
   const gardens=[{x:3,y:5,w:5,h:4,kind:'f'},{x:11,y:5,w:5,h:3,kind:'t'},{x:10,y:9,w:6,h:4,kind:'t'}];
   if (channel.length) gardens.push(
     {x:2,y:10,w:4,h:2,kind:'f'},{x:1,y:13,w:5,h:3,kind:'t'},

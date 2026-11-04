@@ -69,6 +69,7 @@ function villageDetails() {
     prop('hitching-post','Anbindepfosten',7,12,'village-post','inspect',{text:'Hier binden Reisende ihre Pferde an. Das Holz ist an den Kanten blank gescheuert.'}),
     prop('north-gate','Höhlen-Sperre',15,1,'gate','mara-north',{text:'GEFAHR: Der Höhlenweg zum Nordwald ist gesperrt. Die Gilde muss den Durchgang erst freigeben. Hilf zunächst den Leuten im Dorf.'}),
     prop('east-hatch','Wartungsluke',30,11,'east-hatch','east-pump-entry',{hint:'öffnen'}),
+    prop('waystone-village','Wegmacherstein',31,14,'waystone','waystone',{hint:'Reise prüfen'}),
     prop('east-gate','Ostpass-Sperre',32,12,'gate','east-gate',{h:2,text:'GEFAHR: Der Ostpass ist unsicher. Auf Anordnung der Gilde gesperrt, bis die offenen Aufgaben im Dorf erledigt sind.'}),
   ];
 }

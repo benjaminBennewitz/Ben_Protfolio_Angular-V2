@@ -1,3 +1,4 @@
+import { isSword,RUSTY_SWORD,SHARP_SWORD } from '../data/items.js';
 import { ROOT_MARKS,WAYMAKER_LEDGER } from '../data/east-meadow.js';
 import { rememberNote } from './loot.js';
 
@@ -36,7 +37,7 @@ export function inspectMeadowStream(game,object) {
 /** Beschreibt den Bedienstein; Mit Schwert bietet er nach dem ersten Blick eine Bestätigung an. @param {object} game Spiel. @param {object} object Bedienstein. */
 export function inspectMeadowStone(game,object) {
   if (game.flags.eastStreamOpen) return game.say(object.name,'Die Rast hält das Wehr offen. Dein Schwert hast du wieder eingesteckt.');
-  if (game.flags.eastStreamStoneSeen && game.inventory.includes('Rostiges Schwert')) return promptMeadowStream(game);
+  if (game.flags.eastStreamStoneSeen && game.inventory.some(isSword)) return promptMeadowStream(game);
   game.flags.eastStreamStoneSeen=true;
   game.say(object.name,'Der Eisenhebel ist abgebrochen. Etwas Flaches und Stabiles könnte in die Aufnahme passen.');
 }
@@ -51,7 +52,7 @@ export function promptMeadowStream(game) {
 
 /** Hebt das Wehr mit dem rostigen Schwert an, ohne den Gegenstand zu verbrauchen. @param {object} game Spiel. */
 function openMeadowStream(game) {
-  if (game.flags.eastStreamOpen || !game.inventory.includes('Rostiges Schwert')) return;
+  if (game.flags.eastStreamOpen || !game.inventory.some(isSword)) return;
   game.flags.eastStreamStoneSeen=true; game.flags.eastStreamOpen=true;
   game.say('Das alte Wehr','Die Klinge passt in die Aufnahme. Beim Drehen rastet das Wehr ein. Wasser rauscht durch das Bachbett. Du ziehst das Schwert wieder heraus.','success-quest');
 }
@@ -66,10 +67,10 @@ export function talkMeadowResident(game,object) {
 /** Prüft die Schneide am gespannten Hanfseil. @param {object} game Spiel. */
 export function tryLowlandGate(game) {
   if (game.flags.eastLowlandGateOpen) return;
-  if (game.inventory.includes('Geschärftes Schwert')) {
+  if (game.inventory.includes(SHARP_SWORD)) {
     game.flags.eastLowlandGateOpen=true;
     return game.say('Weggitter','Die scharfe Klinge trennt das Seil. Das Gitter schwingt zur Seite.','success-small');
   }
-  if (game.inventory.includes('Rostiges Schwert')) return game.say('Weggitter','Du setzt das Schwert an. Die stumpfe Klinge bleibt in den Fasern hängen. Die Schneide braucht einen neuen Schliff.','ui-denied');
+  if (game.inventory.includes(RUSTY_SWORD)) return game.say('Weggitter','Du setzt das Schwert an. Die stumpfe Klinge bleibt in den Fasern hängen. Vielleicht kann die Gesellin in der Werkstatt von Bruchstein die Schneide schleifen.','ui-denied');
   game.say('Weggitter','Ein straff gespanntes Hanfseil hält das Gitter zu. Der Knoten sitzt auf der anderen Seite.');
 }

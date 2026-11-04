@@ -1,3 +1,4 @@
+import { updateWaystoneRide } from './systems/waystones.js';
 import { restChoiceLabel } from './systems/rest-menu.js';
 import { START_MINUTES,updateWorldClock,dayPhase } from './systems/world-clock.js';
 import { updateDoorStudy,updateForestAmbience,finishDoorReading } from './systems/forest-return.js';
@@ -41,13 +42,13 @@ export class Game {
     this.residentHistory=new Map(); this.avatar='male'; this.characterIndex=0;
     this.mode = 'title'; this.time = 0; this.sounds = []; this.message = null; this.pages = [];
     this.bagOpen = false; this.mapOpen = false; this.journalOpen = false; this.journalIndex = 0;
-    this.move = null; this.slide = null; this.held = null;
+    this.move = null; this.slide = null; this.held = null; this.waystoneRide=null;
     if (this.rooms.has('village')) this.notes.push({...INVITATION});
     this.travel(this.rooms.has('village') ? 'village' : 'city'); this.mode = 'title'; this.sounds = [];
     this.reduced = false;
   }
-  /** Erhält Räume und Funde beim Ortswechsel. @param {string} id Raumkennung. @param {number[]} spawn Optionaler Einstieg. */
-  travel(id, spawn) {
+  /** Erhält Räume und Funde beim Ortswechsel. @param {string} id Raumkennung. @param {number[]} spawn Optionaler Einstieg. @param {string|null} cue Ankunftsklang. */
+  travel(id, spawn, cue='door') {
     const room = this.rooms.get(id);
     if (!room) throw new Error(`Unbekannter Raum: ${id}`);
     trackDungeonVisit(this,room); clearTavern(this); settleFetch(this,Boolean(room.furnished));
@@ -58,8 +59,8 @@ export class Game {
     this.roomState = this.states.get(id);
     const point = spawn || room.spawn;
     this.player = { x: point[0], y: point[1], facing: 'up' };
-    this.move = null; this.slide = null; this.held = null; this.message = null; this.pages = [];
-    this.bagOpen = false; this.mapOpen = false; this.journalOpen = false; this.sounds.push('door');
+    this.move = null; this.slide = null; this.held = null; this.waystoneRide=null; this.message = null; this.pages = [];
+    this.bagOpen = false; this.mapOpen = false; this.journalOpen = false; if (cue) this.sounds.push(cue);
     this.bagIndex=6; this.bagAction=false; this.bagChoice=0; this.bagTab='items'; this.bagTabFocus=false;
     enterDungeonRoom(this);
   }
@@ -96,7 +97,7 @@ export class Game {
   get hint() { if (this.resting) return 'Du schläfst ...'; if (this.room.dungeon && !this.target) return 'A: Angriff  B: Rucksack'; return this.seat?(this.roomState.service?.phase==='ready'?'A: Getränke  B: aufstehen':this.roomState.service?.phase==='approach'?'Der Wirt kommt. B: aufstehen':'B: aufstehen'):objectHint(this.target); }
   /** Beginnt einen Schritt ohne Wanddurchquerung. @param {string} direction Laufrichtung. */
   step(direction) {
-    if (this.mode!=='world' || this.systemMenu || this.resting || this.doorStudy) return false;
+    if (this.mode!=='world' || this.systemMenu || this.resting || this.doorStudy || this.waystoneRide) return false;
     if (!MOVE_DIRECTIONS[direction] || this.move || this.slide || this.message || this.bagOpen || this.journalOpen || this.mapOpen) return false;
     if (this.tavernMenu) return false;
     if (this.seat) { standUp(this); return false; }
@@ -115,6 +116,7 @@ export class Game {
   update(dt, reduced) {
     if (this.mode !== 'world' || this.systemMenu) return;
     this.reduced = reduced;
+    if (this.waystoneRide) return updateWaystoneRide(this,dt);
     if (updateDoorStudy(this,dt)) return;
     if (this.resting) { updateRest(this,dt); return; }
     const paused = this.message || this.bagOpen || this.journalOpen || this.mapOpen || this.tavernMenu;
@@ -132,7 +134,7 @@ export class Game {
   }
   /** Bestätigt Titel, Dialog oder Objektaktion. */
   interact() {
-    if (this.systemMenu || this.resting || this.doorStudy) return;
+    if (this.systemMenu || this.resting || this.doorStudy || this.waystoneRide) return;
     if (this.mode === 'title') return this.beginAdventure();
     if (this.mode === 'character') return confirmCharacter(this);
     if (this.move && this.room.dungeon && !this.message && !this.bagOpen && !this.journalOpen && !this.mapOpen) return attack(this);
@@ -165,7 +167,7 @@ export class Game {
   /** Meldet eine noch laufende Hausmeisterbewegung ohne zusätzliche Daueranimation. */
   get animating() {
     if (this.mode!=='world' || this.systemMenu || this.resting) return false;
-    if (this.doorStudy) return true;
+    if (this.doorStudy || this.waystoneRide) return true;
     if (this.message || this.bagOpen || this.journalOpen || this.mapOpen) return false;
     const keeper=this.room.id==='village' && this.roomState.keeper && !this.roomState.keeper.waiting && !this.flags.guildOpen;
     return Boolean(this.resting || (this.room.dungeon && (this.enemies.length || this.attackTime || this.attackCooldown || this.nestWave && !this.flags.quellNestCleared)) || (this.room.pipeBoard && !this.reduced) || this.locationNotice || (this.roomState.service && this.roomState.service.phase!=='ready') || keeper || ['throw','pickup'].includes(this.roomState.fetch?.phase) || wanderersMoving(this));
@@ -194,7 +196,7 @@ export class Game {
   /** Öffnet Inventar oder schließt den aktuellen Dialog. */
   back() {
     this.held = null;
-    if (this.resting || this.doorStudy) return;
+    if (this.resting || this.doorStudy || this.waystoneRide) return;
     if (this.systemMenu) return closeSystemMenu(this);
     if (this.mode==='title') return;
     if (this.mode==='character') { this.mode='title'; this.sounds.push('ui-back'); return; }
@@ -209,7 +211,7 @@ export class Game {
   }
   /** Öffnet das wiederlesbare Journal. */
   journal() {
-    if (this.mode!=='world' || this.systemMenu || this.doorStudy) return;
+    if (this.mode!=='world' || this.systemMenu || this.doorStudy || this.waystoneRide) return;
     this.journalFromBag=this.bagOpen; this.bagAction=false; this.tavernMenu=false;
     this.held = null; this.message = null; this.pages = []; this.bagOpen = false; this.mapOpen = false;
     this.journalOpen = !this.journalOpen;

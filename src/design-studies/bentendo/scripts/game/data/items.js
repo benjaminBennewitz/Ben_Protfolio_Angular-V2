@@ -1,8 +1,15 @@
+export const RUSTY_SWORD='Rostiges Schwert';
+export const SHARP_SWORD='Geschärftes Schwert';
+
+/** Erkennt beide Zustände derselben Klinge. @param {string} item Gegenstand. */
+export function isSword(item) { return item===RUSTY_SWORD || item===SHARP_SWORD; }
+
 export const ITEM_INFO={
   Rohrbogen:'Ein Ersatzbogen mit frischer Dichtung für eine gebrochene Druckleitung.',
   Feldflasche:'Eine leere Feldflasche mit eingeritztem E. Am Dorfbrunnen mit Benutzen füllbar.',
   'Volle Feldflasche':'Frisches Brunnenwasser in einer Flasche mit eingeritztem E.',
   'Rostiges Schwert':'Deine erste richtige Waffe. Angriff 2 statt 1. Wird automatisch verwendet, solange sie im Rucksack liegt. Erst nach sicherem Verlassen des Dungeons ist sie gesichert.',
+  [SHARP_SWORD]:'Entrostet und frisch geschliffen. Angriff 3. Schneidet durch straff gespannte Seile.',
   Feldverband:'Heilt beim Benutzen vier Lebenspunkte, also zwei Herzen. Wird nur bei fehlendem Leben verbraucht.',
   Ast:'Stabiler Ast aus dem Wasserrad. Beim Hund zum Apportieren verwendbar.',
   'Blaue Brosche':'Ein blaues Schmuckstück aus Jorins Reisekiste. Es gehört Frau Moos.',
@@ -18,7 +25,7 @@ export const ITEM_INFO={
 };
 export const ITEM_LABELS={
   Rohrbogen:['Rohrbogen'],Feldflasche:['Feldflasche'],'Volle Feldflasche':['Volle','Feldflasche'],
-  'Rostiges Schwert':['Rostiges','Schwert'],Feldverband:['Feld-','verband'],
+  [RUSTY_SWORD]:['Rostiges','Schwert'],[SHARP_SWORD]:['Geschärftes','Schwert'],Feldverband:['Feld-','verband'],
   'Ast (Hund)':['Ast','beim Hund'],'Blaue Brosche':['Blaue','Brosche'],Messingknopf:['Messing-','knopf'],Glasperle:['Glasperle'],Garnspule:['Garnspule'],
   Runenkupplung:['Runen-','kupplung'],Zahnradamulett:['Zahnrad-','amulett'],Runensplitter:['Runen-','splitter'],Schutzsiegel:['Schutz-','siegel'],Pausenbecher:['Pausen-','becher'],Ersatzrune:['Ersatz-','rune'],
 };

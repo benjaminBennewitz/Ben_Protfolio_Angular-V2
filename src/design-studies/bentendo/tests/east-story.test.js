@@ -128,6 +128,7 @@ function newRoomAccess() {
   const game=world(); oldChapter(game); game.flags.eastDoorStudied=true;
   for (const room of createEastRooms()) {
     game.travel(room.id); assert.equal(game.occupied(game.player.x,game.player.y),false);
+    if (room.id==='east-lowland') game.inventory.push('Geschärftes Schwert');
     for (const object of room.objects) {
       if (object.action==='travel' || object.kind==='wildlife' || (object.kind==='meadow-rock' && object.small)) continue;
       useObject(game,object.id); dismiss(game);
@@ -152,3 +153,23 @@ test('Ostkapitel: freie Hinweisreihenfolge, Eda und einmaliger Mara-Bericht',for
 test('Ostkapitel: leere Flasche, Brunnen, Rückgabe und einmalige Belohnung',canteen);
 test('Ostkapitel: alle neuen Räume und Interaktionen sind erreichbar',newRoomAccess);
 test('Ostkapitel: Druck nur bei dichtem Verlauf, trockene Nebenrohre bleiben frei',pipePressure);
+
+/** Prüft beide Reisepunkte, die Sperre und den Ortswechsel auf halber Blende. */
+function waystoneRide() {
+  const game=world(); game.travel('village');
+  useObject(game,'waystone-village'); dismiss(game);
+  assert.equal(game.room.id,'village'); assert.equal(game.waystoneRide,null);
+  game.flags.eastRootOpen=true;
+  useObject(game,'waystone-village'); game.back(); assert.equal(game.waystoneRide,null);
+  useObject(game,'waystone-village'); dismiss(game);
+  const time=game.worldMinutes;
+  game.update(0.12,false); assert.equal(game.room.id,'village'); assert.equal(game.step('up'),false);
+  game.update(0.12,false); assert.equal(game.room.id,'east-clearing');
+  game.update(0.24,false); assert.equal(game.waystoneRide,null); assert.equal(game.worldMinutes,time);
+  assert.equal(game.occupied(game.player.x,game.player.y),false);
+  useObject(game,'waystone-clearing'); game.reduced=true; dismiss(game);
+  assert.equal(game.room.id,'village'); assert.equal(game.waystoneRide,null);
+  assert.equal(game.occupied(game.player.x,game.player.y),false);
+}
+
+test('Wegmachersteine: Sperre, Abbruch, Blende und Rückfahrt ohne Animation',waystoneRide);

@@ -1,3 +1,5 @@
+import { recordSmithRest } from './smith.js';
+import { RUSTY_SWORD,SHARP_SWORD } from '../data/items.js';
 import { sleepUntil,dayPhase } from './world-clock.js';
 
 export const HERO_BED={room:'village-inn-upper',id:'bed-west',spawn:[2,3]};
@@ -7,8 +9,8 @@ export function createHealth() { return {hp:6,maxHp:6,deaths:0,run:null,lost:nul
 
 /** Berechnet Kampfwerte aus der tatsächlich getragenen Ausrüstung. @param {object} game Spiel. */
 export function heroStats(game) {
-  const sword=game.inventory.includes('Rostiges Schwert'),stick=game.inventory.includes('Ast');
-  return {attack:sword?2:1,defense:0,weapon:sword?'Rostiges Schwert':stick?'Ast':'Fäuste',armor:'Reisekleidung'};
+  const sharp=game.inventory.includes(SHARP_SWORD),rusty=game.inventory.includes(RUSTY_SWORD),stick=game.inventory.includes('Ast');
+  return {attack:sharp?3:rusty?2:1,defense:0,weapon:sharp?SHARP_SWORD:rusty?RUSTY_SWORD:stick?'Ast':'Fäuste',armor:'Reisekleidung'};
 }
 
 /** Sichert die mitgebrachten Dinge beim Einstieg und bankt Beute beim sicheren Verlassen. @param {object} game Spiel. @param {object} room Zielraum. */
@@ -53,7 +55,7 @@ function defeatHero(game) {
 /** Heilt nach bestätigter Bettruhe und erhält den verlorenen Dungeonbeutel. @param {object} game Spiel. @param {number} target Gewählte Tagesminute. */
 export function sleepInBed(game,target=420) {
   game.move=null; game.held=null; game.message=null; game.pages=[]; game.locationNotice=null;
-  sleepUntil(game,target); game.resting={remaining:1.2,reason:'sleep'}; refillHero(game,game.health.maxHp);
+  sleepUntil(game,target); recordSmithRest(game); game.resting={remaining:1.2,reason:'sleep'}; refillHero(game,game.health.maxHp);
   game.player={x:HERO_BED.spawn[0],y:HERO_BED.spawn[1],facing:'down'}; game.sounds.push('ui-confirm');
 }
 

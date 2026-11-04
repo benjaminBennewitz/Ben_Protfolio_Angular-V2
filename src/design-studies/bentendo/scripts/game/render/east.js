@@ -1,3 +1,4 @@
+import { drawWaystone } from './waystone.js';
 import { drawMeadowLeverStone } from './meadow-stream.js';
 import { rect } from './primitives.js';
 import { pipePorts,pipeFlow,PIPE_STEPS } from '../data/east-pipes.js';
@@ -35,7 +36,7 @@ export function drawPipeBoard(render) {
 
 /** Zeichnet neue Requisiten über kleine, getrennte Darstellungsfunktionen. @param {object} render Zeicheninformationen. @param {object} object Raumelement. */
 export function drawEastProp(render,object) {
-  const draw={'east-canteen':drawCanteen,'east-pipe':drawPipe,'east-hatch':drawHatch,'east-root-door':drawRootDoor,'east-root-mark':drawRootMark,'east-meadow-view':drawMeadowPost,'meadow-lever-stone':drawMeadowLeverStone,'lowland-gate':drawLowlandGate}[object.kind];
+  const draw={waystone:drawWaystone,'east-canteen':drawCanteen,'east-pipe':drawPipe,'east-hatch':drawHatch,'east-root-door':drawRootDoor,'east-root-mark':drawRootMark,'east-meadow-view':drawMeadowPost,'meadow-lever-stone':drawMeadowLeverStone,'lowland-gate':drawLowlandGate}[object.kind];
   if (draw) { draw(render,object); return true; }
   return ['east-cylinder','meadow-weir','meadow-pontoon'].includes(object.kind);
 }

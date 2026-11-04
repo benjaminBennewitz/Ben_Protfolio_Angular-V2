@@ -3,6 +3,7 @@ import { openAudioMenu,navigateAudioMenu } from './audio-menu.js';
 /** Schaltet eine Pause ein, ohne das aktuelle Gespräch oder den Rucksack zu verlieren. @param {object} game Spiel. */
 export function togglePause(game) {
   if (game.mode!=='world') return game.interact();
+  if (game.waystoneRide) return;
   game.held=null;
   if (game.systemMenu) { closeSystemMenu(game); return; }
   game.systemMenu={kind:'pause',choice:0}; game.sounds.push('ui-confirm');
@@ -10,7 +11,7 @@ export function togglePause(game) {
 
 /** Öffnet über SELECT die ausdrückliche Speicherbestätigung. @param {object} game Spiel. */
 export function openSaveMenu(game) {
-  if (game.mode!=='world') return;
+  if (game.mode!=='world' || game.waystoneRide) return;
   const returnPause=Boolean(game.systemMenu?.kind==='pause' || game.systemMenu?.returnPause);
   game.held=null; game.systemMenu={kind:'save',choice:0,returnPause}; game.sounds.push('ui-confirm');
 }

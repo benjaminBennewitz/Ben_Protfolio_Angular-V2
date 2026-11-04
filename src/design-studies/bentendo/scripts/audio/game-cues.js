@@ -14,7 +14,7 @@ export function playGameCue(effects,cue) {
   if (cue.startsWith('ui-')) return playUiCall(effects,cue);
   if (cue.startsWith('animal-')) return playAnimalCall(effects,cue.slice(7));
   if (cue.startsWith('success-')) return playSuccessCall(effects,cue);
-  if (['door','chest','treasure','throw'].includes(cue)) return playInteractionCall(effects,cue);
+  if (['door','chest','treasure','throw','waystone-ride'].includes(cue)) return playInteractionCall(effects,cue);
   const frequencies={step:100,push:140,pickup:620,gear:240,rune:460,talk:300,steam:120};
   effects.tone(frequencies[cue] || 220,cue==='step'?0.025:0.06);
 }

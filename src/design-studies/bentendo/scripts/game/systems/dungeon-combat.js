@@ -1,3 +1,4 @@
+import { isSword } from '../data/items.js';
 import { movementPosition } from './player-movement.js';
 import { WEAPON_TIMING } from './weapon-timing.js';
 import { dropHeart } from './heart-drops.js';
@@ -98,6 +99,6 @@ export function heroOccupies(game,x,y) {
 /** Synchronisiert Schwungklang und einmaligen Treffer auch bei großen Zeitschritten. @param {object} game Spiel. @param {number} before Vorherige Restdauer. */
 function advanceSwing(game,before) {
   const swing=WEAPON_TIMING.duration-WEAPON_TIMING.windup,impact=WEAPON_TIMING.duration-WEAPON_TIMING.impact;
-  if (before>swing && game.attackTime<=swing) game.sounds.push(heroStats(game).weapon==='Rostiges Schwert'?'combat-swing-sword':'combat-swing-stick');
+  if (before>swing && game.attackTime<=swing) game.sounds.push(isSword(heroStats(game).weapon)?'combat-swing-sword':'combat-swing-stick');
   if (before>impact && game.attackTime<=impact) strike(game);
 }

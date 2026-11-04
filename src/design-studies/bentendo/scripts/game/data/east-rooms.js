@@ -53,6 +53,7 @@ export function createEastRooms() {
   clearing.trees=clearing.trees.filter(clearOfRootWall);
   clearing.trees.push([1,0],[3,0,'pine'],[5,0],[5,2,'pine'],[17,0],[19,0,'pine'],[17,2,'pine'],[19,2]);
   addRootMarks(clearing);
+  clearing.objects.push(prop('waystone-clearing','Wegmacherstein',14,8,'waystone','waystone',{hint:'Reise prüfen'}));
   return [pumpRoom(),edge,...createForestSections(),clearing,...createMeadowRooms()];
 }
 

@@ -1,3 +1,4 @@
+import { drawWaystoneMarker } from './waystone.js';
 import { dayPhase,clockLabel } from '../systems/world-clock.js';
 import { drawQuestMarkers } from './quest-markers.js';
 import { rect } from './primitives.js';
@@ -22,6 +23,7 @@ export function drawMap(render) {
   for (const tree of room.trees || []) mapTree(ctx,plan,tree);
   for (const house of room.buildings || []) mapHouse(ctx,plan,house);
   for (const object of room.objects) if (object.kind==='gate' || object.kind==='well') mapLandmark(ctx,plan,object,object.id==='east-gate'?game.flags.eastOpen:game.flags.northOpen);
+  if (game.flags.eastRootOpen) for (const stone of room.objects) if (stone.kind==='waystone') drawWaystoneMarker(ctx,plan,stone);
   drawQuestMarkers(render,plan);
   drawMarker(ctx,plan.x+location.x*scale,plan.y+location.y*scale,scale);
   pixelText(ctx,'N',145,26,PALETTE[2]); rect(ctx,2,146,36,1,7); rect(ctx,2,145,36,3,1); rect(ctx,2,146,35,1,1);

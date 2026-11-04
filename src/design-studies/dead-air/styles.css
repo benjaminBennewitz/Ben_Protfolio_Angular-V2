@@ -24,7 +24,7 @@
    04   Receiver, Frequenzregler und Kameras
    05   Analoger Bildschirm, Lichtquellen und Szene
    06   Wiedergabe und Telemetrie
-   07   Informationsdialog und Quellenhinweise
+   07   Story-Artefakte, Dialoge und Quellenhinweise
    08   Zustandswechsel und Animationen
    09   Responsive Verhalten
    10   Reduced Motion
@@ -721,8 +721,8 @@ figure {
   display: block;
   height: auto;
   object-fit: contain;
-  opacity: 0;
-  animation: window-dim 8s steps(1, end) infinite;
+  opacity: 1;
+  animation: none;
 }
 
 .scene__window-light--a {
@@ -829,8 +829,8 @@ figure {
     0 0 0 1px rgba(255, 195, 188, 0.26),
     0 0 8px 2px rgba(255, 101, 92, 0.62),
     0 0 18px 4px rgba(255, 82, 72, 0.28);
-  opacity: 0;
-  animation: mast-led-normal 3.2s steps(1, end) infinite;
+  opacity: 1;
+  animation: none;
 }
 
 .scene__anomaly {
@@ -912,6 +912,272 @@ figure {
   background: #d7dfd5;
   pointer-events: none;
   animation: signal-line 6s linear infinite;
+}
+
+/* Interaktives Fundstück in CAM 02. Die Flaschenpost bleibt zunächst unsichtbar,
+   materialisiert mit Glitch-Artefakten und liegt danach als klickbares Objekt
+   im Felsvorsprung der Küstenkamera. */
+.scene__artifact[hidden] {
+  display: none;
+}
+
+.scene__artifact {
+  position: absolute;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scene__artifact--bottle {
+  top: 66.15%;
+  left: 80.55%;
+  width: clamp(48px, 7.1vw, 92px);
+  aspect-ratio: 1.33;
+  transform: translate(-50%, -50%) rotate(-8deg) scale(.86);
+  transform-origin: center;
+  filter: drop-shadow(0 5px 14px rgba(0, 0, 0, .55));
+  transition: opacity 420ms ease, transform 540ms ease, filter 540ms ease;
+}
+
+.scene__artifact--bottle:hover,
+.scene__artifact--bottle:focus-visible {
+  transform: translate(-50%, -50%) rotate(-6deg) scale(.95);
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .65)) drop-shadow(0 0 8px rgba(212, 231, 231, .16));
+}
+
+.scene__artifact-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.scene__artifact-image--base {
+  opacity: .96;
+}
+
+.scene__artifact-image--glitch {
+  opacity: 0;
+  transform: scale(1.07);
+  filter: saturate(1.1) brightness(1.06);
+  mix-blend-mode: screen;
+}
+
+/* 07   Story-Artefakte, Dialoge und Quellenhinweise */
+
+.artifact-dialog,
+.info-dialog {
+  position: fixed;
+  border: 1px solid #78908b;
+  border-radius: 2px;
+  color: var(--chalk);
+  box-shadow: 12px 12px 0 #03080988, 0 30px 80px #0009;
+}
+
+.artifact-dialog {
+  width: min(760px, calc(100% - 32px));
+  max-height: min(680px, calc(100svh - 32px));
+  padding: 24px;
+  overflow-y: auto;
+  background: linear-gradient(132deg, #243336, #111a1c 65%);
+}
+
+.artifact-dialog::backdrop,
+.info-dialog::backdrop {
+  background: #030709bb;
+  backdrop-filter: blur(5px);
+}
+
+.artifact-dialog__header,
+.info-dialog__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--edge);
+}
+
+.artifact-dialog__close,
+.info-dialog__close {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--edge);
+  background: var(--surface);
+  color: var(--chalk);
+  font-size: 25px;
+  line-height: 1;
+}
+
+.artifact-dialog__close:hover,
+.info-dialog__close:hover {
+  border-color: var(--secondary);
+  background: var(--surface-raised);
+}
+
+.artifact-dialog__layout {
+  display: grid;
+  grid-template-columns: minmax(180px, 228px) minmax(0, 1fr);
+  gap: 26px;
+  margin-top: 22px;
+  align-items: start;
+}
+
+.artifact-dialog__preview {
+  position: relative;
+  padding: 16px;
+  border: 1px solid var(--edge-soft);
+  background: linear-gradient(180deg, rgba(18, 29, 31, .92), rgba(10, 16, 17, .96));
+}
+
+.artifact-dialog__preview::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 34%, rgba(0, 0, 0, .34) 100%);
+  pointer-events: none;
+}
+
+.artifact-dialog__preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .5));
+}
+
+.artifact-note {
+  position: relative;
+  padding: clamp(18px, 2vw, 28px);
+  border: 1px solid rgba(146, 130, 102, .46);
+  background:
+    linear-gradient(180deg, rgba(232, 223, 199, .96), rgba(202, 187, 158, .95)),
+    radial-gradient(circle at 15% 20%, rgba(255, 255, 255, .18), transparent 32%);
+  color: #2a271f;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18), 0 12px 28px rgba(0, 0, 0, .18);
+}
+
+.artifact-note::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(180deg, rgba(90, 77, 58, .022) 0 2px, transparent 2px 6px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.artifact-note__eyebrow {
+  margin: 0 0 12px;
+  color: #564b38;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+
+.artifact-note h2 {
+  margin: 0;
+  font-family: 'B2 Condensed', Impact, 'Arial Narrow', sans-serif;
+  font-size: clamp(42px, 5vw, 62px);
+  line-height: .92;
+  letter-spacing: -.04em;
+}
+
+.artifact-note__body {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.artifact-note__body p,
+.artifact-note__footer {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: #3a352a;
+  font-size: 14px;
+  line-height: 1.62;
+}
+
+.artifact-note__footer {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(90, 77, 58, .22);
+  color: #5b5140;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.info-dialog {
+  width: min(440px, calc(100% - 32px));
+  max-height: min(680px, calc(100svh - 32px));
+  padding: 24px;
+  overflow-y: auto;
+  background: linear-gradient(132deg, #253438, #111b1d 65%);
+}
+
+.info-dialog__logo {
+  display: block;
+  width: 72px;
+  height: 72px;
+  margin: 20px 0 8px;
+}
+
+.info-dialog h2 {
+  font-family: 'B2 Condensed', Impact, 'Arial Narrow', sans-serif;
+  font-size: clamp(48px, 10vw, 66px);
+  letter-spacing: -.035em;
+  line-height: 1;
+}
+
+.info-dialog p {
+  max-width: 35ch;
+  margin-top: 12px;
+  color: var(--secondary);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.info-dialog__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 25px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--edge);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.info-dialog__links {
+  display: grid;
+  gap: 0;
+  margin-top: 8px;
+}
+
+.info-dialog__links a {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--edge-soft);
+  color: var(--chalk);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.info-dialog__links a:hover {
+  color: var(--signal-light);
 }
 
 .television__footer {
@@ -1006,105 +1272,6 @@ figure {
   animation-delay: -900ms;
 }
 
-/* 07   Informationsdialog und Quellenhinweise */
-
-.info-dialog {
-  position: fixed;
-  width: min(440px, calc(100% - 32px));
-  max-height: min(680px, calc(100svh - 32px));
-  padding: 24px;
-  overflow-y: auto;
-  border: 1px solid #78908b;
-  border-radius: 2px;
-  background: linear-gradient(132deg, #253438, #111b1d 65%);
-  color: var(--chalk);
-  box-shadow: 12px 12px 0 #03080988, 0 30px 80px #0009;
-}
-
-.info-dialog::backdrop {
-  background: #030709bb;
-  backdrop-filter: blur(5px);
-}
-
-.info-dialog__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--edge);
-}
-
-.info-dialog__close {
-  display: grid;
-  width: 38px;
-  height: 38px;
-  place-items: center;
-  border: 1px solid var(--edge);
-  background: var(--surface);
-  color: var(--chalk);
-  font-size: 25px;
-  line-height: 1;
-}
-
-.info-dialog__close:hover {
-  border-color: var(--secondary);
-  background: var(--surface-raised);
-}
-
-.info-dialog__logo {
-  display: block;
-  width: 72px;
-  height: 72px;
-  margin: 20px 0 8px;
-}
-
-.info-dialog h2 {
-  font-family: 'B2 Condensed', Impact, 'Arial Narrow', sans-serif;
-  font-size: clamp(48px, 10vw, 66px);
-  letter-spacing: -.035em;
-  line-height: 1;
-}
-
-.info-dialog p {
-  max-width: 35ch;
-  margin-top: 12px;
-  color: var(--secondary);
-  font-size: 13px;
-  line-height: 1.55;
-}
-
-.info-dialog__meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 25px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--edge);
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 10px;
-}
-
-.info-dialog__links {
-  display: grid;
-  gap: 0;
-  margin-top: 8px;
-}
-
-.info-dialog__links a {
-  padding: 14px 0;
-  border-bottom: 1px solid var(--edge-soft);
-  color: var(--chalk);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  text-decoration: none;
-}
-
-.info-dialog__links a:hover {
-  color: var(--signal-light);
-}
-
 /* 08   Zustandswechsel und Animationen */
 
 [data-state='interference'] .scene__fog::before,
@@ -1189,6 +1356,36 @@ figure {
   background: var(--signal);
 }
 
+/* Die Geschichte kontrolliert die Lichtquellen – Frequenzen allein lösen noch keine Ereignisse aus. */
+[data-story='routine'] .scene__window-light,
+[data-story='message-found'] .scene__window-light,
+[data-story='morse-active'] .scene__window-light {
+  opacity: 1;
+  animation: none;
+}
+
+[data-story='routine'] .scene__mast-led,
+[data-story='message-found'] .scene__mast-led {
+  opacity: 1;
+  animation: none;
+}
+
+[data-story='morse-active'] .scene__mast-led {
+  opacity: 1;
+  animation: mast-code-1037 22s steps(1, end) infinite;
+}
+
+[data-story='windows-event'] .scene__window-light {
+  animation-name: window-dim;
+  animation-duration: 8s;
+  animation-timing-function: steps(1, end);
+  animation-iteration-count: infinite;
+}
+
+[data-story='windows-event'] .scene__mast-led {
+  animation: mast-led-fault 4s steps(1, end) infinite;
+}
+
 /* Die gewählte Kamera hat Vorrang vor den frequenzabhängigen Lichtzuständen. */
 [data-source='video'] .scene__window-lights,
 [data-source='video'] .scene__beam--lighthouse,
@@ -1198,11 +1395,72 @@ figure {
   animation: none;
 }
 
+[data-source='artwork'] .scene__artifact--bottle,
+[data-bottle='hidden'] .scene__artifact--bottle,
+[data-bottle='waiting'] .scene__artifact--bottle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-source='video'][data-bottle='visible'] .scene__artifact--bottle,
+[data-source='video'][data-bottle='opened'] .scene__artifact--bottle,
+[data-source='video'][data-bottle='materializing'] .scene__artifact--bottle {
+  opacity: .94;
+  pointer-events: auto;
+}
+
+[data-bottle='opened'] .scene__artifact--bottle {
+  transform: translate(-50%, -50%) rotate(-8deg) scale(.92);
+}
+
+[data-bottle='materializing'] .scene__artifact--bottle {
+  animation: artifact-bottle-arrive 2s ease-out both;
+}
+
+[data-bottle='materializing'] .scene__artifact-image--base {
+  animation: artifact-bottle-core 2s ease-out both;
+}
+
+[data-bottle='materializing'] .scene__artifact-image--glitch {
+  animation: artifact-bottle-glitch 2s steps(1, end) both;
+}
+
+/* Die Flasche liegt nach dem Reveal stabil auf dem Felsen. */
+[data-bottle='visible'] .scene__artifact--bottle,
+[data-bottle='opened'] .scene__artifact--bottle {
+  transform: translate(-50%, -50%) rotate(-8deg) scale(.92);
+  animation: none;
+}
+
 [data-paused='true'] .scene *,
 [data-paused='true'] .scene__fog::before,
 [data-paused='true'] .scene__fog::after,
 [data-paused='true'] .readout-bars i {
   animation-play-state: paused;
+}
+
+@keyframes artifact-bottle-arrive {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(-8deg) scale(.9); }
+  16% { opacity: .28; transform: translate(-50%, -50%) rotate(-8deg) scale(.92); }
+  38% { opacity: .62; transform: translate(-50%, -50%) rotate(-8deg) scale(.92); }
+  55% { opacity: .52; transform: translate(-50%, -50%) rotate(-8deg) scale(.92); }
+  80%, 100% { opacity: .94; transform: translate(-50%, -50%) rotate(-8deg) scale(.92); }
+}
+
+@keyframes artifact-bottle-core {
+  0% { opacity: 0; filter: blur(4px); }
+  35% { opacity: .76; filter: blur(1.5px); }
+  72%, 100% { opacity: .96; filter: blur(0); }
+}
+
+@keyframes artifact-bottle-glitch {
+  0%, 14% { opacity: 0; transform: translate3d(0,0,0) scale(1.01); }
+  15%, 20% { opacity: .68; transform: translate3d(-2px,1px,0) scale(1.03); }
+  21%, 39% { opacity: 0; }
+  40%, 45% { opacity: .48; transform: translate3d(2px,-1px,0) scale(1.02); }
+  46%, 63% { opacity: 0; }
+  64%, 68% { opacity: .22; transform: translate3d(-1px,0,0) scale(1.01); }
+  69%, 100% { opacity: 0; transform: translate3d(0,0,0) scale(1); }
 }
 
 @keyframes fog-bank-distant {
@@ -1220,6 +1478,51 @@ figure {
   21%, 24% { opacity: .92; }
   49%, 53% { opacity: .68; }
   75%, 77% { opacity: .97; }
+}
+
+@keyframes mast-code-1037 {
+  0.000% { opacity: 0; }
+  6.818% { opacity: 1; }
+  7.909% { opacity: 0; }
+  9.000% { opacity: 1; }
+  12.273% { opacity: 0; }
+  13.364% { opacity: 1; }
+  16.636% { opacity: 0; }
+  17.727% { opacity: 1; }
+  21.000% { opacity: 0; }
+  22.091% { opacity: 1; }
+  25.364% { opacity: 0; }
+  28.636% { opacity: 1; }
+  31.909% { opacity: 0; }
+  33.000% { opacity: 1; }
+  36.273% { opacity: 0; }
+  37.364% { opacity: 1; }
+  40.636% { opacity: 0; }
+  41.727% { opacity: 1; }
+  45.000% { opacity: 0; }
+  46.091% { opacity: 1; }
+  49.364% { opacity: 0; }
+  52.636% { opacity: 1; }
+  53.727% { opacity: 0; }
+  54.818% { opacity: 1; }
+  55.909% { opacity: 0; }
+  57.000% { opacity: 1; }
+  58.091% { opacity: 0; }
+  59.182% { opacity: 1; }
+  62.455% { opacity: 0; }
+  63.545% { opacity: 1; }
+  66.818% { opacity: 0; }
+  70.091% { opacity: 1; }
+  73.364% { opacity: 0; }
+  74.455% { opacity: 1; }
+  77.727% { opacity: 0; }
+  78.818% { opacity: 1; }
+  79.909% { opacity: 0; }
+  81.000% { opacity: 1; }
+  82.091% { opacity: 0; }
+  83.182% { opacity: 1; }
+  84.273% { opacity: 0; }
+  100.000% { opacity: 0; }
 }
 
 @keyframes mast-led-normal {
@@ -1282,6 +1585,25 @@ figure {
 
 @keyframes readout {
   to { height: 25%; }
+}
+
+@media (max-width: 720px) {
+  .artifact-dialog {
+    padding: 18px;
+  }
+
+  .artifact-dialog__layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .artifact-dialog__preview {
+    max-width: 240px;
+  }
+
+  .artifact-note h2 {
+    font-size: clamp(34px, 10vw, 48px);
+  }
 }
 
 /* 09   Responsive Verhalten */

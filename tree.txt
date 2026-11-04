@@ -1017,6 +1017,8 @@ folio/
 │   │   │   │   ├── coast-loop.mp4
 │   │   │   │   ├── favicon.svg
 │   │   │   │   ├── lighthouse-beam.webp
+│   │   │   │   ├── message-bottle.webp
+│   │   │   │   ├── message-bottle-glitch.webp
 │   │   │   │   ├── preview.webp
 │   │   │   │   ├── scene-poster.webp
 │   │   │   │   ├── station-mark.svg

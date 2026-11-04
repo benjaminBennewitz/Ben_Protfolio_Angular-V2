@@ -21,11 +21,11 @@ The fictional North Coast Broadcasting System (NCBS) is framed as a decommission
 - Native HTML, CSS and JavaScript ES module; no app framework, bundler or runtime dependencies.
 - English and German translations of all control instructions and descriptions; broadcast branding remains in English.
 - Manual FM tuning from 87.5 to 108.0 MHz in 0.1 MHz increments; no developer-only channel presets or interference-strength control.
-- Three automatically detected signal states, `normal` (87.6 MHz), `interference` (91.3 MHz), and `unknown` (103.7 MHz). Other frequencies report `NO CARRIER` rather than triggering story events.
+- Three channel frequencies with staged unlocks: `normal` (87.6 MHz) is initially available, `interference` (91.3 MHz) becomes receivable after reading the message bottle, and `unknown` (103.7 MHz) after the radio mast starts signaling. Before an unlock, they report `NO CARRIER`.
 - Fixed interference values of 15%, 60%, and 91% respectively; UNKNOWN darkens the camera image by ~30% relative to the previous implementation.
-- CAM 01 uses the owner-corrected scene image without the original baked-in beam; the beam is generated independently by CSS as an animated, softly feathered light source.
+- CAM 01 uses the owner-corrected scene image without the original baked-in beam; a static, warmly feathered lighthouse glow is generated independently by CSS.
 - Three independent, tightly masked photographic window passes on CAM 01 switch between the original warm-color glazing and a desaturated dark variant. The alpha-masked WebP crops align with the 1280×720 scene master; no artificial light dots or full-scene grayscale effects are used. Surrounding bloom in the concept image is still embedded and cannot be fully removed without a genuinely unlit master.
-- CAM 01 has a softened CSS lighthouse beam with horizontal-axis sweep and a separate CSS obstacle light on the radio mast (regular red flash, then irregular or interrupted flashes by signal state). The owner-corrected image no longer contains the original beam. A local lighthouse sweep is anchored to the lantern; it uses a soft gradient, feathered alpha mask, and 3D Y-axis rotation rather than a baked-in beam.
+- CAM 01 has a static, softened CSS lighthouse beam and a CSS mast light. At the beginning the windows are dark and the mast light stays continuously on; only the later story stages enable Morse flashes and window flicker.
 - Two selectable sources and the pause button share one compact receiver row under the frequency dial; the monitor gains back the former toolbar height. The video loads only when requested.
 - `deadair:frequencychange` and `deadair:signalacquired` events on `window` provide `{ frequency, channel, reception, interference }` for future Web Audio and story triggers. The latter fires only upon acquiring a new named station. No sound is played or fetched yet.
 - A ±0.35 MHz capture range makes manual station scanning manageable on touch displays, while the tuner still displays the actual frequency in 0.1 MHz steps.
@@ -35,6 +35,7 @@ The fictional North Coast Broadcasting System (NCBS) is framed as a decommission
 - Dedicated, keyboard-accessible information dialog containing imprint, privacy and video source links instead of a permanent footer.
 - Local station-mark SVG (broadcast tower with red/orange signal waveform) and simplified SVG favicon; the wordmark is typeset directly in the interface.
 - Broadcast-specific user-facing copy; technical prototype notes are documented here rather than displayed in the interface.
+- Nach 15 Sekunden aktiver Laufzeit materialisiert auf CAM 02 eine klickbare Flaschenpost als erstes echtes Story-Artefakt. Ein Dialog mit übersetzter Fundnotiz startet die spätere Frequenzkette um 91.3 MHz.
 - Semantic control groups, visible keyboard focus and controls that work without pointing-device gestures.
 
 The art-direction still is a flattened concept visualization. It is **not** a working parallax scene or a replacement for the upcoming separately isolated photographic assets. The ocean video is a moving visual reference; matching the concept still to the video perspective, tracking, compositing and loop continuity remain separate production tasks.
@@ -152,3 +153,22 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 - Dichte, fotografisch weiche `coastal-fog.webp` mit deutlicher sichtbaren Nebelbänken und organischen Intensitätsunterschieden.
 - Zwei unterschiedlich schnelle, überlappende Ebenen ziehen am Horizont und über den Felsen; ein dezenter Grunddunst verbindet beide.
 - Vorhandene Signalzustände, Kameras, Pause und Reduced Motion bleiben erhalten.
+
+
+## Patch 22 – First Story Artifact: Message Bottle
+
+- Neue freigestellte Flaschenpost (`message-bottle.webp`) und ein separater Glitch-Zustand (`message-bottle-glitch.webp`) als CAM-02-Asset ergänzt.
+- Die Flaschenpost erscheint nach 15 Sekunden aktiver Laufzeit automatisch auf CAM 02, ohne permanente UI-Hinweise oder zusätzliche Debug-Steuerung.
+- Erscheinen erfolgt mit kurzer dimensionaler Materialisierungsanimation; danach bleibt das Objekt als klickbares Fundstück im Bild.
+- Klick auf das Artefakt öffnet einen neuen Dialog mit der ersten erzählerischen Nachricht und dem Hinweis auf 91.3 MHz sowie die Stationskamera.
+- `deadair:bottleappeared` und `deadair:bottleopened` stehen auf `window` als Hook für die spätere Ereigniskette bereit.
+
+
+## Patch 23 – Investigation Intro & Stabilized CAM 02
+
+- **ROUTINE:** Die Fenster werden bereits ab Beginn vollständig durch die vorhandenen Off-Masken abgedunkelt; das rote Mastlicht leuchtet ohne Blinken. Frühe Frequenzsuche triggert keine Story-Effekte.
+- Funkfrequenzen werden schrittweise freigeschaltet: Erst nach der Flaschenpost kann 91.3 MHz empfangen werden. Erst CAM 01 + 91.3 MHz startet das Morse-Lichtsignal `1037`; erst anschließend kann 103.7 MHz das Fensterereignis auslösen.
+- Die Flaschenpost enthält nun eine glaubwürdigere, scheinbar menschliche Spur zu einem fehlenden Teil der letzten Übertragung. Die Wesen geben sich nicht zu erkennen, die Kennung `91 / 3` muss interpretiert werden.
+- Die Flasche materialisiert erst, wenn CAM 02 nach Ablauf von 15 Sekunden aktiver Laufzeit tatsächlich sichtbar ist. Kein übertriebener Zoom, kein dauerhaftes Schweben nach dem Reveal.
+- `coast-loop.mp4` wurde mit FFmpeg `vidstabdetect` / `vidstabtransform` im Tripod-Modus stabilisiert und als H.264 erneut gespeichert. Der Felsbereich bleibt nun über die 12 Sekunden weitgehend ortsfest (in einer Stichprobe verringerte sich die horizontale Abweichung von 22 auf 3 Pixel); die Brandung bewegt sich weiterhin. Die Stabilisierung kann den Bildrand geringfügig beschneiden.
+- `scene` verwendet `role=group` statt `role=img`, damit die interaktive Flaschenpost für Screenreader nicht als dekorativer Bildinhalt versteckt wird.

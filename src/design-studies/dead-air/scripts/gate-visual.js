@@ -58,15 +58,15 @@ function levitateTriangle(points, time, opening, reducedMotion) {
     x: points.reduce((sum, point) => sum + point.x, 0) / 3,
     y: points.reduce((sum, point) => sum + point.y, 0) / 3,
   };
-  const rotation = reducedMotion ? -.055 * lift : lift * (
-    -.075 + .058 * Math.sin(time * .57) + .026 * Math.sin(time * 1.26)
-  );
-  const shear = reducedMotion ? 0 : lift * .13 * Math.sin(time * .38 + 1);
-  const pitch = 1 - lift * (reducedMotion ? .08 : .12 + .07 * Math.sin(time * .43));
-  const hover = lift * (23 + (reducedMotion ? 0 : 6 * Math.sin(time * 1.11)));
-  const pulse = reducedMotion ? 1 : 1 + lift * (
-    .025 * Math.sin(time * 3.4) + .013 * Math.sin(time * 9.8)
-  );
+
+  // Die Geometrie schwebt langsam. Kurze elektrische Impulse verändern nur das Licht,
+  // nicht mehr die Position des ganzen Tores.
+  const rotation = lift * (reducedMotion ? -.022 : -.022 + .013 * Math.sin(time * .24));
+  const shear = reducedMotion ? 0 : lift * .012 * Math.sin(time * .17 + .6);
+  const pitch = 1 - lift * (reducedMotion ? .1 : .1 + .009 * Math.sin(time * .19));
+  const hover = lift * (20 + (reducedMotion ? 0 : 2.6 * Math.sin(time * .32)));
+  const drift = reducedMotion ? 0 : lift * 2.1 * Math.sin(time * .21 + .4);
+  const pulse = 1 + (reducedMotion ? 0 : lift * .003 * Math.sin(time * .38));
   const cosine = Math.cos(rotation);
   const sine = Math.sin(rotation);
 
@@ -75,44 +75,61 @@ function levitateTriangle(points, time, opening, reducedMotion) {
     const y = (point.y - center.y) * pulse;
     const rx = x * cosine - y * sine;
     const ry = x * sine + y * cosine;
-    return { x: center.x + rx + shear * ry, y: center.y + ry * pitch - hover };
+    return { x: center.x + rx + shear * ry + drift, y: center.y + ry * pitch - hover };
   });
 }
 
 /** Weicher, von der schwebenden Öffnung getrennter Schlagschatten auf dem Meer.
  * Die Distanz zwischen Objekt und Schatten macht die räumliche Höhe lesbar. */
-function drawHoverShadow(ctx, anchored, opening) {
+function drawHoverShadow(ctx, anchored, hovering, opening) {
   if (opening < .025) return;
-  const center = {
-    x: anchored.reduce((sum, p) => sum + p.x, 0) / 3,
-    y: anchored.reduce((sum, p) => sum + p.y, 0) / 3,
-  };
-  const bounds = {
-    minX: Math.min(...anchored.map(point => point.x)),
-    maxX: Math.max(...anchored.map(point => point.x)),
-  };
-  const radius = Math.max(12, (bounds.maxX - bounds.minX) * .44);
-  const shadowY = center.y + 38;
-  const intensity = ease(opening);
-  ctx.save();
-  // Leichtes Streulicht um die dunkle Fläche macht den Schatten im Meer sichtbar.
-  const reflection = ctx.createRadialGradient(center.x, shadowY, radius * .08,
-    center.x, shadowY, radius * 1.2);
-  reflection.addColorStop(0, `rgba(13,3,4,${.48 * intensity})`);
-  reflection.addColorStop(.55, `rgba(6,2,5,${.34 * intensity})`);
-  reflection.addColorStop(.85, `rgba(172,52,19,${.075 * intensity})`);
-  reflection.addColorStop(1, 'rgba(172,52,19,0)');
-  ctx.fillStyle = reflection;
-  ctx.beginPath();
-  ctx.ellipse(center.x, shadowY, radius * 1.28, radius * .36, 0, 0, Math.PI * 2);
-  ctx.fill();
 
-  ctx.translate(0, 26 + 17 * intensity);
-  ctx.globalAlpha = .58 * intensity;
-  ctx.shadowColor = '#030206';
-  ctx.shadowBlur = 30;
-  ctx.fillStyle = 'rgba(3,2,5,.78)';
-  traceFracture(ctx, expandTriangle(anchored, 1.06), 0, .1);
+  const progress = ease(opening);
+  const surface = {
+    x: anchored.reduce((sum, point) => sum + point.x, 0) / 3,
+    y: anchored.reduce((sum, point) => sum + point.y, 0) / 3,
+  };
+  const airborne = {
+    x: hovering.reduce((sum, point) => sum + point.x, 0) / 3,
+    y: hovering.reduce((sum, point) => sum + point.y, 0) / 3,
+  };
+
+  // Perspektivische Projektion auf die Wasseroberfläche: Rotation, seitlicher Drift
+  // und langsames Schweben stammen unmittelbar aus der aktuellen Torgeometrie.
+  const lift = ease(opening * 1.45);
+  const shadowCenter = {
+    x: airborne.x,
+    y: surface.y + 24 + (airborne.y - surface.y + lift * 20) * .42,
+  };
+  const footprint = hovering.map(point => ({
+    x: shadowCenter.x + (point.x - airborne.x) * .98,
+    y: shadowCenter.y + (point.y - airborne.y) * .48,
+  }));
+  const span = Math.max(12, Math.max(...footprint.map(point => point.x))
+    - Math.min(...footprint.map(point => point.x)));
+
+  ctx.save();
+  // Breiter, sehr weicher Lichtentzug statt einer harten schwarzen Dreiecksfläche.
+  const wash = ctx.createRadialGradient(shadowCenter.x, shadowCenter.y, span * .05,
+    shadowCenter.x, shadowCenter.y, span * .67);
+  wash.addColorStop(0, `rgba(3,2,5,${.18 * progress})`);
+  wash.addColorStop(.42, `rgba(3,2,5,${.1 * progress})`);
+  wash.addColorStop(1, 'rgba(3,2,5,0)');
+  ctx.translate(shadowCenter.x, shadowCenter.y);
+  ctx.scale(1, .52);
+  ctx.translate(-shadowCenter.x, -shadowCenter.y);
+  ctx.fillStyle = wash;
+  ctx.beginPath();
+  ctx.arc(shadowCenter.x, shadowCenter.y, span * .67, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  // Auch der dreieckige Kern folgt der geneigten Portalform, bleibt aber diffus.
+  ctx.save();
+  ctx.filter = 'blur(25px)';
+  ctx.globalAlpha = .11 * progress;
+  ctx.fillStyle = '#050308';
+  traceFracture(ctx, footprint, 0, .06);
   ctx.fill();
   ctx.restore();
 }
@@ -214,7 +231,7 @@ function drawAperture(ctx, points, time, opening) {
     y: points.reduce((sum, point) => sum + point.y, 0) / 3,
   };
   const radius = Math.hypot(points[0].x - center.x, points[0].y - center.y) * 1.7;
-  const extent = Math.max(.04, opening * (1 + .028 * Math.sin(time * 3.6) + .012 * Math.sin(time * 13)));
+  const extent = Math.max(.04, opening * (1 + .004 * Math.sin(time * .42)));
 
   const expanded = expandTriangle(points, extent);
   ctx.save();
@@ -321,7 +338,7 @@ export function drawGate(canvas, elapsedMs, mode, reducedMotion = false) {
   const electricPulse = reducedMotion ? 1 : .82 + .14 * Math.sin(t * 5.3) + .04 * Math.sin(t * 17.8);
 
   // Der Schatten liegt unter dem Objekt, nicht im rot leuchtenden Riss.
-  drawHoverShadow(ctx, anchoredTriangle, opening);
+  drawHoverShadow(ctx, anchoredTriangle, hoveringTriangle, opening);
   drawRelays(ctx, link > 0 ? hoveringTriangle : points, t, (.25 + approach * .75) * electricPulse);
 
   if (link > 0) {

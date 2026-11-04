@@ -72,12 +72,13 @@
             <span id="camera-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></span>
             <button id="pause-toggle" type="button" class="pause-toggle" aria-pressed="false"><span id="pause-icon" aria-hidden="true">Ⅱ</span> <span id="pause-label" data-i18n="pause">PAUSE</span></button>
           </div>
+          <div class="receiver__archive" aria-label="Archivierte Funksignale und Systemprotokolle"><span class="receiver__archive-label" id="archive-label">EMPFANGENE DATEN / ARCHIV</span><div class="receiver__archive-actions"><button id="evidence-log" class="monitor-area__evidence" type="button" aria-controls="message-dialog" aria-haspopup="dialog" hidden>AKTE / 01</button><button id="transmission-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 001</button><button id="transmission-2-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 002</button><button id="relay-toggle" class="monitor-area__evidence" type="button" aria-controls="relay-dialog" aria-haspopup="dialog" hidden>RELAIS / 0/3</button><button id="sync-toggle" class="monitor-area__evidence receiver__sync" type="button" aria-controls="sync-dialog" aria-haspopup="dialog" hidden>SYNC / 3</button></div></div>
         </div>
 
       </section>
 
       <section class="monitor-area" aria-labelledby="monitor-title">
-        <div class="monitor-area__header"><h2 id="monitor-title">CAMERA 01 <span>//</span> NORTH COAST FEED</h2><div class="monitor-area__actions"><button id="evidence-log" class="monitor-area__evidence" type="button" aria-controls="message-dialog" aria-haspopup="dialog" hidden>AKTE / 01</button><button id="transmission-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 001</button><button id="relay-toggle" class="monitor-area__evidence" type="button" aria-controls="relay-dialog" aria-haspopup="dialog" hidden>RELAIS / 0/3</button><span class="indicator indicator--red" aria-hidden="true"></span> <span data-i18n="transmitting">ÜBERTRAGUNG AKTIV</span></div></div>
+        <div class="monitor-area__header"><h2 id="monitor-title">CAMERA 01 <span>//</span> NORTH COAST FEED</h2><div class="monitor-area__actions"><span class="indicator indicator--red" aria-hidden="true"></span> <span data-i18n="transmitting">ÜBERTRAGUNG AKTIV</span></div></div>
         <div class="television" role="group" aria-label="Analoger Monitor mit Küstenübertragung und Signalstörungen">
           <div class="television__badge"><span>NCBS</span><span>MODEL 1993–C</span></div>
           <div class="television__screen">
@@ -179,6 +180,31 @@
         <div class="relay-dialog__row" id="relay-row-b" tabindex="-1" data-linked="false"><strong>RELAY / B</strong><span>98–100 MHz</span><span class="relay-dialog__status">KEIN LINK</span></div>
         <div class="relay-dialog__row" id="relay-row-c" tabindex="-1" data-linked="false"><strong>RELAY / C</strong><span>105–107 MHz</span><span class="relay-dialog__status">KEIN LINK</span></div>
         <p class="relay-dialog__progress" id="relay-progress" role="status" aria-live="polite">PEILUNG UNVOLLSTÄNDIG · 0/3</p>
+      </div>
+    </dialog>
+
+
+    <dialog class="artifact-dialog sync-dialog" id="sync-dialog" aria-labelledby="sync-title" aria-describedby="sync-description">
+      <div class="artifact-dialog__header">
+        <span class="eyebrow" id="sync-meta">NCBS / PEILUNG · PHASENABGLEICH</span>
+        <button class="artifact-dialog__close" id="sync-close" type="button" aria-label="Schließen">×</button>
+      </div>
+      <div class="sync-dialog__content">
+        <h2 id="sync-title">SIGNALABGLEICH</h2>
+        <p id="sync-description">Die Relais sind verbunden, doch ihre Taktimpulse liegen auseinander. Relais A liefert die Referenz.</p>
+        <div class="sync-dialog__scope" role="img" id="sync-graph" aria-label="Drei Oszilloskopwellen, von denen B und C gegen A verschoben sind">
+          <svg id="sync-waveform" viewBox="0 0 480 152" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <defs><pattern id="sync-grid" width="24" height="19" patternUnits="userSpaceOnUse"><path d="M 24 0 L 0 0 0 19" fill="none" stroke="#5d8180" stroke-width=".55" opacity=".4"/></pattern></defs>
+            <rect width="480" height="152" fill="url(#sync-grid)"/>
+            <path id="sync-path-a" class="sync-dialog__wave sync-dialog__wave--a" d=""/>
+            <path id="sync-path-b" class="sync-dialog__wave sync-dialog__wave--b" d=""/>
+            <path id="sync-path-c" class="sync-dialog__wave sync-dialog__wave--c" d=""/>
+          </svg>
+          <div class="sync-dialog__legend" aria-hidden="true"><span>● A / REF</span><span>● B / OFFSET</span><span>● C / OFFSET</span></div>
+        </div>
+        <div class="sync-dialog__control"><div class="sync-dialog__control-label"><label for="sync-offset-b" id="sync-label-b">RELAIS B / ZEITVERSATZ</label><output for="sync-offset-b" id="sync-value-b">+68 ms</output></div><input id="sync-offset-b" type="range" min="-100" max="100" step="1" value="68"></div>
+        <div class="sync-dialog__control"><div class="sync-dialog__control-label"><label for="sync-offset-c" id="sync-label-c">RELAIS C / ZEITVERSATZ</label><output for="sync-offset-c" id="sync-value-c">−43 ms</output></div><input id="sync-offset-c" type="range" min="-100" max="100" step="1" value="-43"></div>
+        <div class="sync-dialog__foot"><p id="sync-status" role="status" aria-live="polite">PHASENDRIFT ERKANNT</p><button id="sync-commit" type="button" disabled>PEILUNG KALIBRIEREN</button></div>
       </div>
     </dialog>
 

@@ -283,3 +283,14 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - **Story-Ende des Patches:** Bei **RELAIS / 3/3** meldet das Protokoll, dass die Peilung noch nicht synchron ist (`relays-linked`). Die folgende Phasenabgleich-Mechanik und AUDIO / 002 sind **noch nicht implementiert**.
 - Die bekannten Stufen (Flaschenpost, Morsecode, Fensterflackern, automatischer Suchlauf, AUDIO / 001) bleiben unverändert; das Audioarchiv funktioniert auch nach 3/3. Dialog, Status und Aktionen besitzen DE/EN-Texte. Neue Ereignis-Hooks: `deadair:relaylinked`, `deadair:relaysrestored`.
 - **Testumfang:** Isolierter Chromium-Test der vollständigen Kette, drei Verbindungen, Dialog, Sprachwechsel, responsive Ansichten 375/390/1024 px und fehlender JS-Laufzeitfehler. Der vollständige Integrationstest mit dem echten B2FOLIO-Repository steht aus.
+
+
+## Patch 34 – Signal Alignment & Camera 01 Reaction
+
+- Gesicherte Akten, AUDIO / 001, AUDIO / 002, RELAIS und SYNC werden im linken Empfangs-/Steuerpanel statt im Monitorkopf bedient.
+- DEAD//AIR-Headlines mit mehr Letterspacing; responsive Fontgrößen angepasst.
+- Nach allen drei Relais erscheint AUDIO / 002 und wird automatisch als lokale DE/EN-Funkaufnahme wiedergegeben; beide Aufnahmen bleiben im Archiv verfügbar.
+- SYNC / 3 erlaubt die Phasenabgleichung der zwei verschobenen Signalwellen B/C mit A als Referenz. Abschluss erst nach bewusster Bestätigung, nur nach RELAIS / 3/3.
+- Nach erfolgreicher Synchronisation werden beide Regler gesperrt und der Story-State `synchronized` ausgelöst. Dies ist noch **nicht** das Finale / der Rettungsimpuls.
+- CAM 01: Der Leuchtturm-Kegel erlischt erst nach der Synchronisation, das rote Mastlicht sendet dann eine rätselhafte Morsefolge. Der eigentliche Leuchtturm bleibt vorerst unverändert.
+- Native Dialoge, DE/EN, tastaturbedienbare Range-Inputs, Pause und reduzierte Bewegung berücksichtigt.

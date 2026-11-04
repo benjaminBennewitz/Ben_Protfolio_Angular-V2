@@ -749,6 +749,7 @@ folio/
 │   │   │   │   │   │   ├── archive.json
 │   │   │   │   │   │   ├── characters.js
 │   │   │   │   │   │   ├── daily-residents.js
+│   │   │   │   │   │   ├── debug-starts.js
 │   │   │   │   │   │   ├── discoveries.js
 │   │   │   │   │   │   ├── dungeon-furniture.js
 │   │   │   │   │   │   ├── dungeon-layouts.js
@@ -766,6 +767,7 @@ folio/
 │   │   │   │   │   │   ├── interiors.js
 │   │   │   │   │   │   ├── items.js
 │   │   │   │   │   │   ├── mara-rooms.js
+│   │   │   │   │   │   ├── meadow-stream.js
 │   │   │   │   │   │   ├── meadow-wildlife.js
 │   │   │   │   │   │   ├── quell-dungeon.js
 │   │   │   │   │   │   ├── quest-east.js
@@ -801,7 +803,9 @@ folio/
 │   │   │   │   │   │   ├── interior.js
 │   │   │   │   │   │   ├── interior-fixtures.js
 │   │   │   │   │   │   ├── map.js
+│   │   │   │   │   │   ├── meadow-lake.js
 │   │   │   │   │   │   ├── meadow-life.js
+│   │   │   │   │   │   ├── meadow-stream.js
 │   │   │   │   │   │   ├── objects.js
 │   │   │   │   │   │   ├── overlays.js
 │   │   │   │   │   │   ├── primitives.js
@@ -1048,6 +1052,8 @@ folio/
 │   │   │   │   ├── station-mark.svg
 │   │   │   │   ├── transmission-001-de.mp3
 │   │   │   │   ├── transmission-001-en.mp3
+│   │   │   │   ├── transmission-002-de.mp3
+│   │   │   │   ├── transmission-002-en.mp3
 │   │   │   │   ├── window-off-a.webp
 │   │   │   │   ├── window-off-b.webp
 │   │   │   │   └── window-off-c.webp

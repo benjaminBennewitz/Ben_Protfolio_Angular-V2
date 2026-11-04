@@ -121,3 +121,34 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 - Beam nicht mehr animiert, sondern als statischer Lichtkegel belassen.
 - Beam-Startpunkt abgesenkt und schmaler gesetzt.
 - Wärmerer, gelblicher Farbton und weichere, diffusere Kanten im Nebel.
+
+
+## Patch 18 – Denser Warm Beam
+
+- Beam deutlich dichter und sichtbarer gemacht.
+- Größerer gelber Lichtschein direkt um die Laterne.
+- Wärmerer Farbton mit weniger Weißanteil.
+- Weichere Maskierung und breiteres Blur für diffusere Kanten im Nebel.
+
+
+## Patch 19 – Softer Fog Scatter
+
+- Beam-Kanten weiter aufgeweicht.
+- Größere Streuung im bewölkten, nebligen Himmel.
+- Laternen-Glow vergrößert, ohne den Startpunkt zu verändern.
+- Leicht größere Beam-Fläche für ein diffuseres Auslaufen.
+
+
+## Patch 20 – Bewegter Küstennebel
+
+- Zwei unabhängig driftende, weich maskierte Nebelbänke über CAM 01.
+- Eine gemeinsam genutzte, komprimierte `assets/coastal-fog.webp`-Textur (~52 KB), ohne JavaScript oder Bibliotheken.
+- Sichtbarkeit abhängig von NORMAL, INTERFERENCE, UNKNOWN und OFF AIR; CAM 02 zeigt nur die natürliche Videoatmosphäre.
+- PAUSE und `prefers-reduced-motion` stoppen beide Nebelbewegungen; Leuchtturm, Mastlicht und Fenster bleiben unverändert.
+
+## Patch 21 – Dense Animated Coastal Fog
+
+- Ursache für den kaum sichtbaren Nebel behoben: Die frühere Textur war im Durchschnitt zu transparent und wurde mehrfach zusätzlich maskiert.
+- Dichte, fotografisch weiche `coastal-fog.webp` mit deutlicher sichtbaren Nebelbänken und organischen Intensitätsunterschieden.
+- Zwei unterschiedlich schnelle, überlappende Ebenen ziehen am Horizont und über den Felsen; ein dezenter Grunddunst verbindet beide.
+- Vorhandene Signalzustände, Kameras, Pause und Reduced Motion bleiben erhalten.

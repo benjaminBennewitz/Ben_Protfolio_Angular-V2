@@ -668,13 +668,45 @@ figure {
   opacity: 1;
 }
 
+/* Drei Tiefenwirkungen aus einer dichten, weich auslaufenden Wolkentextur:
+   atmosphärischer Dunst im Tal und zwei unabhängig driftende Nebelbänke. */
 .scene__fog {
   z-index: 2;
-  opacity: .1;
-  background: radial-gradient(ellipse at 42% 68%, #b0c5bb 0%, #a4c2b98c 18%, transparent 65%), linear-gradient(0deg, #4b6c6855, transparent 50%);
+  overflow: hidden;
+  opacity: 1;
+  pointer-events: none;
   mix-blend-mode: screen;
-  transition: opacity 700ms ease;
-  animation: fog-drift 20s ease-in-out infinite alternate;
+  background:
+    radial-gradient(ellipse 70% 34% at 25% 56%, rgba(167, 190, 195, .25), transparent 100%),
+    radial-gradient(ellipse 64% 36% at 66% 79%, rgba(164, 182, 185, .13), transparent 100%);
+  transition: opacity 900ms ease;
+}
+
+.scene__fog::before,
+.scene__fog::after {
+  content: '';
+  position: absolute;
+  left: -29%;
+  width: 158%;
+  background: url('assets/coastal-fog.webp') center / 100% 100% no-repeat;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Weitflächiger Seenebel, der sich quer über Horizont und Klippen legt. */
+.scene__fog::before {
+  top: 22%;
+  height: 60%;
+  opacity: .96;
+  animation: fog-bank-distant 46s ease-in-out -15s infinite alternate;
+}
+
+/* Tiefer, dichter Nebel in der Brandungszone, mit leicht gegenläufiger Drift. */
+.scene__fog::after {
+  top: 52%;
+  height: 55%;
+  opacity: .76;
+  animation: fog-bank-near 33s ease-in-out -11s infinite alternate;
 }
 
 /* Transparente Fotoausschnitte dämpfen nur die echten Fensterscheiben.
@@ -723,12 +755,12 @@ figure {
 
 .scene__beam--lighthouse {
   z-index: 1;
-  top: 2.222222%;
-  left: 10.15625%;
-  width: 47.8%;
-  height: 20.8%;
+  top: 2.083333%;
+  left: 9.921875%;
+  width: 51.8%;
+  height: 24.4%;
   mix-blend-mode: screen;
-  opacity: .26;
+  opacity: .46;
   transform-origin: 98.6% 50%;
   animation: none;
 }
@@ -741,41 +773,46 @@ figure {
 }
 
 .scene__beam--lighthouse::before {
-  clip-path: polygon(0 12%, 100% 46%, 100% 54%, 0 88%);
+  clip-path: polygon(0 4%, 100% 44%, 100% 56%, 0 96%);
   background:
-    radial-gradient(ellipse 118% 40% at 100% 50%,
-      rgba(255, 236, 166, .54) 0%,
-      rgba(255, 228, 140, .36) 12%,
-      rgba(255, 220, 128, .18) 24%,
-      rgba(255, 216, 128, 0) 40%),
+    radial-gradient(ellipse 138% 56% at 100% 50%,
+      rgba(255, 236, 150, .94) 0%,
+      rgba(255, 229, 126, .74) 8%,
+      rgba(255, 221, 120, .50) 18%,
+      rgba(255, 216, 120, .30) 30%,
+      rgba(255, 214, 124, .14) 44%,
+      rgba(255, 214, 124, 0) 64%),
     linear-gradient(90deg,
-      rgba(255, 226, 140, 0) 0%,
-      rgba(255, 228, 144, .015) 18%,
-      rgba(255, 230, 148, .05) 38%,
-      rgba(255, 232, 154, .10) 56%,
-      rgba(255, 235, 164, .18) 76%,
-      rgba(255, 239, 176, .30) 92%,
-      rgba(255, 243, 188, .42) 100%),
+      rgba(255, 224, 130, 0) 0%,
+      rgba(255, 226, 132, .02) 14%,
+      rgba(255, 229, 138, .07) 30%,
+      rgba(255, 233, 146, .16) 48%,
+      rgba(255, 237, 156, .28) 66%,
+      rgba(255, 242, 170, .42) 82%,
+      rgba(255, 247, 186, .58) 100%),
     linear-gradient(180deg,
-      rgba(255, 233, 156, 0) 0%,
-      rgba(255, 234, 160, .03) 20%,
-      rgba(255, 236, 168, .08) 38%,
-      rgba(255, 238, 176, .14) 50%,
-      rgba(255, 236, 168, .08) 62%,
-      rgba(255, 234, 160, .03) 80%,
-      rgba(255, 233, 156, 0) 100%);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.42) 20%, rgba(0,0,0,.78) 42%, rgba(0,0,0,.66) 72%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.42) 20%, rgba(0,0,0,.78) 42%, rgba(0,0,0,.66) 72%, transparent 100%);
-  filter: blur(clamp(18px, 1.9vw, 28px));
+      rgba(255, 233, 150, 0) 0%,
+      rgba(255, 235, 154, .04) 12%,
+      rgba(255, 238, 162, .10) 28%,
+      rgba(255, 242, 172, .18) 42%,
+      rgba(255, 245, 180, .24) 50%,
+      rgba(255, 242, 172, .18) 58%,
+      rgba(255, 238, 162, .10) 72%,
+      rgba(255, 235, 154, .04) 88%,
+      rgba(255, 233, 150, 0) 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.18) 12%, rgba(0,0,0,.48) 28%, rgba(0,0,0,.78) 46%, rgba(0,0,0,.76) 62%, rgba(0,0,0,.42) 82%, rgba(0,0,0,.14) 92%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.18) 12%, rgba(0,0,0,.48) 28%, rgba(0,0,0,.78) 46%, rgba(0,0,0,.76) 62%, rgba(0,0,0,.42) 82%, rgba(0,0,0,.14) 92%, transparent 100%);
+  filter: blur(clamp(28px, 2.8vw, 42px));
 }
 
 .scene__beam--lighthouse::after {
-  inset: 37% auto auto 90.6%;
-  width: 7.8%;
-  height: 15%;
+  inset: 20% auto auto 80.8%;
+  width: 21%;
+  height: 40%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 236, 164, .42) 0%, rgba(255, 228, 140, .22) 34%, rgba(255, 218, 126, .06) 62%, rgba(255, 218, 126, 0) 100%);
-  filter: blur(7px);
+  background:
+    radial-gradient(circle, rgba(255, 247, 190, .9) 0%, rgba(255, 239, 166, .66) 20%, rgba(255, 231, 142, .36) 42%, rgba(255, 223, 128, .16) 64%, rgba(255, 220, 126, 0) 100%);
+  filter: blur(18px);
 }
 
 /* Das rote Hindernislicht wird als CSS-Licht an der Mastspitze erzeugt. */
@@ -1070,12 +1107,17 @@ figure {
 
 /* 08   Zustandswechsel und Animationen */
 
-[data-state='interference'] .scene__fog {
-  opacity: .53;
+[data-state='interference'] .scene__fog::before,
+[data-state='unknown'] .scene__fog::before {
+  opacity: 1;
 }
 
-[data-state='unknown'] .scene__fog {
-  opacity: .48;
+[data-state='interference'] .scene__fog::after {
+  opacity: .89;
+}
+
+[data-state='unknown'] .scene__fog::after {
+  opacity: 1;
 }
 
 [data-state='unknown'] .scene__anomaly {
@@ -1101,7 +1143,7 @@ figure {
 }
 
 [data-state='offair'] .scene__fog {
-  opacity: .68;
+  opacity: .9;
 }
 
 [data-state='interference'] .scene__window-light {
@@ -1109,8 +1151,8 @@ figure {
 }
 
 [data-state='interference'] .scene__beam--lighthouse {
-  opacity: .22;
-  filter: saturate(.95) brightness(.94);
+  opacity: .34;
+  filter: saturate(1.02) brightness(.97);
 }
 
 [data-state='unknown'] .scene__window-light {
@@ -1118,8 +1160,8 @@ figure {
 }
 
 [data-state='unknown'] .scene__beam--lighthouse {
-  opacity: .18;
-  filter: saturate(.9) brightness(.88);
+  opacity: .28;
+  filter: saturate(.96) brightness(.92);
 }
 
 [data-state='interference'] .scene__mast-led {
@@ -1150,19 +1192,27 @@ figure {
 /* Die gewählte Kamera hat Vorrang vor den frequenzabhängigen Lichtzuständen. */
 [data-source='video'] .scene__window-lights,
 [data-source='video'] .scene__beam--lighthouse,
-[data-source='video'] .scene__mast-led {
+[data-source='video'] .scene__mast-led,
+[data-source='video'] .scene__fog {
   opacity: 0;
   animation: none;
 }
 
 [data-paused='true'] .scene *,
+[data-paused='true'] .scene__fog::before,
+[data-paused='true'] .scene__fog::after,
 [data-paused='true'] .readout-bars i {
   animation-play-state: paused;
 }
 
-@keyframes fog-drift {
-  from { transform: translateX(-4%) scale(1.04); }
-  to { transform: translateX(4%) scale(1.09); }
+@keyframes fog-bank-distant {
+  from { transform: translate3d(-8%, -1%, 0) scale(1); }
+  to { transform: translate3d(8%, 1.5%, 0) scale(1.045); }
+}
+
+@keyframes fog-bank-near {
+  from { transform: translate3d(7%, 1.5%, 0) scale(1.065); }
+  to { transform: translate3d(-7%, -1%, 0) scale(1); }
 }
 
 @keyframes window-dim {

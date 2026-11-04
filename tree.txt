@@ -1013,6 +1013,7 @@ folio/
 │   │   │   └── styles.css
 │   │   ├── dead-air/
 │   │   │   ├── assets/
+│   │   │   │   ├── coastal-fog.webp
 │   │   │   │   ├── coast-loop.mp4
 │   │   │   │   ├── favicon.svg
 │   │   │   │   ├── lighthouse-beam.webp

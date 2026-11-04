@@ -44,6 +44,11 @@ const BOTTLE_GLITCH_MS = 2_000;
 const CAMERA_BLACKOUT_MS = 320;
 const WINDOWS_TO_SCAN_MS = 2_800;
 const AUTO_SCAN_DURATION_MS = 4_800;
+const FINAL_LIGHTHOUSE_PRELUDE_MS = 2_500;
+const FINAL_LIGHTHOUSE_DARK_MS = 650;
+const FINAL_LIGHTHOUSE_BLACKOUT_MS = 1_180;
+const FINAL_LIGHTHOUSE_MISSING_MS = 1_400;
+const FINAL_LIGHTHOUSE_BLACKOUT_END_MS = 1_800;
 const FINAL_TRIANGULATION_MS = 2_200;
 const FINAL_OPENING_MS = 6_000;
 const FINAL_OPEN_END_MS = 13_000;
@@ -1039,12 +1044,15 @@ function startFinale(mode) {
   scene.audio.resumeAfterPause = false;
   scene.audio.resumeAfterVisibility = false;
   scene.finale.mode = mode;
-  scene.finale.phase = mode === 'breach' ? 'lock' : 'isolating';
+  scene.finale.phase = mode === 'breach' ? 'lighthouse' : 'isolating';
   scene.finale.startedAtMs = scene.anomaly.activeMs;
   scene.finale.lastFrameAtMs = 0;
   coastVideo.playbackRate = 1;
-  applySource('video');
-  gateCanvas.hidden = false;
+  root.dataset.lighthouse = 'present';
+  // Für das schlechte Ende bleibt CAM 01 noch kurz sichtbar.
+  // Die Isolation verwendet weiterhin den bestehenden Küstenabschluss.
+  applySource(mode === 'breach' ? 'artwork' : 'video');
+  gateCanvas.hidden = mode === 'breach';
   frequencyInput.disabled = true;
   for (const button of [evidenceLog, transmissionToggle, transmission2Toggle, relayToggle,
     syncToggle, warningRecordingToggle, warningTranscriptToggle, relayLink]) {
@@ -1058,6 +1066,12 @@ function startFinale(mode) {
   void syncVideo();
   startGateFrames();
   window.dispatchEvent(new CustomEvent('deadair:finalestarted', { detail: { mode } }));
+}
+
+/** Die Portal-Zeit beginnt erst nach dem lautlosen Verschwinden des Turms. */
+function getGateElapsedMs() {
+  const elapsed = scene.anomaly.activeMs - scene.finale.startedAtMs;
+  return Math.max(0, elapsed - (scene.finale.mode === 'breach' ? FINAL_LIGHTHOUSE_PRELUDE_MS : 0));
 }
 
 /** Die Videokamera bleibt beweglich, bis sich die ersten Dreiecksseiten bilden.
@@ -1083,21 +1097,38 @@ function slowSeaToFreeze(elapsedMs) {
 function updateFinale() {
   if (!scene.finale.mode) return;
   const elapsed = scene.anomaly.activeMs - scene.finale.startedAtMs;
+  const gateElapsed = getGateElapsedMs();
   const lastPhase = scene.finale.phase;
-  slowSeaToFreeze(elapsed);
   let phase;
   if (scene.finale.mode === 'isolate') {
     phase = elapsed >= FINAL_ISOLATED_MS ? 'sealed' : 'isolating';
-  } else if (elapsed < FINAL_TRIANGULATION_MS) {
+  } else if (elapsed < FINAL_LIGHTHOUSE_PRELUDE_MS) {
+    phase = 'lighthouse';
+    // Die Schwarzblende sitzt genau über dem harten Wechsel zur leergeräumten Fotografie.
+    // Die dauerhafte Kameraquelle wird in dieser Phase nie geändert.
+    root.dataset.lighthouse = elapsed >= FINAL_LIGHTHOUSE_MISSING_MS
+      ? 'missing' : (elapsed >= FINAL_LIGHTHOUSE_DARK_MS ? 'dark' : 'present');
+    cameraBlackout.classList.toggle('is-active',
+      elapsed >= FINAL_LIGHTHOUSE_BLACKOUT_MS && elapsed < FINAL_LIGHTHOUSE_BLACKOUT_END_MS);
+  } else if (gateElapsed < FINAL_TRIANGULATION_MS) {
     phase = 'lock';
-  } else if (elapsed < FINAL_OPENING_MS) {
+  } else if (gateElapsed < FINAL_OPENING_MS) {
     phase = 'triangulation';
-  } else if (elapsed < FINAL_OPEN_END_MS) {
+  } else if (gateElapsed < FINAL_OPEN_END_MS) {
     phase = 'opening';
   } else {
     phase = 'open';
   }
+  // Der Seefreeze muss auch innerhalb derselben Phase weiterlaufen.
+  // Sonst bleibt das Video bis zur nächsten Phasengrenze auf Normaltempo.
+  if (phase !== 'lighthouse') slowSeaToFreeze(gateElapsed);
   if (phase === lastPhase) return;
+
+  if (lastPhase === 'lighthouse') {
+    cameraBlackout.classList.remove('is-active');
+    applySource('video');
+    gateCanvas.hidden = false;
+  }
 
   scene.finale.phase = phase;
   syncSignalVisuals();
@@ -1117,9 +1148,9 @@ function updateFinale() {
 /** Rendern mit maximal 30 Bildern/Sekunde, nur während aktiver Finaldarstellung. */
 function renderGateFrame(timestamp) {
   scene.finale.animationFrameId = 0;
-  if (!scene.finale.mode || scene.paused || document.hidden) return;
+  if (!scene.finale.mode || scene.paused || document.hidden || scene.finale.phase === 'lighthouse') return;
   if (!scene.finale.lastFrameAtMs || timestamp - scene.finale.lastFrameAtMs >= 32) {
-    drawGate(gateCanvas, scene.anomaly.activeMs - scene.finale.startedAtMs,
+    drawGate(gateCanvas, getGateElapsedMs(),
       scene.finale.mode, window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     scene.finale.lastFrameAtMs = timestamp;
   }
@@ -1130,7 +1161,8 @@ function renderGateFrame(timestamp) {
 
 /** Pausierte oder verdeckte Tabs verbrauchen keine Zeichen- oder Animationszeit. */
 function startGateFrames() {
-  if (!scene.finale.mode || scene.paused || document.hidden || scene.finale.animationFrameId) return;
+  if (!scene.finale.mode || scene.paused || document.hidden || scene.finale.animationFrameId
+    || scene.finale.phase === 'lighthouse') return;
   scene.finale.lastFrameAtMs = 0;
   scene.finale.animationFrameId = requestAnimationFrame(renderGateFrame);
 }

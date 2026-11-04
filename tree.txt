@@ -1055,6 +1055,7 @@ folio/
 │   │   │   │   ├── message-bottle-glitch.webp
 │   │   │   │   ├── preview.webp
 │   │   │   │   ├── scene-poster.webp
+│   │   │   │   ├── scene-poster-no-lighthouse.webp
 │   │   │   │   ├── station-mark.svg
 │   │   │   │   ├── transmission-001-de.mp3
 │   │   │   │   ├── transmission-001-en.mp3

@@ -785,6 +785,32 @@ figure {
   display: block;
 }
 
+/* Der verschwundene Turm ist ein eigenes, deckungsgleiches Szenenbild.
+   Der Wechsel erfolgt ohne Opacity-Animation, damit keine Bildreste entstehen. */
+.scene__artwork--vacant { display: none; }
+
+[data-lighthouse='missing'][data-source='artwork'] .scene__artwork:not(.scene__artwork--vacant) {
+  display: none;
+}
+
+[data-lighthouse='missing'][data-source='artwork'] .scene__artwork--vacant {
+  display: block;
+}
+
+/* Erst das Licht, danach die reale Struktur: kein optisches Zerbröseln. */
+[data-finale='lighthouse'][data-lighthouse='dark'] .scene__beam--lighthouse,
+[data-finale='lighthouse'][data-lighthouse='dark'] .scene__mast-led,
+[data-finale='lighthouse'][data-lighthouse='missing'] .scene__beam--lighthouse,
+[data-finale='lighthouse'][data-lighthouse='missing'] .scene__mast-led {
+  opacity: 0;
+  animation: none;
+}
+
+[data-finale='lighthouse'] .scene__window-light {
+  opacity: 1;
+  animation: none;
+}
+
 /* Drei Tiefenwirkungen aus einer dichten, weich auslaufenden Wolkentextur:
    atmosphärischer Dunst im Tal und zwei unabhängig driftende Nebelbänke. */
 .scene__fog {

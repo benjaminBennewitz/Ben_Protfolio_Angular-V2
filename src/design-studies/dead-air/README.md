@@ -337,3 +337,11 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Die passiven Kanalnamen/Signalbalken verraten noch nicht verbundene Relais vorher nicht mehr.
 - Laufende Pings werden beim Abstimmen, Kameratausch, Pausieren oder Tabwechsel abgebrochen; keine veralteten Treffer.
 - Die obere Taste `EMPFANG` war die mobile Öffnung der Steuerung. Sie heißt jetzt `STEUERUNG` bzw. `CONTROLS`; auf dem Desktop bleibt sie unsichtbar.
+
+
+## Patch 41 – Lighthouse Prelude & Unseen Watchers
+
+- Nach dem Sendeimpuls bleibt CAM 01 für 2,5 Sekunden sichtbar. Nach 0,65 Sekunden erlöschen die Lichtquellen, ein kurzer harter Signalabbruch kaschiert den Wechsel auf das leuchtturmfreie Stationsbild; CAM 02 übernimmt erst nach dem Schlussbild.
+- Neues Fotostandbild `assets/scene-poster-no-lighthouse.webp`, deckungsgleich mit der ursprünglichen Station (lokale Bildretusche; keine CSS-Maske und kein Kanal-Crossfade).
+- In der vollständig geöffneten Portalöffnung werden drei unscharfe Schattenkonturen mit seltenen, asynchronen Augenreflexen sichtbar. Keine neue Rastergrafik, ausschließlich Canvas.
+- Die Sequenz hängt an der aktiven Story-Uhr. Pause und inaktive Browser-Tabs unterbrechen sie ohne Zeitverlust; das alternative isolierte Ende bleibt unverändert.

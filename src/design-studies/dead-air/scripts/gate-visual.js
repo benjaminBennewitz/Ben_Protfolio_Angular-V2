@@ -222,8 +222,85 @@ function drawRelays(ctx, points, time, strength) {
   });
 }
 
+/** Andeutungen hinter dem dimensionalen Riss statt klar erkennbarer Kreaturen.
+ * Drei Silhouetten erscheinen asynchron; nur kurze Lichtreflexe verraten ihre Augen.
+ * Die Aufrufe erfolgen ausschließlich innerhalb des Aperture-Clippings. */
+function drawWatchingShapes(ctx, center, radius, time, opening, reducedMotion) {
+  const emergence = ease((opening - .54) / .42);
+  if (emergence <= 0) return;
+
+  const figures = [
+    { x: -.17, y: .12, scale: .82, offset: .1, rhythm: .34 },
+    { x: .02, y: .13, scale: 1.12, offset: 2.8, rhythm: .26 },
+    { x: .22, y: .09, scale: .75, offset: 5.2, rhythm: .21 },
+  ];
+
+  figures.forEach((figure, index) => {
+    const pulse = reducedMotion ? .46 : (
+      .42 + .26 * Math.sin(time * figure.rhythm + figure.offset)
+      + .21 * Math.sin(time * .73 + index * 3.19));
+    const visibility = emergence * clamp01(pulse);
+    if (visibility <= .07) return;
+    const drift = reducedMotion ? 0 : Math.sin(time * (.17 + index * .033) + figure.offset) * 2.1;
+    const x = center.x + radius * figure.x + drift;
+    const y = center.y + radius * figure.y - emergence * radius * .035;
+    const unit = radius * .125 * figure.scale;
+
+    ctx.save();
+    // Die Innenlinien des Risses werden additiv gezeichnet; Schattenwesen
+    // benötigen dagegen normales Compositing, sonst bleiben sie unsichtbar.
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.translate(x, y);
+    ctx.scale(unit, unit);
+
+    // Konturloser Körper, der im dunklen Hohlraum auszulaufen scheint.
+    ctx.filter = 'blur(6px)';
+    ctx.globalAlpha = visibility * .66;
+    const body = ctx.createRadialGradient(0, .35, .08, 0, .6, 1.4);
+    body.addColorStop(0, 'rgba(1,1,5,.94)');
+    body.addColorStop(.65, 'rgba(3,1,5,.64)');
+    body.addColorStop(1, 'rgba(2,1,4,0)');
+    ctx.fillStyle = body;
+    ctx.beginPath();
+    ctx.ellipse(0, .65, .9, 1.12, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.filter = 'blur(2.5px)';
+    ctx.shadowColor = 'rgba(160,50,35,.26)';
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.ellipse(0, -.42, .43, .59, -.045, 0, Math.PI * 2);
+    ctx.fillStyle = '#010105';
+    ctx.fill();
+    // Ein kaum erkennbarer, warmer Saum löst den Kopf aus dem schwarzen Riss.
+    ctx.globalAlpha = visibility * .2;
+    ctx.strokeStyle = '#9c4736';
+    ctx.lineWidth = .045;
+    ctx.stroke();
+    ctx.restore();
+
+    // Lichtreflexe sind selten und nie gemeinsam im selben Takt sichtbar.
+    const flash = reducedMotion ? .15 : Math.max(0,
+      Math.sin(time * (.94 + index * .14) + index * 2.8) - .28);
+    const eyesAlpha = visibility * Math.pow(flash, 1.3) * 1.16;
+    if (eyesAlpha < .025) return;
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    ctx.globalAlpha = eyesAlpha;
+    ctx.shadowBlur = 18;
+    ctx.shadowColor = '#ffab65';
+    ctx.fillStyle = '#ffc18b';
+    for (const offset of [-1, 1]) {
+      ctx.beginPath();
+      ctx.ellipse(x + offset * unit * .17, y - unit * .44,
+        Math.max(1.35, unit * .046), Math.max(.9, unit * .03), 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  });
+}
+
 /** Zeichnet den Öffnungskörper nur innerhalb der verbundenen Peilpunkte. */
-function drawAperture(ctx, points, time, opening) {
+function drawAperture(ctx, points, time, opening, reducedMotion) {
   if (opening <= 0) return;
 
   const center = {
@@ -264,6 +341,7 @@ function drawAperture(ctx, points, time, opening) {
     ctx.bezierCurveTo(center.x - radius / 3, y + 5 * Math.sin(time + line), center.x + radius / 3, y - 5 * Math.sin(time + line), center.x + radius + drift, y);
     ctx.stroke();
   }
+  drawWatchingShapes(ctx, center, radius, time, opening, reducedMotion);
   ctx.restore();
 
   ctx.save();
@@ -375,7 +453,7 @@ export function drawGate(canvas, elapsedMs, mode, reducedMotion = false) {
     drawElectricArcs(ctx, hoveringTriangle, t, link * (.4 + .6 * opening), reducedMotion);
   }
 
-  drawAperture(ctx, hoveringTriangle, t, opening);
+  drawAperture(ctx, hoveringTriangle, t, opening, reducedMotion);
   drawCoronalSparks(ctx, hoveringTriangle, t, opening, reducedMotion);
 
   // Reflexe auf der unbewegten Brandung lassen den Riss räumlich im Meer sitzen.

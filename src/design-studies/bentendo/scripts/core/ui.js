@@ -77,6 +77,8 @@ export class UI {
   /** Schließt offene Bedienflächen mit Escape. @param {KeyboardEvent} event Ereignis. */
   escape(event) {
     if (event.key !== 'Escape') return;
+    const credits=document.querySelector('.credits-disclosure[open]');
+    if (credits) { credits.open=false; credits.querySelector('summary').focus(); return; }
     if (this.app.helpOpen) this.toggleHelp(); else if (this.app.cartridge.open) this.app.cartridge.close();
   }
   /** Startet einen ausdrücklich gewählten Debugraum. @param {Event} event Ereignis. */

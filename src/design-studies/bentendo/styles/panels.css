@@ -30,10 +30,18 @@
    01   Navigation
    ========================================================================== */
 
-.utility { position: absolute; inset: auto 20px 16px; display: flex; justify-content: space-between; align-items: end; gap: 12px; pointer-events: none; z-index: 5; }
+.utility { position: absolute; right: 20px; display: flex; align-items: center; gap: 8px; z-index: 5; }
+.utility-tools { bottom: 16px; }
+.utility-links { top: max(16px, env(safe-area-inset-top)); z-index: 9; }
+.utility-links .portfolio-back { justify-content: center; min-width: 44px; font-size: 20px; }
+.credits-disclosure > summary { display: grid; place-items: center; list-style: none; padding: 8px 12px; background: #20221de8; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; }
+.credits-disclosure > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.credits-disclosure > summary::-webkit-details-marker { display: none; }
+.credits-disclosure > summary:hover, .credits-disclosure[open] > summary { background: #3c4131; }
+.utility-links .credits-panel { top: calc(100% + 8px); right: 0; bottom: auto; width: min(380px, calc(100vw - 40px)); max-height: calc(100svh - 90px); }
+.utility .credits-panel a { display: inline; min-height: auto; padding: 0; background: none; border: 0; text-decoration: underline; }
 .utility > * { pointer-events: auto; }
 .utility a { display: inline-flex; align-items: center; text-decoration: none; font-size: 12px; }
-.utility-links { flex-shrink: 0; display: grid; gap: 6px; justify-items: start; }
 .utility-actions { display: flex; align-items: center; gap: 8px; font-size: 12px; }
 #debug-level { max-width: 170px; }
 
@@ -74,6 +82,6 @@ summary { min-height: 44px; cursor: pointer; padding-block: 12px; }
    05   Responsive
    ========================================================================== */
 
-@media (max-width: 600px) { .utility { inset-inline: 10px; gap: 6px; } .utility-actions { gap: 5px; flex-wrap: wrap; justify-content: flex-end; min-width: 0; } .utility a, .utility button, .utility select { padding-inline: 8px; font-size: 11px; } #debug-level { max-width: 132px; } .panel { right: 10px; width: calc(100% - 20px); padding: 16px; } #cartridge-panel { right: 10px; bottom: 72px; max-height: 37svh; width: calc(100% - 20px); } #cartridge-panel .note { display: none; } #cartridge-panel h1 { font-size: 18px; margin-bottom: 4px; } #cartridge-panel p { margin-block: 4px 8px; } }
+@media (max-width: 600px) { .utility { right: 10px; gap: 6px; } .utility-links .credits-panel { width: min(380px, calc(100vw - 20px)); } .utility-actions { gap: 5px; } .utility a, .utility button, .utility select { padding-inline: 8px; font-size: 11px; } #debug-level { max-width: 132px; } .panel { right: 10px; width: calc(100% - 20px); padding: 16px; } #cartridge-panel { right: 10px; bottom: 72px; max-height: 37svh; width: calc(100% - 20px); } #cartridge-panel .note { display: none; } #cartridge-panel h1 { font-size: 18px; margin-bottom: 4px; } #cartridge-panel p { margin-block: 4px 8px; } }
 @media (max-height: 500px) and (min-width: 601px) { .panel { width: 300px; } #cartridge-panel { max-height: calc(100% - 90px); } }
 

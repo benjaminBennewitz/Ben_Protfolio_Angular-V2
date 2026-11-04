@@ -71,7 +71,7 @@ export class GameInput {
   }
   /** Übersetzt Tastatureingaben ohne native Bedienelemente zu stören. @param {KeyboardEvent} event Ereignis. */
   keydown(event) {
-    if (event.target.closest('input,select,textarea') || (['Enter',' '].includes(event.key) && event.target.closest('button,a')) || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.target.closest('input,select,textarea,.credits-disclosure') || (['Enter',' '].includes(event.key) && event.target.closest('button,a')) || event.altKey || event.ctrlKey || event.metaKey) return;
     if (KEYS[event.key]) { event.preventDefault(); if (!event.repeat) this.pressKey(KEYS[event.key]); return; }
     const action = { a:'interact', A:'interact', Enter:'start', p:'start', P:'start', s:'select', S:'select', ' ':'interact', b:'back', B:'back' }[event.key];
     if (action) { event.preventDefault(); if (!event.repeat) this.action(action); }

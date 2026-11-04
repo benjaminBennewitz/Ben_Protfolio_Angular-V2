@@ -34,7 +34,7 @@ function forestRoom(id,title,width,height,gardens,objects) {
 
 /** Hält Wege breit und lässt Bäume und Pflanzen gemeinsame Konturen verwenden. @param {number} x Spalte. @param {number} y Zeile. @param {number} width Breite. @param {number} height Höhe. @param {object[]} gardens Pflanzflächen. @param {boolean} through Durchgehender Ostpfad. */
 function forestGround(x,y,width,height,gardens,through) {
-  if (!through && x>=9 && x<=14 && y>=2 && y<=4) return 'r';
+  if (!through && x>=7 && x<=16 && y<=4) return 'r';
   if ((y>=9 && y<=10 && x>=2 && x<=(through?width-3:12)) || (x>=11 && x<=12 && y>=3 && y<=(through?height-3:10))) return '.';
   for (const g of gardens) if (x>=g.x && x<g.x+g.w && y>=g.y && y<g.y+g.h) return g.kind;
   return 'g';
@@ -48,6 +48,7 @@ export function createEastRooms() {
   edge.birds=[{x:6,y:2,treeY:2,facing:'left'}];
   edge.objects.push(prop('rest-bench','Alte Rastbank',7,12,'village-bench','inspect',{w:2,text:'Unter der Lehne steht ein eingeritztes E. Am Holz klebt noch ein grauer Faden.'}));
   edge.objects.push(prop('forest-squirrel','Eichhörnchen',15,15,'wildlife','inspect',{animal:'squirrel',route:[[15,15],[16,15],[16,16],[15,16]],text:'Es versteckt eine Nuss und tut so, als hättest du nichts gesehen.'}));
+  clearing.revision=2;
   clearing.trees=clearing.trees.filter(clearOfRootWall);
   addRootMarks(clearing);
   return [pumpRoom(),edge,...createForestSections(),clearing,...createMeadowRooms()];
@@ -55,4 +56,4 @@ export function createEastRooms() {
 
 
 /** Hält ganze Baumkronen aus dem Mauerrechteck der Wurzelpforte. @param {Array} tree Baumstandort. */
-function clearOfRootWall(tree) { const [x,y]=tree; return x+2<=9 || x>=15 || y+2<=2 || y>=5; }
+function clearOfRootWall(tree) { const [x,y]=tree; return y>0 && (x+2<=7 || x>=17 || y>=5); }

@@ -4,7 +4,7 @@ import { dungeonTile } from './dungeon-atlas.js';
 
 /** Bindet die Wurzelpforte in eine vollständige alte Mauer mit seitlichen Abschlüssen ein. @param {object} render Zeicheninformationen. @param {number} x Spalte. @param {number} y Zeile. */
 export function drawEastRock(render,x,y) {
-  const grid=render.game.room.ground,left=grid[y]?.[x-1]!=='r',right=grid[y]?.[x+1]!=='r',top=grid[y-1]?.[x]!=='r';
+  const grid=render.game.room.ground,left=grid[y]?.[x-1]!=='r',right=grid[y]?.[x+1]!=='r',top=y>0 && grid[y-1]?.[x]!=='r';
   const index=top?(left?0:right?3:1):left?20:right?23:11+x%2;
   const xx=x*16,yy=y*16,{ctx}=render;
   if (!top && !left && !right) return dungeonTile(render,index,xx,yy);

@@ -41,7 +41,7 @@ function mapCell(render,plan,x,y) {
   const {ctx,game}=render,{room,scale}=plan,kind=room.ground?.[y]?.[x] || (room.layout?.[y]?.[x]==='w'?'w':null),xx=plan.x+x*scale,yy=plan.y+y*scale;
   if (!kind) { if (wall({...game,room},x,y)) rect(ctx,2,xx,yy,scale,scale); return; }
   if (['.','p','b'].includes(kind)) { rect(ctx,1,xx,yy,scale,scale); return; }
-  if (kind==='w' || kind==='s') { rect(ctx,2,xx,yy,scale,scale); if ((x+y)%4===0) rect(ctx,0,xx,yy+1,Math.max(1,scale-1),1); return; }
+  if (kind==='w' || kind==='s' || kind==='l') { rect(ctx,2,xx,yy,scale,scale); if ((x+y)%4===0) rect(ctx,0,xx,yy+1,Math.max(1,scale-1),1); return; }
   if (kind==='r' || kind==='c') { rect(ctx,2,xx,yy,scale,scale); if (x%3===0) rect(ctx,1,xx,yy,1,1); return; }
   if (['f','t','h'].includes(kind) && (x+y)%2===0) rect(ctx,1,xx+1,yy+1,1,1);
 }

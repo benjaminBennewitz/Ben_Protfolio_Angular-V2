@@ -1,3 +1,4 @@
+import { meadowWildlife,meadowRocks,MEADOW_BIRDS } from './meadow-wildlife.js';
 import { houseGeometry } from './house-shapes.js';
 import { furniture } from './house-furniture.js';
 import { openForestPassages } from './forest-passages.js';
@@ -7,8 +8,9 @@ const BEDS=[
   {x:3,y:4,w:7,h:4,kind:'f'},{x:14,y:3,w:8,h:3,kind:'t'},
   {x:19,y:6,w:7,h:5,kind:'f'},{x:3,y:13,w:7,h:4,kind:'t'},
   {x:14,y:14,w:7,h:4,kind:'f'},{x:22,y:12,w:5,h:5,kind:'t'},
+  {x:26,y:13,w:7,h:8,kind:'t'},{x:16,y:19,w:9,h:4,kind:'f'},
 ];
-const POOLS=[[11.5,8.5,5,3.2],[11,14.5,3.5,2.4],[22,3,2.7,1.5]];
+const POOLS=[[11.5,8.5,5,3.2],[11,14.5,3.5,2.4],[27,11,3.2,1.8]];
 
 export const ROOT_MARKS=[
   {id:'root-chalk',name:'Heller Stein',text:'Ein Pfeil zum Bach. Weiße Kreide sitzt lose auf dem Stein; der Rand darunter ist unberührt.'},
@@ -41,7 +43,7 @@ function station() {
 
 /** Modelliert Wasser und Pflanzen als unregelmäßige Inseln mit offenen Sichtachsen. */
 function meadow() {
-  const width=28,height=20,ground=[];
+  const width=34,height=24,ground=[];
   for (let y=0;y<height;y++) {
     let row='';
     for (let x=0;x<width;x++) row+=meadowCell(x,y);
@@ -50,16 +52,28 @@ function meadow() {
   const objects=[
     prop('station-return','Zurück zur Wegmacherstation',2,10,'trail','travel',{to:'east-waystation',spawn:[6,1]}),
     prop('meadow-view','Blick über die Ostwiesen',24,10,'east-meadow-view','east-meadow-view',{hint:'umschauen'}),
-    prop('meadow-frog','Wiesenfrosch',12,9,'wildlife','inspect',{animal:'frog',spriteSet:'awakening',passable:true,walkThrough:true,route:[[12,9],[13,9],[13,8],[12,8]],text:'Der Frosch zieht winzige Kreise auf dem Wasser.'}),
-    prop('meadow-hedgehog','Igel',6,15,'wildlife','inspect',{animal:'hedgehog',route:[[6,15],[7,15],[7,14],[6,14]],text:'Zwischen den Halmen raschelt ein kleiner Igel.'}),
+    ...meadowWildlife(),...meadowRocks(),
   ];
-  return openForestPassages({id:'east-meadow',title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,trees:[[1,2,'pine'],[4,1],[24,1],[2,16],[23,17,'pine'],[26,15]],gardens:BEDS,buildings:[],birds:[{x:24,y:1,treeY:1,facing:'left'}],music:'east-meadow-day',objects});
+  return openForestPassages({id:'east-meadow',revision:2,title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,lakeFall:{x:23,y:0,w:2,h:4},meadowBirds:MEADOW_BIRDS,trees:[[1,2,'pine'],[4,1],[12,2],[2,16],[23,19,'pine'],[31,20],[30,15,'pine'],[15,20]],gardens:BEDS,buildings:[],birds:[],music:'east-meadow-day',objects});
 }
 
 /** Legt sandige Wege, flache Tümpel und weiche Pflanzkonturen übereinander. @param {number} x Spalte. @param {number} y Zeile. */
 function meadowCell(x,y) {
-  for (const [cx,cy,rx,ry] of POOLS) if (((x-cx)/rx)**2+((y-cy)/ry)**2<1) return 's';
-  if (x<=8 && Math.abs(y-10)<=1 || x>=17 && x<=24 && Math.abs(y-10)<=1) return '.';
+  const water=meadowWater(x,y);
+  if (water) return water;
+  if (y<=2 && x>=16+y && x<=31-y) return 'r';
+  if ((x<=8 || x>=17 && x<=24) && Math.abs(y-10)<=1) return '.';
+  if (x>=18 && x<=21 && y>=16 && y<=18 && x-y>=1) return '.';
+  for (const [dx,dy] of [[0,-1],[0,1],[-1,0],[1,0]]) if (meadowWater(x+dx,y+dy)) return 't';
   for (const g of BEDS) if (((x-g.x+0.5)/g.w-0.5)**2+((y-g.y+0.5)/g.h-0.5)**2<0.23) return g.kind;
   return 'g';
+}
+
+
+/** Trennt watbare Senken vom tiefen See und seinem Zulauf. @param {number} x Spalte. @param {number} y Zeile. */
+function meadowWater(x,y) {
+  if (x>=23 && x<=24 && y>=0 && y<=3) return 'l';
+  if (y>=3 && ((x-23.5)/8)**2+((y-4.9)/3.7)**2<1) return 'l';
+  for (const [cx,cy,rx,ry] of POOLS) if (((x-cx)/rx)**2+((y-cy)/ry)**2<1) return 's';
+  return '';
 }

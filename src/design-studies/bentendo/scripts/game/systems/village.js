@@ -1,3 +1,4 @@
+import { updateMeadowBirds } from './meadow-birds.js';
 import { dailyLifeObjects,animalsRest,settleSleepingDog,respectNightRest } from './daily-life.js';
 import { forestReturnObjects } from './forest-return.js';
 import { updateTavern } from './tavern-service.js';
@@ -55,7 +56,7 @@ export function villageSluice(game) {
 
 /** Führt den Hausmeister sichtbar zur Gilde und wartet bei blockiertem Weg. @param {object} game Spiel. @param {number} dt Zeitschritt. @param {boolean} reduced Reduzierte Bewegung. */
 export function updateVillage(game,dt,reduced) {
-  settleSleepingDog(game);
+  settleSleepingDog(game); updateMeadowBirds(game,dt);
   if (game.room.id === 'village' || game.room.villageLandscape || game.room.furnished) updateWanderers(game,dt,reduced);
   if (game.room.id==='village' && !animalsRest(game)) updateFetch(game,dt,reduced);
   if (game.room.id==='village-inn') updateTavern(game,dt,reduced);

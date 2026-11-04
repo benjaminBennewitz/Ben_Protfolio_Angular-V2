@@ -122,13 +122,13 @@ function canteen() {
   assert.ok(game.inventory.includes('Feldverband')); useObject(game,'eda'); dismiss(game); assert.equal(game.coins,3);
 }
 
-/** Prüft jeden neuen Gegenstand gegen Grundriss und tatsächlich erreichbare Interaktion. */
+/** Prüft jeden festen interaktiven Gegenstand gegen Grundriss und tatsächlich erreichbare Interaktion. */
 function newRoomAccess() {
   const game=world(); oldChapter(game); game.flags.eastDoorStudied=true;
   for (const room of createEastRooms()) {
     game.travel(room.id); assert.equal(game.occupied(game.player.x,game.player.y),false);
     for (const object of room.objects) {
-      if (object.action==='travel') continue;
+      if (object.action==='travel' || object.kind==='wildlife' || (object.kind==='meadow-rock' && object.small)) continue;
       useObject(game,object.id); dismiss(game);
     }
   }

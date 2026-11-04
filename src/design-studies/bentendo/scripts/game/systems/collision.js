@@ -38,7 +38,7 @@ function townWall(room, x, y) {
 function villageWall(room,x,y) {
   if (room.id==='village' && x===room.width-1 && [12,13].includes(y)) return false;
   if (x === 0 || y === 0 || x === room.width-1 || y === room.height-1) return true;
-  if (['w','r'].includes(room.ground[y][x])) return true;
+  if (['w','r','l'].includes(room.ground[y][x])) return true;
   for (const house of room.buildings) if (contains(house,x,y)) return true;
   for (const [tx,ty] of room.trees) if (y === ty+1 && x >= tx && x <= tx+1) return true;
   return false;

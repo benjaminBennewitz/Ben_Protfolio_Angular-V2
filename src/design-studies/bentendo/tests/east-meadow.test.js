@@ -51,3 +51,31 @@ function wade() {
 
 test('Wurzelpforte: Hinweise, falsche Marken, Speicherstand und beide Rückwege',openRoute);
 test('Ostwiesen: zusammenhängendes Flachwasser tagsüber und nachts durchquerbar',wade);
+
+/** Prüft das tiefe Seeufer und das Auffliegen bei einem Schritt in Vogelnähe. */
+function lakeAndBirds() {
+  const game=world(); game.travel('east-meadow'); game.worldMinutes=720;
+  game.player={x:24,y:9,facing:'up'};
+  assert.equal(game.room.ground[8][24],'l'); assert.equal(game.step('up'),false);
+  game.player={x:7,y:10,facing:'up'}; game.update(0.1,false);
+  assert.equal(game.roomState.meadowFlights[0],undefined);
+  assert.equal(game.step('up'),true); game.update(0.2,false);
+  assert.equal(game.roomState.meadowFlights[0],0);
+  game.player={x:3,y:10,facing:'right'}; game.update(8.1,false);
+  assert.equal(game.roomState.meadowFlights[0],undefined);
+}
+
+/** Erhält alte Stände auch dann, wenn das neue Gelände ihr letztes Feld blockiert. */
+function oldTerrainSave() {
+  for (const [id,x,y] of [['east-meadow',22,5],['east-clearing',11,1]]) {
+    const game=world(); game.travel(id);
+    const old=captureGame(game); old.roomRevision=1; old.player={x,y,facing:'up'};
+    assert.equal(game.occupied(x,y),true);
+    assert.equal(restoreGame(game,old),true);
+    assert.equal(game.room.id,id);
+    assert.equal(game.occupied(game.player.x,game.player.y),false);
+  }
+}
+
+test('Ostwiesen: tiefer See sperrt Schritte, Vögel fliegen auf und kehren zurück',lakeAndBirds);
+test('Ostwiesen und Wurzelpforte: alte Speicherpositionen im neuen Gelände bleiben ladbar',oldTerrainSave);

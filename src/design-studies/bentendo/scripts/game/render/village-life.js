@@ -1,3 +1,4 @@
+import { drawMeadowDeer } from './meadow-life.js';
 import { drawDogSprite } from './dog.js';
 import { AWAKENING_ANIMALS } from '../data/village-fauna.js';
 
@@ -36,6 +37,7 @@ export function drawKeeper(render,object,x,y) {
 
 /** Zeichnet die zwei Originalframes der Kleintiere ohne Hintergrund oder Skalierung. @param {object} render Zeicheninformationen. @param {object} object Tierobjekt. @param {number} x X. @param {number} y Y. */
 function drawWildlife(render,object,x,y) {
+  if (object.animal==='deer') return drawMeadowDeer(render,object,x,y);
   if (object.spriteSet==='awakening') return drawAwakeningAnimal(render,object,x,y);
   const {ctx,game,assets}=render;
   const frame=game.reduced?0:Math.floor(game.time*(object.walking?8:2))%2;

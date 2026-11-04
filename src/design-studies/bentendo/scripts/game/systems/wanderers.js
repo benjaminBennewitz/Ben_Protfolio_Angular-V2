@@ -61,7 +61,7 @@ function startStep(game,object,actor) {
 
 /** Prüft Tiere einschließlich ihrer noch sichtbaren Ausgangsfelder. @param {object} game Spiel. @param {object} object Bewegtes Tier. @param {number} x Ziel-X. @param {number} y Ziel-Y. */
 function blocked(game,object,x,y) {
-  const swimming=object.habitat==='water-edge' && game.room.ground?.[y]?.[x]==='w';
+  const swimming=object.habitat==='water-edge' && ['w','l'].includes(game.room.ground?.[y]?.[x]);
   if ((wall(game,x,y) && !swimming) || wandererOccupies(game,x,y)) return true;
   if ((game.player.x===x && game.player.y===y) || (game.move?.x===x && game.move?.y===y)) return true;
   if (game.seat?.exit[0]===x && game.seat?.exit[1]===y) return true;

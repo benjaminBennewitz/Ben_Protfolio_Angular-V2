@@ -1,3 +1,4 @@
+import { MEADOW_CHANNEL,MEADOW_WEIR,MEADOW_BRIDGE,meadowPaths,meadowStreamObjects,meadowNeighbourRooms } from './meadow-stream.js';
 import { meadowWildlife,meadowRocks,MEADOW_BIRDS } from './meadow-wildlife.js';
 import { houseGeometry } from './house-shapes.js';
 import { furniture } from './house-furniture.js';
@@ -29,7 +30,7 @@ export function addRootMarks(room) {
 }
 
 /** Liefert die kleine Durchgangsstation und das erste offene Stück der Ostwiesen. */
-export function createMeadowRooms() { return [station(),meadow()]; }
+export function createMeadowRooms() { return [station(),meadow(),...meadowNeighbourRooms()]; }
 
 /** Nutzt vorhandene Innenraumgrafiken für eine alte Wegmacherstation. */
 function station() {
@@ -55,19 +56,20 @@ function meadow() {
   const objects=[
     prop('station-return','Wurzelpforte · Wegmacherstation',1,10,'trail','travel',{to:'east-waystation',spawn:[6,1],facade:true,hint:'hineingehen'}),
     prop('meadow-view','Blick über die Ostwiesen',24,10,'east-meadow-view','east-meadow-view',{hint:'umschauen'}),
-    ...meadowWildlife(),...meadowRocks(),
+    ...meadowPaths(),...meadowStreamObjects(),...meadowWildlife(),...meadowRocks(),
   ];
-  return openForestPassages({id:'east-meadow',revision:5,title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,lakeFall:{x:23,y:2,w:2,h:4},meadowBirds:MEADOW_BIRDS,trees:[[1,3,'pine'],[4,3],[12,3],[2,16],[23,19,'pine'],[31,20],[30,15,'pine'],[15,20]],gardens:BEDS,buildings:[],birds:[],music:'east-meadow-day',objects});
+  return openForestPassages({id:'east-meadow',revision:6,title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,meadowChannel:{points:MEADOW_CHANNEL,source:[28,8],weir:MEADOW_WEIR,bridge:MEADOW_BRIDGE},lakeFall:{x:23,y:2,w:2,h:4},meadowBirds:MEADOW_BIRDS,trees:[[1,3,'pine'],[4,3],[12,3],[2,16],[23,19,'pine'],[31,20],[30,15,'pine'],[15,20]],gardens:BEDS,buildings:[],birds:[],music:'east-meadow-day',objects});
 }
 
 /** Legt sandige Wege, flache Tümpel und weiche Pflanzkonturen übereinander. @param {number} x Spalte. @param {number} y Zeile. */
 function meadowCell(x,y) {
+  for (const [cx,cy] of MEADOW_CHANNEL) if (x===cx && y===cy) return 'k';
   const water=meadowWater(x,y);
   if (water) return water;
-  if (y<=2 || (x===0 && y>=7 && y<=12 && y!==10)) return 'r';
+  if (y<=2 || (x>=30 && y>=3 && y<=7) || (x===0 && y>=7 && y<=12 && y!==10)) return 'r';
   if (x>=17 && x<=20 && y>=4 && y<=8 && Math.abs(x-18)+Math.abs(y-6)<=3) return 't';
   if ((x<=8 && Math.abs(y-10)<=1) || (x>=18 && x<=24 && y===10)) return '.';
-  if (x>=18 && x<=21 && y>=16 && y<=18 && x-y>=1) return '.';
+  if ((x===20 && y>=15) || (y===15 && x>=20 && x<=30) || (x===30 && y>=9 && y<=15)) return '.';
   if (nearMeadowWater(x,y)) return 't';
   for (const g of BEDS) if (((x-g.x+0.5)/g.w-0.5)**2+((y-g.y+0.5)/g.h-0.5)**2<0.23) return g.kind;
   return 'g';

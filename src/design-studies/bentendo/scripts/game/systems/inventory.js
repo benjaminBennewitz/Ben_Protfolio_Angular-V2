@@ -1,3 +1,4 @@
+import { promptMeadowStream } from './east-meadow.js';
 import { useEastCanteen } from './east-story.js';
 import { BAG_TABS,navigateQuests,activateQuest,questDescription } from './quest-log.js';
 import { heroStats,useBandage } from './health.js';
@@ -46,7 +47,7 @@ export function activateBag(game) {
 function useItem(game,item) {
   if (['Feldflasche','Volle Feldflasche'].includes(item)) return useEastCanteen(game,item);
   if (item==='Rohrbogen' && game.target?.action==='east-pipe') { game.bagOpen=false; game.bagAction=false; ACTIONS['east-pipe'](game,game.target); return; }
-  if (item==='Rostiges Schwert') return game.say(item,'Das Schwert ist automatisch ausgerüstet. Im Dungeon schlägst du mit A in Blickrichtung zu. Angriff: 2.');
+  if (item==='Rostiges Schwert') return useSword(game,item);
   if (item==='Ast' && game.room.dungeon) return game.say('Ast','Du verwendest den Ast automatisch als Waffe, solange du kein Schwert trägst. Im Dungeon schlägst du mit A in Blickrichtung zu.');
   if (item==='Feldverband') return useBandage(game);
   if (item==='Ast') {
@@ -96,4 +97,11 @@ function moveBagTabs(game,direction) {
     game.bagTabFocus=true; game.bagAction=false; game.questDetail=false;
   }
   if (direction==='down' && game.bagTab!=='profile') { game.bagTabFocus=false; game.bagIndex=0; }
+}
+
+
+/** Nutzt das Schwert am Bedienstein oder erklärt seine gewöhnliche Ausrüstung. @param {object} game Spiel. @param {string} item Schwert. */
+function useSword(game,item) {
+  if (game.target?.action!=='meadow-stream-stone' || game.flags.eastStreamOpen) return game.say(item,'Das Schwert ist automatisch ausgerüstet. Im Dungeon schlägst du mit A in Blickrichtung zu. Angriff: 2.');
+  game.bagOpen=false; game.bagAction=false; promptMeadowStream(game);
 }

@@ -24,3 +24,40 @@ export function viewEastMeadow(game) {
   rememberNote(game,entry);
   game.say('Die Ostwiesen',entry.text);
 }
+
+/** Hält die Beobachtungen an Wehr und Brücke getrennt. @param {object} game Spiel. @param {object} object Bauwerk. */
+export function inspectMeadowStream(game,object) {
+  const bridge=object.id==='stream-bridge',open=game.flags.eastStreamOpen;
+  game.flags[bridge?'eastBridgeSeen':'eastWeirSeen']=true;
+  if (bridge) return game.say(object.name,open?'Die Holzbohlen liegen jetzt auf Höhe des Wegs. Unter dir fließt der Bach.':'Die Schwimmkörper liegen zwischen den Steinufern tief im trockenen Bett. Die Bohlen reichen nicht bis zur Uferkante.');
+  return game.say(object.name,open?'Das Wehr steht offen. Wasser aus dem See strömt in den Bach.':'Am Auslauf hält eine Sperre das Wasser zurück. Dahinter ist das Bachbett trocken.');
+}
+
+/** Beschreibt den Bedienstein; Mit Schwert bietet er nach dem ersten Blick eine Bestätigung an. @param {object} game Spiel. @param {object} object Bedienstein. */
+export function inspectMeadowStone(game,object) {
+  if (game.flags.eastStreamOpen) return game.say(object.name,'Die Rast hält das Wehr offen. Dein Schwert hast du wieder eingesteckt.');
+  if (game.flags.eastStreamStoneSeen && game.inventory.includes('Rostiges Schwert')) return promptMeadowStream(game);
+  game.flags.eastStreamStoneSeen=true;
+  game.say(object.name,'Der Eisenhebel ist abgebrochen. Etwas Flaches und Stabiles könnte in die Aufnahme passen.');
+}
+
+/** Bietet den Versuch an; erst A auf der Frage öffnet das Wehr. @param {object} game Spiel. */
+export function promptMeadowStream(game) {
+  game.flags.eastStreamStoneSeen=true;
+  game.say('Du','Das Schwert hineinstecken? A: Ja · B: Abbrechen');
+  const lastPage=game.pages.at(-1) || game.message;
+  lastPage.onConfirm=openMeadowStream;
+}
+
+/** Hebt das Wehr mit dem rostigen Schwert an, ohne den Gegenstand zu verbrauchen. @param {object} game Spiel. */
+function openMeadowStream(game) {
+  if (game.flags.eastStreamOpen || !game.inventory.includes('Rostiges Schwert')) return;
+  game.flags.eastStreamStoneSeen=true; game.flags.eastStreamOpen=true;
+  game.say('Das alte Wehr','Die Klinge passt in die Aufnahme. Beim Drehen rastet das Wehr ein. Wasser rauscht durch das Bachbett. Du ziehst das Schwert wieder heraus.','success-quest');
+}
+
+/** Gibt eine beiläufige Erinnerung und reagiert später auf den wieder fließenden Bach. @param {object} game Spiel. @param {object} object Bewohnerin. */
+export function talkMeadowResident(game,object) {
+  game.flags.eastLeneMet=true;
+  game.say(object.name,game.flags.eastStreamOpen?'Hörst du das? Jetzt hört man den Bach wieder bis ins hohe Gras.':'Früher hab ich am Bach gesessen, wenn es am See zu laut war. Die alte Brücke schaukelte bei jedem Schritt.');
+}

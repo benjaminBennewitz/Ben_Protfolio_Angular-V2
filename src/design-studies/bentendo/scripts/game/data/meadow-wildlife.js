@@ -28,7 +28,7 @@ function animal(id,name,species,x,y,text,extra={}) {
 /** Setzt Felsen als Hindernisse und kleinere Steine in die Wasserfläche. */
 export function meadowRocks() {
   return [
-    rock(6,12,0),rock(16,12,1),rock(4,19,2),rock(24,16,3),rock(31,12,0),rock(14,4,2),
+    rock(6,12,0),rock(16,12,1),rock(4,19,2),rock(24,16,3),rock(32,14,0),rock(14,4,2),
     rock(9,8,0,true),rock(13,14,1,true),{...rock(22,5,2,true),waterArt:'stones'},
     {...rock(28,6,3,true),waterArt:'stones'},{...rock(25,10,0,true),waterArt:'stones'},
     {...rock(25,5,0,true),waterArt:'rock'},

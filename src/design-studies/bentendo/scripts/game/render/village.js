@@ -1,3 +1,4 @@
+import { drawMeadowStream } from './meadow-stream.js';
 import { drawMeadowBirds,drawMeadowMidges,drawMeadowRock,drawMeadowPlants } from './meadow-life.js';
 import { drawShallows,drawShallowRipples,drawLakeFall,drawLakeCliff } from './shallow-water.js';
 import { drawSleepingPet } from './sleeping-pets.js';
@@ -16,7 +17,7 @@ const floors = new WeakMap();
 
 /** Zeichnet den Dorfabschnitt mit nach Fußpunkten sortierten Ebenen. @param {object} render Zeicheninformationen. @param {object} player Interpolierte Spielfigur. */
 export function drawVillage(render,player) {
-  drawGround(render); drawMeadowPlants(render); drawMeadow(render); drawWaterfall(render); drawLakeFall(render); drawShallowRipples(render,player);
+  drawGround(render); drawMeadowPlants(render); drawMeadow(render); drawWaterfall(render); drawLakeFall(render); drawMeadowStream(render); drawShallowRipples(render,player);
   const entries = [];
   for (const tree of render.game.room.trees) entries.push({type:'tree',x:tree[0],y:tree[1],pine:tree[2]==='pine',depth:tree[1]+2});
   for (const bird of render.game.room.birds) if (nightShade(minuteOfDay(render.game))<0.15) entries.push({...bird,type:'perch',animal:'bird',depth:bird.treeY+2.01});
@@ -63,9 +64,9 @@ function drawGround(render) {
 function drawCell(render,x,y) {
   const ground = render.game.room.ground, kind = ground[y][x], xx=x*16, yy=y*16;
   rect(render.ctx,0,xx,yy,16,16);
-  if (kind==='r' && render.game.room.lakeFall) return y>2?drawMeadowGateWall(render,x,y):drawLakeCliff(render,x,y);
+  if (kind==='r' && render.game.room.lakeFall) return x===0 && y>2?drawMeadowGateWall(render,x,y):drawLakeCliff(render,x,y);
   if (kind==='r' && render.game.room.villageLandscape) return drawGreenWall(render,x,y);
-  if (kind==='g' || kind==='e') return drawBareGround(render,x,y,kind);
+  if (kind==='g' || kind==='e' || kind==='k') return drawBareGround(render,x,y,kind==='k'?'g':kind);
   if (kind==='r' || kind==='c') return drawNorthCell(render,x,y);
   if (kind==='s') return drawShallows(render,x,y,kind);
   if (kind === 'w' || kind === 'b') return drawCanal(render,x,y,kind);
@@ -231,10 +232,7 @@ export function drawVillageHero(render,player) {
 function drawVillageObject(render,object) {
   const x=Math.round((object.drawX ?? object.x)*16),y=Math.round((object.drawY ?? object.y)*16),{ctx,game}=render;
   if (drawEastProp(render,object)) return true;
-  if (object.kind==='trail') {
-    const direction=object.to==='village' || object.to==='east-wood'?-1:1;
-    rect(ctx,2,x+5,y+7,6,1); rect(ctx,2,x+(direction<0?4:11),y+6,1,3); return true;
-  }
+  if (object.kind==='trail') { drawTrail(render,object,x,y); return true; }
   if (object.kind==='cave-entry') return true;
   if (object.kind==='discovery-chest') { drawDiscoveryChest(render,object); return true; }
   if (object.id==='keeper') { drawKeeper(render,object,object.drawX*16,object.drawY*16); return true; }
@@ -295,4 +293,16 @@ function drawCat(render,object,x,y) {
   rect(ctx,0,x+10,y+7,1,1); rect(ctx,0,x+13,y+7,1,1); rect(ctx,3,x+1,y+7-pose*2,2,6);
   const stride=object.walking?Math.floor(game.time*12)%2:0;
   rect(ctx,3,x+4+stride,y+13,2,2); rect(ctx,3,x+10-stride,y+13,2,2); ctx.restore();
+}
+
+
+/** Zeigt die Blickrichtung eines markierten Weges am Übergang. @param {object} render Zeicheninformationen. @param {object} object Übergang. @param {number} x Pixelspalte. @param {number} y Pixelzeile. */
+function drawTrail(render,object,x,y) {
+  const {ctx,game}=render,facing=object.trailFacing;
+  if (object.requiresFlag && !game.flags[object.requiresFlag]) return;
+  if (facing==='up' || facing==='down') {
+    rect(ctx,2,x+7,y+5,1,6); rect(ctx,2,x+6,y+(facing==='up'?4:11),3,1); return;
+  }
+  const left=facing==='left' || object.to==='village' || object.to==='east-wood';
+  rect(ctx,2,x+5,y+7,6,1); rect(ctx,2,x+(left?4:11),y+6,1,3);
 }

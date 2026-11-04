@@ -139,7 +139,7 @@ export class Game {
     if (this.move || this.slide) return;
     if (this.journalOpen) return this.browse(1);
     if (this.mapOpen) return toggleQuestMarkers(this);
-    if (this.message) { this.message = this.pages.shift() || null; finishDoorReading(this); return; }
+    if (this.message) return this.advanceMessage();
     if (this.tavernMenu) return serveDrink(this);
     if (this.bagOpen) return activateBag(this);
     if (this.seat) return openDrinks(this);
@@ -148,6 +148,13 @@ export class Game {
     this.held = null;
     if (target && sitDown(this,target)) return;
     if (target) { recordQuestContact(this,target); recordVillageTask(this,target); observeResidentAction(this,target); (ACTIONS[target.action] || ACTIONS.inspect)(this, target); refreshQuestJournal(this); }
+  }
+  /** Blättert weiter oder führt die ausdrücklich bestätigte Aktion aus. */
+  advanceMessage() {
+    const confirm=this.message.onConfirm;
+    this.message=this.pages.shift() || null;
+    finishDoorReading(this);
+    if (!this.message) confirm?.(this);
   }
   /** Öffnet nach dem Titel die einfache Auswahl der beiden Figuren. */
   beginAdventure() {

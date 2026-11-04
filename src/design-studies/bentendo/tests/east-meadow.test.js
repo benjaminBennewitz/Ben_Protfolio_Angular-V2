@@ -1,6 +1,7 @@
+import { startDebugRun } from '../scripts/game/data/debug-starts.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createGame,useObject,dismiss } from './helpers.js';
+import { createGame,useObject,dismiss,go } from './helpers.js';
 import { createEastRooms } from '../scripts/game/data/east-rooms.js';
 import { eastQuestEntries } from '../scripts/game/data/quest-east.js';
 import { captureGame,restoreGame } from '../scripts/game/systems/save-state.js';
@@ -95,3 +96,82 @@ function waterfallView() {
 }
 
 test('Ostwiesen: Wasserfall ist vollständig vom westlichen Ufer sichtbar',waterfallView);
+
+/** Prüft den verschlossenen Übergang, das Schwert als Werkzeug und die Raumwechsel nach dem Speichern. */
+function streamQuest() {
+  const game=world(); game.travel('east-meadow');
+  assert.equal(eastQuestEntries(game).some(isStreamQuest),false);
+  useObject(game,'stream-bridge'); dismiss(game);
+  const quest=eastQuestEntries(game).find(isStreamQuest);
+  assert.deepEqual(quest.markers.map(markerTarget),['stream-bridge']);
+  game.player={x:32,y:9,facing:'right'}; assert.equal(game.step('right'),false);
+  game.player={x:30,y:13,facing:'up'}; assert.equal(game.step('up'),false);
+  useObject(game,'stream-stone'); useObject(game,'stream-stone'); dismiss(game);
+  assert.equal(game.flags.eastStreamOpen,undefined);
+  assert.equal(game.occupied(30,12),true);
+  confirmStream(game);
+  assert.deepEqual(game.inventory,['Rostiges Schwert']); assert.ok(game.sounds.includes('success-quest'));
+  assert.equal(eastQuestEntries(game).find(isStreamQuest).done,true);
+  const loaded=world(); assert.equal(restoreGame(loaded,captureGame(game)),true);
+  assert.equal(loaded.occupied(30,12),false); assert.equal(loaded.occupied(31,12),true);
+  go(loaded,32,9); assert.equal(loaded.step('right'),true); assert.equal(loaded.room.id,'east-lowland');
+  go(loaded,1,9); assert.equal(loaded.step('left'),true); assert.equal(loaded.room.id,'east-meadow');
+}
+
+/** Prüft Abbruch und ausdrückliche Bestätigung über beide Bedienwege. @param {object} game Spiel. */
+function confirmStream(game) {
+  game.inventory.push('Rostiges Schwert'); game.bagOpen=true; game.bagAction=true; game.bagIndex=0;
+  game.interact(); assert.equal(game.flags.eastStreamOpen,undefined);
+  assert.equal(game.occupied(30,12),true);
+  game.back(); assert.equal(game.flags.eastStreamOpen,undefined);
+  useObject(game,'stream-stone'); assert.equal(game.flags.eastStreamOpen,undefined);
+  game.interact(); dismiss(game);
+}
+
+/** Erkennt die Aufgabe zum Bachlauf. @param {object} quest Aufgabe. */
+function isStreamQuest(quest) { return quest.id===11; }
+
+/** Liest die Kennung des bereits entdeckten Orts. @param {object} marker Kartensymbol. */
+function markerTarget(marker) { return marker.target; }
+
+/** Erreicht den Südpfad ohne Schwert und findet den optionalen Hinweis genau einmal. */
+function southTrail() {
+  const game=world(); game.travel('east-meadow');
+  go(game,20,22); assert.equal(game.step('down'),true); assert.equal(game.room.id,'east-south-meadow');
+  const coins=game.coins;
+  useObject(game,'south-cache'); useObject(game,'south-cache'); dismiss(game);
+  assert.equal(game.coins,coins+4);
+  assert.equal(game.notes.filter(isFallNote).length,1);
+  go(game,9,1); assert.equal(game.step('up'),true); assert.equal(game.room.id,'east-meadow');
+}
+
+/** Erkennt die optionale Wasserfallnotiz. @param {object} note Notiz. */
+function isFallNote(note) { return note.id==='east-fall-note'; }
+
+test('Ostwiesen: entdeckt das Wehr, öffnet es mit dem Schwert und erreicht die Bachniederung',streamQuest);
+test('Ostwiesen: Südpfad bleibt offen, Wasserfallnotiz und Münzen sind einmalige Funde',southTrail);
+
+
+/** Spielt das Wehr von beiden Debug-Einstiegen aus und hält den Dungeonloot am ursprünglichen Einstieg offen. */
+function debugLoadout() {
+  const game=world();
+  for (const id of ['east-waystation','east-meadow']) {
+    startDebugRun(game,id);
+    assert.equal(game.debugging,true);
+    assert.ok(game.inventory.includes('Rostiges Schwert'));
+    assert.ok(game.states.get('quell-nest').taken.has('reward'));
+    if (id==='east-waystation') useObject(game,'meadow-exit');
+    assert.equal(game.room.id,'east-meadow');
+    assert.equal(game.flags.eastStreamOpen,undefined);
+    useObject(game,'stream-stone'); useObject(game,'stream-stone');
+    assert.equal(game.flags.eastStreamOpen,undefined);
+    game.interact(); assert.equal(game.flags.eastStreamOpen,true);
+  }
+  startDebugRun(game,'steam');
+  assert.deepEqual(game.inventory,['Runenkupplung']);
+  startDebugRun(game,'hall');
+  assert.deepEqual(game.inventory,[]);
+  assert.equal(game.flags.eastRootOpen,undefined);
+}
+
+test('Debug: beide Ostwiesen-Einstiege bringen ein Schwert mit und lassen das Wehr ungelöst',debugLoadout);

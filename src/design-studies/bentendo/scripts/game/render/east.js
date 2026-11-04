@@ -1,3 +1,4 @@
+import { drawMeadowLeverStone } from './meadow-stream.js';
 import { rect } from './primitives.js';
 import { pipePorts,pipeFlow,PIPE_STEPS } from '../data/east-pipes.js';
 import { dungeonTile } from './dungeon-atlas.js';
@@ -34,9 +35,9 @@ export function drawPipeBoard(render) {
 
 /** Zeichnet neue Requisiten über kleine, getrennte Darstellungsfunktionen. @param {object} render Zeicheninformationen. @param {object} object Raumelement. */
 export function drawEastProp(render,object) {
-  const draw={'east-canteen':drawCanteen,'east-pipe':drawPipe,'east-hatch':drawHatch,'east-root-door':drawRootDoor,'east-root-mark':drawRootMark,'east-meadow-view':drawMeadowPost}[object.kind];
+  const draw={'east-canteen':drawCanteen,'east-pipe':drawPipe,'east-hatch':drawHatch,'east-root-door':drawRootDoor,'east-root-mark':drawRootMark,'east-meadow-view':drawMeadowPost,'meadow-lever-stone':drawMeadowLeverStone}[object.kind];
   if (draw) { draw(render,object); return true; }
-  return object.kind==='east-cylinder';
+  return ['east-cylinder','meadow-weir','meadow-pontoon'].includes(object.kind);
 }
 
 /** Führt die Rückwand vom Kartenrand bis zur beleuchteten Stirnseite. @param {object} render Zeicheninformationen. @param {number} x Spalte. @param {number} y Zeile. */

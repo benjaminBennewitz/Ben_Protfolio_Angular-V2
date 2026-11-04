@@ -12,7 +12,7 @@ export function water(room, x, y) {
 export function wall(game, x, y) {
   const room = game.room;
   if (x < 0 || y < 0 || x >= room.width || y >= room.height) return true;
-  if (room.id === 'village' || room.villageLandscape) return villageWall(room,x,y);
+  if (room.id === 'village' || room.villageLandscape) return villageWall(game,x,y);
   if (room.layout) return room.layout[y]?.[x]!=='.' && !(room.id==='mara-cave' && game.flags.sourceDrained && room.layout[y]?.[x]==='w');
   if (room.id === 'city') return townWall(room, x, y);
   if (x === 0 || y === 0 || x === room.width - 1 || y === room.height - 1) return true;
@@ -34,11 +34,17 @@ function townWall(room, x, y) {
   return false;
 }
 
-/** Prüft Gelände und Gebäude des neuen Dorfabschnitts. @param {object} room Dorfkarte. @param {number} x Spalte. @param {number} y Zeile. */
-function villageWall(room,x,y) {
+/** Prüft Gelände und Gebäude des neuen Dorfabschnitts. @param {object} game Spiel. @param {number} x Spalte. @param {number} y Zeile. */
+function villageWall(game,x,y) {
+  const {room}=game;
   if (room.id==='village' && x===room.width-1 && [12,13].includes(y)) return false;
   if (x === 0 || y === 0 || x === room.width-1 || y === room.height-1) return true;
-  if (['w','r','l'].includes(room.ground[y][x])) return true;
+  const kind=room.ground[y][x];
+  if (kind==='k') {
+    const bridge=room.meadowChannel?.bridge;
+    return !(game.flags.eastStreamOpen && bridge?.[0]===x && bridge[1]===y);
+  }
+  if (['w','r','l'].includes(kind)) return true;
   for (const house of room.buildings) if (contains(house,x,y)) return true;
   for (const [tx,ty] of room.trees) if (y === ty+1 && x >= tx && x <= tx+1) return true;
   return false;

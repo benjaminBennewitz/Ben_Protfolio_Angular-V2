@@ -97,7 +97,7 @@ function forestMusic() {
 function landscape(room) { return room.villageLandscape; }
 
 /** Zählt nur Waldgebiete; die Ostwiesen nutzen denselben Landschaftsrenderer. @param {object} room Raum. */
-function forestLandscape(room) { return landscape(room) && !room.shallows; }
+function forestLandscape(room) { return landscape(room) && !['east-meadow','east-lowland','east-south-meadow'].includes(room.id); }
 
 /** Erkennt die unveränderte Werkstation. @param {object} room Raum. */
 function pump(room) { return room.id==='east-pump'; }

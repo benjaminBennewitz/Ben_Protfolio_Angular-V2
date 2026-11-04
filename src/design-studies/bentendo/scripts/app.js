@@ -1,3 +1,4 @@
+import { startDebugRun } from './game/data/debug-starts.js';
 import { worldMusic } from './game/systems/world-music.js';
 import { worldMovement } from './game/systems/player-movement.js';
 import { selectCartridgeCover } from './device/cartridge/cover.js';
@@ -169,13 +170,7 @@ export class App {
     this.device.cartridge.state.slot = 'seated'; this.device.cartridge.state.contactsFault = false;
     this.device.setPower(true); this.phase = 'on'; this.cartridge.open = false; this.device.setView('front');
     if (id === 'lcd-noise') return this.debugNoise();
-    this.game.reset(); this.game.mode = 'world'; this.game.debugging=true;
-    if (id === 'steam') this.game.inventory.push('Runenkupplung');
-    if (id === 'storage') this.game.flags.hallPowered = true;
-    if (id.startsWith('quell-')) { this.game.inventory.push('Ast'); this.game.flags.sourceDrained=true; }
-    if (id==='east-wood' || id==='east-waystation') this.game.flags.eastOpen=true;
-    if (id==='east-waystation') Object.assign(this.game.flags,{eastDoorStudied:true,eastRootOpen:true});
-    this.game.travel(id); this.ui.sync(); this.request();
+    startDebugRun(this.game,id); this.ui.sync(); this.request();
   }
   /** Erzwingt den Kontaktfehler unabhängig vom Zufallsstart. */
   debugNoise() {

@@ -20,6 +20,6 @@ function migrateEastTerrain(game,data) {
   const room=game.rooms.get(data.room),x=data.player?.x,y=data.player?.y;
   if (!room || (data.roomRevision ?? 1)>=(room.revision ?? 2) || !Number.isInteger(x) || !Number.isInteger(y)) return data;
   const kind=room.ground[y]?.[x];
-  if (!['l','r'].includes(kind) || !wall({room,flags:data.flags},x,y)) return data;
+  if (!['l','r','k'].includes(kind) || !wall({room,flags:data.flags},x,y)) return data;
   return {...data,roomRevision:room.revision,player:{...data.player,x:room.spawn[0],y:room.spawn[1]}};
 }

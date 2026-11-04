@@ -1,4 +1,4 @@
-import { drawMeadowLake } from './meadow-lake.js';
+import { drawMeadowLake,lakeCliffPixel } from './meadow-lake.js';
 import { rect } from './primitives.js';
 
 /** Zeichnet flache Becken mit zusammenhängenden Ufern und abgerundeten Ecken. @param {object} render Zeicheninformationen. @param {number} x Spalte. @param {number} y Zeile. @param {string} kind Wassertiefe. */
@@ -58,5 +58,11 @@ export function drawLakeCliff(render,x,y) {
   const {ctx,assets,game}=render,fall=game.room.lakeFall;
   const sx=y===2 && x===fall.x-1?384:y===2 && x===fall.x+fall.w?416:400;
   const sy=sx===400?64+y%2*16:32;
-  ctx.drawImage(assets.villageTiles,sx,sy,16,16,x*16,y*16,16,16);
+  if (x<30 || y<=2) return ctx.drawImage(assets.villageTiles,sx,sy,16,16,x*16,y*16,16,16);
+  for (let py=0;py<16;py++) {
+    let left=0,right=15;
+    while (left<16 && !lakeCliffPixel(game.room,x,y,left,py)) left++;
+    while (right>=left && !lakeCliffPixel(game.room,x,y,right,py)) right--;
+    if (left<=right) ctx.drawImage(assets.villageTiles,sx+left,sy+py,right-left+1,1,x*16+left,y*16+py,right-left+1,1);
+  }
 }

@@ -39,9 +39,9 @@ function buildLakeLayers(room) {
   const m=mc.createImageData(w,h),s=sc.createImageData(w,h);
   for (let y=0;y<h;y++) for (let x=0;x<w;x++) {
     const kind=room.ground[y>>4][x>>4];
-    if (kind==='r' || kind==='s') continue;
+    if (kind==='s' || kind==='r' && lakeCliffPixel(room,x>>4,y>>4,x%16,y%16)) continue;
     const coverage=lakeCoverage(sum,w,h,x,y);
-    writeLakePixel(m.data,s.data,(y*w+x)*4,coverage,x,y);
+    writeLakePixel(m.data,s.data,(y*w+x)*4,kind==='r'?Math.min(coverage,0.42):coverage,x,y);
   }
   mc.putImageData(m,0,0); sc.putImageData(s,0,0);
   return {sand,mask,water};
@@ -61,4 +61,13 @@ function writeLakePixel(mask,sand,i,coverage,x,y) {
   if (coverage<0.08 || (coverage<0.16 && grain>=5)) return;
   const tone=coverage>=0.43?[76,98,59]:grain<3?[142,159,88]:[206,211,153];
   sand.set([...tone,255],i);
+}
+
+
+/** Hält die abgestufte Ostfelswand innerhalb ihrer Kacheln und lässt davor Ufersand frei. @param {object} room Raum. @param {number} x Kachelspalte. @param {number} y Kachelzeile. @param {number} px Pixelspalte. @param {number} py Pixelzeile. */
+export function lakeCliffPixel(room,x,y,px,py) {
+  if (x<30 || y<=2) return true;
+  const left=room.ground[y][x-1]!=='r',bottom=room.ground[y+1]?.[x]!=='r';
+  const foot=bottom?(left && px<6?11:13):16;
+  return py<foot && (!left || px>=(py<4?2:py<10?3:4));
 }

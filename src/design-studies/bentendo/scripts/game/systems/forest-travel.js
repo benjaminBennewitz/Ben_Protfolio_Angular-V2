@@ -6,7 +6,7 @@ export function leaveForestAtEdge(game,x,y) {
   if (!room.villageLandscape || !room.id.startsWith('east-')) return false;
   if (x!==0 && y!==0 && x!==room.width-1 && y!==room.height-1) return false;
   for (const exit of room.objects) {
-    if (exit.kind!=='trail' || exit.action!=='travel') continue;
+    if (exit.kind!=='trail' || exit.action!=='travel' || exit.requiresFlag && !game.flags[exit.requiresFlag]) continue;
     const area=passageArea(room,exit);
     if (x<area.x || y<area.y || x>=area.x+area.w || y>=area.y+area.h) continue;
     game.travel(exit.to,exit.spawn); return true;

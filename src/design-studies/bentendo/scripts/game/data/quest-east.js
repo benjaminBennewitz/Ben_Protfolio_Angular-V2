@@ -1,7 +1,7 @@
 import { knowsNote,questRecord,questMarker } from './quest-helpers.js';
 
 /** Hält Ostpass, Waldspuren und die kleine Flaschenaufgabe getrennt und ohne vorzeitige Lösungen fest. @param {object} game Spiel. */
-export function eastQuestEntries(game) { return [pumpQuest(game),trailQuest(game),canteenQuest(game),meadowQuest(game)].filter(Boolean); }
+export function eastQuestEntries(game) { return [pumpQuest(game),trailQuest(game),canteenQuest(game),meadowQuest(game),streamQuest(game)].filter(Boolean); }
 
 /** Nennt nur die untersuchte Schadstelle und die bereits belegte Werkstattzuordnung. @param {object} game Spiel. */
 function pumpQuest(game) {
@@ -49,4 +49,17 @@ function meadowQuest(game) {
   const done=knowsNote(game,'east-meadow-view');
   if (done) clues.push('An einem Pfahl auf den Ostwiesen klebt heller Staub. Die Pfahlreihe zieht ins Tal.');
   return questRecord({id:10,title:'Hinter der Wurzelpforte',people:game.flags.eastTrailReported?['Mara']:[],places:['Die Wurzelpforte',...(game.flags.eastRootOpen?['Alte Wegmacherstation','Ostwiesen']:[])],clues,done});
+}
+
+
+/** Hält nur tatsächlich entdeckte Hinweise zum Wasserlauf fest. @param {object} game Spiel. */
+function streamQuest(game) {
+  const f=game.flags,clues=[],markers=[];
+  if (f.eastLeneMet) clues.push('Lene erinnert sich daran, wie die Brücke über dem Bach schaukelte.');
+  if (f.eastBridgeSeen) { clues.push('Die Brücke liegt bei Niedrigwasser tief unter der Uferkante.'); markers.push(questMarker('east-meadow','stream-bridge')); }
+  if (f.eastWeirSeen) { clues.push('Das Wehr trennt den vollen See vom trockenen Bachbett.'); markers.push(questMarker('east-meadow','stream-weir')); }
+  if (f.eastStreamStoneSeen) { clues.push('Im Bedienstein sitzt eine flache Aufnahme. Der alte Hebel ist abgebrochen.'); markers.push(questMarker('east-meadow','stream-stone')); }
+  if (f.eastStreamOpen) clues.push('Das Wehr ist offen. Der Bach trägt die Schwimmbrücke bis auf Höhe des Ostwegs.');
+  if (!clues.length) return null;
+  return questRecord({id:11,title:'Der alte Wasserlauf',people:f.eastLeneMet?['Lene']:[],places:['Ostwiesen'],clues,done:Boolean(f.eastStreamOpen),markers});
 }

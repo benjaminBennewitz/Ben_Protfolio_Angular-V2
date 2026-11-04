@@ -26,7 +26,7 @@ function edgePoints(room,exit) {
 
 /** Prüft jede Spur jedes Waldübergangs und verhindert sofortiges Zurückwechseln. */
 function allEdges() {
-  const game=world();
+  const game=world(); game.flags.eastStreamOpen=true;
   for (const room of createEastRooms()) for (const exit of room.objects.filter(isTrail)) {
     for (const [x,y,direction,dx,dy] of edgePoints(room,exit)) {
       game.travel(room.id); game.player={x:x+dx,y:y+dy,facing:direction};

@@ -1,4 +1,4 @@
-import { tryRootMark,viewEastMeadow } from './east-meadow.js';
+import { tryRootMark,viewEastMeadow,inspectMeadowStream,inspectMeadowStone,talkMeadowResident } from './east-meadow.js';
 import { openRestMenu } from './rest-menu.js';
 import { respectNightRest } from './daily-life.js';
 import { openForestShortcut,talkForestTraveller } from './forest-return.js';
@@ -30,9 +30,10 @@ function inspect(game, object) {
   game.say(object.name,text || 'Hier gibt es gerade nichts weiter zu entdecken.',animal?`animal-${animal}`:'talk');
 }
 /** Wechselt durch eine benannte Tür. @param {object} game Spiel. @param {object} object Ausgang. */
-function travel(game, object) { if (respectNightRest(game,object)) return; game.travel(object.to, object.spawn); }
+function travel(game, object) { if (object.requiresFlag && !game.flags[object.requiresFlag]) return game.say(object.name,'Der Weg ist von hier aus noch nicht erreichbar.','ui-denied'); if (respectNightRest(game,object)) return; game.travel(object.to, object.spawn); }
 
 export const ACTIONS = {
+  'meadow-stream-look':inspectMeadowStream,'meadow-stream-stone':inspectMeadowStone,'meadow-stream-talk':talkMeadowResident,
   'east-root-mark':tryRootMark,'east-meadow-view':viewEastMeadow,
   'east-shortcut':openForestShortcut,'east-traveller':talkForestTraveller,
   'east-pump-entry':enterEastPump,'east-gate':enterEastGate,'east-pump-sign':inspectPump,'east-spares':takeSparePipe,'east-pipe':turnEastPipe,'east-pipe-reset':resetEastPipes,'east-pump-start':startEastPump,'east-clue':inspectEastClue,'east-eda':talkEda,

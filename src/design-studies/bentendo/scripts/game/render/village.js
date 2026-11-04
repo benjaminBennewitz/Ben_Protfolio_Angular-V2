@@ -83,8 +83,9 @@ function drawPlantCell(render,x,y,kind) {
   if (kind==='h') drawHedge(render,x*16,y*16,edges);
 }
 
-/** Schließt sichtbare Pflanzenränder auch vor den verdeckenden Baumfüßen. @param {object} room Raum. @param {number} x Nachbarspalte. @param {number} y Nachbarzeile. @param {string} kind Pflanzentyp. */
+/** Führt Waldpflanzen unter Baumkronen fort und erhält die gepflegten Dorfbeete. @param {object} room Raum. @param {number} x Nachbarspalte. @param {number} y Nachbarzeile. @param {string} kind Pflanzentyp. */
 function plantNeighbor(room,x,y,kind) {
+  if (room.villageLandscape) return room.ground[y]?.[x]===kind;
   if (room.ground[y]?.[x]!==kind) return false;
   for (const [tx,ty] of room.trees) if (y===ty+1 && x>=tx && x<=tx+1) return false;
   return true;

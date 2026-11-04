@@ -5,8 +5,21 @@ import { dungeonTile } from './dungeon-atlas.js';
 /** Bindet die Wurzelpforte in eine vollständige alte Mauer mit seitlichen Abschlüssen ein. @param {object} render Zeicheninformationen. @param {number} x Spalte. @param {number} y Zeile. */
 export function drawEastRock(render,x,y) {
   const grid=render.game.room.ground,left=grid[y]?.[x-1]!=='r',right=grid[y]?.[x+1]!=='r',top=grid[y-1]?.[x]!=='r';
-  const index=top?(left?0:right?3:1+x%2):left?20:right?23:11+x%2;
-  dungeonTile(render,index,x*16,y*16);
+  const index=top?(left?0:right?3:1):left?20:right?23:11+x%2;
+  const xx=x*16,yy=y*16,{ctx}=render;
+  if (!top && !left && !right) return dungeonTile(render,index,xx,yy);
+  ctx.save(); ctx.beginPath();
+  if (top && (left || right)) clipRockCorner(ctx,xx,yy,left);
+  else if (top) ctx.rect(xx,yy+11,16,5);
+  else if (left) ctx.rect(xx+10,yy,6,16);
+  else ctx.rect(xx,yy,6,16);
+  ctx.clip(); dungeonTile(render,index,xx,yy); ctx.restore();
+}
+
+/** Schneidet den Atlas-Hintergrund an der gestuften Mauerecke ab. @param {CanvasRenderingContext2D} ctx Kontext. @param {number} x Pixelspalte. @param {number} y Pixelzeile. @param {boolean} left Linke Ecke. */
+function clipRockCorner(ctx,x,y,left) {
+  const widths=[2,3,4,6,6];
+  for (let i=0;i<widths.length;i++) ctx.rect(x+(left?16-widths[i]:0),y+11+i,widths[i],1);
 }
 
 /** Zeichnet Zulauf und Druckkolben fest an den Enden der Bodenleitung. @param {object} render Zeicheninformationen. */

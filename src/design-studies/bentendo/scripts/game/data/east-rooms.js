@@ -43,11 +43,16 @@ function forestGround(x,y,width,height,gardens,through) {
 /** Verbindet Dorf, Waldsaum und die alte Wurzelpforte mit verlässlichen Rückwegen. */
 export function createEastRooms() {
   const edge=forestRoom('east-wood','Östlicher Waldsaum',24,20,[{x:3,y:5,w:6,h:3,kind:'t'},{x:15,y:4,w:6,h:4,kind:'h'},{x:5,y:13,w:5,h:3,kind:'f'},{x:14,y:13,w:5,h:3,kind:'t'}],[prop('return','Weg nach Bruchstein',2,10,'trail','travel',{to:'village',spawn:[31,12]}),prop('eda','Waldläuferin Eda',9,11,'resident','east-eda',{appearance:[156,208],route:[[9,11],[10,11],[10,12],[9,12]],text:'Der Wald hört zu.'}),prop('ribbon','Grauer Stoffrest',17,6,'note','east-clue',{clue:'ribbon'}),prop('canteen','Verlorene Feldflasche',6,6,'east-canteen','take',{item:'Feldflasche'}),prop('to-clearing','Alter Forstpfad',21,10,'trail','travel',{to:'east-crossroads',spawn:[3,10]})]);
-  const clearing=forestRoom('east-clearing','Die Wurzelpforte',22,18,[{x:4,y:5,w:5,h:3,kind:'h'},{x:14,y:4,w:5,h:4,kind:'t'},{x:4,y:12,w:5,h:3,kind:'t'},{x:14,y:12,w:4,h:3,kind:'f'}],[prop('return','Zurück zum Dornenbogen',2,10,'trail','travel',{to:'east-thicket',spawn:[22,10]}),prop('tracks','Schleifspuren',8,8,'note','east-clue',{clue:'tracks'}),prop('root-door','Verwurzelte Steintür',11,3,'east-root-door','east-clue',{clue:'threshold',w:2,h:2}),prop('cache','Alte Wegkiste',16,13,'discovery-chest','search',{discovery:{coins:4,text:'Zwischen morschen Wegpfählen liegt ein Beutel mit vier Gildenmünzen.'}})]);
+  const clearing=forestRoom('east-clearing','Die Wurzelpforte',22,18,[{x:4,y:5,w:5,h:3,kind:'h'},{x:14,y:4,w:5,h:4,kind:'t'},{x:4,y:12,w:5,h:3,kind:'t'},{x:14,y:12,w:4,h:3,kind:'f'}],[prop('return','Zurück zum Dornenbogen',2,10,'trail','travel',{to:'east-thicket',spawn:[22,10]}),prop('tracks','Schleifspuren',8,8,'note','east-clue',{clue:'tracks'}),prop('root-door','Verwurzelte Steintür',11,3,'east-root-door','east-clue',{clue:'threshold',w:2,h:2}),prop('cache','Alte Wegkiste',14,13,'discovery-chest','search',{discovery:{coins:4,text:'Zwischen morschen Wegpfählen liegt ein Beutel mit vier Gildenmünzen.'}})]);
   edge.objects.push(prop('old-sign','Alter Forstpfahl',11,3,'sign','inspect',{text:'Dieser Pfahl stand einmal am Forstkreuzweg. Das alte Kerbzeichen ist tiefer als die frische Kreide. Darunter bleibt grauer Staub hängen.'}));
   edge.birds=[{x:6,y:2,treeY:2,facing:'left'}];
   edge.objects.push(prop('rest-bench','Alte Rastbank',7,12,'village-bench','inspect',{w:2,text:'Unter der Lehne steht ein eingeritztes E. Am Holz klebt noch ein grauer Faden.'}));
   edge.objects.push(prop('forest-squirrel','Eichhörnchen',15,15,'wildlife','inspect',{animal:'squirrel',route:[[15,15],[16,15],[16,16],[15,16]],text:'Es versteckt eine Nuss und tut so, als hättest du nichts gesehen.'}));
+  clearing.trees=clearing.trees.filter(clearOfRootWall);
   addRootMarks(clearing);
   return [pumpRoom(),edge,...createForestSections(),clearing,...createMeadowRooms()];
 }
+
+
+/** Hält ganze Baumkronen aus dem Mauerrechteck der Wurzelpforte. @param {Array} tree Baumstandort. */
+function clearOfRootWall(tree) { const [x,y]=tree; return x+2<=9 || x>=15 || y+2<=2 || y>=5; }

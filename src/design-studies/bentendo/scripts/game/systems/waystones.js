@@ -1,7 +1,8 @@
 const HALF_FADE=0.24;
+export const BRUCHSTEIN_ARRIVAL=[31,13];
 const DESTINATIONS={
   village:{room:'east-clearing',spawn:[14,9],name:'zur Wurzelpforte'},
-  'east-clearing':{room:'village',spawn:[31,15],name:'nach Bruchstein'},
+  'east-clearing':{room:'village',spawn:BRUCHSTEIN_ARRIVAL,name:'nach Bruchstein'},
 };
 
 /** Fragt vor der Fahrt nach Zustimmung und sperrt die Verbindung bis zur geöffneten Pforte. @param {object} game Spiel. @param {object} stone Wegmacherstein. */

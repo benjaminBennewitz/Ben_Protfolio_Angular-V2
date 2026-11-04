@@ -170,6 +170,20 @@ function waystoneRide() {
   useObject(game,'waystone-clearing'); game.reduced=true; dismiss(game);
   assert.equal(game.room.id,'village'); assert.equal(game.waystoneRide,null);
   assert.equal(game.occupied(game.player.x,game.player.y),false);
+  assert.equal(game.step('left'),true);
 }
+
+/** Prüft die Rettung eines alten Spielstands und den freien Anschluss an den Dorfweg. */
+function recoverWaystoneArrival() {
+  const game=world(); game.flags.eastRootOpen=true;
+  game.travel('village',[31,15]);
+  assert.equal(restoreGame(game,captureGame(game)),true);
+  assert.deepEqual([game.player.x,game.player.y],[31,13]);
+  assert.equal(game.step('left'),true);
+  game.update(0.25,false);
+  assert.deepEqual([game.player.x,game.player.y],[30,13]);
+}
+
+test('Wegmacherstein: alter Ankunftspunkt wird auf den freien Dorfweg versetzt',recoverWaystoneArrival);
 
 test('Wegmachersteine: Sperre, Abbruch, Blende und Rückfahrt ohne Animation',waystoneRide);

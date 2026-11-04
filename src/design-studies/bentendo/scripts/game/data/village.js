@@ -50,7 +50,7 @@ function groundAt(x,y) {
 
 /** Gruppiert die Bäume, ohne Wege oder Gebäude zu versperren. */
 function createTrees() {
-  const trees = [[2,2],[4,2],[6,2],[2,4],[4,4],[2,18],[8,19],[14,21],[20,17],[29,14],[30,16],[26,28],[28,28],[14,28]];
+  const trees = [[2,2],[4,2],[6,2],[2,4],[4,4],[2,18],[8,19],[14,21],[20,17],[30,16],[26,28],[28,28],[14,28]];
   for (let y=2;y<VILLAGE_SIZE.height;y+=2) { trees.push([0,y]); if (y!==12) trees.push([32,y]); }
   for (let x=2;x<32;x+=2) if (x<9 || x>13) trees.push([x,30]);
   for (const tree of trees) if (([0,32].includes(tree[0]) && tree[1]%6===4) || [[2,18],[28,28],[14,28]].some(sameTree.bind(null,tree))) tree.push('pine');
@@ -68,7 +68,7 @@ function villageDetails() {
     prop('barrel','Regenfass',7,10,'village-barrel','inspect',{text:'Auf dem Wasser schwimmt ein einzelnes Blatt.'}),
     prop('hitching-post','Anbindepfosten',7,12,'village-post','inspect',{text:'Hier binden Reisende ihre Pferde an. Das Holz ist an den Kanten blank gescheuert.'}),
     prop('north-gate','Höhlen-Sperre',15,1,'gate','mara-north',{text:'GEFAHR: Der Höhlenweg zum Nordwald ist gesperrt. Die Gilde muss den Durchgang erst freigeben. Hilf zunächst den Leuten im Dorf.'}),
-    prop('east-hatch','Wartungsluke',30,11,'east-hatch','east-pump-entry',{hint:'öffnen'}),
+    prop('east-hatch','Wartungsluke am Ostpass',30,10,'east-hatch','east-pump-entry',{w:2,hint:'öffnen'}),
     prop('waystone-village','Wegmacherstein',31,14,'waystone','waystone',{hint:'Reise prüfen'}),
     prop('east-gate','Ostpass-Sperre',32,12,'gate','east-gate',{h:2,text:'GEFAHR: Der Ostpass ist unsicher. Auf Anordnung der Gilde gesperrt, bis die offenen Aufgaben im Dorf erledigt sind.'}),
   ];

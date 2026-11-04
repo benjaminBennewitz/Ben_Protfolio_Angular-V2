@@ -1,3 +1,4 @@
+import { drawWaystoneGround } from './waystone.js';
 import { drawMeadowStream } from './meadow-stream.js';
 import { drawMeadowBirds,drawMeadowMidges,drawMeadowRock,drawMeadowPlants } from './meadow-life.js';
 import { drawShallows,drawShallowRipples,drawLakeFall,drawLakeCliff } from './shallow-water.js';
@@ -55,6 +56,7 @@ function drawGround(render) {
     const context = surface.getContext('2d'); context.imageSmoothingEnabled = false;
     const groundRender = {...render,ctx:context};
     for (let y = 0; y < room.height; y++) for (let x = 0; x < room.width; x++) drawCell(groundRender,x,y);
+    for (const object of room.objects) if (object.kind==='waystone') drawWaystoneGround(groundRender,object);
     floors.set(room,surface);
   }
   render.ctx.drawImage(floors.get(room),0,0);

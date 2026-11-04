@@ -1,9 +1,13 @@
+import { BRUCHSTEIN_ARRIVAL } from './waystones.js';
 import { migrateDungeonSave } from './dungeon-migrations.js';
 import { wall } from './collision.js';
 
 /** Versetzt ausschließlich alte Kammerstände von inzwischen überfluteten Feldern zum sicheren Eingang. @param {object} game Spiel. @param {object} data Unveränderter gelesener Stand. */
 export function migrateSave(game,data) {
   data=migrateDungeonSave(game,data);
+  if (data?.room==='village' && data.flags?.eastRootOpen && data.player?.x===31 && data.player.y===15) {
+    return {...data,player:{...data.player,x:BRUCHSTEIN_ARRIVAL[0],y:BRUCHSTEIN_ARRIVAL[1]}};
+  }
   if (['east-meadow','east-clearing'].includes(data?.room)) return migrateEastTerrain(game,data);
   if (data?.room!=='mara-cave' || (data.roomRevision ?? 1)>=2) return data;
   const room=game.rooms.get(data.room),x=data.player?.x,y=data.player?.y;

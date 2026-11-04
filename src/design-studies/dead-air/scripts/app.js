@@ -937,6 +937,7 @@ function startFinale(mode) {
   scene.finale.phase = mode === 'breach' ? 'lock' : 'isolating';
   scene.finale.startedAtMs = scene.anomaly.activeMs;
   scene.finale.lastFrameAtMs = 0;
+  coastVideo.playbackRate = 1;
   applySource('video');
   gateCanvas.hidden = false;
   frequencyInput.disabled = true;
@@ -961,11 +962,24 @@ function isSeaFrozen() {
     && ['triangulation', 'opening', 'open'].includes(scene.finale.phase);
 }
 
+/** Bremst die Brandung über den ersten Finalabschnitt kontinuierlich ab.
+ * Der Videoframe steht erst beim Abschluss der Abbremsung endgültig still.
+ * Im Gegensatz zu CSS-Filterungen wird die echte Abspielgeschwindigkeit verändert. */
+function slowSeaToFreeze(elapsedMs) {
+  if (scene.finale.mode !== 'breach' || isSeaFrozen()) return;
+  const progress = smoothStep(elapsedMs / FINAL_TRIANGULATION_MS);
+  const playbackRate = Math.max(0.08, 1 - progress * 0.92);
+  if (Math.abs(coastVideo.playbackRate - playbackRate) > 0.015) {
+    coastVideo.playbackRate = playbackRate;
+  }
+}
+
 /** Story-Phasen werden aus aktiver Spielzeit abgeleitet; Pausen verschieben nichts. */
 function updateFinale() {
   if (!scene.finale.mode) return;
   const elapsed = scene.anomaly.activeMs - scene.finale.startedAtMs;
   const lastPhase = scene.finale.phase;
+  slowSeaToFreeze(elapsed);
   let phase;
   if (scene.finale.mode === 'isolate') {
     phase = elapsed >= FINAL_ISOLATED_MS ? 'sealed' : 'isolating';

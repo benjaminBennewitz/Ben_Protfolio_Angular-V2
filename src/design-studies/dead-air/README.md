@@ -317,3 +317,13 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
   Finalanimation; keine eigenen Hintergrundtimer pro Canvas-Effekt.
 - Der Zustand wird wie bisher nur in der aktuellen Spielsitzung gehalten;
   eine Neuladung beginnt absichtlich eine neue Sitzung.
+
+## Patch 38 – Receiver Layout & Living Gate
+
+- Der große DEAD//AIR-Titel wurde aus der sichtbaren linken Steuerspalte entfernt; die semantische H1 bleibt für Suchmaschinen und Screenreader erhalten. Das Logo im Masthead bleibt unverändert.
+- Die Statuszeile des Receivers reserviert dauerhaft 30 px Höhe, damit `VERBINDEN` bzw. die Live-Audio-Aktionen das Panel nicht kurzzeitig vergrößern. Der Verbindungsbutton hält mindestens 10 px Abstand zum Statuspunkt.
+- Archiv- und Rückkanalbereich wurden kompakter gestaltet. Bei eingeblendetem Rettungsimpuls werden zusätzliche, rein dekorative Abstände reduziert, damit sämtliche linken Bedienelemente auch bei kleineren Desktop-Viewports innerhalb von `100dvh` bleiben. Das mobile Receiver-Overlay behält seinen eigenen Scrollbereich.
+- Im schlechten Finale wird das Video nicht mehr hart bei der Dreiecksbildung angehalten. Seine tatsächliche `playbackRate` sinkt während der ersten 2,2 Sekunden anhand eines sanften Ease-Verlaufs von 1 auf mindestens 0,08; erst beim Abschluss der Abbremsung erfolgt `pause()`.
+- Die vorhandene Portalform wird durch ungleichmäßige Wachstumsimpulse, unterschiedlich pulsierende Relaispunkte, leicht gekrümmte Peillinien, elektrische Randentladungen, eigene Levitations-/Neigungs-/Rotationsbewegungen und einen vom Portal getrennten Schatten auf der Meeresoberfläche ergänzt.
+- Die Bewegung bleibt in der bestehenden Final-Renderloop auf maximal 30 fps, ist pausierbar und berücksichtigt `prefers-reduced-motion`.
+- Sonstige Story-Trigger, Morse-Frequenzen, Tonaufnahmen, Kamerasperren und Endbedingungen bleiben unverändert.

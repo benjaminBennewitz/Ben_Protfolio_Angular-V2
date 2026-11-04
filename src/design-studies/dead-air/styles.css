@@ -1438,6 +1438,165 @@ figure {
   letter-spacing: .07em;
 }
 
+/* NCBS-Relaisdiagnose: nur nach der ersten Funkübertragung zugänglich. */
+.receiver__relay-link {
+  min-height: 24px;
+  margin-left: auto;
+  padding: 3px 8px;
+  border: 1px solid #c78b69;
+  background: #443026;
+  color: #ffe4cd;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.receiver__relay-link:hover:not(:disabled) {
+  border-color: #f8b58c;
+  background: #70412f;
+}
+
+.receiver__relay-link[hidden] {
+  display: none;
+}
+
+.receiver__relay-link:not([hidden]) + .receiver__status-led {
+  display: none;
+}
+
+/* Unaufdringliche Positionslichter statt großer, offensichtlich anklickbarer Marker.
+   Die visuelle Fläche bleibt winzig; die interaktive Trefferfläche ist großzügig. */
+.scene__relay-beacon {
+  position: absolute;
+  z-index: 10;
+  display: grid;
+  width: clamp(32px, 4.3vw, 46px);
+  height: clamp(32px, 4.3vw, 46px);
+  place-items: center;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border: 0;
+  background: transparent;
+  cursor: crosshair;
+}
+
+.scene__relay-beacon[hidden],
+[data-source='artwork'] .scene__relay-beacon {
+  display: none;
+}
+
+.scene__relay-beacon--a { left: 23%; top: 41%; }
+.scene__relay-beacon--b { left: 69%; top: 36%; }
+.scene__relay-beacon--c { left: 47%; top: 61%; }
+
+.scene__relay-beacon span {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c1a895;
+  box-shadow: 0 0 7px #e1bd96cc, 0 0 13px #9ec3b35c;
+  opacity: .45;
+}
+
+.scene__relay-beacon:hover span,
+.scene__relay-beacon:focus-visible span,
+.scene__relay-beacon[data-detected='true'] span {
+  background: #ffe1b0;
+  box-shadow: 0 0 8px 2px #e9ba89aa, 0 0 20px 6px #e9ba8952;
+  opacity: 1;
+}
+
+.scene__relay-beacon[data-linked='true'] span {
+  background: #9abdb0;
+  box-shadow: 0 0 5px #86baab9c;
+  opacity: .7;
+}
+
+.scene__relay-beacon[data-detected='true']:not([data-linked='true']) span {
+  animation: relay-beacon-pulse 1.7s ease-in-out infinite;
+}
+
+/* Relaisprotokoll im selben analogen Stil wie Funk- und Funddialogs. */
+.relay-dialog {
+  width: min(570px, calc(100% - 32px));
+  padding: 20px;
+  background: linear-gradient(145deg, #223235, #101a1b 70%);
+}
+
+.relay-dialog__content h2 {
+  margin: 20px 0 12px;
+  font-family: 'B2 Condensed', Impact, 'Arial Narrow', sans-serif;
+  font-size: clamp(34px, 7vw, 52px);
+  line-height: 1;
+}
+
+.relay-dialog__content > p:not(.relay-dialog__progress) {
+  margin-bottom: 24px;
+  color: var(--secondary);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.relay-dialog__heading,
+.relay-dialog__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.relay-dialog__heading {
+  border-bottom: 1px solid var(--edge);
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: .08em;
+}
+
+.relay-dialog__row {
+  min-height: 50px;
+  border-bottom: 1px solid var(--edge-soft);
+  background: #0b1718;
+  color: #d0d9d2;
+}
+
+.relay-dialog__row:focus {
+  outline: 2px solid #ffad86;
+  outline-offset: -2px;
+}
+
+.relay-dialog__status {
+  justify-self: end;
+  color: #c99b8b;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.relay-dialog__row[data-linked='true'] .relay-dialog__status {
+  color: #9fd4ad;
+}
+
+.relay-dialog__progress {
+  margin-top: 20px;
+  padding: 12px;
+  border: 1px solid var(--edge);
+  background: #081415;
+  color: #c7d4c9;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: .04em;
+}
+
+@keyframes relay-beacon-pulse {
+  0%, 100% { opacity: .46; box-shadow: 0 0 5px #e9ba895e; }
+  50% { opacity: 1; box-shadow: 0 0 11px 3px #e9ba89cc, 0 0 22px 8px #e9ba8940; }
+}
+
 /* 08   Zustandswechsel und Animationen */
 
 [data-state='interference'] .scene__fog::before,

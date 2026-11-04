@@ -5,9 +5,9 @@
  * @author Benjamin Bennewitz
  */
 
-/** @typedef {'normal' | 'interference' | 'unknown'} SignalState */
+/** @typedef {'normal' | 'interference' | 'unknown' | 'voice' | 'relayA' | 'relayB' | 'relayC'} SignalState */
 /** @typedef {'artwork' | 'video'} SceneSource */
-/** @typedef {'routine' | 'message-found' | 'morse-active' | 'windows-event' | 'frequency-scan' | 'transmission-ready'} StoryStage */
+/** @typedef {'routine' | 'message-found' | 'morse-active' | 'windows-event' | 'frequency-scan' | 'transmission-ready' | 'relays-linked'} StoryStage */
 
 /** Fest definierte Frequenzen und ihre Bildstörung. */
 const CHANNELS = Object.freeze({
@@ -15,7 +15,19 @@ const CHANNELS = Object.freeze({
   interference: { frequency: 91.3, channel: '02', reception: 38, interference: 60, label: 'SIGNAL DRIFT' },
   unknown: { frequency: 103.7, channel: '03', reception: 8, interference: 91, label: 'SOURCE UNKNOWN' },
   voice: { frequency: 96.4, channel: '04', reception: 24, interference: 63, label: 'VOICE CARRIER' },
+  relayA: { frequency: 88.9, channel: '05', reception: 64, interference: 24, label: 'RELAY / A' },
+  relayB: { frequency: 99.1, channel: '06', reception: 71, interference: 29, label: 'RELAY / B' },
+  relayC: { frequency: 106.2, channel: '07', reception: 58, interference: 33, label: 'RELAY / C' },
 });
+
+/** Relaiskennungen mit absichtlich nur grob angegebenen Suchbereichen. */
+const RELAYS = Object.freeze([
+  { id: 'A', channel: 'relayA', frequency: CHANNELS.relayA.frequency, band: '88–90 MHz' },
+  { id: 'B', channel: 'relayB', frequency: CHANNELS.relayB.frequency, band: '98–100 MHz' },
+  { id: 'C', channel: 'relayC', frequency: CHANNELS.relayC.frequency, band: '105–107 MHz' },
+]);
+const RELAY_LINK_TOLERANCE = 0.11;
+
 
 const FM_MIN = 87.5;
 const FM_MAX = 108;
@@ -89,6 +101,23 @@ const TRANSLATIONS = Object.freeze({
     transmissionFinishedAnnouncement: 'Ende der Tonübertragung 001.',
     transmissionPlayAction: 'AUDIO / 001 · STARTEN',
     transmissionAudioAria: 'Empfangene Funkaufnahme 001 abspielen und pausieren',
+    relayButton: 'RELAIS / {count}/3',
+    relayButtonAria: 'Status der drei Küstenrelais öffnen',
+    relayLogMeta: 'NCBS / PEILSYSTEM · STATUS',
+    relayLogTitle: 'RELAISPROTOKOLL',
+    relayLogDescription: 'Drei Signale außerhalb der Station. Die Trägerfrequenzen sind nicht mehr gespeichert. Nur die Suchbereiche sind noch lesbar.',
+    relayColumn: 'RELAIS',
+    relayBand: 'SUCHBEREICH',
+    relayMissing: 'KEIN LINK',
+    relayConnected: 'VERBUNDEN',
+    relayLinkAction: 'VERBINDEN',
+    relayCameraRequired: 'CAM 02',
+    relayFinished: 'ALLE DREI RELAIS VERBUNDEN. PEILUNG NOCH NICHT SYNCHRON.',
+    relayUnfinished: 'PEILUNG UNVOLLSTÄNDIG',
+    relayLinkAnnouncement: 'Relais {id} verbunden. {count} von 3 Signalen wiederhergestellt.',
+    relayDiscovered: 'Relais {id}: Trägersignal empfangen. CAM 02 zum Verbinden wählen.',
+    relayBeaconAria: 'Relaisboje {id} in der Küstenkamera untersuchen',
+    relaySelectedAnnouncement: 'Relais {id}. Protokoll geöffnet.',
     messageMeta: 'FUNDSTÜCK / 001',
     messageSubtitle: 'FUNDSTÜCK / FLASCHENPOST',
     messageTitle: 'EINE MINUTE FEHLT.',
@@ -101,6 +130,9 @@ const TRANSLATIONS = Object.freeze({
       interference: 'Die Übertragung verliert an Klarheit. Nebel und Störungen nehmen zu.',
       unknown: 'Eine fremde Frequenz greift in die Übertragung ein. Der Ursprung ist unbekannt.',
       voice: 'Eine unbekannte Stimme wurde auf dieser Frequenz aufgezeichnet.',
+      relayA: 'Ein schwacher Relaisträger. Die Positionsdaten sind noch nicht verifiziert.',
+      relayB: 'Ein schwacher Relaisträger. Die Positionsdaten sind noch nicht verifiziert.',
+      relayC: 'Ein schwacher Relaisträger. Die Positionsdaten sind noch nicht verifiziert.',
     },
   },
   en: {
@@ -157,6 +189,23 @@ const TRANSLATIONS = Object.freeze({
     transmissionFinishedAnnouncement: 'End of voice transmission 001.',
     transmissionPlayAction: 'AUDIO / 001 · PLAY',
     transmissionAudioAria: 'Play and pause received radio recording 001',
+    relayButton: 'RELAY / {count}/3',
+    relayButtonAria: 'Open the status of the three coastal relays',
+    relayLogMeta: 'NCBS / DIRECTION FINDER · STATUS',
+    relayLogTitle: 'RELAY LOG',
+    relayLogDescription: 'Three signals beyond the station. Their carrier frequencies are missing from the log. Only approximate search bands remain.',
+    relayColumn: 'RELAY',
+    relayBand: 'SEARCH BAND',
+    relayMissing: 'NO LINK',
+    relayConnected: 'CONNECTED',
+    relayLinkAction: 'LINK RELAY',
+    relayCameraRequired: 'CAM 02',
+    relayFinished: 'ALL THREE RELAYS CONNECTED. BEARING NOT SYNCHRONIZED.',
+    relayUnfinished: 'BEARING INCOMPLETE',
+    relayLinkAnnouncement: 'Relay {id} connected. {count} of 3 signals restored.',
+    relayDiscovered: 'Relay {id}: carrier signal received. Switch to CAM 02 to establish link.',
+    relayBeaconAria: 'Inspect relay buoy {id} in the shoreline camera',
+    relaySelectedAnnouncement: 'Relay {id}. Log opened.',
     messageMeta: 'RECOVERED OBJECT / 001',
     messageSubtitle: 'RECOVERED / MESSAGE BOTTLE',
     messageTitle: 'ONE MINUTE IS MISSING.',
@@ -169,6 +218,9 @@ const TRANSLATIONS = Object.freeze({
       interference: 'The transmission loses clarity. Fog and interference increase.',
       unknown: 'An unknown frequency interferes with the transmission. Its origin is unclear.',
       voice: 'An unidentified voice was recorded on this frequency.',
+      relayA: 'A weak relay carrier. Position data is not yet verified.',
+      relayB: 'A weak relay carrier. Position data is not yet verified.',
+      relayC: 'A weak relay carrier. Position data is not yet verified.',
     },
   },
 });
@@ -198,6 +250,11 @@ const transmissionDialog = document.querySelector('#transmission-dialog');
 const transmissionClose = document.querySelector('#transmission-close');
 const transmissionAudio = document.querySelector('#transmission-audio');
 const receiverEventStatus = document.querySelector('#receiver-event-status');
+const relayToggle = document.querySelector('#relay-toggle');
+const relayDialog = document.querySelector('#relay-dialog');
+const relayClose = document.querySelector('#relay-close');
+const relayLink = document.querySelector('#relay-link');
+const relayBeacons = [...document.querySelectorAll('.scene__relay-beacon')];
 const compactViewport = window.matchMedia('(max-width: 750px), (max-height: 520px)');
 
 /** Laufzeitzustand der Microsite ohne unnötige Persistenz. */
@@ -218,6 +275,10 @@ const scene = {
   },
   autoScan: {
     startedAtMs: 0,
+  },
+  relays: {
+    unlocked: false,
+    linked: new Set(),
   },
   audio: {
     blocked: false,
@@ -275,6 +336,17 @@ function updateTranslations() {
   transmissionToggle.setAttribute('aria-label', texts.transmissionButtonAria);
   transmissionClose.setAttribute('aria-label', texts.close);
   transmissionAudio.setAttribute('aria-label', texts.transmissionAudioAria);
+  relayToggle.setAttribute('aria-label', texts.relayButtonAria);
+  relayClose.setAttribute('aria-label', texts.close);
+  document.querySelector('#relay-meta').textContent = texts.relayLogMeta;
+  document.querySelector('#relay-title').textContent = texts.relayLogTitle;
+  document.querySelector('#relay-description').textContent = texts.relayLogDescription;
+  document.querySelector('#relay-column-label').textContent = texts.relayColumn;
+  document.querySelector('#relay-band-label').textContent = texts.relayBand;
+  relayBeacons.forEach(beacon => {
+    beacon.setAttribute('aria-label', texts.relayBeaconAria.replace('{id}', beacon.dataset.relay));
+  });
+  refreshRelayUI();
   document.querySelector('#transmission-meta').textContent = texts.transmissionMeta;
   document.querySelector('#transmission-title').textContent = texts.transmissionTitle;
   document.querySelector('#transmission-frequency').textContent = texts.transmissionFrequency;
@@ -314,9 +386,79 @@ function findChannel(frequency) {
 /** Verhindert, dass spätere Story-Frequenzen vor ihrer Entdeckung verraten werden. */
 function isChannelAvailable(channel) {
   if (channel === 'interference') return scene.story.stage !== 'routine';
-  if (channel === 'unknown') return ['morse-active', 'windows-event', 'frequency-scan', 'transmission-ready'].includes(scene.story.stage);
-  if (channel === 'voice') return scene.story.stage === 'transmission-ready';
+  if (channel === 'unknown') return ['morse-active', 'windows-event', 'frequency-scan', 'transmission-ready', 'relays-linked'].includes(scene.story.stage);
+  if (channel === 'voice') return scene.relays.unlocked || scene.story.stage === 'transmission-ready';
+  if (['relayA', 'relayB', 'relayC'].includes(channel)) return scene.relays.unlocked;
   return true;
+}
+
+/** Findet einen exakt abgestimmten, noch nicht verbundenen Relaisträger. */
+function getTunedRelay() {
+  if (!scene.relays.unlocked) return null;
+  return RELAYS.find(relay => !scene.relays.linked.has(relay.id)
+    && Math.abs(scene.frequency - relay.frequency) <= RELAY_LINK_TOLERANCE) ?? null;
+}
+
+/** Synchronisiert alle Relaisanzeigen, ohne eine zweite Spielzustandslogik aufzubauen. */
+function refreshRelayUI() {
+  const texts = TRANSLATIONS[scene.language];
+  const count = scene.relays.linked.size;
+  relayToggle.hidden = !scene.relays.unlocked;
+  relayToggle.textContent = texts.relayButton.replace('{count}', String(count));
+  const tuned = getTunedRelay();
+  relayLink.hidden = !tuned || scene.source !== 'video';
+  relayLink.disabled = scene.paused || !tuned;
+  if (tuned) relayLink.textContent = `${texts.relayLinkAction} / ${tuned.id}`;
+
+  relayBeacons.forEach(beacon => {
+    const id = beacon.dataset.relay;
+    const relay = RELAYS.find(entry => entry.id === id);
+    beacon.hidden = !scene.relays.unlocked;
+    beacon.dataset.linked = String(scene.relays.linked.has(id));
+    beacon.dataset.detected = String(Boolean(tuned && tuned.id === id));
+    beacon.setAttribute('aria-label', texts.relayBeaconAria.replace('{id}', id));
+    if (relay) beacon.title = `RELAY ${id} · ${relay.band}`;
+  });
+
+  RELAYS.forEach(relay => {
+    const linked = scene.relays.linked.has(relay.id);
+    const line = document.querySelector(`#relay-row-${relay.id.toLowerCase()}`);
+    line.dataset.linked = String(linked);
+    line.querySelector('.relay-dialog__status').textContent = linked ? texts.relayConnected : texts.relayMissing;
+  });
+  document.querySelector('#relay-progress').textContent = count === RELAYS.length ? texts.relayFinished : `${texts.relayUnfinished} · ${count}/3`;
+}
+
+/** Verbindet genau einen Träger, wenn Kamera und FM-Empfang übereinstimmen. */
+function linkTunedRelay() {
+  const relay = getTunedRelay();
+  if (!relay || scene.source !== 'video' || scene.paused) return;
+
+  scene.relays.linked.add(relay.id);
+  const count = scene.relays.linked.size;
+  window.dispatchEvent(new CustomEvent('deadair:relaylinked', {
+    detail: { id: relay.id, frequency: relay.frequency, count },
+  }));
+  receiverEventStatus.textContent = TRANSLATIONS[scene.language].relayLinkAnnouncement
+    .replace('{id}', relay.id).replace('{count}', String(count));
+  if (count === RELAYS.length) {
+    scene.story.stage = 'relays-linked';
+    syncSignalVisuals();
+    window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
+    window.dispatchEvent(new CustomEvent('deadair:relaysrestored', { detail: { total: count } }));
+  }
+  refreshRelayUI();
+  updateAnomalyMeter();
+}
+
+/** Öffnet die Relaisakte; Kamera und Frequenz bleiben unverändert. */
+function openRelayLog(id = null) {
+  setReceiverOpen(false);
+  if (!relayDialog.open) relayDialog.showModal();
+  if (id) {
+    const line = document.querySelector(`#relay-row-${id.toLowerCase()}`);
+    if (line) line.focus();
+  }
 }
 
 /** Nur freigeschaltete Story-Ereignisse dürfen die Kameraoptik verändern. */
@@ -362,6 +504,16 @@ function getAnomalyProfile() {
       };
     }
 
+    // Nur ein aktuell empfangener Träger löst auf CAM 02 eine lokale Anomalie aus.
+    if (scene.relays.unlocked) {
+      const relay = RELAYS.find(item => !scene.relays.linked.has(item.id)
+        && Math.abs(scene.frequency - item.frequency) <= 1.25);
+      if (relay) {
+        const closeness = 1 - Math.min(1, Math.abs(scene.frequency - relay.frequency) / 1.25);
+        const wave = (1 + Math.sin(scene.anomaly.activeMs / 450 + relay.frequency)) / 2;
+        return { level: .08 + closeness * (.29 + wave * .19), amplitude: .02 + closeness * .12, speed: 1 + closeness * 2.2 };
+      }
+    }
     return { level: 0, amplitude: 0, speed: 0 };
   }
 
@@ -491,6 +643,8 @@ function setFrequency(value, { automated = false } = {}) {
     : (['routine', 'message-found'].includes(scene.story.stage) ? 0 : (config?.interference ?? 15)));
   if (automated) return;
 
+  refreshRelayUI();
+  updateAnomalyMeter();
   const detail = { frequency, channel, reception: config?.reception ?? 0, interference: config?.interference ?? 91 };
   window.dispatchEvent(new CustomEvent('deadair:frequencychange', { detail }));
   if (channel && channel !== previousChannel) {
@@ -539,6 +693,9 @@ function finishAutoScan() {
   root.dataset.autoscan = 'received';
   setFrequency(CHANNELS.voice.frequency, { automated: true });
   transmissionToggle.hidden = false;
+  scene.relays.unlocked = true;
+  root.dataset.relays = 'active';
+  refreshRelayUI();
   receiverEventStatus.textContent = TRANSLATIONS[scene.language].transmissionReceivedAnnouncement;
   updateAnomalyMeter();
 
@@ -568,7 +725,7 @@ function updateAutoScan() {
  * Der Dialog bleibt beim ersten Empfang geschlossen; die Aufnahme ist dennoch hörbar.
  * Auf erneuten Archivaufruf wird die vorhandene Aufnahme verwendet. */
 async function playTransmission({ restart = false } = {}) {
-  if (scene.story.stage !== 'transmission-ready') return;
+  if (!scene.relays.unlocked) return;
 
   const source = `assets/transmission-001-${scene.language}.mp3`;
   if (transmissionAudio.getAttribute('src') !== source) {
@@ -645,6 +802,7 @@ function applySource(source) {
   updateSourceDescription();
   progressStory();
   maybeStartBottleReveal();
+  refreshRelayUI();
   void syncVideo();
 }
 
@@ -703,6 +861,7 @@ function togglePause() {
   }
   updatePlaybackLabel();
   updateAnomalyMeter();
+  refreshRelayUI();
   void syncVideo();
 }
 
@@ -879,6 +1038,7 @@ function init() {
   root.dataset.bottle = 'hidden';
   root.dataset.story = 'routine';
   root.dataset.autoscan = 'idle';
+  root.dataset.relays = 'inactive';
 
   frequencyInput.addEventListener('input', () => setFrequency(frequencyInput.value));
   document.querySelectorAll('#source-switch button[data-source]').forEach(button => {
@@ -888,7 +1048,7 @@ function init() {
     const wasPlaying = !transmissionAudio.paused;
     scene.language = scene.language === 'de' ? 'en' : 'de';
     updateTranslations();
-    if (scene.story.stage === 'transmission-ready') {
+    if (scene.relays.unlocked) {
       if (wasPlaying) {
         void playTransmission({ restart: true });
       } else {
@@ -917,6 +1077,15 @@ function init() {
   messageClose.addEventListener('click', () => messageDialog.close());
   messageDialog.addEventListener('close', collectBottle);
   transmissionToggle.addEventListener('click', openTransmission);
+  relayToggle.addEventListener('click', () => openRelayLog());
+  relayClose.addEventListener('click', () => relayDialog.close());
+  relayDialog.addEventListener('click', event => {
+    if (event.target === relayDialog) relayDialog.close();
+  });
+  relayLink.addEventListener('click', linkTunedRelay);
+  relayBeacons.forEach(beacon => {
+    beacon.addEventListener('click', () => openRelayLog(beacon.dataset.relay));
+  });
   transmissionAudio.addEventListener('ended', () => {
     scene.audio.resumeAfterPause = false;
     scene.audio.resumeAfterVisibility = false;

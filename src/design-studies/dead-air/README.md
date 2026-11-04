@@ -272,3 +272,14 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 3. **Rückkanal freigeben:** Erst nach bestätigter Peilung und Synchronisation erscheint die Aufforderung, einen einmaligen **Ortungsimpuls** über den Stationssender zu schicken. Der angebliche Rettungsruf schließt den Stromkreis des dreieckigen Resonanzsystems; das Dimensionstor öffnet sich als Bermuda-Dreieck-Erscheinung im Meer.
 
 **Dramaturgie:** Jede Bedingung verdient eine eigene beobachtbare Veränderung auf CAM 01/02 und optional eine zunehmende Täuschung in den Funkaufzeichnungen. Es gibt keinen vorzeitigen Tor-Trigger und keine sofortige Erklärung der Wesen.
+
+
+## Patch 33 – Relay Recovery / Phase 04 (implementiert)
+
+- **Freischaltung:** Sobald der automatische Suchlauf bei 96.4 MHz endet, wird das NCBS-Relaisprotokoll (RELAIS / 0/3) freigeschaltet. Vor AUDIO / 001 sind keine Relais sichtbar oder abstimmbar.
+- **CAM 02:** Drei sehr dezente Positionslichter liegen fest auf der Küstenkamera. Über Klick, Tippen oder Tastatur öffnen sie das Relaisprotokoll mit drei groben Suchbereichen: A 88–90 MHz, B 98–100 MHz und C 105–107 MHz.
+- **Frequenzrätsel:** Die tatsächlichen Träger liegen auf **88.9, 99.1 und 106.2 MHz**. Bei einer Übereinstimmung mit dem FM-Regler erscheint in CAM 02 die Aktion **VERBINDEN / A/B/C** direkt am bestehenden Empfangsdisplay. Jeder Träger kann nur einmal verbunden werden.
+- **Anomalieanzeige:** Nur während einer Suche in der Nähe eines noch offenen Signals und nur in CAM 02 steigen die Balken. Der Ausschlag hängt von der Annäherung an die korrekte Frequenz ab; dauerhaft verbundene Bojen verursachen keine Anomalie mehr. Kein künstlicher Fortschrittsanzeiger.
+- **Story-Ende des Patches:** Bei **RELAIS / 3/3** meldet das Protokoll, dass die Peilung noch nicht synchron ist (`relays-linked`). Die folgende Phasenabgleich-Mechanik und AUDIO / 002 sind **noch nicht implementiert**.
+- Die bekannten Stufen (Flaschenpost, Morsecode, Fensterflackern, automatischer Suchlauf, AUDIO / 001) bleiben unverändert; das Audioarchiv funktioniert auch nach 3/3. Dialog, Status und Aktionen besitzen DE/EN-Texte. Neue Ereignis-Hooks: `deadair:relaylinked`, `deadair:relaysrestored`.
+- **Testumfang:** Isolierter Chromium-Test der vollständigen Kette, drei Verbindungen, Dialog, Sprachwechsel, responsive Ansichten 375/390/1024 px und fehlender JS-Laufzeitfehler. Der vollständige Integrationstest mit dem echten B2FOLIO-Repository steht aus.

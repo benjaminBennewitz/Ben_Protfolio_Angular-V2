@@ -55,7 +55,7 @@
           <div class="panel-bar"><h2 id="receiver-title">RECEIVER / NC–01</h2><span>FM / VHF</span></div>
           <div class="receiver__display">
             <div class="receiver__freq"><output id="frequency-output">87.6</output><span id="frequency-unit">MHz</span></div>
-            <div class="receiver__status"><span id="status-output">STABLE FEED</span><span class="receiver__status-led" aria-hidden="true"></span></div>
+            <div class="receiver__status"><span id="status-output">STABLE FEED</span><button class="receiver__relay-link" id="relay-link" type="button" hidden>VERBINDEN</button><span class="receiver__status-led" aria-hidden="true"></span></div>
             <span id="receiver-event-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></span>
             <div class="receiver__scale" aria-hidden="true"><span>87</span><span>90</span><span>94</span><span>98</span><span>102</span></div>
           </div>
@@ -77,7 +77,7 @@
       </section>
 
       <section class="monitor-area" aria-labelledby="monitor-title">
-        <div class="monitor-area__header"><h2 id="monitor-title">CAMERA 01 <span>//</span> NORTH COAST FEED</h2><div class="monitor-area__actions"><button id="evidence-log" class="monitor-area__evidence" type="button" aria-controls="message-dialog" aria-haspopup="dialog" hidden>AKTE / 01</button><button id="transmission-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 001</button><span class="indicator indicator--red" aria-hidden="true"></span> <span data-i18n="transmitting">ÜBERTRAGUNG AKTIV</span></div></div>
+        <div class="monitor-area__header"><h2 id="monitor-title">CAMERA 01 <span>//</span> NORTH COAST FEED</h2><div class="monitor-area__actions"><button id="evidence-log" class="monitor-area__evidence" type="button" aria-controls="message-dialog" aria-haspopup="dialog" hidden>AKTE / 01</button><button id="transmission-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 001</button><button id="relay-toggle" class="monitor-area__evidence" type="button" aria-controls="relay-dialog" aria-haspopup="dialog" hidden>RELAIS / 0/3</button><span class="indicator indicator--red" aria-hidden="true"></span> <span data-i18n="transmitting">ÜBERTRAGUNG AKTIV</span></div></div>
         <div class="television" role="group" aria-label="Analoger Monitor mit Küstenübertragung und Signalstörungen">
           <div class="television__badge"><span>NCBS</span><span>MODEL 1993–C</span></div>
           <div class="television__screen">
@@ -104,6 +104,9 @@
                 <img class="scene__artifact-image scene__artifact-image--base" src="assets/message-bottle.webp" width="1448" height="1086" alt="">
                 <img class="scene__artifact-image scene__artifact-image--glitch" src="assets/message-bottle-glitch.webp" width="1448" height="1086" alt="">
               </button>
+              <button class="scene__relay-beacon scene__relay-beacon--a" type="button" data-relay="A" aria-controls="relay-dialog" aria-haspopup="dialog" aria-label="Relaisboje A untersuchen" hidden><span aria-hidden="true"></span></button>
+              <button class="scene__relay-beacon scene__relay-beacon--b" type="button" data-relay="B" aria-controls="relay-dialog" aria-haspopup="dialog" aria-label="Relaisboje B untersuchen" hidden><span aria-hidden="true"></span></button>
+              <button class="scene__relay-beacon scene__relay-beacon--c" type="button" data-relay="C" aria-controls="relay-dialog" aria-haspopup="dialog" aria-label="Relaisboje C untersuchen" hidden><span aria-hidden="true"></span></button>
               <div class="scene__signal-line" aria-hidden="true"></div>
               <div class="scene__camera-blackout" id="camera-blackout" aria-hidden="true"></div>
             </figure>
@@ -160,6 +163,22 @@
         <p id="transmission-line-2">Unser Notruf ist raus, aber niemand antwortet. Das Peilsystem ist ausgefallen.</p>
         <p id="transmission-line-3">Vor der Küste liegen drei Relaisbojen. Wenn ihre Signale wieder verbunden sind, kann uns die Küstenwache finden. Bitte versucht das. Wir bleiben auf Empfang.</p>
         <p id="transmission-footer" class="transmission-dialog__footer">SENDERKENNUNG: NCBS · NICHT VERIFIZIERT</p>
+      </div>
+    </dialog>
+
+    <dialog class="artifact-dialog relay-dialog" id="relay-dialog" aria-labelledby="relay-title" aria-describedby="relay-description">
+      <div class="artifact-dialog__header">
+        <span class="eyebrow" id="relay-meta">NCBS / PEILSYSTEM · STATUS</span>
+        <button class="artifact-dialog__close" id="relay-close" type="button" aria-label="Schließen">×</button>
+      </div>
+      <div class="relay-dialog__content">
+        <h2 id="relay-title">RELAISPROTOKOLL</h2>
+        <p id="relay-description">Drei Signale außerhalb der Station. Die Trägerfrequenzen sind nicht mehr gespeichert. Nur die Suchbereiche sind noch lesbar.</p>
+        <div class="relay-dialog__heading"><span id="relay-column-label">RELAIS</span><span id="relay-band-label">SUCHBEREICH</span><span>STATUS</span></div>
+        <div class="relay-dialog__row" id="relay-row-a" tabindex="-1" data-linked="false"><strong>RELAY / A</strong><span>88–90 MHz</span><span class="relay-dialog__status">KEIN LINK</span></div>
+        <div class="relay-dialog__row" id="relay-row-b" tabindex="-1" data-linked="false"><strong>RELAY / B</strong><span>98–100 MHz</span><span class="relay-dialog__status">KEIN LINK</span></div>
+        <div class="relay-dialog__row" id="relay-row-c" tabindex="-1" data-linked="false"><strong>RELAY / C</strong><span>105–107 MHz</span><span class="relay-dialog__status">KEIN LINK</span></div>
+        <p class="relay-dialog__progress" id="relay-progress" role="status" aria-live="polite">PEILUNG UNVOLLSTÄNDIG · 0/3</p>
       </div>
     </dialog>
 

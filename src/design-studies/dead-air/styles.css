@@ -1095,6 +1095,194 @@ figure {
   border: 0;
 }
 
+/* Der letzte Rettungsimpuls bleibt eine ausdrückliche Spieleraktion.
+   Bei gefundenem Warnsignal erst nach der unumkehrbaren Entscheidung zugänglich. */
+.receiver__uplink[hidden] { display: none; }
+
+.receiver__uplink {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid #a9895a;
+  border-radius: 5px;
+  background: linear-gradient(145deg, rgba(125, 82, 38, .19), rgba(8, 22, 24, .8));
+  box-shadow: inset 0 0 24px rgba(210, 129, 69, .045);
+}
+
+.receiver__uplink-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  color: #d8ba92;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .09em;
+}
+
+.receiver__uplink-led {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #e5b675;
+  box-shadow: 0 0 9px rgba(234, 163, 78, .5);
+}
+
+.receiver__uplink p {
+  margin: 0;
+  color: #bccbc5;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.receiver__uplink-button {
+  min-height: 44px;
+  padding: 11px 14px;
+  border: 1px solid #dea96a;
+  border-radius: 3px;
+  background: #c38b53;
+  color: #121b1b;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: .095em;
+  cursor: pointer;
+  transition: background-color 130ms ease, border-color 130ms ease;
+}
+
+.receiver__uplink-button:hover:not(:disabled),
+.receiver__uplink-button:focus-visible {
+  background: #f2c18a;
+  border-color: #ffe2aa;
+}
+
+.receiver__uplink-button:disabled {
+  cursor: not-allowed;
+  opacity: .5;
+}
+
+.receiver__uplink small {
+  color: #c5aa87;
+  font-size: 9px;
+  letter-spacing: .05em;
+}
+
+/* Eigene Finalebenen bleiben getrennt vom Video. Die Küste wird beim
+   Dreiecksaufbau im letzten Frame angehalten; nur der Canvas bewegt sich weiter. */
+.scene__finale-tint,
+.scene__gate-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.scene__finale-tint {
+  z-index: 4;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse 70% 68% at 46% 49%, rgba(255, 110, 28, .42), rgba(154, 30, 10, .2) 60%, transparent 94%),
+    linear-gradient(176deg, rgba(225, 57, 14, .32), rgba(85, 8, 3, .46));
+  mix-blend-mode: screen;
+  transition: opacity 1700ms ease-in;
+}
+
+.scene__gate-canvas {
+  z-index: 5;
+  display: block;
+  image-rendering: auto;
+}
+
+.scene__gate-canvas[hidden],
+.scene__final-caption[hidden] { display: none; }
+
+[data-finale='lock'] .scene__finale-tint { opacity: .18; }
+[data-finale='triangulation'] .scene__finale-tint { opacity: .48; }
+[data-finale='opening'] .scene__finale-tint,
+[data-finale='open'] .scene__finale-tint { opacity: .92; }
+
+[data-finale='triangulation'][data-source='video'] .scene__video { filter: sepia(.45) saturate(1.6) hue-rotate(-18deg) contrast(1.13) brightness(.8); }
+[data-finale='opening'][data-source='video'] .scene__video,
+[data-finale='open'][data-source='video'] .scene__video { filter: sepia(.75) saturate(2.1) hue-rotate(-26deg) contrast(1.23) brightness(.54); }
+
+[data-finale='isolating'][data-source='video'] .scene__video { filter: grayscale(.45) brightness(.78); }
+[data-finale='sealed'][data-source='video'] .scene__video { filter: grayscale(1) brightness(.08) contrast(1.25); }
+
+[data-finale='isolating'] .scene__finale-tint,
+[data-finale='sealed'] .scene__finale-tint { opacity: 0; }
+
+[data-finale='lock'] .scene__relay-beacon,
+[data-finale='triangulation'] .scene__relay-beacon,
+[data-finale='opening'] .scene__relay-beacon,
+[data-finale='open'] .scene__relay-beacon,
+[data-finale='isolating'] .scene__relay-beacon,
+[data-finale='sealed'] .scene__relay-beacon { display: none; }
+
+[data-finale='triangulation'] .scene__signal-bleed,
+[data-finale='opening'] .scene__signal-bleed,
+[data-finale='open'] .scene__signal-bleed {
+  opacity: .53;
+  animation-duration: 2.2s;
+}
+
+[data-finale='opening'] .scene__scanlines,
+[data-finale='open'] .scene__scanlines { opacity: .78; }
+
+[data-finale='opening'] .scene__vignette,
+[data-finale='open'] .scene__vignette {
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(42, 4, 0, .83) 100%);
+}
+
+[data-finale='opening'] .scene__signal-line,
+[data-finale='open'] .scene__signal-line { opacity: .55; }
+
+[data-anomaly='overload'] .readout-bars i {
+  background: #f17533;
+  transition: none;
+  box-shadow: 0 0 5px rgba(255, 98, 36, .68);
+}
+
+[data-finale='opening'] .monitor-extras__readout,
+[data-finale='open'] .monitor-extras__readout { color: #f49a65; }
+
+.scene__final-caption {
+  position: absolute;
+  z-index: 11;
+  bottom: 14%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 84%;
+  padding: 6px 13px;
+  border: 1px solid rgba(233, 121, 63, .52);
+  background: rgba(11, 8, 8, .72);
+  color: #ffbd8d;
+  font-size: clamp(9px, 1.1vw, 13px);
+  font-weight: 700;
+  letter-spacing: .23em;
+  text-align: center;
+  text-shadow: 0 0 9px rgba(255, 126, 53, .4);
+  pointer-events: none;
+}
+
+[data-finale='sealed'] .scene__record i {
+  opacity: 0;
+}
+
+[data-finale='sealed'] .scene__final-caption {
+  border-color: #778785;
+  color: #c3d0ca;
+  text-shadow: none;
+}
+
+/* Bei reduzierter Bewegung bleibt die Zustandsänderung lesbar,
+   aber ohne Kamera-Crossfade oder hektische Flächenblitze. */
+@media (prefers-reduced-motion: reduce) {
+  .scene__finale-tint { transition: none; }
+}
+
 /* 07   Story-Artefakte, Dialoge und Quellenhinweise */
 
 .artifact-dialog,

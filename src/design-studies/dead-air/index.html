@@ -73,12 +73,18 @@
             <button id="pause-toggle" type="button" class="pause-toggle" aria-pressed="false"><span id="pause-icon" aria-hidden="true">Ⅱ</span> <span id="pause-label" data-i18n="pause">PAUSE</span></button>
           </div>
           <div class="receiver__archive" aria-label="Archivierte Funksignale und Systemprotokolle"><span class="receiver__archive-label" id="archive-label">EMPFANGENE DATEN / ARCHIV</span><div class="receiver__archive-actions"><button id="evidence-log" class="monitor-area__evidence" type="button" aria-controls="message-dialog" aria-haspopup="dialog" hidden>AKTE / 01</button><button id="transmission-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 001</button><button id="transmission-2-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 002</button><button id="relay-toggle" class="monitor-area__evidence" type="button" aria-controls="relay-dialog" aria-haspopup="dialog" hidden>RELAIS / 0/3</button><button id="sync-toggle" class="monitor-area__evidence receiver__sync" type="button" aria-controls="sync-dialog" aria-haspopup="dialog" hidden>SYNC / 3</button></div><p id="decision-result" class="receiver__decision-result" role="status" aria-live="polite" hidden></p></div>
+          <div class="receiver__uplink" id="uplink-panel" hidden>
+            <div class="receiver__uplink-head"><span id="uplink-meta">NCBS / NOTFUNK · RÜCKKANAL</span><span class="receiver__uplink-led" aria-hidden="true"></span></div>
+            <p id="uplink-description">Drei Peilpunkte verbunden. Phasenlage stabil. Ortungsimpuls kann gesendet werden.</p>
+            <button type="button" class="receiver__uplink-button" id="uplink-action">RETTUNGSIMPULS SENDEN</button>
+            <small id="uplink-status">SENDEKANAL BEREIT · FREIGABE AUSSTEHEND</small>
+          </div>
         </div>
 
       </section>
 
       <section class="monitor-area" aria-labelledby="monitor-title">
-        <div class="monitor-area__header"><h2 id="monitor-title">CAMERA 01 <span>//</span> NORTH COAST FEED</h2><div class="monitor-area__actions"><span class="indicator indicator--red" aria-hidden="true"></span> <span data-i18n="transmitting">ÜBERTRAGUNG AKTIV</span></div></div>
+        <div class="monitor-area__header"><h2 id="monitor-title"><span id="monitor-camera-label">CAMERA 01</span> <span>//</span> NORTH COAST FEED</h2><div class="monitor-area__actions"><span class="indicator indicator--red" aria-hidden="true"></span> <span id="monitor-live-status" data-i18n="transmitting">ÜBERTRAGUNG AKTIV</span></div></div>
         <div class="television" role="group" aria-label="Analoger Monitor mit Küstenübertragung und Signalstörungen">
           <div class="television__badge"><span>NCBS</span><span>MODEL 1993–C</span></div>
           <div class="television__screen">
@@ -96,6 +102,8 @@
                 <div class="scene__mast-led" aria-hidden="true"></div>
               </div>
               <div class="scene__anomaly" aria-hidden="true"></div>
+              <div class="scene__finale-tint" aria-hidden="true"></div>
+              <canvas class="scene__gate-canvas" id="gate-canvas" aria-hidden="true" hidden></canvas>
               <div class="scene__signal-bleed" aria-hidden="true"></div>
               <div class="scene__scanlines" aria-hidden="true"></div>
               <div class="scene__vignette" aria-hidden="true"></div>
@@ -108,6 +116,7 @@
               <button class="scene__relay-beacon scene__relay-beacon--a" type="button" data-relay="A" aria-controls="relay-dialog" aria-haspopup="dialog" aria-label="Relaisboje A untersuchen" hidden><span aria-hidden="true"></span></button>
               <button class="scene__relay-beacon scene__relay-beacon--b" type="button" data-relay="B" aria-controls="relay-dialog" aria-haspopup="dialog" aria-label="Relaisboje B untersuchen" hidden><span aria-hidden="true"></span></button>
               <button class="scene__relay-beacon scene__relay-beacon--c" type="button" data-relay="C" aria-controls="relay-dialog" aria-haspopup="dialog" aria-label="Relaisboje C untersuchen" hidden><span aria-hidden="true"></span></button>
+              <div class="scene__final-caption" id="final-caption" aria-hidden="true" hidden></div>
               <div class="scene__signal-line" aria-hidden="true"></div>
               <div class="scene__camera-blackout" id="camera-blackout" aria-hidden="true"></div>
             </figure>

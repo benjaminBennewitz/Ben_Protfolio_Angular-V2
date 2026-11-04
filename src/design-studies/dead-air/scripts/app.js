@@ -5,9 +5,11 @@
  * @author Benjamin Bennewitz
  */
 
+import { drawGate } from './gate-visual.js';
+
 /** @typedef {'normal' | 'interference' | 'unknown' | 'voice' | 'relayA' | 'relayB' | 'relayC' | 'warning'} SignalState */
 /** @typedef {'artwork' | 'video'} SceneSource */
-/** @typedef {'routine' | 'message-found' | 'morse-active' | 'windows-event' | 'frequency-scan' | 'transmission-ready' | 'relays-linked' | 'synchronized' | 'warning-received' | 'rescue-standby' | 'signal-isolated'} StoryStage */
+/** @typedef {'routine' | 'message-found' | 'morse-active' | 'windows-event' | 'frequency-scan' | 'transmission-ready' | 'relays-linked' | 'synchronized' | 'warning-received' | 'rescue-standby' | 'signal-isolated' | 'final-lock' | 'final-triangulation' | 'final-opening' | 'final-open' | 'final-isolated'} StoryStage */
 
 /** Fest definierte Frequenzen und ihre Bildstörung. */
 const CHANNELS = Object.freeze({
@@ -39,6 +41,10 @@ const BOTTLE_GLITCH_MS = 2_000;
 const CAMERA_BLACKOUT_MS = 320;
 const WINDOWS_TO_SCAN_MS = 2_800;
 const AUTO_SCAN_DURATION_MS = 4_800;
+const FINAL_TRIANGULATION_MS = 2_200;
+const FINAL_OPENING_MS = 6_000;
+const FINAL_OPEN_END_MS = 13_000;
+const FINAL_ISOLATED_MS = 6_800;
 const AUTO_SCAN_POINTS = Object.freeze([
   { time: 0, frequency: 103.7 },
   { time: .24, frequency: 93.8 },
@@ -175,6 +181,28 @@ const TRANSLATIONS = Object.freeze({
     decisionRescueStatus: 'RÜCKKANAL FREIGEGEBEN · SENDEIMPULS NOCH AUSSTEHEND',
     decisionIsolateStatus: 'RÜCKKANAL ISOLIERT · KEINE SENDUNG',
     decisionRouteAnnouncement: 'Entscheidung endgültig gespeichert.',
+    uplinkMeta: 'NCBS / NOTFUNK · RÜCKKANAL',
+    uplinkDescription: 'Drei Peilpunkte verbunden. Phasenlage stabil. Ortungsimpuls kann gesendet werden.',
+    uplinkAction: 'RETTUNGSIMPULS SENDEN',
+    uplinkAria: 'Einmaligen Ortungsimpuls an die Küstenwache senden und die Finalsequenz auslösen',
+    uplinkPending: 'SENDEKANAL BEREIT · FREIGABE AUSSTEHEND',
+    finalLock: 'RÜCKKANAL AKTIV · VERBINDUNG WIRD AUFGEBAUT',
+    finalTriangle: 'DREI PEILPUNKTE AKTIV · UNBEKANNTE GEOMETRIE',
+    finalOpening: 'QUELLE UNBEKANNT · SIGNALSTÄRKE AUSSERHALB DES MESSBEREICHS',
+    finalOpen: 'VERBINDUNG OFFEN · HERKUNFT UNBEKANNT',
+    finalIsolating: 'RÜCKKANAL GETRENNT · RELAIS WERDEN ABGESCHALTET',
+    finalSealed: 'SENDER STUMM · KEIN RÜCKSIGNAL',
+    finalLockedCamera: 'Kamerawechsel fehlgeschlagen. Küstenfeed bleibt erzwungen.',
+    finalOpenCaption: 'VERBINDUNG OFFEN',
+    finalSealedCaption: 'KEIN TRÄGER',
+    finalMonitorLock: 'NOTSIGNAL AKTIV',
+    finalMonitorOpen: 'FREMDES SIGNAL',
+    finalMonitorSealed: 'ÜBERTRAGUNG BEENDET',
+    finalReceiverOpen: 'INTERFERENZ / MAX',
+    finalReceiverSealed: 'KEIN TRÄGER',
+    finalStartAnnouncement: 'Rettungsimpuls gesendet. Kamera zwei übernimmt die Übertragung.',
+    finalEndAnnouncement: 'Signalquelle unbekannt. Verbindung bleibt geöffnet.',
+    finalSealedAnnouncement: 'Rückkanal isoliert. Der Sender ist verstummt.',
     messageMeta: 'FUNDSTÜCK / 001',
     messageSubtitle: 'FUNDSTÜCK / FLASCHENPOST',
     messageTitle: 'EINE MINUTE FEHLT.',
@@ -319,6 +347,28 @@ const TRANSLATIONS = Object.freeze({
     decisionRescueStatus: 'RETURN CHANNEL AUTHORIZED · PULSE NOT YET SENT',
     decisionIsolateStatus: 'RETURN CHANNEL ISOLATED · NO TRANSMISSION',
     decisionRouteAnnouncement: 'Choice permanently recorded.',
+    uplinkMeta: 'NCBS / EMERGENCY · RETURN CHANNEL',
+    uplinkDescription: 'Three bearings linked. Phase alignment stable. Location pulse ready to transmit.',
+    uplinkAction: 'TRANSMIT RESCUE PULSE',
+    uplinkAria: 'Transmit one-time rescue location pulse and start the final sequence',
+    uplinkPending: 'RETURN CHANNEL READY · AUTHORIZATION REQUIRED',
+    finalLock: 'RETURN CHANNEL ACTIVE · ESTABLISHING CONNECTION',
+    finalTriangle: 'THREE BEARINGS ACTIVE · UNKNOWN GEOMETRY',
+    finalOpening: 'UNKNOWN SOURCE · SIGNAL EXCEEDS MEASUREMENT RANGE',
+    finalOpen: 'CONNECTION OPEN · SOURCE UNKNOWN',
+    finalIsolating: 'RETURN CHANNEL DISCONNECTED · RELAYS GOING OFFLINE',
+    finalSealed: 'TRANSMITTER SILENT · NO RETURN CARRIER',
+    finalLockedCamera: 'Camera switch failed. Shoreline feed forced.',
+    finalOpenCaption: 'CONNECTION OPEN',
+    finalSealedCaption: 'NO CARRIER',
+    finalMonitorLock: 'EMERGENCY SIGNAL ACTIVE',
+    finalMonitorOpen: 'UNKNOWN CARRIER',
+    finalMonitorSealed: 'TRANSMISSION ENDED',
+    finalReceiverOpen: 'INTERFERENCE / MAX',
+    finalReceiverSealed: 'NO CARRIER',
+    finalStartAnnouncement: 'Rescue pulse transmitted. Camera two now has the feed.',
+    finalEndAnnouncement: 'Unknown carrier detected. Connection remains open.',
+    finalSealedAnnouncement: 'Return channel isolated. Transmitter is silent.',
     messageMeta: 'RECOVERED OBJECT / 001',
     messageSubtitle: 'RECOVERED / MESSAGE BOTTLE',
     messageTitle: 'ONE MINUTE IS MISSING.',
@@ -382,6 +432,10 @@ const decisionResult = document.querySelector('#decision-result');
 const decisionDialog = document.querySelector('#decision-dialog');
 const decisionRescue = document.querySelector('#decision-rescue');
 const decisionIsolate = document.querySelector('#decision-isolate');
+const uplinkPanel = document.querySelector('#uplink-panel');
+const uplinkAction = document.querySelector('#uplink-action');
+const gateCanvas = document.querySelector('#gate-canvas');
+const finalCaption = document.querySelector('#final-caption');
 const compactViewport = window.matchMedia('(max-width: 750px), (max-height: 520px)');
 
 /** Laufzeitzustand der Microsite ohne unnötige Persistenz. */
@@ -420,6 +474,13 @@ const scene = {
   // choice === null ist der unentdeckte Standardweg (Phase 06: schlechtes Ende).
   // Eine getroffene Entscheidung kann innerhalb der Spielsitzung nicht geändert werden.
   warning: { found: false, choice: null, playbackCompleted: false },
+  finale: {
+    mode: null,
+    phase: 'idle',
+    startedAtMs: 0,
+    animationFrameId: 0,
+    lastFrameAtMs: 0,
+  },
   story: {
     stage: /** @type {StoryStage} */ ('routine'),
     elapsedMs: 0,
@@ -488,6 +549,8 @@ function updateTranslations() {
   renderTransmission();
   updateSyncUI();
   updateWarningUI();
+  updateUplinkUI();
+  updateFinaleUI();
   document.querySelector('#message-meta').textContent = texts.messageMeta;
   document.querySelector('#message-subtitle').textContent = texts.messageSubtitle;
   document.querySelector('#message-title').textContent = texts.messageTitle;
@@ -504,6 +567,11 @@ function updateTranslations() {
 
 /** Liefert zum aktiven Story-Ereignis passende Empfangstexte. */
 function getStateDescription(texts) {
+  if (scene.finale.mode) {
+    return ({ lock: texts.finalLock, triangulation: texts.finalTriangle, opening: texts.finalOpening,
+      open: texts.finalOpen, isolating: texts.finalIsolating, sealed: texts.finalSealed })[scene.finale.phase]
+      ?? texts.finalLock;
+  }
   if (scene.story.stage === 'frequency-scan') return texts.scanDescription;
   if (scene.warning.choice === 'isolate') return texts.decisionIsolateStatus;
   if (scene.warning.choice === 'rescue') return texts.decisionRescueStatus;
@@ -546,7 +614,7 @@ function refreshRelayUI() {
   transmission2Toggle.hidden = !scene.audio.secondReceived;
   const tuned = getTunedRelay();
   relayLink.hidden = !tuned || scene.source !== 'video';
-  relayLink.disabled = scene.paused || !tuned;
+  relayLink.disabled = scene.paused || Boolean(scene.finale.mode) || !tuned;
   if (tuned) relayLink.textContent = `${texts.relayLinkAction} / ${tuned.id}`;
 
   relayBeacons.forEach(beacon => {
@@ -597,6 +665,7 @@ function linkTunedRelay() {
 
 /** Öffnet die Relaisakte; Kamera und Frequenz bleiben unverändert. */
 function openRelayLog(id = null) {
+  if (scene.finale.mode) return;
   setReceiverOpen(false);
   if (!relayDialog.open) relayDialog.showModal();
   if (id) {
@@ -654,6 +723,7 @@ function updateSyncUI() {
 
 /** Öffnet die Kalibrierung erst, nachdem alle drei Relais verbunden wurden. */
 function openSyncDialog() {
+  if (scene.finale.mode) return;
   if (scene.relays.linked.size !== RELAYS.length) return;
   setReceiverOpen(false);
   updateSyncUI();
@@ -673,6 +743,7 @@ function commitSignalAlignment() {
   updateSyncUI();
   updateWarningUI();
   updateAnomalyMeter();
+  updateUplinkUI();
   receiverEventStatus.textContent = TRANSLATIONS[scene.language].syncAnnouncement;
   window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
   window.dispatchEvent(new CustomEvent('deadair:relayaligned', { detail: { relays: ['A', 'B', 'C'] } }));
@@ -680,7 +751,7 @@ function commitSignalAlignment() {
 
 /** Der Warnträger wird nur auf CAM 01 bei exakt eingestellter Frequenz empfangen. */
 function canReceiveWarning() {
-  return scene.sync.completed
+  return !scene.finale.mode && scene.sync.completed
     && scene.source === 'artwork'
     && scene.channel === 'warning'
     && Math.abs(scene.frequency - CHANNELS.warning.frequency) <= WARNING_TUNING_TOLERANCE;
@@ -699,6 +770,7 @@ function stopWarningAudio() {
 /** Das Signal wird bei der ersten korrekten Abstimmung entdeckt und bei späterer
  * erneuter Abstimmung wiederholt. Der Entscheidungsdialog bleibt einmalig. */
 function receiveWarningSignal() {
+  if (scene.finale.mode) return;
   if (!canReceiveWarning()) return;
 
   if (!scene.warning.found) {
@@ -774,6 +846,7 @@ function openDecisionDialog() {
 /** Legt den Weg endgültig fest. Ohne gefundenen Funkträger bleibt der
  * Standardweg zu Phase 06 erhalten; der rettende Alternativweg bleibt verborgen. */
 function chooseRoute(route) {
+  if (scene.finale.mode) return;
   if (!scene.warning.found || !scene.warning.playbackCompleted
     || scene.warning.choice !== null || !['rescue', 'isolate'].includes(route)) return;
 
@@ -785,8 +858,162 @@ function chooseRoute(route) {
   updateAnomalyMeter();
   decisionDialog.close();
   receiverEventStatus.textContent = TRANSLATIONS[scene.language].decisionRouteAnnouncement;
+  updateUplinkUI();
+  if (route === 'isolate') startIsolationEnding();
   window.dispatchEvent(new CustomEvent('deadair:routechosen', { detail: { route, permanent: true } }));
   window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
+}
+
+/** Der Rettungssender wird nach erfolgreichem Abgleich freigeschaltet.
+ * Ein gefundenes, aber nicht zu Ende gehörtes Warnsignal sperrt den Impuls bis zur Entscheidung. */
+function updateUplinkUI() {
+  const texts = TRANSLATIONS[scene.language];
+  const warningPending = scene.warning.found && scene.warning.choice === null;
+  uplinkPanel.hidden = !scene.sync.completed || scene.warning.choice === 'isolate'
+    || warningPending || Boolean(scene.finale.mode);
+  uplinkAction.disabled = scene.paused || Boolean(scene.finale.mode);
+  uplinkAction.textContent = texts.uplinkAction;
+  uplinkAction.setAttribute('aria-label', texts.uplinkAria);
+  document.querySelector('#uplink-meta').textContent = texts.uplinkMeta;
+  document.querySelector('#uplink-description').textContent = texts.uplinkDescription;
+  document.querySelector('#uplink-status').textContent = texts.uplinkPending;
+}
+
+/** Textliche und technische Ausgabe aller Finalphasen, einschließlich Kamera- und Bedienlock. */
+function updateFinaleUI() {
+  const texts = TRANSLATIONS[scene.language];
+  root.dataset.finale = scene.finale.phase;
+  finalCaption.hidden = !['open', 'sealed'].includes(scene.finale.phase);
+  finalCaption.textContent = scene.finale.phase === 'sealed'
+    ? texts.finalSealedCaption : texts.finalOpenCaption;
+  if (scene.finale.mode) {
+    document.querySelector('#monitor-live-status').textContent = scene.finale.mode === 'isolate'
+      ? texts.finalMonitorSealed
+      : (scene.finale.phase === 'lock' ? texts.finalMonitorLock : texts.finalMonitorOpen);
+    document.querySelector('#status-output').textContent = scene.finale.mode === 'isolate'
+      ? texts.finalReceiverSealed : texts.finalReceiverOpen;
+    document.querySelector('#rx-output').textContent = scene.finale.mode === 'isolate' ? '0%' : '---';
+    document.querySelector('#screen-frequency').textContent = scene.finale.mode === 'isolate'
+      ? 'NO CARRIER' : '--- MHz';
+  }
+  stateDescription.textContent = getStateDescription(texts);
+  document.querySelector('#scene-state').textContent = scene.finale.mode
+    ? `NCBS / ${scene.finale.phase.toUpperCase()}`
+    : document.querySelector('#scene-state').textContent;
+}
+
+/** Aktiviert nur tatsächlich vorhandene Endbedingungen, niemals einen bloßen Klick auf den Warnträger. */
+function canTransmitRescue() {
+  return !scene.paused && !scene.finale.mode && scene.sync.completed
+    && scene.relays.linked.size === RELAYS.length
+    && (!scene.warning.found || scene.warning.choice === 'rescue');
+}
+
+/** Nach dem letzten manuellen Impuls startet der irreversible Küstenfeed. */
+function transmitRescuePulse() {
+  if (!canTransmitRescue()) return;
+  startFinale('breach');
+  receiverEventStatus.textContent = TRANSLATIONS[scene.language].finalStartAnnouncement;
+  window.dispatchEvent(new CustomEvent('deadair:rescuepulse', {
+    detail: { relays: ['A', 'B', 'C'], warningFound: scene.warning.found },
+  }));
+}
+
+/** Die echte Gegenentscheidung trennt den Rückkanal unmittelbar und ebenfalls irreversibel. */
+function startIsolationEnding() {
+  if (!scene.warning.found || scene.warning.choice !== 'isolate' || scene.finale.mode) return;
+  startFinale('isolate');
+}
+
+/** Gemeinsamer Finalstart: eine Quelle, eine Uhr, eine Kamerasperre. */
+function startFinale(mode) {
+  if (scene.finale.mode || !['breach', 'isolate'].includes(mode)) return;
+  setReceiverOpen(false);
+  stopWarningAudio();
+  transmissionAudio.pause();
+  scene.audio.resumeAfterPause = false;
+  scene.audio.resumeAfterVisibility = false;
+  scene.finale.mode = mode;
+  scene.finale.phase = mode === 'breach' ? 'lock' : 'isolating';
+  scene.finale.startedAtMs = scene.anomaly.activeMs;
+  scene.finale.lastFrameAtMs = 0;
+  applySource('video');
+  gateCanvas.hidden = false;
+  frequencyInput.disabled = true;
+  for (const button of [evidenceLog, transmissionToggle, transmission2Toggle, relayToggle,
+    syncToggle, warningRecordingToggle, warningTranscriptToggle, relayLink]) {
+    button.disabled = true;
+  }
+  updateUplinkUI();
+  syncSignalVisuals();
+  applyInterference(mode === 'breach' ? 95 : 12);
+  updateFinaleUI();
+  updateAnomalyMeter();
+  void syncVideo();
+  startGateFrames();
+  window.dispatchEvent(new CustomEvent('deadair:finalestarted', { detail: { mode } }));
+}
+
+/** Die Videokamera bleibt beweglich, bis sich die ersten Dreiecksseiten bilden.
+ * Ab diesem Moment werden nur die Zusatzebenen bewegt, nicht die Brandung. */
+function isSeaFrozen() {
+  return scene.finale.mode === 'breach'
+    && ['triangulation', 'opening', 'open'].includes(scene.finale.phase);
+}
+
+/** Story-Phasen werden aus aktiver Spielzeit abgeleitet; Pausen verschieben nichts. */
+function updateFinale() {
+  if (!scene.finale.mode) return;
+  const elapsed = scene.anomaly.activeMs - scene.finale.startedAtMs;
+  const lastPhase = scene.finale.phase;
+  let phase;
+  if (scene.finale.mode === 'isolate') {
+    phase = elapsed >= FINAL_ISOLATED_MS ? 'sealed' : 'isolating';
+  } else if (elapsed < FINAL_TRIANGULATION_MS) {
+    phase = 'lock';
+  } else if (elapsed < FINAL_OPENING_MS) {
+    phase = 'triangulation';
+  } else if (elapsed < FINAL_OPEN_END_MS) {
+    phase = 'opening';
+  } else {
+    phase = 'open';
+  }
+  if (phase === lastPhase) return;
+
+  scene.finale.phase = phase;
+  syncSignalVisuals();
+  updateFinaleUI();
+  if (isSeaFrozen() || phase === 'sealed') coastVideo.pause();
+  applyInterference(scene.finale.mode === 'breach' ? 100 : 0);
+  updateAnomalyMeter();
+  startGateFrames();
+  receiverEventStatus.textContent = getStateDescription(TRANSLATIONS[scene.language]);
+  if (phase === 'open' || phase === 'sealed') {
+    window.dispatchEvent(new CustomEvent('deadair:finalecomplete', {
+      detail: { mode: scene.finale.mode, phase },
+    }));
+  }
+}
+
+/** Rendern mit maximal 30 Bildern/Sekunde, nur während aktiver Finaldarstellung. */
+function renderGateFrame(timestamp) {
+  scene.finale.animationFrameId = 0;
+  if (!scene.finale.mode || scene.paused || document.hidden) return;
+  if (!scene.finale.lastFrameAtMs || timestamp - scene.finale.lastFrameAtMs >= 32) {
+    drawGate(gateCanvas, scene.anomaly.activeMs - scene.finale.startedAtMs,
+      scene.finale.mode, window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    scene.finale.lastFrameAtMs = timestamp;
+  }
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    scene.finale.animationFrameId = requestAnimationFrame(renderGateFrame);
+  }
+}
+
+/** Pausierte oder verdeckte Tabs verbrauchen keine Zeichen- oder Animationszeit. */
+function startGateFrames() {
+  if (!scene.finale.mode || scene.paused || document.hidden || scene.finale.animationFrameId) return;
+  scene.finale.lastFrameAtMs = 0;
+  scene.finale.animationFrameId = requestAnimationFrame(renderGateFrame);
 }
 
 /** Zeichnet das gemeinsame Audiotranskript abhängig vom archivierten Funkspruch. */
@@ -808,6 +1035,11 @@ function renderTransmission() {
 
 /** Nur freigeschaltete Story-Ereignisse dürfen die Kameraoptik verändern. */
 function syncSignalVisuals() {
+  if (scene.finale.mode) {
+    root.dataset.story = scene.finale.mode === 'breach' ? 'final-breach' : 'final-isolated';
+    root.dataset.state = scene.finale.mode === 'breach' ? 'unknown' : 'offair';
+    return;
+  }
   const activeStage = scene.story.stage;
   root.dataset.story = activeStage;
   root.dataset.state = activeStage === 'frequency-scan'
@@ -827,6 +1059,14 @@ function smoothStep(value) {
  * Die erreichte Story-Stufe ist nur Voraussetzung für bestimmte Ereignisse,
  * niemals eine dauerhaft erhöhte Anzeige des Spielfortschritts. */
 function getAnomalyProfile() {
+  if (scene.finale.mode === 'breach') {
+    return { level: 1, amplitude: .27, speed: 13 };
+  }
+  if (scene.finale.mode === 'isolate') {
+    const age = scene.anomaly.activeMs - scene.finale.startedAtMs;
+    const activity = 1 - smoothStep(age / FINAL_ISOLATED_MS);
+    return { level: activity * .35, amplitude: activity * .04, speed: .8 };
+  }
   const { stage, elapsedMs, bottleVisible, bottleCollected } = scene.story;
 
   if (scene.source === 'video') {
@@ -915,6 +1155,18 @@ function getAnomalyProfile() {
  * Keine Zufallswerte und keine frei laufende CSS-Animation: Pause und verdeckte Tabs
  * halten dadurch sowohl Story-Zeit als auch den visuellen Zustand an. */
 function updateAnomalyMeter() {
+  if (scene.finale.mode === 'breach') {
+    const time = scene.anomaly.activeMs / 1000;
+    anomalyBars.forEach((bar, index) => {
+      const burst = Math.sin(time * 18 + index * 2.61) * Math.sin(time * 3 + index * .47);
+      const clip = Math.sin(time * 1.7 + index * 1.9) > .4;
+      bar.style.height = `${clip ? 99 : 55 + Math.max(0, burst) * 44}%`;
+    });
+    anomalyMeter.setAttribute('aria-valuenow', '100');
+    root.dataset.anomaly = 'overload';
+    scene.anomaly.displayedLevel = 100;
+    return;
+  }
   const { level, amplitude, speed } = getAnomalyProfile();
   const time = scene.anomaly.activeMs / 1000;
   const isIdle = level === 0;
@@ -939,6 +1191,11 @@ function updateAnomalyMeter() {
 /** Fortschritt wird durch das gesicherte Fundstück, Kamera und korrekt abgestimmte
  * Frequenz ausgelöst. Die Übergänge sind einmalig und erzwingen keinen Kamerawechsel. */
 function progressStory() {
+  if (scene.finale.mode) {
+    syncSignalVisuals();
+    updateAnomalyMeter();
+    return;
+  }
   const previous = scene.story.stage;
   if (previous === 'message-found' && scene.source === 'artwork' && scene.channel === 'interference') {
     scene.story.stage = 'morse-active';
@@ -968,6 +1225,7 @@ function applyInterference(amount) {
 
 /** Aktualisiert Empfänger, Bild und Telemetrie bei jeder Frequenzänderung. */
 function setFrequency(value, { automated = false } = {}) {
+  if (scene.finale.mode) return;
   if (scene.story.stage === 'frequency-scan' && !automated) return;
 
   const frequency = Math.round(Math.max(FM_MIN, Math.min(FM_MAX, Number(value))) * 10) / 10;
@@ -1142,6 +1400,7 @@ async function playTransmission({ restart = false, recording = scene.audio.curre
 
 /** Öffnet das Archiv; wurde die Aufnahme beendet, beginnt sie erneut. */
 function openTransmission(recording = '001') {
+  if (scene.finale.mode) return;
   if (recording === '002' && !scene.audio.secondReceived) return;
   if (recording === '003') return; // AUDIO / 003 ist nur als Live-Empfang auf CAM 01 hörbar.
   setReceiverOpen(false);
@@ -1156,7 +1415,8 @@ function openTransmission(recording = '001') {
 
 /** Lädt das reale Video erst bei Auswahl der Kameraquelle. */
 async function syncVideo() {
-  const shouldPlay = scene.source === 'video' && !scene.paused && !document.hidden;
+  const shouldPlay = scene.source === 'video' && !scene.paused && !document.hidden
+    && !isSeaFrozen() && scene.finale.phase !== 'sealed';
   if (!shouldPlay) {
     coastVideo.pause();
     return;
@@ -1184,6 +1444,7 @@ function applySource(source) {
     button.classList.toggle('is-active', active);
     button.setAttribute('aria-pressed', String(active));
   });
+  document.querySelector('#monitor-camera-label').textContent = source === 'artwork' ? 'CAMERA 01' : 'CAMERA 02';
   document.querySelector('#screen-location').textContent = source === 'artwork' ? 'NORTH COAST / STATION' : 'NORTH COAST / SHORE';
   updateSourceDescription();
   progressStory();
@@ -1204,7 +1465,9 @@ function applySource(source) {
 function showBlockedCamera() {
   if (cameraBlackout.classList.contains('is-active')) return;
 
-  cameraStatus.textContent = TRANSLATIONS[scene.language].cameraBlocked;
+  cameraStatus.textContent = scene.finale.mode
+    ? TRANSLATIONS[scene.language].finalLockedCamera
+    : TRANSLATIONS[scene.language].cameraBlocked;
   cameraBlackout.classList.add('is-active');
   window.clearTimeout(scene.cameraBlackoutTimerId);
   scene.cameraBlackoutTimerId = window.setTimeout(() => {
@@ -1217,6 +1480,10 @@ function showBlockedCamera() {
  * Während des aktiven Morsecodes auf 91.3 MHz wird CAM 02 abgefangen. */
 function setSource(source) {
   if (source !== 'artwork' && source !== 'video') return;
+  if (scene.finale.mode) {
+    if (source !== scene.source) showBlockedCamera();
+    return;
+  }
 
   const morseLocksCamera = scene.story.stage === 'morse-active'
     && scene.channel === 'interference'
@@ -1253,6 +1520,8 @@ function togglePause() {
   }
   updatePlaybackLabel();
   updateAnomalyMeter();
+  updateUplinkUI();
+  startGateFrames();
   refreshRelayUI();
   updateSyncUI();
   void syncVideo();
@@ -1323,6 +1592,7 @@ function revealBottle() {
 
 /** Öffnet die Fundnotiz; bereits gesicherte Hinweise bleiben über die Akte lesbar. */
 function openBottleMessage() {
+  if (scene.finale.mode) return;
   if (!scene.story.bottleVisible || messageDialog.open) return;
 
   if (scene.story.bottleMaterializing) {
@@ -1399,6 +1669,7 @@ function runStoryClock() {
       startAutoScan();
     }
     updateAutoScan();
+    updateFinale();
   }
 
   updateAnomalyMeter();
@@ -1432,6 +1703,7 @@ function init() {
   root.dataset.story = 'routine';
   root.dataset.autoscan = 'idle';
   root.dataset.relays = 'inactive';
+  root.dataset.finale = 'idle';
 
   frequencyInput.addEventListener('input', () => setFrequency(frequencyInput.value));
   document.querySelectorAll('#source-switch button[data-source]').forEach(button => {
@@ -1452,6 +1724,9 @@ function init() {
     }
   });
   pauseButton.addEventListener('click', togglePause);
+  coastVideo.addEventListener('play', () => {
+    if (isSeaFrozen() || scene.finale.phase === 'sealed') coastVideo.pause();
+  });
   receiverToggle.addEventListener('click', () => setReceiverOpen(true));
   receiverClose.addEventListener('click', () => setReceiverOpen(false));
   receiverPanel.addEventListener('keydown', handleReceiverKeyboard);
@@ -1473,6 +1748,7 @@ function init() {
   transmission2Toggle.addEventListener('click', () => openTransmission('002'));
   relayToggle.addEventListener('click', () => openRelayLog());
   syncToggle.addEventListener('click', openSyncDialog);
+  uplinkAction.addEventListener('click', transmitRescuePulse);
   syncClose.addEventListener('click', () => syncDialog.close());
   syncDialog.addEventListener('click', event => {
     if (event.target === syncDialog) syncDialog.close();
@@ -1534,6 +1810,7 @@ function init() {
       if (scene.audio.currentRecording !== '003' || canReceiveWarning()) void playTransmission();
     }
     void syncVideo();
+    startGateFrames();
   });
   window.addEventListener('pagehide', () => {
     coastVideo.pause();
@@ -1541,6 +1818,7 @@ function init() {
     window.clearTimeout(scene.story.clockTimeoutId);
     window.clearTimeout(scene.story.revealTimeoutId);
     window.clearTimeout(scene.cameraBlackoutTimerId);
+    cancelAnimationFrame(scene.finale.animationFrameId);
   });
 
   setFrequency(scene.frequency);
@@ -1551,6 +1829,8 @@ function init() {
   syncStoryState();
   updateAnomalyMeter();
   updateSyncUI();
+  updateUplinkUI();
+  updateFinaleUI();
   runStoryClock();
 }
 

@@ -296,3 +296,24 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Die Verzweigung zum tatsächlichen Finale ist weiterhin Phase 06 und nicht Bestandteil dieses Patches. Ein Neuladen beginnt eine neue Spielsitzung (wie bisher ohne Persistenz).
 
 - Die fragmentierte Mitschrift ist für barrierearmen Zugriff nur auf der eingestellten Live-Frequenz abrufbar; das allein löst die Entscheidung nicht aus.
+
+
+## Patch 37 – Phase 06 / The Triangle
+
+- Nach Phase 05 wird der manuelle Rettungsimpuls im linken Steuerpanel freigegeben.
+- Die Warnung auf 102.4 MHz bleibt optional. Sobald sie gefunden wird, sperrt sie den
+  Rettungsimpuls bis zum vollständig gehörten Audio / 003 und der endgültigen Wahl.
+- Ohne Warnfund oder nach „Dem Signal weiter folgen“: Einmaliger Rettungsimpuls startet
+  die irreversible schlechte Finalsequenz (CAM 02 → triangulation → freeze → opening).
+- CAM 02 wird im Finale erzwungen. Der Wechsel zu CAM 01 führt nur noch zu einem harten
+  kurzen Schwarzbild; es werden keine Bildquellen durch Überblenden umgeschaltet.
+- Bei Beginn der Dreiecksbildung wird der reale Küstenclip pausiert. Die `gate-visual.js`
+  zeichnet nur die prozedurale Öffnung über diesem eingefrorenen Frame.
+- Blutorange Lichtstimmung, starke, aber kontrollierte Signalstörungen und
+  Anomalie-Indikator mit Übersteuerung sind nur während dieses Finales aktiv.
+- Bei vollständigem Warnempfang und Wahl „Rückkanal isolieren“: irreversible
+  alternative Finalsequenz ohne Portalfreigabe; die Relais verlöschen, der Feed fällt aus.
+- Pause, Tab-Sichtbarkeit und `prefers-reduced-motion` steuern die eigentliche
+  Finalanimation; keine eigenen Hintergrundtimer pro Canvas-Effekt.
+- Der Zustand wird wie bisher nur in der aktuellen Spielsitzung gehalten;
+  eine Neuladung beginnt absichtlich eine neue Sitzung.

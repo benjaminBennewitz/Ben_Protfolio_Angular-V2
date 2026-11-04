@@ -210,3 +210,21 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 **Phase 02 / THE SIGNAL:** Der Spieler findet die Kennung `91 / 3` auf dem Fundstück und stimmt 91.3 MHz ab. Auf CAM 01 sendet das rote Mastlicht wiederholt `1037` als korrekten Morse-Zahlencode (`.---- / ----- / ...-- / --...`). Der Empfänger selbst verrät die nächste Frequenz nicht. Sobald 103.7 MHz auf CAM 01 abgestimmt wird, beginnen die zuvor dunklen Fenster getrennt voneinander zu flackern und die Atmosphäre der Station wird unnatürlicher. Das Fensterereignis bildet den Übergang zum nächsten, noch auszuarbeitenden Fundstück.
 
 **Designprinzip:** Keine automatische Kamerawahl, keine Popup-Hinweise und keine Überspringbarkeit per zufällig früh eingestellten Frequenzen. Die ursprüngliche Geschichte der verschwundenen Schicht bleibt bis zum Finale verborgen.
+
+
+## Patch 29 – Kamera-Sperre während des Morsecodes
+
+- Während `morse-active` auf CAM 01 und 91.3 MHz blockiert ein CAM-02-Klick die Umschaltung.
+- Statt eines Kamerabildes erscheint für 320 ms ein abruptes, vollständig schwarzes Signalbild; danach ist CAM 01 unverändert sichtbar.
+- Video, Flaschenpost, Morsecode und ausgewählter Kamerabutton bleiben in diesem Fall unverändert.
+- Sobald 91.3 MHz verlassen oder die nächste Story-Phase erreicht wird, funktionieren reguläre harte Kamerawechsel wieder.
+- Der blockierte Wechsel wird für Screenreader auf Deutsch und Englisch angesagt.
+
+
+## Patch 29 – Anomalieindikator im Receiver-Readout
+
+- Die Balken unter dem Monitor werden nicht mehr permanent und zufällig animiert, sondern folgen dem tatsächlichen Story-Fortschritt.
+- **ROUTINE / CAM 01:** niedrige, statische Balken ohne Bewegung. **ROUTINE / CAM 02:** kaum wahrnehmbare Anfangsbewegung, die über 15 Sekunden bis zum Flaschenpost-Reveal kontinuierlich zunimmt.
+- Nach dem Einsammeln der Flaschenpost steigt die Aktivität mit den Stufen **message-found → morse-active → windows-event** und bleibt als Fortschrittssignal erhalten – unabhängig von der gerade eingestellten Frequenz.
+- Der Anomalie-Indikator ist von der Empfangsqualität (`RX`) getrennt. Er wird bei PAUSE oder einem inaktiven Tab eingefroren und besitzt eine übersetzte, nicht permanent vorlesende Meter-Beschreibung für Assistenztechnologien.
+- Kein neues Framework, keine Assets, kein zusätzlicher Animationsloop: Die Anzeige verwendet den bereits vorhandenen Story-Takt.

@@ -21,6 +21,7 @@ const FM_MAX = 108;
 const TUNING_TOLERANCE = 0.35;
 const BOTTLE_APPEAR_AFTER_MS = 15_000;
 const BOTTLE_GLITCH_MS = 2_000;
+const CAMERA_BLACKOUT_MS = 320;
 
 /** Sämtliche sichtbaren UI- und Status-Texte der Microsite. */
 const TRANSLATIONS = Object.freeze({
@@ -53,6 +54,8 @@ const TRANSLATIONS = Object.freeze({
     sceneArtworkAria: 'Küstenkamera mit Leuchtturm, Sendestation, Nebel und Signalstörungen',
     sceneVideoAria: 'Küstenkamera mit felsigem Ufer, Brandung und Signalstörungen',
     examineBottle: 'Flaschenpost untersuchen',
+    cameraBlocked: 'Signal unterbrochen. Kamera 01 bleibt aktiv.',
+    anomalyMeter: 'Anomalieaktivität',
     evidenceLog: 'AKTE / 01',
     evidenceLogAria: 'Gesicherte Flaschenpost erneut lesen',
     messageMeta: 'FUNDSTÜCK / 001',
@@ -97,6 +100,8 @@ const TRANSLATIONS = Object.freeze({
     sceneArtworkAria: 'Coastal station camera with a lighthouse, transmitter, fog and interference',
     sceneVideoAria: 'Coastal camera with a rocky shoreline, rolling waves and signal interference',
     examineBottle: 'Inspect the message bottle',
+    cameraBlocked: 'Signal lost. Camera 01 remains active.',
+    anomalyMeter: 'Anomaly activity',
     evidenceLog: 'FILE / 01',
     evidenceLogAria: 'Read the recovered message again',
     messageMeta: 'RECOVERED OBJECT / 001',
@@ -130,6 +135,10 @@ const messageDialog = document.querySelector('#message-dialog');
 const messageClose = document.querySelector('#message-close');
 const bottleArtifact = document.querySelector('#bottle-artifact');
 const evidenceLog = document.querySelector('#evidence-log');
+const cameraBlackout = document.querySelector('#camera-blackout');
+const cameraStatus = document.querySelector('#camera-status');
+const anomalyMeter = document.querySelector('#anomaly-meter');
+const anomalyBars = [...document.querySelectorAll('.readout-bars i')];
 const compactViewport = window.matchMedia('(max-width: 750px), (max-height: 520px)');
 
 /** Laufzeitzustand der Microsite ohne unnötige Persistenz. */
@@ -139,6 +148,11 @@ const scene = {
   source: /** @type {SceneSource} */ ('artwork'),
   language: 'de',
   paused: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  cameraBlackoutTimerId: 0,
+  anomaly: {
+    activeMs: 0,
+    displayedLevel: -1,
+  },
   story: {
     stage: /** @type {StoryStage} */ ('routine'),
     elapsedMs: 0,
@@ -184,6 +198,7 @@ function updateTranslations() {
   evidenceLog.textContent = texts.evidenceLog;
   evidenceLog.setAttribute('aria-label', texts.evidenceLogAria);
   messageClose.setAttribute('aria-label', texts.close);
+  anomalyMeter.setAttribute('aria-label', texts.anomalyMeter);
   document.querySelector('#message-meta').textContent = texts.messageMeta;
   document.querySelector('#message-subtitle').textContent = texts.messageSubtitle;
   document.querySelector('#message-title').textContent = texts.messageTitle;
@@ -221,6 +236,57 @@ function syncSignalVisuals() {
     : 'normal';
 }
 
+/** Bestimmt die Anomalieintensität ausschließlich aus dem Spielfortschritt.
+ * In der Routine bleibt CAM 01 ruhig. CAM 02 wird bis zur ersten Erscheinung
+ * langsam unruhiger. Spätere Phasen halten erreichte Intensitätsstufen. */
+function getAnomalyProfile() {
+  const stage = scene.story.stage;
+  if (stage === 'routine') {
+    if (scene.source === 'artwork') {
+      return { level: 0, amplitude: 0, speed: 0 };
+    }
+
+    const progress = Math.min(scene.story.elapsedMs / BOTTLE_APPEAR_AFTER_MS, 1);
+    return {
+      level: 0.07 + progress * 0.33,
+      amplitude: 0.012 + progress * 0.095,
+      speed: 0.52 + progress * 1.18,
+    };
+  }
+
+  if (stage === 'message-found') {
+    return { level: 0.48, amplitude: 0.11, speed: 1.35 };
+  }
+  if (stage === 'morse-active') {
+    return { level: 0.69, amplitude: 0.17, speed: 2.15 };
+  }
+  return { level: 0.87, amplitude: 0.22, speed: 2.9 };
+}
+
+/** Zeichnet die Monitorbalken als ruhige oder leicht fluktuierende Anomalieanzeige.
+ * Keine Zufallswerte und keine frei laufende CSS-Animation: Pause und verdeckte Tabs
+ * halten dadurch sowohl Story-Zeit als auch den visuellen Zustand an. */
+function updateAnomalyMeter() {
+  const { level, amplitude, speed } = getAnomalyProfile();
+  const time = scene.anomaly.activeMs / 1000;
+  const isIdle = level === 0;
+
+  anomalyBars.forEach((bar, index) => {
+    const weight = 0.38 + ((index * 7) % 11) / 18;
+    const wave = Math.sin(time * speed + index * 0.79) * 0.72
+      + Math.sin(time * speed * 0.47 + index * 1.83) * 0.28;
+    const activity = Math.max(0, level * weight + amplitude * wave);
+    const height = isIdle ? 7 + ((index * 3) % 5) : Math.min(96, 8 + activity * 88);
+    bar.style.height = `${height.toFixed(1)}%`;
+  });
+
+  const percent = Math.round(level * 100);
+  if (scene.anomaly.displayedLevel !== percent) {
+    anomalyMeter.setAttribute('aria-valuenow', String(percent));
+    scene.anomaly.displayedLevel = percent;
+  }
+}
+
 /** Fortschritt wird durch das gesicherte Fundstück, Kamera und korrekt abgestimmte
  * Frequenz ausgelöst. Die Übergänge sind einmalig und erzwingen keinen Kamerawechsel. */
 function progressStory() {
@@ -231,6 +297,7 @@ function progressStory() {
     scene.story.stage = 'windows-event';
   }
   syncSignalVisuals();
+  updateAnomalyMeter();
   if (previous !== scene.story.stage) {
     window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
   }
@@ -316,11 +383,37 @@ function applySource(source) {
   void syncVideo();
 }
 
-/** Wechselt die Kamera sofort. Das vorherige Bild und alle zugehörigen
- * Szenenobjekte werden im selben Rendering-Schritt vollständig ausgeblendet. */
+/** Zeigt bei unterbrochenem CAM-02-Signal kurz ein vollständig schwarzes Bild.
+ * Die tatsächliche Bildquelle wird bewusst nicht geändert, damit keine
+ * Video-/Artefaktreste entstehen und der Morsecode aktiv bleibt. */
+function showBlockedCamera() {
+  if (cameraBlackout.classList.contains('is-active')) return;
+
+  cameraStatus.textContent = TRANSLATIONS[scene.language].cameraBlocked;
+  cameraBlackout.classList.add('is-active');
+  window.clearTimeout(scene.cameraBlackoutTimerId);
+  scene.cameraBlackoutTimerId = window.setTimeout(() => {
+    cameraBlackout.classList.remove('is-active');
+    scene.cameraBlackoutTimerId = 0;
+  }, CAMERA_BLACKOUT_MS);
+}
+
+/** Wechselt nur dann die Kamera, wenn die Story das Signal freigibt.
+ * Während des aktiven Morsecodes auf 91.3 MHz wird CAM 02 abgefangen. */
 function setSource(source) {
   if (source !== 'artwork' && source !== 'video') return;
+
+  const morseLocksCamera = scene.story.stage === 'morse-active'
+    && scene.channel === 'interference'
+    && scene.source === 'artwork';
+
+  if (source === 'video' && morseLocksCamera) {
+    showBlockedCamera();
+    return;
+  }
+
   if (source === scene.source && root.dataset.source === source) return;
+  cameraStatus.textContent = '';
   applySource(source);
 }
 
@@ -337,6 +430,7 @@ function togglePause() {
   scene.paused = !scene.paused;
   scene.story.lastTick = performance.now();
   updatePlaybackLabel();
+  updateAnomalyMeter();
   void syncVideo();
 }
 
@@ -455,19 +549,25 @@ function collectBottle() {
   }));
 }
 
-/** Wartet ressourcenschonend auf 15 Sekunden aktive Untersuchungszeit. */
+/** Taktet die Story-Uhr und Anomalieanzeige sparsam mit 200 ms.
+ * Die Flasche wird einmalig nach 15 Sekunden aktivem Spiel freigegeben; die
+ * Anomalieanzeige bleibt auch danach an die Story gebunden in Bewegung. */
 function runStoryClock() {
   const now = performance.now();
   if (scene.story.lastTick && !scene.paused && !document.hidden) {
-    scene.story.elapsedMs += now - scene.story.lastTick;
+    const deltaMs = Math.max(0, now - scene.story.lastTick);
+    scene.anomaly.activeMs += deltaMs;
+    if (!scene.story.bottleVisible) {
+      scene.story.elapsedMs += deltaMs;
+    }
   }
   scene.story.lastTick = now;
 
-  if (scene.story.elapsedMs >= BOTTLE_APPEAR_AFTER_MS) {
+  if (!scene.story.bottleVisible && scene.story.elapsedMs >= BOTTLE_APPEAR_AFTER_MS) {
     revealBottle();
-    return;
   }
 
+  updateAnomalyMeter();
   scene.story.clockTimeoutId = window.setTimeout(runStoryClock, 200);
 }
 
@@ -535,6 +635,7 @@ function init() {
     coastVideo.pause();
     window.clearTimeout(scene.story.clockTimeoutId);
     window.clearTimeout(scene.story.revealTimeoutId);
+    window.clearTimeout(scene.cameraBlackoutTimerId);
   });
 
   setFrequency(scene.frequency);
@@ -543,6 +644,7 @@ function init() {
   updatePlaybackLabel();
   setReceiverOpen(false);
   syncStoryState();
+  updateAnomalyMeter();
   runStoryClock();
 }
 

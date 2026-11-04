@@ -68,6 +68,7 @@
               <button type="button" data-source="artwork" class="is-active" aria-pressed="true" data-i18n="artwork">STATION / CAM 01</button>
               <button type="button" data-source="video" aria-pressed="false" data-i18n="footage">KÜSTE / CAM 02</button>
             </div>
+            <span id="camera-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></span>
             <button id="pause-toggle" type="button" class="pause-toggle" aria-pressed="false"><span id="pause-icon" aria-hidden="true">Ⅱ</span> <span id="pause-label" data-i18n="pause">PAUSE</span></button>
           </div>
         </div>
@@ -103,6 +104,7 @@
                 <img class="scene__artifact-image scene__artifact-image--glitch" src="assets/message-bottle-glitch.webp" width="1448" height="1086" alt="">
               </button>
               <div class="scene__signal-line" aria-hidden="true"></div>
+              <div class="scene__camera-blackout" id="camera-blackout" aria-hidden="true"></div>
             </figure>
           </div>
           <div class="television__footer"><span class="television__power"><i></i> POWER</span><span>NCBS / VIDEO TRANSCEIVER</span><span class="television__vents" aria-hidden="true"></span></div>
@@ -112,7 +114,7 @@
         <div class="monitor-extras">
           <div class="monitor-extras__caption"><span data-i18n="sceneStatus">AKTUELLER SIGNALZUSTAND</span><strong id="scene-state">NORMAL / 87.6 MHz</strong></div>
           <div class="monitor-extras__message" id="state-description" aria-live="polite">Ein gewöhnlicher Küstenfeed. Leuchtfeuer und Wetter bleiben stabil.</div>
-          <div class="monitor-extras__readout"><span id="readout-channel">CH–01</span><div class="readout-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span>RX <output id="rx-output">76%</output></span></div>
+          <div class="monitor-extras__readout"><span id="readout-channel">CH–01</span><div class="readout-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="visually-hidden" id="anomaly-meter" role="meter" aria-label="Anomalieaktivität" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></span><span>RX <output id="rx-output">76%</output></span></div>
         </div>
       </section>
     </main>

@@ -79,3 +79,19 @@ function oldTerrainSave() {
 
 test('Ostwiesen: tiefer See sperrt Schritte, Vögel fliegen auf und kehren zurück',lakeAndBirds);
 test('Ostwiesen und Wurzelpforte: alte Speicherpositionen im neuen Gelände bleiben ladbar',oldTerrainSave);
+
+/** Hält den Wasserfall aus der nativen LCD-Kamera vom begehbaren Ufer sichtbar. */
+function waterfallView() {
+  const game=world(); game.travel('east-meadow');
+  game.player={x:19,y:8,facing:'up'};
+  for (let i=0;i<2;i++) {
+    assert.equal(game.step('up'),true);
+    game.update(0.2,false);
+  }
+  assert.equal(game.step('right'),true); game.update(0.2,false);
+  const fall=game.room.lakeFall,x=game.player.x*16-72,y=game.player.y*16-64;
+  assert.ok(fall.x*16>=x && (fall.x+fall.w)*16<=x+160);
+  assert.ok(fall.y*16>=y && (fall.y+fall.h)*16<=y+144);
+}
+
+test('Ostwiesen: Wasserfall ist vollständig vom westlichen Ufer sichtbar',waterfallView);

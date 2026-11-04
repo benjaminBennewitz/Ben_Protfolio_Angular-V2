@@ -54,14 +54,15 @@ function meadow() {
     prop('meadow-view','Blick über die Ostwiesen',24,10,'east-meadow-view','east-meadow-view',{hint:'umschauen'}),
     ...meadowWildlife(),...meadowRocks(),
   ];
-  return openForestPassages({id:'east-meadow',revision:2,title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,lakeFall:{x:23,y:0,w:2,h:4},meadowBirds:MEADOW_BIRDS,trees:[[1,2,'pine'],[4,1],[12,2],[2,16],[23,19,'pine'],[31,20],[30,15,'pine'],[15,20]],gardens:BEDS,buildings:[],birds:[],music:'east-meadow-day',objects});
+  return openForestPassages({id:'east-meadow',revision:3,title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,lakeFall:{x:23,y:2,w:2,h:4},meadowBirds:MEADOW_BIRDS,trees:[[1,2,'pine'],[4,1],[12,2],[2,16],[23,19,'pine'],[31,20],[30,15,'pine'],[15,20]],gardens:BEDS,buildings:[],birds:[],music:'east-meadow-day',objects});
 }
 
 /** Legt sandige Wege, flache Tümpel und weiche Pflanzkonturen übereinander. @param {number} x Spalte. @param {number} y Zeile. */
 function meadowCell(x,y) {
   const water=meadowWater(x,y);
   if (water) return water;
-  if (y<=2 && x>=16+y && x<=31-y) return 'r';
+  if (y<=2) return 'r';
+  if (x>=18 && x<=20 && y>=4 && y<=7) return x===20?'t':'.';
   if ((x<=8 || x>=17 && x<=24) && Math.abs(y-10)<=1) return '.';
   if (x>=18 && x<=21 && y>=16 && y<=18 && x-y>=1) return '.';
   for (const [dx,dy] of [[0,-1],[0,1],[-1,0],[1,0]]) if (meadowWater(x+dx,y+dy)) return 't';
@@ -72,8 +73,8 @@ function meadowCell(x,y) {
 
 /** Trennt watbare Senken vom tiefen See und seinem Zulauf. @param {number} x Spalte. @param {number} y Zeile. */
 function meadowWater(x,y) {
-  if (x>=23 && x<=24 && y>=0 && y<=3) return 'l';
-  if (y>=3 && ((x-23.5)/8)**2+((y-4.9)/3.7)**2<1) return 'l';
+  if (x>=23 && x<=24 && y>=2 && y<=5) return 'l';
+  if (y>=4 && !(x<=20 && y<=7) && ((x-23.5)/8)**2+((y-4.9)/3.7)**2<1) return 'l';
   for (const [cx,cy,rx,ry] of POOLS) if (((x-cx)/rx)**2+((y-cy)/ry)**2<1) return 's';
   return '';
 }

@@ -35,6 +35,7 @@ function forestRoom(id,title,width,height,gardens,objects) {
 /** Hält Wege breit und lässt Bäume und Pflanzen gemeinsame Konturen verwenden. @param {number} x Spalte. @param {number} y Zeile. @param {number} width Breite. @param {number} height Höhe. @param {object[]} gardens Pflanzflächen. @param {boolean} through Durchgehender Ostpfad. */
 function forestGround(x,y,width,height,gardens,through) {
   if (!through && x>=7 && x<=16 && y<=4) return 'r';
+  if (!through && y<=4) return x<7?'h':'t';
   if ((y>=9 && y<=10 && x>=2 && x<=(through?width-3:12)) || (x>=11 && x<=12 && y>=3 && y<=(through?height-3:10))) return '.';
   for (const g of gardens) if (x>=g.x && x<g.x+g.w && y>=g.y && y<g.y+g.h) return g.kind;
   return 'g';
@@ -50,10 +51,11 @@ export function createEastRooms() {
   edge.objects.push(prop('forest-squirrel','Eichhörnchen',15,15,'wildlife','inspect',{animal:'squirrel',route:[[15,15],[16,15],[16,16],[15,16]],text:'Es versteckt eine Nuss und tut so, als hättest du nichts gesehen.'}));
   clearing.revision=2;
   clearing.trees=clearing.trees.filter(clearOfRootWall);
+  clearing.trees.push([1,0],[3,0,'pine'],[5,0],[5,2,'pine'],[17,0],[19,0,'pine'],[17,2,'pine'],[19,2]);
   addRootMarks(clearing);
   return [pumpRoom(),edge,...createForestSections(),clearing,...createMeadowRooms()];
 }
 
 
 /** Hält ganze Baumkronen aus dem Mauerrechteck der Wurzelpforte. @param {Array} tree Baumstandort. */
-function clearOfRootWall(tree) { const [x,y]=tree; return y>0 && (x+2<=7 || x>=17 || y>=5); }
+function clearOfRootWall(tree) { const [x,y]=tree; return y>=4 && (x+2<=7 || x>=17 || y>=5); }

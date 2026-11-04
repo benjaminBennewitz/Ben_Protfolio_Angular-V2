@@ -25,13 +25,27 @@ export function drawMeadowMidges(render) {
   }
 }
 
-/** Zeichnet einen Fels mit Schatten, gebrochenen Kanten und heller Oberseite. @param {object} render Zeicheninformationen. @param {object} object Fels. */
+const ROCKS=[
+  ['.....333.......','...3311133.....','..3110011233...','.311111122223..','31112212222223.','31122222222333.','32222222223333.','.333333333333..','...222222222...'],
+  ['......33.......','.....3113......','....310123.....','...31101233....','..311122223....','..3122222233...','.312212222233..','.322222223333..','..3333333333...','....222222222..'],
+  ['...............','......3333.....','..3333111233...','.3111100112233.','311122222222223','322222222223333','.3333333333333.','...2222222222..'],
+  ['...333.........','..310133.......','.31011223..33..','.3111222333123.','311222223311223','322222233222233','.3333333333333.','...2222222222..'],
+];
+const PEBBLES=[
+  ['..333...','.31023..','3112233.','.33333..'],
+  ['...33...','..3113..','.310223.','.332333.','..3333..'],
+  ['........','.33333..','3101123.','.333333.'],
+  ['.33.....','3103.33.','32233123','.333333.'],
+];
+
+/** Zeichnet Felsvarianten mit Licht von links oben und einem Bodenschatten. @param {object} render Zeicheninformationen. @param {object} object Fels. */
 export function drawMeadowRock(render,object) {
-  const {ctx}=render,x=object.x*16,y=object.y*16,small=object.small;
-  const left=x+(small?5:1),top=y+(small?9:4),w=small?7:14;
-  rect(ctx,2,left+1,y+14,w-1,2); rect(ctx,3,left,top+2,w,y+14-top-2);
-  rect(ctx,3,left+2,top,w-4,2); rect(ctx,2,left+1,top+2,w-2,y+12-top-2);
-  rect(ctx,1,left+2,top+1,w-4,3); rect(ctx,0,left+3,top+1,w-6,1);
+  const {ctx}=render,small=object.small,art=(small?PEBBLES:ROCKS)[object.shape];
+  const x=object.x*16+(small?4:0),y=object.y*16+15-art.length;
+  rect(ctx,1,x+(small?2:3),y+art.length,small?5:12,1);
+  for (const [row,line] of art.entries()) for (let col=0;col<line.length;col++) {
+    if (line[col]!=='.') rect(ctx,Number(line[col]),x+col,y+row,1,1);
+  }
 }
 
 /** Zeichnet grasende Rehe und den Hirsch mit eigener Silhouette in nativer Auflösung. @param {object} render Zeicheninformationen. @param {object} object Tier. @param {number} x Pixelspalte. @param {number} y Pixelzeile. */

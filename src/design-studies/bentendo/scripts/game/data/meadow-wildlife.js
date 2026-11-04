@@ -28,12 +28,12 @@ function animal(id,name,species,x,y,text,extra={}) {
 /** Setzt Felsen als Hindernisse und kleinere Steine in die Wasserfläche. */
 export function meadowRocks() {
   return [
-    rock(6,12),rock(16,12),rock(4,19),rock(24,16),rock(31,12),rock(14,4),
-    rock(9,8,true),rock(13,14,true),rock(20,5,true),rock(28,6,true),rock(25,10,true),
+    rock(6,12,0),rock(16,12,1),rock(4,19,2),rock(24,16,3),rock(31,12,0),rock(14,4,2),
+    rock(9,8,0,true),rock(13,14,1,true),rock(22,5,2,true),rock(28,6,3,true),rock(25,10,0,true),
   ];
 }
 
-/** Erhält die Begehbarkeit um kleine Steine und sperrt nur große Felsen. @param {number} x Spalte. @param {number} y Zeile. @param {boolean} small Kleiner Stein. */
-function rock(x,y,small=false) {
-  return prop(`meadow-rock-${x}-${y}`,'Uferstein',x,y,'meadow-rock','inspect',{small,passable:small,walkThrough:small,text:'Wasser und Wind haben den Stein rund geschliffen.'});
+/** Erhält die Begehbarkeit um kleine Steine und sperrt nur große Felsen. @param {number} x Spalte. @param {number} y Zeile. @param {number} shape Silhouette. @param {boolean} small Kleiner Stein. */
+function rock(x,y,shape,small=false) {
+  return prop(`meadow-rock-${x}-${y}`,'Uferstein',x,y,'meadow-rock','inspect',{shape,small,passable:small,walkThrough:small,text:'Wasser und Wind haben den Stein rund geschliffen.'});
 }

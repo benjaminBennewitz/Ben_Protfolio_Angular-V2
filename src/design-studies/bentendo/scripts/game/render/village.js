@@ -1,5 +1,5 @@
 import { drawMeadowBirds,drawMeadowMidges,drawMeadowRock } from './meadow-life.js';
-import { drawShallows,drawShallowRipples,drawLakeFall } from './shallow-water.js';
+import { drawShallows,drawShallowRipples,drawLakeFall,drawLakeCell,drawLakeCliff } from './shallow-water.js';
 import { drawSleepingPet } from './sleeping-pets.js';
 import { minuteOfDay,nightShade } from '../systems/world-clock.js';
 import { drawEastProp,drawEastRock } from './east.js';
@@ -34,7 +34,8 @@ function drawMeadow(render) {
   for (const garden of game.room.gardens) {
     if (garden.kind!=='f') continue;
     for (let y=garden.y;y<garden.y+garden.h;y++) for (let x=garden.x;x<garden.x+garden.w;x++) {
-      if (game.room.ground[y][x]==='f') ctx.drawImage(assets.flowerSprites,frame*16,0,16,16,x*16,y*16,16,16);
+      const phase=game.room.lakeFall?(frame+x+y*3)%4:frame;
+      if (game.room.ground[y][x]==='f') ctx.drawImage(assets.flowerSprites,phase*16,0,16,16,x*16,y*16,16,16);
     }
   }
 }
@@ -62,10 +63,12 @@ function drawGround(render) {
 function drawCell(render,x,y) {
   const ground = render.game.room.ground, kind = ground[y][x], xx=x*16, yy=y*16;
   rect(render.ctx,0,xx,yy,16,16);
+  if (kind==='r' && render.game.room.lakeFall) return drawLakeCliff(render,x,y);
   if (kind==='r' && render.game.room.villageLandscape) return drawEastRock(render,x,y);
   if (kind==='g' || kind==='e') return drawBareGround(render,x,y,kind);
   if (kind==='r' || kind==='c') return drawNorthCell(render,x,y);
-  if (kind==='s' || kind==='l') return drawShallows(render,x,y,kind);
+  if (kind==='l') return drawLakeCell(render,x,y);
+  if (kind==='s') return drawShallows(render,x,y,kind);
   if (kind === 'w' || kind === 'b') return drawCanal(render,x,y,kind);
   if (kind === 'p') return render.ctx.drawImage(render.assets.villageTiles,0,240,16,16,xx,yy,16,16);
   if (kind === '.') {

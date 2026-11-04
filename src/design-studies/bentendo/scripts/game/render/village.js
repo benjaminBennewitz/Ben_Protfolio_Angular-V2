@@ -1,8 +1,8 @@
 import { drawMeadowBirds,drawMeadowMidges,drawMeadowRock,drawMeadowPlants } from './meadow-life.js';
-import { drawShallows,drawShallowRipples,drawLakeFall,drawLakeCell,drawLakeCliff } from './shallow-water.js';
+import { drawShallows,drawShallowRipples,drawLakeFall,drawLakeCliff } from './shallow-water.js';
 import { drawSleepingPet } from './sleeping-pets.js';
 import { minuteOfDay,nightShade } from '../systems/world-clock.js';
-import { drawEastProp,drawEastRock } from './east.js';
+import { drawEastProp,drawEastRock,drawMeadowGate,drawMeadowGateWall } from './east.js';
 import { drawWaterfall, drawGate } from './village-scenery.js';
 import { drawResident, drawKeeper, drawAwakeningAnimal } from './village-life.js';
 import { rect } from './primitives.js';
@@ -63,11 +63,10 @@ function drawGround(render) {
 function drawCell(render,x,y) {
   const ground = render.game.room.ground, kind = ground[y][x], xx=x*16, yy=y*16;
   rect(render.ctx,0,xx,yy,16,16);
-  if (kind==='r' && render.game.room.lakeFall) return drawLakeCliff(render,x,y);
+  if (kind==='r' && render.game.room.lakeFall) return y>2?drawMeadowGateWall(render,x,y):drawLakeCliff(render,x,y);
   if (kind==='r' && render.game.room.villageLandscape) return drawGreenWall(render,x,y);
   if (kind==='g' || kind==='e') return drawBareGround(render,x,y,kind);
   if (kind==='r' || kind==='c') return drawNorthCell(render,x,y);
-  if (kind==='l') return drawLakeCell(render,x,y);
   if (kind==='s') return drawShallows(render,x,y,kind);
   if (kind === 'w' || kind === 'b') return drawCanal(render,x,y,kind);
   if (kind === 'p') return render.ctx.drawImage(render.assets.villageTiles,0,240,16,16,xx,yy,16,16);
@@ -168,6 +167,7 @@ function drawEntry(render,entry) {
   if (entry.type === 'house') return drawHouse(render,entry);
   if (entry.type === 'player') { drawVillageHero(render,entry); drawFoliageMask(render,entry); return; }
   if (entry.kind==='meadow-rock') return drawMeadowRock(render,entry);
+  if (entry.facade) return drawMeadowGate(render,entry);
   if (!drawVillageObject(render,entry)) drawObject(render,entry);
   if (['cat','dog','wildlife','discovery-chest'].includes(entry.kind)) drawFoliageMask(render,entry);
   drawDiscoveryStatus(render,entry);

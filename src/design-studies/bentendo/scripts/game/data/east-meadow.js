@@ -13,6 +13,8 @@ const BEDS=[
 const LAKE_SPANS={4:[22,27],5:[21,29],6:[21,30],7:[21,30],8:[23,28]};
 const POOLS=[[11.5,8.5,5,3.2],[11,14.5,3.5,2.4],[27,11,3.2,1.8]];
 
+export const WAYMAKER_LEDGER={id:'east-waymaker-ledger',title:'Letzter Eintrag im Frachtbuch',text:'Eine abgedeckte Kiste ging bei trockenem Boden über die Wiesen. Am nächsten Morgen kam der Träger allein zurück. Neben dem Eintrag ist ein runder Abdruck aus hellem Staub.'};
+
 export const ROOT_MARKS=[
   {id:'root-chalk',name:'Heller Stein',text:'Ein Pfeil zum Bach. Weiße Kreide sitzt lose auf dem Stein; der Rand darunter ist unberührt.'},
   {id:'root-notch',name:'Tief gekerbter Stein',text:'Drei tiefe Kerben, eine ist durchgestrichen. Am unteren Rand ist der Stein blank und glatt.'},
@@ -36,7 +38,7 @@ function station() {
     prop('meadow-exit','Ausgang ins Licht',6,0,'door','travel',{to:'east-meadow',spawn:[3,10]}),
     furniture('tools','Wegmacherregal',2,1,'cupboard','Keile, Ersatzfedern und Steinschablonen. Nur im mittleren Fach fehlt etwas.'),
     furniture('bench','Werkbank',8,1,'workbench','Ein Ritzstift liegt neben einer Schablone mit drei Kerben. Der Zughebel der Pforte ist über Gegengewichte mit dem Stein draußen verbunden.'),
-    prop('waymaker-ledger','Aufgeschlagenes Frachtbuch',8,5,'note','east-waymaker-ledger'),
+    prop('waymaker-ledger','Loser Frachtbucheintrag',8,5,'note','note',{note:WAYMAKER_LEDGER,hideWhenRead:true}),
     furniture('supply','Leeres Kistenlager',10,7,'barrel','Im Staub zeichnet sich der Umriss einer frisch fortgeschobenen Kiste ab.'),
   ];
   return {id:'east-waystation',title:'Alte Wegmacherstation',...houseGeometry('workshop'),style:'stone',furnished:true,rugs:[],music:'maras-quellplan',objects};
@@ -51,18 +53,18 @@ function meadow() {
     ground.push(row);
   }
   const objects=[
-    prop('station-return','Zurück zur Wegmacherstation',2,10,'trail','travel',{to:'east-waystation',spawn:[6,1]}),
+    prop('station-return','Wurzelpforte · Wegmacherstation',1,10,'trail','travel',{to:'east-waystation',spawn:[6,1],facade:true,hint:'hineingehen'}),
     prop('meadow-view','Blick über die Ostwiesen',24,10,'east-meadow-view','east-meadow-view',{hint:'umschauen'}),
     ...meadowWildlife(),...meadowRocks(),
   ];
-  return openForestPassages({id:'east-meadow',revision:3,title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,lakeFall:{x:23,y:2,w:2,h:4},meadowBirds:MEADOW_BIRDS,trees:[[1,3,'pine'],[4,3],[12,3],[2,16],[23,19,'pine'],[31,20],[30,15,'pine'],[15,20]],gardens:BEDS,buildings:[],birds:[],music:'east-meadow-day',objects});
+  return openForestPassages({id:'east-meadow',revision:5,title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,lakeFall:{x:23,y:2,w:2,h:4},meadowBirds:MEADOW_BIRDS,trees:[[1,3,'pine'],[4,3],[12,3],[2,16],[23,19,'pine'],[31,20],[30,15,'pine'],[15,20]],gardens:BEDS,buildings:[],birds:[],music:'east-meadow-day',objects});
 }
 
 /** Legt sandige Wege, flache Tümpel und weiche Pflanzkonturen übereinander. @param {number} x Spalte. @param {number} y Zeile. */
 function meadowCell(x,y) {
   const water=meadowWater(x,y);
   if (water) return water;
-  if (y<=2) return 'r';
+  if (y<=2 || (x===0 && y>=7 && y<=12 && y!==10)) return 'r';
   if (x>=17 && x<=20 && y>=4 && y<=8 && Math.abs(x-18)+Math.abs(y-6)<=3) return 't';
   if ((x<=8 && Math.abs(y-10)<=1) || (x>=18 && x<=24 && y===10)) return '.';
   if (x>=18 && x<=21 && y>=16 && y<=18 && x-y>=1) return '.';

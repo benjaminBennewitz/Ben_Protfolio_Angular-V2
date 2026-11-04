@@ -1,4 +1,4 @@
-import { tryRootMark,readWaymakerLedger,viewEastMeadow } from './east-meadow.js';
+import { tryRootMark,viewEastMeadow } from './east-meadow.js';
 import { openRestMenu } from './rest-menu.js';
 import { respectNightRest } from './daily-life.js';
 import { openForestShortcut,talkForestTraveller } from './forest-return.js';
@@ -33,7 +33,7 @@ function inspect(game, object) {
 function travel(game, object) { if (respectNightRest(game,object)) return; game.travel(object.to, object.spawn); }
 
 export const ACTIONS = {
-  'east-root-mark':tryRootMark,'east-waymaker-ledger':readWaymakerLedger,'east-meadow-view':viewEastMeadow,
+  'east-root-mark':tryRootMark,'east-meadow-view':viewEastMeadow,
   'east-shortcut':openForestShortcut,'east-traveller':talkForestTraveller,
   'east-pump-entry':enterEastPump,'east-gate':enterEastGate,'east-pump-sign':inspectPump,'east-spares':takeSparePipe,'east-pipe':turnEastPipe,'east-pipe-reset':resetEastPipes,'east-pump-start':startEastPump,'east-clue':inspectEastClue,'east-eda':talkEda,
   sleep:openRestMenu,'recover-loot':recoverLoot,'source-mechanism':sourceMechanism,'dungeon-door':dungeonDoor,'start-nest':startNest,'dungeon-reward':dungeonReward,

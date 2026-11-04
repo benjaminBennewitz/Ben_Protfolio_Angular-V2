@@ -68,7 +68,10 @@ export class Game {
     const objects = [...this.roomState.blocks];
     for (const object of this.room.objects) {
       const removed = ['take','note'].includes(object.action) && !object.persistent && this.roomState.taken.has(object.id);
-      if (!removed) objects.push(object.discovery && this.roomState.taken.has(object.id)?{...object,searched:true,hint:object.discovery.note?'lesen':'erneut ansehen'}:object);
+      const read=object.hideWhenRead && this.notes.some(
+        /** Erkennt einen bereits gespeicherten losen Zettel. @param {object} note Journalnotiz. */
+        note=>note.id===object.note.id);
+      if (!removed && !read) objects.push(object.discovery && this.roomState.taken.has(object.id)?{...object,searched:true,hint:object.discovery.note?'lesen':'erneut ansehen'}:object);
     }
     return recoveryObjects(this,dungeonObjects(this,taskObjects(this,villageObjects(this,objects))));
   }

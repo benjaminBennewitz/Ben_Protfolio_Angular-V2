@@ -89,6 +89,7 @@ function persistence() {
   loaded.travel('east-clearing'); useObject(loaded,'tracks'); dismiss(loaded);
   const again=world(); assert.equal(restoreGame(again,captureGame(loaded)),true);
   assert.equal(again.flags.eastOpen,true); assert.ok(again.notes.some(trackNote));
+  assert.ok(!again.objects.some(/** Erkennt den eingesammelten Zettel. @param {object} object Gegenstand. */ object=>object.id==='tracks'));
 }
 
 /** Erkennt die tatsächlich aufgenommene Spur. @param {object} note Notiz. */

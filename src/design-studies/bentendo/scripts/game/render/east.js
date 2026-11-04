@@ -39,6 +39,25 @@ export function drawEastProp(render,object) {
   return object.kind==='east-cylinder';
 }
 
+/** Führt die Rückwand vom Kartenrand bis zur beleuchteten Stirnseite. @param {object} render Zeicheninformationen. @param {number} x Spalte. @param {number} y Zeile. */
+export function drawMeadowGateWall(render,x,y) {
+  const {ctx,game}=render,xx=x*16,yy=y*16,front=game.room.ground[y][x+1]!=='r';
+  dungeonTile(render,11+(x+y)%2,xx,yy);
+  if (!front) return;
+  rect(ctx,3,xx+13,yy,3,16); rect(ctx,1,xx+12,yy,1,16);
+  for (const dy of [3,9,15]) rect(ctx,2,xx+13,yy+dy,3,1);
+}
+
+/** Zeigt eine schlichte rechteckige Öffnung in der Westmauer. @param {object} render Zeicheninformationen. @param {object} object Zugang. */
+export function drawMeadowGate(render,object) {
+  const {ctx}=render,x=object.x*16,y=object.y*16;
+  rect(ctx,3,x-16,y,x,13);
+  rect(ctx,2,x-4,y,4,13);
+  rect(ctx,3,x-4,y-2,5,2);
+  rect(ctx,1,x-16,y+12,x+2,3);
+  rect(ctx,0,x-3,y+14,5,1);
+}
+
 /** Zeichnet die verlorene Flasche als kleines Fundstück im Gras. @param {object} render Zeicheninformationen. @param {object} object Flasche. */
 function drawCanteen(render,object) {
   const x=object.x*16,y=object.y*16;

@@ -1,7 +1,6 @@
-import { ROOT_MARKS } from '../data/east-meadow.js';
+import { ROOT_MARKS,WAYMAKER_LEDGER } from '../data/east-meadow.js';
 import { rememberNote } from './loot.js';
 
-const LEDGER={id:'east-waymaker-ledger',title:'Letzter Eintrag im Frachtbuch',text:'Eine abgedeckte Kiste ging bei trockenem Boden über die Wiesen. Am nächsten Morgen kam der Träger allein zurück. Neben dem Eintrag ist ein runder Abdruck aus hellem Staub.'};
 const VIEW={id:'east-meadow-view',title:'Hinter dem Wald',text:'Im flachen Wasser spiegeln sich Wolken. Weit hinter den Blumen läuft eine Reihe alter Pfähle ins Tal. Am nächsten Pfahl klebt heller Staub, wie auf der Seite im Frachtbuch.'};
 
 /** Zeigt jede Wegmarke zuerst; ein erneuter Druck versucht ihre Mechanik. @param {object} game Spiel. @param {object} object Wegmarke. */
@@ -18,14 +17,9 @@ export function tryRootMark(game,object) {
   game.say('Die Wurzelpforte','Der Stein gibt nach. Über dir rasselt eine Kette. Die Flügel gleiten auseinander und ein heller Luftzug kommt dir entgegen.','success-quest');
 }
 
-/** Hält die Frachtspur im Journal fest. @param {object} game Spiel. */
-export function readWaymakerLedger(game) {
-  game.say(LEDGER.title,LEDGER.text,rememberNote(game,LEDGER)?'pickup':'talk');
-}
-
 /** Beschließt den Waldabschnitt mit einer Beobachtung in der neuen Landschaft. @param {object} game Spiel. */
 export function viewEastMeadow(game) {
-  const known=game.notes.some(/** Erkennt den Frachtbucheintrag. @param {object} note Notiz. */ note=>note.id===LEDGER.id);
+  const known=game.notes.some(/** Erkennt den Frachtbucheintrag. @param {object} note Notiz. */ note=>note.id===WAYMAKER_LEDGER.id);
   const entry=known?VIEW:{...VIEW,text:'Im flachen Wasser spiegeln sich Wolken. Weit hinter den Blumen läuft eine Reihe alter Pfähle ins Tal. Am nächsten Pfahl klebt heller Staub.'};
   rememberNote(game,entry);
   game.say('Die Ostwiesen',entry.text);

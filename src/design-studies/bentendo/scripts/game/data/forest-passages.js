@@ -20,6 +20,7 @@ function isTrail(object) { return object.kind==='trail' && object.action==='trav
 export function passageArea(room,exit) {
   const distances=[exit.x,room.width-1-exit.x,exit.y,room.height-1-exit.y];
   const side=distances.indexOf(Math.min(...distances));
+  if (side===0 && exit.facade) return {x:0,y:exit.y,w:exit.x+1,h:1};
   if (side===0) return {x:0,y:exit.y-1,w:exit.x+1,h:3};
   if (side===1) return {x:exit.x,y:exit.y-1,w:room.width-exit.x,h:3};
   if (side===2) return {x:exit.x-1,y:0,w:3,h:exit.y+1};

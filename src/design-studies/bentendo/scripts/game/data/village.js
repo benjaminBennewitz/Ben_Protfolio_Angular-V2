@@ -39,7 +39,7 @@ function groundAt(x,y) {
   if (x >= 15 && x <= 16 && y <= 8) return '.';
   if (x >= 5 && x <= 33 && y >= 12 && y <= 13) return '.';
   if (x === 16 && y >= 8 && y <= 14) return '.';
-  if (x >= 19 && x <= 21 && y >= 9 && y <= 14) return '.';
+  if (x >= 19 && x <= 22 && y >= 9 && y <= 14) return '.';
   if (x >= 23 && x <= 24 && y >= 12 && y <= 27) return '.';
   if (x >= 27 && x <= 28 && y >= 9 && y <= 12) return '.';
   if (x >= 24 && x <= 29 && y >= 23 && y <= 24) return '.';
@@ -68,7 +68,7 @@ function villageDetails() {
     prop('barrel','Regenfass',7,10,'village-barrel','inspect',{text:'Auf dem Wasser schwimmt ein einzelnes Blatt.'}),
     prop('hitching-post','Anbindepfosten',7,12,'village-post','inspect',{text:'Hier binden Reisende ihre Pferde an. Das Holz ist an den Kanten blank gescheuert.'}),
     prop('north-gate','Höhlen-Sperre',15,1,'gate','mara-north',{text:'GEFAHR: Der Höhlenweg zum Nordwald ist gesperrt. Die Gilde muss den Durchgang erst freigeben. Hilf zunächst den Leuten im Dorf.'}),
-    prop('east-hatch','Wartungsluke am Ostpass',30,10,'east-hatch','east-pump-entry',{w:2,hint:'öffnen'}),
+    prop('east-hatch','Wartungsluke am Mühlenhaus',22,8,'east-hatch','east-pump-entry',{renderDepth:9.1,hint:'öffnen'}),
     prop('waystone-village','Wegmacherstein',31,14,'waystone','waystone',{hint:'Reise prüfen'}),
     prop('east-gate','Ostpass-Sperre',32,12,'gate','east-gate',{h:2,text:'GEFAHR: Der Ostpass ist unsicher. Auf Anordnung der Gilde gesperrt, bis die offenen Aufgaben im Dorf erledigt sind.'}),
   ];

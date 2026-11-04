@@ -67,19 +67,15 @@ function drawCanteen(render,object) {
   rect(render.ctx,1,x+5,y+6,6,7); rect(render.ctx,0,x+6,y+7,1,4);
 }
 
-/** Zeichnet eine geschlossene Wartungsluke bündig im Dorfgrund. @param {object} render Zeicheninformationen. @param {object} object Luke. */
+/** Zeichnet eine geschlossene Wartungsluke eingelassen in die Mühlenfassade. @param {object} render Zeicheninformationen. @param {object} object Luke. */
 function drawHatch(render,object) {
   const {ctx,game}=render,x=object.x*16,y=object.y*16;
-  rect(ctx,2,x+4,y+15,24,4); rect(ctx,1,x+6,y+16,20,2);
-  rect(ctx,3,x+1,y+1,30,15); rect(ctx,2,x+2,y+3,28,11);
-  rect(ctx,3,x+3,y,26,2); rect(ctx,1,x+2,y+2,28,2);
-  for (const dy of [5,10]) { rect(ctx,3,x+3,y+dy,26,1); rect(ctx,1,x+4,y+dy+1,24,1); }
-  rect(ctx,3,x+8,y+5,13,11); rect(ctx,2,x+9,y+6,11,9);
-  for (const dx of [10,13,16,19]) rect(ctx,1,x+dx,y+7,1,7);
-  rect(ctx,3,x+16,y+11,3,2);
-  rect(ctx,3,x+23,y+9,11,4); rect(ctx,3,x+31,y+10,4,20);
-  rect(ctx,game.flags.eastOpen?0:1,x+24,y+10,9,1); rect(ctx,1,x+32,y+12,1,16);
-  rect(ctx,2,x+30,y+14,6,2); rect(ctx,2,x+30,y+24,6,2);
+  rect(ctx,2,x+1,y+1,14,14); rect(ctx,1,x+2,y+2,12,1);
+  rect(ctx,3,x+3,y+3,10,12); rect(ctx,2,x+4,y+4,8,10);
+  for (const dx of [5,8,11]) rect(ctx,1,x+dx,y+5,1,8);
+  rect(ctx,3,x+9,y+9,2,2); rect(ctx,2,x+1,y+14,14,2);
+  rect(ctx,1,x+2,y+14,12,1);
+  rect(ctx,3,x+13,y,2,9); rect(ctx,game.flags.eastOpen?0:1,x+13,y+6,1,2);
 }
 
 /** Verbindet geschlossene Steinflügel, Wurzeln und das alte Warnzeichen. @param {object} render Zeicheninformationen. @param {object} object Pforte. */

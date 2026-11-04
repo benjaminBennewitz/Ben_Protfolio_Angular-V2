@@ -7,7 +7,7 @@ export function eastQuestEntries(game) { return [pumpQuest(game),trailQuest(game
 function pumpQuest(game) {
   const f=game.flags;
   if (!f.eastPumpKnown && !f.eastPumpSurveyed && !f.eastOpen) return null;
-  const clues=['Eine Druckleitung hebt die Sperre am Ostpass. Die Werkstation liegt unmittelbar beim Pass.'];
+  const clues=['Eine Druckleitung hebt die Sperre am Ostpass. Der Zugang zur Werkstation liegt an der Außenwand des Mühlenhauses.'];
   if (f.eastPumpSurveyed) clues.push('Ein Rohrbogen ist eingerissen. Die Ersatzteilfächer tragen das Zeichen der Dorfwerkstatt.');
   if (f.eastSpareTaken) clues.push('Ein passender Ersatzbogen ist aus der Werkstatt mitgenommen.');
   if (f.eastPipeRepaired) clues.push('Der Bogen sitzt dicht. Die sichtbaren Öffnungen müssen den Wasserweg bis zum Kolben verbinden.');

@@ -23,7 +23,7 @@ export function talkMara(game) {
   game.flags.maraStarted=true;
   if (game.flags.maraLowerReported) return talkEastMara(game);
   if (game.flags.maraSpringSurveyed && !game.flags.maraSpringReported) return reportSource(game);
-  if (game.flags.maraLowerMessage) { game.flags.maraLowerReported=true; game.flags.eastPumpKnown=true; refreshMaraJournal(game); return game.say('Mara','Mein Zeichen? Aber diese Nachricht habe ich nicht geschrieben. Der untere Wasserweg führt zum Ostpass. Wir müssen herausfinden, wer dort meine Spuren legt. Bewahre die Nachricht auf. Die Werkstation am Ostpass könnte zeigen, warum der Wasserweg dort endet.'); }
+  if (game.flags.maraLowerMessage) { game.flags.maraLowerReported=true; game.flags.eastPumpKnown=true; refreshMaraJournal(game); return game.say('Mara','Mein Zeichen? Aber diese Nachricht habe ich nicht geschrieben. Der untere Wasserweg führt zum Ostpass. Wir müssen herausfinden, wer dort meine Spuren legt. Bewahre die Nachricht auf. Die Werkstation unter dem Mühlenhaus könnte zeigen, warum der Wasserweg dort endet.'); }
   if (game.flags.maraSpringReported) return game.say('Mara','Auf dem Plan liegt eine Treppe unter dem Becken. Die alte Mechanik wird das Wasser erst freigeben müssen. Auf der Pegelplatte sind sicher noch Wartungsspuren. Und falls du erschöpft zurückkommst: Dein Bett wartet oben in der Schenke.');
   if (game.flags.northOpen) return game.say('Mara','Der Quellstollen ist freigegeben. Am alten Fluttor sind drei Kerben. Schau nach, ob die Markierung noch zum Plan passt. Der Ostpass bleibt vorerst gesperrt.');
   if (hasMaraNote(game,'mara-old-plan')) return reportPlan(game);

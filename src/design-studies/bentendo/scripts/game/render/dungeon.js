@@ -1,4 +1,4 @@
-import { drawKobold } from './root-dungeon.js';
+import { drawRootEnemy,rootEnemyRise } from './root-dungeon.js';
 import { dungeonTile,drawDungeonPillar } from './dungeon-atlas.js';
 import { drawDungeonFurniture } from './dungeon-furniture.js';
 import { drawDungeonGround,drawDungeonWall,drawWeb } from './dungeon-scenery.js';
@@ -19,17 +19,25 @@ export function drawEnemies(render) {
   for (const actor of game.enemies || []) {
     const p=game.reduced?1:1-Math.max(0,actor.walk || 0)/0.2;
     const x=Math.round(((actor.fromX ?? actor.x)+(actor.x-(actor.fromX ?? actor.x))*p)*16),y=Math.round(((actor.fromY ?? actor.y)+(actor.y-(actor.fromY ?? actor.y))*p)*16);
-    const frame=game.reduced?0:Math.floor(game.time*6)%2;
+    const forest=game.room.dungeon==='wurzelgrund';
+    const frame=game.reduced?0:forest?forestStep(p):Math.floor(game.time*6)%2;
+    const markerY=y-(forest?rootEnemyRise(actor.species):0);
     ctx.save(); ctx.translate(x,y);
     if (actor.facing==='left') { ctx.translate(16,0); ctx.scale(-1,1); }
-    if (actor.species==='kobold') drawKobold(ctx,frame);
+    if (forest) drawRootEnemy(ctx,actor.species,actor.facing,frame);
     else ctx.drawImage(assets.dungeonEnemies,ENEMY_ART[actor.species],frame*16,16,16,0,0,16,16);
     ctx.restore();
     if (actor.hp<actor.maxHp || actor.windup>0) {
-      rect(ctx,3,x+1,y-4,14,3); rect(ctx,0,x+2,y-3,Math.ceil(12*actor.hp/actor.maxHp),1);
+      rect(ctx,3,x+1,markerY-4,14,3); rect(ctx,0,x+2,markerY-3,Math.ceil(12*actor.hp/actor.maxHp),1);
     }
-    if (actor.windup>0) { rect(ctx,3,x+7,y-10,2,4); rect(ctx,3,x+7,y-5,2,1); }
+    if (actor.windup>0) { rect(ctx,3,x+7,markerY-10,2,4); rect(ctx,3,x+7,markerY-5,2,1); }
   }
+}
+
+/** Bindet die Bein- und Schwanzbewegung an den Kachelwechsel. @param {number} progress Fortschritt des Schritts. */
+function forestStep(progress) {
+  if (progress>=0.9) return 0;
+  return progress<0.45?1:2;
 }
 
 /** Zeichnet Beutel, Gitter, Nest und Druckplatte mit klar unterschiedlichen Silhouetten. @param {object} render Zeicheninformationen. @param {object} object Einrichtung. */

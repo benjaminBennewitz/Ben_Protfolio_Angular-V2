@@ -28,6 +28,7 @@ function rootRoute() {
   useObject(game,'east'); assert.equal(game.room.id,'root-camp');
   assert.equal(restoreGame(game,captureGame(game)),true);
   assert.equal(game.enemies[0].species,'kobold'); assert.equal(game.enemies[0].hp,4);
+  assert.ok(game.enemies.some(actor=>actor.species==='gorgon'));
   exploreCamp(game);
 }
 

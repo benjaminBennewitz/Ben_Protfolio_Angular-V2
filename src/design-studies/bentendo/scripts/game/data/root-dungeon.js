@@ -28,7 +28,7 @@ function camp() {
       prop('coins','Koboldtruhe',9,3,'chest','chest',{coins:5}),
       prop('aid','Zurückgelassene Tasche',13,5,'chest','chest',{item:'Feldverband'}),
       prop('end','Verwachsener Durchlass',17,8,'sign','inspect',{text:'Hinter den Wurzeln geht der Wald weiter. Hier endet der derzeit spielbare Abschnitt.'}),
-    ],[enemy('camp-kobold-a','kobold',8,4),enemy('camp-kobold-b','kobold',10,5)]);
+    ],[enemy('camp-kobold-a','kobold',8,4),enemy('camp-kobold-b','kobold',10,5),enemy('camp-gorgon','gorgon',14,8)]);
 }
 
 /** Leitet sichtbare Waldkonturen und Kollision aus demselben Grundriss ab. @param {string} id Raumkennung. @param {string} title Raumname. @param {Array} paths Wegflächen. @param {Array} pits Grubenfelder. @param {Array} objects Raumobjekte. @param {Array} enemies Gegner. */

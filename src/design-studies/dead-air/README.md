@@ -239,3 +239,14 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 - Das Fensterereignis auf CAM 01 / 103.7 MHz verursacht einen starken Ausschlag, der langsam abklingt. Bei CAM 02 bleibt sie null; auf CAM 01 zeigt sie das weiterhin sichtbare Fensterflackern an, auch wenn die Frequenz gewechselt wird.
 - Die visuelle Farbcodierung richtet sich ebenfalls nach der momentanen Intensität und nicht nach der erreichten Story-Stufe.
 - Phase 03 (neuer Fund nach der Fensteranomalie) ist noch nicht implementiert und muss erzählerisch/visuell ausgearbeitet werden.
+
+
+## Patch 31 – Autonomous Tuning / First Voice Transmission
+
+- **Nächster Abschnitt nach 103.7 MHz:** Nach 2,8 Sekunden Fensterflackern auf CAM 01 übernimmt die Frequenzsteuerung automatisch den Regler.
+- Der Regler läuft ca. 4,8 Sekunden über 103.7 → 93.8 → 102.6 → 89.9 → **96.4 MHz**; das sind drei Richtungswechsel.
+- Manuelles Tuning und CAM 02 sind während des automatischen Suchlaufs gesperrt. Die Story-Uhr hält beim Pausieren, bei inaktiven Tabs und geöffneten Dialogen an.
+- Nach Empfang erscheint **AUDIO / 001**. Der Dialog zeigt das erste harmlose, scheinbar hilfsbereite Funkfragment mit zunächst unbekanntem Absender. Die Stimme stammt erzählerisch von den dimensionsfremden Wesen; das bleibt dem Spieler verborgen.
+- **Audio selbst ist noch nicht enthalten:** Der Dialog zeigt vorerst nur das Transkript. Keine vorgetäuschte Wiedergabe oder defekter Download. Eine originale Sprecheraufnahme wird in einem späteren Schritt integriert.
+- Neue Hooks: `deadair:autoscanstarted` und `deadair:transmissionreceived`.
+- Fenster-, Morse-, Flaschen- und CAM-Cut-Mechaniken bleiben unverändert; nur die neuen Story-Stufen und dazugehörige Empfangsanzeige wurden ergänzt.

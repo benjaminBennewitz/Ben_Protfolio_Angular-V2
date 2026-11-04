@@ -432,6 +432,22 @@ figure {
   background: #a7bcae;
 }
 
+[data-story='frequency-scan'] .receiver__freq {
+  color: #f0c98d;
+  text-shadow: 0 0 17px rgba(237, 164, 95, .54);
+}
+
+[data-story='frequency-scan'] .receiver__status-led,
+[data-story='transmission-ready'] .receiver__status-led {
+  background: var(--signal-light);
+  box-shadow: 0 0 11px rgba(231, 130, 102, .82);
+}
+
+[data-story='frequency-scan'] #frequency-tuning {
+  opacity: 1;
+  cursor: not-allowed;
+}
+
 .receiver__scale {
   display: flex;
   justify-content: space-between;
@@ -607,6 +623,22 @@ figure {
 .monitor-area__evidence:hover {
   border-color: var(--signal-light);
   color: var(--signal-light);
+}
+
+.monitor-area__transmission {
+  border-color: #bc785c;
+  background: #442c28;
+  color: #ffe0bc;
+  box-shadow: 0 0 16px rgba(210, 103, 68, .16);
+  animation: transmission-found-pulse 2.5s ease-in-out 3;
+}
+
+.monitor-area__transmission:focus-visible {
+  outline-offset: 2px;
+}
+
+[data-paused='true'] .monitor-area__transmission {
+  animation-play-state: paused;
 }
 
 .monitor-area__evidence[hidden] {
@@ -1326,6 +1358,75 @@ figure {
   transition: none;
 }
 
+/* Empfangsarchiv für die erste Tonaufzeichnung. Ohne Fake-Audio-Steuerung,
+   solange noch keine echte Sprecherdatei vorliegt. */
+.transmission-dialog {
+  width: min(540px, calc(100% - 32px));
+  padding: 22px;
+  background: linear-gradient(145deg, #233437, #111b1d 70%);
+}
+
+.transmission-dialog__display {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 62px;
+  margin: 20px 0;
+  padding: 12px 16px;
+  border: 1px solid #395350;
+  background: #091618;
+  color: #b9dbcc;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .07em;
+}
+
+.transmission-dialog__led {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0 0 10px #d7685488;
+}
+
+.transmission-dialog__wave {
+  width: 60px;
+  height: 22px;
+  margin-left: auto;
+  background: repeating-linear-gradient(90deg,
+    transparent 0 4px, #7daca0 4px 6px, transparent 6px 9px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 2%, #000 47%, transparent 98%);
+  mask-image: linear-gradient(180deg, transparent 2%, #000 47%, transparent 98%);
+  opacity: .6;
+}
+
+.transmission-dialog__content h2 {
+  max-width: 14ch;
+  margin: 12px 0 20px;
+  font-family: 'B2 Condensed', Impact, 'Arial Narrow', sans-serif;
+  font-size: clamp(38px, 8vw, 58px);
+  line-height: .97;
+}
+
+.transmission-dialog__content p {
+  margin: 0 0 14px;
+  color: var(--chalk);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.transmission-dialog__content .transmission-dialog__footer {
+  margin: 22px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--edge);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .07em;
+}
+
 /* 08   Zustandswechsel und Animationen */
 
 [data-state='interference'] .scene__fog::before,
@@ -1410,7 +1511,8 @@ figure {
 /* Die Geschichte kontrolliert die Lichtquellen – Frequenzen allein lösen noch keine Ereignisse aus. */
 [data-story='routine'] .scene__window-light,
 [data-story='message-found'] .scene__window-light,
-[data-story='morse-active'] .scene__window-light {
+[data-story='morse-active'] .scene__window-light,
+[data-story='transmission-ready'] .scene__window-light {
   opacity: 1;
   animation: none;
 }
@@ -1432,14 +1534,16 @@ figure {
   animation: mast-code-1037 22s steps(1, end) infinite;
 }
 
-[data-story='windows-event'] .scene__window-light {
+[data-story='windows-event'] .scene__window-light,
+[data-story='frequency-scan'] .scene__window-light {
   animation-name: window-dim;
   animation-duration: 8s;
   animation-timing-function: steps(1, end);
   animation-iteration-count: infinite;
 }
 
-[data-story='windows-event'] .scene__mast-led {
+[data-story='windows-event'] .scene__mast-led,
+[data-story='frequency-scan'] .scene__mast-led {
   animation: mast-led-fault 4s steps(1, end) infinite;
 }
 
@@ -1523,6 +1627,11 @@ figure {
   46%, 63% { opacity: 0; }
   64%, 68% { opacity: .22; transform: translate3d(-1px,0,0) scale(1.01); }
   69%, 100% { opacity: 0; transform: translate3d(0,0,0) scale(1); }
+}
+
+@keyframes transmission-found-pulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(210, 103, 68, 0); }
+  50% { box-shadow: 0 0 14px rgba(210, 103, 68, .5); }
 }
 
 @keyframes fog-bank-distant {
@@ -1900,6 +2009,34 @@ figure {
 
   .monitor-area__header > div {
     display: none;
+  }
+
+  /* Gesicherte Hinweise bleiben auch bei der kompakten Kameraansicht erreichbar. */
+  .monitor-area__header {
+    align-items: center;
+  }
+
+  .monitor-area__header h2 {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .monitor-area__header > .monitor-area__actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: 5px;
+  }
+
+  .monitor-area__actions > .indicator,
+  .monitor-area__actions > [data-i18n='transmitting'] {
+    display: none;
+  }
+
+  .monitor-area__evidence {
+    padding: 3px 5px;
+    font-size: 8px;
   }
 
   .television {

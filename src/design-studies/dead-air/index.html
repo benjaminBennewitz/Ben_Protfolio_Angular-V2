@@ -56,6 +56,7 @@
           <div class="receiver__display">
             <div class="receiver__freq"><output id="frequency-output">87.6</output><span id="frequency-unit">MHz</span></div>
             <div class="receiver__status"><span id="status-output">STABLE FEED</span><span class="receiver__status-led" aria-hidden="true"></span></div>
+            <span id="receiver-event-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></span>
             <div class="receiver__scale" aria-hidden="true"><span>87</span><span>90</span><span>94</span><span>98</span><span>102</span></div>
           </div>
           <div class="tuning-control">
@@ -76,7 +77,7 @@
       </section>
 
       <section class="monitor-area" aria-labelledby="monitor-title">
-        <div class="monitor-area__header"><h2 id="monitor-title">CAMERA 01 <span>//</span> NORTH COAST FEED</h2><div class="monitor-area__actions"><button id="evidence-log" class="monitor-area__evidence" type="button" aria-controls="message-dialog" aria-haspopup="dialog" hidden>AKTE / 01</button><span class="indicator indicator--red" aria-hidden="true"></span> <span data-i18n="transmitting">ÜBERTRAGUNG AKTIV</span></div></div>
+        <div class="monitor-area__header"><h2 id="monitor-title">CAMERA 01 <span>//</span> NORTH COAST FEED</h2><div class="monitor-area__actions"><button id="evidence-log" class="monitor-area__evidence" type="button" aria-controls="message-dialog" aria-haspopup="dialog" hidden>AKTE / 01</button><button id="transmission-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 001</button><span class="indicator indicator--red" aria-hidden="true"></span> <span data-i18n="transmitting">ÜBERTRAGUNG AKTIV</span></div></div>
         <div class="television" role="group" aria-label="Analoger Monitor mit Küstenübertragung und Signalstörungen">
           <div class="television__badge"><span>NCBS</span><span>MODEL 1993–C</span></div>
           <div class="television__screen">
@@ -138,6 +139,26 @@
           </div>
           <p class="artifact-note__footer" id="message-footer">KEIN DATUM · KEINE UNTERSCHRIFT</p>
         </article>
+      </div>
+    </dialog>
+
+    <dialog class="artifact-dialog transmission-dialog" id="transmission-dialog" aria-labelledby="transmission-title" aria-describedby="transmission-line-1">
+      <div class="artifact-dialog__header">
+        <span class="eyebrow" id="transmission-meta">NCBS / UNBEKANNTER EMPFANG</span>
+        <button class="artifact-dialog__close" id="transmission-close" type="button" aria-label="Schließen">×</button>
+      </div>
+      <div class="transmission-dialog__display" aria-hidden="true">
+        <span class="transmission-dialog__led"></span>
+        <span id="transmission-frequency">96.4 MHz / AUFZEICHNUNG 001</span>
+        <span class="transmission-dialog__wave"></span>
+      </div>
+      <div class="transmission-dialog__content">
+        <span class="eyebrow" id="transmission-transcript-label">TRANSKRIPT / EMPFANGENES FRAGMENT</span>
+        <h2 id="transmission-title">EINE STIMME IM RAUSCHEN.</h2>
+        <p id="transmission-line-1">…hier ist die Küstenleitstelle. Ist noch jemand an der Station?</p>
+        <p id="transmission-line-2">Wir haben den letzten Funkspruch gefunden. Es fehlt nur die Rückmeldung.</p>
+        <p id="transmission-line-3">Halten Sie die Frequenz frei. Wir versuchen, den Rest zu übertragen.</p>
+        <p id="transmission-footer" class="transmission-dialog__footer">ABSENDER UNBESTÄTIGT · TRANSKRIPT REKONSTRUIERT</p>
       </div>
     </dialog>
 

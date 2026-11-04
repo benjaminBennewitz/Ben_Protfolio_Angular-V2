@@ -1,4 +1,4 @@
-import { tryRootMark,viewEastMeadow,inspectMeadowStream,inspectMeadowStone,talkMeadowResident } from './east-meadow.js';
+import { tryRootMark,viewEastMeadow,inspectMeadowStream,inspectMeadowStone,talkMeadowResident,tryLowlandGate } from './east-meadow.js';
 import { openRestMenu } from './rest-menu.js';
 import { respectNightRest } from './daily-life.js';
 import { openForestShortcut,talkForestTraveller } from './forest-return.js';
@@ -33,6 +33,7 @@ function inspect(game, object) {
 function travel(game, object) { if (object.requiresFlag && !game.flags[object.requiresFlag]) return game.say(object.name,'Der Weg ist von hier aus noch nicht erreichbar.','ui-denied'); if (respectNightRest(game,object)) return; game.travel(object.to, object.spawn); }
 
 export const ACTIONS = {
+  'lowland-gate':tryLowlandGate,
   'meadow-stream-look':inspectMeadowStream,'meadow-stream-stone':inspectMeadowStone,'meadow-stream-talk':talkMeadowResident,
   'east-root-mark':tryRootMark,'east-meadow-view':viewEastMeadow,
   'east-shortcut':openForestShortcut,'east-traveller':talkForestTraveller,

@@ -42,6 +42,7 @@ function southMeadow() {
 function lowland() {
   const objects=[
     prop('lowland-return','Zurück zu den Ostwiesen',1,9,'trail','travel',{to:'east-meadow',spawn:[31,9],trailFacing:'left'}),
+    prop('lowland-gate','Verschnürtes Weggitter',16,9,'lowland-gate','lowland-gate',{hint:'Seil prüfen',hiddenBy:'eastLowlandGateOpen'}),
     prop('lowland-tracks','Alter Landesteg',13,10,'sign','inspect',{text:'Eine Schleifspur endet an einem losen Tau. Auf dem Holz liegt derselbe helle Staub wie auf den Pfählen der Wiese.'}),
   ];
   const trees=[[2,2],[6,2,'pine'],[12,2],[15,3],[2,14],[14,12,'pine']];
@@ -69,7 +70,8 @@ function outskirts(id,title,height,spawn,trees,objects,channel=[]) {
 /** Legt zusammenhängende Grasflächen und Fußwege zwischen den Zugängen. @param {number} x Spalte. @param {number} y Zeile. @param {string} id Gebiet. @param {object[]} gardens Wiesenflächen. @param {Array} channel Bachlauf. */
 function outskirtsCell(x,y,id,gardens,channel) {
   for (const [cx,cy] of channel) if (x===cx && y===cy) return 'k';
-  if (id==='east-lowland' && y===9 && x<=13 || id==='east-south-meadow' && (x===9 && y<=7 || y===7 && x>=9 && x<=11)) return '.';
+  if (id==='east-lowland' && x===16 && y!==9) return 'r';
+  if (id==='east-lowland' && y===9 || id==='east-south-meadow' && (x===9 && y<=7 || y===7 && x>=9 && x<=11)) return '.';
   for (const g of gardens) if (((x-g.x+0.5)/g.w-0.5)**2+((y-g.y+0.5)/g.h-0.5)**2<0.23) return g.kind;
   return 'g';
 }

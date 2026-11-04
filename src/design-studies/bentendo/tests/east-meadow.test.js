@@ -175,3 +175,19 @@ function debugLoadout() {
 }
 
 test('Debug: beide Ostwiesen-Einstiege bringen ein Schwert mit und lassen das Wehr ungelöst',debugLoadout);
+
+/** Prüft die stumpfe Klinge und den späteren Zugang mit geschärftem Schwert. */
+function lowlandGate() {
+  const game=world(); game.travel('east-lowland'); game.inventory.push('Rostiges Schwert');
+  useObject(game,'lowland-gate'); dismiss(game);
+  assert.equal(game.flags.eastLowlandGateOpen,undefined);
+  assert.equal(game.occupied(16,9),true);
+  assert.ok(game.sounds.includes('ui-denied'));
+  game.inventory[0]='Geschärftes Schwert';
+  useObject(game,'lowland-gate'); dismiss(game);
+  assert.equal(game.flags.eastLowlandGateOpen,true);
+  assert.equal(game.occupied(16,9),false);
+  assert.deepEqual(game.inventory,['Geschärftes Schwert']);
+}
+
+test('Bachniederung: nur eine geschärfte Klinge öffnet das verschnürte Weggitter',lowlandGate);

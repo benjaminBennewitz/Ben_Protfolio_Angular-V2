@@ -35,7 +35,7 @@ export function drawPipeBoard(render) {
 
 /** Zeichnet neue Requisiten über kleine, getrennte Darstellungsfunktionen. @param {object} render Zeicheninformationen. @param {object} object Raumelement. */
 export function drawEastProp(render,object) {
-  const draw={'east-canteen':drawCanteen,'east-pipe':drawPipe,'east-hatch':drawHatch,'east-root-door':drawRootDoor,'east-root-mark':drawRootMark,'east-meadow-view':drawMeadowPost,'meadow-lever-stone':drawMeadowLeverStone}[object.kind];
+  const draw={'east-canteen':drawCanteen,'east-pipe':drawPipe,'east-hatch':drawHatch,'east-root-door':drawRootDoor,'east-root-mark':drawRootMark,'east-meadow-view':drawMeadowPost,'meadow-lever-stone':drawMeadowLeverStone,'lowland-gate':drawLowlandGate}[object.kind];
   if (draw) { draw(render,object); return true; }
   return ['east-cylinder','meadow-weir','meadow-pontoon'].includes(object.kind);
 }
@@ -126,4 +126,14 @@ function drawMeadowPost(render,object) {
   const {ctx}=render,x=object.x*16,y=object.y*16;
   rect(ctx,2,x+5,y+13,8,2); rect(ctx,3,x+6,y+4,5,10);
   rect(ctx,1,x+7,y+5,2,8); rect(ctx,0,x+7,y+8,2,2);
+}
+
+
+/** Zeichnet das Seil vor den Holzlatten, damit die Sperre auf dem LCD erkennbar ist. @param {object} render Zeicheninformationen. @param {object} object Weggitter. */
+function drawLowlandGate(render,object) {
+  const {ctx}=render,x=object.x*16,y=object.y*16;
+  rect(ctx,3,x+3,y+2,10,2); rect(ctx,3,x+3,y+11,10,2);
+  for (const offset of [3,7,11]) { rect(ctx,3,x+offset,y,2,15); rect(ctx,2,x+offset,y+1,1,12); }
+  rect(ctx,3,x+2,y+5,12,5); rect(ctx,0,x+2,y+6,12,1); rect(ctx,1,x+2,y+8,12,1);
+  rect(ctx,0,x+10,y+5,2,4);
 }

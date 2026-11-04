@@ -61,3 +61,15 @@ export function talkMeadowResident(game,object) {
   game.flags.eastLeneMet=true;
   game.say(object.name,game.flags.eastStreamOpen?'Hörst du das? Jetzt hört man den Bach wieder bis ins hohe Gras.':'Früher hab ich am Bach gesessen, wenn es am See zu laut war. Die alte Brücke schaukelte bei jedem Schritt.');
 }
+
+
+/** Prüft die Schneide am gespannten Hanfseil. @param {object} game Spiel. */
+export function tryLowlandGate(game) {
+  if (game.flags.eastLowlandGateOpen) return;
+  if (game.inventory.includes('Geschärftes Schwert')) {
+    game.flags.eastLowlandGateOpen=true;
+    return game.say('Weggitter','Die scharfe Klinge trennt das Seil. Das Gitter schwingt zur Seite.','success-small');
+  }
+  if (game.inventory.includes('Rostiges Schwert')) return game.say('Weggitter','Du setzt das Schwert an. Die stumpfe Klinge bleibt in den Fasern hängen. Die Schneide braucht einen neuen Schliff.','ui-denied');
+  game.say('Weggitter','Ein straff gespanntes Hanfseil hält das Gitter zu. Der Knoten sitzt auf der anderen Seite.');
+}

@@ -4,7 +4,7 @@ import { drawDungeonGround,drawDungeonWall,drawWeb } from './dungeon-scenery.js'
 import { drawDungeonPassage } from './dungeon-passages.js';
 import { rect } from './primitives.js';
 
-const ENEMY_ART={spider:624,beetle:640,snake:528};
+const ENEMY_ART={spider:0,beetle:16,snake:32};
 
 /** Zeichnet native Steinplatten, echte Wandabschlüsse und sparsame Spinnennetze. @param {object} render Zeicheninformationen. @param {number} x Spalte. @param {number} y Zeile. */
 export function drawDungeonCell(render,x,y) {
@@ -21,7 +21,7 @@ export function drawEnemies(render) {
     const frame=game.reduced?0:Math.floor(game.time*6)%2;
     ctx.save(); ctx.translate(x,y);
     if (actor.facing==='left') { ctx.translate(16,0); ctx.scale(-1,1); }
-    ctx.drawImage(assets.villagers,ENEMY_ART[actor.species],frame*16,16,16,0,0,16,16); ctx.restore();
+    ctx.drawImage(assets.dungeonEnemies,ENEMY_ART[actor.species],frame*16,16,16,0,0,16,16); ctx.restore();
     if (actor.hp<actor.maxHp || actor.windup>0) {
       rect(ctx,3,x+1,y-4,14,3); rect(ctx,0,x+2,y-3,Math.ceil(12*actor.hp/actor.maxHp),1);
     }

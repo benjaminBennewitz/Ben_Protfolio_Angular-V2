@@ -85,7 +85,7 @@ function visiblePassages() {
 
 /** Hält die gesamte Waldregion auf einem vorhandenen eigenen Track und bewahrt die Werkstationsmusik. */
 function forestMusic() {
-  const rooms=createEastRooms(),woods=rooms.filter(landscape);
+  const rooms=createEastRooms(),woods=rooms.filter(forestLandscape);
   assert.equal(woods.length,6);
   for (const room of woods) assert.equal(room.music,'forest-canopy');
   assert.equal(rooms.find(pump).music,'maras-quellplan');
@@ -95,6 +95,9 @@ function forestMusic() {
 
 /** Erkennt die tatsächlich dargestellten Waldgebiete. @param {object} room Raum. */
 function landscape(room) { return room.villageLandscape; }
+
+/** Zählt nur Waldgebiete; die Ostwiesen nutzen denselben Landschaftsrenderer. @param {object} room Raum. */
+function forestLandscape(room) { return landscape(room) && !room.shallows; }
 
 /** Erkennt die unveränderte Werkstation. @param {object} room Raum. */
 function pump(room) { return room.id==='east-pump'; }

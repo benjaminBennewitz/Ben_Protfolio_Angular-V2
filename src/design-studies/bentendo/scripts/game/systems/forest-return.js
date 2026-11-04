@@ -38,7 +38,8 @@ export function forestReturnObjects(game,objects) {
   for (const object of objects) {
     if (object.id==='forest-traveller' && !game.flags.eastDoorStudied) continue;
     if (object.id==='forest-shortcut' && !game.flags.eastDoorStudied) continue;
-    if (object.id==='dead-end' && game.room.id==='east-crossroads' && game.flags.eastShortcutOpen) result.push(shortcut(object,'east-thicket',[17,18]));
+    if (object.id==='root-door' && game.flags.eastRootOpen) result.push({...object,action:'travel',to:'east-waystation',hint:'hindurchgehen'});
+    else if (object.id==='dead-end' && game.room.id==='east-crossroads' && game.flags.eastShortcutOpen) result.push(shortcut(object,'east-thicket',[17,18]));
     else if (object.id==='forest-shortcut' && game.flags.eastShortcutOpen) result.push(shortcut(object,'east-crossroads',[17,17]));
     else result.push(object);
   }
@@ -59,8 +60,10 @@ function shortcut(object,to,spawn) { return {...object,kind:'trail',action:'trav
 /** Lässt den müden Reisenden Beobachtungen statt einer direkten Questlösung teilen. @param {object} game Spiel. */
 export function talkForestTraveller(game) {
   const first=rememberNote(game,{id:'east-traveller',title:'Ein Ruf im Abendwald',text:'Der Reisende Tamo hörte seinen Namen aus Richtung der Wurzelpforte. Dort war niemand zu sehen. Eine Gestalt hatte zuvor eine abgedeckte Kiste am Waldrand vorbeigetragen; eine Laterne hing daran, obwohl es noch hell war.'});
+  const cloth=rememberNote(game,{id:'east-traveller-cloth',title:'Tamos Beobachtung',text:'An der Laterne der Gestalt mit der Kiste hing ein grauer Lappen. Als die Gestalt an den Dornen vorbeiging, hörte Tamo Stoff reißen.'});
   game.flags.eastTravellerMet=true;
-  game.say('Reisender Tamo',first?'Ich wollte längst im Dorf sein. Dann rief jemand meinen Namen, drüben bei den alten Steinen. Ich kenne hier niemanden. Vorher kam einer mit einer abgedeckten Kiste vorbei. Eine Laterne hing daran. Mitten am hellen Tag ... Jetzt bleibe ich lieber am offenen Weg.':'Seit es dunkel wird, halte ich mich an die alten Forstpfähle. Unter den Dornen liegt noch ein alter Steig zur Raststelle. Von hier aus sitzen seine Zweige fest.');
+  const observation='An der Laterne hing ein grauer Lappen. Bei den Dornen hat es kurz gerissen. Ich dachte erst, es wäre nur ein Ast.';
+  game.say('Reisender Tamo',first?'Ich wollte längst im Dorf sein. Dann rief jemand meinen Namen, drüben bei den alten Steinen. Ich kenne hier niemanden. Vorher kam einer mit einer abgedeckten Kiste vorbei. Eine Laterne hing daran, mitten am hellen Tag. '+observation:cloth?observation:'Seit es dunkel wird, halte ich mich an die alten Forstpfähle. Unter den Dornen liegt noch ein alter Steig zur Raststelle. Von hier aus sitzen seine Zweige fest.');
 }
 
 /** Plant seltene Waldlaute ausschließlich während aktiver dunkler Außenzeit. @param {object} game Spiel. @param {number} dt Aktive Sekunden. */

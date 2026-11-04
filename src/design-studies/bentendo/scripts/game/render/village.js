@@ -1,3 +1,4 @@
+import { drawShallows,drawShallowRipples } from './shallow-water.js';
 import { drawSleepingPet } from './sleeping-pets.js';
 import { minuteOfDay,nightShade } from '../systems/world-clock.js';
 import { drawEastProp,drawEastRock } from './east.js';
@@ -14,7 +15,7 @@ const floors = new WeakMap();
 
 /** Zeichnet den Dorfabschnitt mit nach Fußpunkten sortierten Ebenen. @param {object} render Zeicheninformationen. @param {object} player Interpolierte Spielfigur. */
 export function drawVillage(render,player) {
-  drawGround(render); drawMeadow(render); drawWaterfall(render);
+  drawGround(render); drawMeadow(render); drawWaterfall(render); drawShallowRipples(render,player);
   const entries = [];
   for (const tree of render.game.room.trees) entries.push({type:'tree',x:tree[0],y:tree[1],pine:tree[2]==='pine',depth:tree[1]+2});
   for (const bird of render.game.room.birds) if (nightShade(minuteOfDay(render.game))<0.15) entries.push({...bird,type:'perch',animal:'bird',depth:bird.treeY+2.01});
@@ -62,6 +63,7 @@ function drawCell(render,x,y) {
   if (kind==='r' && render.game.room.villageLandscape) return drawEastRock(render,x,y);
   if (kind==='g' || kind==='e') return drawBareGround(render,x,y,kind);
   if (kind==='r' || kind==='c') return drawNorthCell(render,x,y);
+  if (kind==='s') return drawShallows(render,x,y);
   if (kind === 'w' || kind === 'b') return drawCanal(render,x,y,kind);
   if (kind === 'p') return render.ctx.drawImage(render.assets.villageTiles,0,240,16,16,xx,yy,16,16);
   if (kind === '.') {

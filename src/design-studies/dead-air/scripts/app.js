@@ -291,10 +291,8 @@ function updateSourceDescription() {
   document.querySelector('#scene').setAttribute('aria-label', texts[scene.source === 'artwork' ? 'sceneArtworkAria' : 'sceneVideoAria']);
 }
 
-/** Wechselt zwischen Stationskamera und bewegtem Küstenfeed. */
-function setSource(source) {
-  if (source !== 'artwork' && source !== 'video') return;
-
+/** Übernimmt die Quellenumschaltung ohne sichtbaren Übergang. */
+function applySource(source) {
   scene.source = source;
   root.dataset.source = source;
   document.querySelectorAll('[data-source]').forEach(button => {
@@ -307,6 +305,33 @@ function setSource(source) {
   progressStory();
   maybeStartBottleReveal();
   void syncVideo();
+}
+
+/** Wechselt hart zwischen Stationskamera und bewegtem Küstenfeed.
+ * Ein kurzer Schwarzbild-/Signalglitch kaschiert Lade- oder Umschaltartefakte. */
+function setSource(source, hardCut = true) {
+  if (source !== 'artwork' && source !== 'video') return;
+  if (source === scene.source) return;
+
+  if (!hardCut) {
+    applySource(source);
+    return;
+  }
+
+  window.clearTimeout(scene.switchTimers.phaseId);
+  window.clearTimeout(scene.switchTimers.endId);
+  root.dataset.switching = 'true';
+  root.dataset.switchPhase = 'cut';
+
+  scene.switchTimers.phaseId = window.setTimeout(() => {
+    applySource(source);
+    root.dataset.switchPhase = 'recover';
+  }, 72);
+
+  scene.switchTimers.endId = window.setTimeout(() => {
+    root.dataset.switching = 'false';
+    root.dataset.switchPhase = 'idle';
+  }, 168);
 }
 
 /** Spiegelt den Wiedergabezustand im Button und für Assistenztechnologien. */

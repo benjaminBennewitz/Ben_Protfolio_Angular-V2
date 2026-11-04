@@ -172,3 +172,18 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 - Die Flasche materialisiert erst, wenn CAM 02 nach Ablauf von 15 Sekunden aktiver Laufzeit tatsächlich sichtbar ist. Kein übertriebener Zoom, kein dauerhaftes Schweben nach dem Reveal.
 - `coast-loop.mp4` wurde mit FFmpeg `vidstabdetect` / `vidstabtransform` im Tripod-Modus stabilisiert und als H.264 erneut gespeichert. Der Felsbereich bleibt nun über die 12 Sekunden weitgehend ortsfest (in einer Stichprobe verringerte sich die horizontale Abweichung von 22 auf 3 Pixel); die Brandung bewegt sich weiterhin. Die Stabilisierung kann den Bildrand geringfügig beschneiden.
 - `scene` verwendet `role=group` statt `role=img`, damit die interaktive Flaschenpost für Screenreader nicht als dekorativer Bildinhalt versteckt wird.
+
+
+## Patch 24 – Window Layer Depth Fix
+
+- Die dunkle Fenster-Ebene (`scene__window-lights`) wurde von `z-index: 4` auf `z-index: 1` verschoben.
+- Dadurch liegen die gedimmten Fenster wieder hinter dem atmosphärischen Nebel und nicht mehr fälschlich darüber.
+- Keine Änderung an Story-Logik, Video oder Flaschenpost-Ablauf.
+
+
+## Patch 25 – Hard Camera Cuts
+
+- Die weiche Überblendung zwischen CAM 01 und CAM 02 wurde entfernt.
+- Artwork, Video und Quell-nebel schalten jetzt ohne Crossfade um.
+- Beim Kamerawechsel liegt kurz ein harter Schwarzbild-/Signalglitch über dem Monitor, angelehnt an alte portable TV-Geräte der 80er/90er.
+- Das Küstenvideo wird beim Start einmal vorgeladen, damit der erste Wechsel robuster ist.

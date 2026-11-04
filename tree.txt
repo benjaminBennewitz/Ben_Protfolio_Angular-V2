@@ -557,7 +557,8 @@ folio/
 │   │   │   │   │   ├── npcs/
 │   │   │   │   │   │   └── 5yvalia-samples.png
 │   │   │   │   │   ├── explorer.png
-│   │   │   │   │   └── goblin.png
+│   │   │   │   │   ├── goblin.png
+│   │   │   │   │   └── quell-enemies.png
 │   │   │   │   ├── tiles/
 │   │   │   │   │   ├── Old Tilesets/
 │   │   │   │   │   │   ├── Dungeons (GameboyBW).png
@@ -736,6 +737,7 @@ folio/
 │   │   │   │   │   │   ├── discoveries.js
 │   │   │   │   │   │   ├── dungeon-furniture.js
 │   │   │   │   │   │   ├── dungeon-layouts.js
+│   │   │   │   │   │   ├── east-meadow.js
 │   │   │   │   │   │   ├── east-pipes.js
 │   │   │   │   │   │   ├── east-rooms.js
 │   │   │   │   │   │   ├── forest-passages.js
@@ -790,6 +792,7 @@ folio/
 │   │   │   │   │   │   ├── quests.js
 │   │   │   │   │   │   ├── save-indicator.js
 │   │   │   │   │   │   ├── seated-guest.js
+│   │   │   │   │   │   ├── shallow-water.js
 │   │   │   │   │   │   ├── sleeping-pets.js
 │   │   │   │   │   │   ├── speech-bubble.js
 │   │   │   │   │   │   ├── system-menu.js
@@ -813,6 +816,7 @@ folio/
 │   │   │   │   │   │   ├── dungeon.js
 │   │   │   │   │   │   ├── dungeon-combat.js
 │   │   │   │   │   │   ├── dungeon-migrations.js
+│   │   │   │   │   │   ├── east-meadow.js
 │   │   │   │   │   │   ├── east-story.js
 │   │   │   │   │   │   ├── fetch-path.js
 │   │   │   │   │   │   ├── forest-return.js
@@ -873,6 +877,7 @@ folio/
 │   │   │   │   ├── dog-fetch.test.js
 │   │   │   │   ├── dungeon-layouts.test.js
 │   │   │   │   ├── dungeon-polish.test.js
+│   │   │   │   ├── east-meadow.test.js
 │   │   │   │   ├── east-story.test.js
 │   │   │   │   ├── forest-edge.test.js
 │   │   │   │   ├── forest-evening.test.js

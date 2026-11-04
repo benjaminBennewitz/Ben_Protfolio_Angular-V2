@@ -21,7 +21,7 @@ export function drawPipeBoard(render) {
 
 /** Zeichnet neue Requisiten über kleine, getrennte Darstellungsfunktionen. @param {object} render Zeicheninformationen. @param {object} object Raumelement. */
 export function drawEastProp(render,object) {
-  const draw={'east-canteen':drawCanteen,'east-pipe':drawPipe,'east-hatch':drawHatch,'east-root-door':drawRootDoor}[object.kind];
+  const draw={'east-canteen':drawCanteen,'east-pipe':drawPipe,'east-hatch':drawHatch,'east-root-door':drawRootDoor,'east-root-mark':drawRootMark,'east-meadow-view':drawMeadowPost}[object.kind];
   if (draw) { draw(render,object); return true; }
   return object.kind==='east-cylinder';
 }
@@ -45,7 +45,12 @@ function drawHatch(render,object) {
 function drawRootDoor(render,object) {
   const {ctx,assets}=render,x=object.x*16,y=object.y*16;
   for (const dx of [0,16]) for (const dy of [0,16]) ctx.drawImage(assets.dungeonTiles,64,0,16,16,x+dx,y+dy,16,16);
-  rect(ctx,3,x+7,y+8,18,24); rect(ctx,1,x+9,y+10,14,22); rect(ctx,3,x+15,y+10,1,22);
+  rect(ctx,3,x+6,y+8,20,24);
+  if (render.game.flags.eastRootOpen) {
+    rect(ctx,2,x+8,y+10,16,22); rect(ctx,1,x+10,y+12,12,20);
+    rect(ctx,0,x+12,y+15,8,14); rect(ctx,1,x+6,y+30,20,2); return;
+  }
+  rect(ctx,1,x+9,y+10,14,22); rect(ctx,3,x+15,y+10,1,22);
   for (const dx of [2,16,27]) { rect(ctx,3,x+dx,y,2,24-dx%7); rect(ctx,1,x+dx+1,y,1,20-dx%7); }
   for (const yy of [17,20,23]) rect(ctx,3,x+10,y+yy,3,1);
 }
@@ -66,4 +71,26 @@ function drawPipeArm(ctx,x,y,port,wet) {
   const [dx,dy]=PIPE_STEPS[port],xx=x+(dx<0?0:dx>0?8:4),yy=y+(dy<0?0:dy>0?8:4);
   rect(ctx,3,xx,yy,8,8); rect(ctx,2,xx+(dx?0:1),yy+(dy?0:1),dx?8:6,dy?8:6);
   rect(ctx,wet?0:1,xx+(dx?0:3),yy+(dy?0:3),dx?8:2,dy?8:2);
+}
+
+/** Stellt drei unterscheidbare Kerbmuster auf freistehenden Steinen dar. @param {object} render Zeicheninformationen. @param {object} object Wegmarke. */
+function drawRootMark(render,object) {
+  const {ctx}=render,x=object.x*16,y=object.y*16;
+  rect(ctx,2,x+2,y+12,13,3); rect(ctx,3,x+3,y+5,11,8); rect(ctx,3,x+5,y+3,7,2);
+  rect(ctx,1,x+4,y+5,9,6); rect(ctx,1,x+6,y+4,5,1);
+  if (object.index===0) {
+    rect(ctx,0,x+6,y+7,5,1); rect(ctx,0,x+10,y+6,1,3); return;
+  }
+  if (object.index===1) {
+    for (const yy of [6,8,10]) rect(ctx,3,x+6,y+yy,5,1);
+    rect(ctx,3,x+8,y+7,1,3); return;
+  }
+  for (const [dx,dy] of [[8,6],[6,8],[10,8],[8,10]]) rect(ctx,3,x+dx,y+dy,1,1);
+}
+
+/** Zeichnet einen verwitterten Pfahl mit dem hellen Frachtstaub. @param {object} render Zeicheninformationen. @param {object} object Aussichtspunkt. */
+function drawMeadowPost(render,object) {
+  const {ctx}=render,x=object.x*16,y=object.y*16;
+  rect(ctx,2,x+5,y+13,8,2); rect(ctx,3,x+6,y+4,5,10);
+  rect(ctx,1,x+7,y+5,2,8); rect(ctx,0,x+7,y+8,2,2);
 }

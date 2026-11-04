@@ -1,3 +1,4 @@
+import { addRootMarks,createMeadowRooms } from './east-meadow.js';
 import { openForestPassages } from './forest-passages.js';
 import { createForestSections } from './forest-sections.js';
 import { prop } from './town.js';
@@ -47,5 +48,6 @@ export function createEastRooms() {
   edge.birds=[{x:6,y:2,treeY:2,facing:'left'}];
   edge.objects.push(prop('rest-bench','Alte Rastbank',7,12,'village-bench','inspect',{w:2,text:'Unter der Lehne steht ein eingeritztes E. Am Holz klebt noch ein grauer Faden.'}));
   edge.objects.push(prop('forest-squirrel','Eichhörnchen',15,15,'wildlife','inspect',{animal:'squirrel',route:[[15,15],[16,15],[16,16],[15,16]],text:'Es versteckt eine Nuss und tut so, als hättest du nichts gesehen.'}));
-  return [pumpRoom(),edge,...createForestSections(),clearing];
+  addRootMarks(clearing);
+  return [pumpRoom(),edge,...createForestSections(),clearing,...createMeadowRooms()];
 }

@@ -12,10 +12,10 @@ export function enterEastPump(game) {
 /** Hält die nächste Geschichte auch für bereits abgeschlossene ältere Spielstände erreichbar. @param {object} game Spiel. */
 export function talkEastMara(game) {
   game.flags.eastPumpKnown=true;
-  if (game.flags.eastTrailReported) return game.say('Mara','Eine durchgestrichene Kerbe. Das ist kein Kartenzeichen, sondern eine Warnung der alten Wegmacher. Hinter der Wurzelpforte liegt ihr Gewölbe. Ich vergleiche die Zeichen mit den Chroniken. Geh nicht unvorbereitet an diese Tür.');
+  if (game.flags.eastTrailReported) return game.say('Mara','Eine durchgestrichene Kerbe. Das ist kein Kartenzeichen, sondern eine Warnung der alten Wegmacher. Hinter der Wurzelpforte liegt ihr Gewölbe. In der Chronik steht, dass die Wegmacher bewegliche Steine am Rand glatt schliffen. Kreide hätte darauf kaum gehalten.');
   if (game.flags.eastTrailDone) {
     game.flags.eastTrailReported=true; game.coins+=6;
-    return game.say('Mara','Edas Beobachtungen passen zu deinen Funden: Der Pfeil zum Bach war eine falsche Fährte. Jemand brachte eine Kiste zur Wurzelpforte und benutzte dabei mein Zeichen. Die durchgestrichene Kerbe gehört den alten Wegmachern. Sechs Münzen für deine sorgfältigen Notizen. Ich suche ihre Chronik.','success-quest');
+    return game.say('Mara','Edas Beobachtungen passen zu deinen Funden: Der Pfeil zum Bach war eine falsche Fährte. Jemand brachte eine Kiste zur Wurzelpforte und benutzte dabei mein Zeichen. Die durchgestrichene Kerbe gehört den alten Wegmachern. Sechs Münzen für deine sorgfältigen Notizen. In ihrer Chronik steht, dass die Wegmacher bewegliche Steine am Rand glatt schliffen.','success-quest');
   }
   if (game.flags.eastOpen) return game.say('Mara','Der Ostpass ist offen. Früher hielt Eda die Waldwege frei. Vielleicht hat sie mehr gesehen als die Händler. Beim Kopieren eines Zeichens verrät die Hand manchmal mehr als das Zeichen selbst.');
   return game.say('Mara','Der Wasserweg aus dem Nest endet an der alten Werkstation beim Ostpass. Der Passriegel wird mit Wasserdruck gehoben. Seit die Leitung versagte, kam niemand mehr hinaus. Am Schrank klebt das Werkstattzeichen. Vielleicht weiß die Gesellin noch, was dort repariert wurde.');

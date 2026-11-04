@@ -6,6 +6,8 @@ import { createVillageInteriors } from '../scripts/game/data/house-rooms.js';
 import { createEastRooms } from '../scripts/game/data/east-rooms.js';
 import { minuteOfDay,dayPhase,nightShade } from '../scripts/game/systems/world-clock.js';
 import { captureGame,restoreGame } from '../scripts/game/systems/save-state.js';
+import { knowsNote } from '../scripts/game/data/quest-helpers.js';
+import { eastQuestEntries } from '../scripts/game/data/quest-east.js';
 import { sleepInBed } from '../scripts/game/systems/health.js';
 
 /** Lädt den Wald und das eigene Bett mit echter Lauf- und Speicherlogik. */
@@ -138,3 +140,19 @@ function travellerGreeting() {
 
 test('Tür: Untersuchung bleibt vor dem neunsekündigen Abendübergang frei lesbar',readBeforeEvening);
 test('Tamo: gemeinsamer Rückweg, sichtbarer Gruß und Vorrang des Gesprächs',travellerGreeting);
+
+/** Gibt auch bestehenden Spielständen die Beobachtung, ohne den Stofffund zu verbuchen. */
+function travellerClothClue() {
+  const game=world(); game.flags.eastDoorStudied=true; game.travel('east-crossroads');
+  game.flags.eastTravellerMet=true;
+  game.notes.push({id:'east-traveller',title:'Ein Ruf im Abendwald',text:'Tamo hörte einen Ruf.'});
+  useObject(game,'forest-traveller'); dismiss(game);
+  const count=game.notes.length; useObject(game,'forest-traveller');
+  assert.equal(game.notes.length,count); assert.ok(knowsNote(game,'east-traveller-cloth'));
+  assert.ok(!knowsNote(game,'east-ribbon'));
+  const [quest]=eastQuestEntries(game); assert.equal(quest.id,8);
+  assert.match(quest.clues.join(' '),/Laterne/);
+  assert.equal(quest.ready,false); assert.equal(quest.done,false);
+}
+
+test('Tamo: Beobachtung ergänzt auch alte Spielstände und ersetzt keinen Fund',travellerClothClue);

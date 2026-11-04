@@ -51,6 +51,6 @@ function nest() {
   result.boss=true; result.style='nest'; result.enemies=[enemy('nest-scout-a','spider',5,3),enemy('nest-scout-b','spider',12,8)]; result.objects[3].kind='dungeon-stairs-up'; return result;
 }
 
-/** Legt echte Awakening-Gegner mit unveränderten kleinen Grundflächen fest. @param {string} id Kennung. @param {string} species Art. @param {number} x Spalte. @param {number} y Zeile. */
+/** Legt Dungeon-Gegner mit einer Grundfläche von einem Feld fest. @param {string} id Kennung. @param {string} species Art. @param {number} x Spalte. @param {number} y Zeile. */
 export function enemy(id,species,x,y) { return {id,species,x,y,hp:species==='beetle'?3:2,maxHp:species==='beetle'?3:2,facing:'down',wait:0.8,windup:0,hurt:0}; }
 

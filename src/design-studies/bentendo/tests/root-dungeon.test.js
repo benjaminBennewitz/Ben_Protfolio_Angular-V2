@@ -1,9 +1,13 @@
+import { SaveManager,DEBUG_SAVE_KEY } from '../scripts/game/systems/save-manager.js';
+import { startDebugRun } from '../scripts/game/data/debug-starts.js';
+import { navigateTitle } from '../scripts/game/data/title.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createGame,useObject,dismiss } from './helpers.js';
 import { createEastRooms } from '../scripts/game/data/east-rooms.js';
 import { createRootDungeon } from '../scripts/game/data/root-dungeon.js';
-import { captureGame,restoreGame } from '../scripts/game/systems/save-state.js';
+import { createQuellDungeon } from '../scripts/game/data/quell-dungeon.js';
+import { captureGame,restoreGame,SAVE_KEY } from '../scripts/game/systems/save-state.js';
 
 /** Prüft die neue Route einschließlich Rückweg und gültigem Speicherstand mit Kobolden. */
 function rootRoute() {
@@ -39,3 +43,23 @@ function exploreCamp(game) {
 }
 
 test('Wurzelgrund: Gruben kosten ein Herz und drei Waldkammern sind durchgängig spielbar',rootRoute);
+
+
+/** Sichert einen Debuglauf manuell, lädt ihn vom Titel und hält den normalen Stand getrennt. */
+function debugRoundTrip() {
+  const game=createGame(),storage=new Map();
+  for (const room of [...createQuellDungeon(),...createEastRooms(),...createRootDungeon()]) game.rooms.set(room.id,room);
+  const saves=new SaveManager(game,{getItem:storage.get.bind(storage),setItem:storage.set.bind(storage)});
+  game.coins=7; assert.equal(saves.flush(),true);
+  startDebugRun(game,'root-entry'); assert.ok(game.inventory.includes('Geschärftes Schwert'));
+  assert.equal(saves.flush(),false); game.coins=12;
+  assert.equal(saves.flush(true),true);
+  assert.equal(JSON.parse(storage.get(SAVE_KEY)).coins,7);
+  assert.equal(JSON.parse(storage.get(DEBUG_SAVE_KEY)).coins,12);
+  game.reset(); saves.load(); navigateTitle(game,'down'); game.interact();
+  assert.equal(game.room.id,'root-entry'); assert.equal(game.coins,12); assert.equal(game.debugging,true);
+  storage.delete(SAVE_KEY); game.reset(); saves.load(); game.interact();
+  assert.equal(game.room.id,'root-entry'); assert.equal(game.debugging,true);
+}
+
+test('Debug: Wurzelgrund lässt sich separat manuell speichern und vom Titel laden',debugRoundTrip);

@@ -8,7 +8,7 @@ import { wrapText } from '../systems/text.js';
 export function drawSystemMenu(render) {
   const {ctx,game}=render,menu=game.systemMenu;
   rect(ctx,3,8,20,144,119); rect(ctx,0,10,22,140,115);
-  pixelText(ctx,{pause:'PAUSE',audio:'TON EINSTELLEN',save:'SPIEL SPEICHERN',rest:'BIS WANN SCHLAFEN?'}[menu.kind],80,29,PALETTE[3],1,true);
+  pixelText(ctx,{pause:'PAUSE',audio:'TON EINSTELLEN',save:game.debugging?'DEBUGSTAND SPEICHERN':'SPIEL SPEICHERN',rest:'BIS WANN SCHLAFEN?'}[menu.kind],80,29,PALETTE[3],1,true);
   if (menu.status) return drawStatus(ctx,menu.status);
   if (menu.kind==='audio') return drawAudioMenu(ctx,menu);
   const labels=menu.kind==='rest'?[0,1,2,3].map(/** Beschriftet die Schlafauswahl. @param {number} index Zielzeit. */ index=>restChoiceLabel(game,index)):menu.kind==='pause'?['WEITER','NOTIZEN','KARTE','TON EINSTELLEN','SPEICHERN']:['SPEICHERN','ZURÜCK'];

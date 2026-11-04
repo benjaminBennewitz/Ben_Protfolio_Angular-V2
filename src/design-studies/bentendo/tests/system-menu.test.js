@@ -65,13 +65,13 @@ test('SELECT: erst bestätigen, abbrechen ohne Änderung und genau eine Speicher
 test('SELECT: Speicherfehler bleiben sichtbar und spielen keinen Erfolgsklang',failedSave);
 test('Gerätetasten: START und SELECT haben eigene Aktionen, J behält das Journal',buttonActions);
 
-/** Bewahrt Pause nach dem Speichern und erklärt, dass Debugdurchläufe nicht gesichert werden. */
+/** Bewahrt Pause nach dem Speichern und erklärt, dass Debugdurchläufe einen eigenen Slot verwenden. */
 function pausedSaveAndDebug() {
   const game=createGame(),saves=new SaveManager(game,new Storage());
   togglePause(game); openSaveMenu(game); activateSystemMenu(game,saves); activateSystemMenu(game,saves);
   assert.equal(game.systemMenu.kind,'pause'); closeSystemMenu(game); assert.equal(game.systemMenu,null);
   game.debugging=true; openSaveMenu(game); activateSystemMenu(game,saves);
-  assert.match(game.systemMenu.status,/Debuglauf/u); assert.equal(saves.storage.writes,1);
+  assert.equal(game.systemMenu.status,'Debugstand gespeichert.'); assert.equal(saves.storage.writes,2);
 }
 test('SELECT: Speichern aus der Pause kehrt zur Pause zurück und schützt Debugdurchläufe',pausedSaveAndDebug);
 

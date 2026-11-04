@@ -28,27 +28,30 @@ export function drawRootTunnel(render,object) {
 }
 
 const KOBOLD=[
-  '.....333333.....',
-  '..33.322223.33..',
-  '.33233211233233.',
-  '3322112112112233',
-  '.33213011031233.',
-  '..333311113333..',
-  '....32111123.33.',
-  '...3320002333223',
-  '..33233333323323',
-  '.33232212232333.',
-  '.32321211232333.',
-  '.3333222223333..',
-  '...333003333....',
-  '...332333233....',
-  '...3333.3333....',
+  '........333......33.',
+  '.......31133....3123',
+  '...33.311113....3103',
+  '..323331112333..3223',
+  '...3213303313....33.',
+  '....31012103.....23.',
+  '....32100123.....23.',
+  '.....333333..33..23.',
+  '...3332112333213.23.',
+  '..31133222321133333.',
+  '.310113332231123233.',
+  '.311013232333333.23.',
+  '.31011322223.....23.',
+  '..3113333333.....33.',
+  '...333311233........',
+  '.....332.233........',
+  '....3223.3223.......',
+  '....3333.3333.......',
 ];
 
-/** Zeichnet einen gepanzerten Kobold mit Spitzohren, Zähnen und Keule. @param {CanvasRenderingContext2D} ctx Zeichenfläche. @param {number} frame Schrittphase. */
+/** Zeichnet einen Schildkobold mit Speer, klaren Gesichtszügen und kurzem Schrittzyklus. @param {CanvasRenderingContext2D} ctx Zeichenfläche. @param {number} frame Schrittphase. */
 export function drawKobold(ctx,frame) {
   for (let y=0;y<KOBOLD.length;y++) for (let x=0;x<KOBOLD[y].length;x++) {
-    const pixel=KOBOLD[y][x],lift=frame && y>=13 && x>=8?1:0;
-    if (pixel!=='.') rect(ctx,Number(pixel),x,y-lift,1,1);
+    const pixel=KOBOLD[y][x],lift=frame && y>=15 && x>=8?1:0;
+    if (pixel!=='.') rect(ctx,Number(pixel),x-2,y-2-lift,1,1);
   }
 }

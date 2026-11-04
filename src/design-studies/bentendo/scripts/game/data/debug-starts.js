@@ -15,6 +15,7 @@ const STARTS={
   'quell-nest':{items:['Ast'],flags:DUNGEON_PROGRESS},
   'east-wood':{items:['Ast','Rostiges Schwert'],flags:FOREST_PROGRESS},
   'east-waystation':{items:['Ast','Rostiges Schwert'],flags:MEADOW_PROGRESS},
+  'root-entry':{items:['Ast','Geschärftes Schwert'],flags:{...MEADOW_PROGRESS,eastStreamOpen:true,eastLowlandGateOpen:true}},
   'east-meadow':{items:['Ast','Rostiges Schwert'],flags:MEADOW_PROGRESS},
 };
 

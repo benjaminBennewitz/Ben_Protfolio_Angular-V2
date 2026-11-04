@@ -36,9 +36,8 @@ export function activateSystemMenu(game,saves,audio) {
   if (menu.kind==='pause') return activatePause(game);
   if (menu.kind==='audio') return menu.choice===3?closeSystemMenu(game):navigateAudioMenu(game,menu.choice===2?'toggle':'right',audio);
   if (menu.status || menu.choice===1) return closeSystemMenu(game);
-  if (game.debugging) { menu.status='Debuglauf wird nicht gespeichert.'; game.sounds.push('ui-back'); return; }
-  const success=saves.flush();
-  menu.status=success?'Gespeichert.':game.saveStatus || 'Speichern nicht möglich.';
+  const success=saves.flush(true);
+  menu.status=success?(game.debugging?'Debugstand gespeichert.':'Gespeichert.'):game.saveStatus || 'Speichern nicht möglich.';
   game.sounds.push(success?'ui-confirm':'ui-back');
 }
 

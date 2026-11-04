@@ -12,7 +12,7 @@ const BEDS=[
   {x:26,y:13,w:7,h:8,kind:'t'},{x:16,y:19,w:9,h:4,kind:'f'},
 ];
 const LAKE_SPANS={4:[22,27],5:[21,29],6:[21,30],7:[21,30],8:[23,28]};
-const POOLS=[[11.5,8.5,5,3.2],[11,14.5,3.5,2.4],[27,11,3.2,1.8]];
+const POOLS=[[11.5,8.5,5,3.2],[11,14.5,3.5,2.4],[27,11,2.9,1.8]];
 
 export const WAYMAKER_LEDGER={id:'east-waymaker-ledger',title:'Letzter Eintrag im Frachtbuch',text:'Eine abgedeckte Kiste ging bei trockenem Boden über die Wiesen. Am nächsten Morgen kam der Träger allein zurück. Neben dem Eintrag ist ein runder Abdruck aus hellem Staub.'};
 

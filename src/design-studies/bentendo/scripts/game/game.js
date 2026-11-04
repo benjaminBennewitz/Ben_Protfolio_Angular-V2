@@ -1,3 +1,4 @@
+import { titleOptions } from './data/title.js';
 import { pitAt } from './systems/collision.js';
 import { updateWaystoneRide } from './systems/waystones.js';
 import { restChoiceLabel } from './systems/rest-menu.js';
@@ -172,7 +173,8 @@ export class Game {
   }
   /** Öffnet nach dem Titel die einfache Auswahl der beiden Figuren. */
   beginAdventure() {
-    if (this.resumeData && this.titleChoice===0 && restoreGame(this,this.resumeData)) return;
+    const choice=titleOptions(this)[this.titleChoice];
+    if (choice?.data && restoreGame(this,choice.data)) { this.debugging=Boolean(choice.debug); return; }
     this.mode='character'; this.held=null; this.message=null; this.pages=[];
     this.bagOpen=false; this.journalOpen=false; this.mapOpen=false;
   }
@@ -234,7 +236,7 @@ export class Game {
   }
   /** Liefert eine textuelle Alternative zur Canvas-Darstellung. */
   get description() {
-    if (this.mode === 'title') return this.resumeData?`DUNGEON WANTED. ${this.titleChoice===0?'Fortsetzen':'Neues Spiel'} gewählt. Pfeile wählen, A bestätigt.`:'DUNGEON WANTED. A oder START beginnt das Abenteuer.';
+    if (this.mode === 'title') return (this.resumeData || this.debugResumeData)?`DUNGEON WANTED. ${titleOptions(this)[this.titleChoice].label} gewählt. Pfeile wählen, A bestätigt.`:'DUNGEON WANTED. A oder START beginnt das Abenteuer.';
     if (this.systemMenu?.kind==='rest') return `Schlafen bis: ${restChoiceLabel(this,this.systemMenu.choice)}. Pfeile wählen, A bestätigt, B bricht ab.`;
     if (this.systemMenu?.kind==='audio') return audioMenuDescription(this.systemMenu);
     if (this.systemMenu) return this.systemMenu.kind==='pause'?`Pause. ${['Weiter','Notizen','Karte','Ton einstellen','Speichern'][this.systemMenu.choice]} gewählt. Pfeile wählen, A bestätigt, B setzt fort.`:`Spiel speichern. ${this.systemMenu.status || (this.systemMenu.choice===0?'Speichern':'Zurück')} gewählt. A bestätigt, B schließt.`;

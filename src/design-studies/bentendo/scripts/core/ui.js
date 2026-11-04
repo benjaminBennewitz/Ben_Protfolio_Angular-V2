@@ -91,7 +91,7 @@ export class UI {
   sync() {
     if (!this.app.device.ready) return;
     this.syncDevice(); this.syncCartridge();
-    element('game-controls').hidden = this.app.phase !== 'on' || !['world','character'].includes(this.app.game.mode) && !(this.app.game.mode==='title' && this.app.game.resumeData) || this.app.cartridge.open;
+    element('game-controls').hidden = this.app.phase !== 'on' || !['world','character'].includes(this.app.game.mode) && !(this.app.game.mode==='title' && (this.app.game.resumeData || this.app.game.debugResumeData)) || this.app.cartridge.open;
     const description = this.app.phase === 'on' ? this.app.game.description : '';
     if (description && description !== this.lastDescription) { this.app.announce(description); this.lastDescription = description; }
     const saveNode=element('save-status'),saveText=this.app.game.saveStatus || '';

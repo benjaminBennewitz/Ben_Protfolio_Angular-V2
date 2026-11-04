@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { Game } from '../scripts/game/game.js';
 import { createVillage,createGuildEntrance } from '../scripts/game/data/village.js';
 import { createVillageInteriors } from '../scripts/game/data/house-rooms.js';
-import { SaveManager } from '../scripts/game/systems/save-manager.js';
+import { SaveManager,DEBUG_SAVE_KEY } from '../scripts/game/systems/save-manager.js';
 import { captureGame,restoreGame,SAVE_KEY } from '../scripts/game/systems/save-state.js';
 import { navigateTitle } from '../scripts/game/data/title.js';
 import { navigateBag } from '../scripts/game/systems/inventory.js';
@@ -13,11 +13,11 @@ import { useObject,dismiss,createGame,push } from './helpers.js';
 /** Bildet einen Browser-Speicher mit beobachtbaren Schreibzugriffen und Fehlerfällen ab. */
 class Storage {
   /** Erstellt einen leeren Speicher. */
-  constructor() { this.value=null; this.writes=0; this.blocked=false; }
+  constructor() { this.value=null; this.debug=null; this.writes=0; this.blocked=false; }
   /** Liest ausschließlich den Spielstand. @param {string} key Schlüssel. */
-  getItem(key) { assert.equal(key,SAVE_KEY); return this.value; }
+  getItem(key) { return key===DEBUG_SAVE_KEY?this.debug:this.value; }
   /** Simuliert atomare Speicherung einschließlich Quotenfehler. @param {string} key Schlüssel. @param {string} value Wert. */
-  setItem(key,value) { assert.equal(key,SAVE_KEY); if (this.blocked) throw new Error('quota'); this.value=value; this.writes++; }
+  setItem(key,value) { if (this.blocked) throw new Error('quota'); if (key===DEBUG_SAVE_KEY) this.debug=value; else this.value=value; this.writes++; }
 }
 
 /** Lädt die echten Dorf- und Hausdaten. */

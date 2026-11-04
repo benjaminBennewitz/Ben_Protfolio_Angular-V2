@@ -1,3 +1,4 @@
+import { titleOptions } from '../game/data/title.js';
 import { waystoneFade } from '../game/systems/waystones.js';
 import { canvas } from '../core/dom.js';
 import { PALETTE } from '../core/config.js';
@@ -37,17 +38,18 @@ export class Display {
   drawTitle(time,game) {
     this.ctx.drawImage(this.assets.title,0,0);
     this.ctx.drawImage(this.assets.logo,2,12);
-    if (game?.resumeData) return this.drawResumeTitle(game);
+    if (game?.resumeData || game?.debugResumeData) return this.drawResumeTitle(game);
     rect(this.ctx,3,35,115,90,17);
     if (Math.floor(time*2)%2 === 0) pixelText(this.ctx,'START',80,120,PALETTE[0],1,true);
   }
   /** Bietet Fortsetzen und einen ausdrücklich gewählten neuen Durchlauf am Titel an. @param {object} game Spiel. */
   drawResumeTitle(game) {
-    rect(this.ctx,3,25,105,110,36);
-    for (let index=0;index<2;index++) {
-      const selected=game.titleChoice===index,y=109+index*15;
-      if (selected) rect(this.ctx,0,28,y-1,104,13);
-      pixelText(this.ctx,`${selected?'> ':'  '}${index===0?'FORTSETZEN':'NEUES SPIEL'}`,32,y,PALETTE[selected?3:0]);
+    const options=titleOptions(game),top=136-options.length*12;
+    rect(this.ctx,3,19,top-3,122,options.length*12+6);
+    for (let index=0;index<options.length;index++) {
+      const selected=game.titleChoice===index,y=top+index*12;
+      if (selected) rect(this.ctx,0,22,y-1,116,11);
+      pixelText(this.ctx,`${selected?'> ':'  '}${options[index].label.toUpperCase()}`,32,y,PALETTE[selected?3:0]);
     }
   }
   /** Zeigt einen ruhigen Kontaktfehler statt flackernder Vollbilder. @param {object} app Anwendung. */

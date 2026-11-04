@@ -327,3 +327,13 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Die vorhandene Portalform wird durch ungleichmäßige Wachstumsimpulse, unterschiedlich pulsierende Relaispunkte, leicht gekrümmte Peillinien, elektrische Randentladungen, eigene Levitations-/Neigungs-/Rotationsbewegungen und einen vom Portal getrennten Schatten auf der Meeresoberfläche ergänzt.
 - Die Bewegung bleibt in der bestehenden Final-Renderloop auf maximal 30 fps, ist pausierbar und berücksichtigt `prefers-reduced-motion`.
 - Sonstige Story-Trigger, Morse-Frequenzen, Tonaufnahmen, Kamerasperren und Endbedingungen bleiben unverändert.
+
+
+## Patch 40 – Relay Echo Ping
+
+- Der bisher automatisch eingeblendete VERBINDEN-Button verrät die Relaisfrequenz nicht mehr beim Schieben des Reglers.
+- Aktives `SENDEN` unterhalb des Frequenzreglers; die Antwortzeit zeigt die Nähe zum noch nicht verbundenen Relais an.
+- Erst ein erfolgreicher Ping auf der präzisen Trägerfrequenz verwandelt die Aktion in `VERBINDEN / A|B|C`.
+- Die passiven Kanalnamen/Signalbalken verraten noch nicht verbundene Relais vorher nicht mehr.
+- Laufende Pings werden beim Abstimmen, Kameratausch, Pausieren oder Tabwechsel abgebrochen; keine veralteten Treffer.
+- Die obere Taste `EMPFANG` war die mobile Öffnung der Steuerung. Sie heißt jetzt `STEUERUNG` bzw. `CONTROLS`; auf dem Desktop bleibt sie unsichtbar.

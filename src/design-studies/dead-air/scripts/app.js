@@ -30,6 +30,9 @@ const RELAYS = Object.freeze([
   { id: 'C', channel: 'relayC', frequency: CHANNELS.relayC.frequency, band: '105–107 MHz' },
 ]);
 const RELAY_LINK_TOLERANCE = 0.11;
+const RELAY_PING_RANGE_MHZ = 2;
+const RELAY_PING_MIN_MS = 180;
+const RELAY_PING_MAX_MS = 1850;
 const WARNING_TUNING_TOLERANCE = 0.11;
 
 
@@ -76,7 +79,7 @@ const TRANSLATIONS = Object.freeze({
     topNavAria: 'Informationen, Sprache und Archiv',
     info: 'INFO',
     close: 'Schließen',
-    receiverButton: 'EMPFANG',
+    receiverButton: 'STEUERUNG',
     openReceiver: 'Empfangsregler öffnen',
     closeReceiver: 'SCHLIESSEN ×',
     legalNav: 'Rechtliches und Bildnachweise',
@@ -119,6 +122,13 @@ const TRANSLATIONS = Object.freeze({
     relayMissing: 'KEIN LINK',
     relayConnected: 'VERBUNDEN',
     relayLinkAction: 'VERBINDEN',
+    relayPingAction: 'SENDEN',
+    relayPingReady: 'BEREIT / CAM 02',
+    relayPingCamera: 'CAM 02 WÄHLEN',
+    relayPingSending: 'PING LÄUFT …',
+    relayPingNone: 'KEIN ECHO',
+    relayPingEcho: 'ECHO NACH {seconds} s',
+    relayPingCarrier: 'TRÄGER / {id} · {seconds} s',
     relayCameraRequired: 'CAM 02',
     relayFinished: 'ALLE DREI RELAIS VERBUNDEN. PEILUNG NOCH NICHT SYNCHRON.',
     relayUnfinished: 'PEILUNG UNVOLLSTÄNDIG',
@@ -242,7 +252,7 @@ const TRANSLATIONS = Object.freeze({
     topNavAria: 'Information, language and archive',
     info: 'INFO',
     close: 'Close',
-    receiverButton: 'RECEIVER',
+    receiverButton: 'CONTROLS',
     openReceiver: 'Open receiver controls',
     closeReceiver: 'CLOSE ×',
     legalNav: 'Legal information and image credits',
@@ -284,7 +294,14 @@ const TRANSLATIONS = Object.freeze({
     relayBand: 'SEARCH BAND',
     relayMissing: 'NO LINK',
     relayConnected: 'CONNECTED',
-    relayLinkAction: 'LINK RELAY',
+    relayLinkAction: 'LINK',
+    relayPingAction: 'SEND',
+    relayPingReady: 'READY / CAM 02',
+    relayPingCamera: 'SELECT CAM 02',
+    relayPingSending: 'PING ACTIVE …',
+    relayPingNone: 'NO ECHO',
+    relayPingEcho: 'ECHO IN {seconds} s',
+    relayPingCarrier: 'CARRIER / {id} · {seconds} s',
     relayCameraRequired: 'CAM 02',
     relayFinished: 'ALL THREE RELAYS CONNECTED. BEARING NOT SYNCHRONIZED.',
     relayUnfinished: 'BEARING INCOMPLETE',
@@ -419,6 +436,8 @@ const relayToggle = document.querySelector('#relay-toggle');
 const relayDialog = document.querySelector('#relay-dialog');
 const relayClose = document.querySelector('#relay-close');
 const relayLink = document.querySelector('#relay-link');
+const relayProbe = document.querySelector('#relay-probe');
+const relayPingStatus = document.querySelector('#relay-ping-status');
 const relayBeacons = [...document.querySelectorAll('.scene__relay-beacon')];
 const syncToggle = document.querySelector('#sync-toggle');
 const syncDialog = document.querySelector('#sync-dialog');
@@ -460,6 +479,15 @@ const scene = {
   relays: {
     unlocked: false,
     linked: new Set(),
+    ping: {
+      timeoutId: 0,
+      inFlight: false,
+      verifiedId: null,
+      result: 'idle',
+      responseMs: 0,
+      responseId: null,
+      receivedAtMs: 0,
+    },
   },
   audio: {
     blocked: false,
@@ -581,10 +609,13 @@ function getStateDescription(texts) {
 
 /** Ordnet einer manuell gewählten Frequenz höchstens einen tatsächlichen Empfang zu. */
 function findChannel(frequency) {
-  return Object.keys(CHANNELS).find(channel =>
-    Math.abs(CHANNELS[channel].frequency - frequency)
-      <= (channel === 'warning' ? WARNING_TUNING_TOLERANCE : TUNING_TOLERANCE)
-  ) ?? null;
+  return Object.keys(CHANNELS).find(channel => {
+    // Relaiskennungen dürfen erst nach einer aktiven Ping-Antwort auftauchen.
+    const relay = RELAYS.find(entry => entry.channel === channel);
+    if (relay && scene.relays.ping.verifiedId !== relay.id) return false;
+    return Math.abs(CHANNELS[channel].frequency - frequency)
+      <= (channel === 'warning' ? WARNING_TUNING_TOLERANCE : TUNING_TOLERANCE);
+  }) ?? null;
 }
 
 /** Verhindert, dass spätere Story-Frequenzen vor ihrer Entdeckung verraten werden. */
@@ -597,11 +628,71 @@ function isChannelAvailable(channel) {
   return true;
 }
 
-/** Findet einen exakt abgestimmten, noch nicht verbundenen Relaisträger. */
+/** Invalidiert laufende Pings und alte Treffer bei jeder neuen Messposition. */
+function resetRelayPing() {
+  const ping = scene.relays.ping;
+  window.clearTimeout(ping.timeoutId);
+  ping.timeoutId = 0;
+  ping.inFlight = false;
+  ping.verifiedId = null;
+  ping.result = 'idle';
+  ping.responseMs = 0;
+  ping.responseId = null;
+  ping.receivedAtMs = 0;
+}
+
+/** Nur ein aktiv gepingter Träger darf verbunden werden. */
 function getTunedRelay() {
-  if (!scene.relays.unlocked) return null;
-  return RELAYS.find(relay => !scene.relays.linked.has(relay.id)
+  if (!scene.relays.unlocked || !scene.relays.ping.verifiedId) return null;
+  return RELAYS.find(relay => relay.id === scene.relays.ping.verifiedId
+    && !scene.relays.linked.has(relay.id)
     && Math.abs(scene.frequency - relay.frequency) <= RELAY_LINK_TOLERANCE) ?? null;
+}
+
+/** Eine Messung beantwortet erst nach der tatsächlichen Laufzeit eine Ping-Anfrage.
+ * Weit entfernte Frequenzen antworten spät oder überhaupt nicht.
+ * Die Kanalnummer wird nicht durch passives Bewegen des Reglers verraten. */
+function sendRelayPing() {
+  const ping = scene.relays.ping;
+  if (!scene.relays.unlocked || scene.relays.linked.size === RELAYS.length
+    || scene.source !== 'video' || scene.paused || scene.finale.mode || ping.inFlight) return;
+
+  const frequency = scene.frequency;
+  const nearest = RELAYS.filter(relay => !scene.relays.linked.has(relay.id))
+    .map(relay => ({ relay, distance: Math.abs(frequency - relay.frequency) }))
+    .sort((a, b) => a.distance - b.distance)[0];
+  const insideRange = Boolean(nearest && nearest.distance <= RELAY_PING_RANGE_MHZ);
+  const responseMs = insideRange
+    ? Math.round(RELAY_PING_MIN_MS + smoothStep(nearest.distance / RELAY_PING_RANGE_MHZ)
+      * (RELAY_PING_MAX_MS - RELAY_PING_MIN_MS))
+    : RELAY_PING_MAX_MS;
+
+  ping.inFlight = true;
+  ping.result = 'sending';
+  ping.verifiedId = null;
+  refreshRelayUI();
+  ping.timeoutId = window.setTimeout(() => {
+    ping.timeoutId = 0;
+    if (scene.finale.mode || scene.paused || document.hidden || scene.source !== 'video'
+      || Math.abs(scene.frequency - frequency) >= .05) {
+      resetRelayPing();
+      refreshRelayUI();
+      return;
+    }
+    ping.inFlight = false;
+    ping.responseMs = responseMs;
+    ping.receivedAtMs = scene.anomaly.activeMs;
+    ping.responseId = insideRange ? nearest.relay.id : null;
+    ping.result = insideRange
+      ? (nearest.distance <= RELAY_LINK_TOLERANCE ? 'carrier' : 'echo') : 'none';
+    ping.verifiedId = ping.result === 'carrier' ? nearest.relay.id : null;
+    if (ping.verifiedId) {
+      // Freigabe des Kanalnamens erfolgt erst nach der Messung, nicht durch Tuning.
+      setFrequency(frequency);
+    }
+    refreshRelayUI();
+    updateAnomalyMeter();
+  }, responseMs);
 }
 
 /** Synchronisiert alle Relaisanzeigen, ohne eine zweite Spielzustandslogik aufzubauen. */
@@ -612,10 +703,20 @@ function refreshRelayUI() {
   relayToggle.textContent = texts.relayButton.replace('{count}', String(count));
   syncToggle.hidden = count !== RELAYS.length;
   transmission2Toggle.hidden = !scene.audio.secondReceived;
+  const ping = scene.relays.ping;
   const tuned = getTunedRelay();
-  relayLink.hidden = !tuned || scene.source !== 'video';
-  relayLink.disabled = scene.paused || Boolean(scene.finale.mode) || !tuned;
-  if (tuned) relayLink.textContent = `${texts.relayLinkAction} / ${tuned.id}`;
+  relayProbe.hidden = !scene.relays.unlocked || count === RELAYS.length || Boolean(scene.finale.mode);
+  relayLink.disabled = scene.paused || Boolean(scene.finale.mode) || scene.source !== 'video' || ping.inFlight;
+  relayLink.textContent = tuned ? `${texts.relayLinkAction} / ${tuned.id}` : texts.relayPingAction;
+  const seconds = (ping.responseMs / 1000).toLocaleString(scene.language === 'de' ? 'de-DE' : 'en-US', {
+    minimumFractionDigits: 2, maximumFractionDigits: 2,
+  });
+  relayPingStatus.textContent = scene.source !== 'video' ? texts.relayPingCamera
+    : (ping.result === 'sending' ? texts.relayPingSending
+      : ping.result === 'none' ? texts.relayPingNone
+        : ping.result === 'echo' ? texts.relayPingEcho.replace('{seconds}', seconds)
+          : ping.result === 'carrier' ? texts.relayPingCarrier.replace('{id}', ping.responseId)
+            .replace('{seconds}', seconds) : texts.relayPingReady);
 
   relayBeacons.forEach(beacon => {
     const id = beacon.dataset.relay;
@@ -644,6 +745,9 @@ function linkTunedRelay() {
   if (!relay || scene.source !== 'video' || scene.paused) return;
 
   scene.relays.linked.add(relay.id);
+  resetRelayPing();
+  // Ein verbundener Träger darf nicht als vermeintlich neuer Live-Fund stehen bleiben.
+  setFrequency(scene.frequency);
   const count = scene.relays.linked.size;
   window.dispatchEvent(new CustomEvent('deadair:relaylinked', {
     detail: { id: relay.id, frequency: relay.frequency, count },
@@ -928,6 +1032,7 @@ function startIsolationEnding() {
 /** Gemeinsamer Finalstart: eine Quelle, eine Uhr, eine Kamerasperre. */
 function startFinale(mode) {
   if (scene.finale.mode || !['breach', 'isolate'].includes(mode)) return;
+  resetRelayPing();
   setReceiverOpen(false);
   stopWarningAudio();
   transmissionAudio.pause();
@@ -1109,14 +1214,12 @@ function getAnomalyProfile() {
       const burst = Math.exp(-ageMs / 3200);
       return { level: burst * .71, amplitude: burst * .12, speed: 1.7 + burst * 2 };
     }
-    if (scene.relays.unlocked) {
-      const relay = RELAYS.find(item => !scene.relays.linked.has(item.id)
-        && Math.abs(scene.frequency - item.frequency) <= 1.25);
-      if (relay) {
-        const closeness = 1 - Math.min(1, Math.abs(scene.frequency - relay.frequency) / 1.25);
-        const wave = (1 + Math.sin(scene.anomaly.activeMs / 450 + relay.frequency)) / 2;
-        return { level: .08 + closeness * (.29 + wave * .19), amplitude: .02 + closeness * .12, speed: 1 + closeness * 2.2 };
-      }
+    // Die Anomalie wird erst durch einen echten Ping-Echo-Empfang sichtbar.
+    const ping = scene.relays.ping;
+    if (ping.responseId && ['echo', 'carrier'].includes(ping.result)) {
+      const age = scene.anomaly.activeMs - ping.receivedAtMs;
+      const pulse = Math.exp(-Math.max(0, age) / 2000);
+      return { level: .11 + .55 * pulse, amplitude: .05 + .12 * pulse, speed: 1.2 + 2 * pulse };
     }
     return { level: 0, amplitude: 0, speed: 0 };
   }
@@ -1244,6 +1347,7 @@ function setFrequency(value, { automated = false } = {}) {
 
   const frequency = Math.round(Math.max(FM_MIN, Math.min(FM_MAX, Number(value))) * 10) / 10;
   if (!Number.isFinite(frequency)) return;
+  if (!automated && Math.abs(frequency - scene.frequency) >= .05) resetRelayPing();
 
   const detectedChannel = (automated && scene.story.stage === 'frequency-scan') ? null : findChannel(frequency);
   const channel = isChannelAvailable(detectedChannel) ? detectedChannel : null;
@@ -1451,6 +1555,8 @@ function updateSourceDescription() {
 
 /** Übernimmt die Quellenumschaltung ohne sichtbaren Übergang. */
 function applySource(source) {
+  const verifiedBeforeSwitch = scene.relays.ping.verifiedId !== null && source !== scene.source;
+  if (source !== scene.source) resetRelayPing();
   scene.source = source;
   root.dataset.source = source;
   document.querySelectorAll('#source-switch button[data-source]').forEach(button => {
@@ -1461,6 +1567,7 @@ function applySource(source) {
   document.querySelector('#monitor-camera-label').textContent = source === 'artwork' ? 'CAMERA 01' : 'CAMERA 02';
   document.querySelector('#screen-location').textContent = source === 'artwork' ? 'NORTH COAST / STATION' : 'NORTH COAST / SHORE';
   updateSourceDescription();
+  if (verifiedBeforeSwitch) setFrequency(scene.frequency);
   progressStory();
   maybeStartBottleReveal();
   refreshRelayUI();
@@ -1526,6 +1633,7 @@ function togglePause() {
   scene.paused = !scene.paused;
   scene.story.lastTick = performance.now();
   if (scene.paused) {
+    if (scene.relays.ping.inFlight) resetRelayPing();
     scene.audio.resumeAfterPause = !transmissionAudio.paused;
     transmissionAudio.pause();
   } else if (scene.audio.resumeAfterPause) {
@@ -1782,7 +1890,10 @@ function init() {
   relayDialog.addEventListener('click', event => {
     if (event.target === relayDialog) relayDialog.close();
   });
-  relayLink.addEventListener('click', linkTunedRelay);
+  relayLink.addEventListener('click', () => {
+    if (getTunedRelay()) linkTunedRelay();
+    else sendRelayPing();
+  });
   relayBeacons.forEach(beacon => {
     beacon.addEventListener('click', () => openRelayLog(beacon.dataset.relay));
   });
@@ -1817,6 +1928,7 @@ function init() {
   document.addEventListener('visibilitychange', () => {
     scene.story.lastTick = performance.now();
     if (document.hidden) {
+      if (scene.relays.ping.inFlight) resetRelayPing();
       scene.audio.resumeAfterVisibility = !transmissionAudio.paused;
       transmissionAudio.pause();
     } else if (scene.audio.resumeAfterVisibility && !scene.paused) {
@@ -1827,6 +1939,7 @@ function init() {
     startGateFrames();
   });
   window.addEventListener('pagehide', () => {
+    resetRelayPing();
     coastVideo.pause();
     transmissionAudio.pause();
     window.clearTimeout(scene.story.clockTimeoutId);

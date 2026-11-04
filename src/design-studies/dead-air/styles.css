@@ -271,7 +271,7 @@ figure {
   white-space: nowrap;
 }
 
-.topbar__receiver {
+.topbar__actions .topbar__receiver {
   display: none;
 }
 
@@ -479,7 +479,7 @@ figure {
   font-size: 9px;
 }
 
-/* Nativer FM-Regler: die Empfangszustände werden ausschließlich durch Tuning ausgelöst. */
+/* Nativer FM-Regler: Funkträger werden erst nach einem aktiven Ping sichtbar. */
 .tuning-control {
   margin: 0 15px 15px;
   padding-top: 13px;
@@ -1686,13 +1686,36 @@ figure {
   letter-spacing: .07em;
 }
 
-/* NCBS-Relaisdiagnose: nur nach der ersten Funkübertragung zugänglich. */
+/* Aktiver Entfernungsping: vollständig vom statischen Frequenzstatus getrennt. */
+.tuning-control__probe {
+  display: flex;
+  min-height: 35px;
+  align-items: center;
+  gap: 9px;
+  margin-top: 10px;
+}
+
+.tuning-control__probe[hidden] { display: none; }
+
+.tuning-control__probe-status {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: #9db3ac;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .receiver__relay-link {
   flex: 0 0 auto;
-  min-height: 24px;
+  min-height: 32px;
   margin-left: auto;
-  margin-right: 10px;
-  padding: 3px 8px;
+  margin-right: 0;
+  padding: 6px 11px;
   border: 1px solid #c78b69;
   background: #443026;
   color: #ffe4cd;
@@ -2722,7 +2745,7 @@ figure {
     gap: 8px;
   }
 
-  .topbar__receiver {
+  .topbar__actions .topbar__receiver {
     display: inline-flex;
   }
 

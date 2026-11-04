@@ -130,7 +130,7 @@ function newRoomAccess() {
     game.travel(room.id); assert.equal(game.occupied(game.player.x,game.player.y),false);
     if (room.id==='east-lowland') game.inventory.push('Geschärftes Schwert');
     for (const object of room.objects) {
-      if (object.action==='travel' || object.kind==='wildlife' || (object.kind==='meadow-rock' && object.small)) continue;
+      if (object.action==='travel' || object.action==='dungeon-door' || object.kind==='wildlife' || (object.kind==='meadow-rock' && object.small)) continue;
       useObject(game,object.id); dismiss(game);
     }
   }

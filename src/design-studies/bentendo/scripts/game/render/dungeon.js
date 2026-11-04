@@ -1,3 +1,4 @@
+import { drawKobold } from './root-dungeon.js';
 import { dungeonTile,drawDungeonPillar } from './dungeon-atlas.js';
 import { drawDungeonFurniture } from './dungeon-furniture.js';
 import { drawDungeonGround,drawDungeonWall,drawWeb } from './dungeon-scenery.js';
@@ -21,7 +22,9 @@ export function drawEnemies(render) {
     const frame=game.reduced?0:Math.floor(game.time*6)%2;
     ctx.save(); ctx.translate(x,y);
     if (actor.facing==='left') { ctx.translate(16,0); ctx.scale(-1,1); }
-    ctx.drawImage(assets.dungeonEnemies,ENEMY_ART[actor.species],frame*16,16,16,0,0,16,16); ctx.restore();
+    if (actor.species==='kobold') drawKobold(ctx,frame);
+    else ctx.drawImage(assets.dungeonEnemies,ENEMY_ART[actor.species],frame*16,16,16,0,0,16,16);
+    ctx.restore();
     if (actor.hp<actor.maxHp || actor.windup>0) {
       rect(ctx,3,x+1,y-4,14,3); rect(ctx,0,x+2,y-3,Math.ceil(12*actor.hp/actor.maxHp),1);
     }

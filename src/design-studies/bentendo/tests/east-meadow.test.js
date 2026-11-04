@@ -192,7 +192,6 @@ function lowlandGate() {
   assert.equal(game.flags.eastLowlandGateOpen,true);
   assert.equal(game.occupied(16,9),false);
   assert.deepEqual(game.inventory,['Geschärftes Schwert']);
-  useObject(game,'lowland-overlook'); dismiss(game);
 }
 
 /** Prüft Abbruch, kostenlosen Schliff im selben Fach und den neuen Kampfwert. @param {object} game Spiel. */

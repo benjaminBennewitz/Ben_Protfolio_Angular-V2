@@ -1,3 +1,4 @@
+import { pitAt } from './systems/collision.js';
 import { updateWaystoneRide } from './systems/waystones.js';
 import { restChoiceLabel } from './systems/rest-menu.js';
 import { START_MINUTES,updateWorldClock,dayPhase } from './systems/world-clock.js';
@@ -42,7 +43,7 @@ export class Game {
     this.residentHistory=new Map(); this.avatar='male'; this.characterIndex=0;
     this.mode = 'title'; this.time = 0; this.sounds = []; this.message = null; this.pages = [];
     this.bagOpen = false; this.mapOpen = false; this.journalOpen = false; this.journalIndex = 0;
-    this.move = null; this.slide = null; this.held = null; this.waystoneRide=null;
+    this.move = null; this.slide = null; this.held = null; this.waystoneRide=null; this.rootFall=null;
     if (this.rooms.has('village')) this.notes.push({...INVITATION});
     this.travel(this.rooms.has('village') ? 'village' : 'city'); this.mode = 'title'; this.sounds = [];
     this.reduced = false;
@@ -59,7 +60,7 @@ export class Game {
     this.roomState = this.states.get(id);
     const point = spawn || room.spawn;
     this.player = { x: point[0], y: point[1], facing: 'up' };
-    this.move = null; this.slide = null; this.held = null; this.waystoneRide=null; this.message = null; this.pages = [];
+    this.move = null; this.slide = null; this.held = null; this.waystoneRide=null; this.rootFall=null; this.message = null; this.pages = [];
     this.bagOpen = false; this.mapOpen = false; this.journalOpen = false; if (cue) this.sounds.push(cue);
     this.bagIndex=6; this.bagAction=false; this.bagChoice=0; this.bagTab='items'; this.bagTabFocus=false;
     enterDungeonRoom(this);
@@ -97,7 +98,7 @@ export class Game {
   get hint() { if (this.resting) return 'Du schläfst ...'; if (this.room.dungeon && !this.target) return 'A: Angriff  B: Rucksack'; return this.seat?(this.roomState.service?.phase==='ready'?'A: Getränke  B: aufstehen':this.roomState.service?.phase==='approach'?'Der Wirt kommt. B: aufstehen':'B: aufstehen'):objectHint(this.target); }
   /** Beginnt einen Schritt ohne Wanddurchquerung. @param {string} direction Laufrichtung. */
   step(direction) {
-    if (this.mode!=='world' || this.systemMenu || this.resting || this.doorStudy || this.waystoneRide) return false;
+    if (this.mode!=='world' || this.systemMenu || this.resting || this.doorStudy || this.waystoneRide || this.rootFall) return false;
     if (!MOVE_DIRECTIONS[direction] || this.move || this.slide || this.message || this.bagOpen || this.journalOpen || this.mapOpen) return false;
     if (this.tavernMenu) return false;
     if (this.seat) { standUp(this); return false; }
@@ -106,7 +107,7 @@ export class Game {
     if (leaveForestAtEdge(this,x,y)) return true;
     if (enemyAt(this,x,y)) { damageHero(this,1); return false; }
     const passing=yieldCompanion(this,x,y);
-    if (!passing && this.occupied(x, y)) return false;
+    if (!passing && !pitAt(this.room,x,y) && this.occupied(x, y)) return false;
     if (steamHot(this, x, y)) { this.say('Du', 'Heißer Dampf! Ich warte kurz.'); return false; }
     this.idleTime=0;
     this.move = { fromX: this.player.x, fromY: this.player.y, x, y, time: 0 };
@@ -117,11 +118,16 @@ export class Game {
     if (this.mode !== 'world' || this.systemMenu) return;
     this.reduced = reduced;
     if (this.waystoneRide) return updateWaystoneRide(this,dt);
+    if (this.rootFall) {
+      this.rootFall.remaining-=dt;
+      if (this.rootFall.remaining<=0) { this.rootFall=null; this.held=null; }
+      return;
+    }
     if (updateDoorStudy(this,dt)) return;
     if (this.resting) { updateRest(this,dt); return; }
     const paused = this.message || this.bagOpen || this.journalOpen || this.mapOpen || this.tavernMenu;
     if (!paused) { this.time += dt; updateWorldClock(this,dt); updateForestAmbience(this,dt); this.updateLocation(dt); }
-    if (this.move) this.updateMove(dt, reduced);
+    if (this.move && this.updateMove(dt, reduced)) return;
     if (this.slide) { this.slide.time += dt; if (reduced || this.slide.time >= 0.28) this.slide = null; }
     if (this.held && !this.move && !this.slide) this.step(this.held);
     if (!paused) { collectHearts(this); updateCombat(this,dt); updateDungeon(this,dt); updateVillage(this,dt,reduced); updateResidentReactions(this,dt); updateResidentChatter(this,dt); }
@@ -130,11 +136,17 @@ export class Game {
   updateMove(dt, reduced) {
     this.move.time += dt;
     if (!reduced && this.move.time < stepDuration(this.move)) return;
+    if (pitAt(this.room,this.move.x,this.move.y)) {
+      const {x,y}=this.move;
+      this.move=null; this.held=null; this.hurtTime=0; damageHero(this,2);
+      if (!this.resting) this.rootFall={x,y,remaining:0.55};
+      return true;
+    }
     this.player.x = this.move.x; this.player.y = this.move.y; this.move = null;
   }
   /** Bestätigt Titel, Dialog oder Objektaktion. */
   interact() {
-    if (this.systemMenu || this.resting || this.doorStudy || this.waystoneRide) return;
+    if (this.systemMenu || this.resting || this.doorStudy || this.waystoneRide || this.rootFall) return;
     if (this.mode === 'title') return this.beginAdventure();
     if (this.mode === 'character') return confirmCharacter(this);
     if (this.move && this.room.dungeon && !this.message && !this.bagOpen && !this.journalOpen && !this.mapOpen) return attack(this);
@@ -167,7 +179,7 @@ export class Game {
   /** Meldet eine noch laufende Hausmeisterbewegung ohne zusätzliche Daueranimation. */
   get animating() {
     if (this.mode!=='world' || this.systemMenu || this.resting) return false;
-    if (this.doorStudy || this.waystoneRide) return true;
+    if (this.doorStudy || this.waystoneRide || this.rootFall) return true;
     if (this.message || this.bagOpen || this.journalOpen || this.mapOpen) return false;
     const keeper=this.room.id==='village' && this.roomState.keeper && !this.roomState.keeper.waiting && !this.flags.guildOpen;
     return Boolean(this.resting || (this.room.dungeon && (this.enemies.length || this.attackTime || this.attackCooldown || this.nestWave && !this.flags.quellNestCleared)) || (this.room.pipeBoard && !this.reduced) || this.locationNotice || (this.roomState.service && this.roomState.service.phase!=='ready') || keeper || ['throw','pickup'].includes(this.roomState.fetch?.phase) || wanderersMoving(this));
@@ -196,7 +208,7 @@ export class Game {
   /** Öffnet Inventar oder schließt den aktuellen Dialog. */
   back() {
     this.held = null;
-    if (this.resting || this.doorStudy || this.waystoneRide) return;
+    if (this.resting || this.doorStudy || this.waystoneRide || this.rootFall) return;
     if (this.systemMenu) return closeSystemMenu(this);
     if (this.mode==='title') return;
     if (this.mode==='character') { this.mode='title'; this.sounds.push('ui-back'); return; }
@@ -211,7 +223,7 @@ export class Game {
   }
   /** Öffnet das wiederlesbare Journal. */
   journal() {
-    if (this.mode!=='world' || this.systemMenu || this.doorStudy || this.waystoneRide) return;
+    if (this.mode!=='world' || this.systemMenu || this.doorStudy || this.waystoneRide || this.rootFall) return;
     this.journalFromBag=this.bagOpen; this.bagAction=false; this.tavernMenu=false;
     this.held = null; this.message = null; this.pages = []; this.bagOpen = false; this.mapOpen = false;
     this.journalOpen = !this.journalOpen;

@@ -43,12 +43,12 @@ function lowland() {
   const objects=[
     prop('lowland-return','Zurück zu den Ostwiesen',1,9,'trail','travel',{to:'east-meadow',spawn:[31,9],trailFacing:'left'}),
     prop('lowland-gate','Verschnürtes Weggitter',16,9,'lowland-gate','lowland-gate',{hint:'Seil prüfen',hiddenBy:'eastLowlandGateOpen'}),
-    prop('lowland-overlook','Alter Grenzpfahl',20,9,'sign','inspect',{text:'Von hier siehst du, wie der Bach zwischen den Hügeln verschwindet. Am Grenzpfahl ist ein verblasstes Wegzeichen eingeritzt.'}),
+    prop('root-entrance','Wurzeltunnel',17,9,'root-tunnel','dungeon-door',{to:'root-entry',spawn:[2,6],revealedBy:'eastLowlandGateOpen',hint:'betreten'}),
     prop('lowland-tracks','Alter Landesteg',13,10,'sign','inspect',{text:'Eine Schleifspur endet an einem losen Tau. Auf dem Holz liegt derselbe helle Staub wie auf den Pfählen der Wiese.'}),
   ];
-  const trees=[[2,2],[6,2,'pine'],[12,2],[15,3],[2,14],[14,12,'pine']];
+  const trees=[[2,2],[6,2,'pine'],[12,2],[15,3],[2,14],[14,12,'pine'],[17,7,'pine'],[19,8],[17,10],[19,10,'pine']];
   const room=outskirts('east-lowland','An der Bachniederung',16,[2,9],trees,objects,LOWER_CHANNEL);
-  room.meadowChannel={points:LOWER_CHANNEL};
+  room.meadowChannel={points:LOWER_CHANNEL}; room.revision=2;
   return openForestPassages(room);
 }
 
@@ -71,6 +71,7 @@ function outskirts(id,title,height,spawn,trees,objects,channel=[]) {
 /** Legt zusammenhängende Grasflächen und Fußwege zwischen den Zugängen. @param {number} x Spalte. @param {number} y Zeile. @param {string} id Gebiet. @param {object[]} gardens Wiesenflächen. @param {Array} channel Bachlauf. */
 function outskirtsCell(x,y,id,gardens,channel) {
   for (const [cx,cy] of channel) if (x===cx && y===cy) return 'k';
+  if (id==='east-lowland' && x>=17) return x===17 && y===9?'g':'v';
   if (id==='east-lowland' && x===16 && y!==9) return 'r';
   if (id==='east-lowland' && y===9 || id==='east-south-meadow' && (x===9 && y<=7 || y===7 && x>=9 && x<=11)) return '.';
   for (const g of gardens) if (((x-g.x+0.5)/g.w-0.5)**2+((y-g.y+0.5)/g.h-0.5)**2<0.23) return g.kind;

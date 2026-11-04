@@ -776,6 +776,7 @@ folio/
 │   │   │   │   │   │   ├── quest-village.js
 │   │   │   │   │   │   ├── resident-lines.js
 │   │   │   │   │   │   ├── rooms.js
+│   │   │   │   │   │   ├── root-dungeon.js
 │   │   │   │   │   │   ├── steam.json
 │   │   │   │   │   │   ├── storage.json
 │   │   │   │   │   │   ├── tavern-company.js
@@ -811,6 +812,7 @@ folio/
 │   │   │   │   │   │   ├── primitives.js
 │   │   │   │   │   │   ├── quest-markers.js
 │   │   │   │   │   │   ├── quests.js
+│   │   │   │   │   │   ├── root-dungeon.js
 │   │   │   │   │   │   ├── save-indicator.js
 │   │   │   │   │   │   ├── seated-guest.js
 │   │   │   │   │   │   ├── shallow-water.js
@@ -919,6 +921,7 @@ folio/
 │   │   │   │   ├── resident-chatter.test.js
 │   │   │   │   ├── resident-life.test.js
 │   │   │   │   ├── rest-menu.test.js
+│   │   │   │   ├── root-dungeon.test.js
 │   │   │   │   ├── save-ui.test.js
 │   │   │   │   ├── settings-chamber.test.js
 │   │   │   │   ├── speech-bubble.test.js

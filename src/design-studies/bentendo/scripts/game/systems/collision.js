@@ -44,7 +44,7 @@ function villageWall(game,x,y) {
     const bridge=room.meadowChannel?.bridge;
     return !(game.flags.eastStreamOpen && bridge?.[0]===x && bridge[1]===y);
   }
-  if (['w','r','l'].includes(kind)) return true;
+  if (['w','r','l','v','q'].includes(kind)) return true;
   for (const house of room.buildings) if (contains(house,x,y)) return true;
   for (const [tx,ty] of room.trees) if (y === ty+1 && x >= tx && x <= tx+1) return true;
   return false;
@@ -60,3 +60,6 @@ function archiveWall(x, y) {
 export function steamHot(game, x, y) {
   return game.room.id === 'steam' && !game.flags.steamSafe && x === 11 && [5,12].includes(y) && (game.time + (y === 5 ? 2 : 0)) % 4 < 2.2;
 }
+
+/** Erkennt einen begehbaren Absturzpunkt für die Spielfigur. @param {object} room Gebiet. @param {number} x Spalte. @param {number} y Zeile. */
+export function pitAt(room,x,y) { return room.dungeon==='wurzelgrund' && room.ground[y]?.[x]==='q'; }

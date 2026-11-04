@@ -1,3 +1,4 @@
+import { enemyMaxHp } from '../data/quell-dungeon.js';
 import { enemyAt,heroOccupies } from './dungeon-combat.js';
 import { wall } from './collision.js';
 
@@ -28,7 +29,7 @@ export function validCombatSave(game,data) {
 /** Prüft Art, Lebenspunkte und Bewegungsfelder, bevor Gegnerobjekte ins Spiel gelangen. @param {object} room Raum. @param {object} flags Questwerte. @param {object} actor Gegner. @param {number} wave Welle. */
 function validActor(room,flags,actor,wave) {
   if (!actor || typeof actor.id!=='string' || !knownActor(room,actor,wave) || !['up','down','left','right'].includes(actor.facing)) return false;
-  const max=actor.species==='beetle'?3:2;
+  const max=enemyMaxHp(actor.species);
   if (actor.maxHp!==max || !Number.isInteger(actor.hp) || actor.hp<1 || actor.hp>max || !floorPoint(room,flags,actor.x,actor.y)) return false;
   if (!bounded(actor.windup,0.5) || !bounded(actor.hurt,0.2) || !bounded(actor.walk || 0,0.2) || !Number.isFinite(actor.wait) || actor.wait < -60 || actor.wait>2) return false;
   if (actor.fromX!==undefined && (!floorPoint(room,flags,actor.fromX,actor.fromY) || Math.abs(actor.x-actor.fromX)+Math.abs(actor.y-actor.fromY)>1)) return false;

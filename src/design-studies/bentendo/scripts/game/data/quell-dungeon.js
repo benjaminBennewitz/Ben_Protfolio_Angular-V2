@@ -52,5 +52,8 @@ function nest() {
 }
 
 /** Legt Dungeon-Gegner mit einer Grundfläche von einem Feld fest. @param {string} id Kennung. @param {string} species Art. @param {number} x Spalte. @param {number} y Zeile. */
-export function enemy(id,species,x,y) { return {id,species,x,y,hp:species==='beetle'?3:2,maxHp:species==='beetle'?3:2,facing:'down',wait:0.8,windup:0,hurt:0}; }
+export function enemy(id,species,x,y) { return {id,species,x,y,hp:enemyMaxHp(species),maxHp:enemyMaxHp(species),facing:'down',wait:0.8,windup:0,hurt:0}; }
 
+
+/** Liefert die festen Lebenspunkte je Gegnerart. @param {string} species Gegnerart. */
+export function enemyMaxHp(species) { return species==='kobold'?4:species==='beetle'?3:2; }

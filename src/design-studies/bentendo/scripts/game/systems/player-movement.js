@@ -22,7 +22,7 @@ export function stepDuration(move) { return 0.18*Math.hypot(move.x-move.fromX,mo
 
 /** Erkennt ausschließlich freie Weltsteuerung für kombinierte Eingaben. @param {object} game Spiel. */
 export function worldMovement(game) {
-  return game.mode==='world' && !game.waystoneRide && !game.message && !game.systemMenu && !game.resting && !game.bagOpen && !game.journalOpen && !game.mapOpen && !game.tavernMenu;
+  return game.mode==='world' && !game.waystoneRide && !game.rootFall && !game.message && !game.systemMenu && !game.resting && !game.bagOpen && !game.journalOpen && !game.mapOpen && !game.tavernMenu;
 }
 
 /** Liefert die aktuelle sichtbare Position gemeinsam für Darstellung und bewegte Angriffe. @param {object} game Spiel. */

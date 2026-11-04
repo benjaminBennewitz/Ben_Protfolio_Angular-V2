@@ -8,6 +8,9 @@ export function migrateSave(game,data) {
   if (data?.room==='village' && data.flags?.eastRootOpen && data.player?.x===31 && data.player.y===15) {
     return {...data,player:{...data.player,x:BRUCHSTEIN_ARRIVAL[0],y:BRUCHSTEIN_ARRIVAL[1]}};
   }
+  if (data?.room==='east-lowland' && (data.roomRevision ?? 1)<2 && data.player?.x>=17) {
+    return {...data,roomRevision:2,player:{...data.player,x:data.flags?.eastLowlandGateOpen?16:15,y:9}};
+  }
   if (['east-meadow','east-clearing'].includes(data?.room)) return migrateEastTerrain(game,data);
   if (data?.room!=='mara-cave' || (data.roomRevision ?? 1)>=2) return data;
   const room=game.rooms.get(data.room),x=data.player?.x,y=data.player?.y;

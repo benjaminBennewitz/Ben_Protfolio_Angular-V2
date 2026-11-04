@@ -1,3 +1,7 @@
+import { drawRootPit,drawRootPassage,drawRootTunnel } from './root-dungeon.js';
+import { drawEnemies } from './dungeon.js';
+import { drawHeartDrops } from './health.js';
+import { drawWeaponSwing } from './weapon-swing.js';
 import { drawWaystoneGround } from './waystone.js';
 import { drawMeadowStream } from './meadow-stream.js';
 import { drawMeadowBirds,drawMeadowMidges,drawMeadowRock,drawMeadowPlants } from './meadow-life.js';
@@ -19,6 +23,7 @@ const floors = new WeakMap();
 /** Zeichnet den Dorfabschnitt mit nach Fußpunkten sortierten Ebenen. @param {object} render Zeicheninformationen. @param {object} player Interpolierte Spielfigur. */
 export function drawVillage(render,player) {
   drawGround(render); drawMeadowPlants(render); drawMeadow(render); drawWaterfall(render); drawLakeFall(render); drawMeadowStream(render); drawShallowRipples(render,player);
+  if (render.game.room.dungeon) { drawHeartDrops(render); drawEnemies(render); }
   const entries = [];
   for (const tree of render.game.room.trees) entries.push({type:'tree',x:tree[0],y:tree[1],pine:tree[2]==='pine',depth:tree[1]+2});
   for (const bird of render.game.room.birds) if (nightShade(minuteOfDay(render.game))<0.15) entries.push({...bird,type:'perch',animal:'bird',depth:bird.treeY+2.01});
@@ -68,6 +73,8 @@ function drawCell(render,x,y) {
   rect(render.ctx,0,xx,yy,16,16);
   if (kind==='r' && render.game.room.lakeFall) return x===0 && y>2?drawMeadowGateWall(render,x,y):drawLakeCliff(render,x,y);
   if (kind==='r' && render.game.room.villageLandscape) return drawGreenWall(render,x,y);
+  if (kind==='q') return drawRootPit(render,x,y);
+  if (kind==='v') return drawPlantCell(render,x,y,'h');
   if (kind==='g' || kind==='e' || kind==='k') return drawBareGround(render,x,y,kind==='k'?'g':kind);
   if (kind==='r' || kind==='c') return drawNorthCell(render,x,y);
   if (kind==='s') return drawShallows(render,x,y,kind);
@@ -108,7 +115,7 @@ function gatePlant(room,x,y) {
 
 /** Führt Waldpflanzen unter Baumkronen fort und erhält die gepflegten Dorfbeete. @param {object} room Raum. @param {number} x Nachbarspalte. @param {number} y Nachbarzeile. @param {string} kind Pflanzentyp. */
 function plantNeighbor(room,x,y,kind) {
-  if (room.villageLandscape) return (gatePlant(room,x,y) || room.ground[y]?.[x])===kind;
+  if (room.villageLandscape) return (gatePlant(room,x,y) || room.ground[y]?.[x]?.replace('v','h'))===kind;
   if (room.ground[y]?.[x]!==kind) return false;
   for (const [tx,ty] of room.trees) if (y===ty+1 && x>=tx && x<=tx+1) return false;
   return true;
@@ -168,7 +175,9 @@ function drawEntry(render,entry) {
   if (entry.type==='tree' && entry.pine) return render.ctx.drawImage(render.assets.pineSprite,entry.x*16,entry.y*16);
   if (entry.type === 'tree') return render.ctx.drawImage(render.assets.roundTreeSprite,entry.x*16,entry.y*16);
   if (entry.type === 'house') return drawHouse(render,entry);
-  if (entry.type === 'player') { drawVillageHero(render,entry); drawFoliageMask(render,entry); return; }
+  if (entry.type === 'player') { if (render.game.room.dungeon) drawWeaponSwing(render); drawVillageHero(render,entry); drawFoliageMask(render,entry); return; }
+  if (entry.kind==='root-tunnel') return drawRootTunnel(render,entry);
+  if (entry.kind==='root-passage') return drawRootPassage(render,entry);
   if (entry.kind==='meadow-rock') return drawMeadowRock(render,entry);
   if (entry.facade) return drawMeadowGate(render,entry);
   if (!drawVillageObject(render,entry)) drawObject(render,entry);
@@ -222,10 +231,18 @@ function drawWheel(render,x,y) {
 /** Zeichnet eine native 16-Pixel-Figur mit vier Laufrichtungen. @param {object} render Zeicheninformationen. @param {object} player Interpolierte Figur. */
 export function drawVillageHero(render,player) {
   const {ctx,game,assets}=render, facing=game.player.facing;
+  const fall=game.rootFall;
+  if (!fall && !game.reduced && game.hurtTime>0 && Math.floor(game.hurtTime*10)%2===0) return;
   const frame=game.move?Math.floor(game.move.time/0.09)%2:0;
   const sx=facing==='up'?32:facing==='left'||facing==='right'?64:0;
   const bob=game.avatar==='female' && game.move && !game.reduced && ['up','down'].includes(facing)?frame:0;
-  ctx.save(); ctx.translate(Math.round(player.x*16),Math.round(player.y*16)-bob);
+  const point=fall || player;
+  ctx.save(); ctx.translate(Math.round(point.x*16),Math.round(point.y*16)-bob);
+  if (fall && !game.reduced) {
+    const progress=1-fall.remaining/0.55;
+    ctx.translate(8,8+progress*5); ctx.scale(1-progress*0.8,1-progress*0.8); ctx.translate(-8,-8);
+    ctx.globalAlpha=1-progress;
+  }
   if (facing==='left') { ctx.translate(16,0); ctx.scale(-1,1); }
   ctx.drawImage(assets.heroes[game.avatar],sx+frame*16,0,16,16,0,0,16,16); ctx.restore();
 }

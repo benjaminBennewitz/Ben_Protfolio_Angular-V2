@@ -1,3 +1,4 @@
+import { pitAt } from './collision.js';
 import { START_MINUTES } from './world-clock.js';
 import { refreshQuestJournal } from './quest-journal.js';
 import { captureCombat,restoreCombat } from './combat-save.js';
@@ -17,7 +18,8 @@ export function captureGame(game) {
     if (state.keeper) room.keeper={index:state.keeper.index,elapsed:state.keeper.elapsed};
     states.push(room);
   }
-  const point=game.seat?.exit || [game.move?.x ?? game.player.x,game.move?.y ?? game.player.y];
+  const move=game.move && !pitAt(game.room,game.move.x,game.move.y)?game.move:game.player;
+  const point=game.seat?.exit || [move.x,move.y];
   return {version:1,dungeonRevision:3,combat:captureCombat(game),health:structuredClone(game.health),roomRevision:game.room.revision || 1,avatar:game.avatar,room:game.room.id,player:{x:point[0],y:point[1],facing:game.player.facing},flags:structuredClone(game.flags),inventory:[...game.inventory],notes:structuredClone(game.notes),coins:game.coins,time:game.time,worldMinutes:game.worldMinutes,states};
 }
 

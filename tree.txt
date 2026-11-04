@@ -824,6 +824,7 @@ folio/
 │   │   │   │   │   │   ├── village-life.js
 │   │   │   │   │   │   ├── village-north.js
 │   │   │   │   │   │   ├── village-scenery.js
+│   │   │   │   │   │   ├── waystone.js
 │   │   │   │   │   │   ├── weapon-swing.js
 │   │   │   │   │   │   └── world.js
 │   │   │   │   │   ├── systems/
@@ -864,6 +865,7 @@ folio/
 │   │   │   │   │   │   ├── save-migrations.js
 │   │   │   │   │   │   ├── save-state.js
 │   │   │   │   │   │   ├── save-validation.js
+│   │   │   │   │   │   ├── smith.js
 │   │   │   │   │   │   ├── system-menu.js
 │   │   │   │   │   │   ├── tavern.js
 │   │   │   │   │   │   ├── tavern-conversations.js
@@ -873,6 +875,7 @@ folio/
 │   │   │   │   │   │   ├── village.js
 │   │   │   │   │   │   ├── village-tasks.js
 │   │   │   │   │   │   ├── wanderers.js
+│   │   │   │   │   │   ├── waystones.js
 │   │   │   │   │   │   ├── weapon-timing.js
 │   │   │   │   │   │   ├── world-clock.js
 │   │   │   │   │   │   └── world-music.js
@@ -943,7 +946,7 @@ folio/
 │   │   │   ├── .gitignore
 │   │   │   ├── credits.html
 │   │   │   ├── CREDITS.md
-│   │   │   ├── DUNGEON_WANTED_GDD_v1_0.pdf
+│   │   │   ├── DUNGEON_WANTED_GDD_v1_1.pdf
 │   │   │   ├── index.html
 │   │   │   ├── package.json
 │   │   │   ├── package-lock.json
@@ -1060,7 +1063,8 @@ folio/
 │   │   │   │   ├── window-off-b.webp
 │   │   │   │   └── window-off-c.webp
 │   │   │   ├── scripts/
-│   │   │   │   └── app.js
+│   │   │   │   ├── app.js
+│   │   │   │   └── gate-visual.js
 │   │   │   ├── index.html
 │   │   │   ├── README.md
 │   │   │   └── styles.css

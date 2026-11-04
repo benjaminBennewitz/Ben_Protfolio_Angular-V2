@@ -553,6 +553,8 @@ folio/
 │   │   │   │   ├── sprites/
 │   │   │   │   │   ├── animals/
 │   │   │   │   │   │   ├── hedgehog.png
+│   │   │   │   │   │   ├── minifolks-roe.png
+│   │   │   │   │   │   ├── minifolks-stag.png
 │   │   │   │   │   │   ├── minifolks-wolf.png
 │   │   │   │   │   │   ├── mouse.png
 │   │   │   │   │   │   └── squirrel.png
@@ -562,6 +564,15 @@ folio/
 │   │   │   │   │   ├── goblin.png
 │   │   │   │   │   └── quell-enemies.png
 │   │   │   │   ├── tiles/
+│   │   │   │   │   ├── meadow-free/
+│   │   │   │   │   │   ├── Grass_16x16.png
+│   │   │   │   │   │   ├── Grass_Tall_16x16.png
+│   │   │   │   │   │   ├── Reeds_Short_16x16.png
+│   │   │   │   │   │   ├── Rock_Water_Big_32x32.png
+│   │   │   │   │   │   ├── Stepping_stones_water_16x16.png
+│   │   │   │   │   │   ├── Water_1.png
+│   │   │   │   │   │   ├── Water_1_Grass_Inner_16x16.png
+│   │   │   │   │   │   └── Water_1_Grass_Outer_16x16.png
 │   │   │   │   │   ├── Old Tilesets/
 │   │   │   │   │   │   ├── Dungeons (GameboyBW).png
 │   │   │   │   │   │   ├── Dungeons (GameboyG).png
@@ -731,6 +742,7 @@ folio/
 │   │   │   │   │   ├── hero-assets.js
 │   │   │   │   │   ├── lcd-effects.js
 │   │   │   │   │   ├── life-assets.js
+│   │   │   │   │   ├── meadow-assets.js
 │   │   │   │   │   └── tree-assets.js
 │   │   │   │   ├── game/
 │   │   │   │   │   ├── data/
@@ -754,6 +766,7 @@ folio/
 │   │   │   │   │   │   ├── interiors.js
 │   │   │   │   │   │   ├── items.js
 │   │   │   │   │   │   ├── mara-rooms.js
+│   │   │   │   │   │   ├── meadow-wildlife.js
 │   │   │   │   │   │   ├── quell-dungeon.js
 │   │   │   │   │   │   ├── quest-east.js
 │   │   │   │   │   │   ├── quest-helpers.js
@@ -788,6 +801,7 @@ folio/
 │   │   │   │   │   │   ├── interior.js
 │   │   │   │   │   │   ├── interior-fixtures.js
 │   │   │   │   │   │   ├── map.js
+│   │   │   │   │   │   ├── meadow-life.js
 │   │   │   │   │   │   ├── objects.js
 │   │   │   │   │   │   ├── overlays.js
 │   │   │   │   │   │   ├── primitives.js
@@ -830,6 +844,7 @@ folio/
 │   │   │   │   │   │   ├── inventory.js
 │   │   │   │   │   │   ├── loot.js
 │   │   │   │   │   │   ├── mara-quest.js
+│   │   │   │   │   │   ├── meadow-birds.js
 │   │   │   │   │   │   ├── player-movement.js
 │   │   │   │   │   │   ├── push.js
 │   │   │   │   │   │   ├── puzzles.js

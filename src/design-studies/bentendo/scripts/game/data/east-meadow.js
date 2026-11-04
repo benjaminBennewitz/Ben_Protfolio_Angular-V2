@@ -10,6 +10,7 @@ const BEDS=[
   {x:14,y:14,w:7,h:4,kind:'f'},{x:22,y:12,w:5,h:5,kind:'t'},
   {x:26,y:13,w:7,h:8,kind:'t'},{x:16,y:19,w:9,h:4,kind:'f'},
 ];
+const LAKE_SPANS={4:[22,27],5:[21,29],6:[21,30],7:[21,30],8:[23,28]};
 const POOLS=[[11.5,8.5,5,3.2],[11,14.5,3.5,2.4],[27,11,3.2,1.8]];
 
 export const ROOT_MARKS=[
@@ -54,7 +55,7 @@ function meadow() {
     prop('meadow-view','Blick über die Ostwiesen',24,10,'east-meadow-view','east-meadow-view',{hint:'umschauen'}),
     ...meadowWildlife(),...meadowRocks(),
   ];
-  return openForestPassages({id:'east-meadow',revision:3,title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,lakeFall:{x:23,y:2,w:2,h:4},meadowBirds:MEADOW_BIRDS,trees:[[1,2,'pine'],[4,1],[12,2],[2,16],[23,19,'pine'],[31,20],[30,15,'pine'],[15,20]],gardens:BEDS,buildings:[],birds:[],music:'east-meadow-day',objects});
+  return openForestPassages({id:'east-meadow',revision:3,title:'Die Ostwiesen',width,height,ground,spawn:[3,10],villageLandscape:true,shallows:true,lakeFall:{x:23,y:2,w:2,h:4},meadowBirds:MEADOW_BIRDS,trees:[[1,3,'pine'],[4,3],[12,3],[2,16],[23,19,'pine'],[31,20],[30,15,'pine'],[15,20]],gardens:BEDS,buildings:[],birds:[],music:'east-meadow-day',objects});
 }
 
 /** Legt sandige Wege, flache Tümpel und weiche Pflanzkonturen übereinander. @param {number} x Spalte. @param {number} y Zeile. */
@@ -62,10 +63,10 @@ function meadowCell(x,y) {
   const water=meadowWater(x,y);
   if (water) return water;
   if (y<=2) return 'r';
-  if (x>=18 && x<=20 && y>=4 && y<=7) return x===20?'t':'.';
-  if ((x<=8 || x>=17 && x<=24) && Math.abs(y-10)<=1) return '.';
+  if (x>=17 && x<=20 && y>=4 && y<=8 && Math.abs(x-18)+Math.abs(y-6)<=3) return 't';
+  if ((x<=8 && Math.abs(y-10)<=1) || (x>=18 && x<=24 && y===10)) return '.';
   if (x>=18 && x<=21 && y>=16 && y<=18 && x-y>=1) return '.';
-  for (const [dx,dy] of [[0,-1],[0,1],[-1,0],[1,0]]) if (meadowWater(x+dx,y+dy)) return 't';
+  if (nearMeadowWater(x,y)) return 't';
   for (const g of BEDS) if (((x-g.x+0.5)/g.w-0.5)**2+((y-g.y+0.5)/g.h-0.5)**2<0.23) return g.kind;
   return 'g';
 }
@@ -74,7 +75,18 @@ function meadowCell(x,y) {
 /** Trennt watbare Senken vom tiefen See und seinem Zulauf. @param {number} x Spalte. @param {number} y Zeile. */
 function meadowWater(x,y) {
   if (x>=23 && x<=24 && y>=2 && y<=5) return 'l';
-  if (y>=4 && !(x<=20 && y<=7) && ((x-23.5)/8)**2+((y-4.9)/3.7)**2<1) return 'l';
+  const span=LAKE_SPANS[y];
+  if (span && x>=span[0] && x<=span[1]) return 'l';
   for (const [cx,cy,rx,ry] of POOLS) if (((x-cx)/rx)**2+((y-cy)/ry)**2<1) return 's';
   return '';
+}
+
+
+/** Verbreitert die Uferwiese auch diagonal, ohne das tiefe Wasser begehbar zu machen. @param {number} x Spalte. @param {number} y Zeile. */
+function nearMeadowWater(x,y) {
+  for (let dy=-1;dy<=1;dy++) for (let dx=-1;dx<=1;dx++) {
+    const water=meadowWater(x+dx,y+dy);
+    if (water==='l' || water==='s' && (!dx || !dy)) return true;
+  }
+  return false;
 }

@@ -3,18 +3,20 @@ import { furnitureSprites } from './furniture-assets.js';
 
 /** Lädt nur die im Dorf verwendeten Bewohner- und Tiergrafiken. @param {Function} quantize Vorhandene LCD-Palettenumsetzung. */
 export async function loadLifeAssets(quantize) {
-  const [npcs,squirrel,hedgehog,mouse,interior,cottage,dog]=await Promise.all([
+  const [npcs,squirrel,hedgehog,mouse,interior,cottage,dog,roe,stag]=await Promise.all([
     loadImage('./assets/sprites/npcs/5yvalia-samples.png'),
     loadImage('./assets/sprites/animals/squirrel.png'),
     loadImage('./assets/sprites/animals/hedgehog.png'),
     loadImage('./assets/sprites/animals/mouse.png'), loadImage('./assets/tiles/fantasy-interior.png'), loadImage('./assets/tiles/cottage-interior.png'),
     loadImage('./assets/sprites/animals/minifolks-wolf.png'),
+    loadImage('./assets/sprites/animals/minifolks-roe.png'),
+    loadImage('./assets/sprites/animals/minifolks-stag.png'),
   ]);
-  return {dogSprite:dogSprite(dog,quantize),cottageTiles:quantize(cottage),interiorTiles:quantize(interior),npcSamples:quantize(npcs),wildlife:{squirrel:animalSprite(squirrel,quantize),hedgehog:animalSprite(hedgehog,quantize),mouse:animalSprite(mouse,quantize)},...furnitureSprites(interior,quantize)};
+  return {dogSprite:minifolksSprite(dog,quantize),deerSprites:{roe:minifolksSprite(roe,quantize),stag:minifolksSprite(stag,quantize)},cottageTiles:quantize(cottage),interiorTiles:quantize(interior),npcSamples:quantize(npcs),wildlife:{squirrel:animalSprite(squirrel,quantize),hedgehog:animalSprite(hedgehog,quantize),mouse:animalSprite(mouse,quantize)},...furnitureSprites(interior,quantize)};
 }
 
-/** Erhält die kühlen Fellschatten beim Wechsel in die LCD-Palette, ohne die Quelldatei zu ändern. @param {HTMLImageElement} image Wolf-Sheet. @param {Function} quantize Gemeinsame Palettenumsetzung. */
-function dogSprite(image,quantize) {
+/** Erhält die kühlen Fellschatten beim Wechsel in die LCD-Palette, ohne die Quelldatei zu ändern. @param {HTMLImageElement} image Minifolks-Tiergrafik. @param {Function} quantize Gemeinsame Palettenumsetzung. */
+function minifolksSprite(image,quantize) {
   const surface=canvas(image.width,image.height),ctx=surface.getContext('2d'); ctx.drawImage(image,0,0);
   const pixels=ctx.getImageData(0,0,image.width,image.height),data=pixels.data;
   for (let i=0;i<data.length;i+=4) {

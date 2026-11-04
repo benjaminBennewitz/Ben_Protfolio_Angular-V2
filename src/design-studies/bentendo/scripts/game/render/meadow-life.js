@@ -40,6 +40,10 @@ const PEBBLES=[
 
 /** Zeichnet Felsvarianten mit Licht von links oben und einem Bodenschatten. @param {object} render Zeicheninformationen. @param {object} object Fels. */
 export function drawMeadowRock(render,object) {
+  if (object.waterArt) {
+    const image=render.assets.meadow[object.waterArt];
+    render.ctx.drawImage(image,object.x*16,object.y*16); return;
+  }
   const {ctx}=render,small=object.small,art=(small?PEBBLES:ROCKS)[object.shape];
   const x=object.x*16+(small?4:0),y=object.y*16+15-art.length;
   rect(ctx,1,x+(small?2:3),y+art.length,small?5:12,1);
@@ -48,18 +52,31 @@ export function drawMeadowRock(render,object) {
   }
 }
 
-/** Zeichnet grasende Rehe und den Hirsch mit eigener Silhouette in nativer Auflösung. @param {object} render Zeicheninformationen. @param {object} object Tier. @param {number} x Pixelspalte. @param {number} y Pixelzeile. */
+/** Mischt Originalgräser und Schilf punktuell in die vorhandene Wiesenvegetation. @param {object} render Zeicheninformationen. */
+export function drawMeadowPlants(render) {
+  const {ctx,game,assets}=render,ground=game.room.ground;
+  if (!game.room.lakeFall) return;
+  for (let y=1;y<game.room.height-1;y++) for (let x=1;x<game.room.width-1;x++) {
+    const kind=ground[y][x],seed=x*13+y*7+x*y;
+    if (kind==='g' && seed%7===0) {
+      ctx.drawImage(assets.meadow.grass,seed%3*16,y%3*16,16,16,x*16,y*16,16,16);
+    } else if (kind==='t' && seed%4===0) {
+      const bank=ground[y-1][x]==='l' || ground[y][x-1]==='l' || ground[y][x+1]==='l';
+      const tile=bank?assets.meadow.reeds:assets.meadow.tall;
+      ctx.drawImage(tile,bank?0:seed%3%2*16,0,16,16,x*16,y*16,16,16);
+    }
+  }
+}
+
+/** Zeichnet die Originalsprites in Blickrichtung und mit demselben Fußpunkt wie die anderen Tiere. @param {object} render Zeicheninformationen. @param {object} object Tier. @param {number} x Pixelspalte. @param {number} y Pixelzeile. */
 export function drawMeadowDeer(render,object,x,y) {
-  const {ctx,game}=render,headUp=object.walking || !game.reduced && (game.time+object.x)%7<1.6;
-  const stride=object.walking && !game.reduced?Math.floor(game.time*9)%2:0,head=headUp?3:11;
+  const {ctx,game,assets}=render;
+  const walking=object.walking && !game.reduced,phase=game.time+object.x*0.43+object.y*0.31;
+  const grazing=!walking && !game.reduced && phase%8>=5.2;
+  const row=walking?1:grazing?(object.stag?5:4):0;
+  const frame=game.reduced || grazing?0:Math.floor(phase*(walking?10:3))%4;
   ctx.save(); ctx.translate(Math.round(x)+8,Math.round(y));
-  if (object.facing==='right') ctx.scale(-1,1);
-  rect(ctx,3,-5,6,13,7); rect(ctx,2,-4,7,11,4); rect(ctx,1,-3,7,8,2);
-  rect(ctx,3,7,7,3,3); rect(ctx,1,7,7,2,1);
-  for (const leg of [-4,-1,4,7]) rect(ctx,3,leg+(leg%2?stride:0),12,1,5-(leg%2?0:stride));
-  rect(ctx,3,-7,headUp?4:8,4,7); rect(ctx,2,-6,headUp?5:9,2,5);
-  rect(ctx,3,-10,head,5,4); rect(ctx,1,-9,head+1,3,1);
-  rect(ctx,3,-7,head-2,1,3);
-  if (object.stag && headUp) { rect(ctx,3,-7,-1,1,5); rect(ctx,3,-10,0,1,2); rect(ctx,3,-10,2,5,1); rect(ctx,3,-6,0,1,2); }
+  if (object.facing==='left') ctx.scale(-1,1);
+  ctx.drawImage(assets.deerSprites[object.stag?'stag':'roe'],frame*32,row*32,32,32,-16,-16,32,32);
   ctx.restore();
 }

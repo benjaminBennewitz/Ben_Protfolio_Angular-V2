@@ -1,3 +1,4 @@
+import { loadMeadowAssets } from './meadow-assets.js';
 import { caveWaterSprites } from './cave-assets.js';
 import { loadLifeAssets } from './life-assets.js';
 import { heroSprite,femaleHeroSprite } from './hero-assets.js';
@@ -25,12 +26,12 @@ function hexByte(value) { return parseInt(value, 16); }
 
 /** Lädt die vorhandenen Spielgrafiken ohne Netzwerkdienste. */
 export async function loadDisplayAssets() {
-  const [title, logo, tiles, portraits, goblin, overworld, villagers, villageTiles, life, dungeon, dungeonEnemies] = await Promise.all([
+  const [title, logo, tiles, portraits, goblin, overworld, villagers, villageTiles, life, dungeon, dungeonEnemies, meadow] = await Promise.all([
     loadImage(ASSETS.title), loadImage(ASSETS.logo), loadImage(ASSETS.tiles),
     loadImage('./assets/characters/adventurer-portraits.png'), loadImage('./assets/sprites/goblin.png'),
     loadImage(ASSETS.overworld), loadImage(ASSETS.villagers), loadImage(ASSETS.villageTiles), loadLifeAssets(quantize), loadImage('./assets/tilesets/gb-dungeon/GBDungeon.png'),
-    loadImage('./assets/sprites/quell-enemies.png'),
+    loadImage('./assets/sprites/quell-enemies.png'), loadMeadowAssets(quantize),
   ]);
   const villageSprites=quantize(villagers),villageAtlas=quantize(villageTiles);
-  return { dungeonEnemies, dungeonTiles:quantize(dungeon), title: quantize(title,160,144), logo: quantize(logo,156,61), tiles: quantize(tiles), portraits:quantize(portraits,128,64), goblin, overworld: quantize(overworld), roundTreeSprite:roundTreeSprite(overworld,quantize), villagers:villageSprites, heroes:{female:femaleHeroSprite(villageSprites),male:heroSprite(villageSprites,32)}, villageTiles:villageAtlas, caveWater:caveWaterSprites(villageAtlas), ...life, ...floraSprites(villageTiles,quantize) };
+  return { meadow, dungeonEnemies, dungeonTiles:quantize(dungeon), title: quantize(title,160,144), logo: quantize(logo,156,61), tiles: quantize(tiles), portraits:quantize(portraits,128,64), goblin, overworld: quantize(overworld), roundTreeSprite:roundTreeSprite(overworld,quantize), villagers:villageSprites, heroes:{female:femaleHeroSprite(villageSprites),male:heroSprite(villageSprites,32)}, villageTiles:villageAtlas, caveWater:caveWaterSprites(villageAtlas), ...life, ...floraSprites(villageTiles,quantize) };
 }

@@ -1,4 +1,4 @@
-import { drawMeadowBirds,drawMeadowMidges,drawMeadowRock } from './meadow-life.js';
+import { drawMeadowBirds,drawMeadowMidges,drawMeadowRock,drawMeadowPlants } from './meadow-life.js';
 import { drawShallows,drawShallowRipples,drawLakeFall,drawLakeCell,drawLakeCliff } from './shallow-water.js';
 import { drawSleepingPet } from './sleeping-pets.js';
 import { minuteOfDay,nightShade } from '../systems/world-clock.js';
@@ -16,7 +16,7 @@ const floors = new WeakMap();
 
 /** Zeichnet den Dorfabschnitt mit nach Fußpunkten sortierten Ebenen. @param {object} render Zeicheninformationen. @param {object} player Interpolierte Spielfigur. */
 export function drawVillage(render,player) {
-  drawGround(render); drawMeadow(render); drawWaterfall(render); drawLakeFall(render); drawShallowRipples(render,player);
+  drawGround(render); drawMeadowPlants(render); drawMeadow(render); drawWaterfall(render); drawLakeFall(render); drawShallowRipples(render,player);
   const entries = [];
   for (const tree of render.game.room.trees) entries.push({type:'tree',x:tree[0],y:tree[1],pine:tree[2]==='pine',depth:tree[1]+2});
   for (const bird of render.game.room.birds) if (nightShade(minuteOfDay(render.game))<0.15) entries.push({...bird,type:'perch',animal:'bird',depth:bird.treeY+2.01});
@@ -64,7 +64,7 @@ function drawCell(render,x,y) {
   const ground = render.game.room.ground, kind = ground[y][x], xx=x*16, yy=y*16;
   rect(render.ctx,0,xx,yy,16,16);
   if (kind==='r' && render.game.room.lakeFall) return drawLakeCliff(render,x,y);
-  if (kind==='r' && render.game.room.villageLandscape) return drawEastRock(render,x,y);
+  if (kind==='r' && render.game.room.villageLandscape) return drawGreenWall(render,x,y);
   if (kind==='g' || kind==='e') return drawBareGround(render,x,y,kind);
   if (kind==='r' || kind==='c') return drawNorthCell(render,x,y);
   if (kind==='l') return drawLakeCell(render,x,y);
@@ -79,6 +79,13 @@ function drawCell(render,x,y) {
   if (['f','t','h'].includes(kind)) drawPlantCell(render,x,y,kind);
 }
 
+/** Setzt Vegetation unter die schmalen Randkacheln der Wurzelpforte. @param {object} render Zeicheninformationen. @param {number} x Spalte. @param {number} y Zeile. */
+function drawGreenWall(render,x,y) {
+  const kind=gatePlant(render.game.room,x,y);
+  if (kind) drawPlantCell(render,x,y,kind);
+  drawEastRock(render,x,y);
+}
+
 /** Verbindet Beete und hohe Wiesen mit passenden oberen und seitlichen Abschlüssen. @param {object} render Zeicheninformationen. @param {number} x Spalte. @param {number} y Zeile. @param {string} kind Pflanzentyp. */
 function drawPlantCell(render,x,y,kind) {
   const room=render.game.room;
@@ -88,9 +95,18 @@ function drawPlantCell(render,x,y,kind) {
   if (kind==='h') drawHedge(render,x*16,y*16,edges);
 }
 
+/** Liest für die sichtbaren Mauerflanken denselben Pflanzentyp wie auf dem Nachbarfeld. @param {object} room Raum. @param {number} x Spalte. @param {number} y Zeile. */
+function gatePlant(room,x,y) {
+  const row=room.ground[y];
+  if (room.id!=='east-clearing' || row?.[x]!=='r') return null;
+  if (row[x-1]==='h') return 'h';
+  if (row[x+1]==='t') return 't';
+  return null;
+}
+
 /** Führt Waldpflanzen unter Baumkronen fort und erhält die gepflegten Dorfbeete. @param {object} room Raum. @param {number} x Nachbarspalte. @param {number} y Nachbarzeile. @param {string} kind Pflanzentyp. */
 function plantNeighbor(room,x,y,kind) {
-  if (room.villageLandscape) return room.ground[y]?.[x]===kind;
+  if (room.villageLandscape) return (gatePlant(room,x,y) || room.ground[y]?.[x])===kind;
   if (room.ground[y]?.[x]!==kind) return false;
   for (const [tx,ty] of room.trees) if (y===ty+1 && x>=tx && x<=tx+1) return false;
   return true;

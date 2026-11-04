@@ -1023,6 +1023,7 @@ folio/
 │   │   │   ├── assets/
 │   │   │   │   ├── coastal-fog.webp
 │   │   │   │   ├── coast-loop.mp4
+│   │   │   │   ├── coast-poster.webp
 │   │   │   │   ├── favicon.svg
 │   │   │   │   ├── lighthouse-beam.webp
 │   │   │   │   ├── message-bottle.webp

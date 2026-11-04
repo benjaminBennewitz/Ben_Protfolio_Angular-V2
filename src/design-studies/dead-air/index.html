@@ -17,6 +17,7 @@
   <title>DEAD//AIR — The Coast Is Still Transmitting</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" as="image" href="assets/scene-poster.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/coast-poster.webp">
   <link rel="preload" as="image" href="assets/message-bottle.webp">
   <link rel="preload" as="image" href="assets/message-bottle-glitch.webp">
   <link rel="stylesheet" href="styles.css">
@@ -80,7 +81,7 @@
           <div class="television__screen">
             <figure class="scene" id="scene" role="group" aria-label="Fotografische Küstenszene mit Meer und Leuchtturm, je nach Signalzustand mit Nebel und Lichteffekten">
               <img class="scene__artwork" src="assets/scene-poster.webp" alt="" width="1280" height="720" fetchpriority="high">
-              <video class="scene__video" id="coast-video" muted loop playsinline preload="none" aria-hidden="true" poster="assets/scene-poster.webp">
+              <video class="scene__video" id="coast-video" muted loop playsinline preload="metadata" aria-hidden="true" poster="assets/coast-poster.webp">
                 <source src="assets/coast-loop.mp4" type="video/mp4">
               </video>
               <div class="scene__fog" aria-hidden="true"></div>
@@ -101,7 +102,6 @@
                 <img class="scene__artifact-image scene__artifact-image--base" src="assets/message-bottle.webp" width="1448" height="1086" alt="">
                 <img class="scene__artifact-image scene__artifact-image--glitch" src="assets/message-bottle-glitch.webp" width="1448" height="1086" alt="">
               </button>
-              <div class="scene__switch-glitch" aria-hidden="true"></div>
               <div class="scene__signal-line" aria-hidden="true"></div>
             </figure>
           </div>

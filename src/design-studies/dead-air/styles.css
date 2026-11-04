@@ -643,8 +643,7 @@ figure {
 .scene__vignette,
 .scene__signal-bleed,
 .scene__anomaly,
-.scene__window-lights,
-.scene__switch-glitch {
+.scene__window-lights {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -657,16 +656,14 @@ figure {
   transition: none;
 }
 
-.scene__video {
-  opacity: 0;
-}
-
+/* Nur die jeweils aktive Bildquelle wird gerendert – kein Alpha-Crossfade. */
+.scene__video,
 [data-source='video'] .scene__artwork {
-  opacity: 0;
+  display: none;
 }
 
 [data-source='video'] .scene__video {
-  opacity: 1;
+  display: block;
 }
 
 /* Drei Tiefenwirkungen aus einer dichten, weich auslaufenden Wolkentextur:
@@ -916,21 +913,6 @@ figure {
   animation: signal-line 6s linear infinite;
 }
 
-/* Hartes Schwarzbild mit kurzen Scanline-Artefakten beim Kamerawechsel. */
-.scene__switch-glitch {
-  z-index: 11;
-  opacity: 0;
-  pointer-events: none;
-  background:
-    repeating-linear-gradient(180deg, #d7e0de12 0 1px, transparent 1px 4px),
-    #020506;
-}
-
-[data-switching='true'] .scene__switch-glitch {
-  opacity: 1;
-  animation: scene-switch-glitch 168ms steps(2, end) 1 both;
-}
-
 /* Interaktives Fundstück in CAM 02. Die Flaschenpost bleibt zunächst unsichtbar,
    materialisiert mit Glitch-Artefakten und liegt danach als klickbares Objekt
    im Felsvorsprung der Küstenkamera. */
@@ -958,7 +940,7 @@ figure {
   transform: translate(-50%, -50%) rotate(-8deg) scale(.86);
   transform-origin: center;
   filter: drop-shadow(0 5px 14px rgba(0, 0, 0, .55));
-  transition: opacity 420ms ease, transform 540ms ease, filter 540ms ease;
+  transition: none;
 }
 
 .scene__artifact--bottle:hover,
@@ -1405,14 +1387,17 @@ figure {
 
 /* Die gewählte Kamera hat Vorrang vor den frequenzabhängigen Lichtzuständen. */
 [data-source='video'] .scene__window-lights,
-[data-source='video'] .scene__beam--lighthouse,
-[data-source='video'] .scene__mast-led,
-[data-source='video'] .scene__fog {
-  opacity: 0;
-  animation: none;
+[data-source='video'] .scene__fog,
+[data-source='video'] .scene__anomaly {
+  display: none;
 }
 
-[data-source='artwork'] .scene__artifact--bottle,
+/* Beim Kameracut verschwindet die Flasche im selben Frame wie CAM 02.
+   display:none verhindert Restbilder trotz Reveal-Keyframes. */
+[data-source='artwork'] .scene__artifact--bottle {
+  display: none;
+}
+
 [data-bottle='hidden'] .scene__artifact--bottle,
 [data-bottle='waiting'] .scene__artifact--bottle {
   opacity: 0;
@@ -1478,34 +1463,6 @@ figure {
   46%, 63% { opacity: 0; }
   64%, 68% { opacity: .22; transform: translate3d(-1px,0,0) scale(1.01); }
   69%, 100% { opacity: 0; transform: translate3d(0,0,0) scale(1); }
-}
-
-@keyframes scene-switch-glitch {
-  0% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-    filter: brightness(.38) contrast(1.18);
-  }
-  18% {
-    opacity: 1;
-    transform: translate3d(0, -1px, 0);
-    filter: brightness(.08) contrast(1.3);
-  }
-  46% {
-    opacity: .96;
-    transform: translate3d(0, 1px, 0);
-    filter: brightness(.52) contrast(1.1);
-  }
-  72% {
-    opacity: .82;
-    transform: translate3d(0, 0, 0);
-    filter: brightness(.14) contrast(1.26);
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0);
-    filter: brightness(1) contrast(1);
-  }
 }
 
 @keyframes fog-bank-distant {

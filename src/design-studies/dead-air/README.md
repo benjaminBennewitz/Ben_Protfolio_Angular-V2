@@ -187,3 +187,12 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 - Artwork, Video und Quell-nebel schalten jetzt ohne Crossfade um.
 - Beim Kamerawechsel liegt kurz ein harter Schwarzbild-/Signalglitch über dem Monitor, angelehnt an alte portable TV-Geräte der 80er/90er.
 - Das Küstenvideo wird beim Start einmal vorgeladen, damit der erste Wechsel robuster ist.
+
+## Patch 27 – Synchronous Camera Cut
+
+- CAM 01 und CAM 02 wechseln unmittelbar im selben Event-Handler; sämtliche 72/168-ms-Umschalt-Timer und der dauerhafte Schwarzbild-Glitch entfallen.
+- Die inaktive Bildquelle wird mit `display: none` vollständig aus dem Rendering entfernt, statt über die Opacity zu überblenden.
+- Die Flaschenpost und ihre laufende Materialisierungsanimation verschwinden beim Wechsel zu CAM 01 ebenfalls sofort, ohne 420-ms-Opacity-Transition.
+- Die stationsbezogenen Licht- und Nebel-Layer werden auf CAM 02 ebenso hart ausgeblendet.
+- CAM 02 erhält ein eigenes Standbild `assets/coast-poster.webp` aus dem stabilisierten Küstenvideo, damit auch vor dem ersten dekodierten Videoframe kein CAM-01-Bild erscheint.
+- Der Flaschenpost-Reveal selbst bleibt erhalten; es gibt lediglich keine Animation beim Kamerawechsel.

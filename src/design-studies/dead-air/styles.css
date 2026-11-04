@@ -916,6 +916,21 @@ figure {
   animation: signal-line 6s linear infinite;
 }
 
+/* Hartes Schwarzbild mit kurzen Scanline-Artefakten beim Kamerawechsel. */
+.scene__switch-glitch {
+  z-index: 11;
+  opacity: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(180deg, #d7e0de12 0 1px, transparent 1px 4px),
+    #020506;
+}
+
+[data-switching='true'] .scene__switch-glitch {
+  opacity: 1;
+  animation: scene-switch-glitch 168ms steps(2, end) 1 both;
+}
+
 /* Interaktives Fundstück in CAM 02. Die Flaschenpost bleibt zunächst unsichtbar,
    materialisiert mit Glitch-Artefakten und liegt danach als klickbares Objekt
    im Felsvorsprung der Küstenkamera. */

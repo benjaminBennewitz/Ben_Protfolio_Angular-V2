@@ -134,6 +134,11 @@ const scene = {
   source: /** @type {SceneSource} */ ('artwork'),
   language: 'de',
   paused: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  switchTimers: {
+    phaseId: 0,
+    endId: 0,
+    target: null,
+  },
   story: {
     stage: /** @type {StoryStage} */ ('routine'),
     elapsedMs: 0,
@@ -295,7 +300,7 @@ function updateSourceDescription() {
 function applySource(source) {
   scene.source = source;
   root.dataset.source = source;
-  document.querySelectorAll('[data-source]').forEach(button => {
+  document.querySelectorAll('#source-switch button[data-source]').forEach(button => {
     const active = button.dataset.source === source;
     button.classList.toggle('is-active', active);
     button.setAttribute('aria-pressed', String(active));
@@ -308,18 +313,25 @@ function applySource(source) {
 }
 
 /** Wechselt hart zwischen Stationskamera und bewegtem Küstenfeed.
- * Ein kurzer Schwarzbild-/Signalglitch kaschiert Lade- oder Umschaltartefakte. */
-function setSource(source, hardCut = true) {
+ * Ein kurzes Schwarzbild kaschiert das Umschalten ohne Crossfade. */
+function setSource(source) {
   if (source !== 'artwork' && source !== 'video') return;
-  if (source === scene.source) return;
 
-  if (!hardCut) {
-    applySource(source);
-    return;
-  }
+  const isSwitching = root.dataset.switching === 'true';
+  if (source === (isSwitching ? scene.switchTimers.target : scene.source)) return;
 
   window.clearTimeout(scene.switchTimers.phaseId);
   window.clearTimeout(scene.switchTimers.endId);
+
+  // Ein schneller Rückwechsel vor dem Bildwechsel verwirft die alte Anforderung.
+  if (source === scene.source) {
+    scene.switchTimers.target = null;
+    root.dataset.switching = 'false';
+    root.dataset.switchPhase = 'idle';
+    return;
+  }
+
+  scene.switchTimers.target = source;
   root.dataset.switching = 'true';
   root.dataset.switchPhase = 'cut';
 
@@ -331,6 +343,9 @@ function setSource(source, hardCut = true) {
   scene.switchTimers.endId = window.setTimeout(() => {
     root.dataset.switching = 'false';
     root.dataset.switchPhase = 'idle';
+    scene.switchTimers.target = null;
+    scene.switchTimers.phaseId = 0;
+    scene.switchTimers.endId = 0;
   }, 168);
 }
 
@@ -482,7 +497,7 @@ function init() {
   root.dataset.story = 'routine';
 
   frequencyInput.addEventListener('input', () => setFrequency(frequencyInput.value));
-  document.querySelectorAll('[data-source]').forEach(button => {
+  document.querySelectorAll('#source-switch button[data-source]').forEach(button => {
     button.addEventListener('click', () => setSource(button.dataset.source));
   });
   languageToggle.addEventListener('click', () => {
@@ -517,8 +532,12 @@ function init() {
     coastVideo.pause();
     window.clearTimeout(scene.story.clockTimeoutId);
     window.clearTimeout(scene.story.revealTimeoutId);
+    window.clearTimeout(scene.switchTimers.phaseId);
+    window.clearTimeout(scene.switchTimers.endId);
   });
 
+  root.dataset.switching = 'false';
+  root.dataset.switchPhase = 'idle';
   setFrequency(scene.frequency);
   setSource(scene.source);
   updateTranslations();

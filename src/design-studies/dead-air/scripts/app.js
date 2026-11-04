@@ -53,6 +53,8 @@ const TRANSLATIONS = Object.freeze({
     sceneArtworkAria: 'Küstenkamera mit Leuchtturm, Sendestation, Nebel und Signalstörungen',
     sceneVideoAria: 'Küstenkamera mit felsigem Ufer, Brandung und Signalstörungen',
     examineBottle: 'Flaschenpost untersuchen',
+    evidenceLog: 'AKTE / 01',
+    evidenceLogAria: 'Gesicherte Flaschenpost erneut lesen',
     messageMeta: 'FUNDSTÜCK / 001',
     messageSubtitle: 'FUNDSTÜCK / FLASCHENPOST',
     messageTitle: 'EINE MINUTE FEHLT.',
@@ -95,6 +97,8 @@ const TRANSLATIONS = Object.freeze({
     sceneArtworkAria: 'Coastal station camera with a lighthouse, transmitter, fog and interference',
     sceneVideoAria: 'Coastal camera with a rocky shoreline, rolling waves and signal interference',
     examineBottle: 'Inspect the message bottle',
+    evidenceLog: 'FILE / 01',
+    evidenceLogAria: 'Read the recovered message again',
     messageMeta: 'RECOVERED OBJECT / 001',
     messageSubtitle: 'RECOVERED / MESSAGE BOTTLE',
     messageTitle: 'ONE MINUTE IS MISSING.',
@@ -125,6 +129,7 @@ const receiverClose = document.querySelector('#receiver-close');
 const messageDialog = document.querySelector('#message-dialog');
 const messageClose = document.querySelector('#message-close');
 const bottleArtifact = document.querySelector('#bottle-artifact');
+const evidenceLog = document.querySelector('#evidence-log');
 const compactViewport = window.matchMedia('(max-width: 750px), (max-height: 520px)');
 
 /** Laufzeitzustand der Microsite ohne unnötige Persistenz. */
@@ -140,6 +145,7 @@ const scene = {
     lastTick: 0,
     bottleVisible: false,
     bottleOpened: false,
+    bottleCollected: false,
     bottleMaterializing: false,
     bottleMaterialized: false,
     clockTimeoutId: 0,
@@ -175,6 +181,8 @@ function updateTranslations() {
   document.querySelector('#source-switch').setAttribute('aria-label', texts.sourceAria);
 
   bottleArtifact.setAttribute('aria-label', texts.examineBottle);
+  evidenceLog.textContent = texts.evidenceLog;
+  evidenceLog.setAttribute('aria-label', texts.evidenceLogAria);
   messageClose.setAttribute('aria-label', texts.close);
   document.querySelector('#message-meta').textContent = texts.messageMeta;
   document.querySelector('#message-subtitle').textContent = texts.messageSubtitle;
@@ -213,7 +221,8 @@ function syncSignalVisuals() {
     : 'normal';
 }
 
-/** Fortschritt wird durch Fundstück, Kamera und korrekt abgestimmte Frequenz ausgelöst. */
+/** Fortschritt wird durch das gesicherte Fundstück, Kamera und korrekt abgestimmte
+ * Frequenz ausgelöst. Die Übergänge sind einmalig und erzwingen keinen Kamerawechsel. */
 function progressStory() {
   const previous = scene.story.stage;
   if (previous === 'message-found' && scene.source === 'artwork' && scene.channel === 'interference') {
@@ -356,13 +365,14 @@ function setReceiverOpen(open) {
 function syncStoryState() {
   root.dataset.bottle = !scene.story.bottleVisible
     ? 'hidden'
-    : (scene.story.bottleMaterializing ? 'materializing' :
-      (scene.story.bottleOpened ? 'opened' : (scene.story.bottleMaterialized ? 'visible' : 'waiting')));
+    : (scene.story.bottleCollected ? 'collected' :
+      (scene.story.bottleMaterializing ? 'materializing' :
+        (scene.story.bottleOpened ? 'opened' : (scene.story.bottleMaterialized ? 'visible' : 'waiting'))));
 }
 
 /** Spielt den kurzen dimensionalen Reveal erst ab, wenn CAM 02 tatsächlich sichtbar ist. */
 function maybeStartBottleReveal() {
-  if (!scene.story.bottleVisible || scene.story.bottleMaterialized || scene.story.bottleMaterializing || scene.source !== 'video') return;
+  if (!scene.story.bottleVisible || scene.story.bottleCollected || scene.story.bottleMaterialized || scene.story.bottleMaterializing || scene.source !== 'video') return;
 
   scene.story.bottleMaterializing = true;
   bottleArtifact.classList.add('is-materializing');
@@ -392,9 +402,9 @@ function revealBottle() {
   }));
 }
 
-/** Öffnet die gefundene Flaschenpost und erschließt die erste Story-Frequenz. */
+/** Öffnet die Fundnotiz; bereits gesicherte Hinweise bleiben über die Akte lesbar. */
 function openBottleMessage() {
-  if (!scene.story.bottleVisible) return;
+  if (!scene.story.bottleVisible || messageDialog.open) return;
 
   if (scene.story.bottleMaterializing) {
     window.clearTimeout(scene.story.revealTimeoutId);
@@ -404,19 +414,44 @@ function openBottleMessage() {
     syncStoryState();
   }
 
-  if (!scene.story.bottleOpened) {
-    scene.story.bottleOpened = true;
-    if (scene.story.stage === 'routine') {
-      scene.story.stage = 'message-found';
-      window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
-    }
-    setFrequency(scene.frequency);
-  }
-  syncStoryState();
+  const firstRead = !scene.story.bottleOpened;
+  scene.story.bottleOpened = true;
   setReceiverOpen(false);
   messageDialog.showModal();
-  window.dispatchEvent(new CustomEvent('deadair:bottleopened', {
-    detail: { channel: scene.channel, source: scene.source, frequency: scene.frequency },
+
+  if (firstRead) {
+    window.dispatchEvent(new CustomEvent('deadair:bottleopened', {
+      detail: { channel: scene.channel, source: scene.source, frequency: scene.frequency },
+    }));
+  }
+}
+
+/** Der Hinweis wird erst nach dem Schließen des Dialogs als aufgenommen markiert.
+ * Dadurch bleibt der Fund beim Lesen im Dialog, verschwindet aber danach
+ * vollständig aus CAM 02; über AKTE / 01 ist der Text weiterhin abrufbar. */
+function collectBottle() {
+  if (!scene.story.bottleOpened || scene.story.bottleCollected) return;
+
+  scene.story.bottleCollected = true;
+  scene.story.bottleMaterializing = false;
+  scene.story.bottleMaterialized = true;
+  window.clearTimeout(scene.story.revealTimeoutId);
+  bottleArtifact.classList.remove('is-materializing');
+  bottleArtifact.hidden = true;
+  evidenceLog.hidden = false;
+  syncStoryState();
+
+  if (scene.story.stage === 'routine') {
+    scene.story.stage = 'message-found';
+    window.dispatchEvent(new CustomEvent('deadair:storychanged', {
+      detail: { stage: scene.story.stage },
+    }));
+  }
+
+  setFrequency(scene.frequency);
+  evidenceLog.focus();
+  window.dispatchEvent(new CustomEvent('deadair:bottlecollected', {
+    detail: { stage: scene.story.stage },
   }));
 }
 
@@ -485,7 +520,9 @@ function init() {
   });
 
   bottleArtifact.addEventListener('click', openBottleMessage);
+  evidenceLog.addEventListener('click', openBottleMessage);
   messageClose.addEventListener('click', () => messageDialog.close());
+  messageDialog.addEventListener('close', collectBottle);
   messageDialog.addEventListener('click', event => {
     if (event.target === messageDialog) messageDialog.close();
   });

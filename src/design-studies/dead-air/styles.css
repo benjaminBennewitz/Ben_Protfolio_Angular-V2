@@ -586,6 +586,33 @@ figure {
   white-space: nowrap;
 }
 
+/* Gesicherte Fundstücke bleiben abrufbar, ohne das Motiv erneut zu bevölkern. */
+.monitor-area__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.monitor-area__evidence {
+  padding: 3px 7px;
+  border: 1px solid var(--edge);
+  background: var(--surface);
+  color: var(--chalk);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .08em;
+}
+
+.monitor-area__evidence:hover {
+  border-color: var(--signal-light);
+  color: var(--signal-light);
+}
+
+.monitor-area__evidence[hidden] {
+  display: none;
+}
+
 .television {
   flex: 0 1 auto;
   align-self: center;
@@ -1369,8 +1396,14 @@ figure {
   animation: none;
 }
 
+/* Das Morsezeichen ist ausschließlich bei 91.3 MHz auf CAM 01 aktiv.
+   Bei anderen Frequenzen bleibt das Signal wieder konstant statt weiterzufunken. */
 [data-story='morse-active'] .scene__mast-led {
   opacity: 1;
+  animation: none;
+}
+
+[data-story='morse-active'][data-state='interference'][data-source='artwork'] .scene__mast-led {
   animation: mast-code-1037 22s steps(1, end) infinite;
 }
 
@@ -1399,7 +1432,9 @@ figure {
 }
 
 [data-bottle='hidden'] .scene__artifact--bottle,
-[data-bottle='waiting'] .scene__artifact--bottle {
+[data-bottle='waiting'] .scene__artifact--bottle,
+[data-bottle='collected'] .scene__artifact--bottle {
+  display: none;
   opacity: 0;
   pointer-events: none;
 }

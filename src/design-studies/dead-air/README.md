@@ -196,3 +196,17 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 - Die stationsbezogenen Licht- und Nebel-Layer werden auf CAM 02 ebenso hart ausgeblendet.
 - CAM 02 erhält ein eigenes Standbild `assets/coast-poster.webp` aus dem stabilisierten Küstenvideo, damit auch vor dem ersten dekodierten Videoframe kein CAM-01-Bild erscheint.
 - Der Flaschenpost-Reveal selbst bleibt erhalten; es gibt lediglich keine Animation beim Kamerawechsel.
+
+
+## Patch 28 – Fundstück sichern und Signalphase
+
+- Nach dem ersten Schließen der Flaschenpost-Nachricht wird das Objekt vollständig aus CAM 02 entfernt. Der Fund gilt dann als eingesammelt; er erscheint auch nach Kamerawechseln nicht erneut.
+- Der kleine Button `AKTE / 01` erscheint erst nach der Aufnahme und öffnet die Nachricht jederzeit erneut. Er benötigt keinen neuen Dialog oder eine weitere Asset-Kopie.
+- Der bestehende Morsecode `1037` leuchtet nur bei `91.3 MHz` in CAM 01; beim Wegstimmen erlischt die Sequenz und die rote Mastlampe leuchtet konstant.
+- Die vorhandene Story-Gate-Kette bleibt bestehen: ROUTINE → Fund öffnen und schließen → 91.3 MHz auf CAM 01 → Morse → 103.7 MHz auf CAM 01 → Fensterflackern.
+
+### Ausarbeitung der nächsten Phase
+
+**Phase 02 / THE SIGNAL:** Der Spieler findet die Kennung `91 / 3` auf dem Fundstück und stimmt 91.3 MHz ab. Auf CAM 01 sendet das rote Mastlicht wiederholt `1037` als korrekten Morse-Zahlencode (`.---- / ----- / ...-- / --...`). Der Empfänger selbst verrät die nächste Frequenz nicht. Sobald 103.7 MHz auf CAM 01 abgestimmt wird, beginnen die zuvor dunklen Fenster getrennt voneinander zu flackern und die Atmosphäre der Station wird unnatürlicher. Das Fensterereignis bildet den Übergang zum nächsten, noch auszuarbeitenden Fundstück.
+
+**Designprinzip:** Keine automatische Kamerawahl, keine Popup-Hinweise und keine Überspringbarkeit per zufällig früh eingestellten Frequenzen. Die ursprüngliche Geschichte der verschwundenen Schicht bleibt bis zum Finale verborgen.

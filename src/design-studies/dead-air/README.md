@@ -274,23 +274,25 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 **Dramaturgie:** Jede Bedingung verdient eine eigene beobachtbare Veränderung auf CAM 01/02 und optional eine zunehmende Täuschung in den Funkaufzeichnungen. Es gibt keinen vorzeitigen Tor-Trigger und keine sofortige Erklärung der Wesen.
 
 
-## Patch 33 – Relay Recovery / Phase 04 (implementiert)
+## Patch 35 – Unknown Warning / Decision Point
 
-- **Freischaltung:** Sobald der automatische Suchlauf bei 96.4 MHz endet, wird das NCBS-Relaisprotokoll (RELAIS / 0/3) freigeschaltet. Vor AUDIO / 001 sind keine Relais sichtbar oder abstimmbar.
-- **CAM 02:** Drei sehr dezente Positionslichter liegen fest auf der Küstenkamera. Über Klick, Tippen oder Tastatur öffnen sie das Relaisprotokoll mit drei groben Suchbereichen: A 88–90 MHz, B 98–100 MHz und C 105–107 MHz.
-- **Frequenzrätsel:** Die tatsächlichen Träger liegen auf **88.9, 99.1 und 106.2 MHz**. Bei einer Übereinstimmung mit dem FM-Regler erscheint in CAM 02 die Aktion **VERBINDEN / A/B/C** direkt am bestehenden Empfangsdisplay. Jeder Träger kann nur einmal verbunden werden.
-- **Anomalieanzeige:** Nur während einer Suche in der Nähe eines noch offenen Signals und nur in CAM 02 steigen die Balken. Der Ausschlag hängt von der Annäherung an die korrekte Frequenz ab; dauerhaft verbundene Bojen verursachen keine Anomalie mehr. Kein künstlicher Fortschrittsanzeiger.
-- **Story-Ende des Patches:** Bei **RELAIS / 3/3** meldet das Protokoll, dass die Peilung noch nicht synchron ist (`relays-linked`). Die folgende Phasenabgleich-Mechanik und AUDIO / 002 sind **noch nicht implementiert**.
-- Die bekannten Stufen (Flaschenpost, Morsecode, Fensterflackern, automatischer Suchlauf, AUDIO / 001) bleiben unverändert; das Audioarchiv funktioniert auch nach 3/3. Dialog, Status und Aktionen besitzen DE/EN-Texte. Neue Ereignis-Hooks: `deadair:relaylinked`, `deadair:relaysrestored`.
-- **Testumfang:** Isolierter Chromium-Test der vollständigen Kette, drei Verbindungen, Dialog, Sprachwechsel, responsive Ansichten 375/390/1024 px und fehlender JS-Laufzeitfehler. Der vollständige Integrationstest mit dem echten B2FOLIO-Repository steht aus.
+- Nach PHASE 05 muss der Spieler das zweite Mastsignal auf CAM 01 selbst untersuchen. Die Station schaltet darauf die weibliche Warnaufnahme AUDIO / 003 frei.
+- Die Aufnahme ist als DE/EN-Demofassung verfügbar, wird automatisch empfangen und anschließend archiviert. Wie bei den übrigen Aufnahmen gelten die bestehenden Pause-, Sichtbarkeits- und Autoplay-Schutzmaßnahmen.
+- Nach der erstmaligen Wiedergabe öffnet sich der native Entscheidungsdialog. Bei Autoplay-Sperren ist die Entscheidung über das Archiv erreichbar.
+- Zwei vorläufige Wege: **Alex folgen / Rettung vorbereiten** oder **Warnung folgen / Sender isolieren**. Es wird dabei noch kein Signal gesendet. Der finale Rückkanal bleibt PHASE 06 vorbehalten.
+- Der gewählte Weg wird im Story-State geführt und über `deadair:routechosen` veröffentlicht. Die Entscheidung darf vor dem finalen Senden noch geändert werden; ein alternatives Ende ist noch nicht festgelegt.
+- Die Mast-Lichtreaktion bleibt erhalten: Nach dem Fund verstummt das Morsezeichen; der Leuchtturmstrahl bleibt aus.
 
 
-## Patch 34 – Signal Alignment & Camera 01 Reaction
+## Patch 36 – Versteckte Warnfrequenz und irreversible Entscheidung
 
-- Gesicherte Akten, AUDIO / 001, AUDIO / 002, RELAIS und SYNC werden im linken Empfangs-/Steuerpanel statt im Monitorkopf bedient.
-- DEAD//AIR-Headlines mit mehr Letterspacing; responsive Fontgrößen angepasst.
-- Nach allen drei Relais erscheint AUDIO / 002 und wird automatisch als lokale DE/EN-Funkaufnahme wiedergegeben; beide Aufnahmen bleiben im Archiv verfügbar.
-- SYNC / 3 erlaubt die Phasenabgleichung der zwei verschobenen Signalwellen B/C mit A als Referenz. Abschluss erst nach bewusster Bestätigung, nur nach RELAIS / 3/3.
-- Nach erfolgreicher Synchronisation werden beide Regler gesperrt und der Story-State `synchronized` ausgelöst. Dies ist noch **nicht** das Finale / der Rettungsimpuls.
-- CAM 01: Der Leuchtturm-Kegel erlischt erst nach der Synchronisation, das rote Mastlicht sendet dann eine rätselhafte Morsefolge. Der eigentliche Leuchtturm bleibt vorerst unverändert.
-- Native Dialoge, DE/EN, tastaturbedienbare Range-Inputs, Pause und reduzierte Bewegung berücksichtigt.
+- Nach erfolgreicher Synchronisation morst der Mast **1024** statt „NO“: 102.4 MHz.
+- Die beschädigte weibliche Aufnahme (AUDIO / 003) ist ausschließlich auf **CAM 01 bei 102.4 MHz** und erst nach der Synchronisation empfangbar.
+- Keine Mast-Hotspot-Aktion, kein archivierter Wiederabspielbutton, kein jederzeit öffnender Entscheidungsbutton. Bei erneutem Abstimmen auf 102.4 MHz (CAM 01) spielt die Übertragung erneut.
+- Das Umschalten der Kamera oder der Frequenz beendet den Warnmitschnitt. Bei blockiertem Browser-Autoplay erscheint nur am aktiven Träger ein manueller Startknopf.
+- Der Dialog **„WAS SOLL ICH TUN?“** erscheint nur nach dem `ended`-Ereignis der vollständig gehörten Übertragung, nie allein durch deren Entdeckung.
+- Genau eine unwiderrufliche Entscheidung pro Sitzung; kein erneut aufrufbarer Entscheidungsdialog und keine Möglichkeit zum Abbrechen via Escape.
+- Wer die Warnfrequenz nicht findet, kann später nur dem voreingestellten Weg zum schlechten Finale folgen; der alternative Weg wird ausschließlich durch vollständig gehörtes Signal + Entscheidung freigeschaltet.
+- Die Verzweigung zum tatsächlichen Finale ist weiterhin Phase 06 und nicht Bestandteil dieses Patches. Ein Neuladen beginnt eine neue Spielsitzung (wie bisher ohne Persistenz).
+
+- Die fragmentierte Mitschrift ist für barrierearmen Zugriff nur auf der eingestellten Live-Frequenz abrufbar; das allein löst die Entscheidung nicht aus.

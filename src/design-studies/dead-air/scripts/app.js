@@ -5,9 +5,9 @@
  * @author Benjamin Bennewitz
  */
 
-/** @typedef {'normal' | 'interference' | 'unknown' | 'voice' | 'relayA' | 'relayB' | 'relayC'} SignalState */
+/** @typedef {'normal' | 'interference' | 'unknown' | 'voice' | 'relayA' | 'relayB' | 'relayC' | 'warning'} SignalState */
 /** @typedef {'artwork' | 'video'} SceneSource */
-/** @typedef {'routine' | 'message-found' | 'morse-active' | 'windows-event' | 'frequency-scan' | 'transmission-ready' | 'relays-linked' | 'synchronized'} StoryStage */
+/** @typedef {'routine' | 'message-found' | 'morse-active' | 'windows-event' | 'frequency-scan' | 'transmission-ready' | 'relays-linked' | 'synchronized' | 'warning-received' | 'rescue-standby' | 'signal-isolated'} StoryStage */
 
 /** Fest definierte Frequenzen und ihre Bildstörung. */
 const CHANNELS = Object.freeze({
@@ -18,6 +18,7 @@ const CHANNELS = Object.freeze({
   relayA: { frequency: 88.9, channel: '05', reception: 64, interference: 24, label: 'RELAY / A' },
   relayB: { frequency: 99.1, channel: '06', reception: 71, interference: 29, label: 'RELAY / B' },
   relayC: { frequency: 106.2, channel: '07', reception: 58, interference: 33, label: 'RELAY / C' },
+  warning: { frequency: 102.4, channel: '08', reception: 12, interference: 82, label: 'WEAK CARRIER' },
 });
 
 /** Relaiskennungen mit absichtlich nur grob angegebenen Suchbereichen. */
@@ -27,6 +28,7 @@ const RELAYS = Object.freeze([
   { id: 'C', channel: 'relayC', frequency: CHANNELS.relayC.frequency, band: '105–107 MHz' },
 ]);
 const RELAY_LINK_TOLERANCE = 0.11;
+const WARNING_TUNING_TOLERANCE = 0.11;
 
 
 const FM_MIN = 87.5;
@@ -145,6 +147,34 @@ const TRANSLATIONS = Object.freeze({
     syncActionDone: 'SYNCHRONISIERT',
     syncAnnouncement: 'Alle drei Relais synchronisiert. Der Rückkanal kann vorbereitet werden.',
 
+    warningRecordingButton: 'AUDIO / 003 · STARTEN',
+    warningRecordingAria: 'Gestörte Tonübertragung auf 102.4 MHz auf CAM 01 starten',
+    warningTranscriptButton: 'MITSCHRIFT / 003',
+    warningTranscriptAria: 'Unvollständige Mitschrift des empfangenen Signals öffnen',
+    warningMeta: 'NCBS / EMPFANG UNBEKANNT',
+    warningTitle: 'UNVOLLSTÄNDIGE ÜBERTRAGUNG',
+    warningFrequency: '102.4 MHz / SIGNALFRAGMENT 003',
+    warningTranscriptLabel: 'MITSCHRIFT / NUR BRUCHSTÜCKE LESBAR',
+    warningLine1: '…[RAUSCHEN] …ein… Fal— …[SIGNALABBRUCH]…',
+    warningLine2: '…wir… versuch— …rauszukommen… [STÖRUNG]…',
+    warningLine3: '…nich— …[ÜBERLAGERT]… akti— …[VERBINDUNG ABGERISSEN]…',
+    warningFooter: 'QUELLE UNBEKANNT · MITSCHRIFT UNVOLLSTÄNDIG',
+    warningReceived: 'Schwaches Sprachsignal auf 102.4 MHz empfangen.',
+    warningPlaying: 'Fragmentierte Übertragung auf 102.4 MHz wird empfangen.',
+    warningFinished: 'Signalfragment vollständig empfangen.',
+    warningBlocked: 'Wiedergabe blockiert. Signal erneut auf 102.4 MHz starten.',
+    decisionMeta: 'NCBS / VERBINDUNGSPROTOKOLL',
+    decisionEyebrow: 'RÜCKKANAL / MANUELLE FREIGABE',
+    decisionTitle: 'WAS SOLL ICH TUN?',
+    decisionDescription: 'Die gestörte Übertragung ist abgebrochen. Alex wartet weiterhin auf das Rücksignal.',
+    decisionRescueTitle: 'DEM SIGNAL WEITER FOLGEN',
+    decisionRescueDescription: 'Den Rückkanal für Alex und die vermisste Schicht öffnen.',
+    decisionIsolateTitle: 'RÜCKKANAL ISOLIEREN',
+    decisionIsolateDescription: 'Den Sender abschalten und keine Verbindung herstellen.',
+    decisionNote: 'DIESE ENTSCHEIDUNG KANN NICHT RÜCKGÄNGIG GEMACHT WERDEN.',
+    decisionRescueStatus: 'RÜCKKANAL FREIGEGEBEN · SENDEIMPULS NOCH AUSSTEHEND',
+    decisionIsolateStatus: 'RÜCKKANAL ISOLIERT · KEINE SENDUNG',
+    decisionRouteAnnouncement: 'Entscheidung endgültig gespeichert.',
     messageMeta: 'FUNDSTÜCK / 001',
     messageSubtitle: 'FUNDSTÜCK / FLASCHENPOST',
     messageTitle: 'EINE MINUTE FEHLT.',
@@ -160,6 +190,7 @@ const TRANSLATIONS = Object.freeze({
       relayA: 'Ein schwacher Relaisträger. Die Positionsdaten sind noch nicht verifiziert.',
       relayB: 'Ein schwacher Relaisträger. Die Positionsdaten sind noch nicht verifiziert.',
       relayC: 'Ein schwacher Relaisträger. Die Positionsdaten sind noch nicht verifiziert.',
+      warning: 'Ein schwaches Sprachsignal überlagert die Station.',
     },
   },
   en: {
@@ -260,6 +291,34 @@ const TRANSLATIONS = Object.freeze({
     syncActionDone: 'SYNCHRONIZED',
     syncAnnouncement: 'All three relays synchronized. Return channel can be prepared.',
 
+    warningRecordingButton: 'AUDIO / 003 · PLAY',
+    warningRecordingAria: 'Play disrupted transmission on 102.4 MHz on CAM 01',
+    warningTranscriptButton: 'TRANSCRIPT / 003',
+    warningTranscriptAria: 'Open transcript of the received signal fragment',
+    warningMeta: 'NCBS / UNIDENTIFIED RECEPTION',
+    warningTitle: 'INCOMPLETE TRANSMISSION',
+    warningFrequency: '102.4 MHz / SIGNAL FRAGMENT 003',
+    warningTranscriptLabel: 'TRANSCRIPT / FRAGMENTS ONLY',
+    warningLine1: '…[STATIC] …a… trap— …[SIGNAL LOST]…',
+    warningLine2: '…we’re… trying… to get out… [INTERFERENCE]…',
+    warningLine3: '…don’— …[OVERLAPPING]… activ— …[CONNECTION LOST]…',
+    warningFooter: 'UNKNOWN ORIGIN · INCOMPLETE TRANSCRIPT',
+    warningReceived: 'Weak voice carrier detected on 102.4 MHz.',
+    warningPlaying: 'Fragmented transmission received on 102.4 MHz.',
+    warningFinished: 'Signal fragment fully received.',
+    warningBlocked: 'Playback blocked. Start the signal manually on 102.4 MHz.',
+    decisionMeta: 'NCBS / CONNECTION PROTOCOL',
+    decisionEyebrow: 'RETURN CHANNEL / MANUAL AUTHORIZATION',
+    decisionTitle: 'WHAT SHOULD I DO?',
+    decisionDescription: 'The broken transmission has ended. Alex is still waiting for the return signal.',
+    decisionRescueTitle: 'CONTINUE FOLLOWING THE SIGNAL',
+    decisionRescueDescription: 'Prepare the return channel for Alex and the missing night shift.',
+    decisionIsolateTitle: 'ISOLATE RETURN CHANNEL',
+    decisionIsolateDescription: 'Shut down the transmitter and establish no connection.',
+    decisionNote: 'THIS DECISION CANNOT BE UNDONE.',
+    decisionRescueStatus: 'RETURN CHANNEL AUTHORIZED · PULSE NOT YET SENT',
+    decisionIsolateStatus: 'RETURN CHANNEL ISOLATED · NO TRANSMISSION',
+    decisionRouteAnnouncement: 'Choice permanently recorded.',
     messageMeta: 'RECOVERED OBJECT / 001',
     messageSubtitle: 'RECOVERED / MESSAGE BOTTLE',
     messageTitle: 'ONE MINUTE IS MISSING.',
@@ -275,6 +334,7 @@ const TRANSLATIONS = Object.freeze({
       relayA: 'A weak relay carrier. Position data is not yet verified.',
       relayB: 'A weak relay carrier. Position data is not yet verified.',
       relayC: 'A weak relay carrier. Position data is not yet verified.',
+      warning: 'A weak voice signal is bleeding into the station.',
     },
   },
 });
@@ -316,6 +376,12 @@ const syncClose = document.querySelector('#sync-close');
 const syncOffsetB = document.querySelector('#sync-offset-b');
 const syncOffsetC = document.querySelector('#sync-offset-c');
 const syncCommit = document.querySelector('#sync-commit');
+const warningRecordingToggle = document.querySelector('#warning-recording-toggle');
+const warningTranscriptToggle = document.querySelector('#warning-transcript-toggle');
+const decisionResult = document.querySelector('#decision-result');
+const decisionDialog = document.querySelector('#decision-dialog');
+const decisionRescue = document.querySelector('#decision-rescue');
+const decisionIsolate = document.querySelector('#decision-isolate');
 const compactViewport = window.matchMedia('(max-width: 750px), (max-height: 520px)');
 
 /** Laufzeitzustand der Microsite ohne unnötige Persistenz. */
@@ -348,8 +414,12 @@ const scene = {
     requestId: 0,
     currentRecording: '001',
     secondReceived: false,
+    thirdReceived: false,
   },
   sync: { completed: false },
+  // choice === null ist der unentdeckte Standardweg (Phase 06: schlechtes Ende).
+  // Eine getroffene Entscheidung kann innerhalb der Spielsitzung nicht geändert werden.
+  warning: { found: false, choice: null, playbackCompleted: false },
   story: {
     stage: /** @type {StoryStage} */ ('routine'),
     elapsedMs: 0,
@@ -417,6 +487,7 @@ function updateTranslations() {
   refreshRelayUI();
   renderTransmission();
   updateSyncUI();
+  updateWarningUI();
   document.querySelector('#message-meta').textContent = texts.messageMeta;
   document.querySelector('#message-subtitle').textContent = texts.messageSubtitle;
   document.querySelector('#message-title').textContent = texts.messageTitle;
@@ -434,6 +505,8 @@ function updateTranslations() {
 /** Liefert zum aktiven Story-Ereignis passende Empfangstexte. */
 function getStateDescription(texts) {
   if (scene.story.stage === 'frequency-scan') return texts.scanDescription;
+  if (scene.warning.choice === 'isolate') return texts.decisionIsolateStatus;
+  if (scene.warning.choice === 'rescue') return texts.decisionRescueStatus;
   if (scene.story.stage === 'transmission-ready' && scene.channel === 'voice') return texts.transmissionDescription;
   return scene.channel ? texts.stateDescriptions[scene.channel] : texts.offAirDescription;
 }
@@ -441,7 +514,8 @@ function getStateDescription(texts) {
 /** Ordnet einer manuell gewählten Frequenz höchstens einen tatsächlichen Empfang zu. */
 function findChannel(frequency) {
   return Object.keys(CHANNELS).find(channel =>
-    Math.abs(CHANNELS[channel].frequency - frequency) <= TUNING_TOLERANCE
+    Math.abs(CHANNELS[channel].frequency - frequency)
+      <= (channel === 'warning' ? WARNING_TUNING_TOLERANCE : TUNING_TOLERANCE)
   ) ?? null;
 }
 
@@ -450,6 +524,7 @@ function isChannelAvailable(channel) {
   if (channel === 'interference') return scene.story.stage !== 'routine';
   if (channel === 'unknown') return ['morse-active', 'windows-event', 'frequency-scan', 'transmission-ready', 'relays-linked'].includes(scene.story.stage);
   if (channel === 'voice') return scene.relays.unlocked || scene.story.stage === 'transmission-ready';
+  if (channel === 'warning') return scene.sync.completed;
   if (['relayA', 'relayB', 'relayC'].includes(channel)) return scene.relays.unlocked;
   return true;
 }
@@ -585,7 +660,8 @@ function openSyncDialog() {
   if (!syncDialog.open) syncDialog.showModal();
 }
 
-/** Speichert den endgültigen Phasenabgleich genau einmal. */
+/** Speichert den endgültigen Phasenabgleich genau einmal.
+ * Danach morst die Station nur eine weitere Empfangsfrequenz, keinen Klartext. */
 function commitSignalAlignment() {
   if (scene.sync.completed || scene.paused || scene.relays.linked.size !== RELAYS.length) return;
   if (Math.abs(Number(syncOffsetB.value)) > 3 || Math.abs(Number(syncOffsetC.value)) > 3) return;
@@ -595,17 +671,129 @@ function commitSignalAlignment() {
   syncSignalVisuals();
   refreshRelayUI();
   updateSyncUI();
+  updateWarningUI();
   updateAnomalyMeter();
   receiverEventStatus.textContent = TRANSLATIONS[scene.language].syncAnnouncement;
   window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
   window.dispatchEvent(new CustomEvent('deadair:relayaligned', { detail: { relays: ['A', 'B', 'C'] } }));
 }
 
+/** Der Warnträger wird nur auf CAM 01 bei exakt eingestellter Frequenz empfangen. */
+function canReceiveWarning() {
+  return scene.sync.completed
+    && scene.source === 'artwork'
+    && scene.channel === 'warning'
+    && Math.abs(scene.frequency - CHANNELS.warning.frequency) <= WARNING_TUNING_TOLERANCE;
+}
+
+/** Hält die Aufnahme an, sobald der Empfänger oder die Kamera den Träger verlässt. */
+function stopWarningAudio() {
+  if (scene.audio.currentRecording !== '003') return;
+  ++scene.audio.requestId;
+  transmissionAudio.pause();
+  scene.audio.resumeAfterPause = false;
+  scene.audio.resumeAfterVisibility = false;
+  scene.audio.blocked = false;
+}
+
+/** Das Signal wird bei der ersten korrekten Abstimmung entdeckt und bei späterer
+ * erneuter Abstimmung wiederholt. Der Entscheidungsdialog bleibt einmalig. */
+function receiveWarningSignal() {
+  if (!canReceiveWarning()) return;
+
+  if (!scene.warning.found) {
+    scene.warning.found = true;
+    scene.audio.thirdReceived = true;
+    scene.story.stage = 'warning-received';
+    syncSignalVisuals();
+    window.dispatchEvent(new CustomEvent('deadair:warningreceived', {
+      detail: { recording: '003', frequency: CHANNELS.warning.frequency, camera: 'artwork' },
+    }));
+    window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
+  }
+
+  receiverEventStatus.textContent = TRANSLATIONS[scene.language].warningReceived;
+  void playTransmission({ restart: true, recording: '003' });
+  updateWarningUI();
+  updateAnomalyMeter();
+}
+
+/** Aktualisiert nur den Live-Empfang und den endgültigen Rückkanalstatus. */
+function updateWarningUI() {
+  const texts = TRANSLATIONS[scene.language];
+  const receivedHere = canReceiveWarning();
+  warningRecordingToggle.hidden = !receivedHere || !scene.audio.blocked || scene.audio.currentRecording !== '003';
+  warningRecordingToggle.textContent = texts.warningRecordingButton;
+  warningRecordingToggle.setAttribute('aria-label', texts.warningRecordingAria);
+  warningTranscriptToggle.hidden = !receivedHere || !scene.warning.found;
+  warningTranscriptToggle.textContent = texts.warningTranscriptButton;
+  warningTranscriptToggle.setAttribute('aria-label', texts.warningTranscriptAria);
+
+  const chosenText = scene.warning.choice === 'rescue'
+    ? texts.decisionRescueStatus
+    : (scene.warning.choice === 'isolate' ? texts.decisionIsolateStatus : '');
+  decisionResult.hidden = !chosenText;
+  decisionResult.textContent = chosenText;
+
+  const decisionLabels = {
+    'decision-meta': 'decisionMeta',
+    'decision-eyebrow': 'decisionEyebrow',
+    'decision-title': 'decisionTitle',
+    'decision-description': 'decisionDescription',
+    'decision-rescue-title': 'decisionRescueTitle',
+    'decision-rescue-description': 'decisionRescueDescription',
+    'decision-isolate-title': 'decisionIsolateTitle',
+    'decision-isolate-description': 'decisionIsolateDescription',
+    'decision-note': 'decisionNote',
+  };
+  Object.entries(decisionLabels).forEach(([id, key]) => {
+    document.getElementById(id).textContent = texts[key];
+  });
+  decisionRescue.setAttribute('aria-pressed', String(scene.warning.choice === 'rescue'));
+  decisionIsolate.setAttribute('aria-pressed', String(scene.warning.choice === 'isolate'));
+}
+
+/** Stellt nur am aktiven CAM-01-Träger den unvollständigen Funktext bereit.
+ * Die Mitschrift allein trifft keine Entscheidung und startet keine Wiedergabe. */
+function openWarningTranscript() {
+  if (!canReceiveWarning() || !scene.warning.found) return;
+  setReceiverOpen(false);
+  scene.audio.currentRecording = '003';
+  renderTransmission();
+  if (!transmissionDialog.open) transmissionDialog.showModal();
+}
+
+/** Eine Entscheidung wird nur nach vollständig gehörtem Funkspruch angeboten. */
+function openDecisionDialog() {
+  if (!scene.warning.playbackCompleted || scene.warning.choice !== null || decisionDialog.open) return;
+  setReceiverOpen(false);
+  updateWarningUI();
+  decisionDialog.showModal();
+}
+
+/** Legt den Weg endgültig fest. Ohne gefundenen Funkträger bleibt der
+ * Standardweg zu Phase 06 erhalten; der rettende Alternativweg bleibt verborgen. */
+function chooseRoute(route) {
+  if (!scene.warning.found || !scene.warning.playbackCompleted
+    || scene.warning.choice !== null || !['rescue', 'isolate'].includes(route)) return;
+
+  scene.warning.choice = route;
+  scene.story.stage = route === 'rescue' ? 'rescue-standby' : 'signal-isolated';
+  syncSignalVisuals();
+  stateDescription.textContent = getStateDescription(TRANSLATIONS[scene.language]);
+  updateWarningUI();
+  updateAnomalyMeter();
+  decisionDialog.close();
+  receiverEventStatus.textContent = TRANSLATIONS[scene.language].decisionRouteAnnouncement;
+  window.dispatchEvent(new CustomEvent('deadair:routechosen', { detail: { route, permanent: true } }));
+  window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
+}
+
 /** Zeichnet das gemeinsame Audiotranskript abhängig vom archivierten Funkspruch. */
 function renderTransmission() {
   const texts = TRANSLATIONS[scene.language];
-  const suffix = scene.audio.currentRecording === '002' ? '2' : '';
-  const field = key => texts[`transmission${suffix}${key}`];
+  const suffix = scene.audio.currentRecording === '003' ? 'Warning' : (scene.audio.currentRecording === '002' ? '2' : '');
+  const field = key => suffix === 'Warning' ? texts[`warning${key}`] : texts[`transmission${suffix}${key}`];
   const fields = {
     '#transmission-meta': 'Meta', '#transmission-title': 'Title',
     '#transmission-frequency': 'Frequency', '#transmission-transcript-label': 'TranscriptLabel',
@@ -677,6 +865,13 @@ function getAnomalyProfile() {
       }
     }
     return { level: 0, amplitude: 0, speed: 0 };
+  }
+
+  // Das Signal ist nur während der tatsächlich hörbaren Störübertragung präsent.
+  if (canReceiveWarning() && scene.audio.currentRecording === '003'
+    && !transmissionAudio.paused && !transmissionAudio.ended) {
+    const pulse = (1 + Math.sin(scene.anomaly.activeMs / 160)) / 2;
+    return { level: .39 + pulse * .37, amplitude: .16, speed: 3.1 };
   }
 
   if (stage === 'synchronized') {
@@ -813,6 +1008,12 @@ function setFrequency(value, { automated = false } = {}) {
   if (automated) return;
 
   refreshRelayUI();
+  if (canReceiveWarning()) {
+    if (previousChannel !== 'warning') receiveWarningSignal();
+  } else {
+    stopWarningAudio();
+    updateWarningUI();
+  }
   updateAnomalyMeter();
   const detail = { frequency, channel, reception: config?.reception ?? 0, interference: config?.interference ?? 91 };
   window.dispatchEvent(new CustomEvent('deadair:frequencychange', { detail }));
@@ -894,7 +1095,8 @@ function updateAutoScan() {
  * Der Dialog bleibt beim ersten Empfang geschlossen; die Aufnahme ist dennoch hörbar.
  * Auf erneuten Archivaufruf wird die vorhandene Aufnahme verwendet. */
 async function playTransmission({ restart = false, recording = scene.audio.currentRecording } = {}) {
-  if (!scene.relays.unlocked || (recording === '002' && !scene.audio.secondReceived)) return;
+  if (!scene.relays.unlocked || (recording === '002' && !scene.audio.secondReceived)
+    || (recording === '003' && (!scene.audio.thirdReceived || !canReceiveWarning()))) return;
 
   scene.audio.currentRecording = recording;
   renderTransmission();
@@ -919,22 +1121,29 @@ async function playTransmission({ restart = false, recording = scene.audio.curre
     scene.audio.blocked = false;
     transmissionToggle.textContent = TRANSLATIONS[scene.language].transmissionButton;
     transmission2Toggle.textContent = TRANSLATIONS[scene.language].transmission2Button;
-    receiverEventStatus.textContent = `${TRANSLATIONS[scene.language].transmissionPlayingAnnouncement.replace('001', recording)}`;
+    warningRecordingToggle.textContent = TRANSLATIONS[scene.language].warningRecordingButton;
+    receiverEventStatus.textContent = recording === '003'
+      ? TRANSLATIONS[scene.language].warningPlaying
+      : TRANSLATIONS[scene.language].transmissionPlayingAnnouncement.replace('001', recording);
+    updateWarningUI();
   } catch (error) {
     if (requestId !== scene.audio.requestId) return;
     scene.audio.blocked = true;
     const texts = TRANSLATIONS[scene.language];
     if (recording === '001') transmissionToggle.textContent = texts.transmissionPlayAction;
-    else transmission2Toggle.textContent = scene.language === 'de' ? 'AUDIO / 002 · STARTEN' : 'AUDIO / 002 · PLAY';
-    receiverEventStatus.textContent = error.name === 'NotAllowedError'
-      ? texts.transmissionBlockedAnnouncement
-      : texts.transmissionErrorAnnouncement;
+    else if (recording === '002') transmission2Toggle.textContent = scene.language === 'de' ? 'AUDIO / 002 · STARTEN' : 'AUDIO / 002 · PLAY';
+    else warningRecordingToggle.textContent = texts.warningRecordingButton;
+    receiverEventStatus.textContent = recording === '003' && error.name === 'NotAllowedError'
+      ? texts.warningBlocked
+      : (error.name === 'NotAllowedError' ? texts.transmissionBlockedAnnouncement : texts.transmissionErrorAnnouncement);
+    updateWarningUI();
   }
 }
 
 /** Öffnet das Archiv; wurde die Aufnahme beendet, beginnt sie erneut. */
 function openTransmission(recording = '001') {
   if (recording === '002' && !scene.audio.secondReceived) return;
+  if (recording === '003') return; // AUDIO / 003 ist nur als Live-Empfang auf CAM 01 hörbar.
   setReceiverOpen(false);
   const changed = scene.audio.currentRecording !== recording;
   scene.audio.currentRecording = recording;
@@ -980,6 +1189,12 @@ function applySource(source) {
   progressStory();
   maybeStartBottleReveal();
   refreshRelayUI();
+  if (canReceiveWarning()) {
+    receiveWarningSignal();
+  } else {
+    stopWarningAudio();
+    updateWarningUI();
+  }
   void syncVideo();
 }
 
@@ -1034,7 +1249,7 @@ function togglePause() {
     transmissionAudio.pause();
   } else if (scene.audio.resumeAfterPause) {
     scene.audio.resumeAfterPause = false;
-    void playTransmission();
+    if (scene.audio.currentRecording !== '003' || canReceiveWarning()) void playTransmission();
   }
   updatePlaybackLabel();
   updateAnomalyMeter();
@@ -1227,7 +1442,7 @@ function init() {
     scene.language = scene.language === 'de' ? 'en' : 'de';
     updateTranslations();
     if (scene.relays.unlocked) {
-      if (wasPlaying) {
+      if (wasPlaying && (scene.audio.currentRecording !== '003' || canReceiveWarning())) {
         void playTransmission({ restart: true });
       } else {
         transmissionAudio.pause();
@@ -1265,6 +1480,14 @@ function init() {
   syncOffsetB.addEventListener('input', updateSyncUI);
   syncOffsetC.addEventListener('input', updateSyncUI);
   syncCommit.addEventListener('click', commitSignalAlignment);
+  warningTranscriptToggle.addEventListener('click', openWarningTranscript);
+  warningRecordingToggle.addEventListener('click', () => {
+    if (canReceiveWarning()) void playTransmission({ recording: '003', restart: true });
+  });
+  // Erst nach einer Auswahl schließen; Escape darf die einmalige Entscheidung nicht umgehen.
+  decisionDialog.addEventListener('cancel', event => event.preventDefault());
+  decisionRescue.addEventListener('click', () => chooseRoute('rescue'));
+  decisionIsolate.addEventListener('click', () => chooseRoute('isolate'));
   relayClose.addEventListener('click', () => relayDialog.close());
   relayDialog.addEventListener('click', event => {
     if (event.target === relayDialog) relayDialog.close();
@@ -1276,7 +1499,17 @@ function init() {
   transmissionAudio.addEventListener('ended', () => {
     scene.audio.resumeAfterPause = false;
     scene.audio.resumeAfterVisibility = false;
-    receiverEventStatus.textContent = TRANSLATIONS[scene.language].transmissionFinishedAnnouncement.replace('001', scene.audio.currentRecording);
+    if (scene.audio.currentRecording === '003') {
+      if (!canReceiveWarning()) return;
+      receiverEventStatus.textContent = TRANSLATIONS[scene.language].warningFinished;
+      if (!scene.warning.playbackCompleted) {
+        scene.warning.playbackCompleted = true;
+        if (transmissionDialog.open) transmissionDialog.close();
+        openDecisionDialog();
+      }
+    } else {
+      receiverEventStatus.textContent = TRANSLATIONS[scene.language].transmissionFinishedAnnouncement.replace('001', scene.audio.currentRecording);
+    }
   });
   transmissionClose.addEventListener('click', () => transmissionDialog.close());
   transmissionDialog.addEventListener('close', () => {
@@ -1298,7 +1531,7 @@ function init() {
       transmissionAudio.pause();
     } else if (scene.audio.resumeAfterVisibility && !scene.paused) {
       scene.audio.resumeAfterVisibility = false;
-      void playTransmission();
+      if (scene.audio.currentRecording !== '003' || canReceiveWarning()) void playTransmission();
     }
     void syncVideo();
   });

@@ -1888,7 +1888,7 @@ figure {
 
 /* Nach vollständigem Phasenabgleich reagiert die Station gegenläufig:
    Der Leuchtkegel erlischt, die Fenster bleiben schwarz. Der Mast sendet ein
-   uneindeutiges zweites Morsemuster („NO“), ohne die Lösung zu verraten. */
+   zweites Morsemuster (1024), das eine neue Empfangsfrequenz verschlüsselt. */
 [data-story='synchronized'] .scene__window-light {
   opacity: 1;
   animation: none;
@@ -1901,21 +1901,174 @@ figure {
 
 [data-story='synchronized'][data-source='artwork'] .scene__mast-led {
   opacity: 1;
-  animation: mast-code-no 12s steps(1, end) infinite;
+  animation: mast-code-1024 19s steps(1, end) infinite;
 }
 
-@keyframes mast-code-no {
-  0% { opacity: 0; }
-  10% { opacity: 1; }
-  16.5% { opacity: 0; }
-  18.67% { opacity: 1; }
-  20.83% { opacity: 0; }
-  27.33% { opacity: 1; }
-  33.83% { opacity: 0; }
-  36% { opacity: 1; }
-  42.5% { opacity: 0; }
-  44.67% { opacity: 1; }
-  51.17%, 100% { opacity: 0; }
+/* Nach Entdeckung ist das Warnsignal verstummt; die Station reagiert nicht mehr. */
+[data-story='warning-received'] .scene__beam--lighthouse,
+[data-story='rescue-standby'] .scene__beam--lighthouse,
+[data-story='signal-isolated'] .scene__beam--lighthouse {
+  opacity: 0;
+  animation: none;
+}
+
+[data-story='warning-received'] .scene__mast-led,
+[data-story='rescue-standby'] .scene__mast-led {
+  opacity: .28;
+  animation: none;
+}
+
+[data-story='signal-isolated'] .scene__mast-led {
+  opacity: 0;
+  animation: none;
+}
+
+[data-story='warning-received'] .scene__window-light,
+[data-story='rescue-standby'] .scene__window-light,
+[data-story='signal-isolated'] .scene__window-light {
+  opacity: 1;
+  animation: none;
+}
+
+/* Der Entscheidungspunkt fügt sich in den bestehenden terminalartigen Archiv-Stil ein. */
+.receiver__decision-result {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  border-left: 2px solid var(--accent, #e77d64);
+  background: rgba(115, 134, 136, .10);
+  font: inherit;
+  font-size: .68rem;
+  line-height: 1.45;
+  letter-spacing: .07em;
+}
+
+.receiver__decision-result[hidden] {
+  display: none;
+}
+
+.decision-dialog__content {
+  padding: clamp(20px, 4vw, 38px);
+}
+
+.decision-dialog__eyebrow {
+  display: block;
+  margin-bottom: 10px;
+  font-size: .68rem;
+  letter-spacing: .16em;
+  opacity: .7;
+}
+
+.decision-dialog__content h2 {
+  margin: 0 0 12px;
+  font-size: clamp(1.6rem, 4vw, 2.65rem);
+  line-height: 1.1;
+  letter-spacing: .07em;
+}
+
+.decision-dialog__content > p:not(.decision-dialog__note) {
+  margin: 0 0 25px;
+  max-width: 58ch;
+  line-height: 1.6;
+}
+
+.decision-dialog__routes {
+  display: grid;
+  gap: 12px;
+}
+
+.decision-dialog__route {
+  display: grid;
+  gap: 7px;
+  width: 100%;
+  padding: 16px 18px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 120ms linear, border-color 120ms linear;
+}
+
+.decision-dialog__route:hover,
+.decision-dialog__route:focus-visible {
+  background: rgba(139, 164, 166, .13);
+  border-color: #e29575;
+}
+
+.decision-dialog__route:focus-visible {
+  outline: 2px solid #e29575;
+  outline-offset: 3px;
+}
+
+.decision-dialog__route[aria-pressed='true'] {
+  border-color: #e29575;
+  box-shadow: inset 3px 0 #e29575;
+}
+
+.decision-dialog__route span {
+  font-weight: 700;
+  font-size: clamp(.8rem, 2vw, 1rem);
+  letter-spacing: .065em;
+}
+
+.decision-dialog__route small {
+  font-size: .77rem;
+  line-height: 1.5;
+  opacity: .75;
+}
+
+.decision-dialog__note {
+  margin: 20px 0 0;
+  opacity: .65;
+  font-size: .69rem;
+  letter-spacing: .025em;
+  line-height: 1.55;
+}
+
+@keyframes mast-code-1024 {
+  0.000% { opacity: 0; }
+  0.000% { opacity: 1; }
+  1.000% { opacity: 0; }
+  2.000% { opacity: 1; }
+  5.000% { opacity: 0; }
+  6.000% { opacity: 1; }
+  9.000% { opacity: 0; }
+  10.000% { opacity: 1; }
+  13.000% { opacity: 0; }
+  14.000% { opacity: 1; }
+  17.000% { opacity: 0; }
+  22.000% { opacity: 1; }
+  25.000% { opacity: 0; }
+  26.000% { opacity: 1; }
+  29.000% { opacity: 0; }
+  30.000% { opacity: 1; }
+  33.000% { opacity: 0; }
+  34.000% { opacity: 1; }
+  37.000% { opacity: 0; }
+  38.000% { opacity: 1; }
+  41.000% { opacity: 0; }
+  46.000% { opacity: 1; }
+  47.000% { opacity: 0; }
+  48.000% { opacity: 1; }
+  49.000% { opacity: 0; }
+  50.000% { opacity: 1; }
+  53.000% { opacity: 0; }
+  54.000% { opacity: 1; }
+  57.000% { opacity: 0; }
+  58.000% { opacity: 1; }
+  61.000% { opacity: 0; }
+  66.000% { opacity: 1; }
+  67.000% { opacity: 0; }
+  68.000% { opacity: 1; }
+  69.000% { opacity: 0; }
+  70.000% { opacity: 1; }
+  71.000% { opacity: 0; }
+  72.000% { opacity: 1; }
+  73.000% { opacity: 0; }
+  74.000% { opacity: 1; }
+  77.000% { opacity: 0; }
+  100% { opacity: 0; }
 }
 
 /* Die gewählte Kamera hat Vorrang vor den frequenzabhängigen Lichtzuständen. */

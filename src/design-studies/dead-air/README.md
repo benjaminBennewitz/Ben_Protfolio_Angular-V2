@@ -399,3 +399,11 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Zwei zusätzliche, einmalig generierte dunkle Wolkenmasken ziehen deutlich sichtbar gegenläufig vor dem Motiv. Sie verdecken große Teile des Bildes und geben einzelne Bereiche nur zeitweise frei.
 - Der bestehende Nebel und die internen Blitze bleiben erhalten; Torform, Schwebebewegung, Schatten, Sound und Story wurden nicht geändert.
 - Beide Wolkentexturen sind mit reduzierter Auflösung gecacht. `prefers-reduced-motion` hält ihre Bewegung an.
+
+
+## Patch 48 – Distant Portal Artwork
+
+- Das bestehende Asset `assets/portal-hanging-shadows.webp` ist durch die freigegebene neue Illustration ersetzt.
+- Die Nabelschnüre setzen an den Bäuchen an, die hängenden Körper sind entsprechend nach hinten durchgebogen.
+- Das Motiv ist innerhalb des Assets auf 80 % verkleinert und mit einer weichen atmosphärischen Randzone versehen, damit es räumlich weiter entfernt wirkt.
+- Das Canvas und die dichten bewegten Wolken aus Patch 47 bleiben unverändert, ebenso das feste Bildframing während des Öffnens.

@@ -32,6 +32,7 @@
     <div class="dev-console__actions">
       <button id="dev-gate-start" type="button" aria-label="Tor-Finale ab Rettungsimpuls testen">TOR / START</button>
       <button id="dev-gate-open" type="button" aria-label="Direkt zum geöffneten Tor springen">TOR / OFFEN</button>
+      <button id="dev-investigation" type="button">SPUREN / SYNC</button>
       <button id="dev-isolation" type="button" aria-label="Alternatives Isolationsende testen">ISOLATION</button>
     </div>
   </aside>
@@ -43,7 +44,6 @@
       </a>
       <div class="topbar__ident" aria-hidden="true">NCBS / 1993 <span class="topbar__dash"></span> NORTH COAST STATION</div>
       <nav class="topbar__actions" id="top-nav" aria-label="Portfolio und Sprache">
-        <button id="receiver-toggle" class="topbar__receiver" type="button" aria-controls="receiver-panel" aria-expanded="false" data-i18n-aria="openReceiver" data-i18n="receiverButton">STEUERUNG</button>
         <button id="info-toggle" class="topbar__info" type="button" aria-haspopup="dialog" aria-controls="info-dialog" aria-label="Informationen und Rechtliches" title="Informationen und Rechtliches"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v6M12 7.3v.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="info">INFO</span></button>
         <button id="language-toggle" class="topbar__language" type="button" aria-label="Switch to English">EN</button>
         <a href="/archive" class="topbar__back" aria-label="Zurück zum Archiv" data-i18n-aria="back"><span class="back-label" data-i18n="back">ZURÜCK ZUM ARCHIV</span><span aria-hidden="true">↗</span></a>
@@ -51,52 +51,6 @@
     </header>
 
     <main id="main" class="workstation">
-      <section class="control-panel" id="receiver-panel" aria-labelledby="page-title">
-        <button class="control-panel__close" id="receiver-close" type="button" data-i18n-aria="closeReceiver" data-i18n="closeReceiver">SCHLIESSEN ×</button>
-        <div class="control-panel__heading">
-          <div class="eyebrow"><span class="indicator indicator--red" aria-hidden="true"></span> <span data-i18n="eyebrow">NCBS / EMPFANGSSTATION 01</span></div>
-          <h1 id="page-title" class="visually-hidden">DEAD//AIR</h1>
-          <p class="tagline">THE COAST IS STILL TRANSMITTING.</p>
-          <p class="lead" data-i18n="intro">Die letzte Schicht verschwand nach einem Hilferuf. Das Kamerasystem ist noch aktiv.</p>
-        </div>
-
-        <div class="receiver" aria-labelledby="receiver-title">
-          <div class="panel-bar"><h2 id="receiver-title">RECEIVER / NC–01</h2><span>FM / VHF</span></div>
-          <div class="receiver__display">
-            <div class="receiver__freq"><output id="frequency-output">87.6</output><span id="frequency-unit">MHz</span></div>
-            <div class="receiver__status"><span id="status-output">STABLE FEED</span><button class="receiver__relay-link" id="warning-recording-toggle" type="button" aria-label="Tonübertragung auf 102.4 MHz starten" hidden>AUDIO / 003 · STARTEN</button><button class="receiver__relay-link" id="warning-transcript-toggle" type="button" aria-haspopup="dialog" aria-controls="transmission-dialog" hidden>MITSCHRIFT / 003</button><span class="receiver__status-led" aria-hidden="true"></span></div>
-            <span id="receiver-event-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></span>
-            <div class="receiver__scale" aria-hidden="true"><span>87</span><span>90</span><span>94</span><span>98</span><span>102</span></div>
-          </div>
-          <div class="tuning-control">
-            <label for="frequency-tuning" data-i18n="tune">FREQUENZ EINSTELLEN</label>
-            <input id="frequency-tuning" type="range" min="87.5" max="108" step="0.1" value="87.6" aria-valuetext="87.6 MHz – STABLE FEED">
-            <div class="tuning-control__scale" aria-hidden="true"><span>87.5 MHz</span><span>FM BAND</span><span>108.0 MHz</span></div>
-            <div class="tuning-control__probe" id="relay-probe" hidden>
-              <output class="tuning-control__probe-status" id="relay-ping-status" role="status" aria-live="polite" aria-atomic="true">BEREIT</output>
-              <button class="receiver__relay-link" id="relay-link" type="button">SENDEN</button>
-            </div>
-          </div>
-          <div class="receiver-actions">
-            <div class="source-switch" id="source-switch" role="group" aria-label="Kamera wählen">
-              <button type="button" data-source="artwork" class="is-active" aria-pressed="true" data-i18n="artwork">STATION / CAM 01</button>
-              <button type="button" data-source="video" aria-pressed="false" data-i18n="footage">KÜSTE / CAM 02</button>
-            </div>
-            <span id="camera-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></span>
-            <button id="pause-toggle" type="button" class="pause-toggle" aria-pressed="false"><span id="pause-icon" aria-hidden="true">Ⅱ</span> <span id="pause-label" data-i18n="pause">PAUSE</span></button>
-            <button id="sound-toggle" class="sound-toggle" type="button" aria-label="Ton ausschalten" aria-pressed="true" title="TON AN">SND</button>
-          </div>
-          <div class="receiver__archive" aria-label="Archivierte Funksignale und Systemprotokolle"><span class="receiver__archive-label" id="archive-label">EMPFANGENE DATEN / ARCHIV</span><div class="receiver__archive-actions"><button id="evidence-log" class="monitor-area__evidence" type="button" aria-controls="message-dialog" aria-haspopup="dialog" hidden>AKTE / 01</button><button id="transmission-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 001</button><button id="transmission-2-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 002</button><button id="relay-toggle" class="monitor-area__evidence" type="button" aria-controls="relay-dialog" aria-haspopup="dialog" hidden>RELAIS / 0/3</button><button id="sync-toggle" class="monitor-area__evidence receiver__sync" type="button" aria-controls="sync-dialog" aria-haspopup="dialog" hidden>SYNC / 3</button></div><p id="decision-result" class="receiver__decision-result" role="status" aria-live="polite" hidden></p></div>
-          <div class="receiver__uplink" id="uplink-panel" hidden>
-            <div class="receiver__uplink-head"><span id="uplink-meta">NCBS / NOTFUNK · RÜCKKANAL</span><span class="receiver__uplink-led" aria-hidden="true"></span></div>
-            <p id="uplink-description">Drei Peilpunkte verbunden. Phasenlage stabil. Ortungsimpuls kann gesendet werden.</p>
-            <button type="button" class="receiver__uplink-button" id="uplink-action">RETTUNGSIMPULS SENDEN</button>
-            <small id="uplink-status">SENDEKANAL BEREIT · FREIGABE AUSSTEHEND</small>
-          </div>
-        </div>
-
-      </section>
-
       <section class="monitor-area" aria-labelledby="monitor-title">
         <div class="monitor-area__header"><h2 id="monitor-title"><span id="monitor-camera-label">CAMERA 01</span> <span>//</span> NORTH COAST FEED</h2><div class="monitor-area__actions"><span class="indicator indicator--red" aria-hidden="true"></span> <span id="monitor-live-status" data-i18n="transmitting">ÜBERTRAGUNG AKTIV</span></div></div>
         <div class="television" role="group" aria-label="Analoger Monitor mit Küstenübertragung und Signalstörungen">
@@ -108,6 +62,11 @@
               <video class="scene__video" id="coast-video" muted loop playsinline preload="metadata" aria-hidden="true" poster="assets/coast-poster.webp">
                 <source src="assets/coast-loop.mp4" type="video/mp4">
               </video>
+              <div class="scene__local" id="local-scene" role="img" hidden>
+                <img class="scene__local-yard" id="local-yard" width="1672" height="941" alt="">
+                <img class="scene__local-swing" id="local-swing" width="1672" height="941" alt="">
+              </div>
+              <div class="scene__offline" id="local-offline" hidden>CAM 01 / 02 · OFFLINE</div>
               <div class="scene__fog" aria-hidden="true"></div>
               <div class="scene__window-lights" aria-hidden="true">
                 <img class="scene__window-light scene__window-light--a" src="assets/window-off-a.webp" width="31" height="47" alt="">
@@ -143,10 +102,72 @@
         <div class="monitor-extras">
           <div class="monitor-extras__caption"><span data-i18n="sceneStatus">AKTUELLER SIGNALZUSTAND</span><strong id="scene-state">NORMAL / 87.6 MHz</strong></div>
           <div class="monitor-extras__message" id="state-description" aria-live="polite">Ein gewöhnlicher Küstenfeed. Leuchtfeuer und Wetter bleiben stabil.</div>
+          <p class="scene__sound-caption" id="signal-caption" role="status" aria-live="polite" hidden></p>
           <div class="monitor-extras__readout"><span id="readout-channel">CH–01</span><div class="readout-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="visually-hidden" id="anomaly-meter" role="meter" aria-label="Anomalieaktivität" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></span><span>RX <output id="rx-output">76%</output></span></div>
         </div>
       </section>
+      <section class="control-panel" id="receiver-panel" aria-labelledby="page-title">
+        <div class="control-panel__heading">
+          <div class="eyebrow"><span class="indicator indicator--red" aria-hidden="true"></span> <span data-i18n="eyebrow">NCBS / EMPFANGSSTATION 01</span></div>
+          <h1 id="page-title" class="visually-hidden">DEAD//AIR</h1>
+          <p class="lead" data-i18n="intro">Die letzte Schicht verschwand nach einem Hilferuf. Das Kamerasystem ist noch aktiv.</p>
+        </div>
+
+        <div class="receiver" aria-labelledby="receiver-title">
+          <div class="panel-bar"><h2 id="receiver-title">RECEIVER / NC–01</h2><span>FM / VHF</span></div>
+          <div class="receiver__display">
+            <div class="receiver__freq"><output id="frequency-output">87.6</output><span id="frequency-unit">MHz</span></div>
+            <div class="receiver__status"><span id="status-output">STABLE FEED</span><button class="receiver__relay-link" id="warning-recording-toggle" type="button" aria-label="Tonübertragung auf 102.4 MHz starten" hidden>AUDIO / 003 · STARTEN</button><button class="receiver__relay-link" id="warning-transcript-toggle" type="button" aria-haspopup="dialog" aria-controls="transmission-dialog" hidden>MITSCHRIFT / 003</button><span class="receiver__status-led" aria-hidden="true"></span></div>
+            <span id="receiver-event-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></span>
+            <div class="receiver__scale" aria-hidden="true"><span>87</span><span>90</span><span>94</span><span>98</span><span>102</span></div>
+          </div>
+          <div class="tuning-control">
+            <div class="tuning-control__tools"><label for="frequency-tuning" data-i18n="tune">FREQUENZ EINSTELLEN</label><button id="morse-toggle" type="button" aria-haspopup="dialog" aria-controls="morse-dialog">ZAHLENCODE</button></div>
+            <input id="frequency-tuning" type="range" min="87.5" max="108" step="0.1" value="87.6" aria-valuetext="87.6 MHz – STABLE FEED">
+            <div class="tuning-control__scale" aria-hidden="true"><span>87.5 MHz</span><span>FM BAND</span><span>108.0 MHz</span></div>
+            <div class="tuning-control__probe" id="relay-probe" hidden>
+              <output class="tuning-control__probe-status" id="relay-ping-status" role="status" aria-live="polite" aria-atomic="true">BEREIT</output>
+              <button class="receiver__relay-link" id="relay-link" type="button">SENDEN</button>
+            </div>
+          </div>
+          <div class="receiver-actions">
+            <div class="source-switch" id="source-switch" role="group" aria-label="Kamera wählen">
+              <button type="button" data-source="artwork" class="is-active" aria-pressed="true" data-i18n="artwork">STATION / CAM 01</button>
+              <button type="button" data-source="video" aria-pressed="false" data-i18n="footage">KÜSTE / CAM 02</button>
+            </div>
+            <span id="camera-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></span>
+            <button id="local-camera" class="receiver__relay-link" type="button" data-source="local" aria-pressed="false" hidden>CAM 03 / LOCAL</button>
+            <button id="pause-toggle" type="button" class="pause-toggle" aria-pressed="false"><span id="pause-icon" aria-hidden="true">Ⅱ</span> <span id="pause-label" data-i18n="pause">PAUSE</span></button>
+            <button id="sound-toggle" class="sound-toggle" type="button" aria-label="Ton ausschalten" aria-pressed="true" title="TON AN">SND</button>
+          </div>
+          <div class="receiver__archive" aria-label="Archivierte Funksignale und Systemprotokolle"><span class="receiver__archive-label" id="archive-label">EMPFANGENE DATEN / ARCHIV</span><div class="receiver__archive-actions"><button id="notes-toggle" class="monitor-area__evidence" type="button" aria-haspopup="dialog" aria-controls="notes-dialog">NOTIZEN / 0</button><button id="evidence-log" class="monitor-area__evidence" type="button" aria-controls="message-dialog" aria-haspopup="dialog" hidden>AKTE / 01</button><button id="transmission-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 001</button><button id="transmission-2-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 002</button><button id="relay-toggle" class="monitor-area__evidence" type="button" aria-controls="relay-dialog" aria-haspopup="dialog" hidden>RELAIS / 0/3</button><button id="sync-toggle" class="monitor-area__evidence receiver__sync" type="button" aria-controls="sync-dialog" aria-haspopup="dialog" hidden>SYNC / 3</button></div><p id="decision-result" class="receiver__decision-result" role="status" aria-live="polite" hidden></p></div>
+          <div class="receiver__uplink" id="uplink-panel" hidden>
+            <div class="receiver__uplink-head"><span id="uplink-meta">NCBS / NOTFUNK · RÜCKKANAL</span><span class="receiver__uplink-led" aria-hidden="true"></span></div>
+            <p id="uplink-description">Drei Peilpunkte verbunden. Phasenlage stabil. Ortungsimpuls kann gesendet werden.</p>
+            <button type="button" class="receiver__uplink-button" id="uplink-action">RETTUNGSIMPULS SENDEN</button>
+            <small id="uplink-status">SENDEKANAL BEREIT · FREIGABE AUSSTEHEND</small>
+          </div>
+        </div>
+
+      </section>
+
     </main>
+
+    <dialog class="artifact-dialog investigation-dialog" id="notes-dialog" aria-labelledby="notes-title" aria-describedby="notes-description">
+      <div class="artifact-dialog__header"><span class="eyebrow">NCBS / RX LOG</span><button class="artifact-dialog__close" id="notes-close" type="button" aria-label="Schließen">×</button></div>
+      <div class="investigation-dialog__content"><h2 id="notes-title">EMPFANGSPROTOKOLL</h2><p id="notes-description"></p><ol id="notes-list"></ol><div class="investigation-dialog__traces"><button type="button" data-trace="stranger" hidden></button><button type="button" data-trace="alex" hidden></button></div><div id="trace-comparison" class="trace-comparison" hidden><p id="trace-prompt"></p><button id="trace-match" type="button"></button><button id="trace-different" type="button"></button></div><p id="trace-status" role="status" aria-live="polite"></p></div>
+    </dialog>
+    <dialog class="artifact-dialog investigation-dialog" id="morse-dialog" aria-labelledby="morse-title" aria-describedby="morse-description">
+      <div class="artifact-dialog__header"><span class="eyebrow">NCBS / SERVICE 1993</span><button class="artifact-dialog__close" id="morse-close" type="button" aria-label="Schließen">×</button></div>
+      <div class="investigation-dialog__content"><h2 id="morse-title">LICHTTELEGRAFIE</h2><p id="morse-description"></p><div class="morse-digits" id="morse-digits" role="group" aria-labelledby="morse-title"></div></div>
+    </dialog>
+
+    <dialog class="info-dialog intro-dialog" id="intro-dialog" aria-labelledby="intro-title" aria-describedby="intro-description">
+      <div class="info-dialog__header"><span class="eyebrow" data-i18n="eyebrow">NCBS / EMPFANGSSTATION 01</span></div>
+      <h2 id="intro-title" data-i18n="introTitle">LETZTE SCHICHT</h2>
+      <p id="intro-description" data-i18n="intro">Die letzte Schicht verschwand nach einem Hilferuf. Das Kamerasystem ist noch aktiv.</p>
+      <form method="dialog"><button class="intro-dialog__start" type="submit" autofocus data-i18n="introStart">EMPFANG STARTEN</button></form>
+    </dialog>
 
     <dialog class="artifact-dialog" id="message-dialog" aria-labelledby="message-title" aria-describedby="message-body-1">
       <div class="artifact-dialog__header">
@@ -163,7 +184,7 @@
           <div class="artifact-note__body">
             <p id="message-body-1">Der Mitschnitt endet zu früh. Nach dem Hilferuf lief das Band noch weiter.</p>
             <p id="message-body-2">Ich habe den Rest nur einmal gehört. Am Rand des Protokolls steht eine Kennung: <strong>91 / 3</strong>.</p>
-            <p id="message-body-3">Vielleicht findet sich dort endlich eine Antwort darauf, wohin sie verschwunden sind.</p>
+            <p id="message-body-3">Das Licht am Mast blinkt nicht wegen einer Störung. Vielleicht findet sich dort eine Antwort darauf, wohin sie verschwunden sind.</p>
           </div>
           <p class="artifact-note__footer" id="message-footer">KEIN DATUM · KEINE UNTERSCHRIFT</p>
         </article>
@@ -203,6 +224,8 @@
         <div class="relay-dialog__row" id="relay-row-a" tabindex="-1" data-linked="false"><strong>RELAY / A</strong><span>88–90 MHz</span><span class="relay-dialog__status">KEIN LINK</span></div>
         <div class="relay-dialog__row" id="relay-row-b" tabindex="-1" data-linked="false"><strong>RELAY / B</strong><span>98–100 MHz</span><span class="relay-dialog__status">KEIN LINK</span></div>
         <div class="relay-dialog__row" id="relay-row-c" tabindex="-1" data-linked="false"><strong>RELAY / C</strong><span>105–107 MHz</span><span class="relay-dialog__status">KEIN LINK</span></div>
+        <div class="signature-controls"><button type="button" data-signature="A"></button><button type="button" data-signature="B"></button><button type="button" data-signature="C"></button></div>
+        <p class="signature-status" id="relay-signature-status" role="status" aria-live="polite"></p>
         <p class="relay-dialog__progress" id="relay-progress" role="status" aria-live="polite">PEILUNG UNVOLLSTÄNDIG · 0/3</p>
       </div>
     </dialog>
@@ -226,8 +249,10 @@
           </svg>
           <div class="sync-dialog__legend" aria-hidden="true"><span>● A / REF</span><span>● B / OFFSET</span><span>● C / OFFSET</span></div>
         </div>
-        <div class="sync-dialog__control"><div class="sync-dialog__control-label"><label for="sync-offset-b" id="sync-label-b">RELAIS B / ZEITVERSATZ</label><output for="sync-offset-b" id="sync-value-b">+68 ms</output></div><input id="sync-offset-b" type="range" min="-100" max="100" step="1" value="68"></div>
-        <div class="sync-dialog__control"><div class="sync-dialog__control-label"><label for="sync-offset-c" id="sync-label-c">RELAIS C / ZEITVERSATZ</label><output for="sync-offset-c" id="sync-value-c">−43 ms</output></div><input id="sync-offset-c" type="range" min="-100" max="100" step="1" value="-43"></div>
+        <div class="signature-controls"><button type="button" data-signature="A"></button><button type="button" data-signature="B"></button><button type="button" data-signature="C"></button></div>
+        <p class="signature-status" id="signature-status" role="status" aria-live="polite"></p>
+        <div class="sync-dialog__control"><div class="sync-dialog__control-label"><label for="sync-offset-b" id="sync-label-b">RELAIS B / ZEITVERSATZ</label><output for="sync-offset-b" id="sync-value-b">0 ms</output></div><input id="sync-offset-b" type="range" min="-600" max="600" step="1" value="0"></div>
+        <div class="sync-dialog__control"><div class="sync-dialog__control-label"><label for="sync-offset-c" id="sync-label-c">RELAIS C / ZEITVERSATZ</label><output for="sync-offset-c" id="sync-value-c">0 ms</output></div><input id="sync-offset-c" type="range" min="-600" max="600" step="1" value="0"></div>
         <div class="sync-dialog__foot"><p id="sync-status" role="status" aria-live="polite">PHASENDRIFT ERKANNT</p><button id="sync-commit" type="button" disabled>PEILUNG KALIBRIEREN</button></div>
       </div>
     </dialog>

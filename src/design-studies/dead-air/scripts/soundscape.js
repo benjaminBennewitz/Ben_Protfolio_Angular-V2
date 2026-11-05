@@ -6,6 +6,13 @@
  */
 
 const SOUND_FILES = Object.freeze({
+  stranger: 'sfx-stranger.mp3',
+  sourceClicks: 'sfx-source-clicks.mp3',
+  signatureA: 'sfx-signature-a.mp3',
+  signatureB: 'sfx-signature-b.mp3',
+  signatureC: 'sfx-signature-c.mp3',
+  swingCreak: 'sfx-swing-creak.mp3',
+  localLaugh: 'sfx-local-laugh.mp3',
   radio: 'sfx-radio-bed.mp3',
   tune: 'sfx-tune-click.mp3',
   scan: 'sfx-auto-scan.mp3',
@@ -47,6 +54,10 @@ class Soundscape {
     this.buffers = new Map();
     this.loading = new Map();
     this.active = new Map();
+    this.requests = new Map();
+    this.morseOscillator = null;
+    this.morseGain = null;
+    this.morseOn = false;
     this.bed = null;
     this.bedName = null;
     this.bedLevel = 0.035;
@@ -113,11 +124,13 @@ class Soundscape {
   }
 
   /** Spielt einen einzelnen, lokal gespeicherten Effekt mit begrenzter Lautstärke. */
-  async play(name, volume = EFFECT_VOLUMES[name] ?? .4) {
+  async play(name, volume = EFFECT_VOLUMES[name] ?? .4, offsetSeconds = 0) {
     if (this.disposed || this.paused || this.muted || document.hidden || !this.context) return;
     const context = this.context;
+    const request = (this.requests.get(name) ?? 0) + 1;
+    this.requests.set(name, request);
     const buffer = await this.load(name);
-    if (!buffer || context.state !== 'running' || this.paused || this.muted || this.disposed
+    if (this.requests.get(name) !== request || !buffer || context.state !== 'running' || this.paused || this.muted || this.disposed
       || document.hidden) return;
 
     // Ein erneuter Trigger ersetzt den älteren gleichnamigen Effekt.
@@ -134,15 +147,34 @@ class Soundscape {
       source.disconnect();
       gain.disconnect();
     };
-    source.start();
+    source.start(0, Math.max(0, Math.min(offsetSeconds, buffer.duration - .001)));
   }
 
   /** Stoppt eine laufende Effektinstanz ohne ausstehende Story-Timer zu verändern. */
   stop(name) {
+    this.requests.set(name, (this.requests.get(name) ?? 0) + 1);
     const source = this.active.get(name);
     if (!source) return;
     this.active.delete(name);
     try { source.stop(); } catch { /* Bereits gestoppte Quellen sind unkritisch. */ }
+  }
+
+  /** Ein einziger Oszillator folgt den Lichtimpulsen; keine unabhängigen Morse-Timer. */
+  setMorseGate(on) {
+    if (!this.context || this.disposed || (!on && !this.morseGain)) return;
+    if (!this.morseGain) {
+      this.morseGain = this.context.createGain();
+      this.morseGain.gain.value = 0;
+      this.morseGain.connect(this.fxBus);
+      this.morseOscillator = this.context.createOscillator();
+      this.morseOscillator.type = 'sine';
+      this.morseOscillator.frequency.value = 720;
+      this.morseOscillator.connect(this.morseGain);
+      this.morseOscillator.start();
+    }
+    if (this.morseOn === Boolean(on)) return;
+    this.morseOn = Boolean(on);
+    this.morseGain.gain.setTargetAtTime(on ? .12 : 0, this.context.currentTime, .006);
   }
 
   /** Lässt Radio- und Portalatmosphäre unabhängig von UI-Sounds loopen. */
@@ -246,6 +278,7 @@ class Soundscape {
     window.addEventListener('deadair:relayping', () => { void this.play('ping'); });
     window.addEventListener('deadair:relayecho', event => {
       void this.play(event.detail.result === 'none' ? 'miss' : 'echo');
+      if (event.detail.result === 'carrier') void this.play(`signature${event.detail.relay}`, .48);
     });
     window.addEventListener('deadair:relaylinked', () => { void this.play('relay'); });
     window.addEventListener('deadair:relayaligned', () => { void this.play('activated'); });
@@ -290,6 +323,12 @@ class Soundscape {
       try { source.stop(); } catch { /* Quelle wurde bereits beendet. */ }
     });
     this.active.clear();
+    this.requests.clear();
+    if (this.morseOscillator) {
+      try { this.morseOscillator.stop(); } catch { /* Bereits gestoppt. */ }
+      this.morseOscillator.disconnect();
+      this.morseGain.disconnect();
+    }
     if (this.bed) {
       try { this.bed.stop(); } catch { /* Quelle wurde bereits beendet. */ }
     }

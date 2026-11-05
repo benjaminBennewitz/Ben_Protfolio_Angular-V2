@@ -2,7 +2,7 @@
 
 [← Design archive](https://b2folio.de/archive) · [Open study](https://b2folio.de/design-studies/dead-air/)
 
-A fictional, analogue coastal broadcast interface. Photographic footage, an AI-generated art-direction still, weathered receiver controls and three experimental signal states establish the identity of **DEAD//AIR**. This is a first visual/technical prototype, not a completed interactive story.
+A fictional analogue coastal broadcast mystery. **DEAD//AIR** combines camera observation, radio exploration, coded light signals, recorded evidence and relay identification. An unverified distress call draws the investigator toward two different supernatural endings.
 
 > [!NOTE]
 > Independent non-commercial design study by Benjamin Bennewitz (B²), 2026. It is an evolving experiment rather than a production broadcast system or a finished game. Accessibility has been considered, but no comprehensive WCAG audit is claimed.
@@ -30,8 +30,8 @@ The fictional North Coast Broadcasting System (NCBS) is framed as a decommission
 - `deadair:frequencychange` and `deadair:signalacquired` events on `window` provide `{ frequency, channel, reception, interference }` for story and audio triggers. The latter fires only upon acquiring a new named station. Since Patch 32, the first received transmission plays from a locally bundled MP3.
 - A ±0.35 MHz capture range makes manual station scanning manageable on touch displays, while the tuner still displays the actual frequency in 0.1 MHz steps.
 - Pause / resume freezes CSS animations and playback, with reduced-motion enabled by default for visitors requesting it.
-- Scrollfreie Broadcast-Oberfläche (`100dvh` einschließlich Header): Monitor, Quellensteuerung und Signaltelemetrie bleiben auch bei niedriger Fensterhöhe sichtbar.
-- Auf schmalen oder besonders niedrigen Displays wird der Empfänger als eigene, tastaturbedienbare Bedienfläche geöffnet. Der Regler und beide Kameratasten bleiben im Dialog erreichbar; der Besucher schließt ihn bei Bedarf über SCHLIESSEN oder Escape.
+- Desktop: scrollfreie Broadcast-Oberfläche (`100dvh` einschließlich Header). Mobil und bei geringer Fensterhöhe: Monitor und Radio dauerhaft untereinander im normalen Dokumentfluss.
+- Auf schmalen oder besonders niedrigen Displays stehen Monitor und Empfänger dauerhaft untereinander. Die Einleitung erscheint dort einmal beim Start als nativer Dialog.
 - Dedicated, keyboard-accessible information dialog containing imprint, privacy and video source links instead of a permanent footer.
 - Local station-mark SVG (broadcast tower with red/orange signal waveform) and simplified SVG favicon; the wordmark is typeset directly in the interface.
 - Broadcast-specific user-facing copy; technical prototype notes are documented here rather than displayed in the interface.
@@ -435,3 +435,69 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Nach etwa 1,5 Sekunden ziehen über sieben Sekunden erneut dichte Wolken auf. Zwei langsame, unterschiedlich schnelle Wetterwellen variieren anschließend die Dichte fortlaufend; die bestehenden gegenläufigen Wolkenbewegungen bleiben erhalten.
 - Die Gestalten werden dadurch wiederholt verdeckt und sichtbar, statt dauerhaft freizustehen. Die reduzierte Bewegungsdarstellung hält nach der ersten Enthüllung eine ruhige Restbewölkung.
 - Keine Änderungen an Portalgeometrie, Hintergrundmaßstab, Licht, Schatten, Story oder Audio.
+
+
+## Patch 52 – Always Visible Mobile Monitor & Radio
+
+- Auf schmalen Bildschirmen und bei sehr geringer Viewporthöhe stehen Monitor und Radio dauerhaft untereinander, der Monitor zuerst. Die HTML-Reihenfolge entspricht dem mobilen Lesefluss; benannte Grid-Bereiche erhalten die Desktopanordnung mit Radio links und Monitor rechts.
+- Der Bildschirm nutzt die verfügbare Breite ohne die frühere Höhenbegrenzung. Die Seite wächst mit Archiv, Relais und Rückkanal und scrollt über den normalen Dokumentfluss.
+- Steuerungs- und Schließen-Button sowie die zugehörige Overlay-, Inert- und Fokusfallenlogik sind entfernt. Native Dialoge für Hinweise und Rätsel bleiben erhalten.
+- Kamera-, Pause- und Tonbedienung erhalten im kompakten Layout mindestens 44 px hohe Berührungsflächen.
+- Portal, Wolken, Story- und Audiologik bleiben unverändert.
+
+
+## Patch 54 – Compact Startup Briefing
+
+- Bei gestapeltem Layout (`max-width: 750px` oder `max-height: 520px`) erscheint die Einleitung direkt beim Seitenstart in einem nativen Dialog. Die Desktop-Einleitung bleibt erhalten.
+- Der Dialog nutzt bestehende Gestaltung und Übersetzungen, bietet einen Startbutton sowie Escape und erscheint einmal pro Seitenaufruf, ohne Wiederöffnung beim Drehen oder Vergrößern.
+- Die Story-Uhr wartet bis zum Schließen, damit während des Lesens kein Spielereignis vorgezogen wird. Kein zusätzlicher Speicher oder Abhängigkeiten.
+
+
+## Patch 55 – Radio Investigation & Local Camera Ending
+
+### Ermittlungsbogen
+
+- Ein schmaler, zunächst verfügbarer Fremdträger auf **90.2 MHz** spielt einmalig etwa sechs Sekunden Atem-, Stöhn- und Klickgeräusche. Nach dem Abriss oder vorzeitigem Verlassen ist er für diese Sitzung dauerhaft verstummt. Der manuelle Regler bleibt erreichbar; der automatische Suchlauf überspringt den verlorenen Träger.
+- Das Klickmotiv liegt jetzt leise unter den unveränderten gesprochenen Inhalten von AUDIO 001 (DE/EN). Das erste verbundene Relais gibt es ebenfalls zurück.
+- Die Flaschenpost verweist auf das absichtliche Mastblinken. Eine am Empfänger verfügbare NCBS-Wartungskarte zeigt die zehn Morseziffern. Licht und 720-Hz-Ton folgen derselben Impulsliste und aktiven Spieluhr; die früheren unabhängigen CSS-Morsekeyframes entfallen.
+- NOTIZEN sichert nur bereits entdeckte Beobachtungen. Die beiden gespeicherten Klickspuren lassen sich akustisch und als Rhythmusnotation vergleichen; die Verbindung muss der Spieler selbst bestätigen. Die verlorene Stimme selbst wird nicht archiviert oder wiederholt.
+- Nach der ersten Relaisverbindung kehrt das Klickmotiv zurück. Nach der zweiten wartet eine sechssekündige Fensterreaktion auf den nächsten CAM-01-Aufruf. Nach der dritten reagiert Alex unmittelbar, obwohl der lokale Rückkanal noch keine Bestätigung gesendet hat. Die Reihenfolge A/B/C bleibt frei.
+
+### Signalabgleich
+
+- Der SYNC-Dialog zeigt aufgezeichnete Dreierkennungen und ähnlich aussehende Störgruppen. Die gespeicherten Kennungen lassen sich im Relaisprotokoll und direkt beim Abgleich erneut hören und visuell lesen.
+- A bleibt die Referenz. Der Beginn der echten Gruppe von B und C muss mit dem Beginn von A übereinstimmen. **Lösung für Entwickler: B −64 ms, C +46 ms, Toleranz jeweils ±3 ms.** Regler auf Null oder Überlagerung einer Störgruppe reicht nicht.
+- Die Oberflächentexte und die zugängliche Beschreibung erklären die Aufgabe und nennen die gespeicherten Pulsabstände, ohne die Zielversätze vorzugeben.
+- Morse und Signalberechnungen liegen in `scripts/signal-patterns.js`; Hinweise und Ermittlungswerkzeuge in `scripts/investigation.js`. Fortschritt, Kamera- und Endbedingungen bleiben im vorhandenen `app.js`.
+
+### Beide Entscheidungen führen zu einer Bedrohung
+
+- Der manuelle Rettungsimpuls führt weiterhin zum freigegebenen Tor-Finale mit unveränderter Portalgeometrie, Bewegung, Licht und organischen Wolken.
+- Nach Entdeckung der Warnung verschwindet der Rettungsimpuls jetzt auch sichtbar bis zur verbindlichen Entscheidung. Die bestehende technische Sperre bleibt bestehen.
+- Isolation schaltet beide bekannten Kameras offline. Nach den 6.8 Sekunden Abschaltung folgen 2.7 Sekunden Stille; dann meldet sich **CAM 03 / LOCAL**.
+- Der neue Eingang muss manuell ausgewählt werden. Er zeigt einen leeren Stationshof mit einer erwachsenen Frau auf einer langsam schaukelnden Schaukel. Nach 4.2 Sekunden aktiver Betrachtung lacht sie; im Klang kehrt das Klickmotiv zurück. Die Warnstimme wird dadurch als mögliche zweite Falle lesbar, ohne ihre Identität ausdrücklich zu erklären.
+- Hintergrund und Frau/Schaukel sind getrennte, lokal eingebundene WebP-Ebenen. Die Bewegung ist eine ruhige CSS-Perspektivbewegung, kein Video. Bei Reduced Motion ruht die Schaukel; die zeitliche Enthüllung bleibt erhalten.
+
+### Zeit, Ton und Bedienung
+
+- Fenster bis 680 px Höhe sowie schmale Desktopfenster bis 1050 px Breite und 750 px Höhe verwenden ebenfalls den gestapelten Aufbau inklusive Starteinleitung, damit Notizen und Rückkanal erreichbar bleiben. CSS und Startdialog verwenden dieselbe Abfrage.
+- Die vorhandene Hauptuhr pausiert bei geöffneten nativen Dialogen, Spielpause und verborgenem Tab. Ein laufender Fremdträger wird beim Lesen angehalten und ab seiner aktiven Position fortgesetzt; Stummschaltung lässt den Spielablauf weiterlaufen.
+- Die Pulsanzeige benötigt maximal etwa 30 Aktualisierungen pro Sekunde. Hörbare Morseimpulse entstehen aus einem einzelnen Oszillator. Neue nichtsprachliche Geräusche sind lokal synthetisiert; die gesprochenen Alex-Aufnahmen behalten ihren Text.
+- Die Bilder für CAM 03 werden erst beim Start der Isolation geladen. Es gibt keine zusätzlichen Bibliotheken oder externen Laufzeitdienste; sämtliche Bild- und Audiodateien bleiben lokal eingebunden.
+- Die Soundbeschreibungen stehen unterhalb des Monitors und verdecken das Bild nicht. Hinweise, Kennungen und Dialoge sind deutsch/englisch vorbereitet und per Tastatur bedienbar.
+- Der Debug-Zugang `?debug=1` bietet zusätzlich **SPUREN / SYNC** als Einstieg in das neue Abgleichrätsel. Der reguläre Ablauf erhält dadurch keine Abkürzung.
+- Ziel sind ungefähr 8–10 Minuten beobachtendes Spielen, ohne künstliche Wartezeit. Diese Spielzeit ist ein gestalterisches Ziel und noch durch einen unvorbereiteten menschlichen Durchlauf zu bewerten.
+
+### Bild- und Tonherkunft
+
+- CAM-03-Motiv mit dem integrierten Bildgenerator erstellt: „Photorealistic fixed 1993 coastal-station CCTV view of a damp foggy courtyard at night. Centered adult woman, about 35, smiling on an old swing, full body, faded light dress and cardigan, muted grey-green palette, natural grit; no UI, text, timestamps, gore or glowing eyes.“
+- Zwei gezielte Folge-Edits: gleicher Hof ohne Frau, Sitz und Ketten; transparente Extraktion derselben Frau samt Sitz und Ketten mit gleichem Bildausschnitt. Enddateien: `assets/local-courtyard.webp`, `assets/local-swing.webp`.
+- Neue lokale Audiodateien: `sfx-stranger.mp3`, `sfx-source-clicks.mp3`, `sfx-signature-a.mp3`, `sfx-signature-b.mp3`, `sfx-signature-c.mp3`, `sfx-swing-creak.mp3`, `sfx-local-laugh.mp3`. Nichtsprachliche Stimme und Lachen sind synthetische Formantklänge; Feintuning nach Hörtest ist möglich.
+
+### Validierung dieses Patches
+
+- Vollständiger Browserdurchlauf: einmaliger Fremdträger, Flaschenpost, beide Morseziele, Relais in abweichender Reihenfolge, Fensterreaktion, echter Signalabgleich, manueller Spurenvergleich, Warnsperre und Isolation bis zur lachenden Frau.
+- Beide Torwege separat geprüft: ohne Warnfund und nach ausdrücklicher Entscheidung für das Signal. In beiden Fällen bleibt der manuelle Rettungsimpuls erforderlich.
+- Dialoge und Layout bei 320/390/750 px sowie Querformat; zusätzliche kleine Desktopfenster und Reduced Motion geprüft. Kein horizontaler Seitenüberlauf; Rückkanal bleibt erreichbar.
+- Reine Berechnungen für Morse-Pulsgrenzen, Pausen und Wiederholung sowie richtige/falsche Kennungsabgleiche geprüft. JavaScript-/CSS-Syntax, lokale Imports, Assetpfade und CRLF geprüft.
+- Eine unvorbereitete menschliche Spielrunde zur tatsächlichen Spielzeit und ein subjektiver Hörtest im Zielgerät stehen noch aus.

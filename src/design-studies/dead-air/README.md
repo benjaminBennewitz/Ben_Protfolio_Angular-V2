@@ -391,3 +391,11 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Die bisherigen prozeduralen Figuren und ihre Augen wurden entfernt.
 - Die vorhandenen Canvas-Gewitter- und Nebelschichten ziehen vor dem Bild vorbei; Dreiecksform, Schweben, Schatten, Lichtbögen und Story bleiben erhalten.
 - Der Bildausschnitt wird proportional skaliert und bleibt auf den unregelmäßigen Portalriss begrenzt.
+
+
+## Patch 47 – Fester Portalhintergrund und dichtere Wolken
+
+- Die Illustration wird in einem weltfesten Ausschnitt mit konstanter Position und Größe gezeichnet. Das wachsende Tor fungiert nur als animierte Maske; die Figuren werden nicht mehr herangezoomt.
+- Zwei zusätzliche, einmalig generierte dunkle Wolkenmasken ziehen deutlich sichtbar gegenläufig vor dem Motiv. Sie verdecken große Teile des Bildes und geben einzelne Bereiche nur zeitweise frei.
+- Der bestehende Nebel und die internen Blitze bleiben erhalten; Torform, Schwebebewegung, Schatten, Sound und Story wurden nicht geändert.
+- Beide Wolkentexturen sind mit reduzierter Auflösung gecacht. `prefers-reduced-motion` hält ihre Bewegung an.

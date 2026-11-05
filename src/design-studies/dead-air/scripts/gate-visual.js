@@ -341,6 +341,42 @@ function createPortalStormBackdrop(seed) {
   return canvas;
 }
 
+/** Erzeugt eine dunkle, nahezu deckende Wolkenmaske mit unregelmäßigen Sichtfenstern.
+ * Zwei unabhängige Masken ziehen später gegeneinander und verbergen den größten
+ * Teil der Hintergrundillustration, ohne sie selbst zu skalieren. */
+function createPortalVeilTexture(seed) {
+  const texture = document.createElement('canvas');
+  texture.width = 384;
+  texture.height = 216;
+  const context = texture.getContext('2d');
+  if (!context) return texture;
+
+  const image = context.createImageData(texture.width, texture.height);
+  const pixels = image.data;
+  for (let y = 0; y < texture.height; y += 1) {
+    for (let x = 0; x < texture.width; x += 1) {
+      const warpX = (cloudNoise(x / 85, y / 65, seed + 4) - .5) * 59;
+      const warpY = (cloudNoise(x / 102, y / 81, seed + 9) - .5) * 38;
+      const u = x + warpX;
+      const v = y + warpY;
+      const mass = cloudNoise(u / 77, v / 59, seed) * .55
+        + cloudNoise(u / 32, v / 28, seed + 13) * .33
+        + cloudNoise(u / 13, v / 14, seed + 21) * .12;
+      const folds = .065 * Math.sin(v * .034 + u * .013 + mass * 10);
+      const density = ease((mass + folds - .35) * 5.3);
+      const edgeFade = clamp01(Math.min(x / 29, (texture.width - 1 - x) / 29,
+        y / 23, (texture.height - 1 - y) / 23));
+      const at = (y * texture.width + x) * 4;
+      pixels[at] = Math.round(5 + 18 * (1 - density));
+      pixels[at + 1] = Math.round(3 + 7 * (1 - density));
+      pixels[at + 2] = Math.round(7 + 7 * (1 - density));
+      pixels[at + 3] = Math.round(255 * density * edgeFade);
+    }
+  }
+  context.putImageData(image, 0, 0);
+  return texture;
+}
+
 /** Große, aus dem Riss heraus beleuchtete Sturmfront.
  * Wolkenlicht und dunkle Wolkenkörper sind voneinander getrennt. Dadurch können
  * die Figuren schwarz bleiben und werden nur bei Lichtdurchbrüchen lesbar. */
@@ -354,6 +390,8 @@ function drawPortalClouds(ctx, center, radius, time, opening, reducedMotion) {
     emberDetail: createPortalCloudTexture(119, 'ember'),
     stormBack: createPortalStormBackdrop(23),
     stormFront: createPortalStormBackdrop(61),
+    veilNear: createPortalVeilTexture(17),
+    veilFar: createPortalVeilTexture(83),
   };
   const t = reducedMotion ? 0 : time;
   const horizontalDrift = Math.sin(t * .105) * radius * .065;
@@ -440,30 +478,36 @@ function drawPortalStormCells(ctx, center, radius, time, opening, reducedMotion)
   ctx.restore();
 }
 
-/** Schwerer Vordergrundnebel verläuft vor den Silhouetten und bricht ihre Konturen.
- * Seine transparenten Lücken verhindern, dass sich perfekte Figuren abzeichnen. */
+/** Zwei dichte, gegeneinander wandernde Wolkenbänke verdecken rund zwei Drittel
+ * des festen Portalhintergrundes. Gegenläufiger, deutlich wahrnehmbarer Drift
+ * erzeugt wechselnde Fenster auf die hängenden Silhouetten. */
 function drawPortalForegroundFog(ctx, center, radius, time, opening, reducedMotion) {
-  if (opening <= .48 || !portalCloudTextures) return;
-  const strength = ease((opening - .48) / .43);
+  if (opening <= .18 || !portalCloudTextures) return;
+  const strength = ease((opening - .18) / .54);
   const t = reducedMotion ? 0 : time;
+  const nearDrift = Math.sin(t * .38 + .5) * radius * .29;
+  const farDrift = -Math.sin(t * .31 + 1.7) * radius * .36;
+  const nearRise = Math.sin(t * .17) * radius * .045;
+  const farRise = Math.sin(t * .14 + 2.2) * radius * .065;
+
   ctx.save();
-  ctx.globalAlpha = .56 * strength;
+  ctx.globalAlpha = .84 * strength;
+  ctx.drawImage(portalCloudTextures.veilFar,
+    center.x - radius * 1.43 + farDrift,
+    center.y - radius * .79 + farRise,
+    radius * 2.86, radius * 1.66);
+  ctx.globalAlpha = .94 * strength;
+  ctx.drawImage(portalCloudTextures.veilNear,
+    center.x - radius * 1.37 + nearDrift,
+    center.y - radius * .73 + nearRise,
+    radius * 2.74, radius * 1.58);
+
+  // Tiefer Bodennebel hält die untere Öffnung diffus, ohne die Wolkenmasken aufzuhellen.
+  ctx.globalAlpha = .48 * strength;
   ctx.drawImage(portalCloudTextures.smoke,
-    center.x - radius * .85 + Math.sin(t * .1 + 1) * radius * .08,
-    center.y - radius * .01 - Math.sin(t * .09) * radius * .05,
-    radius * 1.76, radius * .91);
-  ctx.globalAlpha = .40 * strength;
-  ctx.drawImage(portalCloudTextures.smoke,
-    center.x - radius * .98 - Math.sin(t * .18 + .7) * radius * .14,
-    center.y - radius * .50 + Math.sin(t * .15) * radius * .07,
-    radius * 1.92, radius * 1.03);
-  // Sporadische, warme Dunstschlieren ziehen vor den Beinen vorbei.
-  ctx.globalCompositeOperation = 'screen';
-  ctx.globalAlpha = .17 * strength;
-  ctx.drawImage(portalCloudTextures.emberDetail,
-    center.x - radius * .79 - Math.sin(t * .11) * radius * .04,
-    center.y + radius * .14,
-    radius * 1.58, radius * .57);
+    center.x - radius * .95 - nearDrift * .18,
+    center.y + radius * .1,
+    radius * 1.9, radius * .63);
   ctx.restore();
 }
 
@@ -510,26 +554,18 @@ function drawPortalLightning(ctx, center, radius, time, opening, reducedMotion) 
   ctx.restore();
 }
 
-/** Platziert die fertige Bildwelt unverzerrt hinter den bewegten Sturmschichten.
- * Der eng gewählte vertikale Ausschnitt zeigt die hängenden Figuren in der flachen
- * Portalgeometrie, ohne die menschlichen Proportionen zu verformen. */
-function drawPortalBackdrop(ctx, points, opening) {
+/** Platziert die Illustration in einem weltfesten Ausschnitt hinter dem Tor.
+ * Die wachsende Dreiecksmaske enthüllt mehr vom Bild, ohne dessen Größe oder
+ * räumliche Entfernung zu verändern. Auch die Schwebebewegung zoomt das Bild nicht. */
+function drawPortalBackdrop(ctx, frame, opening) {
   if (!portalBackdrop.complete || !portalBackdrop.naturalWidth) return;
 
-  const xs = points.map(point => point.x);
-  const ys = points.map(point => point.y);
-  const minX = Math.min(...xs);
-  const minY = Math.min(...ys);
-  const width = Math.max(...xs) - minX;
-  const height = Math.max(...ys) - minY;
-  const marginX = width * .03;
-  const marginY = height * .13;
-  const destX = minX - marginX;
-  const destY = minY - marginY;
-  const destWidth = width + marginX * 2;
-  const destHeight = height + marginY * 2;
+  const destWidth = frame.width;
+  const destHeight = frame.height;
+  const destX = frame.x - destWidth / 2;
+  const destY = frame.y - destHeight / 2;
 
-  // Cover ohne Stretching; das obere Bilddrittel bleibt als Ursprung der Nabelschnüre erhalten.
+  // Cover ohne Stretching; der obere Bildteil mit den Nabelschnüren bleibt erhalten.
   const sourceWidth = portalBackdrop.naturalWidth;
   const sourceHeight = portalBackdrop.naturalHeight;
   const sourceAspect = destWidth / destHeight;
@@ -549,14 +585,13 @@ function drawPortalBackdrop(ctx, points, opening) {
   ctx.globalAlpha = ease(opening * 2.2);
   ctx.drawImage(portalBackdrop, cropX, cropY, cropWidth, cropHeight,
     destX, destY, destWidth, destHeight);
-  // Die Wesen bleiben fast schwarz, während warme Durchbrüche im Himmel lesbar sind.
   ctx.fillStyle = 'rgba(5, 2, 5, .06)';
   ctx.fillRect(destX, destY, destWidth, destHeight);
   ctx.restore();
 }
 
 /** Zeichnet den Öffnungskörper nur innerhalb der verbundenen Peilpunkte. */
-function drawAperture(ctx, points, time, opening, reducedMotion) {
+function drawAperture(ctx, points, backdropFrame, time, opening, reducedMotion) {
   if (opening <= 0) return;
 
   const center = {
@@ -577,7 +612,7 @@ function drawAperture(ctx, points, time, opening, reducedMotion) {
 
   // Das erste Motiv liefert korrekt proportionierte Silhouetten und Nabelschnüre.
   // Der Bestand an prozeduralen Wolken wandert davor, nicht mehr hinter separaten Figuren.
-  drawPortalBackdrop(ctx, expanded, opening);
+  drawPortalBackdrop(ctx, backdropFrame, opening);
   drawPortalClouds(ctx, center, radius, time, opening, reducedMotion);
   drawPortalStormCells(ctx, center, radius, time, opening, reducedMotion);
 
@@ -715,7 +750,17 @@ export function drawGate(canvas, elapsedMs, mode, reducedMotion = false) {
     drawElectricArcs(ctx, hoveringTriangle, t, link * (.4 + .6 * opening), reducedMotion);
   }
 
-  drawAperture(ctx, hoveringTriangle, t, opening, reducedMotion);
+  // Feste Weltkoordinaten: Nur die sichtbare Portalmaske wächst, nicht das Bild dahinter.
+  const fullSizeTriangle = expandTriangle(points, 1.52);
+  const backdropFrame = {
+    x: points.reduce((sum, point) => sum + point.x, 0) / 3,
+    y: points.reduce((sum, point) => sum + point.y, 0) / 3 - 20,
+    width: (Math.max(...fullSizeTriangle.map(point => point.x))
+      - Math.min(...fullSizeTriangle.map(point => point.x))) * 1.06,
+    height: (Math.max(...fullSizeTriangle.map(point => point.y))
+      - Math.min(...fullSizeTriangle.map(point => point.y))) * 1.26,
+  };
+  drawAperture(ctx, hoveringTriangle, backdropFrame, t, opening, reducedMotion);
   drawCoronalSparks(ctx, hoveringTriangle, t, opening, reducedMotion);
 
   // Reflexe auf der unbewegten Brandung lassen den Riss räumlich im Meer sitzen.

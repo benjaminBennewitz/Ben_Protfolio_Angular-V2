@@ -1,12 +1,19 @@
 /**
  * @file Prozeduraler Dimensionsriss für das DEAD//AIR-Finale.
  * @description Zeichnet die Dreiecksöffnung über einem eingefrorenen Küstenframe.
- *              Keine Assets, DOM-Manipulation oder eigenständigen Animationstimer.
+ *              Verwendet ein lokales Hintergrundbild und prozedurale Wolkenschichten,
+ *              ohne eigenständige Animationstimer oder zusätzliche Bibliotheken.
  * @author Benjamin Bennewitz
  */
 
 /** Begrenzung für die Pixeldichte der transparenten Effektebene. */
 const MAX_DPR = 1.5;
+
+/** Originalillustration der hängenden Schatten; wird einmalig geladen und anschließend
+ * ausschließlich innerhalb des unregelmäßigen Portal-Clippings gezeichnet. */
+const portalBackdrop = new Image();
+portalBackdrop.decoding = 'async';
+portalBackdrop.src = new URL('../assets/portal-hanging-shadows.webp', import.meta.url).href;
 
 /** Interpoliert eine Phase in einem stabilen Wertebereich. */
 const clamp01 = value => Math.max(0, Math.min(1, value));
@@ -317,15 +324,16 @@ function createPortalStormBackdrop(seed) {
         + cloudNoise(u / 31, v / 28, seed + 8) * .31
         + cloudNoise(u / 13, v / 14, seed + 12) * .16
         + cloudNoise(u / 5, v / 7, seed + 18) * .06;
-      const folds = Math.sin(v * .056 + mass * 8 + u * .009) * .075;
-      const bright = clamp01((.83 - mass + folds) * 3.65);
-      // Niedrige Wolken glimmen nur dort, wo der unsichtbare Strom aufbricht.
-      const flare = Math.pow(bright, 1.8);
-      const shadow = clamp01((mass - .54) * 3.6);
+      const folds = Math.sin(v * .052 + mass * 9.5 + u * .011) * .145;
+      // Das Fremdlicht zeichnet nur einzelne Wolkenfalten nach. Der Hintergrund
+      // bleibt größtenteils schwarz statt flächig in Orange aufzuhellen.
+      const bright = clamp01((.625 - mass + folds) * 5.0);
+      const flare = Math.pow(bright, 2.15);
+      const shadow = clamp01((mass - .51) * 3.4);
       const at = (y * canvas.width + x) * 4;
-      data[at] = Math.round(8 + flare * 216 - shadow * 5);
-      data[at + 1] = Math.round(3 + flare * 88 - shadow * 2);
-      data[at + 2] = Math.round(7 + flare * 42);
+      data[at] = Math.round(6 + flare * 134 - shadow * 3);
+      data[at + 1] = Math.round(3 + flare * 45 - shadow);
+      data[at + 2] = Math.round(6 + flare * 19);
       data[at + 3] = 255;
     }
   }
@@ -354,12 +362,12 @@ function drawPortalClouds(ctx, center, radius, time, opening, reducedMotion) {
   ctx.save();
   // Vollflächiger Turbulenz-Hintergrund: harte, dunkle Wolkenmasse wechselt mit
   // glühenden Schneisen. Die asymmetrische Bewegung ist deutlich langsamer als die Blitze.
-  ctx.globalAlpha = .98 * intensity;
+  ctx.globalAlpha = .29 * intensity;
   ctx.drawImage(portalCloudTextures.stormBack,
     center.x - radius * 1.03 + horizontalDrift * .52,
     center.y - radius * .68 + depthDrift * .6,
     radius * 2.06, radius * 1.42);
-  ctx.globalAlpha = .36 * intensity;
+  ctx.globalAlpha = .16 * intensity;
   ctx.drawImage(portalCloudTextures.stormFront,
     center.x - radius * .98 - horizontalDrift * .28,
     center.y - radius * .54 - depthDrift * .34,
@@ -370,23 +378,23 @@ function drawPortalClouds(ctx, center, radius, time, opening, reducedMotion) {
   const core = ctx.createRadialGradient(
     center.x + radius * .03, center.y + radius * .025, radius * .015,
     center.x + radius * .03, center.y + radius * .025, radius * .95);
-  core.addColorStop(0, `rgba(251,106,40,${.22 * intensity})`);
-  core.addColorStop(.3, `rgba(180,54,26,${.16 * intensity})`);
-  core.addColorStop(.64, `rgba(96,23,21,${.12 * intensity})`);
+  core.addColorStop(0, `rgba(188,63,31,${.09 * intensity})`);
+  core.addColorStop(.3, `rgba(119,39,23,${.07 * intensity})`);
+  core.addColorStop(.64, `rgba(65,16,17,${.045 * intensity})`);
   core.addColorStop(1, 'rgba(18,3,9,0)');
   ctx.fillStyle = core;
   ctx.fillRect(center.x - radius * 1.15, center.y - radius * .85,
     radius * 2.3, radius * 1.7);
 
-  // Zwei gegenläufige Wolkenbänke sorgen für reichlich sichtbare Orangeflächen.
+  // Wenige asynchrone Glutadern statt flächig orangefarbener Wolkenbänke.
   // Die vorab gerasterten, organischen Texturen bewegen sich ohne teure Bildfilter.
   ctx.globalCompositeOperation = 'screen';
-  ctx.globalAlpha = .32 * intensity;
+  ctx.globalAlpha = .115 * intensity;
   ctx.drawImage(portalCloudTextures.ember,
     center.x - radius * 1.02 + horizontalDrift,
     center.y - radius * .74 + depthDrift,
     radius * 2.04, radius * 1.19);
-  ctx.globalAlpha = .26 * intensity;
+  ctx.globalAlpha = .075 * intensity;
   ctx.drawImage(portalCloudTextures.emberDetail,
     center.x - radius * .91 - horizontalDrift * .72,
     center.y - radius * .38 - depthDrift,
@@ -415,9 +423,9 @@ function drawPortalStormCells(ctx, center, radius, time, opening, reducedMotion)
     const x = center.x + radius * cx + drift;
     const y = center.y + radius * cy + rise;
     const gradient = ctx.createRadialGradient(0, 0, .06, 0, 0, 1);
-    gradient.addColorStop(0, `rgba(4,2,6,${.66 * intensity})`);
-    gradient.addColorStop(.52, `rgba(17,5,10,${.61 * intensity})`);
-    gradient.addColorStop(.79, `rgba(56,13,12,${.32 * intensity})`);
+    gradient.addColorStop(0, `rgba(4,2,6,${.48 * intensity})`);
+    gradient.addColorStop(.52, `rgba(17,5,10,${.46 * intensity})`);
+    gradient.addColorStop(.79, `rgba(56,13,12,${.27 * intensity})`);
     gradient.addColorStop(1, 'rgba(45,10,9,0)');
     ctx.save();
     ctx.translate(x, y);
@@ -439,11 +447,16 @@ function drawPortalForegroundFog(ctx, center, radius, time, opening, reducedMoti
   const strength = ease((opening - .48) / .43);
   const t = reducedMotion ? 0 : time;
   ctx.save();
-  ctx.globalAlpha = .42 * strength;
+  ctx.globalAlpha = .56 * strength;
   ctx.drawImage(portalCloudTextures.smoke,
     center.x - radius * .85 + Math.sin(t * .1 + 1) * radius * .08,
     center.y - radius * .01 - Math.sin(t * .09) * radius * .05,
     radius * 1.76, radius * .91);
+  ctx.globalAlpha = .40 * strength;
+  ctx.drawImage(portalCloudTextures.smoke,
+    center.x - radius * .98 - Math.sin(t * .18 + .7) * radius * .14,
+    center.y - radius * .50 + Math.sin(t * .15) * radius * .07,
+    radius * 1.92, radius * 1.03);
   // Sporadische, warme Dunstschlieren ziehen vor den Beinen vorbei.
   ctx.globalCompositeOperation = 'screen';
   ctx.globalAlpha = .17 * strength;
@@ -497,76 +510,49 @@ function drawPortalLightning(ctx, center, radius, time, opening, reducedMotion) 
   ctx.restore();
 }
 
-/** In der Sturmmasse stehende, unvollständige Silhouetten.
- * Ohne Glühen, Aura oder klare Körperränder: Ihre schwarze Masse wird nur durch
- * durchziehende, wechselnd helle Wolken im Hintergrund sichtbar. */
-function drawWatchingShapes(ctx, center, radius, time, opening, reducedMotion) {
-  const emergence = ease((opening - .54) / .38);
-  if (emergence <= 0) return;
+/** Platziert die fertige Bildwelt unverzerrt hinter den bewegten Sturmschichten.
+ * Der eng gewählte vertikale Ausschnitt zeigt die hängenden Figuren in der flachen
+ * Portalgeometrie, ohne die menschlichen Proportionen zu verformen. */
+function drawPortalBackdrop(ctx, points, opening) {
+  if (!portalBackdrop.complete || !portalBackdrop.naturalWidth) return;
 
-  const figures = [
-    { x: -.27, y: .12, size: .89, phase: .8, tilt: -.13 },
-    { x: .055, y: .11, size: 1.14, phase: 3.1, tilt: .085 },
-    { x: .34, y: .075, size: .79, phase: 5.4, tilt: -.105 },
-  ];
+  const xs = points.map(point => point.x);
+  const ys = points.map(point => point.y);
+  const minX = Math.min(...xs);
+  const minY = Math.min(...ys);
+  const width = Math.max(...xs) - minX;
+  const height = Math.max(...ys) - minY;
+  const marginX = width * .03;
+  const marginY = height * .13;
+  const destX = minX - marginX;
+  const destY = minY - marginY;
+  const destWidth = width + marginX * 2;
+  const destHeight = height + marginY * 2;
 
-  figures.forEach((figure, index) => {
-    const drift = reducedMotion ? 0 : Math.sin(time * (.12 + index * .02) + figure.phase) * radius * .007;
-    const visibility = reducedMotion ? 1 : .8 + .2 * Math.sin(time * .22 + figure.phase);
-    const x = center.x + radius * figure.x + drift;
-    const y = center.y + radius * figure.y - radius * emergence * .02;
-    const unit = radius * figure.size * .125;
+  // Cover ohne Stretching; das obere Bilddrittel bleibt als Ursprung der Nabelschnüre erhalten.
+  const sourceWidth = portalBackdrop.naturalWidth;
+  const sourceHeight = portalBackdrop.naturalHeight;
+  const sourceAspect = destWidth / destHeight;
+  let cropX = 0;
+  let cropY = 0;
+  let cropWidth = sourceWidth;
+  let cropHeight = sourceHeight;
+  if (sourceWidth / sourceHeight < sourceAspect) {
+    cropHeight = sourceWidth / sourceAspect;
+    cropY = (sourceHeight - cropHeight) * .37;
+  } else {
+    cropWidth = sourceHeight * sourceAspect;
+    cropX = (sourceWidth - cropWidth) / 2;
+  }
 
-    ctx.save();
-    ctx.globalAlpha = emergence * visibility;
-    ctx.translate(x, y);
-    ctx.rotate(figure.tilt);
-    ctx.scale(unit, unit);
-    const shroud = ctx.createLinearGradient(0, -.8, 0, 1.9);
-    shroud.addColorStop(0, '#000');
-    shroud.addColorStop(.55, '#000');
-    shroud.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = shroud;
-    // Oberkörper, Kopf und Arme bleiben eine einzige ungleichmäßige Schattenmasse.
-    ctx.beginPath();
-    ctx.moveTo(-.28, -.64);
-    ctx.lineTo(-.43, -.88);
-    ctx.bezierCurveTo(-.40, -1.05, -.32, -1.19, -.12, -1.16);
-    ctx.lineTo(.075, -1.22);
-    ctx.bezierCurveTo(.29, -1.12, .32, -.99, .27, -.78);
-    ctx.lineTo(.24, -.65);
-    ctx.bezierCurveTo(.4, -.59, .58, -.38, .51, -.19);
-    ctx.bezierCurveTo(.87, .09, .65, .4, .77, .7);
-    ctx.bezierCurveTo(.47, .53, .42, .92, .32, 1.39);
-    ctx.lineTo(.13, 1.84);
-    ctx.lineTo(-.1, 1.48);
-    ctx.lineTo(-.39, 1.81);
-    ctx.bezierCurveTo(-.49, 1.1, -.51, .73, -.72, .52);
-    ctx.bezierCurveTo(-.54, .17, -.85, -.06, -.52, -.36);
-    ctx.bezierCurveTo(-.48, -.51, -.36, -.65, -.26, -.67);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-
-    // Seltene schmale Reflexe erscheinen ohne Blur oder Aura und nur im Augenblick
-    // einer Entladung; nicht jedes Wesen blickt gleichzeitig auf.
-    if (reducedMotion) return;
-    const glint = Math.max(0, Math.sin(time * (1.19 + index * .13) + index * 2.89) - .84);
-    if (glint < .02) return;
-    ctx.save();
-    ctx.globalAlpha = emergence * glint * 1.4;
-    ctx.strokeStyle = '#d9a182';
-    ctx.lineWidth = .8;
-    for (const side of [-1, 1]) {
-      const xx = x + side * unit * .145;
-      const yy = y - unit * .85 + (side > 0 ? .7 : 0);
-      ctx.beginPath();
-      ctx.moveTo(xx - unit * .035, yy);
-      ctx.lineTo(xx + unit * .03, yy - .3);
-      ctx.stroke();
-    }
-    ctx.restore();
-  });
+  ctx.save();
+  ctx.globalAlpha = ease(opening * 2.2);
+  ctx.drawImage(portalBackdrop, cropX, cropY, cropWidth, cropHeight,
+    destX, destY, destWidth, destHeight);
+  // Die Wesen bleiben fast schwarz, während warme Durchbrüche im Himmel lesbar sind.
+  ctx.fillStyle = 'rgba(5, 2, 5, .06)';
+  ctx.fillRect(destX, destY, destWidth, destHeight);
+  ctx.restore();
 }
 
 /** Zeichnet den Öffnungskörper nur innerhalb der verbundenen Peilpunkte. */
@@ -585,16 +571,13 @@ function drawAperture(ctx, points, time, opening, reducedMotion) {
   traceFracture(ctx, expanded, time, opening);
   ctx.clip();
 
-  // Dunkler Hohlraum statt eines gleichmäßig leuchtenden grafischen Dreiecks.
-  const abyss = ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, radius);
-  abyss.addColorStop(0, `rgba(24,4,9,${.98 * opening})`);
-  abyss.addColorStop(.4, `rgba(51,11,13,${.96 * opening})`);
-  abyss.addColorStop(.7, `rgba(101,24,18,${.89 * opening})`);
-  abyss.addColorStop(1, `rgba(239,84,22,${.85 * opening})`);
-  ctx.fillStyle = abyss;
+  // Schwarze Grundtiefe verhindert ein auffälliges Leerbild, solange die Illustration lädt.
+  ctx.fillStyle = `rgba(6, 3, 7, ${Math.min(1, opening * 2.2)})`;
   ctx.fillRect(center.x - radius, center.y - radius, radius * 2, radius * 2);
 
-  // Gewitter und schwerer Tiefennebel bewegen sich hinter den Schattenwesen.
+  // Das erste Motiv liefert korrekt proportionierte Silhouetten und Nabelschnüre.
+  // Der Bestand an prozeduralen Wolken wandert davor, nicht mehr hinter separaten Figuren.
+  drawPortalBackdrop(ctx, expanded, opening);
   drawPortalClouds(ctx, center, radius, time, opening, reducedMotion);
   drawPortalStormCells(ctx, center, radius, time, opening, reducedMotion);
 
@@ -605,8 +588,8 @@ function drawAperture(ctx, points, time, opening, reducedMotion) {
     const drift = Math.sin(time * (.26 + line * .006) + line * 1.76) * (11 + 14 * opening);
     const grad = ctx.createLinearGradient(center.x - radius, y, center.x + radius, y);
     grad.addColorStop(0, 'rgba(241,72,24,0)');
-    grad.addColorStop(.3, `rgba(236,74,34,${.015 + .05 * opening})`);
-    grad.addColorStop(.7, `rgba(254,141,69,${.05 + .10 * opening})`);
+    grad.addColorStop(.3, `rgba(236,74,34,${.006 + .02 * opening})`);
+    grad.addColorStop(.7, `rgba(254,141,69,${.02 + .045 * opening})`);
     grad.addColorStop(1, 'rgba(241,72,24,0)');
     ctx.strokeStyle = grad;
     ctx.lineWidth = .7 + (line % 4) * .3;
@@ -617,23 +600,9 @@ function drawAperture(ctx, points, time, opening, reducedMotion) {
   }
   drawPortalLightning(ctx, center, radius, time, opening, reducedMotion);
 
-  // Die letzte Wolkenfront muss VOR den schwarzen Wesen liegen, aber NACH den
-  // dunklen Sturmzellen und überlagernden Lichtschleiern. So bleibt die Textur
-  // im fertigen Canvas wirklich sichtbar statt zu einer glatten Fläche zu werden.
-  if (portalCloudTextures) {
-    const drift = reducedMotion ? 0 : Math.sin(time * .095) * radius * .041;
-    ctx.save();
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.globalAlpha = .9 * ease((opening - .22) / .55);
-    ctx.drawImage(portalCloudTextures.stormBack,
-      center.x - radius * .96 + drift,
-      center.y - radius * .6,
-      radius * 1.92, radius * 1.28);
-    ctx.restore();
-  }
+  // Der schwere Vordergrundnebel verschluckt große Teile des Hintergrundmotivs;
+  // Köpfe und Körper werden nicht mehr als separate Canvas-Primitive aufgesetzt.
   ctx.globalCompositeOperation = 'source-over';
-  drawWatchingShapes(ctx, center, radius, time, opening, reducedMotion);
-
   drawPortalForegroundFog(ctx, center, radius, time, opening, reducedMotion);
   ctx.restore();
 

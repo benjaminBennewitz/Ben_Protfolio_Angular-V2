@@ -374,3 +374,20 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Entwicklerkonsole per URL `?debug=1` aktivieren. Sie enthält `TOR / START`, `TOR / OFFEN` und `ISOLATION`. Die Optionen umgehen bewusst die Rätsel und sind im normalen Spielerlebnis ausgeblendet.
 - `TOR / START` spielt die gesamte Sequenz ab, `TOR / OFFEN` springt direkt ins geöffnete Tor. Für einen anderen Ausgang die Seite neu laden.
 - Keine zusätzlichen Assets oder Laufzeit-Abhängigkeiten.
+
+
+## Patch 45 – Shadow Presence Refinement
+
+- Der Hintergrund des Dimensionstors bleibt überwiegend rußschwarz; orangefarbene Glut tritt nur noch in einzelnen Wolkenfalten und bei Entladungen hervor.
+- Drei unterschiedlich entfernte Wesen sind deutlich schlanker, höher und asymmetrischer. Ihre unteren Konturen verschwinden in der Dunkelheit.
+- Kleine, zeitversetzt aufleuchtende Augenschlitze sitzen in den Figuren, ohne Glow oder Aura.
+- Die doppelt aufgetragene Sturmtextur wird nicht mehr über interne Blitze und die Tiefenstaffelung gezeichnet.
+- Keine Änderungen an Story, UI, Audio oder der Bewegung und Schattenprojektion des Tores.
+
+
+## Patch 46 – Illustrierte Schatten im Portalkern
+
+- Die erste Illustration mit frei schwebenden, an Nabelschnüren hängenden Figuren ist als lokales WebP-Asset `assets/portal-hanging-shadows.webp` in den Torhintergrund integriert.
+- Die bisherigen prozeduralen Figuren und ihre Augen wurden entfernt.
+- Die vorhandenen Canvas-Gewitter- und Nebelschichten ziehen vor dem Bild vorbei; Dreiecksform, Schweben, Schatten, Lichtbögen und Story bleiben erhalten.
+- Der Bildausschnitt wird proportional skaliert und bleibt auf den unregelmäßigen Portalriss begrenzt.

@@ -1053,6 +1053,7 @@ folio/
 │   │   │   │   ├── lighthouse-beam.webp
 │   │   │   │   ├── message-bottle.webp
 │   │   │   │   ├── message-bottle-glitch.webp
+│   │   │   │   ├── portal-hanging-shadows.webp
 │   │   │   │   ├── preview.webp
 │   │   │   │   ├── scene-poster.webp
 │   │   │   │   ├── scene-poster-no-lighthouse.webp

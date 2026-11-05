@@ -5,7 +5,7 @@
  * @author Benjamin Bennewitz
  */
 
-import { drawGate } from './gate-visual.js';
+import { drawGate, PORTAL_REVEAL_END_MS } from './gate-visual.js';
 import { soundscape } from './soundscape.js';
 
 /** @typedef {'normal' | 'interference' | 'unknown' | 'voice' | 'relayA' | 'relayB' | 'relayC' | 'warning'} SignalState */
@@ -1110,23 +1110,33 @@ function getGateElapsedMs() {
   return Math.max(0, elapsed - (scene.finale.mode === 'breach' ? FINAL_LIGHTHOUSE_PRELUDE_MS : 0));
 }
 
-/** Die Videokamera bleibt beweglich, bis sich die ersten Dreiecksseiten bilden.
- * Ab diesem Moment werden nur die Zusatzebenen bewegt, nicht die Brandung. */
+/** Die Brandung friert erst ein, wenn die eigentliche Portalöffnung beginnt. */
 function isSeaFrozen() {
   return scene.finale.mode === 'breach'
-    && ['triangulation', 'opening', 'open'].includes(scene.finale.phase);
+    && ['opening', 'open'].includes(scene.finale.phase);
 }
 
-/** Bremst die Brandung über den ersten Finalabschnitt kontinuierlich ab.
+/** Bremst die Brandung bis zum Beginn der Portalöffnung kontinuierlich ab.
  * Der Videoframe steht erst beim Abschluss der Abbremsung endgültig still.
  * Im Gegensatz zu CSS-Filterungen wird die echte Abspielgeschwindigkeit verändert. */
 function slowSeaToFreeze(elapsedMs) {
   if (scene.finale.mode !== 'breach' || isSeaFrozen()) return;
-  const progress = smoothStep(elapsedMs / FINAL_TRIANGULATION_MS);
+  const progress = smoothStep(elapsedMs / FINAL_OPENING_MS);
   const playbackRate = Math.max(0.08, 1 - progress * 0.92);
   if (Math.abs(coastVideo.playbackRate - playbackRate) > 0.015) {
     coastVideo.playbackRate = playbackRate;
   }
+}
+
+/** Steigert Szenenlicht und Gehäusereflexe aus derselben pausierbaren Finaluhr.
+ * Die Phasenbezeichnungen lösen keine abrupten Farbfilter mehr aus. */
+function updateFinaleLighting(elapsedMs) {
+  const light = scene.finale.mode === 'breach'
+    ? smoothStep((elapsedMs - 1_200) / (FINAL_OPEN_END_MS - 1_200)) : 0;
+  const spill = scene.finale.mode === 'breach'
+    ? smoothStep((elapsedMs - FINAL_OPENING_MS) / (FINAL_OPEN_END_MS - FINAL_OPENING_MS)) : 0;
+  root.style.setProperty('--gate-light', light.toFixed(4));
+  root.style.setProperty('--gate-spill', spill.toFixed(4));
 }
 
 /** Story-Phasen werden aus aktiver Spielzeit abgeleitet; Pausen verschieben nichts. */
@@ -1134,6 +1144,7 @@ function updateFinale() {
   if (!scene.finale.mode) return;
   const elapsed = scene.anomaly.activeMs - scene.finale.startedAtMs;
   const gateElapsed = getGateElapsedMs();
+  updateFinaleLighting(gateElapsed);
   const lastPhase = scene.finale.phase;
   let phase;
   if (scene.finale.mode === 'isolate') {
@@ -1191,7 +1202,8 @@ function renderGateFrame(timestamp) {
       scene.finale.mode, window.matchMedia('(prefers-reduced-motion: reduce)').matches);
     scene.finale.lastFrameAtMs = timestamp;
   }
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const revealPending = scene.finale.mode === 'breach' && getGateElapsedMs() < PORTAL_REVEAL_END_MS;
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches || revealPending) {
     scene.finale.animationFrameId = requestAnimationFrame(renderGateFrame);
   }
 }

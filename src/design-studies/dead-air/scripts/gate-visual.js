@@ -9,6 +9,14 @@
 /** Begrenzung für die Pixeldichte der transparenten Effektebene. */
 const MAX_DPR = 1.5;
 
+/** Erst nach vollständiger Öffnung lichten sich die Wolken über zehn Sekunden. */
+const PORTAL_REVEAL_START_SECONDS = 13.8;
+const PORTAL_REVEAL_DURATION_SECONDS = 10;
+/** Ende der zeitgesteuerten Enthüllung für den begrenzten Reduced-Motion-Renderlauf. */
+export const PORTAL_REVEAL_END_MS = (PORTAL_REVEAL_START_SECONDS + PORTAL_REVEAL_DURATION_SECONDS) * 1000;
+const PORTAL_BACKDROP_SCALE = .86;
+let distantPortalBackdrop = null;
+
 /** Originalillustration der hängenden Schatten; wird einmalig geladen und anschließend
  * ausschließlich innerhalb des unregelmäßigen Portal-Clippings gezeichnet. */
 const portalBackdrop = new Image();
@@ -68,11 +76,11 @@ function levitateTriangle(points, time, opening, reducedMotion) {
 
   // Die Geometrie schwebt langsam. Kurze elektrische Impulse verändern nur das Licht,
   // nicht mehr die Position des ganzen Tores.
-  const rotation = lift * (reducedMotion ? -.022 : -.022 + .013 * Math.sin(time * .24));
-  const shear = reducedMotion ? 0 : lift * .012 * Math.sin(time * .17 + .6);
-  const pitch = 1 - lift * (reducedMotion ? .1 : .1 + .009 * Math.sin(time * .19));
-  const hover = lift * (20 + (reducedMotion ? 0 : 2.6 * Math.sin(time * .32)));
-  const drift = reducedMotion ? 0 : lift * 2.1 * Math.sin(time * .21 + .4);
+  const rotation = lift * (reducedMotion ? -.022 : -.022 + .028 * Math.sin(time * .24));
+  const shear = reducedMotion ? 0 : lift * .021 * Math.sin(time * .17 + .6);
+  const pitch = 1 - lift * (reducedMotion ? .1 : .1 + .022 * Math.sin(time * .19));
+  const hover = lift * (20 + (reducedMotion ? 0 : 4.4 * Math.sin(time * .32)));
+  const drift = reducedMotion ? 0 : lift * 3.8 * Math.sin(time * .21 + .4);
   const pulse = 1 + (reducedMotion ? 0 : lift * .003 * Math.sin(time * .38));
   const cosine = Math.cos(rotation);
   const sine = Math.sin(rotation);
@@ -119,8 +127,8 @@ function drawHoverShadow(ctx, anchored, hovering, opening) {
   // Breiter, sehr weicher Lichtentzug statt einer harten schwarzen Dreiecksfläche.
   const wash = ctx.createRadialGradient(shadowCenter.x, shadowCenter.y, span * .05,
     shadowCenter.x, shadowCenter.y, span * .67);
-  wash.addColorStop(0, `rgba(3,2,5,${.18 * progress})`);
-  wash.addColorStop(.42, `rgba(3,2,5,${.1 * progress})`);
+  wash.addColorStop(0, `rgba(3,2,5,${.31 * progress})`);
+  wash.addColorStop(.42, `rgba(3,2,5,${.19 * progress})`);
   wash.addColorStop(1, 'rgba(3,2,5,0)');
   ctx.translate(shadowCenter.x, shadowCenter.y);
   ctx.scale(1, .52);
@@ -133,8 +141,8 @@ function drawHoverShadow(ctx, anchored, hovering, opening) {
 
   // Auch der dreieckige Kern folgt der geneigten Portalform, bleibt aber diffus.
   ctx.save();
-  ctx.filter = 'blur(25px)';
-  ctx.globalAlpha = .11 * progress;
+  ctx.filter = `blur(${Math.max(10, span * .035)}px)`;
+  ctx.globalAlpha = .27 * progress;
   ctx.fillStyle = '#050308';
   traceFracture(ctx, footprint, 0, .06);
   ctx.fill();
@@ -159,7 +167,7 @@ function drawElectricArcs(ctx, points, time, intensity, reducedMotion) {
     const pulse = intensity * clamp01((trigger - .24) / .76);
     ctx.shadowBlur = 8 + 17 * pulse;
     ctx.shadowColor = '#ff8e4c';
-    ctx.strokeStyle = `rgba(255,${175 + branch % 4 * 14},${102 + branch % 3 * 22},${.72 * pulse})`;
+    ctx.strokeStyle = `rgba(255,${175 + branch % 4 * 14},${102 + branch % 3 * 22},${.42 * pulse})`;
     ctx.lineWidth = .55 + 1.1 * pulse;
     ctx.beginPath();
     for (let step = 0; step <= 8; step += 1) {
@@ -200,7 +208,7 @@ function drawCoronalSparks(ctx, points, time, strength, reducedMotion) {
     const size = (5 + i % 4 * 2.7) * clamp01((phase - .52) / .48) * strength;
     ctx.shadowColor = '#ffb47a';
     ctx.shadowBlur = 12;
-    ctx.strokeStyle = `rgba(255,214,162,${.75 * strength})`;
+    ctx.strokeStyle = `rgba(255,214,162,${.42 * strength})`;
     ctx.lineWidth = .9;
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -217,7 +225,7 @@ function drawRelays(ctx, points, time, strength) {
       + .11 * Math.sin(time * (8.1 + index * .81) + index);
     const radius = 1.8 + 2.5 * strength * Math.max(.16, pulse);
     const glow = ctx.createRadialGradient(x, y, 0, x, y, 24 + 10 * strength);
-    glow.addColorStop(0, `rgba(255,225,165,${.75 * strength})`);
+    glow.addColorStop(0, `rgba(255,225,165,${.42 * strength})`);
     glow.addColorStop(.12, `rgba(251,140,60,${.55 * strength})`);
     glow.addColorStop(1, 'rgba(203,49,12,0)');
     ctx.fillStyle = glow;
@@ -382,8 +390,6 @@ function createPortalVeilTexture(seed) {
  * die Figuren schwarz bleiben und werden nur bei Lichtdurchbrüchen lesbar. */
 function drawPortalClouds(ctx, center, radius, time, opening, reducedMotion) {
   const intensity = ease((opening - .13) / .62);
-  if (intensity <= 0) return;
-
   portalCloudTextures ??= {
     smoke: createPortalCloudTexture(31, 'smoke'),
     ember: createPortalCloudTexture(73, 'ember'),
@@ -393,6 +399,7 @@ function drawPortalClouds(ctx, center, radius, time, opening, reducedMotion) {
     veilNear: createPortalVeilTexture(17),
     veilFar: createPortalVeilTexture(83),
   };
+  if (intensity <= 0) return;
   const t = reducedMotion ? 0 : time;
   const horizontalDrift = Math.sin(t * .105) * radius * .065;
   const depthDrift = Math.sin(t * .14 + 1.4) * radius * .035;
@@ -478,12 +485,22 @@ function drawPortalStormCells(ctx, center, radius, time, opening, reducedMotion)
   ctx.restore();
 }
 
-/** Zwei dichte, gegeneinander wandernde Wolkenbänke verdecken rund zwei Drittel
- * des festen Portalhintergrundes. Gegenläufiger, deutlich wahrnehmbarer Drift
- * erzeugt wechselnde Fenster auf die hängenden Silhouetten. */
-function drawPortalForegroundFog(ctx, center, radius, time, opening, reducedMotion) {
-  if (opening <= .18 || !portalCloudTextures) return;
-  const strength = ease((opening - .18) / .54);
+/** Lässt nach dem ersten Sichtfenster neue Wolkenfronten unregelmäßig aufziehen.
+ * Überlagerte langsame Wellen vermeiden einen gleichmäßig wiederkehrenden Puls. */
+function getPortalCloudConcealment(time, reveal, reducedMotion) {
+  if (reducedMotion) return 1 - reveal * .8;
+  const afterReveal = Math.max(0, time - PORTAL_REVEAL_END_MS / 1000 - 1.5);
+  const weather = clamp01(.5 + .30 * Math.sin(afterReveal * .21 + .5)
+    + .20 * Math.sin(afterReveal * .37 + 1.4));
+  const returningClouds = ease(afterReveal / 7) * (.16 + .60 * weather);
+  return 1 - reveal + reveal * (.12 + returningClouds);
+}
+
+/** Eine geschlossene Sturmdecke verbirgt das Motiv während der gesamten Öffnung.
+ * Nach einer kurzen Lichtung verdichten sich die gegenläufigen Wolken erneut. */
+function drawPortalForegroundFog(ctx, center, radius, time, opening, reducedMotion, reveal) {
+  if (opening <= 0 || !portalCloudTextures) return;
+  const conceal = getPortalCloudConcealment(time, reveal, reducedMotion);
   const t = reducedMotion ? 0 : time;
   const nearDrift = Math.sin(t * .38 + .5) * radius * .29;
   const farDrift = -Math.sin(t * .31 + 1.7) * radius * .36;
@@ -491,19 +508,28 @@ function drawPortalForegroundFog(ctx, center, radius, time, opening, reducedMoti
   const farRise = Math.sin(t * .14 + 2.2) * radius * .065;
 
   ctx.save();
-  ctx.globalAlpha = .84 * strength;
+  // Flächige Tiefe schließt die Lücken der Wolkenmasken, solange das Tor wächst.
+  ctx.fillStyle = `rgba(6, 3, 8, ${.97 * conceal})`;
+  ctx.fillRect(center.x - radius * 1.8, center.y - radius * 1.2,
+    radius * 3.6, radius * 2.4);
+  ctx.globalAlpha = .78 * conceal;
+  ctx.drawImage(portalCloudTextures.stormFront,
+    center.x - radius * 1.5 + farDrift * .25,
+    center.y - radius * .9 + farRise,
+    radius * 3, radius * 1.8);
+  ctx.globalAlpha = .22 + .74 * conceal;
   ctx.drawImage(portalCloudTextures.veilFar,
     center.x - radius * 1.43 + farDrift,
     center.y - radius * .79 + farRise,
     radius * 2.86, radius * 1.66);
-  ctx.globalAlpha = .94 * strength;
+  ctx.globalAlpha = .25 + .73 * conceal;
   ctx.drawImage(portalCloudTextures.veilNear,
     center.x - radius * 1.37 + nearDrift,
     center.y - radius * .73 + nearRise,
     radius * 2.74, radius * 1.58);
 
   // Tiefer Bodennebel hält die untere Öffnung diffus, ohne die Wolkenmasken aufzuhellen.
-  ctx.globalAlpha = .48 * strength;
+  ctx.globalAlpha = .14 + .48 * conceal;
   ctx.drawImage(portalCloudTextures.smoke,
     center.x - radius * .95 - nearDrift * .18,
     center.y + radius * .1,
@@ -554,10 +580,40 @@ function drawPortalLightning(ctx, center, radius, time, opening, reducedMotion) 
   ctx.restore();
 }
 
+/** Bettet das unveränderte Motiv einmalig kleiner in atmosphärische Randtiefe ein.
+ * Die gecachte Textur erhält beim späteren Öffnen einen konstanten Maßstab. */
+function getDistantPortalBackdrop() {
+  if (distantPortalBackdrop) return distantPortalBackdrop;
+  const texture = document.createElement('canvas');
+  texture.width = Math.min(1280, portalBackdrop.naturalWidth);
+  texture.height = Math.round(texture.width * portalBackdrop.naturalHeight / portalBackdrop.naturalWidth);
+  const ctx = texture.getContext('2d');
+  if (!ctx) return portalBackdrop;
+  const width = texture.width * PORTAL_BACKDROP_SCALE;
+  const height = texture.height * PORTAL_BACKDROP_SCALE;
+  ctx.drawImage(portalBackdrop, (texture.width - width) / 2,
+    (texture.height - height) / 2, width, height);
+  ctx.save();
+  ctx.translate(texture.width / 2, texture.height / 2);
+  ctx.scale(width / 2, height / 2);
+  const fade = ctx.createRadialGradient(0, 0, .62, 0, 0, 1);
+  fade.addColorStop(0, '#000');
+  fade.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.globalCompositeOperation = 'destination-in';
+  ctx.fillStyle = fade;
+  ctx.fillRect(-2, -2, 4, 4);
+  ctx.restore();
+  ctx.globalCompositeOperation = 'destination-over';
+  ctx.fillStyle = '#060307';
+  ctx.fillRect(0, 0, texture.width, texture.height);
+  distantPortalBackdrop = texture;
+  return texture;
+}
+
 /** Platziert die Illustration in einem weltfesten Ausschnitt hinter dem Tor.
  * Die wachsende Dreiecksmaske enthüllt mehr vom Bild, ohne dessen Größe oder
  * räumliche Entfernung zu verändern. Auch die Schwebebewegung zoomt das Bild nicht. */
-function drawPortalBackdrop(ctx, frame, opening) {
+function drawPortalBackdrop(ctx, frame, time, opening, reducedMotion) {
   if (!portalBackdrop.complete || !portalBackdrop.naturalWidth) return;
 
   const destWidth = frame.width;
@@ -566,8 +622,9 @@ function drawPortalBackdrop(ctx, frame, opening) {
   const destY = frame.y - destHeight / 2;
 
   // Cover ohne Stretching; der obere Bildteil mit den Nabelschnüren bleibt erhalten.
-  const sourceWidth = portalBackdrop.naturalWidth;
-  const sourceHeight = portalBackdrop.naturalHeight;
+  const backdrop = getDistantPortalBackdrop();
+  const sourceWidth = backdrop.naturalWidth || backdrop.width;
+  const sourceHeight = backdrop.naturalHeight || backdrop.height;
   const sourceAspect = destWidth / destHeight;
   let cropX = 0;
   let cropY = 0;
@@ -582,8 +639,15 @@ function drawPortalBackdrop(ctx, frame, opening) {
   }
 
   ctx.save();
+  // Kleines unabhängiges Schaukeln im festen Bildraum, ohne Öffnungszoom.
+  const sway = reducedMotion ? 0 : Math.sin(time * .19 + .8) * .012;
+  const driftX = reducedMotion ? 0 : Math.sin(time * .16) * destWidth * .008;
+  const driftY = reducedMotion ? 0 : Math.sin(time * .22 + 1.2) * destHeight * .012;
+  ctx.translate(frame.x + driftX, frame.y + driftY);
+  ctx.rotate(sway);
+  ctx.translate(-frame.x, -frame.y);
   ctx.globalAlpha = ease(opening * 2.2);
-  ctx.drawImage(portalBackdrop, cropX, cropY, cropWidth, cropHeight,
+  ctx.drawImage(backdrop, cropX, cropY, cropWidth, cropHeight,
     destX, destY, destWidth, destHeight);
   ctx.fillStyle = 'rgba(5, 2, 5, .06)';
   ctx.fillRect(destX, destY, destWidth, destHeight);
@@ -591,7 +655,7 @@ function drawPortalBackdrop(ctx, frame, opening) {
 }
 
 /** Zeichnet den Öffnungskörper nur innerhalb der verbundenen Peilpunkte. */
-function drawAperture(ctx, points, backdropFrame, time, opening, reducedMotion) {
+function drawAperture(ctx, points, backdropFrame, time, opening, reducedMotion, reveal) {
   if (opening <= 0) return;
 
   const center = {
@@ -612,7 +676,7 @@ function drawAperture(ctx, points, backdropFrame, time, opening, reducedMotion) 
 
   // Das erste Motiv liefert korrekt proportionierte Silhouetten und Nabelschnüre.
   // Der Bestand an prozeduralen Wolken wandert davor, nicht mehr hinter separaten Figuren.
-  drawPortalBackdrop(ctx, backdropFrame, opening);
+  drawPortalBackdrop(ctx, backdropFrame, time, opening, reducedMotion);
   drawPortalClouds(ctx, center, radius, time, opening, reducedMotion);
   drawPortalStormCells(ctx, center, radius, time, opening, reducedMotion);
 
@@ -638,24 +702,27 @@ function drawAperture(ctx, points, backdropFrame, time, opening, reducedMotion) 
   // Der schwere Vordergrundnebel verschluckt große Teile des Hintergrundmotivs;
   // Köpfe und Körper werden nicht mehr als separate Canvas-Primitive aufgesetzt.
   ctx.globalCompositeOperation = 'source-over';
-  drawPortalForegroundFog(ctx, center, radius, time, opening, reducedMotion);
+  drawPortalForegroundFog(ctx, center, radius, time, opening, reducedMotion, reveal);
   ctx.restore();
 
   ctx.save();
   ctx.globalCompositeOperation = 'screen';
   traceFracture(ctx, expanded, time, opening);
   ctx.shadowColor = '#f04f15';
-  ctx.shadowBlur = 31 + 22 * opening;
-  ctx.strokeStyle = `rgba(209,51,14,${.8 * opening})`;
-  ctx.lineWidth = 11 + opening * 7;
+  const edgeScale = Math.max(.32, Math.min(1.15, radius / 620));
+  ctx.filter = `blur(${1.8 * edgeScale}px)`;
+  ctx.shadowBlur = (15 + 9 * opening) * edgeScale;
+  ctx.strokeStyle = `rgba(209,51,14,${.28 * opening})`;
+  ctx.lineWidth = (7 + opening * 4) * edgeScale;
   ctx.stroke();
-  ctx.shadowBlur = 16;
-  ctx.strokeStyle = `rgba(252,112,36,${.77 * opening})`;
-  ctx.lineWidth = 4.2 + opening * 1.8;
+  ctx.shadowBlur = 9 * edgeScale;
+  ctx.strokeStyle = `rgba(252,112,36,${.38 * opening})`;
+  ctx.lineWidth = (2.4 + opening * 1.2) * edgeScale;
   ctx.stroke();
-  ctx.shadowBlur = 5;
-  ctx.strokeStyle = `rgba(255,207,127,${.69 * opening})`;
-  ctx.lineWidth = 1.25;
+  ctx.filter = `blur(${.65 * edgeScale}px)`;
+  ctx.shadowBlur = 4 * edgeScale;
+  ctx.strokeStyle = `rgba(255,207,127,${.29 * opening})`;
+  ctx.lineWidth = .85 * edgeScale;
   ctx.stroke();
   ctx.restore();
 }
@@ -729,7 +796,7 @@ export function drawGate(canvas, elapsedMs, mode, reducedMotion = false) {
       if (portion <= 0) continue;
       const jitter = reducedMotion ? 1 : .84 + .11 * Math.sin(t * (4.7 + side) + side * 3.1)
         + .05 * Math.sin(t * 15.5 - side);
-      ctx.strokeStyle = `rgba(248,105,37,${(.28 + .6 * portion) * jitter})`;
+      ctx.strokeStyle = `rgba(248,105,37,${(.14 + .3 * portion) * jitter * (1 - .7 * opening)})`;
       ctx.lineWidth = (1.4 + opening * 1.2) * jitter;
       ctx.beginPath();
       const dx = (to.x - from.x) * portion;
@@ -760,7 +827,9 @@ export function drawGate(canvas, elapsedMs, mode, reducedMotion = false) {
     height: (Math.max(...fullSizeTriangle.map(point => point.y))
       - Math.min(...fullSizeTriangle.map(point => point.y))) * 1.26,
   };
-  drawAperture(ctx, hoveringTriangle, backdropFrame, t, opening, reducedMotion);
+  // Die Enthüllung folgt auch bei reduzierter Bewegung der aktiven Story-Uhr.
+  const reveal = ease((time - PORTAL_REVEAL_START_SECONDS) / PORTAL_REVEAL_DURATION_SECONDS);
+  drawAperture(ctx, hoveringTriangle, backdropFrame, t, opening, reducedMotion, reveal);
   drawCoronalSparks(ctx, hoveringTriangle, t, opening, reducedMotion);
 
   // Reflexe auf der unbewegten Brandung lassen den Riss räumlich im Meer sitzen.

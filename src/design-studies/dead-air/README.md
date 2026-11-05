@@ -407,3 +407,31 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Die Nabelschnüre setzen an den Bäuchen an, die hängenden Körper sind entsprechend nach hinten durchgebogen.
 - Das Motiv ist innerhalb des Assets auf 80 % verkleinert und mit einer weichen atmosphärischen Randzone versehen, damit es räumlich weiter entfernt wirkt.
 - Das Canvas und die dichten bewegten Wolken aus Patch 47 bleiben unverändert, ebenso das feste Bildframing während des Öffnens.
+
+
+## Patch 49 – Portal Motion, Soft Light & Sea Timing
+
+- Die Hintergrundillustration schaukelt unabhängig und sehr leicht im bestehenden Bildraum, ohne beim Öffnen zu wachsen. Die dichten Wolkenschichten und das freigegebene Motiv bleiben erhalten.
+- Das Tor neigt sich etwas stärker und schwebt mit sanft vergrößerter Amplitude. Sein diffuser Schatten folgt weiterhin derselben Geometrie und ist deutlicher sichtbar.
+- Lichtkanten und Entladungen sind transparenter; ein weicher, an die Bildschirmgröße angepasster Saum ersetzt die starke Kontur. Die Peillinien treten beim Öffnen zurück.
+- Das Küstenvideo bremst über sechs statt 2,2 Sekunden ab und pausiert erst zum Beginn der eigentlichen Öffnung, nicht schon beim Aufbau der Dreiecksseiten.
+- Video-Farbfilter, Szenentönung und UI-Streulicht steigen kontinuierlich anhand der aktiven Finaluhr an. Sprunghafte Phasenfilter und der abrupte orangefarbene Vignettenwechsel entfallen.
+- Ein langsam wachsender Reflex an den inneren Glaskanten und ein äußerer Schein auf der Bildschirmfassung binden das geöffnete Tor in den Monitor ein.
+- Bestehende Pause-/Tab-Steuerung und Reduced Motion bleiben berücksichtigt; keine zusätzlichen Assets oder Abhängigkeiten.
+
+
+## Patch 50 – Distant Presence & Delayed Cloud Reveal
+
+- Das freigegebene Motiv wird in einer einmalig gecachten Canvas-Textur um weitere 14 % verkleinert und weich in dunkle Randtiefe eingebettet. Der Maßstab bleibt während der Öffnung konstant; das leichte Schaukeln bleibt erhalten.
+- Während des gesamten Torwachstums verdeckt eine dichte, bewegte Sturmdecke die Illustration. Die Wolkenschichten sind schon beim ersten sichtbaren Riss aktiv.
+- Erst 0,8 Sekunden nach der vollständigen Öffnung beginnt die Sturmdecke, sich über zehn Sekunden weich zu lichten. Bewegte Wolkenreste bleiben vor dem enthüllten Motiv erhalten.
+- Die Enthüllung folgt der vorhandenen aktiven Finaluhr; Pause und Hintergrund-Tabs halten sie an. Bei reduzierter Bewegung lichten sich die ruhenden Wolken ebenfalls zeitgesteuert.
+- Torbewegung, Lichtkanten, Schatten, Videotiming, Audio und Story aus Patch 49 bleiben erhalten. Keine neuen Assets oder Abhängigkeiten.
+
+
+## Patch 51 – Organic Returning Clouds
+
+- Die erste Enthüllung bleibt ein kurzes Sichtfenster: Auch an der lichtesten Stelle bleibt eine dünne Wolkendecke vor dem Motiv.
+- Nach etwa 1,5 Sekunden ziehen über sieben Sekunden erneut dichte Wolken auf. Zwei langsame, unterschiedlich schnelle Wetterwellen variieren anschließend die Dichte fortlaufend; die bestehenden gegenläufigen Wolkenbewegungen bleiben erhalten.
+- Die Gestalten werden dadurch wiederholt verdeckt und sichtbar, statt dauerhaft freizustehen. Die reduzierte Bewegungsdarstellung hält nach der ersten Enthüllung eine ruhige Restbewölkung.
+- Keine Änderungen an Portalgeometrie, Hintergrundmaßstab, Licht, Schatten, Story oder Audio.

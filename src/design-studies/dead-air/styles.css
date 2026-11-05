@@ -41,6 +41,8 @@
 
 :root {
   color-scheme: dark;
+  --gate-light: 0;
+  --gate-spill: 0;
   --black: #070c0d;
   --background: #10191a;
   --surface: #172224;
@@ -1237,7 +1239,7 @@ figure {
 }
 
 /* Eigene Finalebenen bleiben getrennt vom Video. Die Küste wird beim
-   Dreiecksaufbau im letzten Frame angehalten; nur der Canvas bewegt sich weiter. */
+   Öffnungsbeginn im letzten Frame angehalten; nur der Canvas bewegt sich weiter. */
 .scene__finale-tint,
 .scene__gate-canvas {
   position: absolute;
@@ -1249,12 +1251,12 @@ figure {
 
 .scene__finale-tint {
   z-index: 4;
-  opacity: 0;
+  opacity: calc(var(--gate-light) * .68);
   background:
     radial-gradient(ellipse 70% 68% at 46% 49%, rgba(255, 110, 28, .42), rgba(154, 30, 10, .2) 60%, transparent 94%),
     linear-gradient(176deg, rgba(225, 57, 14, .32), rgba(85, 8, 3, .46));
   mix-blend-mode: screen;
-  transition: opacity 1700ms ease-in;
+  transition: opacity 240ms linear;
 }
 
 .scene__gate-canvas {
@@ -1265,15 +1267,6 @@ figure {
 
 .scene__gate-canvas[hidden],
 .scene__final-caption[hidden] { display: none; }
-
-[data-finale='lock'] .scene__finale-tint { opacity: .18; }
-[data-finale='triangulation'] .scene__finale-tint { opacity: .48; }
-[data-finale='opening'] .scene__finale-tint,
-[data-finale='open'] .scene__finale-tint { opacity: .92; }
-
-[data-finale='triangulation'][data-source='video'] .scene__video { filter: sepia(.45) saturate(1.6) hue-rotate(-18deg) contrast(1.13) brightness(.8); }
-[data-finale='opening'][data-source='video'] .scene__video,
-[data-finale='open'][data-source='video'] .scene__video { filter: sepia(.75) saturate(2.1) hue-rotate(-26deg) contrast(1.23) brightness(.54); }
 
 [data-finale='isolating'][data-source='video'] .scene__video { filter: grayscale(.45) brightness(.78); }
 [data-finale='sealed'][data-source='video'] .scene__video { filter: grayscale(1) brightness(.08) contrast(1.25); }
@@ -1297,11 +1290,6 @@ figure {
 
 [data-finale='opening'] .scene__scanlines,
 [data-finale='open'] .scene__scanlines { opacity: .78; }
-
-[data-finale='opening'] .scene__vignette,
-[data-finale='open'] .scene__vignette {
-  background: radial-gradient(ellipse at center, transparent 35%, rgba(42, 4, 0, .83) 100%);
-}
 
 [data-finale='opening'] .scene__signal-line,
 [data-finale='open'] .scene__signal-line { opacity: .55; }
@@ -3207,13 +3195,42 @@ figure {
 
 /* 09a   Dimensionales Streulicht im gesamten Empfänger statt nur im Videobild.
    Der Effekt beeinflusst keine Pointer-Ereignisse und lässt Textkontraste erhalten. */
-:root[data-finale='triangulation'],
-:root[data-finale='opening'],
-:root[data-finale='open'] {
-  --edge: #59433e;
-  --edge-soft: #45332f;
-  --signal: #e37b54;
-  --signal-light: #ffc098;
+/* Finale-Farben bleiben von Frequenzfiltern unabhängig und wachsen kontinuierlich. */
+:root[data-story='final-breach'] {
+  --edge: color-mix(in srgb, #405357, #59433e calc(var(--gate-light) * 100%));
+  --edge-soft: color-mix(in srgb, #2b393c, #45332f calc(var(--gate-light) * 100%));
+  --signal: color-mix(in srgb, #d76854, #e37b54 calc(var(--gate-light) * 100%));
+  --signal-light: color-mix(in srgb, #f4a28b, #ffc098 calc(var(--gate-light) * 100%));
+}
+
+:root[data-story='final-breach'][data-source='video'] .scene__video {
+  filter: sepia(calc(var(--gate-light) * .48))
+    saturate(calc(1 + var(--gate-light) * .55))
+    hue-rotate(calc(var(--gate-light) * -20deg))
+    contrast(calc(1 + var(--gate-light) * .16))
+    brightness(calc(1 - var(--gate-light) * .34));
+  transition: filter 240ms linear;
+}
+
+/* Das Glas fängt das Licht innen auf; der äußere Schein trifft die Bildschirmfassung. */
+.scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  border-radius: inherit;
+  box-shadow: inset 0 0 16px rgba(255, 148, 78, .48),
+    inset 0 0 45px rgba(211, 65, 23, .23);
+  opacity: var(--gate-spill);
+  transition: opacity 240ms linear;
+  pointer-events: none;
+}
+
+.television__screen {
+  box-shadow: inset 0 0 0 2px #445557, inset 0 0 24px #000,
+    0 0 12px rgba(245, 112, 47, calc(var(--gate-spill) * .32)),
+    0 0 28px rgba(209, 65, 23, calc(var(--gate-spill) * .19));
+  transition: box-shadow 240ms linear;
 }
 
 body::after {
@@ -3222,33 +3239,13 @@ body::after {
   inset: 0;
   z-index: 35;
   pointer-events: none;
-  opacity: 0;
+  opacity: calc(var(--gate-light) * .70);
   background:
     radial-gradient(ellipse 88% 82% at 68% 50%,
       rgba(231, 73, 24, .21), rgba(124, 42, 16, .1) 46%, transparent 81%),
     linear-gradient(90deg, rgba(0,0,0,0), rgba(255, 107, 51, .035));
   mix-blend-mode: screen;
-  transition: opacity 2.2s ease-out;
-}
-
-:root[data-finale='lock'] body::after { opacity: .10; }
-:root[data-finale='triangulation'] body::after { opacity: .30; }
-:root[data-finale='opening'] body::after { opacity: .63; }
-:root[data-finale='open'] body::after {
-  opacity: .77;
-  animation: final-ambient-breath 10s ease-in-out infinite alternate;
-}
-
-:root[data-finale='opening'] .receiver,
-:root[data-finale='open'] .receiver,
-:root[data-finale='opening'] .television,
-:root[data-finale='open'] .television {
-  box-shadow: 0 0 25px rgba(197, 59, 24, .07);
-}
-
-@keyframes final-ambient-breath {
-  from { opacity: .62; }
-  to { opacity: .81; }
+  transition: opacity 240ms linear;
 }
 
 /* Kompakte Entwicklersteuerung, nur mit ?debug=1 sichtbar. */

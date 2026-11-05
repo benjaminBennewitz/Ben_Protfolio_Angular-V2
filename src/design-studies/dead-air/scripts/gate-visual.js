@@ -222,78 +222,348 @@ function drawRelays(ctx, points, time, strength) {
   });
 }
 
-/** Andeutungen hinter dem dimensionalen Riss statt klar erkennbarer Kreaturen.
- * Drei Silhouetten erscheinen asynchron; nur kurze Lichtreflexe verraten ihre Augen.
- * Die Aufrufe erfolgen ausschließlich innerhalb des Aperture-Clippings. */
+/** Einmalig erzeugte, geräuscharme Wolkentexturen für den Riss.
+ * Die Texturen werden nicht pro Frame neu berechnet; im Frame selbst bewegen sich
+ * nur wenige Canvas-Layer. Dadurch bleiben die zusätzlichen Nebelbänke günstig. */
+let portalCloudTextures;
+
+/** Deterministische Rauschfunktion ohne globale Zufallszustände. */
+function cloudHash(x, y, seed) {
+  let value = Math.imul(x, 374761393) + Math.imul(y, 668265263) + Math.imul(seed, 1442695041);
+  value = Math.imul(value ^ (value >>> 13), 1274126177);
+  return ((value ^ (value >>> 16)) >>> 0) / 4294967295;
+}
+
+/** Sanft interpoliertes 2D-Rauschen für zusammenhängende Wolkenformationen. */
+function cloudNoise(x, y, seed) {
+  const ix = Math.floor(x);
+  const iy = Math.floor(y);
+  const u = x - ix;
+  const v = y - iy;
+  const sx = u * u * (3 - 2 * u);
+  const sy = v * v * (3 - 2 * v);
+  const a = cloudHash(ix, iy, seed);
+  const b = cloudHash(ix + 1, iy, seed);
+  const c = cloudHash(ix, iy + 1, seed);
+  const d = cloudHash(ix + 1, iy + 1, seed);
+  return a + (b - a) * sx + (c - a) * sy + ((a - b - c + d) * sx * sy);
+}
+
+/** Erstellt einen alpha-transparenten Nebellayer mit organischen Verwirbelungen.
+ * @param {number} seed - Unterschiedliche, aber reproduzierbare Wolkenmuster.
+ * @param {'smoke'|'ember'} kind - Dunkle Masse oder schwache warme Hinterleuchtung.
+ * @returns {HTMLCanvasElement}
+ */
+function createPortalCloudTexture(seed, kind) {
+  const texture = document.createElement('canvas');
+  texture.width = 320;
+  texture.height = 224;
+  const context = texture.getContext('2d');
+  if (!context) return texture;
+
+  const image = context.createImageData(texture.width, texture.height);
+  const pixels = image.data;
+  for (let y = 0; y < texture.height; y += 1) {
+    for (let x = 0; x < texture.width; x += 1) {
+      const warpX = (cloudNoise(x / 83, y / 77, seed + 6) - .5) * 46;
+      const warpY = (cloudNoise(x / 89, y / 69, seed + 11) - .5) * 40;
+      const nx = x + warpX;
+      const ny = y + warpY;
+      const broad = cloudNoise(nx / 86, ny / 74, seed);
+      const detail = cloudNoise(nx / 37, ny / 33, seed + 2);
+      const fine = cloudNoise(nx / 15, ny / 16, seed + 4);
+      const density = clamp01(.46 + (broad * .53 + detail * .34 + fine * .13 - .5) * 2.55);
+      const softness = density * density * (3 - 2 * density);
+      const edgeFade = Math.min(1, x / 26, (texture.width - 1 - x) / 26,
+        y / 20, (texture.height - 1 - y) / 20);
+      const alpha = Math.round(255 * (.12 + .88 * softness) * Math.max(0, edgeFade)
+        * (kind === 'smoke' ? .84 : 1));
+      const at = (y * texture.width + x) * 4;
+      if (kind === 'smoke') {
+        const shade = Math.round(10 + 20 * (1 - density) + 12 * detail);
+        pixels[at] = shade;
+        pixels[at + 1] = Math.round(shade * .35);
+        pixels[at + 2] = Math.round(shade * .43);
+      } else {
+        pixels[at] = Math.round(94 + 160 * density);
+        pixels[at + 1] = Math.round(33 + 82 * density);
+        pixels[at + 2] = Math.round(17 + 48 * density);
+      }
+      pixels[at + 3] = alpha;
+    }
+  }
+  context.putImageData(image, 0, 0);
+  return texture;
+}
+
+/** Zusammenhängender, stark kontrastierender Gewitterhimmel.
+ * Eine prozedural gerasterte, vollflächige Wolkenkarte verhindert, dass die
+ * transparente Wolkenlagen im sehr dunklen Portal wieder verschwinden. */
+function createPortalStormBackdrop(seed) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 420;
+  canvas.height = 264;
+  const context = canvas.getContext('2d');
+  if (!context) return canvas;
+  const image = context.createImageData(canvas.width, canvas.height);
+  const data = image.data;
+  for (let y = 0; y < canvas.height; y += 1) {
+    for (let x = 0; x < canvas.width; x += 1) {
+      const warpX = (cloudNoise(x / 117, y / 88, seed + 3) - .5) * 53;
+      const warpY = (cloudNoise(x / 94, y / 112, seed + 5) - .5) * 44;
+      const u = x + warpX;
+      const v = y + warpY;
+      const mass = cloudNoise(u / 76, v / 57, seed) * .47
+        + cloudNoise(u / 31, v / 28, seed + 8) * .31
+        + cloudNoise(u / 13, v / 14, seed + 12) * .16
+        + cloudNoise(u / 5, v / 7, seed + 18) * .06;
+      const folds = Math.sin(v * .056 + mass * 8 + u * .009) * .075;
+      const bright = clamp01((.83 - mass + folds) * 3.65);
+      // Niedrige Wolken glimmen nur dort, wo der unsichtbare Strom aufbricht.
+      const flare = Math.pow(bright, 1.8);
+      const shadow = clamp01((mass - .54) * 3.6);
+      const at = (y * canvas.width + x) * 4;
+      data[at] = Math.round(8 + flare * 216 - shadow * 5);
+      data[at + 1] = Math.round(3 + flare * 88 - shadow * 2);
+      data[at + 2] = Math.round(7 + flare * 42);
+      data[at + 3] = 255;
+    }
+  }
+  context.putImageData(image, 0, 0);
+  return canvas;
+}
+
+/** Große, aus dem Riss heraus beleuchtete Sturmfront.
+ * Wolkenlicht und dunkle Wolkenkörper sind voneinander getrennt. Dadurch können
+ * die Figuren schwarz bleiben und werden nur bei Lichtdurchbrüchen lesbar. */
+function drawPortalClouds(ctx, center, radius, time, opening, reducedMotion) {
+  const intensity = ease((opening - .13) / .62);
+  if (intensity <= 0) return;
+
+  portalCloudTextures ??= {
+    smoke: createPortalCloudTexture(31, 'smoke'),
+    ember: createPortalCloudTexture(73, 'ember'),
+    emberDetail: createPortalCloudTexture(119, 'ember'),
+    stormBack: createPortalStormBackdrop(23),
+    stormFront: createPortalStormBackdrop(61),
+  };
+  const t = reducedMotion ? 0 : time;
+  const horizontalDrift = Math.sin(t * .105) * radius * .065;
+  const depthDrift = Math.sin(t * .14 + 1.4) * radius * .035;
+
+  ctx.save();
+  // Vollflächiger Turbulenz-Hintergrund: harte, dunkle Wolkenmasse wechselt mit
+  // glühenden Schneisen. Die asymmetrische Bewegung ist deutlich langsamer als die Blitze.
+  ctx.globalAlpha = .98 * intensity;
+  ctx.drawImage(portalCloudTextures.stormBack,
+    center.x - radius * 1.03 + horizontalDrift * .52,
+    center.y - radius * .68 + depthDrift * .6,
+    radius * 2.06, radius * 1.42);
+  ctx.globalAlpha = .36 * intensity;
+  ctx.drawImage(portalCloudTextures.stormFront,
+    center.x - radius * .98 - horizontalDrift * .28,
+    center.y - radius * .54 - depthDrift * .34,
+    radius * 1.96, radius * 1.29);
+  ctx.globalAlpha = 1;
+  // Der warme Kern wird großflächig von Sturmwolken verdeckt, statt bloß einen
+  // kleinen, dunklen Mittelpunkt zu beleuchten.
+  const core = ctx.createRadialGradient(
+    center.x + radius * .03, center.y + radius * .025, radius * .015,
+    center.x + radius * .03, center.y + radius * .025, radius * .95);
+  core.addColorStop(0, `rgba(251,106,40,${.22 * intensity})`);
+  core.addColorStop(.3, `rgba(180,54,26,${.16 * intensity})`);
+  core.addColorStop(.64, `rgba(96,23,21,${.12 * intensity})`);
+  core.addColorStop(1, 'rgba(18,3,9,0)');
+  ctx.fillStyle = core;
+  ctx.fillRect(center.x - radius * 1.15, center.y - radius * .85,
+    radius * 2.3, radius * 1.7);
+
+  // Zwei gegenläufige Wolkenbänke sorgen für reichlich sichtbare Orangeflächen.
+  // Die vorab gerasterten, organischen Texturen bewegen sich ohne teure Bildfilter.
+  ctx.globalCompositeOperation = 'screen';
+  ctx.globalAlpha = .32 * intensity;
+  ctx.drawImage(portalCloudTextures.ember,
+    center.x - radius * 1.02 + horizontalDrift,
+    center.y - radius * .74 + depthDrift,
+    radius * 2.04, radius * 1.19);
+  ctx.globalAlpha = .26 * intensity;
+  ctx.drawImage(portalCloudTextures.emberDetail,
+    center.x - radius * .91 - horizontalDrift * .72,
+    center.y - radius * .38 - depthDrift,
+    radius * 1.92, radius * .96);
+  ctx.restore();
+}
+
+/** Dunkle, ungleichmäßig geschichtete Gewitterzellen gegen das orange Gegenlicht.
+ * Große, transparente Zwischenräume lassen genügend Licht für schwarze Figuren. */
+function drawPortalStormCells(ctx, center, radius, time, opening, reducedMotion) {
+  const intensity = ease((opening - .21) / .56);
+  if (intensity <= 0) return;
+
+  const cells = [
+    [-.71, -.35, .43, .23, .4], [-.32, -.34, .32, .20, 2.7],
+    [.14, -.36, .40, .23, 1.2], [.60, -.27, .35, .25, 3.3],
+    [-.72, -.02, .31, .22, 4.3], [-.23, -.015, .25, .18, 3.7],
+    [.46, .045, .35, .21, 5.7], [-.53, .29, .39, .22, 1.9],
+    [.02, .32, .31, .20, 3.9], [.51, .30, .34, .23, 5.2],
+  ];
+  ctx.save();
+  for (const [index, cell] of cells.entries()) {
+    const [cx, cy, wide, tall, seed] = cell;
+    const drift = reducedMotion ? 0 : Math.sin(time * (.09 + index * .007) + seed) * radius * .028;
+    const rise = reducedMotion ? 0 : Math.sin(time * .12 + seed * 2.1) * radius * .014;
+    const x = center.x + radius * cx + drift;
+    const y = center.y + radius * cy + rise;
+    const gradient = ctx.createRadialGradient(0, 0, .06, 0, 0, 1);
+    gradient.addColorStop(0, `rgba(4,2,6,${.66 * intensity})`);
+    gradient.addColorStop(.52, `rgba(17,5,10,${.61 * intensity})`);
+    gradient.addColorStop(.79, `rgba(56,13,12,${.32 * intensity})`);
+    gradient.addColorStop(1, 'rgba(45,10,9,0)');
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(Math.sin(seed * 2.5) * .2);
+    ctx.scale(radius * wide, radius * tall);
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(0, 0, 1, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+/** Schwerer Vordergrundnebel verläuft vor den Silhouetten und bricht ihre Konturen.
+ * Seine transparenten Lücken verhindern, dass sich perfekte Figuren abzeichnen. */
+function drawPortalForegroundFog(ctx, center, radius, time, opening, reducedMotion) {
+  if (opening <= .48 || !portalCloudTextures) return;
+  const strength = ease((opening - .48) / .43);
+  const t = reducedMotion ? 0 : time;
+  ctx.save();
+  ctx.globalAlpha = .42 * strength;
+  ctx.drawImage(portalCloudTextures.smoke,
+    center.x - radius * .85 + Math.sin(t * .1 + 1) * radius * .08,
+    center.y - radius * .01 - Math.sin(t * .09) * radius * .05,
+    radius * 1.76, radius * .91);
+  // Sporadische, warme Dunstschlieren ziehen vor den Beinen vorbei.
+  ctx.globalCompositeOperation = 'screen';
+  ctx.globalAlpha = .17 * strength;
+  ctx.drawImage(portalCloudTextures.emberDetail,
+    center.x - radius * .79 - Math.sin(t * .11) * radius * .04,
+    center.y + radius * .14,
+    radius * 1.58, radius * .57);
+  ctx.restore();
+}
+
+/** Interne elektrische Verästelungen leuchten hinter dem dunklen Rauch und den Wesen auf.
+ * Seltene, asynchrone Zuckungen statt permanenter Blitze. */
+function drawPortalLightning(ctx, center, radius, time, opening, reducedMotion) {
+  if (reducedMotion || opening < .32) return;
+  const intensity = ease((opening - .32) / .42);
+  ctx.save();
+  ctx.globalCompositeOperation = 'screen';
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  for (let bolt = 0; bolt < 4; bolt += 1) {
+    const flicker = Math.sin(time * (1.13 + bolt * .21) + bolt * 3.87)
+      + .24 * Math.sin(time * (7.1 + bolt * .9) + bolt * 1.6);
+    if (flicker < .86) continue;
+    const flash = intensity * clamp01((flicker - .86) / .38);
+    const startX = center.x + radius * (-.38 + bolt * .24);
+    const startY = center.y - radius * (.26 + (bolt % 2) * .17);
+    const endX = center.x + radius * (-.12 + bolt * .15);
+    const endY = center.y + radius * (.15 + (bolt % 3) * .09);
+    const seed = Math.floor(time * 7) + bolt * 19;
+    ctx.beginPath();
+    for (let step = 0; step <= 12; step += 1) {
+      const progress = step / 12;
+      const jitter = (cloudHash(step, seed, bolt + 137) - .5) * radius * .055
+        * Math.sin(Math.PI * progress);
+      const x = startX + (endX - startX) * progress + jitter;
+      const y = startY + (endY - startY) * progress;
+      if (step === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.shadowColor = '#e15e30';
+    ctx.shadowBlur = 19;
+    ctx.lineWidth = 4.7;
+    ctx.strokeStyle = `rgba(242,83,38,${flash * .37})`;
+    ctx.stroke();
+    ctx.shadowBlur = 9;
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = `rgba(255,179,113,${flash * .8})`;
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/** In der Sturmmasse stehende, unvollständige Silhouetten.
+ * Ohne Glühen, Aura oder klare Körperränder: Ihre schwarze Masse wird nur durch
+ * durchziehende, wechselnd helle Wolken im Hintergrund sichtbar. */
 function drawWatchingShapes(ctx, center, radius, time, opening, reducedMotion) {
-  const emergence = ease((opening - .54) / .42);
+  const emergence = ease((opening - .54) / .38);
   if (emergence <= 0) return;
 
   const figures = [
-    { x: -.17, y: .12, scale: .82, offset: .1, rhythm: .34 },
-    { x: .02, y: .13, scale: 1.12, offset: 2.8, rhythm: .26 },
-    { x: .22, y: .09, scale: .75, offset: 5.2, rhythm: .21 },
+    { x: -.27, y: .12, size: .89, phase: .8, tilt: -.13 },
+    { x: .055, y: .11, size: 1.14, phase: 3.1, tilt: .085 },
+    { x: .34, y: .075, size: .79, phase: 5.4, tilt: -.105 },
   ];
 
   figures.forEach((figure, index) => {
-    const pulse = reducedMotion ? .46 : (
-      .42 + .26 * Math.sin(time * figure.rhythm + figure.offset)
-      + .21 * Math.sin(time * .73 + index * 3.19));
-    const visibility = emergence * clamp01(pulse);
-    if (visibility <= .07) return;
-    const drift = reducedMotion ? 0 : Math.sin(time * (.17 + index * .033) + figure.offset) * 2.1;
+    const drift = reducedMotion ? 0 : Math.sin(time * (.12 + index * .02) + figure.phase) * radius * .007;
+    const visibility = reducedMotion ? 1 : .8 + .2 * Math.sin(time * .22 + figure.phase);
     const x = center.x + radius * figure.x + drift;
-    const y = center.y + radius * figure.y - emergence * radius * .035;
-    const unit = radius * .125 * figure.scale;
+    const y = center.y + radius * figure.y - radius * emergence * .02;
+    const unit = radius * figure.size * .125;
 
     ctx.save();
-    // Die Innenlinien des Risses werden additiv gezeichnet; Schattenwesen
-    // benötigen dagegen normales Compositing, sonst bleiben sie unsichtbar.
-    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = emergence * visibility;
     ctx.translate(x, y);
+    ctx.rotate(figure.tilt);
     ctx.scale(unit, unit);
-
-    // Konturloser Körper, der im dunklen Hohlraum auszulaufen scheint.
-    ctx.filter = 'blur(6px)';
-    ctx.globalAlpha = visibility * .66;
-    const body = ctx.createRadialGradient(0, .35, .08, 0, .6, 1.4);
-    body.addColorStop(0, 'rgba(1,1,5,.94)');
-    body.addColorStop(.65, 'rgba(3,1,5,.64)');
-    body.addColorStop(1, 'rgba(2,1,4,0)');
-    ctx.fillStyle = body;
+    const shroud = ctx.createLinearGradient(0, -.8, 0, 1.9);
+    shroud.addColorStop(0, '#000');
+    shroud.addColorStop(.55, '#000');
+    shroud.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = shroud;
+    // Oberkörper, Kopf und Arme bleiben eine einzige ungleichmäßige Schattenmasse.
     ctx.beginPath();
-    ctx.ellipse(0, .65, .9, 1.12, 0, 0, Math.PI * 2);
+    ctx.moveTo(-.28, -.64);
+    ctx.lineTo(-.43, -.88);
+    ctx.bezierCurveTo(-.40, -1.05, -.32, -1.19, -.12, -1.16);
+    ctx.lineTo(.075, -1.22);
+    ctx.bezierCurveTo(.29, -1.12, .32, -.99, .27, -.78);
+    ctx.lineTo(.24, -.65);
+    ctx.bezierCurveTo(.4, -.59, .58, -.38, .51, -.19);
+    ctx.bezierCurveTo(.87, .09, .65, .4, .77, .7);
+    ctx.bezierCurveTo(.47, .53, .42, .92, .32, 1.39);
+    ctx.lineTo(.13, 1.84);
+    ctx.lineTo(-.1, 1.48);
+    ctx.lineTo(-.39, 1.81);
+    ctx.bezierCurveTo(-.49, 1.1, -.51, .73, -.72, .52);
+    ctx.bezierCurveTo(-.54, .17, -.85, -.06, -.52, -.36);
+    ctx.bezierCurveTo(-.48, -.51, -.36, -.65, -.26, -.67);
+    ctx.closePath();
     ctx.fill();
-    ctx.filter = 'blur(2.5px)';
-    ctx.shadowColor = 'rgba(160,50,35,.26)';
-    ctx.shadowBlur = 12;
-    ctx.beginPath();
-    ctx.ellipse(0, -.42, .43, .59, -.045, 0, Math.PI * 2);
-    ctx.fillStyle = '#010105';
-    ctx.fill();
-    // Ein kaum erkennbarer, warmer Saum löst den Kopf aus dem schwarzen Riss.
-    ctx.globalAlpha = visibility * .2;
-    ctx.strokeStyle = '#9c4736';
-    ctx.lineWidth = .045;
-    ctx.stroke();
     ctx.restore();
 
-    // Lichtreflexe sind selten und nie gemeinsam im selben Takt sichtbar.
-    const flash = reducedMotion ? .15 : Math.max(0,
-      Math.sin(time * (.94 + index * .14) + index * 2.8) - .28);
-    const eyesAlpha = visibility * Math.pow(flash, 1.3) * 1.16;
-    if (eyesAlpha < .025) return;
+    // Seltene schmale Reflexe erscheinen ohne Blur oder Aura und nur im Augenblick
+    // einer Entladung; nicht jedes Wesen blickt gleichzeitig auf.
+    if (reducedMotion) return;
+    const glint = Math.max(0, Math.sin(time * (1.19 + index * .13) + index * 2.89) - .84);
+    if (glint < .02) return;
     ctx.save();
-    ctx.globalCompositeOperation = 'screen';
-    ctx.globalAlpha = eyesAlpha;
-    ctx.shadowBlur = 18;
-    ctx.shadowColor = '#ffab65';
-    ctx.fillStyle = '#ffc18b';
-    for (const offset of [-1, 1]) {
+    ctx.globalAlpha = emergence * glint * 1.4;
+    ctx.strokeStyle = '#d9a182';
+    ctx.lineWidth = .8;
+    for (const side of [-1, 1]) {
+      const xx = x + side * unit * .145;
+      const yy = y - unit * .85 + (side > 0 ? .7 : 0);
       ctx.beginPath();
-      ctx.ellipse(x + offset * unit * .17, y - unit * .44,
-        Math.max(1.35, unit * .046), Math.max(.9, unit * .03), 0, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.moveTo(xx - unit * .035, yy);
+      ctx.lineTo(xx + unit * .03, yy - .3);
+      ctx.stroke();
     }
     ctx.restore();
   });
@@ -317,12 +587,16 @@ function drawAperture(ctx, points, time, opening, reducedMotion) {
 
   // Dunkler Hohlraum statt eines gleichmäßig leuchtenden grafischen Dreiecks.
   const abyss = ctx.createRadialGradient(center.x, center.y, 0, center.x, center.y, radius);
-  abyss.addColorStop(0, `rgba(0,1,4,${.97 * opening})`);
-  abyss.addColorStop(.4, `rgba(12,2,7,${.96 * opening})`);
-  abyss.addColorStop(.7, `rgba(68,10,8,${.84 * opening})`);
+  abyss.addColorStop(0, `rgba(24,4,9,${.98 * opening})`);
+  abyss.addColorStop(.4, `rgba(51,11,13,${.96 * opening})`);
+  abyss.addColorStop(.7, `rgba(101,24,18,${.89 * opening})`);
   abyss.addColorStop(1, `rgba(239,84,22,${.85 * opening})`);
   ctx.fillStyle = abyss;
   ctx.fillRect(center.x - radius, center.y - radius, radius * 2, radius * 2);
+
+  // Gewitter und schwerer Tiefennebel bewegen sich hinter den Schattenwesen.
+  drawPortalClouds(ctx, center, radius, time, opening, reducedMotion);
+  drawPortalStormCells(ctx, center, radius, time, opening, reducedMotion);
 
   // Gebrochene, wandernde Schichtungen in der Öffnung – kein fertiges Stockvideo.
   ctx.globalCompositeOperation = 'screen';
@@ -341,7 +615,26 @@ function drawAperture(ctx, points, time, opening, reducedMotion) {
     ctx.bezierCurveTo(center.x - radius / 3, y + 5 * Math.sin(time + line), center.x + radius / 3, y - 5 * Math.sin(time + line), center.x + radius + drift, y);
     ctx.stroke();
   }
+  drawPortalLightning(ctx, center, radius, time, opening, reducedMotion);
+
+  // Die letzte Wolkenfront muss VOR den schwarzen Wesen liegen, aber NACH den
+  // dunklen Sturmzellen und überlagernden Lichtschleiern. So bleibt die Textur
+  // im fertigen Canvas wirklich sichtbar statt zu einer glatten Fläche zu werden.
+  if (portalCloudTextures) {
+    const drift = reducedMotion ? 0 : Math.sin(time * .095) * radius * .041;
+    ctx.save();
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = .9 * ease((opening - .22) / .55);
+    ctx.drawImage(portalCloudTextures.stormBack,
+      center.x - radius * .96 + drift,
+      center.y - radius * .6,
+      radius * 1.92, radius * 1.28);
+    ctx.restore();
+  }
+  ctx.globalCompositeOperation = 'source-over';
   drawWatchingShapes(ctx, center, radius, time, opening, reducedMotion);
+
+  drawPortalForegroundFog(ctx, center, radius, time, opening, reducedMotion);
   ctx.restore();
 
   ctx.save();

@@ -26,6 +26,15 @@
 
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">Zum Empfangsbereich springen</a>
+  <!-- Entwicklerkonsole: ausschließlich mit ?debug=1 verfügbar. -->
+  <aside id="dev-console" class="dev-console" aria-label="DEAD AIR Entwicklungswerkzeuge" hidden>
+    <span class="dev-console__label">DEV / EVENTS</span>
+    <div class="dev-console__actions">
+      <button id="dev-gate-start" type="button" aria-label="Tor-Finale ab Rettungsimpuls testen">TOR / START</button>
+      <button id="dev-gate-open" type="button" aria-label="Direkt zum geöffneten Tor springen">TOR / OFFEN</button>
+      <button id="dev-isolation" type="button" aria-label="Alternatives Isolationsende testen">ISOLATION</button>
+    </div>
+  </aside>
   <div class="broadcast-shell">
     <header class="topbar">
       <a class="station-brand" href="#main" aria-label="DEAD//AIR — North Coast Broadcasting System">
@@ -75,6 +84,7 @@
             </div>
             <span id="camera-status" class="visually-hidden" role="status" aria-live="polite" aria-atomic="true"></span>
             <button id="pause-toggle" type="button" class="pause-toggle" aria-pressed="false"><span id="pause-icon" aria-hidden="true">Ⅱ</span> <span id="pause-label" data-i18n="pause">PAUSE</span></button>
+            <button id="sound-toggle" class="sound-toggle" type="button" aria-label="Ton ausschalten" aria-pressed="true" title="TON AN">SND</button>
           </div>
           <div class="receiver__archive" aria-label="Archivierte Funksignale und Systemprotokolle"><span class="receiver__archive-label" id="archive-label">EMPFANGENE DATEN / ARCHIV</span><div class="receiver__archive-actions"><button id="evidence-log" class="monitor-area__evidence" type="button" aria-controls="message-dialog" aria-haspopup="dialog" hidden>AKTE / 01</button><button id="transmission-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 001</button><button id="transmission-2-toggle" class="monitor-area__evidence monitor-area__transmission" type="button" aria-controls="transmission-dialog" aria-haspopup="dialog" hidden>AUDIO / 002</button><button id="relay-toggle" class="monitor-area__evidence" type="button" aria-controls="relay-dialog" aria-haspopup="dialog" hidden>RELAIS / 0/3</button><button id="sync-toggle" class="monitor-area__evidence receiver__sync" type="button" aria-controls="sync-dialog" aria-haspopup="dialog" hidden>SYNC / 3</button></div><p id="decision-result" class="receiver__decision-result" role="status" aria-live="polite" hidden></p></div>
           <div class="receiver__uplink" id="uplink-panel" hidden>

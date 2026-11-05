@@ -601,6 +601,27 @@ figure {
   font-size: 12px;
 }
 
+/* Gleichberechtigter, platzsparender Tonschalter ohne zusätzliche Panelhöhe. */
+.sound-toggle {
+  display: inline-flex;
+  flex: 0 0 36px;
+  min-height: 43px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--edge);
+  background: #162224;
+  color: #a9c0b9;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+.sound-toggle[aria-pressed='false'] { color: #6f8480; }
+.sound-toggle:hover { background: #304246; color: #fff; }
+.sound-toggle:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
 /* Sämtliche aktiven Steuer- und Archivaktionen bleiben unter dem FM-Regler. */
 .receiver__archive {
   display: grid;
@@ -3183,6 +3204,90 @@ figure {
     font-size: 9px;
   }
 }
+
+/* 09a   Dimensionales Streulicht im gesamten Empfänger statt nur im Videobild.
+   Der Effekt beeinflusst keine Pointer-Ereignisse und lässt Textkontraste erhalten. */
+:root[data-finale='triangulation'],
+:root[data-finale='opening'],
+:root[data-finale='open'] {
+  --edge: #59433e;
+  --edge-soft: #45332f;
+  --signal: #e37b54;
+  --signal-light: #ffc098;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse 88% 82% at 68% 50%,
+      rgba(231, 73, 24, .21), rgba(124, 42, 16, .1) 46%, transparent 81%),
+    linear-gradient(90deg, rgba(0,0,0,0), rgba(255, 107, 51, .035));
+  mix-blend-mode: screen;
+  transition: opacity 2.2s ease-out;
+}
+
+:root[data-finale='lock'] body::after { opacity: .10; }
+:root[data-finale='triangulation'] body::after { opacity: .30; }
+:root[data-finale='opening'] body::after { opacity: .63; }
+:root[data-finale='open'] body::after {
+  opacity: .77;
+  animation: final-ambient-breath 10s ease-in-out infinite alternate;
+}
+
+:root[data-finale='opening'] .receiver,
+:root[data-finale='open'] .receiver,
+:root[data-finale='opening'] .television,
+:root[data-finale='open'] .television {
+  box-shadow: 0 0 25px rgba(197, 59, 24, .07);
+}
+
+@keyframes final-ambient-breath {
+  from { opacity: .62; }
+  to { opacity: .81; }
+}
+
+/* Kompakte Entwicklersteuerung, nur mit ?debug=1 sichtbar. */
+.dev-console[hidden] { display: none; }
+.dev-console {
+  position: fixed;
+  right: max(10px, env(safe-area-inset-right));
+  bottom: max(10px, env(safe-area-inset-bottom));
+  z-index: 80;
+  width: min(350px, calc(100vw - 20px));
+  padding: 9px;
+  border: 1px solid #986143;
+  background: rgba(8, 14, 16, .96);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .65);
+  font-family: var(--font-mono);
+}
+.dev-console__label {
+  display: block;
+  margin-bottom: 7px;
+  color: #e59c74;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+}
+.dev-console__actions { display: flex; gap: 6px; }
+.dev-console__actions button {
+  flex: 1;
+  min-width: 0;
+  min-height: 32px;
+  padding: 5px 3px;
+  border: 1px solid #a36b4e;
+  background: #231a17;
+  color: #f3d2bd;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.dev-console__actions button:hover { background: #533123; }
+.dev-console__actions button:focus-visible { outline: 2px solid #f9bd92; outline-offset: 2px; }
 
 /* 10   Reduced Motion */
 

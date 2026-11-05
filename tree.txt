@@ -1056,6 +1056,20 @@ folio/
 │   │   │   │   ├── preview.webp
 │   │   │   │   ├── scene-poster.webp
 │   │   │   │   ├── scene-poster-no-lighthouse.webp
+│   │   │   │   ├── sfx-anomaly.mp3
+│   │   │   │   ├── sfx-auto-scan.mp3
+│   │   │   │   ├── sfx-ping-echo.mp3
+│   │   │   │   ├── sfx-ping-miss.mp3
+│   │   │   │   ├── sfx-ping-send.mp3
+│   │   │   │   ├── sfx-portal-charge.mp3
+│   │   │   │   ├── sfx-portal-hum.mp3
+│   │   │   │   ├── sfx-portal-opening.mp3
+│   │   │   │   ├── sfx-radio-bed.mp3
+│   │   │   │   ├── sfx-relay-activated.mp3
+│   │   │   │   ├── sfx-signal-activated.mp3
+│   │   │   │   ├── sfx-signal-glitch.mp3
+│   │   │   │   ├── sfx-signal-isolated.mp3
+│   │   │   │   ├── sfx-tune-click.mp3
 │   │   │   │   ├── station-mark.svg
 │   │   │   │   ├── transmission-001-de.mp3
 │   │   │   │   ├── transmission-001-en.mp3
@@ -1068,7 +1082,8 @@ folio/
 │   │   │   │   └── window-off-c.webp
 │   │   │   ├── scripts/
 │   │   │   │   ├── app.js
-│   │   │   │   └── gate-visual.js
+│   │   │   │   ├── gate-visual.js
+│   │   │   │   └── soundscape.js
 │   │   │   ├── index.html
 │   │   │   ├── README.md
 │   │   │   └── styles.css

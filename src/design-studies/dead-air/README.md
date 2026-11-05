@@ -345,3 +345,32 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Neues Fotostandbild `assets/scene-poster-no-lighthouse.webp`, deckungsgleich mit der ursprünglichen Station (lokale Bildretusche; keine CSS-Maske und kein Kanal-Crossfade).
 - In der vollständig geöffneten Portalöffnung werden drei unscharfe Schattenkonturen mit seltenen, asynchronen Augenreflexen sichtbar. Keine neue Rastergrafik, ausschließlich Canvas.
 - Die Sequenz hängt an der aktiven Story-Uhr. Pause und inaktive Browser-Tabs unterbrechen sie ohne Zeitverlust; das alternative isolierte Ende bleibt unverändert.
+
+
+## Patch 42 – The Storm Inside
+
+- Die Schattenwesen im Portal bestehen aus asymmetrischen, vollständig schwarzen Konturen statt ovalen Köpfen mit eigener Aura. Seltene, schmale Lichtreflexe ersetzen die runden, leuchtenden Augen.
+- Zwei einmalig generierte und wiederverwendete Wolkentexturen erzeugen langsame, unterschiedlich driftende Sturm- und Nebelschichten im geöffneten Dreieck; sie bleiben auf die Öffnung begrenzt.
+- Seltene interne elektrische Entladungen beleuchten die Gewittermasse hinter den Silhouetten.
+- Torbewegung, Schlagschatten, Küstenvideo, Audio- und Story-Zustände bleiben unverändert. `prefers-reduced-motion` reduziert Bewegungen und unterdrückt interne Blitze.
+
+
+## Patch 43 – Original Soundscape
+
+- 14 eigenständig mit Python/NumPy/SciPy generierte MP3-Effekte in `assets/sfx-*.mp3`, keine externen Lizenzen oder Soundbibliotheken.
+- Das Modul `scripts/soundscape.js` bündelt AudioContext, Puffer-Cache, FM-Rauschbett, kurze Effekte und Mix-Steuerung.
+- Relais-Pings senden einen Ton beim Tastendruck. Das Echo kommt **erst** nach der in `sendRelayPing()` berechneten Laufzeit; bei Nichterreichbarkeit erklingt ein kurzes Squelch.
+- Die bestehende Sprachaufnahme hat Vorrang: das analoge Rauschen wird bei aktiver Stimme automatisch abgesenkt.
+- Tuning, Auto-Suchlauf, Relaisverbindung, Synchronisation, Kamerasignalfehler, Anomalie und Finalsequenz erhalten passende Geräusche.
+- Ein kompakter, tastaturbedienbarer Ton-Schalter neben Pause schaltet Soundeffekte **und** HTML-Sprachnachrichten gemeinsam stumm (DE/EN).
+- `PAUSE` und inaktive Tabs unterbrechen die Audiowiedergabe; der Audiokontext wird erst nach einer echten Nutzereingabe freigeschaltet.
+- Das originale Story-Timing, Relaisrätsel, Videos und die vorhandenen Sprachdateien bleiben unverändert.
+
+
+## Patch 44 – Dimensional Storm & Dev Events
+
+- Portal: größerer, von innen leuchtender orange-schwarzer Wolkenhintergrund, langsam ziehende Gewitterzellen und vorgelagerter Dunst. Die Silhouetten werden nur vom Wetter hinter ihnen erkennbar, ohne Glow.
+- Über die Finalzustände `lock`, `triangulation`, `opening` und `open` beeinflusst blutoranges Streulicht subtil die gesamte Oberfläche. Die UI bleibt bedienbar; reduzierte Bewegung wird berücksichtigt.
+- Entwicklerkonsole per URL `?debug=1` aktivieren. Sie enthält `TOR / START`, `TOR / OFFEN` und `ISOLATION`. Die Optionen umgehen bewusst die Rätsel und sind im normalen Spielerlebnis ausgeblendet.
+- `TOR / START` spielt die gesamte Sequenz ab, `TOR / OFFEN` springt direkt ins geöffnete Tor. Für einen anderen Ausgang die Seite neu laden.
+- Keine zusätzlichen Assets oder Laufzeit-Abhängigkeiten.

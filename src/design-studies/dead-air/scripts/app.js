@@ -6,6 +6,7 @@
  */
 
 import { drawGate } from './gate-visual.js';
+import { soundscape } from './soundscape.js';
 
 /** @typedef {'normal' | 'interference' | 'unknown' | 'voice' | 'relayA' | 'relayB' | 'relayC' | 'warning'} SignalState */
 /** @typedef {'artwork' | 'video'} SceneSource */
@@ -76,6 +77,10 @@ const TRANSLATIONS = Object.freeze({
     footage: 'KÜSTE / CAM 02',
     pause: 'PAUSE',
     resume: 'FORTSETZEN',
+    soundOn: 'TON AN',
+    soundOff: 'TON AUS',
+    soundDisable: 'Ton ausschalten',
+    soundEnable: 'Ton einschalten',
     sceneStatus: 'AKTUELLER SIGNALZUSTAND',
     imprint: 'Impressum',
     privacy: 'Datenschutz',
@@ -249,6 +254,10 @@ const TRANSLATIONS = Object.freeze({
     footage: 'COAST / CAM 02',
     pause: 'PAUSE',
     resume: 'RESUME',
+    soundOn: 'SOUND ON',
+    soundOff: 'SOUND OFF',
+    soundDisable: 'Mute sound',
+    soundEnable: 'Enable sound',
     sceneStatus: 'CURRENT SIGNAL STATE',
     imprint: 'Legal notice',
     privacy: 'Privacy',
@@ -417,6 +426,7 @@ const stateDescription = document.querySelector('#state-description');
 const languageToggle = document.querySelector('#language-toggle');
 const pauseButton = document.querySelector('#pause-toggle');
 const pauseLabel = document.querySelector('#pause-label');
+const soundToggle = document.querySelector('#sound-toggle');
 const infoDialog = document.querySelector('#info-dialog');
 const infoToggle = document.querySelector('#info-toggle');
 const frequencyInput = document.querySelector('#frequency-tuning');
@@ -459,6 +469,7 @@ const decisionIsolate = document.querySelector('#decision-isolate');
 const uplinkPanel = document.querySelector('#uplink-panel');
 const uplinkAction = document.querySelector('#uplink-action');
 const gateCanvas = document.querySelector('#gate-canvas');
+const devConsole = document.querySelector('#dev-console');
 const finalCaption = document.querySelector('#final-caption');
 const compactViewport = window.matchMedia('(max-width: 750px), (max-height: 520px)');
 
@@ -469,6 +480,7 @@ const scene = {
   source: /** @type {SceneSource} */ ('artwork'),
   language: 'de',
   paused: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  soundMuted: false,
   cameraBlackoutTimerId: 0,
   anomaly: {
     activeMs: 0,
@@ -674,6 +686,7 @@ function sendRelayPing() {
 
   ping.inFlight = true;
   ping.result = 'sending';
+  window.dispatchEvent(new CustomEvent('deadair:relayping', { detail: { frequency } }));
   ping.verifiedId = null;
   refreshRelayUI();
   ping.timeoutId = window.setTimeout(() => {
@@ -691,6 +704,9 @@ function sendRelayPing() {
     ping.result = insideRange
       ? (nearest.distance <= RELAY_LINK_TOLERANCE ? 'carrier' : 'echo') : 'none';
     ping.verifiedId = ping.result === 'carrier' ? nearest.relay.id : null;
+    window.dispatchEvent(new CustomEvent('deadair:relayecho', {
+      detail: { frequency, responseMs, result: ping.result, relay: ping.responseId },
+    }));
     if (ping.verifiedId) {
       // Freigabe des Kanalnamens erfolgt erst nach der Messung, nicht durch Tuning.
       setFrequency(frequency);
@@ -1068,6 +1084,26 @@ function startFinale(mode) {
   window.dispatchEvent(new CustomEvent('deadair:finalestarted', { detail: { mode } }));
 }
 
+/** Nur der ausdrücklich aktivierte Debug-Modus darf Finalzustände überspringen.
+ * Diese Funktion umgeht bewusst die normalen Rätselbedingungen, verändert aber
+ * keine regulären Story-Flags und ist im veröffentlichten Spiel unsichtbar. */
+function debugJumpToFinal(mode, skipToOpen = false) {
+  if (scene.finale.mode && (scene.finale.mode !== mode || !skipToOpen)) return;
+  if (scene.paused) {
+    scene.paused = false;
+    updatePlaybackLabel();
+    soundscape.setPaused(false);
+  }
+  if (!scene.finale.mode) startFinale(mode);
+  if (mode === 'breach' && skipToOpen) {
+    // Gleiches Finale, gleiche Zeichenlogik – lediglich die aktive Uhr springt vor.
+    // Die Kameraquelle und der eingefrorene Videoframe werden von updateFinale gesetzt.
+    scene.finale.startedAtMs = scene.anomaly.activeMs
+      - FINAL_LIGHTHOUSE_PRELUDE_MS - FINAL_OPEN_END_MS - 1_100;
+    updateFinale();
+  }
+}
+
 /** Die Portal-Zeit beginnt erst nach dem lautlosen Verschwinden des Turms. */
 function getGateElapsedMs() {
   const elapsed = scene.anomaly.activeMs - scene.finale.startedAtMs;
@@ -1131,6 +1167,7 @@ function updateFinale() {
   }
 
   scene.finale.phase = phase;
+  window.dispatchEvent(new CustomEvent('deadair:finalephase', { detail: { phase } }));
   syncSignalVisuals();
   updateFinaleUI();
   if (isSeaFrozen() || phase === 'sealed') coastVideo.pause();
@@ -1589,6 +1626,7 @@ function updateSourceDescription() {
 function applySource(source) {
   const verifiedBeforeSwitch = scene.relays.ping.verifiedId !== null && source !== scene.source;
   if (source !== scene.source) resetRelayPing();
+  if (source !== scene.source) void soundscape.play('glitch', .27);
   scene.source = source;
   root.dataset.source = source;
   document.querySelectorAll('#source-switch button[data-source]').forEach(button => {
@@ -1617,6 +1655,7 @@ function applySource(source) {
  * Video-/Artefaktreste entstehen und der Morsecode aktiv bleibt. */
 function showBlockedCamera() {
   if (cameraBlackout.classList.contains('is-active')) return;
+  void soundscape.play('glitch');
 
   cameraStatus.textContent = scene.finale.mode
     ? TRANSLATIONS[scene.language].finalLockedCamera
@@ -1660,9 +1699,27 @@ function updatePlaybackLabel() {
   root.dataset.paused = String(scene.paused);
 }
 
+/** Schaltet Soundeffekte und Sprachnachrichten gemeinsam stumm. */
+function toggleSound() {
+  scene.soundMuted = !scene.soundMuted;
+  soundscape.setMuted(scene.soundMuted);
+  updateSoundLabel();
+}
+
+/** Synchronisiert die deutsch/englische Beschriftung des Tonschalters. */
+function updateSoundLabel() {
+  const texts = TRANSLATIONS[scene.language];
+  const label = scene.soundMuted ? texts.soundOff : texts.soundOn;
+  soundToggle.textContent = 'SND';
+  soundToggle.setAttribute('aria-label', scene.soundMuted ? texts.soundEnable : texts.soundDisable);
+  soundToggle.setAttribute('title', label);
+  soundToggle.setAttribute('aria-pressed', String(!scene.soundMuted));
+}
+
 /** Stoppt beziehungsweise aktiviert die visuellen Bewegungen und das Video. */
 function togglePause() {
   scene.paused = !scene.paused;
+  soundscape.setPaused(scene.paused);
   scene.story.lastTick = performance.now();
   if (scene.paused) {
     if (scene.relays.ping.inFlight) resetRelayPing();
@@ -1853,11 +1910,22 @@ function handleReceiverKeyboard(event) {
 
 /** Bindet schlanke native Controls ohne Fremdbibliotheken. */
 function init() {
+  soundscape.attach(transmissionAudio);
+  soundscape.setPaused(scene.paused);
   root.dataset.bottle = 'hidden';
   root.dataset.story = 'routine';
   root.dataset.autoscan = 'idle';
   root.dataset.relays = 'inactive';
   root.dataset.finale = 'idle';
+
+  // Sichtbare Debug-Sprünge nur auf ausdrückliche Aktivierung per ?debug=1.
+  const debugMode = new URLSearchParams(window.location.search).get('debug') === '1';
+  devConsole.hidden = !debugMode;
+  if (debugMode) {
+    document.querySelector('#dev-gate-start').addEventListener('click', () => debugJumpToFinal('breach'));
+    document.querySelector('#dev-gate-open').addEventListener('click', () => debugJumpToFinal('breach', true));
+    document.querySelector('#dev-isolation').addEventListener('click', () => debugJumpToFinal('isolate'));
+  }
 
   frequencyInput.addEventListener('input', () => setFrequency(frequencyInput.value));
   document.querySelectorAll('#source-switch button[data-source]').forEach(button => {
@@ -1867,6 +1935,7 @@ function init() {
     const wasPlaying = !transmissionAudio.paused;
     scene.language = scene.language === 'de' ? 'en' : 'de';
     updateTranslations();
+    updateSoundLabel();
     if (scene.relays.unlocked) {
       if (wasPlaying && (scene.audio.currentRecording !== '003' || canReceiveWarning())) {
         void playTransmission({ restart: true });
@@ -1878,6 +1947,7 @@ function init() {
     }
   });
   pauseButton.addEventListener('click', togglePause);
+  soundToggle.addEventListener('click', toggleSound);
   coastVideo.addEventListener('play', () => {
     if (isSeaFrozen() || scene.finale.phase === 'sealed') coastVideo.pause();
   });
@@ -1984,6 +2054,7 @@ function init() {
   applySource(scene.source);
   updateTranslations();
   updatePlaybackLabel();
+  updateSoundLabel();
   setReceiverOpen(false);
   syncStoryState();
   updateAnomalyMeter();

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eeeee7">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="FORMIC: Eine interaktive generative Designstudie, in der simulierte Ameisen ihre Wege als lebendige Linienzeichnung auf einer digitalen Leinwand hinterlassen.">
+  <link rel="canonical" href="https://b2folio.de/design-studies/formic/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="FORMIC — A Living Canvas">
+  <meta property="og:description" content="Eine generative Canvas-Studie über Ameisenbewegung, Zufall, Kontrolle und eine Linie, die dem Weg folgt.">
+  <meta property="og:image" content="https://b2folio.de/design-studies/formic/assets/preview.webp">
+  <meta property="og:url" content="https://b2folio.de/design-studies/formic/">
+  <title>FORMIC — A Living Canvas</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+
+<body>
+  <header>
+    <a class="brand" href="./">FORMIC<span>®</span></a>
+    <span class="edition">BEHAVIOURAL ART STUDIO<br>EXPERIMENT № 001 — FORMICIDAE</span>
+    <button id="language" class="quiet" type="button">EN ↗</button>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="formic-title">
+      <div>
+        <p class="eyebrow" data-de="KLEINE WESEN. EIGENE WEGE." data-en="SMALL CREATURES. THEIR OWN PATHS."></p>
+        <h1 id="formic-title" data-de="Der Zufall<br>hat sechs Beine." data-en="Chance has<br>six legs."></h1>
+      </div>
+      <p class="intro-copy" data-de="Du wählst die Farbe.<br>Sie finden ihren Weg.<br>Zusammen entsteht etwas Einmaliges." data-en="You choose the colour.<br>They find their way.<br>Together, something unique emerges."></p>
+    </section>
+
+    <section class="studio" aria-label="FORMIC Experiment">
+      <div class="workbench">
+        <div class="canvas-top">
+          <span><i id="indicator"></i> <b id="status">BEREIT</b></span>
+          <span id="paperLabel">A4 · 210 × 297 MM</span>
+          <span id="clock">00:00</span>
+        </div>
+
+        <div class="paper-area">
+          <div class="paper" id="paper">
+            <canvas id="paint" aria-label="Gezeichnete Linien hinter den Ameisen"></canvas>
+            <canvas id="animals" aria-label="Animierte Ameisen auf der Leinwand"></canvas>
+            <div id="hint" data-de="Ein kleiner Schritt. Ein neues Bild." data-en="One small step. A new picture."></div>
+          </div>
+          <div class="scale-mark">01 / LIVING CANVAS</div>
+        </div>
+
+        <div class="canvas-bottom">
+          <span data-de="Keine zwei Wege sind gleich." data-en="No two paths are alike."></span>
+          <button class="quiet" id="clear" type="button" data-de="↺ Neues Blatt" data-en="↺ New sheet"></button>
+        </div>
+      </div>
+
+      <aside aria-label="Experimentsteuerung">
+        <div class="panel-heading">
+          <span data-de="DAS EXPERIMENT" data-en="THE EXPERIMENT"></span>
+          <span aria-hidden="true">↘</span>
+        </div>
+
+        <div class="specimen">
+          <svg viewBox="0 0 220 115" aria-hidden="true">
+            <g fill="none" stroke="#292b22" stroke-width="2" stroke-linecap="round">
+              <path d="M95 48 72 27 46 31M99 57 69 53 43 69M99 65 78 88 48 96M123 48 145 27 173 31M120 57 151 53 177 69M120 65 143 88 172 96M103 31 91 14 75 10M117 31 130 14 145 10" />
+            </g>
+            <g fill="#292b22">
+              <ellipse cx="110" cy="83" rx="13" ry="22" />
+              <ellipse cx="110" cy="56" rx="7" ry="13" />
+              <ellipse cx="110" cy="34" rx="11" ry="12" />
+            </g>
+          </svg>
+          <div>
+            <h2>Formica</h2>
+            <p data-de="Die Ameise · Der Weg wird zur Linie" data-en="The ant · A path becomes a line"></p>
+          </div>
+        </div>
+
+        <fieldset>
+          <legend data-de="01 — DIE LINIE" data-en="01 — THE LINE"></legend>
+          <label class="line-color">
+            <input id="lineColor" type="color" value="#d3684b" aria-label="Linienfarbe">
+            <span data-de="Linienfarbe" data-en="Line colour"></span>
+          </label>
+          <label class="range-label">
+            <span data-de="Glätte" data-en="Smoothness"></span>
+            <output id="smoothnessOut">35 %</output>
+            <input id="smoothness" type="range" min="0" max="100" step="1" value="35" aria-describedby="smoothnessHint">
+          </label>
+          <p class="smoothness-hint" id="smoothnessHint">
+            <span data-de="Zittrig" data-en="Trembling"></span>
+            <span data-de="Glatt" data-en="Smooth"></span>
+          </p>
+          <p class="note" data-de="Farbe und Glätte gelten für neue Linienabschnitte." data-en="Colour and smoothness apply to new line segments."></p>
+        </fieldset>
+
+        <fieldset>
+          <legend data-de="02 — VERHALTEN" data-en="02 — BEHAVIOUR"></legend>
+          <label class="range-label">
+            <span data-de="Ameisen" data-en="Ants"></span>
+            <output id="countOut">1</output>
+            <input id="count" type="range" min="1" max="20" value="1">
+          </label>
+          <label class="range-label">
+            <span data-de="Tempo" data-en="Speed"></span>
+            <output id="speedOut">1×</output>
+            <input id="speed" type="range" min="0.3" max="2" step="0.1" value="1">
+          </label>
+          <label class="range-label">
+            <span data-de="Linienstärke" data-en="Line width"></span>
+            <output id="widthOut">1.0</output>
+            <input id="width" type="range" min="0.5" max="3" step="0.1" value="1">
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend data-de="03 — LEINWAND & EXPORT" data-en="03 — CANVAS & EXPORT"></legend>
+          <div class="select-row">
+            <select id="format" aria-label="DIN-Format">
+              <option>A4</option>
+              <option>A3</option>
+              <option>A5</option>
+            </select>
+            <select id="orientation" aria-label="Ausrichtung">
+              <option value="portrait">Hochformat</option>
+              <option value="landscape">Querformat</option>
+            </select>
+          </div>
+          <label class="export-size">
+            <span data-de="Ausgabe" data-en="Resolution"></span>
+            <select id="dpi" aria-label="Exportauflösung">
+              <option value="150">150 DPI</option>
+              <option value="300" selected>300 DPI</option>
+            </select>
+          </label>
+          <button id="export" class="export" type="button" data-de="Bild herunterladen ↗" data-en="Download artwork ↗"></button>
+        </fieldset>
+
+        <button id="play" class="play" type="button">Experiment starten <span>→</span></button>
+        <p class="note" data-de="Setze eine Ameise per Klick auf das Papier.<br>Die Linie folgt mit etwas Abstand." data-en="Click the paper to place an ant.<br>The line follows a short distance behind."></p>
+      </aside>
+    </section>
+
+    <footer>
+      <span>FORMIC — A LIVING CANVAS</span>
+      <span data-de="Ein Zusammenspiel aus Instinkt und Pigment." data-en="An interplay of instinct and pigment."></span>
+      <span>B² / DESIGN STUDIES</span>
+    </footer>
+
+    <details class="credits">
+      <summary data-de="Inspiration & Credits ↗" data-en="Inspiration & credits ↗">Inspiration & Credits ↗</summary>
+      <p data-de="Inspiriert von »Wandering Position« des japanischen Künstlers Yukinori Yanagi. Yanagi zeichnet den Weg einer Ameise innerhalb einer Begrenzung nach. So wird ihre Bewegung selbst zum Bild – im Spannungsfeld von Zufall, Kontrolle und Grenzen." data-en="Inspired by ‘Wandering Position’ by Japanese artist Yukinori Yanagi. Yanagi traces an ant’s path within a confined space. Its movement becomes the image itself, exploring chance, control and boundaries."></p>
+      <p data-de="FORMIC greift dieses Prinzip als interaktive digitale Designstudie auf: Eine virtuelle Stiftspitze folgt dem simulierten Weg der Ameise." data-en="FORMIC explores this principle as an interactive digital design study: a virtual pen follows the ant’s simulated path."></p>
+      <a href="https://www.annshafer.com/annshaferblog/can-an-ant-be-an-artist" target="_blank" rel="noopener noreferrer" data-de="Über Yukinori Yanagis »Wandering Position« — Ann Shafer ↗" data-en="About Yukinori Yanagi’s ‘Wandering Position’ — Ann Shafer ↗"></a>
+      <p class="credit-note" data-de="Konzeptuelle Inspiration: Yukinori Yanagi · Wandering Position. Digitale Gestaltung und Umsetzung: B². Unabhängige Studie; keine Zusammenarbeit mit dem Künstler." data-en="Conceptual inspiration: Yukinori Yanagi · Wandering Position. Digital design and implementation: B². Independent study; no collaboration with the artist."></p>
+    </details>
+  </main>
+</body>
+
+</html>

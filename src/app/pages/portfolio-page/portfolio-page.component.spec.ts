@@ -36,7 +36,7 @@ describe('PortfolioPageComponent', /** Gruppiert die Verhaltensprüfungen der La
     expect(page.designStudyNumber('raw-form')).toBe('DS/001');
     expect(page.designStudyNumber('ctrl-room')).toBe('DS/003');
     expect(page.designStudyNumber('phase')).toBe('DS/009');
-    expect(DESIGN_STUDIES).toHaveLength(10);
+    expect(DESIGN_STUDIES).toHaveLength(11);
   });
 
   it('setzt den Schoko-Zustand nur einmal und schließt das dekorative Terminal', /** Setzt den Schoko-Zustand nur einmal und schließt das dekorative Terminal. */() => {

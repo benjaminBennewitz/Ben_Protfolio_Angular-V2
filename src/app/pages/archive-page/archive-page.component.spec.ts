@@ -30,11 +30,12 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
 
   afterEach(/** Bereinigt den isolierten Angular-Testkontext. */() => TestBed.resetTestingModule());
 
-  it('zeigt sämtliche zehn Studien mit stabilen, eindeutigen Archivnummern', /** Prüft die zentrale Quelle. */() => {
+  it('zeigt sämtliche elf Studien mit stabilen, eindeutigen Archivnummern', /** Prüft die zentrale Quelle. */() => {
     expect(page.studies()).toHaveLength(DESIGN_STUDIES.length);
     expect(page.studyNumber('ctrl-room')).toBe('DS/003');
     expect(page.studyNumber('phase')).toBe('DS/009');
     expect(page.studyNumber('dead-air')).toBe('DS/010');
+    expect(page.studyNumber('formic')).toBe('DS/011');
     expect(page.categoryCount('spatial')).toBe(2);
   });
 
@@ -48,7 +49,7 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     expect(page.filteredStudies()).toEqual([]);
     expect(page.activeStudy()).toBeNull();
     page.clearFilters();
-    expect(page.filteredStudies()).toHaveLength(10);
+    expect(page.filteredStudies()).toHaveLength(11);
   });
 
   it('reagiert auf den globalen Sprachwechsel auch bei Textsuche', /** Prüft lokalisierte Suchindizes. */() => {
@@ -80,12 +81,12 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     Object.defineProperty(page, 'canvas', { configurable: true, value: new ElementRef(stage) });
     page.resetLayout();
 
-    const placed = page.visibleWindows(); // Die zehn anfänglich geöffneten Fenster.
+    const placed = page.visibleWindows(); // Die elf anfänglich geöffneten Fenster.
     const centerX = placed.map(({ state }) => state.x + state.width / 2); // Horizontale Mittelpunkte.
     const centerY = placed.map(({ state }) => state.y + state.height / 2); // Vertikale Mittelpunkte.
     const widths = new Set(placed.map(({ state }) => Math.round(state.width))); // Unterschiedliche Fensterformate.
 
-    expect(placed).toHaveLength(10);
+    expect(placed).toHaveLength(11);
     expect(widths.size).toBeGreaterThan(3);
     expect(Math.max(...centerX) - Math.min(...centerX)).toBeGreaterThan(stage.clientWidth * 0.55);
     expect(Math.max(...centerY) - Math.min(...centerY)).toBeGreaterThan(stage.clientHeight * 0.45);

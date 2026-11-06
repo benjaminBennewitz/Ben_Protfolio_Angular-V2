@@ -102,7 +102,7 @@ The goal is a website that remains technically controlled while making a strong 
 > [!NOTE]
 > The standalone design studies are non-commercial experiments in graphic design and web development. Some begin with a visual language or illustrated identity; others begin with a theme or a technical interaction. Their READMEs explain that intent before the implementation details. They are not production products or commercial services. Accessibility and production readiness are not their primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed for these studies.
 
-Ten independent experiences explore distinct visual directions and interaction models. The complete catalogue lives on `/archive`; `/portfolio#design-studies` shows three curated previews in a compact masonry composition and links to it. The archive combines keyword search, visual categories, a bilingual concept/subject/idea inspector and a freely arranged window canvas. On desktop, its sidebar and canvas share one viewport-bounded workspace, with independent sidebar scrolling; study windows have varied sizes and collision-aware random positions instead of forming a rigid grid or clustering in one corner. The search and catalogue sections can be collapsed, and the viewport-height workspace snaps into view when scrolling. Windows can be dragged and resized (including keyboard arrow controls), focused, closed/reopened, shuffled or tiled; on smaller devices the same catalogue becomes a responsive card gallery. Study assets and independent study source code remain unchanged. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
+Eleven independent experiences explore distinct visual directions and interaction models. The complete catalogue lives on `/archive`; `/portfolio#design-studies` shows three curated previews in a compact masonry composition and links to it. The archive combines keyword search, visual categories, a bilingual concept/subject/idea inspector and a freely arranged window canvas. On desktop, its sidebar and canvas share one viewport-bounded workspace, with independent sidebar scrolling; study windows have varied sizes and collision-aware random positions instead of forming a rigid grid or clustering in one corner. The search and catalogue sections can be collapsed, and the viewport-height workspace snaps into view when scrolling. Windows can be dragged and resized (including keyboard arrow controls), focused, closed/reopened, shuffled or tiled; on smaller devices the same catalogue becomes a responsive card gallery. Study assets and independent study source code remain isolated inside their respective study folders. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
 
 ### RAW/FORM
 
@@ -164,6 +164,12 @@ An interactive manifesto about pressure, destruction, and creative transformatio
 
 [Study README](src/design-studies/dead-air/README.md) · [Open study](https://b2folio.de/design-studies/dead-air/)
 
+### FORMIC
+
+**Generative behavioural-art study.** FORMIC turns simulated ant movement into a drawing system: one or more autonomous agents explore a digital sheet while a delayed virtual pen translates their paths into configurable lines. Collision avoidance, line tremor, physical paper formats and high-resolution export keep the experiment between creative coding, editorial interface and generative image-making.
+
+[Study README](src/design-studies/formic/README.md) · [Open study](https://b2folio.de/design-studies/formic/)
+
 ### Shared integration
 
 Each study owns its HTML, styles, scripts, and assets. Angular copies these experiences as static pages; portfolio theme, language, and accessibility services do not automatically apply to them. Dependencies and supported interactions are documented in each study's README. Framework-free interaction code is written in VanillaJS; individual studies also explore Canvas, SVG, WebGL, Web Audio, or CSS3D.
@@ -220,7 +226,8 @@ src/
 │  ├─ growth/                 # GROWTH.
 │  ├─ bentendo/               # BENTENDO / DUNGEON WANTED
 │  ├─ phase/                  # PHASE. / generative microcosm
-│  └─ dead-air/               # DEAD//AIR / analog coastal broadcast
+│  ├─ dead-air/               # DEAD//AIR / analog coastal broadcast
+│  └─ formic/                 # FORMIC / generative behavioural art
 ├─ environments/              # Public frontend configuration by environment
 ├─ styles/                    # Tokens, base styles, utilities, and case-study styles
 ├─ styles.scss                # Global SCSS entry point
@@ -249,7 +256,7 @@ Material Symbols are bundled as a reduced local font, so icon rendering does not
 
 The portfolio is an Angular application with lazy-loaded pages, centralized services, shared components, and a token-based SCSS system. Production configuration includes optimization, hashed application bundles, public environment configuration, and size budgets.
 
-The `angular.json` asset rules publish all ten standalone studies alongside the application. Selected source-only material is excluded, including SCOOP artwork masters and BENTENDO tests, generators, Blender sources, and internal documentation. Static delivery also includes `.htaccess`, crawler configuration, the sitemap, fonts, and study assets.
+The `angular.json` asset rules publish all eleven standalone studies alongside the application. Selected source-only material is excluded, including SCOOP artwork masters and BENTENDO tests, generators, Blender sources, and internal documentation. Static delivery also includes `.htaccess`, crawler configuration, the sitemap, fonts, and study assets.
 
 Local deployment utilities are kept outside Git tracking in the root-level `scripts/` directory. Nested study runtime scripts remain versioned. These implementation notes document the work for review; they are not installation instructions or permission to reproduce, execute, deploy, or reuse it.
 

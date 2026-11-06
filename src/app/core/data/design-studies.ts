@@ -105,6 +105,16 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       category: 'retro',
       archive: { concept: 'Analog Broadcast / CRT', subject: 'Supernatural coastal transmission', idea: 'Can a believable regional broadcast interface make a photographic landscape feel mysteriously alive through subtle signal interference?' },
     },
+    {
+      id: 'formic',
+      name: 'FORMIC',
+      subtitle: 'A Living Canvas — Behavioural Art Studio',
+      href: '/design-studies/formic/',
+      preview: '/design-studies/formic/assets/preview.webp',
+      tags: ['Generative Art', 'Canvas', 'Behaviour Simulation', 'HTML / CSS / JS'],
+      category: 'generative',
+      archive: { concept: 'Generative Behaviour / Creative Coding', subject: 'Ant movement as drawing', idea: 'What happens when autonomous movement becomes the drawing tool and human control is reduced to a few visual parameters?' },
+    },
   ]; // Reihenfolge und öffentliche Ziele der Designstudien.
 
 /** Deutsche Karteninhalte; Marken und technische Eigennamen bleiben erhalten. */
@@ -119,4 +129,5 @@ export const DESIGN_STUDY_TRANSLATIONS_DE: Readonly<Record<string, Pick<DesignSt
   phase: { subtitle: 'Ein lebendiger Mikrokosmos – zwölf generative Wesen', tags: ['Generative Kunst', 'p5.js', 'Canvas', 'Kreative Programmierung'], archive: { concept: 'Generative Kunst / Creative Coding', subject: 'Organische digitale Wesen', idea: 'Wie entstehen aus mathematischen Regeln lebendige, ausdrucksstarke visuelle Systeme statt bloßer Animationen?' } },
   bentendo: { subtitle: 'Ein spielbarer Handheld – DUNGEON WANTED', tags: ['Three.js', 'Pixel-Rollenspiel', 'Web Audio', 'Spieldesign'], archive: { concept: 'Retro-Handheld / Pixel-Art', subject: 'Spielbares Browserabenteuer', idea: 'Wie überzeugend verschmelzen ein fiktiver Handheld, seine Geräteoberfläche und ein tatsächlich spielbares Spiel?' } },
   'dead-air': { subtitle: 'North Coast Broadcasting System – Signallabor', tags: ['Analog Broadcast', 'CRT / Signal', 'Fotografie', 'HTML / CSS / JS'], archive: { concept: 'Analog Broadcast / CRT', subject: 'Übernatürlicher Küstenfunk', idea: 'Kann ein glaubwürdiges regionales Broadcast-Interface eine fotografische Landschaft durch subtile Signalstörungen geheimnisvoll lebendig erscheinen lassen?' } },
+  formic: { subtitle: 'Eine lebendige Leinwand – Atelier für Verhaltenskunst', tags: ['Generative Kunst', 'Canvas', 'Verhaltenssimulation', 'HTML / CSS / JS'], archive: { concept: 'Generatives Verhalten / Creative Coding', subject: 'Ameisenbewegung als Zeichnung', idea: 'Was passiert, wenn autonome Bewegung selbst zum Zeichenwerkzeug wird und die menschliche Kontrolle auf wenige visuelle Parameter reduziert ist?' } },
 };

@@ -5,6 +5,9 @@ B2Folio/
 │   └── ...
 ├── node_modules/
 │   └── ...
+├── scripts/
+│   ├── deploy-portfolio-local.cmd
+│   └── deploy-portfolio-server.sh
 ├── src/
 │   ├── app/
 │   │   ├── core/
@@ -1046,6 +1049,8 @@ B2Folio/
 │   │   │   │   ├── coastal-fog.webp
 │   │   │   │   ├── coast-loop.mp4
 │   │   │   │   ├── coast-poster.webp
+│   │   │   │   ├── dimension-landscape.webp
+│   │   │   │   ├── dimension-people.webp
 │   │   │   │   ├── ending-empty-swing.webp
 │   │   │   │   ├── ending-ronnie.webp
 │   │   │   │   ├── favicon.svg
@@ -1054,12 +1059,12 @@ B2Folio/
 │   │   │   │   ├── local-swing.webp
 │   │   │   │   ├── message-bottle.webp
 │   │   │   │   ├── message-bottle-glitch.webp
-│   │   │   │   ├── portal-hanging-shadows.webp
 │   │   │   │   ├── preview.webp
 │   │   │   │   ├── scene-poster.webp
 │   │   │   │   ├── scene-poster-no-lighthouse.webp
 │   │   │   │   ├── sfx-anomaly.mp3
 │   │   │   │   ├── sfx-auto-scan.mp3
+│   │   │   │   ├── sfx-dimension-presence.mp3
 │   │   │   │   ├── sfx-local-laugh.mp3
 │   │   │   │   ├── sfx-ping-echo.mp3
 │   │   │   │   ├── sfx-ping-miss.mp3
@@ -1081,16 +1086,15 @@ B2Folio/
 │   │   │   │   ├── sfx-tune-click.mp3
 │   │   │   │   ├── station-mark.svg
 │   │   │   │   ├── transmission-001-de.mp3
-│   │   │   │   ├── transmission-001-en.mp3
 │   │   │   │   ├── transmission-002-de.mp3
-│   │   │   │   ├── transmission-002-en.mp3
 │   │   │   │   ├── transmission-003-de.mp3
-│   │   │   │   ├── transmission-003-en.mp3
+│   │   │   │   ├── transmission-004-de.mp3
 │   │   │   │   ├── window-off-a.webp
 │   │   │   │   ├── window-off-b.webp
 │   │   │   │   └── window-off-c.webp
 │   │   │   ├── scripts/
 │   │   │   │   ├── app.js
+│   │   │   │   ├── dimension-world.js
 │   │   │   │   ├── ending.js
 │   │   │   │   ├── gate-visual.js
 │   │   │   │   ├── investigation.js

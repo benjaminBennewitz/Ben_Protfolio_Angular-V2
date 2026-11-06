@@ -4,57 +4,72 @@
  * übernimmt Fokus und Hintergrundsperre; begrenzte Tiefenebenen ersetzen eine 3D-Engine.
  * @author Benjamin Bennewitz
  */
+import { prepareDimension, drawDimension } from './dimension-world.js';
+
 const COPY = Object.freeze({
-  de: {
     title: 'KEIN RÜCKSIGNAL', ending: 'NCBS / VERBINDUNG BEENDET', who: 'Ermittler', status: 'Status', missing: 'NICHT ERREICHBAR',
     restart: 'Erneut empfangen', archive: 'Zurück zum Archiv', skip: 'Zum Status', forward: 'Weitergehen',
     look: 'Umsehen: Maus oder Ziehen · Weitergehen: W / ↑ oder Button',
     swing: 'Die Schaukel ist leer.', ronnie: 'An der Jacke hängt derselbe Name wie an deinem Empfänger.',
     dimension: 'Vor dir liegt die andere Seite.', close: 'Ein trockenes Klicken. Direkt neben dir.',
-    region: 'Die andere Dimension. Mit Maus oder Ziehen umsehen; W, Pfeil nach oben oder Weitergehen bewegt dich vorwärts.',
+    region: 'Die andere Dimension mit unabhängig schwebenden Frauen und Männern an pulsierenden Schläuchen. Mit Maus oder Ziehen umsehen; W, Pfeil nach oben oder Weitergehen bewegt dich vorwärts.',
     swingRegion: 'Der Stationshof jenseits des Monitors. Eine leere Schaukel; im Nebel erscheint darauf Ronnie mit unkenntlichem Gesicht.',
     pause: 'Pause', resume: 'Fortsetzen', mute: 'Ton aus', unmute: 'Ton an',
     flash: 'Ein Licht dringt aus dem Bildschirm. Die Geräte verschwinden im Nebel.',
-  },
-  en: {
-    title: 'NO RETURN SIGNAL', ending: 'NCBS / CONNECTION TERMINATED', who: 'Investigator', status: 'Status', missing: 'UNREACHABLE',
-    restart: 'Receive again', archive: 'Back to archive', skip: 'Show status', forward: 'Walk on',
-    look: 'Look: mouse or drag · Walk: W / ↑ or button',
-    swing: 'The swing is empty.', ronnie: 'The jacket carries the same name as your receiver.',
-    dimension: 'The other side lies ahead.', close: 'A dry click. Right beside you.',
-    region: 'The other dimension. Look with the mouse or by dragging; W, arrow up or Walk on moves you forward.',
-    swingRegion: 'The station courtyard beyond the monitor. An empty swing; in the fog Ronnie appears on it with an unrecognizable face.',
-    pause: 'Pause', resume: 'Resume', mute: 'Mute', unmute: 'Sound on',
-    flash: 'Light spills from the screen. The devices disappear into fog.',
-  },
 });
 const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
 const ease = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
 
-/** Eine einmal erzeugte Wolkentextur; pro Frame werden nur gecachte Ebenen verschoben. */
+/** Einmalig gerasterter, fein aufgelöster Fraktalnebel statt vergrößerter Gradientkreise. */
 function createFogTexture() {
   const canvas = document.createElement('canvas');
-  canvas.width = 768;
-  canvas.height = 384;
+  canvas.width = 1536;
+  canvas.height = 768;
   const ctx = canvas.getContext('2d');
   if (!ctx) return canvas;
-  for (let i = 0; i < 70; i++) {
-    const x = (Math.sin(i * 19.73) * .5 + .5) * canvas.width;
-    const y = (Math.cos(i * 11.91) * .5 + .5) * canvas.height;
-    const radius = 80 + (i % 7) * 17;
-    const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-    gradient.addColorStop(0, 'rgba(38, 22, 19, .35)');
-    gradient.addColorStop(.5, 'rgba(58, 35, 25, .18)');
-    gradient.addColorStop(1, 'rgba(32, 17, 15, 0)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(x - radius, y - radius, radius * 2, radius * 2);
+  const pixels = ctx.createImageData(canvas.width,canvas.height);
+  const layers = [6,13,27,55,111].map((columns,index) => {
+    const rows = Math.ceil(columns/2);
+    const values = new Float32Array((columns+1)*(rows+1));
+    for (let i=0;i<values.length;i++) {
+      const hash = Math.sin(i*127.1+index*311.7)*43758.5453;
+      values[i] = hash-Math.floor(hash);
+    }
+    return { columns, rows, values, weight: [.48,.27,.14,.075,.035][index] };
+  });
+  for (let y=0;y<canvas.height;y++) {
+    for (let x=0;x<canvas.width;x++) {
+      let density=0;
+      for (const layer of layers) {
+        const gx=x/canvas.width*layer.columns;
+        const gy=y/canvas.height*layer.rows;
+        const ix=Math.floor(gx);
+        const iy=Math.floor(gy);
+        const fx=ease(gx-ix);
+        const fy=ease(gy-iy);
+        const i=iy*(layer.columns+1)+ix;
+        const upper=layer.values[i]*(1-fx)+layer.values[i+1]*fx;
+        const lower=layer.values[i+layer.columns+1]*(1-fx)+layer.values[i+layer.columns+2]*fx;
+        density+=(upper*(1-fy)+lower*fy)*layer.weight;
+      }
+      const i=(y*canvas.width+x)*4;
+      pixels.data[i]=37;
+      pixels.data[i+1]=29;
+      pixels.data[i+2]=25;
+      // Subpixel-Dithering bricht 8-Bit-Bänder, ohne ein sichtbares Punktraster zu bilden.
+      let hash=Math.imul(x+1,374761393)^Math.imul(y+1,668265263);
+      hash=Math.imul(hash^(hash>>>13),1274126177);
+      const dither=(hash>>>0)/4294967296-.5;
+      pixels.data[i+3]=Math.round(clamp((density-.18)*1.45)*165+dither);
+    }
   }
+  ctx.putImageData(pixels,0,0);
   return canvas;
 }
 
 export class Ending {
-  constructor({ scene, investigation, soundscape, onLanguage, onPause, onMute, onTakeover }) {
-    Object.assign(this, { scene, investigation, soundscape, onLanguage, onPause, onMute, onTakeover });
+  constructor({ scene, investigation, soundscape, onPause, onMute, onTakeover }) {
+    Object.assign(this, { scene, investigation, soundscape, onPause, onMute, onTakeover });
     this.dialog = document.querySelector('#ending-dialog');
     this.canvas = document.querySelector('#ending-fog');
     this.context = this.canvas.getContext('2d');
@@ -79,7 +94,7 @@ export class Ending {
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   }
 
-  get copy() { return COPY[this.scene.language]; }
+  get copy() { return COPY; }
   get elapsed() { return Math.max(0, this.scene.anomaly.activeMs - this.startedAt); }
 
   /** Alle Eingaben sind auf die Schlusssequenz beschränkt; kein globaler Cursor-Lock. */
@@ -87,7 +102,6 @@ export class Ending {
     this.dialog.addEventListener('cancel', event => { event.preventDefault(); this.showStatus(); });
     document.querySelector('#ending-pause').addEventListener('click', () => { this.onPause(); this.render(); });
     document.querySelector('#ending-sound').addEventListener('click', () => { this.onMute(); this.render(); });
-    document.querySelector('#ending-language').addEventListener('click', () => { this.onLanguage(); this.render(); });
     document.querySelector('#ending-skip').addEventListener('click', () => this.showStatus());
     document.querySelector('#ending-restart').addEventListener('click', () => window.location.reload());
     const forward = document.querySelector('#ending-forward');
@@ -140,7 +154,8 @@ export class Ending {
 
   /** Lädt die nächste Schlusskulisse bereits während des vorhandenen Finales. */
   prepare(mode) {
-    const ids = mode === 'breach' ? ['ending-dimension'] : ['ending-yard', 'ending-empty', 'ending-ronnie'];
+    if (mode === 'breach') prepareDimension();
+    const ids = mode === 'breach' ? [] : ['ending-yard', 'ending-empty', 'ending-ronnie'];
     for (const id of ids) {
       const image = document.querySelector(`#${id}`);
       if (!image.getAttribute('src')) image.src = image.dataset.asset;
@@ -158,6 +173,7 @@ export class Ending {
         && this.scene.anomaly.activeMs - this.investigation.localOpenedAt >= 10_000) this.start('swing');
       return;
     }
+    this.updateDimensionAudio();
     if (this.phase === 'flash' && this.elapsed >= 1800) {
       this.phase = 'view';
       this.dialog.dataset.phase = 'view';
@@ -187,15 +203,31 @@ export class Ending {
     document.documentElement.dataset.epilogue = mode;
     this.onTakeover();
     this.soundscape.stop('localLaugh');
+    this.soundscape.voiceAudio?.pause();
     this.soundscape.bedLevel = mode === 'dimension' ? .16 : .13;
-    void this.soundscape.startBed(mode === 'dimension' ? 'hum' : 'swingCreak');
+    void this.soundscape.unlock().then(() => {
+      if (!this.active || this.phase === 'status') return;
+      void this.soundscape.startBed(mode === 'dimension' ? 'hum' : 'swingCreak');
+      this.updateDimensionAudio();
+    });
     this.soundscape.updateBed();
     this.fogTexture = createFogTexture();
     this.dialog.showModal();
     this.resize();
     this.announce('flash');
     this.render();
+    if (mode === 'dimension') void prepareDimension().then(() => this.requestFrame());
     this.requestFrame();
+  }
+
+  /** Startet die räumliche Störspur am richtigen Zeitpunkt der pausierbaren Spieluhr.
+   * Ein später freigeschalteter Browserkontext setzt am aktuellen Punkt der Spur ein.
+   */
+  updateDimensionAudio() {
+    if (this.mode !== 'dimension' || this.phase === 'status' || this.scene.paused || document.hidden) return;
+    if (!this.soundscape.active.has('dimension') && this.elapsed < 44_000) {
+      void this.soundscape.play('dimension', .85, this.elapsed/1000);
+    }
   }
 
   /** Begrenzte Vorwärtsbewegung verändert Tiefe und Nebel; am Ende kommt das Klicken näher. */
@@ -236,6 +268,7 @@ export class Ending {
       this.ronnieVisible = true;
       this.dialog.dataset.ronnie = 'true';
     }
+    this.soundscape.stop('dimension');
     this.soundscape.bedLevel = .045;
     this.soundscape.updateBed();
     this.render();
@@ -256,12 +289,10 @@ export class Ending {
     pause.textContent = this.scene.paused ? t.resume : t.pause;
     pause.setAttribute('aria-pressed', String(this.scene.paused));
     const sound = document.querySelector('#ending-sound');
-    sound.textContent = this.scene.soundMuted ? t.unmute : t.mute;
+    sound.textContent = this.scene.soundMuted ? 'TON AUS' : 'TON AN';
+    sound.setAttribute('aria-label', this.scene.soundMuted ? t.unmute : t.mute);
     sound.setAttribute('aria-pressed', String(!this.scene.soundMuted));
-    const language = document.querySelector('#ending-language');
-    language.textContent = this.scene.language === 'de' ? 'EN' : 'DE';
-    language.setAttribute('aria-label', this.scene.language === 'de' ? 'Switch to English' : 'Zu Deutsch wechseln');
-    document.querySelector('#ending-tools').setAttribute('aria-label', this.scene.language === 'de' ? 'Abschlusssteuerung' : 'Ending controls');
+    document.querySelector('#ending-tools').setAttribute('aria-label', 'Abschlusssteuerung');
     this.world.setAttribute('aria-label', this.mode === 'swing' ? t.swingRegion : t.region);
     const output = document.querySelector('#ending-description');
     if (output.dataset.key) output.textContent = t[output.dataset.key];
@@ -280,6 +311,10 @@ export class Ending {
     this.canvas.width = Math.round(this.width * ratio);
     this.canvas.height = Math.round(this.height * ratio);
     this.context?.setTransform(ratio, 0, 0, ratio, 0, 0);
+    const dimension = document.querySelector('#ending-dimension');
+    dimension.width = this.canvas.width;
+    dimension.height = this.canvas.height;
+    dimension.getContext('2d')?.setTransform(ratio, 0, 0, ratio, 0, 0);
   }
 
   /** Nebel verdeckt den Austausch; drei gegenläufige Ebenen geben den Blick danach frei. */
@@ -289,9 +324,11 @@ export class Ending {
     const w = this.width;
     const h = this.height;
     ctx.clearRect(0, 0, w, h);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
     const warm = ctx.createRadialGradient(w * .55, h * .45, 0, w * .55, h * .45, Math.max(w, h));
-    warm.addColorStop(0, 'rgba(238, 110, 42, .19)');
-    warm.addColorStop(.5, 'rgba(101, 34, 15, .24)');
+    warm.addColorStop(0, this.mode === 'dimension' ? 'rgba(150, 56, 18, .08)' : 'rgba(238, 110, 42, .19)');
+    warm.addColorStop(.5, this.mode === 'dimension' ? 'rgba(12, 10, 10, .24)' : 'rgba(101, 34, 15, .24)');
     warm.addColorStop(1, 'rgba(3, 5, 7, .8)');
     ctx.fillStyle = warm;
     ctx.fillRect(0, 0, w, h);
@@ -303,11 +340,11 @@ export class Ending {
     ctx.fillStyle = `rgba(27, 17, 14, ${density * .68})`;
     ctx.fillRect(0, 0, w, h);
     for (let layer = 0; layer < 3; layer++) {
-      const scale = 1.9 + layer * .4;
-      const x = (Math.sin(motionTime * (.035 + layer * .012) + layer * 2) * .25 - .55) * w;
-      const y = (Math.cos(motionTime * .05 + layer) * .13 - .25) * h;
+      const scale = 1.65 + layer * .28;
+      const x = (-(scale-1)/2+Math.sin(motionTime*(.035+layer*.012)+layer*2)*.07)*w;
+      const y = (Math.cos(motionTime*.05+layer)*.05-.24)*h;
       ctx.globalAlpha = clamp(density * .9 + .12);
-      ctx.drawImage(this.fogTexture, x + this.lookX * 30 * layer, y, w * scale, h * 1.7);
+      ctx.drawImage(this.fogTexture, x + this.lookX * 14 * layer, y, w * scale, h * 1.5);
     }
     ctx.globalAlpha = 1;
   }
@@ -333,8 +370,11 @@ export class Ending {
     const flash = this.phase === 'flash' ? ease(time / .65) * (1 - ease((time - .65) / 1.1)) : 0;
     this.dialog.style.setProperty('--ending-flash', String(flash * (this.reducedMotion.matches ? .23 : .92)));
     this.dialog.style.setProperty('--ending-world', String(ease((time - .6) / 1.1)));
-    const scale = 1.14 + this.depth * .3;
-    document.querySelector('#ending-dimension').style.transform = `translate(${-this.lookX * 5}%, ${-this.lookY * 4}%) scale(${scale})`;
+    if (this.mode === 'dimension') {
+      const ctx = document.querySelector('#ending-dimension').getContext('2d');
+      if (ctx) drawDimension(ctx, this.width, this.height, this.reducedMotion.matches ? 0 : time,
+        { depth: this.depth, lookX: this.lookX, lookY: this.lookY });
+    }
     const swingTime = this.reducedMotion.matches ? 0 : time;
     document.querySelector('#ending-rig').style.transform = `perspective(1100px) rotateX(${Math.sin(swingTime * 1.05) * 5}deg) scale(${1 + Math.sin(swingTime * 1.05) * .025})`;
     const blackout = this.phase === 'closing' && this.closedAt !== null
@@ -346,6 +386,7 @@ export class Ending {
 
   dispose() {
     cancelAnimationFrame(this.frame);
+    this.soundscape.stop('dimension');
     this.resizeObserver?.disconnect();
   }
 }

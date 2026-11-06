@@ -7,6 +7,8 @@
  */
 
 /** Begrenzung für die Pixeldichte der transparenten Effektebene. */
+import { prepareDimension, drawDimension } from './dimension-world.js';
+
 const MAX_DPR = 1.5;
 
 /** Erst nach vollständiger Öffnung lichten sich die Wolken über zehn Sekunden. */
@@ -14,14 +16,7 @@ const PORTAL_REVEAL_START_SECONDS = 13.8;
 const PORTAL_REVEAL_DURATION_SECONDS = 10;
 /** Ende der zeitgesteuerten Enthüllung für den begrenzten Reduced-Motion-Renderlauf. */
 export const PORTAL_REVEAL_END_MS = (PORTAL_REVEAL_START_SECONDS + PORTAL_REVEAL_DURATION_SECONDS) * 1000;
-const PORTAL_BACKDROP_SCALE = .86;
 let distantPortalBackdrop = null;
-
-/** Originalillustration der hängenden Schatten; wird einmalig geladen und anschließend
- * ausschließlich innerhalb des unregelmäßigen Portal-Clippings gezeichnet. */
-const portalBackdrop = new Image();
-portalBackdrop.decoding = 'async';
-portalBackdrop.src = new URL('../assets/portal-hanging-shadows.webp', import.meta.url).href;
 
 /** Interpoliert eine Phase in einem stabilen Wertebereich. */
 const clamp01 = value => Math.max(0, Math.min(1, value));
@@ -580,41 +575,23 @@ function drawPortalLightning(ctx, center, radius, time, opening, reducedMotion) 
   ctx.restore();
 }
 
-/** Bettet das unveränderte Motiv einmalig kleiner in atmosphärische Randtiefe ein.
- * Die gecachte Textur erhält beim späteren Öffnen einen konstanten Maßstab. */
-function getDistantPortalBackdrop() {
-  if (distantPortalBackdrop) return distantPortalBackdrop;
-  const texture = document.createElement('canvas');
-  texture.width = Math.min(1280, portalBackdrop.naturalWidth);
-  texture.height = Math.round(texture.width * portalBackdrop.naturalHeight / portalBackdrop.naturalWidth);
-  const ctx = texture.getContext('2d');
-  if (!ctx) return portalBackdrop;
-  const width = texture.width * PORTAL_BACKDROP_SCALE;
-  const height = texture.height * PORTAL_BACKDROP_SCALE;
-  ctx.drawImage(portalBackdrop, (texture.width - width) / 2,
-    (texture.height - height) / 2, width, height);
-  ctx.save();
-  ctx.translate(texture.width / 2, texture.height / 2);
-  ctx.scale(width / 2, height / 2);
-  const fade = ctx.createRadialGradient(0, 0, .62, 0, 0, 1);
-  fade.addColorStop(0, '#000');
-  fade.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.globalCompositeOperation = 'destination-in';
-  ctx.fillStyle = fade;
-  ctx.fillRect(-2, -2, 4, 4);
-  ctx.restore();
-  ctx.globalCompositeOperation = 'destination-over';
-  ctx.fillStyle = '#060307';
-  ctx.fillRect(0, 0, texture.width, texture.height);
-  distantPortalBackdrop = texture;
-  return texture;
+/** Wiederverwendete Zeichenfläche für dieselben beweglichen Ebenen wie im Abschluss. */
+function getDistantPortalBackdrop(time, reducedMotion) {
+  prepareDimension();
+  if (!distantPortalBackdrop) {
+    distantPortalBackdrop = document.createElement('canvas');
+    distantPortalBackdrop.width = 1280;
+    distantPortalBackdrop.height = 720;
+  }
+  const ctx = distantPortalBackdrop.getContext('2d');
+  if (ctx) drawDimension(ctx, 1280, 720, reducedMotion ? 0 : time);
+  return distantPortalBackdrop;
 }
 
 /** Platziert die Illustration in einem weltfesten Ausschnitt hinter dem Tor.
  * Die wachsende Dreiecksmaske enthüllt mehr vom Bild, ohne dessen Größe oder
  * räumliche Entfernung zu verändern. Auch die Schwebebewegung zoomt das Bild nicht. */
 function drawPortalBackdrop(ctx, frame, time, opening, reducedMotion) {
-  if (!portalBackdrop.complete || !portalBackdrop.naturalWidth) return;
 
   const destWidth = frame.width;
   const destHeight = frame.height;
@@ -622,7 +599,7 @@ function drawPortalBackdrop(ctx, frame, time, opening, reducedMotion) {
   const destY = frame.y - destHeight / 2;
 
   // Cover ohne Stretching; der obere Bildteil mit den Nabelschnüren bleibt erhalten.
-  const backdrop = getDistantPortalBackdrop();
+  const backdrop = getDistantPortalBackdrop(time, reducedMotion);
   const sourceWidth = backdrop.naturalWidth || backdrop.width;
   const sourceHeight = backdrop.naturalHeight || backdrop.height;
   const sourceAspect = destWidth / destHeight;

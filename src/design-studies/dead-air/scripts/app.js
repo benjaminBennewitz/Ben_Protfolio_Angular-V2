@@ -17,15 +17,15 @@ import { sampleRelayWave, isSignalAligned } from './signal-patterns.js';
 
 /** Fest definierte Frequenzen und ihre Bildstörung. */
 const CHANNELS = Object.freeze({
-  stranger: { frequency: 90.2, channel: '00', reception: 17, interference: 48, label: 'UNIDENTIFIED CARRIER' },
-  normal: { frequency: 87.6, channel: '01', reception: 76, interference: 15, label: 'STABLE FEED' },
-  interference: { frequency: 91.3, channel: '02', reception: 38, interference: 60, label: 'SIGNAL DRIFT' },
-  unknown: { frequency: 103.7, channel: '03', reception: 8, interference: 91, label: 'SOURCE UNKNOWN' },
-  voice: { frequency: 96.4, channel: '04', reception: 24, interference: 63, label: 'VOICE CARRIER' },
-  relayA: { frequency: 88.9, channel: '05', reception: 64, interference: 24, label: 'RELAY / A' },
-  relayB: { frequency: 99.1, channel: '06', reception: 71, interference: 29, label: 'RELAY / B' },
-  relayC: { frequency: 106.2, channel: '07', reception: 58, interference: 33, label: 'RELAY / C' },
-  warning: { frequency: 102.4, channel: '08', reception: 12, interference: 82, label: 'WEAK CARRIER' },
+  stranger: { frequency: 90.2, channel: '00', reception: 17, interference: 48, label: 'UNBEKANNTER TRÄGER' },
+  normal: { frequency: 87.6, channel: '01', reception: 76, interference: 15, label: 'SIGNAL STABIL' },
+  interference: { frequency: 91.3, channel: '02', reception: 38, interference: 60, label: 'SIGNALDRIFT' },
+  unknown: { frequency: 103.7, channel: '03', reception: 8, interference: 91, label: 'QUELLE UNBEKANNT' },
+  voice: { frequency: 96.4, channel: '04', reception: 24, interference: 63, label: 'SPRACHTRÄGER' },
+  relayA: { frequency: 88.9, channel: '05', reception: 64, interference: 24, label: 'RELAIS / A' },
+  relayB: { frequency: 99.1, channel: '06', reception: 71, interference: 29, label: 'RELAIS / B' },
+  relayC: { frequency: 106.2, channel: '07', reception: 58, interference: 33, label: 'RELAIS / C' },
+  warning: { frequency: 102.4, channel: '08', reception: 12, interference: 82, label: 'SCHWACHER TRÄGER' },
 });
 
 /** Relaiskennungen mit absichtlich nur grob angegebenen Suchbereichen. */
@@ -67,8 +67,7 @@ const AUTO_SCAN_POINTS = Object.freeze([
 ]);
 
 /** Sämtliche sichtbaren UI- und Status-Texte der Microsite. */
-const TRANSLATIONS = Object.freeze({
-  de: {
+const TEXTS = Object.freeze({
     skip: 'Zum Empfangsbereich springen',
     back: 'ZURÜCK ZUM ARCHIV',
     eyebrow: 'NCBS / EMPFANGSSTATION 01',
@@ -92,7 +91,7 @@ const TRANSLATIONS = Object.freeze({
     privacy: 'Datenschutz',
     credits: 'Video: Pexels ↗',
     sourceAria: 'Kamera wählen',
-    topNavAria: 'Informationen, Sprache und Archiv',
+    topNavAria: 'Informationen und Archiv',
     info: 'INFO',
     close: 'Schließen',
     legalNav: 'Rechtliches und Bildnachweise',
@@ -114,9 +113,9 @@ const TRANSLATIONS = Object.freeze({
     transmissionTitle: 'WIR SIND NOCH HIER.',
     transmissionFrequency: '96.4 MHz / AUFZEICHNUNG 001',
     transmissionTranscriptLabel: 'MITSCHRIFT / NOTFUNK 001',
-    transmissionLine1: 'Hallo? Hört mich jemand? Hier ist Alex, Nachtschicht der Küstenstation. Wir sind noch hier.',
-    transmissionLine2: 'Unser Notruf ist raus, aber niemand antwortet. Das Peilsystem ist ausgefallen.',
-    transmissionLine3: 'Vor der Küste liegen drei Relaisbojen. Wenn ihre Signale wieder verbunden sind, kann uns die Küstenwache finden. Bitte versucht das. Wir bleiben auf Empfang.',
+    transmissionLine1: 'Hallo? Ist da jemand? Hört mich jemand? Alex, Küstenstation. Bitte kommen. Wir sind hier … irgendwo. Ich kann es nicht erklären.',
+    transmissionLine2: 'Ist da draußen jemand? Das Peilsystem ist ausgefallen. Wir können uns nicht orientieren.',
+    transmissionLine3: 'Vor der Küste waren noch drei Relaisbojen im Meer. Wenn es irgendjemand schaffen könnte, die Signale zu verbinden … könntet ihr uns finden? Schaltet den Kanal frei.',
     transmissionFooter: 'SENDERKENNUNG: NCBS · NICHT VERIFIZIERT',
     transmissionReceivedAnnouncement: 'Neue Tonübertragung auf 96.4 Megahertz empfangen.',
     transmissionPlayingAnnouncement: 'Tonübertragung 001 wird abgespielt.',
@@ -152,13 +151,21 @@ const TRANSLATIONS = Object.freeze({
     archiveLabel: 'EMPFANGENE DATEN / ARCHIV',
     transmission2Button: 'AUDIO / 002',
     transmission2ButtonAria: 'Neue Funkaufnahme 002 erneut hören',
+    transmission4Title: 'DANKE, RONNIE.',
+    transmission4Line1: 'Danke … Ronnie.',
+    transmission4Line2: '',
+    transmission4Line3: '',
+    transmission4Meta: 'NCBS / PERSÖNLICHER FUNKSPRUCH',
+    transmission4Frequency: '96.4 MHz / AUFZEICHNUNG 004',
+    transmission4TranscriptLabel: 'MITSCHRIFT / FUNKSPRUCH 004',
+    transmission4Footer: 'QUELLE NICHT VERIFIZIERT',
     transmission2Meta: 'NCBS / NOTFUNK · NACHTSCHICHT',
     transmission2Title: 'DIE PEILUNG IST NOCH NICHT STABIL.',
     transmission2Frequency: '96.4 MHz / AUFZEICHNUNG 002',
     transmission2TranscriptLabel: 'MITSCHRIFT / NOTFUNK 002',
-    transmission2Line1: '…Alex hier. Ich sehe die drei Bojen wieder. Gut. Wirklich gut.',
-    transmission2Line2: 'Aber wir bekommen noch keinen Standort. Die Zeitstempel laufen auseinander. Relais A ist die Referenz.',
-    transmission2Line3: 'Legt die anderen beiden Spuren auf denselben Takt. Dann kann die Peilung greifen. Ich bleibe auf Empfang.',
+    transmission2Line1: 'Hey, Alex hier. Wirklich gute Arbeit. Die Relais funken wieder.',
+    transmission2Line2: 'Aber wir bekommen immer noch keinen Standort. Die Zeitstempel laufen auseinander.',
+    transmission2Line3: 'Die Signale müssen noch synchronisiert werden, damit die Ortung funktioniert.',
     transmission2Footer: 'SENDERKENNUNG: NCBS · QUELLE NICHT BESTÄTIGT',
     transmission2Announcement: 'Neue Funkaufnahme 002 empfangen. Signalabgleich jetzt verfügbar.',
     syncButton: 'SYNC / 3',
@@ -244,190 +251,11 @@ const TRANSLATIONS = Object.freeze({
       relayC: 'Ein schwacher Relaisträger. Die Positionsdaten sind noch nicht verifiziert.',
       warning: 'Ein schwaches Sprachsignal überlagert die Station.',
     },
-  },
-  en: {
-    skip: 'Skip to receiver',
-    back: 'BACK TO ARCHIVE',
-    eyebrow: 'NCBS / RECEIVER STATION 01',
-    introTitle: 'LAST SHIFT',
-    introStart: 'START RECEIVING',
-    intro: 'The last shift vanished after a distress call. The camera system is still active.',
-    tune: 'TUNE FREQUENCY',
-    offAir: 'NO CARRIER',
-    offAirDescription: 'Only static. No one answers on this frequency.',
-    transmitting: 'TRANSMISSION ACTIVE',
-    artwork: 'STATION / CAM 01',
-    footage: 'COAST / CAM 02',
-    pause: 'PAUSE',
-    resume: 'RESUME',
-    soundOn: 'SOUND ON',
-    soundOff: 'SOUND OFF',
-    soundDisable: 'Mute sound',
-    soundEnable: 'Enable sound',
-    sceneStatus: 'CURRENT SIGNAL STATE',
-    imprint: 'Legal notice',
-    privacy: 'Privacy',
-    credits: 'Footage: Pexels ↗',
-    sourceAria: 'Choose camera',
-    topNavAria: 'Information, language and archive',
-    info: 'INFO',
-    close: 'Close',
-    legalNav: 'Legal information and image credits',
-    infoDescription: 'North Coast Broadcasting System. The coast is still transmitting.',
-    sceneArtworkAria: 'Coastal station camera with a lighthouse, transmitter, fog and interference',
-    sceneVideoAria: 'Coastal camera with a rocky shoreline, rolling waves and signal interference',
-    examineBottle: 'Inspect the message bottle',
-    cameraBlocked: 'Signal lost. Camera 01 remains active.',
-    anomalyMeter: 'Anomaly activity in the current camera',
-    evidenceLog: 'FILE / 01',
-    evidenceLogAria: 'Read the recovered message again',
-    scanStatus: 'REMOTE OVERRIDE / SCANNING',
-    scanDescription: 'The receiver is tuning itself without input.',
-    transmissionStatus: 'VOICE SIGNAL DETECTED',
-    transmissionDescription: 'An unidentified transmission was received on 96.4 MHz.',
-    transmissionButton: 'AUDIO / 001',
-    transmissionButtonAria: 'Inspect incoming voice transmission 001',
-    transmissionMeta: 'NCBS / DISTRESS RADIO · NIGHT SHIFT',
-    transmissionTitle: 'WE ARE STILL HERE.',
-    transmissionFrequency: '96.4 MHz / RECORDING 001',
-    transmissionTranscriptLabel: 'TRANSCRIPT / DISTRESS RADIO 001',
-    transmissionLine1: 'Hello? Can anybody hear me? This is Alex, night shift at North Coast Station. We are still here.',
-    transmissionLine2: 'We sent the distress call, but nobody answered. The direction finder is down.',
-    transmissionLine3: 'There are three relay buoys offshore. If their signals are linked again, the coast guard can find us. Please try. We will keep listening.',
-    transmissionFooter: 'SENDER ID: NCBS · UNVERIFIED',
-    transmissionReceivedAnnouncement: 'New voice transmission received on 96.4 megahertz.',
-    transmissionPlayingAnnouncement: 'Voice transmission 001 is playing.',
-    transmissionBlockedAnnouncement: 'Playback blocked. Select AUDIO / 001 to start the recording.',
-    transmissionErrorAnnouncement: 'Voice recording could not be loaded. Please try again.',
-    transmissionFinishedAnnouncement: 'End of voice transmission 001.',
-    transmissionPlayAction: 'AUDIO / 001 · PLAY',
-    transmissionAudioAria: 'Play and pause received radio recording 001',
-    relayButton: 'RELAY / {count}/3',
-    relayButtonAria: 'Open the status of the three coastal relays',
-    relayLogMeta: 'NCBS / DIRECTION FINDER · STATUS',
-    relayLogTitle: 'RELAY LOG',
-    relayLogDescription: 'Three signals beyond the station. Their carrier frequencies are missing from the log. Only approximate search bands remain.',
-    relayColumn: 'RELAY',
-    relayBand: 'SEARCH BAND',
-    relayMissing: 'NO LINK',
-    relayConnected: 'CONNECTED',
-    relayLinkAction: 'LINK',
-    relayPingAction: 'SEND',
-    relayPingReady: 'READY / CAM 02',
-    relayPingCamera: 'SELECT CAM 02',
-    relayPingSending: 'PING ACTIVE …',
-    relayPingNone: 'NO ECHO',
-    relayPingEcho: 'ECHO IN {seconds} s',
-    relayPingCarrier: 'CARRIER / {id} · {seconds} s',
-    relayCameraRequired: 'CAM 02',
-    relayFinished: 'ALL THREE RELAYS CONNECTED. BEARING NOT SYNCHRONIZED.',
-    relayUnfinished: 'BEARING INCOMPLETE',
-    relayLinkAnnouncement: 'Relay {id} connected. {count} of 3 signals restored.',
-    relayDiscovered: 'Relay {id}: carrier signal received. Switch to CAM 02 to establish link.',
-    relayBeaconAria: 'Inspect relay buoy {id} in the shoreline camera',
-    relaySelectedAnnouncement: 'Relay {id}. Log opened.',
-    archiveLabel: 'RECEIVED DATA / ARCHIVE',
-    transmission2Button: 'AUDIO / 002',
-    transmission2ButtonAria: 'Replay newly received voice transmission 002',
-    transmission2Meta: 'NCBS / DISTRESS RADIO · NIGHT SHIFT',
-    transmission2Title: 'THE BEARING STILL WON’T HOLD.',
-    transmission2Frequency: '96.4 MHz / RECORDING 002',
-    transmission2TranscriptLabel: 'TRANSCRIPT / DISTRESS RADIO 002',
-    transmission2Line1: '…Alex here. I can see all three buoys again. Good. That’s really good.',
-    transmission2Line2: 'But we still have no position. Their timestamps keep slipping. Relay A is our reference.',
-    transmission2Line3: 'Bring the other two traces into the same timing. Then we should get a bearing. I’ll stay on this channel.',
-    transmission2Footer: 'SENDER ID: NCBS · SOURCE NOT VERIFIED',
-    transmission2Announcement: 'New recording 002 received. Signal alignment now available.',
-    syncButton: 'SYNC / 3',
-    syncButtonAria: 'Open synchronization for all three relays',
-    syncMeta: 'NCBS / DIRECTION FINDER · PHASE ALIGNMENT',
-    syncTitle: 'SIGNAL ALIGNMENT',
-    syncDescription: 'Align the first click of each stored three-click ID with the first click of A. Gaps within the group distinguish real IDs from interference. A remains the reference.',
-    syncLabelB: 'RELAY B / TIME OFFSET',
-    syncLabelC: 'RELAY C / TIME OFFSET',
-    syncGraphAria: 'Three click traces with interference groups. Stored gaps: A 140 and 290, B 430 and 140, C 290 and 430 milliseconds. Identify the real group and align its first click with A.',
-    syncPending: 'SIGNATURES OFFSET · COMPARE ECHO GAPS',
-    syncAligned: 'SIGNATURES ALIGNED · CALIBRATION AVAILABLE',
-    syncComplete: 'BEARING SYNCHRONIZED · RETURN CHANNEL STANDBY',
-    syncAction: 'CALIBRATE BEARING',
-    syncActionDone: 'SYNCHRONIZED',
-    syncAnnouncement: 'All three relays synchronized. Return channel can be prepared.',
-
-    warningRecordingButton: 'AUDIO / 003 · PLAY',
-    warningRecordingAria: 'Play disrupted transmission on 102.4 MHz on CAM 01',
-    warningTranscriptButton: 'TRANSCRIPT / 003',
-    warningTranscriptAria: 'Open transcript of the received signal fragment',
-    warningMeta: 'NCBS / UNIDENTIFIED RECEPTION',
-    warningTitle: 'INCOMPLETE TRANSMISSION',
-    warningFrequency: '102.4 MHz / SIGNAL FRAGMENT 003',
-    warningTranscriptLabel: 'TRANSCRIPT / FRAGMENTS ONLY',
-    warningLine1: '…[STATIC] …a… trap— …[SIGNAL LOST]…',
-    warningLine2: '…we’re… trying… to get out… [INTERFERENCE]…',
-    warningLine3: '…don’— …[OVERLAPPING]… activ— …[CONNECTION LOST]…',
-    warningFooter: 'UNKNOWN ORIGIN · INCOMPLETE TRANSCRIPT',
-    warningReceived: 'Weak voice carrier detected on 102.4 MHz.',
-    warningPlaying: 'Fragmented transmission received on 102.4 MHz.',
-    warningFinished: 'Signal fragment fully received.',
-    warningBlocked: 'Playback blocked. Start the signal manually on 102.4 MHz.',
-    decisionMeta: 'NCBS / CONNECTION PROTOCOL',
-    decisionEyebrow: 'RETURN CHANNEL / MANUAL AUTHORIZATION',
-    decisionTitle: 'WHAT SHOULD I DO?',
-    decisionDescription: 'The broken transmission has ended. Alex is still waiting for the return signal.',
-    decisionRescueTitle: 'CONTINUE FOLLOWING THE SIGNAL',
-    decisionRescueDescription: 'Prepare the return channel for Alex and the missing night shift.',
-    decisionIsolateTitle: 'ISOLATE RETURN CHANNEL',
-    decisionIsolateDescription: 'Shut down the transmitter and establish no connection.',
-    decisionNote: 'THIS DECISION CANNOT BE UNDONE.',
-    decisionRescueStatus: 'RETURN CHANNEL AUTHORIZED · PULSE NOT YET SENT',
-    decisionIsolateStatus: 'RETURN CHANNEL ISOLATED · NO TRANSMISSION',
-    decisionRouteAnnouncement: 'Choice permanently recorded.',
-    uplinkMeta: 'NCBS / EMERGENCY · RETURN CHANNEL',
-    uplinkDescription: 'Three bearings linked. Phase alignment stable. Location pulse ready to transmit.',
-    uplinkAction: 'TRANSMIT RESCUE PULSE',
-    uplinkAria: 'Transmit one-time rescue location pulse and start the final sequence',
-    uplinkPending: 'RETURN CHANNEL READY · AUTHORIZATION REQUIRED',
-    finalLock: 'RETURN CHANNEL ACTIVE · ESTABLISHING CONNECTION',
-    finalTriangle: 'THREE BEARINGS ACTIVE · UNKNOWN GEOMETRY',
-    finalOpening: 'UNKNOWN SOURCE · SIGNAL EXCEEDS MEASUREMENT RANGE',
-    finalOpen: 'CONNECTION OPEN · SOURCE UNKNOWN',
-    finalIsolating: 'RETURN CHANNEL DISCONNECTED · RELAYS GOING OFFLINE',
-    finalSealed: 'TRANSMITTER SILENT · NO RETURN CARRIER',
-    finalLockedCamera: 'Camera switch failed. Shoreline feed forced.',
-    finalOpenCaption: 'CONNECTION OPEN',
-    finalSealedCaption: 'NO CARRIER',
-    finalMonitorLock: 'EMERGENCY SIGNAL ACTIVE',
-    finalMonitorOpen: 'UNKNOWN CARRIER',
-    finalMonitorSealed: 'TRANSMISSION ENDED',
-    finalReceiverOpen: 'INTERFERENCE / MAX',
-    finalReceiverSealed: 'NO CARRIER',
-    finalStartAnnouncement: 'Rescue pulse transmitted. Camera two now has the feed.',
-    finalEndAnnouncement: 'Unknown carrier detected. Connection remains open.',
-    finalSealedAnnouncement: 'Return channel isolated. Transmitter is silent.',
-    messageMeta: 'RECOVERED OBJECT / 001',
-    messageSubtitle: 'RECOVERED / MESSAGE BOTTLE',
-    messageTitle: 'ONE MINUTE IS MISSING.',
-    messageBody1: 'The recording ends too soon. The tape kept running after the distress call.',
-    messageBody2: 'I only heard the rest once. A code was written in the margin of the log: 91 / 3.',
-    messageBody3: 'The mast light is not blinking because of a fault. Perhaps it holds an answer to where they went.',
-    messageFooter: 'NO DATE · NO SIGNATURE',
-    stateDescriptions: {
-      stranger: 'A narrow foreign carrier. Breath and mechanical clicks emerge from the static.',
-      normal: 'An ordinary coastal feed. The beacon and weather remain stable.',
-      interference: 'The transmission loses clarity. Fog and interference increase.',
-      unknown: 'An unknown frequency interferes with the transmission. Its origin is unclear.',
-      voice: 'An unidentified voice was recorded on this frequency.',
-      relayA: 'A weak relay carrier. Position data is not yet verified.',
-      relayB: 'A weak relay carrier. Position data is not yet verified.',
-      relayC: 'A weak relay carrier. Position data is not yet verified.',
-      warning: 'A weak voice signal is bleeding into the station.',
-    },
-  },
 });
 
 const root = document.documentElement;
 const coastVideo = document.querySelector('#coast-video');
 const stateDescription = document.querySelector('#state-description');
-const languageToggle = document.querySelector('#language-toggle');
 const pauseButton = document.querySelector('#pause-toggle');
 const pauseLabel = document.querySelector('#pause-label');
 const soundToggle = document.querySelector('#sound-toggle');
@@ -445,6 +273,7 @@ const anomalyMeter = document.querySelector('#anomaly-meter');
 const anomalyBars = [...document.querySelectorAll('.readout-bars i')];
 const transmissionToggle = document.querySelector('#transmission-toggle');
 const transmission2Toggle = document.querySelector('#transmission-2-toggle');
+const transmission4Toggle = document.querySelector('#transmission-4-toggle');
 const transmissionDialog = document.querySelector('#transmission-dialog');
 const transmissionClose = document.querySelector('#transmission-close');
 const transmissionAudio = document.querySelector('#transmission-audio');
@@ -479,7 +308,6 @@ const scene = {
   channel: /** @type {SignalState | null} */ ('normal'),
   frequency: CHANNELS.normal.frequency,
   source: /** @type {SceneSource} */ ('artwork'),
-  language: 'de',
   paused: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   soundMuted: false,
   cameraBlackoutTimerId: 0,
@@ -553,7 +381,7 @@ const investigation = new Investigation({
 
 const ending = new Ending({
   scene, investigation, soundscape,
-  onLanguage: toggleLanguage, onPause: togglePause, onMute: toggleSound,
+  onPause: togglePause, onMute: toggleSound,
   onTakeover: () => {
     cancelAnimationFrame(scene.finale.animationFrameId);
     scene.finale.animationFrameId = 0;
@@ -561,48 +389,28 @@ const ending = new Ending({
   },
 });
 
-/** Ein gemeinsamer Sprachwechsel für Empfangsgerät und Abschlussansicht. */
-function toggleLanguage() {
-  const wasPlaying = !transmissionAudio.paused;
-  scene.language = scene.language === 'de' ? 'en' : 'de';
-  updateTranslations();
-  updateSoundLabel();
-  ending.render();
-  if (scene.relays.unlocked) {
-    if (wasPlaying && !ending.active && (scene.audio.currentRecording !== '003' || canReceiveWarning())) {
-      void playTransmission({ restart: true });
-    } else {
-      transmissionAudio.pause();
-      transmissionAudio.setAttribute('src', `assets/transmission-${scene.audio.currentRecording}-${scene.language}.mp3`);
-      transmissionAudio.load();
-    }
-  }
-}
+/** Setzt die deutschen Beschriftungen ohne doppelte Markup-Strukturen. */
+function renderTexts() {
+  const texts = TEXTS;
+  root.lang = 'de';
 
-/** Synchronisiert die übersetzten Texte ohne doppelte Markup-Strukturen. */
-function updateTranslations() {
-  const texts = TRANSLATIONS[scene.language];
-  root.lang = scene.language;
-
-  document.querySelectorAll('[data-i18n]').forEach(element => {
-    const key = element.dataset.i18n;
+  document.querySelectorAll('[data-copy]').forEach(element => {
+    const key = element.dataset.copy;
     if (typeof texts[key] === 'string') {
       element.textContent = texts[key];
     }
   });
 
-  document.querySelectorAll('[data-i18n-aria]').forEach(element => {
-    const key = element.dataset.i18nAria;
+  document.querySelectorAll('[data-copy-aria]').forEach(element => {
+    const key = element.dataset.copyAria;
     if (typeof texts[key] === 'string') {
       element.setAttribute('aria-label', texts[key]);
     }
   });
 
-  infoToggle.setAttribute('aria-label', scene.language === 'de' ? 'Informationen und Rechtliches' : 'Information and legal notices');
+  infoToggle.setAttribute('aria-label', 'Informationen und Rechtliches');
   infoToggle.title = infoToggle.getAttribute('aria-label');
   stateDescription.textContent = getStateDescription(texts);
-  languageToggle.textContent = scene.language === 'de' ? 'EN' : 'DE';
-  languageToggle.setAttribute('aria-label', scene.language === 'de' ? 'Switch to English' : 'Zu Deutsch wechseln');
   document.querySelector('#top-nav').setAttribute('aria-label', texts.topNavAria);
   document.querySelector('#source-switch').setAttribute('aria-label', texts.sourceAria);
 
@@ -612,8 +420,11 @@ function updateTranslations() {
   messageClose.setAttribute('aria-label', texts.close);
   anomalyMeter.setAttribute('aria-label', texts.anomalyMeter);
   transmissionToggle.textContent = scene.audio.blocked && scene.audio.currentRecording === '001' ? texts.transmissionPlayAction : texts.transmissionButton;
-  transmission2Toggle.textContent = scene.audio.blocked && scene.audio.currentRecording === '002' ? (scene.language === 'de' ? 'AUDIO / 002 · STARTEN' : 'AUDIO / 002 · PLAY') : texts.transmission2Button;
+  transmission2Toggle.textContent = scene.audio.blocked && scene.audio.currentRecording === '002' ? ('AUDIO / 002 · STARTEN') : texts.transmission2Button;
   transmission2Toggle.setAttribute('aria-label', texts.transmission2ButtonAria);
+  transmission4Toggle.textContent = scene.audio.blocked && scene.audio.currentRecording === '004'
+    ? ('AUDIO / 004 · STARTEN') : 'AUDIO / 004';
+  transmission4Toggle.setAttribute('aria-label', texts.transmission4Title);
   document.querySelector('#archive-label').textContent = texts.archiveLabel;
   document.querySelector('.receiver__archive').setAttribute('aria-label', texts.archiveLabel);
   transmissionToggle.setAttribute('aria-label', texts.transmissionButtonAria);
@@ -761,18 +572,19 @@ function sendRelayPing() {
 
 /** Synchronisiert alle Relaisanzeigen, ohne eine zweite Spielzustandslogik aufzubauen. */
 function refreshRelayUI() {
-  const texts = TRANSLATIONS[scene.language];
+  const texts = TEXTS;
   const count = scene.relays.linked.size;
   relayToggle.hidden = !scene.relays.unlocked;
   relayToggle.textContent = texts.relayButton.replace('{count}', String(count));
   syncToggle.hidden = count !== RELAYS.length;
   transmission2Toggle.hidden = !scene.audio.secondReceived;
+  transmission4Toggle.hidden = !scene.sync.completed;
   const ping = scene.relays.ping;
   const tuned = getTunedRelay();
   relayProbe.hidden = !scene.relays.unlocked || count === RELAYS.length || Boolean(scene.finale.mode);
   relayLink.disabled = scene.paused || Boolean(scene.finale.mode) || scene.source !== 'video' || ping.inFlight;
   relayLink.textContent = tuned ? `${texts.relayLinkAction} / ${tuned.id}` : texts.relayPingAction;
-  const seconds = (ping.responseMs / 1000).toLocaleString(scene.language === 'de' ? 'de-DE' : 'en-US', {
+  const seconds = (ping.responseMs / 1000).toLocaleString('de-DE', {
     minimumFractionDigits: 2, maximumFractionDigits: 2,
   });
   relayPingStatus.textContent = scene.source !== 'video' ? texts.relayPingCamera
@@ -817,14 +629,14 @@ function linkTunedRelay() {
   window.dispatchEvent(new CustomEvent('deadair:relaylinked', {
     detail: { id: relay.id, frequency: relay.frequency, count },
   }));
-  receiverEventStatus.textContent = TRANSLATIONS[scene.language].relayLinkAnnouncement
+  receiverEventStatus.textContent = TEXTS.relayLinkAnnouncement
     .replace('{id}', relay.id).replace('{count}', String(count));
   if (count === RELAYS.length) {
     scene.story.stage = 'relays-linked';
     scene.audio.secondReceived = true;
     syncSignalVisuals();
     void playTransmission({ restart: true, recording: '002' });
-    receiverEventStatus.textContent = TRANSLATIONS[scene.language].transmission2Announcement;
+    receiverEventStatus.textContent = TEXTS.transmission2Announcement;
     window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
     window.dispatchEvent(new CustomEvent('deadair:relaysrestored', { detail: { total: count } }));
   }
@@ -868,7 +680,7 @@ function formatSyncOffset(value) {
 
 /** Synchronisiert Status, Barrierefreiheit und Abschlussschaltfläche der Peilung. */
 function updateSyncUI() {
-  const texts = TRANSLATIONS[scene.language];
+  const texts = TEXTS;
   const aligned = isSignalAligned('B', syncOffsetB.value) && isSignalAligned('C', syncOffsetC.value);
   document.querySelector('#sync-meta').textContent = texts.syncMeta;
   document.querySelector('#sync-title').textContent = texts.syncTitle;
@@ -907,7 +719,8 @@ function commitSignalAlignment() {
   scene.sync.completed = true;
   scene.story.stage = 'synchronized';
   investigation.record('nameNote');
-  investigation.showCaption('nameSignal');
+  investigation.showCaption(null);
+  void playTransmission({ restart: true, recording: '004' });
   investigation.record('warningNote');
   scene.anomaly.syncStartedAtMs = scene.anomaly.activeMs;
   syncSignalVisuals();
@@ -916,7 +729,7 @@ function commitSignalAlignment() {
   updateWarningUI();
   updateAnomalyMeter();
   updateUplinkUI();
-  receiverEventStatus.textContent = TRANSLATIONS[scene.language].syncAnnouncement;
+  receiverEventStatus.textContent = TEXTS.syncAnnouncement;
   window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
   window.dispatchEvent(new CustomEvent('deadair:relayaligned', { detail: { relays: ['A', 'B', 'C'] } }));
 }
@@ -956,7 +769,7 @@ function receiveWarningSignal() {
     window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
   }
 
-  receiverEventStatus.textContent = TRANSLATIONS[scene.language].warningReceived;
+  receiverEventStatus.textContent = TEXTS.warningReceived;
   void playTransmission({ restart: true, recording: '003' });
   updateWarningUI();
   updateUplinkUI();
@@ -965,7 +778,7 @@ function receiveWarningSignal() {
 
 /** Aktualisiert nur den Live-Empfang und den endgültigen Rückkanalstatus. */
 function updateWarningUI() {
-  const texts = TRANSLATIONS[scene.language];
+  const texts = TEXTS;
   const receivedHere = canReceiveWarning();
   warningRecordingToggle.hidden = !receivedHere || !scene.audio.blocked || scene.audio.currentRecording !== '003';
   warningRecordingToggle.textContent = texts.warningRecordingButton;
@@ -1026,11 +839,11 @@ function chooseRoute(route) {
   scene.warning.choice = route;
   scene.story.stage = route === 'rescue' ? 'rescue-standby' : 'signal-isolated';
   syncSignalVisuals();
-  stateDescription.textContent = getStateDescription(TRANSLATIONS[scene.language]);
+  stateDescription.textContent = getStateDescription(TEXTS);
   updateWarningUI();
   updateAnomalyMeter();
   decisionDialog.close();
-  receiverEventStatus.textContent = TRANSLATIONS[scene.language].decisionRouteAnnouncement;
+  receiverEventStatus.textContent = TEXTS.decisionRouteAnnouncement;
   updateUplinkUI();
   if (route === 'isolate') startIsolationEnding();
   window.dispatchEvent(new CustomEvent('deadair:routechosen', { detail: { route, permanent: true } }));
@@ -1040,7 +853,7 @@ function chooseRoute(route) {
 /** Der Rettungssender wird nach erfolgreichem Abgleich freigeschaltet.
  * Ein gefundenes, aber nicht zu Ende gehörtes Warnsignal sperrt den Impuls bis zur Entscheidung. */
 function updateUplinkUI() {
-  const texts = TRANSLATIONS[scene.language];
+  const texts = TEXTS;
   const warningPending = scene.warning.found && scene.warning.choice === null;
   uplinkPanel.hidden = !scene.sync.completed || scene.warning.choice === 'isolate'
     || warningPending || Boolean(scene.finale.mode);
@@ -1054,7 +867,7 @@ function updateUplinkUI() {
 
 /** Textliche und technische Ausgabe aller Finalphasen, einschließlich Kamera- und Bedienlock. */
 function updateFinaleUI() {
-  const texts = TRANSLATIONS[scene.language];
+  const texts = TEXTS;
   root.dataset.finale = scene.finale.phase;
   const isolated = scene.finale.mode === 'isolate';
   const localReady = ['local-ready', 'local-view'].includes(scene.finale.phase);
@@ -1097,7 +910,7 @@ function canTransmitRescue() {
 function transmitRescuePulse() {
   if (!canTransmitRescue()) return;
   startFinale('breach');
-  receiverEventStatus.textContent = TRANSLATIONS[scene.language].finalStartAnnouncement;
+  receiverEventStatus.textContent = TEXTS.finalStartAnnouncement;
   window.dispatchEvent(new CustomEvent('deadair:rescuepulse', {
     detail: { relays: ['A', 'B', 'C'], warningFound: scene.warning.found },
   }));
@@ -1135,7 +948,7 @@ function startFinale(mode) {
     document.querySelector('#local-offline').hidden = false;
   }
   frequencyInput.disabled = true;
-  for (const button of [evidenceLog, transmissionToggle, transmission2Toggle, relayToggle,
+  for (const button of [evidenceLog, transmissionToggle, transmission2Toggle, transmission4Toggle, relayToggle,
     syncToggle, warningRecordingToggle, warningTranscriptToggle, relayLink]) {
     button.disabled = true;
   }
@@ -1252,7 +1065,7 @@ function updateFinale() {
   applyInterference(scene.finale.mode === 'breach' ? 100 : 0);
   updateAnomalyMeter();
   startGateFrames();
-  receiverEventStatus.textContent = getStateDescription(TRANSLATIONS[scene.language]);
+  receiverEventStatus.textContent = getStateDescription(TEXTS);
   if (phase === 'open' || phase === 'sealed') {
     window.dispatchEvent(new CustomEvent('deadair:finalecomplete', {
       detail: { mode: scene.finale.mode, phase },
@@ -1283,10 +1096,16 @@ function startGateFrames() {
   scene.finale.animationFrameId = requestAnimationFrame(renderGateFrame);
 }
 
+/** Liefert lokale Aufnahmen; der persönliche Funkspruch behält seine Originalsprache. */
+function getTransmissionSource(recording) {
+  return `assets/transmission-${recording}-de.mp3`;
+}
+
 /** Zeichnet das gemeinsame Audiotranskript abhängig vom archivierten Funkspruch. */
 function renderTransmission() {
-  const texts = TRANSLATIONS[scene.language];
-  const suffix = scene.audio.currentRecording === '003' ? 'Warning' : (scene.audio.currentRecording === '002' ? '2' : '');
+  const texts = TEXTS;
+  const suffix = scene.audio.currentRecording === '003' ? 'Warning'
+    : (scene.audio.currentRecording === '004' ? '4' : (scene.audio.currentRecording === '002' ? '2' : ''));
   const field = key => suffix === 'Warning' ? texts[`warning${key}`] : texts[`transmission${suffix}${key}`];
   const fields = {
     '#transmission-meta': 'Meta', '#transmission-title': 'Title',
@@ -1505,7 +1324,7 @@ function setFrequency(value, { automated = false } = {}) {
   const channel = isChannelAvailable(detectedChannel) ? detectedChannel : null;
   const previousChannel = scene.channel;
   const config = channel ? CHANNELS[channel] : null;
-  const texts = TRANSLATIONS[scene.language];
+  const texts = TEXTS;
   scene.frequency = frequency;
   scene.channel = channel;
   frequencyInput.value = frequency.toFixed(1);
@@ -1596,7 +1415,7 @@ function finishAutoScan() {
   scene.relays.unlocked = true;
   root.dataset.relays = 'active';
   refreshRelayUI();
-  receiverEventStatus.textContent = TRANSLATIONS[scene.language].transmissionReceivedAnnouncement;
+  receiverEventStatus.textContent = TEXTS.transmissionReceivedAnnouncement;
   updateAnomalyMeter();
 
   // Der erste Empfang beginnt automatisch; das Archiv bleibt zum erneuten Hören erhalten.
@@ -1626,11 +1445,12 @@ function updateAutoScan() {
  * Auf erneuten Archivaufruf wird die vorhandene Aufnahme verwendet. */
 async function playTransmission({ restart = false, recording = scene.audio.currentRecording } = {}) {
   if (!scene.relays.unlocked || (recording === '002' && !scene.audio.secondReceived)
+    || (recording === '004' && !scene.sync.completed)
     || (recording === '003' && (!scene.audio.thirdReceived || !canReceiveWarning()))) return;
 
   scene.audio.currentRecording = recording;
   renderTransmission();
-  const source = `assets/transmission-${recording}-${scene.language}.mp3`;
+  const source = getTransmissionSource(recording);
   if (transmissionAudio.getAttribute('src') !== source) {
     transmissionAudio.setAttribute('src', source);
     transmissionAudio.load();
@@ -1649,19 +1469,21 @@ async function playTransmission({ restart = false, recording = scene.audio.curre
     await transmissionAudio.play();
     if (requestId !== scene.audio.requestId) return;
     scene.audio.blocked = false;
-    transmissionToggle.textContent = TRANSLATIONS[scene.language].transmissionButton;
-    transmission2Toggle.textContent = TRANSLATIONS[scene.language].transmission2Button;
-    warningRecordingToggle.textContent = TRANSLATIONS[scene.language].warningRecordingButton;
+    transmissionToggle.textContent = TEXTS.transmissionButton;
+    transmission2Toggle.textContent = TEXTS.transmission2Button;
+    transmission4Toggle.textContent = 'AUDIO / 004';
+    warningRecordingToggle.textContent = TEXTS.warningRecordingButton;
     receiverEventStatus.textContent = recording === '003'
-      ? TRANSLATIONS[scene.language].warningPlaying
-      : TRANSLATIONS[scene.language].transmissionPlayingAnnouncement.replace('001', recording);
+      ? TEXTS.warningPlaying
+      : TEXTS.transmissionPlayingAnnouncement.replace('001', recording);
     updateWarningUI();
   } catch (error) {
     if (requestId !== scene.audio.requestId) return;
     scene.audio.blocked = true;
-    const texts = TRANSLATIONS[scene.language];
+    const texts = TEXTS;
     if (recording === '001') transmissionToggle.textContent = texts.transmissionPlayAction;
-    else if (recording === '002') transmission2Toggle.textContent = scene.language === 'de' ? 'AUDIO / 002 · STARTEN' : 'AUDIO / 002 · PLAY';
+    else if (recording === '002') transmission2Toggle.textContent = 'AUDIO / 002 · STARTEN';
+    else if (recording === '004') transmission4Toggle.textContent = 'AUDIO / 004 · STARTEN';
     else warningRecordingToggle.textContent = texts.warningRecordingButton;
     receiverEventStatus.textContent = recording === '003' && error.name === 'NotAllowedError'
       ? texts.warningBlocked
@@ -1674,6 +1496,7 @@ async function playTransmission({ restart = false, recording = scene.audio.curre
 function openTransmission(recording = '001') {
   if (scene.finale.mode) return;
   if (recording === '002' && !scene.audio.secondReceived) return;
+  if (recording === '004' && !scene.sync.completed) return;
   if (recording === '003') return; // AUDIO / 003 ist nur als Live-Empfang auf CAM 01 hörbar.
 
   const changed = scene.audio.currentRecording !== recording;
@@ -1703,7 +1526,7 @@ async function syncVideo() {
 
 /** Kennzeichnet Bildquelle und Inhalt für Sehende und Assistenztechnologien. */
 function updateSourceDescription() {
-  const texts = TRANSLATIONS[scene.language];
+  const texts = TEXTS;
   document.querySelector('#scene').setAttribute('aria-label', scene.source === 'local' ? investigation.copy.localAria : texts[scene.source === 'artwork' ? 'sceneArtworkAria' : 'sceneVideoAria']);
 }
 
@@ -1744,8 +1567,8 @@ function showBlockedCamera() {
   void soundscape.play('glitch');
 
   cameraStatus.textContent = scene.finale.mode
-    ? TRANSLATIONS[scene.language].finalLockedCamera
-    : TRANSLATIONS[scene.language].cameraBlocked;
+    ? TEXTS.finalLockedCamera
+    : TEXTS.cameraBlocked;
   cameraBlackout.classList.add('is-active');
   window.clearTimeout(scene.cameraBlackoutTimerId);
   scene.cameraBlackoutTimerId = window.setTimeout(() => {
@@ -1789,7 +1612,7 @@ function setSource(source) {
 /** Spiegelt den Wiedergabezustand im Button und für Assistenztechnologien. */
 function updatePlaybackLabel() {
   pauseButton.setAttribute('aria-pressed', String(scene.paused));
-  pauseLabel.textContent = TRANSLATIONS[scene.language][scene.paused ? 'resume' : 'pause'];
+  pauseLabel.textContent = TEXTS[scene.paused ? 'resume' : 'pause'];
   document.querySelector('#pause-icon').textContent = scene.paused ? '▶' : 'Ⅱ';
   root.dataset.paused = String(scene.paused);
 }
@@ -1801,14 +1624,22 @@ function toggleSound() {
   updateSoundLabel();
 }
 
-/** Synchronisiert die deutsch/englische Beschriftung des Tonschalters. */
+/** Synchronisiert Tonschalter und Lautstärkeregler beider Ansichten. */
 function updateSoundLabel() {
-  const texts = TRANSLATIONS[scene.language];
+  const texts = TEXTS;
   const label = scene.soundMuted ? texts.soundOff : texts.soundOn;
-  soundToggle.textContent = 'SND';
+  soundToggle.textContent = label;
   soundToggle.setAttribute('aria-label', scene.soundMuted ? texts.soundEnable : texts.soundDisable);
   soundToggle.setAttribute('title', label);
   soundToggle.setAttribute('aria-pressed', String(!scene.soundMuted));
+  document.querySelectorAll('[data-master-volume]').forEach(input => {
+    input.value = String(Math.round(soundscape.volume * 100));
+    input.setAttribute('aria-valuetext', `${input.value} Prozent`);
+  });
+  document.querySelectorAll('[data-volume-output]').forEach(output => {
+    output.textContent = `${Math.round(soundscape.volume * 100)} %`;
+  });
+  ending.render();
 }
 
 /** Stoppt beziehungsweise aktiviert die visuellen Bewegungen und das Video. */
@@ -2019,9 +1850,14 @@ function init() {
   document.querySelectorAll('#source-switch button[data-source], #local-camera').forEach(button => {
     button.addEventListener('click', () => setSource(button.dataset.source));
   });
-  languageToggle.addEventListener('click', toggleLanguage);
   pauseButton.addEventListener('click', togglePause);
   soundToggle.addEventListener('click', toggleSound);
+  document.querySelectorAll('[data-master-volume]').forEach(input => {
+    input.addEventListener('input', () => {
+      soundscape.setVolume(Number(input.value) / 100);
+      updateSoundLabel();
+    });
+  });
   coastVideo.addEventListener('play', () => {
     if (isSeaFrozen() || scene.finale.phase === 'sealed') coastVideo.pause();
   });
@@ -2040,6 +1876,7 @@ function init() {
   messageDialog.addEventListener('close', collectBottle);
   transmissionToggle.addEventListener('click', () => openTransmission('001'));
   transmission2Toggle.addEventListener('click', () => openTransmission('002'));
+  transmission4Toggle.addEventListener('click', () => openTransmission('004'));
   relayToggle.addEventListener('click', () => openRelayLog());
   syncToggle.addEventListener('click', openSyncDialog);
   uplinkAction.addEventListener('click', transmitRescuePulse);
@@ -2074,14 +1911,14 @@ function init() {
     scene.audio.resumeAfterVisibility = false;
     if (scene.audio.currentRecording === '003') {
       if (!canReceiveWarning()) return;
-      receiverEventStatus.textContent = TRANSLATIONS[scene.language].warningFinished;
+      receiverEventStatus.textContent = TEXTS.warningFinished;
       if (!scene.warning.playbackCompleted) {
         scene.warning.playbackCompleted = true;
         if (transmissionDialog.open) transmissionDialog.close();
         openDecisionDialog();
       }
     } else {
-      receiverEventStatus.textContent = TRANSLATIONS[scene.language].transmissionFinishedAnnouncement.replace('001', scene.audio.currentRecording);
+      receiverEventStatus.textContent = TEXTS.transmissionFinishedAnnouncement.replace('001', scene.audio.currentRecording);
     }
   });
   transmissionClose.addEventListener('click', () => transmissionDialog.close());
@@ -2124,7 +1961,7 @@ function init() {
 
   setFrequency(scene.frequency);
   applySource(scene.source);
-  updateTranslations();
+  renderTexts();
   updatePlaybackLabel();
   updateSoundLabel();
 

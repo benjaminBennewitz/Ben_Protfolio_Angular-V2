@@ -7,9 +7,7 @@
 import { MORSE_DIGITS, RELAY_PATTERNS, createMorseTimeline, isMorseOn } from './signal-patterns.js';
 
 const COPY = Object.freeze({
-  de: {
-    nameSignal: 'TEXTTRÄGER / 96.4 MHz: „Danke, Ronnie.“',
-    nameNote: 'Nach dem Abgleich erscheint ein Textträger: „Danke, Ronnie.“ Alex wurde der Name des Ermittlers nie genannt.',
+    nameNote: 'Nach dem Abgleich sagt die Stimme: „Danke, Ronnie.“ Alex wurde der Name des Ermittlers nie genannt.',
     newLabel: 'NEU', unreadNotes: '{count} neue Notizen', unreadNote: '1 neue Notiz', notesTotal: 'Notizen: {total}.', notesOpen: 'Empfangsprotokoll öffnen',
     notes: 'NOTIZEN', notesTitle: 'EMPFANGSPROTOKOLL', notesEmpty: 'Noch keine ungewöhnlichen Beobachtungen gesichert.',
     reference: 'ZAHLENCODE', referenceTitle: 'LICHTTELEGRAFIE', referenceBody: 'NCBS / WARTUNGSKARTE · Kurzer Impuls = Punkt. Langer Impuls = Strich. Fünf Impulse ergeben eine Ziffer; die längere Pause trennt die Ziffern.',
@@ -22,7 +20,7 @@ const COPY = Object.freeze({
     relay1: 'Erstes Relais verbunden: Im Rücksignal taucht erneut das trockene Klickmuster auf.',
     relay2: 'Zweites Relais verbunden: Die Station meldet eine Bildabweichung auf CAM 01.',
     windows: 'CAM 01: Nach der zweiten Verbindung gingen die Fenster nacheinander aus und wieder an. Das sah nach einer Antwort aus.',
-    relay3: 'Alex: „Ich sehe die drei Bojen wieder.“ Die Antwort kam unmittelbar nach der dritten Verbindung. Eine Bestätigung wurde von hier noch gar nicht gesendet.',
+    relay3: 'Alex: „Die Relais funken wieder.“ Die Antwort kam unmittelbar nach der dritten Verbindung. Eine Bestätigung wurde von hier noch gar nicht gesendet.',
     syncNote: 'Jede Boje wiederholt eine Dreierkennung. Die kurzen Gruppen im Oszilloskop sehen ähnlich aus; erst die Pausen zeigen, welche Gruppe zur gespeicherten Kennung gehört.',
     warningNote: 'Nach dem Abgleich erlischt der Leuchtkegel auf CAM 01. Der Mast sendet wieder einen Zahlencode. Alex wartet auf den Rückkanal.',
     localNote: 'Beide bekannten Kameras sind offline. Ein nicht registrierter lokaler Eingang hat sich danach selbst angemeldet.',
@@ -33,34 +31,6 @@ const COPY = Object.freeze({
     localAria: 'Lokale Überwachungskamera: eine erwachsene Frau lächelt auf einer langsam schaukelnden Schaukel im leeren Stationshof.',
     match: 'GLEICHER RHYTHMUS', different: 'ANDERE FOLGE', comparePrompt: 'Vergleiche beide gespeicherten Klickspuren. Stammt der Rhythmus aus derselben Quelle?', compareRetry: 'Höre besonders auf die kurze und die längere Pause zwischen den Klicks.', compareDone: 'Übereinstimmung im Protokoll gesichert. Die Identität des Senders bleibt ungeklärt.',
     compare: 'FUNKSPUREN VERGLEICHEN', compareHint: 'Gesicherte Beobachtungen bleiben hier lesbar. Ein Hinweis ist noch kein Beweis.',
-  },
-  en: {
-    nameSignal: 'TEXT CARRIER / 96.4 MHz: “Thank you, Ronnie.”',
-    nameNote: 'After alignment, a text carrier appears: “Thank you, Ronnie.” The investigator never gave Alex his name.',
-    newLabel: 'NEW', unreadNotes: '{count} new notes', unreadNote: '1 new note', notesTotal: 'Notes: {total}.', notesOpen: 'Open reception log',
-    notes: 'NOTES', notesTitle: 'RECEPTION LOG', notesEmpty: 'No unusual observations recorded yet.',
-    reference: 'NUMBER CODE', referenceTitle: 'LIGHT TELEGRAPHY', referenceBody: 'NCBS / SERVICE CARD · Short pulse = dot. Long pulse = dash. Five pulses form a digit; the longer gap separates digits.',
-    source: 'Clicking. A strained breath right against the microphone.', sourceLost: 'The voice cuts out. The carrier remains empty.', lost: 'CARRIER LOST',
-    sourceNote: '90.2 MHz: Six seconds of breath, moaning and a recurring click pattern. Then no carrier. The recording could not be repeated.',
-    sourceInterrupted: '90.2 MHz: A breath and three uneven clicks. Leaving the frequency permanently cut the carrier.',
-    morseNote: 'The note mentions 91 / 3. On CAM 01 the mast pulses in short and long intervals. The receiver service card explains number codes.',
-    alexNote: 'Alex asks for the three relays. Dry, recurring clicks can be heard behind his voice. The station ID is unverified.',
-    matchedNote: 'The clicks behind Alex sound like the sequence on the now silent 90.2-MHz carrier. The same source – or just the same interference?',
-    relay1: 'First relay linked: The dry click pattern returns in the response.',
-    relay2: 'Second relay linked: The station reports an image discrepancy on CAM 01.',
-    windows: 'CAM 01: After the second connection, the windows went dark and lit up in sequence. It looked like a response.',
-    relay3: 'Alex: “I can see the three buoys again.” The response arrived immediately after the third connection. No confirmation has been sent from here yet.',
-    syncNote: 'Each buoy repeats a three-click ID. Short groups in the scope look alike; the gaps identify the group that matches the stored signature.',
-    warningNote: 'After alignment, the beam on CAM 01 goes out. The mast sends another number code. Alex is waiting for the return channel.',
-    localNote: 'Both known cameras are offline. An unregistered local input has subsequently connected itself.',
-    signature: 'SIGNATURE / {id}', signatureAria: 'Play stored click signature of relay {id}', signatureMissing: 'Not recorded yet',
-    signaturePlaying: 'Three-click signature {id}: {pattern}. Gaps: {intervals}.',
-    local: 'CAM 03 / LOCAL', localReady: 'UNREGISTERED INPUT / CAM 03', localFeed: 'LOCAL FEED · NO STATION ID',
-    offline: 'CAM 01 / 02 · OFFLINE', creak: 'A slow creak. The swing is moving.', laugh: 'The woman laughs. Dry clicking between breaths.',
-    localAria: 'Local surveillance camera: an adult woman smiles on a slowly moving swing in the empty station courtyard.',
-    match: 'SAME RHYTHM', different: 'DIFFERENT SEQUENCE', comparePrompt: 'Compare both stored click traces. Does the rhythm come from the same source?', compareRetry: 'Listen closely to the short and the longer gap between the clicks.', compareDone: 'Match recorded in the log. The identity of the sender remains unknown.',
-    compare: 'COMPARE RADIO TRACES', compareHint: 'Recorded observations remain available here. A clue is not proof.',
-  },
 });
 
 export class Investigation {
@@ -161,7 +131,7 @@ export class Investigation {
     this.render();
   }
 
-  get copy() { return COPY[this.scene.language]; }
+  get copy() { return COPY; }
 
   /** Die Verbindung der beiden Quellen muss der Spieler selbst bestätigen. */
   renderComparison() {
@@ -402,7 +372,7 @@ export class Investigation {
       this.notesNotice.setAttribute('aria-label', `${this.unreadLabel}. ${texts.notesOpen}`);
     }
     for (const id of ['notes-close', 'morse-close']) {
-      document.querySelector(`#${id}`).setAttribute('aria-label', this.scene.language === 'de' ? 'Schließen' : 'Close');
+      document.querySelector(`#${id}`).setAttribute('aria-label', 'Schließen');
     }
     document.querySelector('#local-scene').setAttribute('aria-label', texts.localAria);
     const list = document.querySelector('#notes-list');

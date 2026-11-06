@@ -1,7 +1,7 @@
 /**
  * @file Lokale Soundeffekte und analoger Audiomix für DEAD//AIR.
  * @description Lädt synthetisierte Audiodateien bedarfsorientiert, bündelt
- * Spielereignisse und berücksichtigt Browser-Autoplay, Sprache, Pause und Stummschaltung.
+ * Spielereignisse und berücksichtigt Browser-Autoplay, Lautstärke, Pause und Stummschaltung.
  * @author Benjamin Bennewitz
  */
 
@@ -26,6 +26,7 @@ const SOUND_FILES = Object.freeze({
   charge: 'sfx-portal-charge.mp3',
   opening: 'sfx-portal-opening.mp3',
   hum: 'sfx-portal-hum.mp3',
+  dimension: 'sfx-dimension-presence.mp3',
   isolated: 'sfx-signal-isolated.mp3',
 });
 
@@ -64,6 +65,7 @@ class Soundscape {
     this.lastTuneAt = 0;
     this.paused = false;
     this.muted = false;
+    this.volume = .7;
     this.voicePlaying = false;
     this.scanning = false;
     this.finale = false;
@@ -82,7 +84,7 @@ class Soundscape {
       this.output = this.context.createGain();
       this.fxBus = this.context.createGain();
       this.bedBus = this.context.createGain();
-      this.output.gain.value = .65;
+      this.output.gain.value = this.muted ? 0 : .65 * this.volume;
       this.fxBus.gain.value = 1;
       this.bedBus.gain.value = 0;
       this.fxBus.connect(this.output);
@@ -189,7 +191,11 @@ class Soundscape {
     const requested = name;
     this.bedName = name;
     const buffer = await this.load(name);
-    if (!buffer || !this.context || this.bedName !== requested || this.disposed) return;
+    if (!buffer) {
+      if (this.bedName === requested) this.bedName = null;
+      return;
+    }
+    if (!this.context || this.bedName !== requested || this.disposed) return;
     if (this.bed) {
       try { this.bed.stop(); } catch { /* Quelle wurde bereits beendet. */ }
       this.bed.disconnect();
@@ -233,9 +239,20 @@ class Soundscape {
     this.muted = Boolean(value);
     if (this.voiceAudio) this.voiceAudio.muted = this.muted;
     if (!this.context) return;
-    this.output.gain.setTargetAtTime(this.muted ? 0 : .65, this.context.currentTime, .04);
+    this.output.gain.setTargetAtTime(this.muted ? 0 : .65 * this.volume, this.context.currentTime, .04);
     if (!this.muted && !this.paused && !document.hidden) void this.unlock();
     this.updateBed();
+  }
+
+  /** Regelt alle Effekte, Atmosphären und die HTML-Sprachaufnahme gemeinsam.
+   * @param {number} value Gesamtlautstärke von 0 bis 1; Stummschaltung bleibt separat.
+   */
+  setVolume(value) {
+    if (!Number.isFinite(value)) return;
+    this.volume = Math.max(0, Math.min(1, value));
+    if (this.voiceAudio) this.voiceAudio.volume = this.volume;
+    if (this.context) this.output.gain.setTargetAtTime(
+      this.muted ? 0 : .65 * this.volume, this.context.currentTime, .04);
   }
 
   /** Pausen und Hintergrund-Tabs stoppen auch lange Soundflächen. */
@@ -250,6 +267,8 @@ class Soundscape {
   /** Spielzustandsereignisse steuern die Soundeffekte ohne Duplikatlogik in app.js. */
   attach(voiceAudio) {
     this.voiceAudio = voiceAudio;
+    voiceAudio.volume = this.volume;
+    voiceAudio.muted = this.muted;
     const tryUnlock = () => { void this.unlock(); };
     window.addEventListener('pointerdown', tryUnlock, { passive: true });
     window.addEventListener('keydown', tryUnlock);

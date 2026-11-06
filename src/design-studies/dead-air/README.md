@@ -19,7 +19,7 @@ The fictional North Coast Broadcasting System (NCBS) is framed as a decommission
 ## Current prototype
 
 - Native HTML, CSS and JavaScript ES module; no app framework, bundler or runtime dependencies.
-- English and German translations of all control instructions and descriptions; broadcast branding remains in English.
+- German-only game interface and recordings; a shared mute switch and master volume control cover speech, effects and atmosphere.
 - Manual FM tuning from 87.5 to 108.0 MHz in 0.1 MHz increments; no developer-only channel presets or interference-strength control.
 - Three channel frequencies with staged unlocks: `normal` (87.6 MHz) is initially available, `interference` (91.3 MHz) becomes receivable after reading the message bottle, and `unknown` (103.7 MHz) after the radio mast starts signaling. Before an unlock, they report `NO CARRIER`.
 - Fixed interference values of 15%, 60%, and 91% respectively; UNKNOWN darkens the camera image by ~30% relative to the previous implementation.
@@ -56,7 +56,7 @@ These remain visual states. The three frequencies are initial gameplay candidate
 dead-air/
 ├── index.html              # Broadcast workstation and accessible information dialog
 ├── styles.css              # Design tokens, viewport layout, states, responsive, reduced motion
-├── scripts/app.js          # FM tuning, automatic states, language, audio-event hook and dialog controls
+├── scripts/app.js          # FM tuning, automatic states, audio-event hook and dialog controls
 ├── assets/
 │   ├── station-mark.svg    # Editable broadcast tower signet
 │   ├── favicon.svg         # Reduced signet for browser tabs
@@ -83,7 +83,7 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 2. Produce and isolate tower, station, aerials, mist and anomaly photo assets at matching light and perspective.
 3. Replace the flattened still with controllable photographic layers and coordinate-tracked movement.
 4. Define the discoverable frequencies and their prerequisites (clues, cameras, interaction), then bind player events to the existing receiver instead of creating UI-only state buttons.
-5. Replace the synthetic demo recordings with original, naturally spoken DE/EN shift-worker voices and professionally designed radio interference. The current audio plays automatically when permitted by the browser; no microphone permissions are used.
+5. Replace the synthetic demo recordings with original, naturally spoken German shift-worker voices and professionally designed radio interference. The current audio plays automatically when permitted by the browser; no microphone permissions are used.
 6. Audit keyboard and screen-reader paths, performance, reduced-motion and mobile readability as the concept matures.
 
 
@@ -218,7 +218,7 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 - Statt eines Kamerabildes erscheint für 320 ms ein abruptes, vollständig schwarzes Signalbild; danach ist CAM 01 unverändert sichtbar.
 - Video, Flaschenpost, Morsecode und ausgewählter Kamerabutton bleiben in diesem Fall unverändert.
 - Sobald 91.3 MHz verlassen oder die nächste Story-Phase erreicht wird, funktionieren reguläre harte Kamerawechsel wieder.
-- Der blockierte Wechsel wird für Screenreader auf Deutsch und Englisch angesagt.
+- Der blockierte Wechsel wird für Screenreader auf Deutsch angesagt.
 
 
 ## Patch 29 – Anomalieindikator im Receiver-Readout
@@ -258,10 +258,10 @@ Angular only lists the study via `src/app/core/data/design-studies.ts`; it does 
 
 - Bei erfolgreichem automatischem Tuning auf **96.4 MHz** beginnt die erste Nachricht ohne weiteren Klick zu spielen; ein Dialog wird dabei **nicht automatisch geöffnet**.
 - Aus dem Off meldet sich angeblich **Alex von der verschwundenen NCBS-Nachtschicht**. Sie bittet um Unterstützung bei einer vermeintlich defekten Küstenpeilung. Der tatsächliche Absender sind die dimensionsfremden Wesen.
-- Das Archiv (`AUDIO / 001`) öffnet das Transkript und erlaubt die erneute Wiedergabe über einen nativen, barrierefreien Audio-Player. Die MP3-Dateien sind lokal unter `assets/transmission-001-de.mp3` und `assets/transmission-001-en.mp3` abgelegt.
+- Das Archiv (`AUDIO / 001`) öffnet das Transkript und erlaubt die erneute Wiedergabe über einen nativen, barrierefreien Audio-Player. Die MP3-Dateien sind lokal unter `assets/transmission-001-de.mp3` abgelegt.
 - Tonfassungen sind **vorläufige synthetische Funk-Demos** (eSpeak und analoger Bandpass/Rauschen), damit Story und Audio technisch bereits vollständig funktionieren. Für das finale Erlebnis sollen sie durch glaubwürdig eingesprochene, professionell bearbeitete Aufnahmen mit gleichem Namen ersetzt werden.
 - Ist das automatische Abspielen durch Browser-Autoplay-Regeln blockiert, wird der Archivbutton zur klar sichtbaren manuellen Startaktion. Keine Falschanzeige einer laufenden Wiedergabe.
-- Pause und unsichtbare Browser-Tabs halten die Aufnahme an. Ein Sprachwechsel während der Wiedergabe startet die Aufnahme in der gewählten Sprache neu.
+- Pause und unsichtbare Browser-Tabs halten die Aufnahme an. Die gemeinsame Lautstärkeregelung wirkt auf Aufnahmen, Effekte und Atmosphäre.
 
 ### Erzähl- und Rätselkonzept: vermeintliche Rettungspeilung
 
@@ -277,7 +277,7 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 ## Patch 35 – Unknown Warning / Decision Point
 
 - Nach PHASE 05 muss der Spieler das zweite Mastsignal auf CAM 01 selbst untersuchen. Die Station schaltet darauf die weibliche Warnaufnahme AUDIO / 003 frei.
-- Die Aufnahme ist als DE/EN-Demofassung verfügbar, wird automatisch empfangen und anschließend archiviert. Wie bei den übrigen Aufnahmen gelten die bestehenden Pause-, Sichtbarkeits- und Autoplay-Schutzmaßnahmen.
+- Die Aufnahme ist auf Deutsch verfügbar, wird automatisch empfangen und anschließend archiviert. Wie bei den übrigen Aufnahmen gelten die bestehenden Pause-, Sichtbarkeits- und Autoplay-Schutzmaßnahmen.
 - Nach der erstmaligen Wiedergabe öffnet sich der native Entscheidungsdialog. Bei Autoplay-Sperren ist die Entscheidung über das Archiv erreichbar.
 - Zwei vorläufige Wege: **Alex folgen / Rettung vorbereiten** oder **Warnung folgen / Sender isolieren**. Es wird dabei noch kein Signal gesendet. Der finale Rückkanal bleibt PHASE 06 vorbehalten.
 - Der gewählte Weg wird im Story-State geführt und über `deadair:routechosen` veröffentlicht. Die Entscheidung darf vor dem finalen Senden noch geändert werden; ein alternatives Ende ist noch nicht festgelegt.
@@ -362,7 +362,7 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Relais-Pings senden einen Ton beim Tastendruck. Das Echo kommt **erst** nach der in `sendRelayPing()` berechneten Laufzeit; bei Nichterreichbarkeit erklingt ein kurzes Squelch.
 - Die bestehende Sprachaufnahme hat Vorrang: das analoge Rauschen wird bei aktiver Stimme automatisch abgesenkt.
 - Tuning, Auto-Suchlauf, Relaisverbindung, Synchronisation, Kamerasignalfehler, Anomalie und Finalsequenz erhalten passende Geräusche.
-- Ein kompakter, tastaturbedienbarer Ton-Schalter neben Pause schaltet Soundeffekte **und** HTML-Sprachnachrichten gemeinsam stumm (DE/EN).
+- Ein kompakter, tastaturbedienbarer Ton-Schalter neben Pause schaltet Soundeffekte **und** HTML-Sprachnachrichten gemeinsam stumm (DE).
 - `PAUSE` und inaktive Tabs unterbrechen die Audiowiedergabe; der Audiokontext wird erst nach einer echten Nutzereingabe freigeschaltet.
 - Das originale Story-Timing, Relaisrätsel, Videos und die vorhandenen Sprachdateien bleiben unverändert.
 
@@ -458,7 +458,7 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 ### Ermittlungsbogen
 
 - Ein schmaler, zunächst verfügbarer Fremdträger auf **90.2 MHz** spielt einmalig etwa sechs Sekunden Atem-, Stöhn- und Klickgeräusche. Nach dem Abriss oder vorzeitigem Verlassen ist er für diese Sitzung dauerhaft verstummt. Der manuelle Regler bleibt erreichbar; der automatische Suchlauf überspringt den verlorenen Träger.
-- Das Klickmotiv liegt jetzt leise unter den unveränderten gesprochenen Inhalten von AUDIO 001 (DE/EN). Das erste verbundene Relais gibt es ebenfalls zurück.
+- Das Klickmotiv liegt jetzt leise unter den unveränderten gesprochenen Inhalten von AUDIO 001 (DE). Das erste verbundene Relais gibt es ebenfalls zurück.
 - Die Flaschenpost verweist auf das absichtliche Mastblinken. Eine am Empfänger verfügbare NCBS-Wartungskarte zeigt die zehn Morseziffern. Licht und 720-Hz-Ton folgen derselben Impulsliste und aktiven Spieluhr; die früheren unabhängigen CSS-Morsekeyframes entfallen.
 - NOTIZEN sichert nur bereits entdeckte Beobachtungen. Die beiden gespeicherten Klickspuren lassen sich akustisch und als Rhythmusnotation vergleichen; die Verbindung muss der Spieler selbst bestätigen. Die verlorene Stimme selbst wird nicht archiviert oder wiederholt.
 - Nach der ersten Relaisverbindung kehrt das Klickmotiv zurück. Nach der zweiten wartet eine sechssekündige Fensterreaktion auf den nächsten CAM-01-Aufruf. Nach der dritten reagiert Alex unmittelbar, obwohl der lokale Rückkanal noch keine Bestätigung gesendet hat. Die Reihenfolge A/B/C bleibt frei.
@@ -547,3 +547,7 @@ Der bestehende Hof und das freigegebene Portalbild werden wiederverwendet. `gate
 - Fehler vor der Korrektur im Browser reproduziert: Morsezustand „off“, aber berechnete Deckkraft weiterhin 1. Danach zeigen beide Codes tatsächlich Deckkraft 1 beziehungsweise 0.045, passend zum Audio-Gate. Pause und Wiederaufnahme sowie das Ende des Codes nach Empfang der Warnung geprüft.
 - Hinweisablauf nach sechs Sekunden, persistenter Ungelesen-Zähler, wiederholte bereits bekannte Hinweise, Zurückhalten während SYNC, Klick auf den Hinweis, Markierung beim Öffnen und neue Einträge im bereits geöffneten Protokoll geprüft.
 - Deutsch/Englisch und zugängliche Zählerbeschriftung sowie 320/390/1280 px Breite und Reduced Motion geprüft. JavaScript-/CSS-Syntax und CRLF geprüft.
+
+## Audio und Sprache – aktueller Stand
+
+DEAD//AIR verwendet ausschließlich deutsche Texte und Funkaufnahmen. Sprachschalter und englische Texttabellen sind entfernt. Der gemeinsame Lautstärkeregler (0–100 %) und die separate Stummschaltung gelten für alle Funkaufnahmen, Effekte und Atmosphären und bleiben beim Wechsel in die Endsequenzen synchron. Stummschalten behält den eingestellten Pegel.

@@ -8,6 +8,7 @@
 import { drawGate, PORTAL_REVEAL_END_MS } from './gate-visual.js';
 import { soundscape } from './soundscape.js';
 import { Investigation } from './investigation.js';
+import { Ending } from './ending.js';
 import { sampleRelayWave, isSignalAligned } from './signal-patterns.js';
 
 /** @typedef {'normal' | 'interference' | 'unknown' | 'voice' | 'relayA' | 'relayB' | 'relayC' | 'warning' | 'stranger'} SignalState */
@@ -542,13 +543,41 @@ const scene = {
 
 /** Gemeinsame Hauptuhr: Modale Hinweise halten Ereignisse an. */
 function isStoryRunning() {
-  return !scene.paused && !document.hidden && !document.querySelector('dialog[open]');
+  return !scene.paused && !document.hidden && !document.querySelector('dialog[open]:not(#ending-dialog)');
 }
 
 const investigation = new Investigation({
   scene, root, soundscape, isRunning: isStoryRunning,
   refreshFrequency: () => setFrequency(scene.frequency),
 });
+
+const ending = new Ending({
+  scene, investigation, soundscape,
+  onLanguage: toggleLanguage, onPause: togglePause, onMute: toggleSound,
+  onTakeover: () => {
+    cancelAnimationFrame(scene.finale.animationFrameId);
+    scene.finale.animationFrameId = 0;
+    coastVideo.pause();
+  },
+});
+
+/** Ein gemeinsamer Sprachwechsel für Empfangsgerät und Abschlussansicht. */
+function toggleLanguage() {
+  const wasPlaying = !transmissionAudio.paused;
+  scene.language = scene.language === 'de' ? 'en' : 'de';
+  updateTranslations();
+  updateSoundLabel();
+  ending.render();
+  if (scene.relays.unlocked) {
+    if (wasPlaying && !ending.active && (scene.audio.currentRecording !== '003' || canReceiveWarning())) {
+      void playTransmission({ restart: true });
+    } else {
+      transmissionAudio.pause();
+      transmissionAudio.setAttribute('src', `assets/transmission-${scene.audio.currentRecording}-${scene.language}.mp3`);
+      transmissionAudio.load();
+    }
+  }
+}
 
 /** Synchronisiert die übersetzten Texte ohne doppelte Markup-Strukturen. */
 function updateTranslations() {
@@ -877,6 +906,8 @@ function commitSignalAlignment() {
   if (!isSignalAligned('B', syncOffsetB.value) || !isSignalAligned('C', syncOffsetC.value)) return;
   scene.sync.completed = true;
   scene.story.stage = 'synchronized';
+  investigation.record('nameNote');
+  investigation.showCaption('nameSignal');
   investigation.record('warningNote');
   scene.anomaly.syncStartedAtMs = scene.anomaly.activeMs;
   syncSignalVisuals();
@@ -1088,6 +1119,7 @@ function startFinale(mode) {
   scene.audio.resumeAfterPause = false;
   scene.audio.resumeAfterVisibility = false;
   scene.finale.mode = mode;
+  ending.prepare(mode);
   scene.finale.phase = mode === 'breach' ? 'lighthouse' : 'isolating';
   scene.finale.startedAtMs = scene.anomaly.activeMs;
   scene.finale.lastFrameAtMs = 0;
@@ -1231,7 +1263,7 @@ function updateFinale() {
 /** Rendern mit maximal 30 Bildern/Sekunde, nur während aktiver Finaldarstellung. */
 function renderGateFrame(timestamp) {
   scene.finale.animationFrameId = 0;
-  if (scene.finale.mode !== 'breach' || scene.paused || document.hidden || scene.finale.phase === 'lighthouse') return;
+  if (ending.active || scene.finale.mode !== 'breach' || scene.paused || document.hidden || scene.finale.phase === 'lighthouse') return;
   if (!scene.finale.lastFrameAtMs || timestamp - scene.finale.lastFrameAtMs >= 32) {
     drawGate(gateCanvas, getGateElapsedMs(),
       scene.finale.mode, window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -1245,7 +1277,7 @@ function renderGateFrame(timestamp) {
 
 /** Pausierte oder verdeckte Tabs verbrauchen keine Zeichen- oder Animationszeit. */
 function startGateFrames() {
-  if (scene.finale.mode !== 'breach' || scene.paused || document.hidden || scene.finale.animationFrameId
+  if (ending.active || scene.finale.mode !== 'breach' || scene.paused || document.hidden || scene.finale.animationFrameId
     || scene.finale.phase === 'lighthouse') return;
   scene.finale.lastFrameAtMs = 0;
   scene.finale.animationFrameId = requestAnimationFrame(renderGateFrame);
@@ -1927,6 +1959,7 @@ function runStoryClock() {
   }
 
   investigation.tick();
+  ending.tick();
   updateAnomalyMeter();
   scene.story.clockTimeoutId = window.setTimeout(runStoryClock, 200);
 }
@@ -1960,6 +1993,7 @@ function init() {
   introDialog.addEventListener('close', () => {
     scene.story.lastTick = performance.now();
   });
+  ending.attach();
   investigation.attach();
   soundscape.attach(transmissionAudio);
   soundscape.setPaused(scene.paused);
@@ -1973,6 +2007,8 @@ function init() {
   const debugMode = new URLSearchParams(window.location.search).get('debug') === '1';
   devConsole.hidden = !debugMode;
   if (debugMode) {
+    document.querySelector('#dev-ending-dimension').addEventListener('click', () => { debugJumpToFinal('breach', true); ending.start('dimension'); });
+    document.querySelector('#dev-ending-swing').addEventListener('click', () => { debugJumpToFinal('isolate'); ending.start('swing'); });
     document.querySelector('#dev-investigation').addEventListener('click', debugInvestigation);
     document.querySelector('#dev-gate-start').addEventListener('click', () => debugJumpToFinal('breach'));
     document.querySelector('#dev-gate-open').addEventListener('click', () => debugJumpToFinal('breach', true));
@@ -1983,21 +2019,7 @@ function init() {
   document.querySelectorAll('#source-switch button[data-source], #local-camera').forEach(button => {
     button.addEventListener('click', () => setSource(button.dataset.source));
   });
-  languageToggle.addEventListener('click', () => {
-    const wasPlaying = !transmissionAudio.paused;
-    scene.language = scene.language === 'de' ? 'en' : 'de';
-    updateTranslations();
-    updateSoundLabel();
-    if (scene.relays.unlocked) {
-      if (wasPlaying && (scene.audio.currentRecording !== '003' || canReceiveWarning())) {
-        void playTransmission({ restart: true });
-      } else {
-        transmissionAudio.pause();
-        transmissionAudio.setAttribute('src', `assets/transmission-${scene.audio.currentRecording}-${scene.language}.mp3`);
-        transmissionAudio.load();
-      }
-    }
-  });
+  languageToggle.addEventListener('click', toggleLanguage);
   pauseButton.addEventListener('click', togglePause);
   soundToggle.addEventListener('click', toggleSound);
   coastVideo.addEventListener('play', () => {
@@ -2089,6 +2111,7 @@ function init() {
     startGateFrames();
   });
   window.addEventListener('pagehide', () => {
+    ending.dispose();
     investigation.dispose();
     resetRelayPing();
     coastVideo.pause();

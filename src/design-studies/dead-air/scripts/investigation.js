@@ -8,6 +8,8 @@ import { MORSE_DIGITS, RELAY_PATTERNS, createMorseTimeline, isMorseOn } from './
 
 const COPY = Object.freeze({
   de: {
+    nameSignal: 'TEXTTRÄGER / 96.4 MHz: „Danke, Ronnie.“',
+    nameNote: 'Nach dem Abgleich erscheint ein Textträger: „Danke, Ronnie.“ Alex wurde der Name des Ermittlers nie genannt.',
     notes: 'NOTIZEN', notesTitle: 'EMPFANGSPROTOKOLL', notesEmpty: 'Noch keine ungewöhnlichen Beobachtungen gesichert.',
     reference: 'ZAHLENCODE', referenceTitle: 'LICHTTELEGRAFIE', referenceBody: 'NCBS / WARTUNGSKARTE · Kurzer Impuls = Punkt. Langer Impuls = Strich. Fünf Impulse ergeben eine Ziffer; die längere Pause trennt die Ziffern.',
     source: 'Klicken. Ein gepresster Atemzug direkt am Mikrofon.', sourceLost: 'Die Stimme bricht ab. Der Träger bleibt leer.', lost: 'TRÄGER VERLOREN',
@@ -32,6 +34,8 @@ const COPY = Object.freeze({
     compare: 'FUNKSPUREN VERGLEICHEN', compareHint: 'Gesicherte Beobachtungen bleiben hier lesbar. Ein Hinweis ist noch kein Beweis.',
   },
   en: {
+    nameSignal: 'TEXT CARRIER / 96.4 MHz: “Thank you, Ronnie.”',
+    nameNote: 'After alignment, a text carrier appears: “Thank you, Ronnie.” The investigator never gave Alex his name.',
     notes: 'NOTES', notesTitle: 'RECEPTION LOG', notesEmpty: 'No unusual observations recorded yet.',
     reference: 'NUMBER CODE', referenceTitle: 'LIGHT TELEGRAPHY', referenceBody: 'NCBS / SERVICE CARD · Short pulse = dot. Long pulse = dash. Five pulses form a digit; the longer gap separates digits.',
     source: 'Clicking. A strained breath right against the microphone.', sourceLost: 'The voice cuts out. The carrier remains empty.', lost: 'CARRIER LOST',

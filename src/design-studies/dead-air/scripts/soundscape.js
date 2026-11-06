@@ -124,7 +124,7 @@ class Soundscape {
   }
 
   /** Spielt einen einzelnen, lokal gespeicherten Effekt mit begrenzter Lautstärke. */
-  async play(name, volume = EFFECT_VOLUMES[name] ?? .4, offsetSeconds = 0) {
+  async play(name, volume = EFFECT_VOLUMES[name] ?? .4, offsetSeconds = 0, pan = 0) {
     if (this.disposed || this.paused || this.muted || document.hidden || !this.context) return;
     const context = this.context;
     const request = (this.requests.get(name) ?? 0) + 1;
@@ -140,12 +140,18 @@ class Soundscape {
     source.buffer = buffer;
     gain.gain.value = volume;
     source.connect(gain);
-    gain.connect(this.fxBus);
+    const panner = pan && this.context.createStereoPanner ? this.context.createStereoPanner() : null;
+    if (panner) {
+      panner.pan.value = Math.max(-1, Math.min(1, pan));
+      gain.connect(panner);
+      panner.connect(this.fxBus);
+    } else gain.connect(this.fxBus);
     this.active.set(name, source);
     source.onended = () => {
       if (this.active.get(name) === source) this.active.delete(name);
       source.disconnect();
       gain.disconnect();
+      panner?.disconnect();
     };
     source.start(0, Math.max(0, Math.min(offsetSeconds, buffer.duration - .001)));
   }

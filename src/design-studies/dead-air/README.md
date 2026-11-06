@@ -501,3 +501,34 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Dialoge und Layout bei 320/390/750 px sowie Querformat; zusätzliche kleine Desktopfenster und Reduced Motion geprüft. Kein horizontaler Seitenüberlauf; Rückkanal bleibt erreichbar.
 - Reine Berechnungen für Morse-Pulsgrenzen, Pausen und Wiederholung sowie richtige/falsche Kennungsabgleiche geprüft. JavaScript-/CSS-Syntax, lokale Imports, Assetpfade und CRLF geprüft.
 - Eine unvorbereitete menschliche Spielrunde zur tatsächlichen Spielzeit und ein subjektiver Hörtest im Zielgerät stehen noch aus.
+
+
+## Patch 56 – Beyond the Receiver / Ronnie
+
+- Der Geräteaufkleber nennt den Ermittler nun beiläufig **RONNIE / FIELD INVESTIGATION**. Nach dem Signalabgleich erscheint auf dem Empfänger ein Textträger: „Danke, Ronnie.“ Die Beobachtung wird im Protokoll gesichert. Die bestehenden gesprochenen Alex-Aufnahmen werden nicht verändert; eine neue gesprochene Namenszeile ist in diesem Patch nicht enthalten.
+- Eine gemeinsame, einmalige Lichtblende löst nach beiden bisherigen Enden die Geräteansicht ab. Dichte dunkle Wolken und warmes oranges Gegenlicht übernehmen den gesamten Browser-Viewport. Ein nativer Dialog hält Fokus und Eingaben in der Schlusssequenz.
+- **Torweg:** 38 Sekunden nach dem Rettungsimpuls, nach Öffnung und erster Wolkenenthüllung, beginnt der Übergang. Das vorhandene Dimensionsmotiv wird ohne Monitorfassung sichtbar. Maus oder Touch-Ziehen verschieben den Blick; W/↑, S/↓, Mausrad und ein Touchbutton steuern eine begrenzte Vorwärts-/Rückwärtsbewegung durch Tiefenebenen. Das ist eine atmosphärische 2.5D-Szene, keine frei begehbare 3D-Welt.
+- Am Ende des Weges ertönt das bekannte Klicken nah auf der linken Stereoseite, bevor das Bild schwarz wird und der Status erscheint. Ohne Bewegung schließt dieselbe Sequenz nach etwa 42 Sekunden Erkundungszeit ab. „Zum Status“ und Escape erlauben ein direktes Überspringen.
+- **Schaukelweg:** Das CAM-03-Bild und das Lachen aus Patch 55 bleiben zunächst erhalten. Zehn Sekunden nach dem Öffnen von CAM 03 startet dieselbe Lichtblende. Danach zeigt der bildschirmfüllende Stationshof zuerst eine leere Schaukel. Beim erneuten Verdichten des Nebels wird sie unbemerkt durch Ronnie mit unkenntlichem Gesicht ersetzt. Die beiden Ebenen teilen dieselbe Schwingbewegung; der Nebel gibt Ronnie anschließend frei. Nach 19 Sekunden Schlusssequenz erscheint der Status.
+- Der Endscreen zeigt **NCBS / VERBINDUNG BEENDET**, **Ermittler: RONNIE**, **Status: NICHT ERREICHBAR** sowie „Erneut empfangen“ und „Zurück zum Archiv“. Die gewählte Schlusskulisse bleibt dahinter schwach bewegt sichtbar.
+- `scripts/ending.js` kapselt den Viewport-Übergang, die Erkundung, Wolkentexturen und Schlusssteuerung. Ereigniszeiten kommen weiterhin aus der vorhandenen Hauptuhr; Pause und Hintergrund-Tabs halten die Sequenz an. Der Schlussdialog ist gezielt von der normalen Dialogpause ausgenommen, damit seine eigene Handlung läuft.
+- Bilddateien werden beim Start des jeweiligen bisherigen Finales vorab geladen. Wolken werden einmal in eine Textur gezeichnet und danach gecacht verschoben. Canvas-Auflösung ist auf DPR 1.5 und die reguläre Darstellung auf ungefähr 30 fps begrenzt. Reduced Motion reduziert die Überbelichtung und hält die automatische Schaukelbewegung ruhig.
+- Deutsch/Englisch, Pause, Stummschaltung, Tastaturbedienung, Touch, kleine Viewports und Querformat sind berücksichtigt. Browser-Zoom über Strg+Mausrad wird nicht abgefangen. Es gibt keine neuen Laufzeitabhängigkeiten oder externen Dienste.
+- Zwei zusätzliche Debugtasten (`?debug=1`): **ENDE / DIMENSION** und **ENDE / RONNIE**. Reguläre Spielwege bleiben an ihre vorhandenen Voraussetzungen gebunden.
+
+### Neue Bilddateien
+
+Mit dem integrierten Bildgenerator aus der vorhandenen transparenten Schaukel-Figur abgeleitet und als WebP eingebunden:
+
+- `assets/ending-empty-swing.webp`: Frau vollständig entfernt; leerer Sitz und Ketten bleiben am ursprünglichen Platz, transparenter Hintergrund.
+- `assets/ending-ronnie.webp`: gleiche Pose und Ketten, erwachsener Ermittler in olivfarbener Feldjacke mit kleinem orangefarbenem Namensstreifen RONNIE, dunkler Hose und Stiefeln; Gesicht als glatte fotografische Verzerrung ohne erkennbare Merkmale. Keine Verletzungen, kein Gore, keine leuchtenden Augen. Transparenter Hintergrund und gleicher Bildausschnitt.
+
+Der bestehende Hof und das freigegebene Portalbild werden wiederverwendet. `gate-visual.js` und `portal-hanging-shadows.webp` bleiben bytegleich zu Patch 55.
+
+### Validierung Patch 56
+
+- Die vorhandene Portalenthüllung läuft vor dem automatischen Übergang vollständig an; der Schlussdialog startet erst nach der festgelegten Wartezeit.
+- Isolation, manuelle CAM-03-Auswahl und erstes Lachen laufen vor dem Übergang zum leeren beziehungsweise besetzten Schaukelbild.
+- Browserprüfungen: Umsehen, Weitergehen bis zur Schwarzblende, Pause/Fortsetzen, Deutsch/Englisch, gedämpfte Blende bei Reduced Motion, Escape/Zum Status und Neustart in eine saubere Sitzung.
+- Statusdialog bei 320 × 740, 390 × 844 und 844 × 390 geprüft. Keine horizontale Seitenüberbreite; im flachen Querformat kann der Statusinhalt innerhalb seiner Karte gescrollt werden.
+- JavaScript-/CSS-Syntax, lokale Imports und Bildpfade sowie CRLF geprüft. Keine Änderung am freigegebenen Portal-Renderer oder Portalbild.

@@ -1049,6 +1049,8 @@ folio/
 │   │   │   │   ├── coastal-fog.webp
 │   │   │   │   ├── coast-loop.mp4
 │   │   │   │   ├── coast-poster.webp
+│   │   │   │   ├── ending-empty-swing.webp
+│   │   │   │   ├── ending-ronnie.webp
 │   │   │   │   ├── favicon.svg
 │   │   │   │   ├── lighthouse-beam.webp
 │   │   │   │   ├── local-courtyard.webp
@@ -1092,6 +1094,7 @@ folio/
 │   │   │   │   └── window-off-c.webp
 │   │   │   ├── scripts/
 │   │   │   │   ├── app.js
+│   │   │   │   ├── ending.js
 │   │   │   │   ├── gate-visual.js
 │   │   │   │   ├── investigation.js
 │   │   │   │   ├── signal-patterns.js

@@ -32,6 +32,7 @@
     <div class="dev-console__actions">
       <button id="dev-gate-start" type="button" aria-label="Tor-Finale ab Rettungsimpuls testen">TOR / START</button>
       <button id="dev-gate-open" type="button" aria-label="Direkt zum geöffneten Tor springen">TOR / OFFEN</button>
+      <button id="dev-ending-dimension" type="button">ENDE / DIMENSION</button><button id="dev-ending-swing" type="button">ENDE / RONNIE</button>
       <button id="dev-investigation" type="button">SPUREN / SYNC</button>
       <button id="dev-isolation" type="button" aria-label="Alternatives Isolationsende testen">ISOLATION</button>
     </div>
@@ -54,7 +55,7 @@
       <section class="monitor-area" aria-labelledby="monitor-title">
         <div class="monitor-area__header"><h2 id="monitor-title"><span id="monitor-camera-label">CAMERA 01</span> <span>//</span> NORTH COAST FEED</h2><div class="monitor-area__actions"><span class="indicator indicator--red" aria-hidden="true"></span> <span id="monitor-live-status" data-i18n="transmitting">ÜBERTRAGUNG AKTIV</span></div></div>
         <div class="television" role="group" aria-label="Analoger Monitor mit Küstenübertragung und Signalstörungen">
-          <div class="television__badge"><span>NCBS</span><span>MODEL 1993–C</span></div>
+          <div class="television__badge"><span>NCBS</span><span class="television__owner">RONNIE / FIELD INVESTIGATION</span></div>
           <div class="television__screen">
             <figure class="scene" id="scene" role="group" aria-label="Fotografische Küstenszene mit Meer und Leuchtturm, je nach Signalzustand mit Nebel und Lichteffekten">
               <img class="scene__artwork" src="assets/scene-poster.webp" alt="" width="1280" height="720" fetchpriority="high">
@@ -295,5 +296,24 @@
       </nav>
     </dialog>
   </div>
+  <dialog class="ending" id="ending-dialog" aria-labelledby="ending-title" aria-describedby="ending-description">
+    <div class="ending__world" id="ending-world" role="region">
+      <img class="ending__dimension" id="ending-dimension" data-asset="assets/portal-hanging-shadows.webp" alt="">
+      <div class="ending__courtyard">
+        <img id="ending-yard" data-asset="assets/local-courtyard.webp" alt="">
+        <div class="ending__rig" id="ending-rig"><img id="ending-empty" data-asset="assets/ending-empty-swing.webp" alt=""><img id="ending-ronnie" data-asset="assets/ending-ronnie.webp" alt=""></div>
+      </div>
+      <canvas class="ending__fog" id="ending-fog" aria-hidden="true"></canvas>
+    </div>
+    <div class="ending__flash" aria-hidden="true"></div><div class="ending__black" aria-hidden="true"></div>
+    <nav class="ending__tools" id="ending-tools" aria-label="Abschlusssteuerung" hidden><button id="ending-pause" type="button" aria-pressed="false">Pause</button><button id="ending-sound" type="button" aria-pressed="true">Ton aus</button><button id="ending-language" type="button">EN</button><button id="ending-skip" type="button">Zum Status</button></nav>
+    <p class="ending__description" id="ending-description" role="status" aria-live="polite"></p>
+    <div class="ending__movement" id="ending-movement" hidden><p id="ending-instructions"></p><button id="ending-forward" type="button">Weitergehen</button></div>
+    <section class="ending__card" id="ending-card" hidden>
+      <p class="ending__kicker" id="ending-kicker">NCBS / VERBINDUNG BEENDET</p><h2 id="ending-title" tabindex="-1">KEIN RÜCKSIGNAL</h2>
+      <dl><div><dt id="ending-who-label">Ermittler</dt><dd>RONNIE</dd></div><div><dt id="ending-status-label">Status</dt><dd id="ending-status-value">NICHT ERREICHBAR</dd></div></dl>
+      <div class="ending__actions"><button id="ending-restart" type="button">Erneut empfangen</button><a id="ending-archive" href="/archive">Zurück zum Archiv</a></div>
+    </section>
+  </dialog>
 </body>
 </html>

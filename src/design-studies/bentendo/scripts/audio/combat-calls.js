@@ -2,6 +2,11 @@ import { playSwordSwoosh } from './sword-swoosh.js';
 import { playSynthCall } from './synth-calls.js';
 
 export const COMBAT_CALLS={
+  'combat-pit-fall':[
+    {wave:'square',duration:0.14,pitches:[690,830,380],count:1,gap:0,delay:0,level:0.52},
+    {wave:'square',duration:0.16,pitches:[500,610,245],count:1,gap:0,delay:0.15,level:0.48},
+    {wave:'square',duration:0.21,pitches:[350,420,105],count:1,gap:0,delay:0.32,level:0.42},
+  ],
   'combat-hurt':[
     {wave:'square',duration:0.16,pitches:[290,180,120,155],count:1,gap:0,level:1.2},
     {wave:'noise',duration:0.055,pitches:[],count:1,gap:0,level:0.45},

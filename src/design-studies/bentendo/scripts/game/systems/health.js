@@ -20,11 +20,12 @@ export function trackDungeonVisit(game,room) {
   health.run=room.dungeon?{dungeon:room.dungeon,inventory:[...game.inventory],coins:game.coins}:null;
 }
 
-/** Zieht Treffer nur in aktiven Dungeons und außerhalb kurzer Unverwundbarkeit ab. @param {object} game Spiel. @param {number} amount Schaden in Lebenspunkten; 0,5 entspricht einem Viertelherz. */
-export function damageHero(game,amount) {
+/** Zieht Treffer nur in aktiven Dungeons und außerhalb kurzer Unverwundbarkeit ab. @param {object} game Spiel. @param {number} amount Schaden in Lebenspunkten; 0,5 entspricht einem Viertelherz. @param {string} [cue] Eigener Klang der Schadensquelle. */
+export function damageHero(game,amount,cue) {
   if (!game.room.dungeon || game.mode!=='world' || game.message || game.bagOpen || game.journalOpen || game.mapOpen || game.systemMenu || game.resting || game.hurtTime>0) return false;
   if (typeof amount!=='number' || !Number.isSafeInteger(amount*2) || amount<=0) return false;
-  game.health.hp=Math.max(0,game.health.hp-amount); game.hurtTime=1.1; game.sounds.push(game.health.hp?'combat-hurt':'combat-death-hero');
+  game.health.hp=Math.max(0,game.health.hp-amount); game.hurtTime=1.1; if (cue || game.health.hp) game.sounds.push(cue || 'combat-hurt');
+  if (!game.health.hp) game.sounds.push('combat-death-hero');
   if (!game.health.hp) defeatHero(game);
   return true;
 }

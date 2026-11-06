@@ -139,7 +139,7 @@ export class Game {
     if (!reduced && this.move.time < stepDuration(this.move)) return;
     if (pitAt(this.room,this.move.x,this.move.y)) {
       const {x,y}=this.move;
-      this.move=null; this.held=null; this.hurtTime=0; damageHero(this,2);
+      this.move=null; this.held=null; this.hurtTime=0; damageHero(this,2,'combat-pit-fall');
       if (!this.resting) this.rootFall={x,y,remaining:0.55};
       return true;
     }

@@ -182,7 +182,8 @@ test('Materialklänge: Audiofreigabe, Cache, SFX/Mute und Quellenfreigabe',mecha
 function combatProfiles() {
   const ctx=new SoundContext(),master=ctx.createGain(),effects={context:ctx,gain:master,disconnect:release},signatures=new Set();
   for (const cue of Object.keys(COMBAT_CALLS)) { playGameCue(effects,cue); signatures.add(JSON.stringify(COMBAT_CALLS[cue])); }
-  assert.equal(signatures.size,7);
+  assert.ok(COMBAT_CALLS['combat-pit-fall']);
+  assert.equal(signatures.size,Object.keys(COMBAT_CALLS).length);
   for (const source of ctx.sources) {
     const envelope=source.connections[0]; assert.equal(envelope.connections[0],master);
     assert.ok(source.stopped>source.started); assert.ok(source.stopped-source.started<0.5);
@@ -191,7 +192,7 @@ function combatProfiles() {
   const count=ctx.sources.length; ctx.state='suspended'; playGameCue(effects,'combat-hurt'); assert.equal(ctx.sources.length,count);
 }
 
-test('Kampfklänge: sieben unterschiedliche Profile am vorhandenen SFX-Ausgang',combatProfiles);
+test('Kampfklänge: unterschiedliche Profile am vorhandenen SFX-Ausgang',combatProfiles);
 
 /** Prüft den kräftigen Luftzug mit kurzem Metallnachklang am gemeinsamen SFX-Ausgang. */
 function swordAir() {

@@ -37,13 +37,38 @@ function exploreCamp(game) {
   game.enemies=[];
   useObject(game,'coins'); dismiss(game); assert.equal(game.coins,5);
   useObject(game,'aid'); dismiss(game); assert.ok(game.inventory.includes('Feldverband'));
-  useObject(game,'end'); dismiss(game);
+  exploreDepths(game);
   useObject(game,'west'); game.enemies=[];
   useObject(game,'west'); useObject(game,'exit');
   assert.equal(game.room.id,'east-lowland'); assert.equal(game.occupied(game.player.x,game.player.y),false);
 }
 
-test('Wurzelgrund: Gruben kosten ein Herz und drei Waldkammern sind durchgängig spielbar',rootRoute);
+/** Begeht beide Äste, lädt den Kampfzustand und prüft die einmalige Beute. */
+function exploreDepths(game) {
+  const route=[
+    ['east','root-fork'],['north','root-cache'],['south','root-fork'],
+    ['east','root-hollow'],['east','root-gallery'],['east','root-spring'],
+    ['west','root-gallery'],['west','root-hollow'],['west','root-fork'],
+    ['north','root-cache'],['south','root-fork'],['west','root-camp'],
+  ];
+  for (const [door,destination] of route) {
+    game.enemies=[];
+    useObject(game,door);
+    assert.equal(game.room.id,destination);
+    assert.equal(restoreGame(game,captureGame(game)),true);
+    if (destination==='root-cache') {
+      useObject(game,'resin-purse'); dismiss(game); assert.equal(game.coins,11);
+      useObject(game,'resin-note'); dismiss(game);
+    }
+    if (destination==='root-spring') {
+      useObject(game,'spring-lip'); dismiss(game);
+      useObject(game,'spring-bag'); dismiss(game);
+    }
+  }
+  game.enemies=[];
+}
+
+test('Wurzelgrund: Gruben kosten ein Herz und acht Waldkammern sind durchgängig spielbar',rootRoute);
 
 
 /** Sichert einen Debuglauf manuell, lädt ihn vom Titel und hält den normalen Stand getrennt. */

@@ -5,25 +5,65 @@ import { playerPosition,rect } from './primitives.js';
 
 const FACING={right:0,down:Math.PI/2,left:Math.PI,up:-Math.PI/2};
 
-/** Hält die Klinge erst angehoben und führt einen Viertelkreis bis exakt in Blickrichtung aus. @param {object} game Spiel. */
-export function weaponPose(game) {
-  const elapsed=WEAPON_TIMING.duration-game.attackTime,facing=game.attackFacing || game.player.facing;
-  const progress=game.reduced?1:Math.max(0,Math.min(1,(elapsed-WEAPON_TIMING.windup)/(WEAPON_TIMING.impact-WEAPON_TIMING.windup)));
-  const lift=(facing==='left'?1:-1)*Math.PI/2;
-  return {angle:FACING[facing]+lift*(1-progress),length:isSword(heroStats(game).weapon)?17:14};
+/** Winkel relativ zur Trefferachse: zurückziehen, beschleunigen, kurz durchziehen. @param {number} elapsed Verstrichene Angriffszeit. */
+function swordOffset(elapsed) {
+  const radians=Math.PI/180;
+  const {windup,impact,duration}=WEAPON_TIMING;
+  if (elapsed<windup) return -(40+15*Math.max(0,elapsed/windup))*radians;
+  if (elapsed<impact) {
+    const t=(elapsed-windup)/(impact-windup);
+    return -55*radians*(1-t*t);
+  }
+  return 10*radians*Math.min(1,(elapsed-impact)/(duration-impact));
 }
 
-/** Zeichnet Ast und Klinge am Griffpunkt mit einer angehobenen Klinge und einem Viertelkreis zum Ziel. @param {object} render Zeicheninformationen. */
+/** Bestimmt die Pose relativ zur beim Angriff fixierten Blickrichtung. @param {object} game Spiel. */
+export function weaponPose(game) {
+  const elapsed=WEAPON_TIMING.duration-game.attackTime,facing=game.attackFacing || game.player.facing;
+  const sign=facing==='left'?-1:1;
+  if (isSword(heroStats(game).weapon)) {
+    const offset=game.reduced?0:swordOffset(elapsed);
+    return {angle:FACING[facing]+sign*offset,length:17};
+  }
+  const progress=game.reduced?1:Math.max(0,Math.min(1,(elapsed-WEAPON_TIMING.windup)/(WEAPON_TIMING.impact-WEAPON_TIMING.windup)));
+  return {angle:FACING[facing]-sign*Math.PI/2*(1-progress),length:14};
+}
+
+/** Zeichnet die zurückgelegte Klingenspur. Die helle Schneide läuft am älteren Ende spitz aus. @param {object} ctx Zeichenfläche. @param {number} x Griff-X. @param {number} y Griff-Y. @param {string} facing Schlagrichtung. @param {number} elapsed Angriffszeit. */
+function drawSlash(ctx,x,y,facing,elapsed) {
+  if (elapsed<=WEAPON_TIMING.windup) return;
+  const sign=facing==='left'?-1:1;
+  const start=swordOffset(Math.max(WEAPON_TIMING.windup,elapsed-0.045));
+  const end=swordOffset(elapsed);
+  const fade=Math.min(1,(WEAPON_TIMING.duration-elapsed)/0.025);
+  const samples=Math.ceil((end-start)*19);
+  for (let i=1;i<=samples;i++) {
+    const fraction=i/samples,angle=FACING[facing]+sign*(start+(end-start)*fraction);
+    const thickness=Math.ceil(4*fraction*fade);
+    for (let j=0;j<thickness;j++) {
+      const radius=17-j;
+      rect(ctx,j===0 || fraction>0.72?0:1,x+Math.cos(angle)*radius,y+Math.sin(angle)*radius,1,1);
+    }
+  }
+}
+
+/** Zeichnet Spur, Klingenschatten und Schneide am Griffpunkt. @param {object} render Zeicheninformationen. */
 export function drawWeaponSwing(render) {
   const {ctx,game}=render;
   if (!game.attackTime) return;
   const player=playerPosition(game),pose=weaponPose(game),sword=isSword(heroStats(game).weapon);
-  const base=FACING[game.attackFacing || game.player.facing],x=player.x*16+8+Math.cos(base)*5,y=player.y*16+9+Math.sin(base)*4;
+  const facing=game.attackFacing || game.player.facing,base=FACING[facing];
+  const x=player.x*16+8+Math.cos(base)*5,y=player.y*16+9+Math.sin(base)*4;
+  if (sword && !game.reduced) drawSlash(ctx,x,y,facing,WEAPON_TIMING.duration-game.attackTime);
   for (let distance=2;distance<=pose.length;distance++) {
     const xx=x+Math.cos(pose.angle)*distance,yy=y+Math.sin(pose.angle)*distance;
-    rect(ctx,3,xx-1,yy-1,3,3); rect(ctx,sword?0:2,xx,yy,1,1);
+    rect(ctx,3,xx-1,yy-1,3,3);
+    if (!sword) rect(ctx,2,xx,yy,1,1);
   }
   if (sword) {
+    for (let distance=5;distance<=pose.length;distance++) {
+      rect(ctx,0,x+Math.cos(pose.angle)*distance,y+Math.sin(pose.angle)*distance,1,1);
+    }
     const xx=x+Math.cos(pose.angle)*4,yy=y+Math.sin(pose.angle)*4;
     for (let cross=-3;cross<=3;cross++) rect(ctx,2,xx-Math.sin(pose.angle)*cross,yy+Math.cos(pose.angle)*cross,1,1);
   }

@@ -562,11 +562,10 @@ function applyLabels() {
   });
 
   byId('language').textContent = language === 'de' ? 'EN ↗' : 'DE ↗';
-  byId('play').innerHTML = `${
-    running
+  byId('play').innerHTML = `${running
       ? (language === 'de' ? 'Experiment pausieren' : 'Pause experiment')
       : (language === 'de' ? 'Experiment starten' : 'Start experiment')
-  } <span>${running ? 'Ⅱ' : '→'}</span>`;
+    } <span>${running ? 'Ⅱ' : '→'}</span>`;
   byId('status').textContent = running
     ? (language === 'de' ? 'IN BEWEGUNG' : 'IN MOTION')
     : (language === 'de' ? 'BEREIT / PAUSE' : 'READY / PAUSED');

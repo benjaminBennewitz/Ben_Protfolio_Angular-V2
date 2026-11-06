@@ -532,3 +532,18 @@ Der bestehende Hof und das freigegebene Portalbild werden wiederverwendet. `gate
 - Browserprüfungen: Umsehen, Weitergehen bis zur Schwarzblende, Pause/Fortsetzen, Deutsch/Englisch, gedämpfte Blende bei Reduced Motion, Escape/Zum Status und Neustart in eine saubere Sitzung.
 - Statusdialog bei 320 × 740, 390 × 844 und 844 × 390 geprüft. Keine horizontale Seitenüberbreite; im flachen Querformat kann der Statusinhalt innerhalb seiner Karte gescrollt werden.
 - JavaScript-/CSS-Syntax, lokale Imports und Bildpfade sowie CRLF geprüft. Keine Änderung am freigegebenen Portal-Renderer oder Portalbild.
+
+
+## Patch 57 – Visible Morse & Unread Investigation Notes
+
+- Eine spezifischere, ältere CSS-Regel zwang das Mastlicht nach erfolgreichem SYNC dauerhaft auf volle Deckkraft. Diese konkurrierende Zustandsregel entfällt; Licht und Ton folgen wieder gemeinsam der vorhandenen Morseuhr für 1024.
+- Neue Notizen erhalten einen klaren, persistenten NEU-Zähler am Notizbutton. Ein sechs Sekunden sichtbarer, klickbarer Empfangshinweis meldet die ungelesene Anzahl auch dann, wenn das Radio außerhalb des sichtbaren Bereichs steht.
+- Während eines geöffneten Dialogs wird der kurze Hinweis zurückgehalten und erst danach angezeigt. Sein Ablauf bestätigt keine Einträge; nur das bewusste Öffnen des Protokolls setzt den Ungelesen-Zähler zurück.
+- Beim Öffnen sind die neuen Einträge markiert; der erste wird direkt in den sichtbaren Dialogbereich geholt. Bereits geöffnete Notizen markieren neu hinzukommende Einträge sofort, ohne sie zusätzlich als ungelesen zu zählen.
+- Deutsch/Englisch, Screenreader-Ankündigung, Tastaturbedienung und Reduced Motion berücksichtigt. Kein zusätzlicher Sound und keine Änderung an Story, Frequenzen oder Enden.
+
+### Validierung Patch 57
+
+- Fehler vor der Korrektur im Browser reproduziert: Morsezustand „off“, aber berechnete Deckkraft weiterhin 1. Danach zeigen beide Codes tatsächlich Deckkraft 1 beziehungsweise 0.045, passend zum Audio-Gate. Pause und Wiederaufnahme sowie das Ende des Codes nach Empfang der Warnung geprüft.
+- Hinweisablauf nach sechs Sekunden, persistenter Ungelesen-Zähler, wiederholte bereits bekannte Hinweise, Zurückhalten während SYNC, Klick auf den Hinweis, Markierung beim Öffnen und neue Einträge im bereits geöffneten Protokoll geprüft.
+- Deutsch/Englisch und zugängliche Zählerbeschriftung sowie 320/390/1280 px Breite und Reduced Motion geprüft. JavaScript-/CSS-Syntax und CRLF geprüft.

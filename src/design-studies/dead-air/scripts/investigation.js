@@ -10,6 +10,7 @@ const COPY = Object.freeze({
   de: {
     nameSignal: 'TEXTTRÄGER / 96.4 MHz: „Danke, Ronnie.“',
     nameNote: 'Nach dem Abgleich erscheint ein Textträger: „Danke, Ronnie.“ Alex wurde der Name des Ermittlers nie genannt.',
+    newLabel: 'NEU', unreadNotes: '{count} neue Notizen', unreadNote: '1 neue Notiz', notesTotal: 'Notizen: {total}.', notesOpen: 'Empfangsprotokoll öffnen',
     notes: 'NOTIZEN', notesTitle: 'EMPFANGSPROTOKOLL', notesEmpty: 'Noch keine ungewöhnlichen Beobachtungen gesichert.',
     reference: 'ZAHLENCODE', referenceTitle: 'LICHTTELEGRAFIE', referenceBody: 'NCBS / WARTUNGSKARTE · Kurzer Impuls = Punkt. Langer Impuls = Strich. Fünf Impulse ergeben eine Ziffer; die längere Pause trennt die Ziffern.',
     source: 'Klicken. Ein gepresster Atemzug direkt am Mikrofon.', sourceLost: 'Die Stimme bricht ab. Der Träger bleibt leer.', lost: 'TRÄGER VERLOREN',
@@ -36,6 +37,7 @@ const COPY = Object.freeze({
   en: {
     nameSignal: 'TEXT CARRIER / 96.4 MHz: “Thank you, Ronnie.”',
     nameNote: 'After alignment, a text carrier appears: “Thank you, Ronnie.” The investigator never gave Alex his name.',
+    newLabel: 'NEW', unreadNotes: '{count} new notes', unreadNote: '1 new note', notesTotal: 'Notes: {total}.', notesOpen: 'Open reception log',
     notes: 'NOTES', notesTitle: 'RECEPTION LOG', notesEmpty: 'No unusual observations recorded yet.',
     reference: 'NUMBER CODE', referenceTitle: 'LIGHT TELEGRAPHY', referenceBody: 'NCBS / SERVICE CARD · Short pulse = dot. Long pulse = dash. Five pulses form a digit; the longer gap separates digits.',
     source: 'Clicking. A strained breath right against the microphone.', sourceLost: 'The voice cuts out. The carrier remains empty.', lost: 'CARRIER LOST',
@@ -69,6 +71,18 @@ export class Investigation {
     this.refreshFrequency = refreshFrequency;
     this.isRunning = isRunning;
     this.observations = new Set();
+    this.unreadNotes = new Set();
+    this.highlightedNotes = new Set();
+    this.noticePending = false;
+    this.noticeTimer = 0;
+    this.notesToggle = document.querySelector('#notes-toggle');
+    this.notesNotice = document.querySelector('#notes-notice');
+    this.notesAnnouncement = document.querySelector('#notes-announcement');
+    this.notesLabel = document.createElement('span');
+    this.notesBadge = document.createElement('span');
+    this.notesBadge.className = 'notes-unread';
+    this.notesBadge.setAttribute('aria-hidden', 'true');
+    this.notesToggle.replaceChildren(this.notesLabel, this.notesBadge);
     this.tracesPlayed = new Set();
     this.strangerStartedAt = null;
     this.strangerSpent = false;
@@ -85,7 +99,12 @@ export class Investigation {
 
   /** Bindet nur lokale Hinweise; alle eigentlichen Fortschrittssperren bleiben in app.js. */
   attach() {
-    document.querySelector('#notes-toggle').addEventListener('click', () => this.notesDialog.showModal());
+    this.notesToggle.addEventListener('click', () => this.openNotes());
+    this.notesNotice.addEventListener('click', () => this.openNotes());
+    this.notesDialog.addEventListener('close', () => {
+      this.highlightedNotes.clear();
+      this.render();
+    });
     document.querySelector('#morse-toggle').addEventListener('click', () => this.referenceDialog.showModal());
     for (const id of ['notes', 'morse']) {
       const dialog = document.querySelector(`#${id}-dialog`);
@@ -96,6 +115,7 @@ export class Investigation {
       dialog.addEventListener('close', () => {
         this.scene.story.lastTick = performance.now();
         this.refreshMorse();
+        this.showNotesNotice();
       });
     }
     document.querySelectorAll('[data-signature]').forEach(button => {
@@ -120,6 +140,10 @@ export class Investigation {
     this.audioObserver = new MutationObserver(() => {
       this.updateStrangerAudio();
       this.refreshMorse();
+      if (document.querySelector('dialog[open]')) {
+        if (!this.notesNotice.hidden && this.unreadNotes.size) this.noticePending = true;
+        this.hideNotesNotice();
+      } else this.showNotesNotice();
     });
     for (const dialog of document.querySelectorAll('dialog')) {
       this.audioObserver.observe(dialog, { attributes: true, attributeFilter: ['open'] });
@@ -153,7 +177,54 @@ export class Investigation {
   record(key) {
     if (this.observations.has(key)) return;
     this.observations.add(key);
+    if (this.notesDialog.open) this.highlightedNotes.add(key);
+    else {
+      this.unreadNotes.add(key);
+      this.noticePending = true;
+    }
     this.render();
+    this.showNotesNotice();
+  }
+
+  /** Bestätigt ungelesene Beobachtungen erst beim bewussten Öffnen des Protokolls. */
+  openNotes() {
+    if (this.notesDialog.open) return;
+    this.highlightedNotes = new Set(this.unreadNotes);
+    this.unreadNotes.clear();
+    this.noticePending = false;
+    this.hideNotesNotice();
+    this.notesAnnouncement.textContent = '';
+    this.notesToggle.focus({ preventScroll: true });
+    this.render();
+    this.notesDialog.showModal();
+    this.notesDialog.querySelector('.is-new')?.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+  }
+
+  /** Zähler und Hinweis teilen dieselbe übersetzte Anzahl ungelesener Einträge. */
+  get unreadLabel() {
+    return this.unreadNotes.size === 1 ? this.copy.unreadNote
+      : this.copy.unreadNotes.replace('{count}', String(this.unreadNotes.size));
+  }
+
+  /** Ein kurzer Hinweis verdeckt keine geöffneten Rätsel- oder Hinweisdialoge. */
+  showNotesNotice() {
+    if (!this.noticePending || !this.unreadNotes.size || document.querySelector('dialog[open]')) return;
+    this.noticePending = false;
+    window.clearTimeout(this.noticeTimer);
+    this.notesNotice.hidden = false;
+    this.notesNotice.textContent = this.unreadLabel;
+    this.notesNotice.setAttribute('aria-label', `${this.unreadLabel}. ${this.copy.notesOpen}`);
+    this.notesAnnouncement.textContent = this.unreadLabel;
+    this.noticeTimer = window.setTimeout(() => {
+      this.notesNotice.hidden = true;
+      this.noticeTimer = 0;
+    }, 6000);
+  }
+
+  hideNotesNotice() {
+    window.clearTimeout(this.noticeTimer);
+    this.noticeTimer = 0;
+    this.notesNotice.hidden = true;
   }
 
   /** Ein Fremdsignal kann nur einmal empfangen werden; Verlassen beendet den Versuch. */
@@ -320,7 +391,16 @@ export class Investigation {
       ['morse-toggle','reference'], ['local-camera','local'], ['local-offline','offline']]) {
       document.querySelector(`#${id}`).textContent = texts[key];
     }
-    document.querySelector('#notes-toggle').textContent = `${texts.notes} / ${this.observations.size}`;
+    this.notesLabel.textContent = `${texts.notes} / ${this.observations.size}`;
+    this.notesBadge.textContent = `${texts.newLabel} ${this.unreadNotes.size}`;
+    this.notesBadge.hidden = this.unreadNotes.size === 0;
+    this.notesToggle.classList.toggle('has-unread', this.unreadNotes.size > 0);
+    const totalLabel = texts.notesTotal.replace('{total}', String(this.observations.size));
+    this.notesToggle.setAttribute('aria-label', this.unreadNotes.size ? `${totalLabel} ${this.unreadLabel}.` : totalLabel);
+    if (!this.notesNotice.hidden) {
+      this.notesNotice.textContent = this.unreadLabel;
+      this.notesNotice.setAttribute('aria-label', `${this.unreadLabel}. ${texts.notesOpen}`);
+    }
     for (const id of ['notes-close', 'morse-close']) {
       document.querySelector(`#${id}`).setAttribute('aria-label', this.scene.language === 'de' ? 'Schließen' : 'Close');
     }
@@ -329,7 +409,13 @@ export class Investigation {
     list.replaceChildren();
     for (const key of this.observations) {
       const item = document.createElement('li');
-      item.textContent = texts[key];
+      if (this.highlightedNotes.has(key)) {
+        item.className = 'is-new';
+        const marker = document.createElement('span');
+        marker.className = 'notes-entry-label';
+        marker.textContent = texts.newLabel;
+        item.append(marker, document.createTextNode(texts[key]));
+      } else item.textContent = texts[key];
       list.append(item);
     }
     if (!this.observations.size) {
@@ -357,6 +443,7 @@ export class Investigation {
   }
 
   dispose() {
+    this.hideNotesNotice();
     cancelAnimationFrame(this.morseFrame);
     this.audioObserver?.disconnect();
     this.soundscape.setMorseGate(false);

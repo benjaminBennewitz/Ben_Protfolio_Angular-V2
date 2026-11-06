@@ -14,7 +14,7 @@ export function validCombatSave(game,data) {
   if (combat===undefined) return true;
   if (combat===null) return !room.dungeon;
   if (!room.dungeon || !combat || !Array.isArray(combat.enemies) || combat.enemies.length>4) return false;
-  if (!Number.isInteger(combat.wave) || combat.wave<0 || combat.wave>3 || (!room.boss && combat.wave!==0)) return false;
+  if (!Number.isInteger(combat.wave) || combat.wave<0 || combat.wave>3 || (!room.boss && !room.rootWaves && combat.wave!==0)) return false;
   if (!bounded(combat.wait,1.6) || !bounded(combat.hurt,1.1) || !bounded(combat.cooldown,0.38)) return false;
   if (!validHeartDrops(room,data.flags,combat.hearts)) return false;
   const ids=new Set(),points=new Set();
@@ -23,6 +23,7 @@ export function validCombatSave(game,data) {
     if (!validActor(room,data.flags,actor,combat.wave) || ids.has(actor.id) || points.has(key)) return false;
     ids.add(actor.id); points.add(key);
   }
+  if (room.rootWaves && (data.flags.rootGuardsCleared || data.flags.rootSpringFlowing) && combat.enemies.length) return false;
   return !room.boss || !data.flags.quellNestCleared || !combat.enemies.length;
 }
 
@@ -39,7 +40,7 @@ function validActor(room,flags,actor,wave) {
 /** Beschränkt frei erzeugte Gegner auf die aktuelle Nestwelle und bekannte Arten. @param {object} room Raum. @param {object} actor Gegner. @param {number} wave Welle. */
 function knownActor(room,actor,wave) {
   if (room.boss && wave>0) return wave>0 && actor.species==='spider' && new RegExp(`^wave-${wave}-[0-3]$`,'u').test(actor.id);
-  for (const original of room.enemies) if (original.id===actor.id && original.species===actor.species) return true;
+  for (const original of [...room.enemies,...(room.rootWaves || []).flat()]) if (original.id===actor.id && original.species===actor.species) return true;
   return false;
 }
 
@@ -66,7 +67,7 @@ function validHeartDrops(room,flags,hearts) {
   const ids=new Set();
   for (const drop of hearts) {
     if (!drop || typeof drop.id!=='string' || ![0.5,1,2].includes(drop.amount) || ids.has(drop.id) || !floorPoint(room,flags,drop.x,drop.y)) return false;
-    if (!room.enemies.some(knownDropId.bind(null,drop.id)) && !(room.boss && /^wave-[123]-[0-3]$/u.test(drop.id))) return false;
+    if (![...room.enemies,...(room.rootWaves || []).flat()].some(knownDropId.bind(null,drop.id)) && !(room.boss && /^wave-[123]-[0-3]$/u.test(drop.id))) return false;
     ids.add(drop.id);
   }
   return true;

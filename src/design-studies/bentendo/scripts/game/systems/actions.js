@@ -6,7 +6,7 @@ import { respectNightRest } from './daily-life.js';
 import { openForestShortcut,talkForestTraveller } from './forest-return.js';
 import { enterEastPump,enterEastGate,inspectPump,takeSparePipe,turnEastPipe,resetEastPipes,startEastPump,inspectEastClue,talkEda } from './east-story.js';
 import { recoverLoot } from './health.js';
-import { sourceMechanism,dungeonDoor,startNest,dungeonReward } from './dungeon.js';
+import { sourceMechanism,dungeonDoor,startNest,dungeonReward,inspectRootValve } from './dungeon.js';
 import { talkMara,enterMaraArchive,enterSourceCave,inspectSourceGate } from './mara-quest.js';
 import { villageBranch, villageSluice, villageKeeper, villageDoor } from './village.js';
 import { take, chest, note } from './loot.js';
@@ -36,6 +36,7 @@ function inspect(game, object) {
 function travel(game, object) { if (object.requiresFlag && !game.flags[object.requiresFlag]) return game.say(object.name,'Der Weg ist von hier aus noch nicht erreichbar.','ui-denied'); if (respectNightRest(game,object)) return; game.travel(object.to, object.spawn); }
 
 export const ACTIONS = {
+  'free-root-spring':inspectRootValve,
   waystone:useWaystone,
   'lowland-gate':tryLowlandGate,
   'meadow-stream-look':inspectMeadowStream,'meadow-stream-stone':inspectMeadowStone,'meadow-stream-talk':talkMeadowResident,

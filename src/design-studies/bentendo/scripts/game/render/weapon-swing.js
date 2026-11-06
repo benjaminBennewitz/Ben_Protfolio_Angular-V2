@@ -11,7 +11,7 @@ function swordOffset(elapsed) {
   const {windup,impact,duration}=WEAPON_TIMING;
   if (elapsed<windup) return -(40+15*Math.max(0,elapsed/windup))*radians;
   if (elapsed<impact) {
-    const t=(elapsed-windup)/(impact-windup);
+    const t=Math.max(0,(elapsed-windup)/(impact-windup)*2-1);
     return -55*radians*(1-t*t);
   }
   return 10*radians*Math.min(1,(elapsed-impact)/(duration-impact));
@@ -33,16 +33,16 @@ export function weaponPose(game) {
 function drawSlash(ctx,x,y,facing,elapsed) {
   if (elapsed<=WEAPON_TIMING.windup) return;
   const sign=facing==='left'?-1:1;
-  const start=swordOffset(Math.max(WEAPON_TIMING.windup,elapsed-0.045));
+  const start=swordOffset(Math.max(WEAPON_TIMING.windup,elapsed-0.095));
   const end=swordOffset(elapsed);
   const fade=Math.min(1,(WEAPON_TIMING.duration-elapsed)/0.025);
-  const samples=Math.ceil((end-start)*19);
+  const samples=Math.ceil((end-start)*30);
   for (let i=1;i<=samples;i++) {
     const fraction=i/samples,angle=FACING[facing]+sign*(start+(end-start)*fraction);
-    const thickness=Math.ceil(4*fraction*fade);
+    const thickness=Math.ceil((2+5*fraction)*fade);
     for (let j=0;j<thickness;j++) {
-      const radius=17-j;
-      rect(ctx,j===0 || fraction>0.72?0:1,x+Math.cos(angle)*radius,y+Math.sin(angle)*radius,1,1);
+      const radius=20-j;
+      rect(ctx,j===0?3:j<=2 || fraction>0.65?0:1,x+Math.cos(angle)*radius,y+Math.sin(angle)*radius,1,1);
     }
   }
 }

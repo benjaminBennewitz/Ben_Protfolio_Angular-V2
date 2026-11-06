@@ -12,7 +12,9 @@ function visible(game,object) { return (!object.revealedBy || game.flags[object.
 
 /** Setzt nur flüchtige Kampfzustände beim Raumwechsel zurück; Beute bleibt dauerhaft gespeichert. @param {object} game Spiel. */
 export function enterDungeonRoom(game) {
-  game.enemies=game.room.boss && game.flags.quellNestCleared?[]:structuredClone(game.room.enemies || []); game.heartDrops=[]; game.nestWave=0; game.waveWait=0;
+  const cleared=(game.room.boss && game.flags.quellNestCleared) || (game.room.id==='root-headwater' && (game.flags.rootSpringFlowing || game.flags.rootGuardsCleared));
+  game.enemies=cleared?[]:structuredClone(game.room.enemies || []); game.heartDrops=[]; game.nestWave=0; game.waveWait=0;
+  if (game.room.id==='root-headwater' && !cleared) game.nestWave=1;
   game.attackTime=0; game.attackCooldown=0;
 }
 
@@ -34,6 +36,7 @@ export function sourceMechanism(game,object) {
 /** Hält den Rückweg während des bewusst gestarteten Nestkampfes geschlossen. @param {object} game Spiel. @param {object} object Durchgang. */
 export function dungeonDoor(game,object) {
   if (game.room.boss && game.nestWave && !game.flags.quellNestCleared) return game.say('Spinnenbrut','Die Spinnen versperren den Rückweg. Besiege die drei Wellen.');
+  if (game.room.id==='root-headwater' && !game.flags.rootGuardsCleared && !game.flags.rootSpringFlowing) return game.say('Quellwache','Die Wachen versperren den Rückweg.');
   game.travel(object.to,object.spawn);
 }
 
@@ -60,6 +63,7 @@ function spawnWave(game) {
 /** Prüft Druckplatte und Wellenfortschritt ausschließlich während aktiver Spielzeit. @param {object} game Spiel. @param {number} dt Zeitschritt. */
 export function updateDungeon(game,dt) {
   if (!game.room.dungeon) return;
+  if (game.room.id==='root-headwater') return updateRootWaves(game,dt);
   if (game.room.id==='quell-sluice' && !game.flags.quellGateOpen) {
     for (const block of game.roomState.blocks) if (block.x===6 && block.y===5) { game.flags.quellGateOpen=true; game.sounds.push('success-small'); }
   }
@@ -79,4 +83,52 @@ export function dungeonReward(game,object) {
     rememberNote(game,DUNGEON_MESSAGE); game.flags.maraLowerMessage=true;
     game.say('Waffentruhe','Ein rostiges Schwert und acht Münzen! Darunter liegt eine frische Nachricht mit Maras Zeichen. Sie liegt jetzt im Journal. Sichere deine Beute über die Wartungstreppe und zeige Mara den Fund.','success-quest');
   }
+}
+
+/** Gibt die Fassung erst nach dem Wachkampf und der Bestätigung frei. @param {object} game Spiel. */
+export function inspectRootValve(game) {
+  if (game.flags.rootSpringFlowing) { claimSpringHeart(game); return game.say('Quellherz','Der Stein sitzt wieder in seiner Führung. Das Wasser rauscht durch den Überlauf.'); }
+  if (!game.flags.rootGuardsCleared || game.enemies.length) return game.say('Quellherz','Ein Speer schrammt über den Stein. Solange hier Wachen stehen, kannst du die Wurzeln nicht lösen.');
+  game.say('Quellherz','Unter der Wurzel zittert ein flacher Stein. Die Wurzel kappen und den Stein lösen? A: Ja · B: Zurück');
+  (game.pages.at(-1) || game.message).onConfirm=releaseRootSpring;
+}
+
+/** Öffnet dauerhaft den Überlauf und hinterlegt den Hinweis auf den östlichen Wasserlauf. @param {object} game Spiel. */
+function releaseRootSpring(game) {
+  if (game.flags.rootSpringFlowing) return;
+  game.flags.rootSpringFlowing=true;
+  claimSpringHeart(game);
+  rememberNote(game,{id:'root-headwater',title:'Der Lauf unter den Wurzeln',text:'Im Quellherz fließt wieder Wasser. Der alte Überlauf mündet in der Bachniederung. Auf der Fassung ist ein See östlich der Niederung eingeritzt.'});
+  game.say('Wurzelgrund · Quelle befreit','Die Wurzel reißt. Wasser hebt den Stein aus seiner Kerbe und spült den Überlauf frei. Eine leuchtende Quellscherbe sinkt in deine Hand. Du erhältst dauerhaft ein zusätzliches Herz. Durch den Gang riechst du die feuchte Luft der Bachniederung.','success-quest');
+}
+
+/** Führt drei gemischte Wachenwellen mit einer kurzen Atempause fort. @param {object} game Spiel. @param {number} dt Zeitschritt. */
+function updateRootWaves(game,dt) {
+  if (game.flags.rootSpringFlowing || game.flags.rootGuardsCleared || game.enemies.length) return;
+  game.nestWave=Math.max(1,game.nestWave);
+  game.waveWait+=dt;
+  if (game.waveWait<1.2) return;
+  game.waveWait=0;
+  if (game.nestWave===3) {
+    game.flags.rootGuardsCleared=true;
+    return game.say('Quellherz','Die letzte Wache fällt. Jetzt hörst du das Pochen hinter dem Quellstein.','success-quest');
+  }
+  const candidates=game.room.rootWaves[game.nestWave-1];
+  /** Freie Startfelder halten Abstand zur aktuellen Spielerposition. */
+  const points=[[6,3],[14,4],[13,7],[6,8],[12,6],[9,3],[14,8],[5,5]];
+  const free=points.filter(([x,y])=>Math.abs(x-game.player.x)+Math.abs(y-game.player.y)>=3 && !wall(game,x,y) && !game.objectAt(x,y));
+  game.enemies=structuredClone(candidates);
+  for (let i=0;i<game.enemies.length;i++) {
+    game.enemies[i].x=free[i][0]; game.enemies[i].y=free[i][1];
+  }
+  game.nestWave++;
+  game.say('Quellwache',`Welle ${game.nestWave} von 3. Zwischen den Wurzeln drängen weitere Wachen hervor.`,'gear');
+}
+
+/** Bindet den dauerhaften Herzgewinn an die einmalig geborgene Quellscherbe. @param {object} game Spiel. */
+function claimSpringHeart(game) {
+  if (game.flags.rootHeartTaken) return;
+  game.flags.rootHeartTaken=true;
+  game.health.maxHp=8; game.health.hp=8;
+  rememberNote(game,{id:'root-heart',title:'Quellscherbe',text:'Ein heller Splitter aus der befreiten Quellfassung. Er pulsiert wie ein Herz. Seit du ihn berührt hast, besitzt du dauerhaft vier Herzen. Der Fund bleibt bei dir, auch wenn du im Dungeon fällst.'});
 }

@@ -167,6 +167,20 @@ function drawCanal(render,x,y,kind) {
   }
 }
 
+/** Zeichnet die trockene oder sprudelnde Quellfassung. @param {object} render Zeicheninformationen. @param {object} entry Quellstein. */
+function drawSpringStone(render,entry) {
+  const {ctx,game}=render,x=entry.x*16,y=entry.y*16;
+  rect(ctx,3,x+1,y+5,14,9); rect(ctx,2,x+2,y+4,12,8);
+  rect(ctx,1,x+4,y+3,8,3); rect(ctx,3,x+4,y+6,9,4);
+  if (game.flags.rootSpringFlowing) {
+    const ripple=game.reduced?0:Math.floor(game.time*5)%3;
+    rect(ctx,1,x+6,y+7,5,8); rect(ctx,0,x+7,y+7+ripple,3,2);
+    rect(ctx,0,x+9,y+12+ripple,4,1);
+  } else {
+    rect(ctx,2,x+5,y+6,7,3); rect(ctx,1,x+8,y+7,2,5);
+  }
+}
+
 /** Zeichnet eine sortierte Landschaftsebene. @param {object} render Zeicheninformationen. @param {object} entry Element. */
 function drawEntry(render,entry) {
   if (entry.sleeping) return drawSleepingPet(render,entry);
@@ -176,6 +190,7 @@ function drawEntry(render,entry) {
   if (entry.type === 'tree') return render.ctx.drawImage(render.assets.roundTreeSprite,entry.x*16,entry.y*16);
   if (entry.type === 'house') return drawHouse(render,entry);
   if (entry.type === 'player') { if (render.game.room.dungeon) drawWeaponSwing(render); drawVillageHero(render,entry); drawFoliageMask(render,entry); return; }
+  if (entry.kind==='spring-stone') return drawSpringStone(render,entry);
   if (entry.kind==='root-tunnel') return drawRootTunnel(render,entry);
   if (entry.kind==='root-passage') return drawRootPassage(render,entry);
   if (entry.kind==='meadow-rock') return drawMeadowRock(render,entry);

@@ -1,13 +1,10 @@
-folio/
+B2Folio/
 ├── .angular/
 │   └── ...
 ├── dist/
 │   └── ...
 ├── node_modules/
 │   └── ...
-├── scripts/
-│   ├── deploy-portfolio-local.cmd
-│   └── deploy-portfolio-server.sh
 ├── src/
 │   ├── app/
 │   │   ├── core/

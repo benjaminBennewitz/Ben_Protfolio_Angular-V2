@@ -1,7 +1,7 @@
 import { enemy } from './quell-dungeon.js';
 import { prop } from './town.js';
 
-/** Baut acht begehbare Waldkammern mit abgestuften Gefahren. */
+/** Baut neun begehbare Waldkammern mit abgestuften Gefahren. */
 export function createRootDungeon() {
   return [
     room('root-entry','Wurzelgrund · Grenzpfad',[
@@ -15,7 +15,7 @@ export function createRootDungeon() {
     ],[[9,5],[10,3],[14,6]],[
       passage('west',1,7,'root-entry',[16,7]),passage('east',17,7,'root-camp',[2,7]),
     ],[enemy('turn-spider-a','spider',8,3),enemy('turn-spider-b','spider',13,6)]),
-    camp(), fork(), cache(), hollow(), gallery(), spring(),
+    camp(), fork(), cache(), hollow(), gallery(), spring(), headwater(),
   ];
 }
 
@@ -81,9 +81,27 @@ function spring() {
     [1,7,6,1],[6,5,3,3],[8,3,7,5],[12,2,3,2],[14,5,3,2],
   ],[[10,5],[11,5]],[
     passage('west',1,7,'root-gallery',[16,4]),
-    prop('spring-lip','Ausgewaschener Stein',13,2,'sign','inspect',{text:'Die Rinne ist trocken. Als du die Hand an den Stein legst, spürst du ein leises Klopfen. Tief unter deinen Füßen läuft noch Wasser.'}),
-    prop('spring-bag','Tasche im Wurzelwerk',16,6,'chest','chest',{item:'Feldverband'}),
+    passage('east',16,5,'root-headwater',[2,7]),
+    prop('spring-lip','Ausgewaschener Stein',13,2,'spring-stone','inspect',{hiddenBy:'rootSpringFlowing',text:'Die Rinne ist trocken. Als du die Hand an den Stein legst, spürst du ein leises Klopfen. Tief unter deinen Füßen läuft noch Wasser.'}),
+    prop('spring-flow','Sprudelnde Quelle',13,2,'spring-stone','inspect',{revealedBy:'rootSpringFlowing',text:'Kühles Wasser läuft durch die Kerbe. Von unten antwortet das Rauschen des Bachs.'}),
+    prop('spring-bag','Tasche im Wurzelwerk',8,4,'chest','chest',{item:'Feldverband'}),
   ]);
+}
+
+/** Führt die beiden Uferwege zur bewachten Fassung und zum alten Überlauf. */
+function headwater() {
+  const chamber=room('root-headwater','Wurzelgrund · Quellherz',[
+    [1,7,6,1],[5,3,10,6],[12,2,4,4],[15,5,3,2],
+  ],[[8,5],[9,5],[10,5],[11,5]],[
+    passage('west',1,7,'root-spring',[15,5]),
+    prop('spring-valve','Verkeilter Quellstein',14,2,'spring-stone','free-root-spring',{hint:'untersuchen'}),
+    prop('spillway','Alter Überlauf',17,6,'root-passage','dungeon-door',{to:'east-lowland',spawn:[16,9],revealedBy:'rootSpringFlowing',hint:'zur Bachniederung'}),
+  ],[enemy('source-spear','kobold',7,7),enemy('source-mask','gorgon',12,3)]);
+  chamber.rootWaves=[
+    [enemy('root-wave-2-a','spider',6,3),enemy('root-wave-2-b','spider',13,7),enemy('root-wave-2-c','kobold',14,4)],
+    [enemy('root-wave-3-a','gorgon',6,3),enemy('root-wave-3-b','kobold',13,7),enemy('root-wave-3-c','spider',14,4)],
+  ];
+  return chamber;
 }
 
 /** Leitet sichtbare Waldkonturen und Kollision aus demselben Grundriss ab. @param {string} id Raumkennung. @param {string} title Raumname. @param {Array} paths Wegflächen. @param {Array} pits Grubenfelder. @param {Array} objects Raumobjekte. @param {Array} enemies Gegner. @param {number[]} spawn Sicherer Einstieg. */

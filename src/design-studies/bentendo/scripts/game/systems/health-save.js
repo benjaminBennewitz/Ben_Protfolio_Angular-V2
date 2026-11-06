@@ -5,7 +5,7 @@ import { createHealth } from './health.js';
 export function validHealthSave(game,data) {
   const health=data.health;
   if (health===undefined) return true;
-  if (!health || typeof health.hp!=='number' || !Number.isSafeInteger(health.hp*2) || !Number.isSafeInteger(health.maxHp) || health.maxHp!==6 || health.hp<0.5 || health.hp>health.maxHp) return false;
+  if (!health || typeof health.hp!=='number' || !Number.isSafeInteger(health.hp*2) || !Number.isSafeInteger(health.maxHp) || health.maxHp!==(data.flags?.rootHeartTaken?8:6) || health.hp<0.5 || health.hp>health.maxHp) return false;
   if (!Number.isSafeInteger(health.deaths) || health.deaths<0) return false;
   return validRun(game,health.run,data.room) && validLost(game,health.lost,data.flags);
 }

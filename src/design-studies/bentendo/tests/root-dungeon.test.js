@@ -89,3 +89,43 @@ function debugRoundTrip() {
 }
 
 test('Debug: Wurzelgrund lässt sich separat manuell speichern und vom Titel laden',debugRoundTrip);
+
+/** Prüft Freigabe, Abbruch, dauerhafte Rückkehr und Journal im echten Raumwechsel. */
+test('Quellherz: Quelle erst nach Kampf und Bestätigung befreien',()=>{
+  const game=createGame();
+  for (const room of [...createEastRooms(),...createRootDungeon()]) game.rooms.set(room.id,room);
+  game.flags.eastLowlandGateOpen=true;
+  game.travel('root-spring'); useObject(game,'east');
+  assert.equal(game.room.id,'root-headwater');
+  assert.equal(game.enemies.length,2);
+  game.player={x:14,y:3,facing:'up'};
+  game.interact(); dismiss(game);
+  assert.ok(!game.flags.rootSpringFlowing);
+  game.enemies=[];
+  for (let wave=1;wave<=3;wave++) {
+    assert.equal(game.nestWave,wave);
+    game.update(1.21,false);
+    if (wave<3) {
+      dismiss(game);
+      assert.equal(game.enemies.length,3);
+      assert.equal(restoreGame(game,captureGame(game)),true);
+      game.enemies=[];
+    }
+  }
+  dismiss(game);
+  assert.ok(game.flags.rootGuardsCleared);
+  useObject(game,'spring-valve');
+  while (game.message && !game.message.onConfirm) game.interact();
+  game.back(); assert.ok(!game.flags.rootSpringFlowing);
+  useObject(game,'spring-valve'); dismiss(game);
+  assert.ok(game.flags.rootSpringFlowing);
+  assert.equal(game.health.maxHp,8);
+  assert.equal(game.health.hp,8);
+  assert.equal(restoreGame(game,captureGame(game)),true);
+  useObject(game,'west');
+  assert.ok(game.objects.some(object=>object.id==='spring-flow'));
+  useObject(game,'east'); assert.equal(game.enemies.length,0);
+  useObject(game,'spring-valve'); dismiss(game);
+  assert.equal(game.notes.filter(note=>note.id==='root-headwater').length,1);
+  useObject(game,'spillway'); assert.equal(game.room.id,'east-lowland');
+});

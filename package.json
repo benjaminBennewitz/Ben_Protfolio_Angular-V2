@@ -11,7 +11,9 @@
     "build": "ng build",
     "build:production": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "assets:audit": "python scripts/audit_assets.py",
+    "assets:clean": "python scripts/audit_assets.py --delete"
   },
   "dependencies": {
     "@angular/animations": "^21.2.0",

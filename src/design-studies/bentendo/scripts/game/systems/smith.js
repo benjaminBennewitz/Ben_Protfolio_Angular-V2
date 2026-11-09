@@ -31,5 +31,6 @@ function collectSword(game,smith) {
 
 /** Vermerkt die Bettruhe, wenn sie bis zur Abholzeit reicht. @param {object} game Spiel. */
 export function recordSmithRest(game) {
+  if (game.flags.temperDue && game.worldMinutes>=game.flags.temperDue) game.flags.temperRested=true;
   if (game.flags.smithDue && game.worldMinutes>=game.flags.smithDue) game.flags.smithRested=true;
 }

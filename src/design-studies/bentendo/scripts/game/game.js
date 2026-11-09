@@ -1,3 +1,6 @@
+import { updateWinter } from './systems/winter.js';
+import { updateCombatEffects,poisonFromEnemy } from './systems/combat-effects.js';
+import { REISWAREN } from './systems/preparation.js';
 import { titleOptions } from './data/title.js';
 import { pitAt } from './systems/collision.js';
 import { updateWaystoneRide } from './systems/waystones.js';
@@ -40,7 +43,7 @@ export class Game {
     this.states = new Map(); this.flags = {}; this.inventory = []; this.notes = []; this.coins = 0;
     this.systemMenu=null; this.journalFromBag=false; this.health=createHealth(); this.resting=null; this.hurtTime=0; this.bagTab='items'; this.bagTabFocus=false;
     this.titleChoice=0; this.debugging=false; this.saveNotice=null; this.questIndex=0; this.questPage=0; this.questDetail=false;
-    this.worldMinutes=START_MINUTES; this.doorStudy=null; this.pendingDoorStudy=null; this.forestAmbienceWait=5; this.forestAmbienceCount=0;
+    this.winterRemainder=0; this.worldMinutes=START_MINUTES; this.doorStudy=null; this.pendingDoorStudy=null; this.forestAmbienceWait=5; this.forestAmbienceCount=0;
     this.residentHistory=new Map(); this.avatar='male'; this.characterIndex=0;
     this.mode = 'title'; this.time = 0; this.sounds = []; this.message = null; this.pages = [];
     this.bagOpen = false; this.mapOpen = false; this.journalOpen = false; this.journalIndex = 0;
@@ -106,12 +109,12 @@ export class Game {
     if (diagonalBlocked(this,direction)) return false;
     const [dx,dy] = MOVE_DIRECTIONS[direction], x = this.player.x + dx, y = this.player.y + dy;
     if (leaveForestAtEdge(this,x,y)) return true;
-    if (enemyAt(this,x,y)) { damageHero(this,1); return false; }
+    if (enemyAt(this,x,y)) { if (damageHero(this,1)) poisonFromEnemy(this,enemyAt(this,x,y)); return false; }
     const passing=yieldCompanion(this,x,y);
     if (!passing && !pitAt(this.room,x,y) && this.occupied(x, y)) return false;
     if (steamHot(this, x, y)) { this.say('Du', 'Heißer Dampf! Ich warte kurz.'); return false; }
     this.idleTime=0;
-    this.move = { fromX: this.player.x, fromY: this.player.y, x, y, time: 0 };
+    this.move = { fromX: this.player.x, fromY: this.player.y, x, y, time: 0, cold:this.room.winter && this.flags.winterCold>=60000 };
     this.sounds.push('step'); return true;
   }
   /** Aktualisiert nur aktive Spielzeit. @param {number} dt Zeitschritt. @param {boolean} reduced Reduzierte Bewegung. */
@@ -127,7 +130,7 @@ export class Game {
     if (updateDoorStudy(this,dt)) return;
     if (this.resting) { updateRest(this,dt); return; }
     const paused = this.message || this.bagOpen || this.journalOpen || this.mapOpen || this.tavernMenu;
-    if (!paused) { this.time += dt; updateWorldClock(this,dt); updateForestAmbience(this,dt); this.updateLocation(dt); }
+    if (!paused) { this.time += dt; updateWorldClock(this,dt); updateForestAmbience(this,dt); this.updateLocation(dt); updateWinter(this,dt); updateCombatEffects(this); if (this.resting) return; }
     if (this.move && this.updateMove(dt, reduced)) return;
     if (this.slide) { this.slide.time += dt; if (reduced || this.slide.time >= 0.28) this.slide = null; }
     if (this.held && !this.move && !this.slide) this.step(this.held);
@@ -184,7 +187,7 @@ export class Game {
     if (this.doorStudy || this.waystoneRide || this.rootFall) return true;
     if (this.message || this.bagOpen || this.journalOpen || this.mapOpen) return false;
     const keeper=this.room.id==='village' && this.roomState.keeper && !this.roomState.keeper.waiting && !this.flags.guildOpen;
-    return Boolean(this.resting || (this.room.dungeon && (this.enemies.length || this.attackTime || this.attackCooldown || this.nestWave && !this.flags.quellNestCleared)) || (this.room.pipeBoard && !this.reduced) || this.locationNotice || (this.roomState.service && this.roomState.service.phase!=='ready') || keeper || ['throw','pickup'].includes(this.roomState.fetch?.phase) || wanderersMoving(this));
+    return Boolean(this.room.winter || this.flags.poisonTicks || this.flags.strengthUntil>this.time*1000 || this.flags.antidoteUntil>this.time*1000 || this.resting || (this.room.dungeon && (this.enemies.length || this.attackTime || this.attackCooldown || this.nestWave && !this.flags.quellNestCleared)) || (this.room.pipeBoard && !this.reduced) || this.locationNotice || (this.roomState.service && this.roomState.service.phase!=='ready') || keeper || ['throw','pickup'].includes(this.roomState.fetch?.phase) || wanderersMoving(this));
   }
   /** Beendet die Ortsmeldung nach kurzer aktiver Spielzeit. @param {number} dt Zeitschritt. */
   updateLocation(dt) {
@@ -239,6 +242,7 @@ export class Game {
     if (this.mode === 'title') return (this.resumeData || this.debugResumeData)?`DUNGEON WANTED. ${titleOptions(this)[this.titleChoice].label} gewählt. Pfeile wählen, A bestätigt.`:'DUNGEON WANTED. A oder START beginnt das Abenteuer.';
     if (this.systemMenu?.kind==='rest') return `Schlafen bis: ${restChoiceLabel(this,this.systemMenu.choice)}. Pfeile wählen, A bestätigt, B bricht ab.`;
     if (this.systemMenu?.kind==='audio') return audioMenuDescription(this.systemMenu);
+    if (this.systemMenu?.kind==='shop') return `Reisebedarf. ${this.systemMenu.status || REISWAREN[this.systemMenu.choice]?.name || 'Zurück'}. Pfeile wählen, A kauft, B schließt.`;
     if (this.systemMenu) return this.systemMenu.kind==='pause'?`Pause. ${['Weiter','Notizen','Karte','Ton einstellen','Speichern'][this.systemMenu.choice]} gewählt. Pfeile wählen, A bestätigt, B setzt fort.`:`Spiel speichern. ${this.systemMenu.status || (this.systemMenu.choice===0?'Speichern':'Zurück')} gewählt. A bestätigt, B schließt.`;
     if (this.mode==='character') return `Figur wählen: ${CHARACTER_PRESETS[this.characterIndex].label}. Pfeile wählen, A startet, B zum Titel. Beide Presets haben dieselben Fähigkeiten.`;
     if (this.doorStudy) return 'Du untersuchst die verwitterten Kerben. Währenddessen bricht der Abend an.';

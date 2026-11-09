@@ -1,10 +1,18 @@
 export const RUSTY_SWORD='Rostiges Schwert';
+export const TEMPERED_SWORD='Veredeltes Schwert';
 export const SHARP_SWORD='Geschärftes Schwert';
 
 /** Erkennt beide Zustände derselben Klinge. @param {string} item Gegenstand. */
-export function isSword(item) { return item===RUSTY_SWORD || item===SHARP_SWORD; }
+export function isSword(item) { return item===RUSTY_SWORD || item===SHARP_SWORD || item===TEMPERED_SWORD; }
 
 export const ITEM_INFO={
+  [TEMPERED_SWORD]:'Mit dem feinen Stein veredelt. Angriff 4. Wird automatisch getragen.',
+  Heiltrank:'Heilt beim Benutzen bis zu drei Herzen.',
+  Gegengift:'Stoppt Vergiftung. Schützt 60 aktive Spielsekunden vor erneutem Gift.',
+  Stärkungstrank:'Erhöht den Angriff 60 aktive Spielsekunden lang um 2. Menüs pausieren die Wirkung.',
+  Wollballen:'Warmes Futter für den Mantel der Näherin.',
+  Bronzeverschluss:'Verschluss eines alten Reiseumhangs. Die Näherin kann ihn wiederverwenden.',
+  'Feiner Schleifstein':'Eine feine Körnung aus der Schleifkammer. Die Gesellin kann damit die Schneide verbessern.',
   Rohrbogen:'Ein Ersatzbogen mit frischer Dichtung für eine gebrochene Druckleitung.',
   Feldflasche:'Eine leere Feldflasche mit eingeritztem E. Am Dorfbrunnen mit Benutzen füllbar.',
   'Volle Feldflasche':'Frisches Brunnenwasser in einer Flasche mit eingeritztem E.',
@@ -24,6 +32,9 @@ export const ITEM_INFO={
   Schutzsiegel:'Ein altes Schutzzeichen. Es ist zurzeit kein passender Einsatzort in der Nähe.',
 };
 export const ITEM_LABELS={
+  [TEMPERED_SWORD]:['Veredeltes','Schwert'],Heiltrank:['Heiltrank'],Gegengift:['Gegengift'],
+  Stärkungstrank:['Stärkungs-','trank'],Wollballen:['Wollballen'],Bronzeverschluss:['Bronze-','verschluss'],
+  'Feiner Schleifstein':['Feiner','Schleifstein'],
   Rohrbogen:['Rohrbogen'],Feldflasche:['Feldflasche'],'Volle Feldflasche':['Volle','Feldflasche'],
   [RUSTY_SWORD]:['Rostiges','Schwert'],[SHARP_SWORD]:['Geschärftes','Schwert'],Feldverband:['Feld-','verband'],
   'Ast (Hund)':['Ast','beim Hund'],'Blaue Brosche':['Blaue','Brosche'],Messingknopf:['Messing-','knopf'],Glasperle:['Glasperle'],Garnspule:['Garnspule'],

@@ -1,5 +1,5 @@
 import { recordSmithRest } from './smith.js';
-import { RUSTY_SWORD,SHARP_SWORD } from '../data/items.js';
+import { RUSTY_SWORD,SHARP_SWORD,TEMPERED_SWORD } from '../data/items.js';
 import { sleepUntil,dayPhase } from './world-clock.js';
 
 export const HERO_BED={room:'village-inn-upper',id:'bed-west',spawn:[2,3]};
@@ -9,22 +9,25 @@ export function createHealth() { return {hp:6,maxHp:6,deaths:0,run:null,lost:nul
 
 /** Berechnet Kampfwerte aus der tatsächlich getragenen Ausrüstung. @param {object} game Spiel. */
 export function heroStats(game) {
+  const tempered=game.inventory.includes(TEMPERED_SWORD),boost=game.flags.strengthUntil>game.time*1000?2:0;
   const sharp=game.inventory.includes(SHARP_SWORD),rusty=game.inventory.includes(RUSTY_SWORD),stick=game.inventory.includes('Ast');
-  return {attack:sharp?3:rusty?2:1,defense:0,weapon:sharp?SHARP_SWORD:rusty?RUSTY_SWORD:stick?'Ast':'Fäuste',armor:'Reisekleidung'};
+  return {attack:(tempered?4:sharp?3:rusty?2:1)+boost,defense:game.flags.mantleMade?0.5:0,weapon:tempered?TEMPERED_SWORD:sharp?SHARP_SWORD:rusty?RUSTY_SWORD:stick?'Ast':'Fäuste',armor:game.flags.mantleMade?'Gefütterter Mantel':'Reisekleidung'};
 }
 
 /** Sichert die mitgebrachten Dinge beim Einstieg und bankt Beute beim sicheren Verlassen. @param {object} game Spiel. @param {object} room Zielraum. */
 export function trackDungeonVisit(game,room) {
+  if (!room.dungeon) { delete game.flags.poisonTicks; delete game.flags.poisonNext; }
   const health=game.health;
   if (health.run?.dungeon===room.dungeon) return;
   health.run=room.dungeon?{dungeon:room.dungeon,inventory:[...game.inventory],coins:game.coins}:null;
 }
 
-/** Zieht Treffer nur in aktiven Dungeons und außerhalb kurzer Unverwundbarkeit ab. @param {object} game Spiel. @param {number} amount Schaden in Lebenspunkten; 0,5 entspricht einem Viertelherz. @param {string} [cue] Eigener Klang der Schadensquelle. */
+/** Zieht Treffer nur in aktiven Dungeons und außerhalb kurzer Unverwundbarkeit ab. @param {object} game Spiel. @param {number} amount Schaden in Lebenspunkten; 0,5 entspricht einem Viertelherz. @param {string} cue Eigener Klang der Schadensquelle. */
 export function damageHero(game,amount,cue) {
   if (!game.room.dungeon || game.mode!=='world' || game.message || game.bagOpen || game.journalOpen || game.mapOpen || game.systemMenu || game.resting || game.hurtTime>0) return false;
   if (typeof amount!=='number' || !Number.isSafeInteger(amount*2) || amount<=0) return false;
-  game.health.hp=Math.max(0,game.health.hp-amount); game.hurtTime=1.1; if (cue || game.health.hp) game.sounds.push(cue || 'combat-hurt');
+  const loss=amount===1?Math.max(0.5,amount-heroStats(game).defense):amount;
+  game.health.hp=Math.max(0,game.health.hp-loss); game.hurtTime=1.1; if (cue || game.health.hp) game.sounds.push(cue || 'combat-hurt');
   if (!game.health.hp) game.sounds.push('combat-death-hero');
   if (!game.health.hp) defeatHero(game);
   return true;
@@ -44,6 +47,7 @@ function dropRunLoot(game) {
 
 /** Ersetzt einen nicht zurückgeholten Beutel und weckt die Figur im reservierten Bett. @param {object} game Spiel. */
 function defeatHero(game) {
+  delete game.flags.poisonTicks; delete game.flags.poisonNext; delete game.flags.strengthUntil; delete game.flags.antidoteUntil;
   dropRunLoot(game); game.health.run=null; game.health.deaths++;
   const room=game.rooms.has(HERO_BED.room)?HERO_BED.room:game.rooms.has('village')?'village':'city';
   game.travel(room,room===HERO_BED.room?HERO_BED.spawn:undefined);
@@ -56,6 +60,7 @@ function defeatHero(game) {
 /** Heilt nach bestätigter Bettruhe und erhält den verlorenen Dungeonbeutel. @param {object} game Spiel. @param {number} target Gewählte Tagesminute. */
 export function sleepInBed(game,target=420) {
   game.move=null; game.held=null; game.message=null; game.pages=[]; game.locationNotice=null;
+  delete game.flags.poisonTicks; delete game.flags.poisonNext;
   sleepUntil(game,target); recordSmithRest(game); game.resting={remaining:1.2,reason:'sleep'}; refillHero(game,game.health.maxHp);
   game.player={x:HERO_BED.spawn[0],y:HERO_BED.spawn[1],facing:'down'}; game.sounds.push('ui-confirm');
 }

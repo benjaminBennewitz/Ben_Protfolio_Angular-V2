@@ -1,4 +1,4 @@
-B2Folio/
+folio/
 ├── .angular/
 │   └── ...
 ├── dist/
@@ -6,6 +6,9 @@ B2Folio/
 ├── node_modules/
 │   └── ...
 ├── scripts/
+│   ├── tests/
+│   │   └── test_audit_assets.py
+│   ├── audit_assets.py
 │   ├── deploy-portfolio-local.cmd
 │   └── deploy-portfolio-server.sh
 ├── src/
@@ -773,7 +776,9 @@ B2Folio/
 │   │   │   │   │   │   ├── quest-east.js
 │   │   │   │   │   │   ├── quest-helpers.js
 │   │   │   │   │   │   ├── quest-mara.js
+│   │   │   │   │   │   ├── quest-preparation.js
 │   │   │   │   │   │   ├── quest-village.js
+│   │   │   │   │   │   ├── quest-west.js
 │   │   │   │   │   │   ├── resident-lines.js
 │   │   │   │   │   │   ├── rooms.js
 │   │   │   │   │   │   ├── root-dungeon.js
@@ -785,7 +790,8 @@ B2Folio/
 │   │   │   │   │   │   ├── village.js
 │   │   │   │   │   │   ├── village-fauna.js
 │   │   │   │   │   │   ├── village-life.js
-│   │   │   │   │   │   └── village-north.js
+│   │   │   │   │   │   ├── village-north.js
+│   │   │   │   │   │   └── west-rooms.js
 │   │   │   │   │   ├── render/
 │   │   │   │   │   │   ├── bag.js
 │   │   │   │   │   │   ├── cave.js
@@ -828,11 +834,13 @@ B2Folio/
 │   │   │   │   │   │   ├── village-scenery.js
 │   │   │   │   │   │   ├── waystone.js
 │   │   │   │   │   │   ├── weapon-swing.js
+│   │   │   │   │   │   ├── winter.js
 │   │   │   │   │   │   └── world.js
 │   │   │   │   │   ├── systems/
 │   │   │   │   │   │   ├── actions.js
 │   │   │   │   │   │   ├── audio-menu.js
 │   │   │   │   │   │   ├── collision.js
+│   │   │   │   │   │   ├── combat-effects.js
 │   │   │   │   │   │   ├── combat-save.js
 │   │   │   │   │   │   ├── daily-life.js
 │   │   │   │   │   │   ├── discoveries.js
@@ -853,6 +861,7 @@ B2Folio/
 │   │   │   │   │   │   ├── mara-quest.js
 │   │   │   │   │   │   ├── meadow-birds.js
 │   │   │   │   │   │   ├── player-movement.js
+│   │   │   │   │   │   ├── preparation.js
 │   │   │   │   │   │   ├── push.js
 │   │   │   │   │   │   ├── puzzles.js
 │   │   │   │   │   │   ├── quest-journal.js
@@ -879,6 +888,7 @@ B2Folio/
 │   │   │   │   │   │   ├── wanderers.js
 │   │   │   │   │   │   ├── waystones.js
 │   │   │   │   │   │   ├── weapon-timing.js
+│   │   │   │   │   │   ├── winter.js
 │   │   │   │   │   │   ├── world-clock.js
 │   │   │   │   │   │   └── world-music.js
 │   │   │   │   │   └── game.js
@@ -917,6 +927,7 @@ B2Folio/
 │   │   │   │   ├── mara-buttons.test.js
 │   │   │   │   ├── night-music.test.js
 │   │   │   │   ├── portfolio-integration.test.js
+│   │   │   │   ├── preparation.test.js
 │   │   │   │   ├── quest-log.test.js
 │   │   │   │   ├── resident-chatter.test.js
 │   │   │   │   ├── resident-life.test.js
@@ -934,6 +945,7 @@ B2Folio/
 │   │   │   │   ├── village.test.js
 │   │   │   │   ├── village-houses.test.js
 │   │   │   │   ├── village-life.test.js
+│   │   │   │   ├── west-pass.test.js
 │   │   │   │   └── world.test.js
 │   │   │   ├── vendor/
 │   │   │   │   └── three/

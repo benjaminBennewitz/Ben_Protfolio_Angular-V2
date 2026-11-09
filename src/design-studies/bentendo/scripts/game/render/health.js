@@ -16,6 +16,14 @@ export function drawDungeonHealth(render) {
   if (!game.room.dungeon || game.bagOpen || game.journalOpen || game.mapOpen || game.systemMenu) return;
   rect(ctx,3,2,2,68,14); rect(ctx,0,3,3,66,12); drawHearts(ctx,game.health,7,5);
   pixelText(ctx,`${game.health.hp}/${game.health.maxHp}`,43,5,PALETTE[3]);
+  const effects=[];
+  if (game.flags.poisonTicks) effects.push('GIFT '+game.flags.poisonTicks);
+  if (game.flags.strengthUntil>game.time*1000) effects.push('KRAFT '+Math.ceil((game.flags.strengthUntil-game.time*1000)/1000));
+  if (game.flags.antidoteUntil>game.time*1000) effects.push('G-SCHUTZ');
+  if (effects.length) {
+    rect(ctx,3,2,17,112,10);
+    pixelText(ctx,effects.join(' '),4,18,PALETTE[0]);
+  }
   if (game.room.boss && game.nestWave && !game.flags.quellNestCleared) {
     rect(ctx,0,89,3,69,12); pixelText(ctx,`WELLE ${game.nestWave}/3`,94,5,PALETTE[3]);
   }
@@ -30,7 +38,7 @@ export function drawProfile(render) {
   pixelText(ctx,`ANGRIFF ${stats.attack}`,82,76,PALETTE[3]); pixelText(ctx,`SCHUTZ ${stats.defense}`,82,87,PALETTE[3]);
   pixelText(ctx,stats.weapon,80,100,PALETTE[3],1,true);
   pixelText(ctx,`${game.coins} G   GEFALLEN: ${game.health.deaths}`,80,111,PALETTE[2],1,true);
-  pixelText(ctx,game.health.lost?'BEUTEL IM DUNGEON':'REISEKLEIDUNG',80,119,PALETTE[2],1,true);
+  pixelText(ctx,game.health.lost?'BEUTEL IM DUNGEON':stats.armor.toUpperCase(),80,119,PALETTE[2],1,true);
   pixelText(ctx,'L: BEUTEL  R: QUESTS',80,129,PALETTE[2],1,true);
 }
 

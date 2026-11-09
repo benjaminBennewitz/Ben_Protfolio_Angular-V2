@@ -18,7 +18,7 @@ export function diagonalBlocked(game,direction) {
 }
 
 /** Normalisiert die Laufgeschwindigkeit anhand der tatsächlichen Rasterstrecke. @param {object} move Bewegungsschritt. */
-export function stepDuration(move) { return 0.18*Math.hypot(move.x-move.fromX,move.y-move.fromY); }
+export function stepDuration(move) { return 0.18*(move.cold?1.4:1)*Math.hypot(move.x-move.fromX,move.y-move.fromY); }
 
 /** Erkennt ausschließlich freie Weltsteuerung für kombinierte Eingaben. @param {object} game Spiel. */
 export function worldMovement(game) {

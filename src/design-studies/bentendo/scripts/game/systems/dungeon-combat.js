@@ -1,3 +1,4 @@
+import { poisonFromEnemy } from './combat-effects.js';
 import { isSword } from '../data/items.js';
 import { movementPosition } from './player-movement.js';
 import { WEAPON_TIMING } from './weapon-timing.js';
@@ -54,7 +55,7 @@ function finishBite(game,actor,dt) {
   actor.windup=Math.max(0,actor.windup-dt);
   if (actor.windup>0) return;
   const distance=Math.abs(actor.x-game.player.x)+Math.abs(actor.y-game.player.y);
-  if (distance===1) damageHero(game,1);
+  if (distance===1 && damageHero(game,1)) poisonFromEnemy(game,actor);
   actor.wait=actor.species==='snake'?0.8:1.1;
 }
 

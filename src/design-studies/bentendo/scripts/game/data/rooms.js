@@ -1,3 +1,4 @@
+import { createWestRooms } from './west-rooms.js';
 import { createRootDungeon } from './root-dungeon.js';
 import { createEastRooms } from './east-rooms.js';
 import { createQuellDungeon } from './quell-dungeon.js';
@@ -21,6 +22,6 @@ export async function loadRooms() {
   await Promise.all(['hall','storage','steam','archive'].map(loadRoom));
   const generated = [createVillage(), createGuildEntrance(), ...createVillageInteriors(), createTown(), ...createInteriors(), createForest('north'), createForest('east')];
   for (const room of generated) rooms.set(room.id, room);
-  for (const room of [createMaraArchive(rooms.get('archive')),createSourceCave(),...createQuellDungeon(),...createEastRooms(),...createRootDungeon()]) rooms.set(room.id,room);
+  for (const room of [createMaraArchive(rooms.get('archive')),createSourceCave(),...createQuellDungeon(),...createEastRooms(),...createRootDungeon(),...createWestRooms()]) rooms.set(room.id,room);
   return rooms;
 }

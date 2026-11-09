@@ -1,3 +1,4 @@
+import { REISWAREN } from '../systems/preparation.js';
 import { restChoiceLabel } from '../systems/rest-menu.js';
 import { rect } from './primitives.js';
 import { pixelText } from '../../display/font.js';
@@ -8,11 +9,12 @@ import { wrapText } from '../systems/text.js';
 export function drawSystemMenu(render) {
   const {ctx,game}=render,menu=game.systemMenu;
   rect(ctx,3,8,20,144,119); rect(ctx,0,10,22,140,115);
-  pixelText(ctx,{pause:'PAUSE',audio:'TON EINSTELLEN',save:game.debugging?'DEBUGSTAND SPEICHERN':'SPIEL SPEICHERN',rest:'BIS WANN SCHLAFEN?'}[menu.kind],80,29,PALETTE[3],1,true);
+  pixelText(ctx,{shop:'REISEBEDARF',pause:'PAUSE',audio:'TON EINSTELLEN',save:game.debugging?'DEBUGSTAND SPEICHERN':'SPIEL SPEICHERN',rest:'BIS WANN SCHLAFEN?'}[menu.kind],80,29,PALETTE[3],1,true);
   if (menu.status) return drawStatus(ctx,menu.status);
   if (menu.kind==='audio') return drawAudioMenu(ctx,menu);
-  const labels=menu.kind==='rest'?[0,1,2,3].map(/** Beschriftet die Schlafauswahl. @param {number} index Zielzeit. */ index=>restChoiceLabel(game,index)):menu.kind==='pause'?['WEITER','NOTIZEN','KARTE','TON EINSTELLEN','SPEICHERN']:['SPEICHERN','ZURÜCK'];
+  const labels=menu.kind==='shop'?[...REISWAREN.map(/** Beschriftet Preis und Reisegegenstand. @param {object} ware Angebot. */ ware=>`${ware.name} ${ware.price}G`),'ZURÜCK']:menu.kind==='rest'?[0,1,2,3].map(/** Beschriftet die Schlafauswahl. @param {number} index Zielzeit. */ index=>restChoiceLabel(game,index)):menu.kind==='pause'?['WEITER','NOTIZEN','KARTE','TON EINSTELLEN','SPEICHERN']:['SPEICHERN','ZURÜCK'];
   for (let i=0;i<labels.length;i++) pixelText(ctx,`${menu.choice===i?'>':' '} ${labels[i]}`,23,46+i*14,PALETTE[3]);
+  if (menu.kind==='shop') pixelText(ctx,`BEUTEL ${game.inventory.length}/6  ${game.coins} G`,80,113,PALETTE[2],1,true);
   pixelText(ctx,'PFEILE: WAHL  A: OK  B: ZU',80,124,PALETTE[2],1,true);
 }
 

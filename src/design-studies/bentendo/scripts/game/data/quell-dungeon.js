@@ -7,7 +7,7 @@ export const DUNGEON_MESSAGE={id:'mara-lower-message',title:'Unter Maras Zeichen
 
 /** Baut fünf verbundene Gewölbe mit einem sicheren Einstieg und einem gesonderten Wellenraum. */
 export function createQuellDungeon() {
-  const rooms=[entry(),gallery(),sluice(),refuge(),nest()];
+  const rooms=[entry(),gallery(),sluice(),refuge(),nest(),quarry()];
   for (const room of rooms) { shapeDungeon(room); furnishDungeon(room); }
   return rooms;
 }
@@ -42,6 +42,15 @@ function sluice() {
 /** Bietet vor dem angekündigten Nest eine kleine Vorbereitungsmöglichkeit. */
 function refuge() {
   const result=room('quell-refuge','Der alte Wachposten',14,12,[door('west',1,6,'quell-sluice',[11,6]),door('east',12,6,'quell-nest',[2,10]),prop('aid','Verbandskiste',4,4,'chest','chest',{item:'Feldverband'}),prop('nest-warning','Verwebte Tafel',8,2,'cave-plaque','inspect',{text:'Im nächsten Raum liegt ein Spinnennest. Untersuche erst das Gespinst in der Mitte, wenn du bereit bist. Danach versperren die Spinnen den Rückweg. Drei Wellen bewachen eine alte Waffentruhe. Ein Feldverband heilt vier Lebenspunkte.'})],[enemy('watch-spider','spider',9,4),enemy('watch-beetle','beetle',9,8)]);
+  result.style='guardpost'; result.objects.push({...door('quarry',9,2,'quell-quarry',[2,6]),name:'Gang zur Schleifkammer',revealedBy:'rootSpringFlowing'}); return result;
+}
+
+/** Öffnet nach Wurzelgrund einen alten Arbeitsraum für eine optionale Rückkehr. */
+function quarry() {
+  const result=room('quell-quarry','Die alte Schleifkammer',14,12,[
+    door('west',1,6,'quell-refuge',[9,3]),
+    prop('stone-cache','Werkzeugkiste',9,3,'chest','quarry-reward'),
+  ],[{...enemy('quarry-beetle','stonebeetle',10,6),venom:true},{...enemy('quarry-spider','spider',8,8),venom:true}]);
   result.style='guardpost'; return result;
 }
 
@@ -56,4 +65,4 @@ export function enemy(id,species,x,y) { return {id,species,x,y,hp:enemyMaxHp(spe
 
 
 /** Liefert die festen Lebenspunkte je Gegnerart. @param {string} species Gegnerart. */
-export function enemyMaxHp(species) { return species==='kobold'?4:species==='beetle'?3:2; }
+export function enemyMaxHp(species) { return species==='stonebeetle'?9:species==='kobold'?4:species==='beetle'?3:2; }

@@ -1,3 +1,4 @@
+import { drawWinterCell,drawWinterTree,drawWinterProp } from './winter.js';
 import { drawRootPit,drawRootPassage,drawRootTunnel } from './root-dungeon.js';
 import { drawEnemies } from './dungeon.js';
 import { drawHeartDrops } from './health.js';
@@ -69,6 +70,7 @@ function drawGround(render) {
 
 /** Zeichnet Gelände und passende Wegkanten aus denselben Kartendaten wie die Kollision. @param {object} render Zeicheninformationen. @param {number} x Spalte. @param {number} y Zeile. */
 function drawCell(render,x,y) {
+  if (render.game.room.winter) return drawWinterCell(render,x,y);
   const ground = render.game.room.ground, kind = ground[y][x], xx=x*16, yy=y*16;
   rect(render.ctx,0,xx,yy,16,16);
   if (kind==='r' && render.game.room.lakeFall) return x===0 && y>2?drawMeadowGateWall(render,x,y):drawLakeCliff(render,x,y);
@@ -186,11 +188,14 @@ function drawEntry(render,entry) {
   if (entry.sleeping) return drawSleepingPet(render,entry);
   if (entry.type==='fetch-stick') return drawFetchStick(render);
   if (entry.type==='perch') return drawAwakeningAnimal(render,entry,entry.x*16,entry.y*16);
+  if (entry.type==='tree' && render.game.room.winter) return drawWinterTree(render,entry);
   if (entry.type==='tree' && entry.pine) return render.ctx.drawImage(render.assets.pineSprite,entry.x*16,entry.y*16);
+  if (entry.type==='tree' && render.game.room.winter) return drawWinterTree(render,entry);
   if (entry.type === 'tree') return render.ctx.drawImage(render.assets.roundTreeSprite,entry.x*16,entry.y*16);
   if (entry.type === 'house') return drawHouse(render,entry);
   if (entry.type === 'player') { if (render.game.room.dungeon) drawWeaponSwing(render); drawVillageHero(render,entry); drawFoliageMask(render,entry); return; }
   if (entry.kind==='spring-stone') return drawSpringStone(render,entry);
+  if (drawWinterProp(render,entry)) return;
   if (entry.kind==='root-tunnel') return drawRootTunnel(render,entry);
   if (entry.kind==='root-passage') return drawRootPassage(render,entry);
   if (entry.kind==='meadow-rock') return drawMeadowRock(render,entry);

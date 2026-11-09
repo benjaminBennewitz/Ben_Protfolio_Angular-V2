@@ -1,3 +1,5 @@
+import { createWestRooms } from '../scripts/game/data/west-rooms.js';
+import { residentLocation } from '../scripts/game/systems/daily-life.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createGame,useObject,dismiss,go } from './helpers.js';
@@ -15,7 +17,7 @@ import { contains,wall } from '../scripts/game/systems/collision.js';
 /** Lädt das vollständige Dorf samt Gilde und Wald. */
 function world() {
   const game=createGame();
-  for (const room of [createVillage(),createGuildEntrance(),...createVillageInteriors(),...createEastRooms()]) game.rooms.set(room.id,room);
+  for (const room of [createVillage(),createGuildEntrance(),...createVillageInteriors(),...createEastRooms(),...createWestRooms()]) game.rooms.set(room.id,room);
   game.reset(); game.mode='world'; game.flags.guildOpen=true; game.flags.eastDoorStudied=true; game.flags.eastTravellerMet=true;
   return game;
 }
@@ -31,7 +33,8 @@ function eveningGuests() {
     game.travel(room); assert.equal(game.objects.some(isPerson),false,room);
   }
   game.travel('village-inn'); const guests=game.objects.filter(isPerson);
-  assert.equal(guests.length,DAILY_RESIDENTS.length+1); assert.equal(new Set(guests.map(personId)).size,guests.length);
+  const expected=DAILY_RESIDENTS.filter(/** Erkennt die zur aktuellen Zeit erwarteten Gäste. @param {object} plan Tagesplan. */ plan=>residentLocation(game,plan.id)==='village-inn');
+  assert.equal(guests.length,expected.length+1); assert.equal(new Set(guests.map(personId)).size,guests.length);
   for (const guest of guests) {
     assert.equal(wall(game,guest.x,guest.y),false);
     for (const object of game.room.objects) if (!isPerson(object) && guest.seatId!==object.id) assert.equal(contains(object,guest.x,guest.y),false,guest.id);

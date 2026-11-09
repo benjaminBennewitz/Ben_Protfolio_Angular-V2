@@ -1,3 +1,5 @@
+import { westQuests } from '../data/quest-west.js';
+import { preparationQuests } from '../data/quest-preparation.js';
 import { eastQuestEntries } from '../data/quest-east.js';
 import { villageQuestEntries } from '../data/quest-village.js';
 import { maraQuestEntries } from '../data/quest-mara.js';
@@ -6,7 +8,7 @@ import { wrapText } from './text.js';
 export const BAG_TABS=['items','profile','quests'];
 
 /** Leitet das Questbuch aus tatsächlichen Gesprächen, Funden und Aufgabenständen ab. @param {object} game Spiel. */
-export function questEntries(game) { return [...villageQuestEntries(game),...maraQuestEntries(game),...eastQuestEntries(game)]; }
+export function questEntries(game) { return [...villageQuestEntries(game),...maraQuestEntries(game),...eastQuestEntries(game),...preparationQuests(game),...westQuests(game)]; }
 
 /** Liefert die stabile Auswahl auch nach einem neu hinzugekommenen Eintrag. @param {object} game Spiel. */
 export function selectedQuest(game) {

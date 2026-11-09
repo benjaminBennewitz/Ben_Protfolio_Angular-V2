@@ -1,3 +1,4 @@
+import { drawWinterHud } from './winter.js';
 import { drawDaylight,drawDoorStudy } from './daylight.js';
 import { drawSaveIndicator } from './save-indicator.js';
 import { drawDungeonHealth,drawHeartDrops } from './health.js';
@@ -29,7 +30,7 @@ export function drawWorld(render) {
   else if (game.room.furnished) drawInterior(render,player);
   else { terrain(render); drawObjects(render); drawHeartDrops(render); drawWeaponSwing(render); drawPlayer(render, player); drawEnemies(render); }
   ctx.restore();
-  drawDaylight(render);
+  drawDaylight(render); drawWinterHud(render);
   const overlay=currentOverlay(game);
   if (overlay==='hud') drawSpeechBubble(render,{x:Math.round(x),y:Math.round(y)});
   drawDungeonHealth(render); OVERLAYS[overlay](render); drawDoorStudy(render); drawSaveIndicator(render);

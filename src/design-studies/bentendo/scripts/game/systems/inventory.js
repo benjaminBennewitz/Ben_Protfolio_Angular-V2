@@ -1,3 +1,4 @@
+import { useTravelPotion } from './combat-effects.js';
 import { promptMeadowStream } from './east-meadow.js';
 import { useEastCanteen } from './east-story.js';
 import { BAG_TABS,navigateQuests,activateQuest,questDescription } from './quest-log.js';
@@ -45,6 +46,7 @@ export function activateBag(game) {
 
 /** Verwendet vorhandene Objektaktionen im passenden Kontext statt einer zweiten Questlogik. @param {object} game Spiel. @param {string} item Gegenstand. */
 function useItem(game,item) {
+  if (['Heiltrank','Gegengift','Stärkungstrank'].includes(item)) return useTravelPotion(game,item);
   if (['Feldflasche','Volle Feldflasche'].includes(item)) return useEastCanteen(game,item);
   if (item==='Rohrbogen' && game.target?.action==='east-pipe') { game.bagOpen=false; game.bagAction=false; ACTIONS['east-pipe'](game,game.target); return; }
   if (isSword(item)) return useSword(game,item);

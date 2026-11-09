@@ -31,6 +31,7 @@ function createGround() {
 /** Bestimmt Wege, Platz und Mühlgraben an zentraler Stelle. @param {number} x Spalte. @param {number} y Zeile. */
 function groundAt(x,y) {
   const north=northGround(x,y); if (north) return north;
+  if (x>=2 && x<=6 && y===16) return '.';
   if (x >= 17 && x <= 18 && y >= 1 && y <= 30) return [12,13,26,27].includes(y) ? 'b' : 'w';
   if (x>=9 && x<=12 && y>=10 && y<=13) return 'e';
   if (x >= 8 && x <= 15 && y >= 9 && y <= 14) return 'p';
@@ -67,6 +68,7 @@ function villageDetails() {
     prop('logs','Holzstapel',2,13,'village-logs','inspect',{w:2,text:'Trockenes Feuerholz für die Schenke. Es riecht nach Harz.'}),
     prop('barrel','Regenfass',7,10,'village-barrel','inspect',{text:'Auf dem Wasser schwimmt ein einzelnes Blatt.'}),
     prop('hitching-post','Anbindepfosten',7,12,'village-post','inspect',{text:'Hier binden Reisende ihre Pferde an. Das Holz ist an den Kanten blank gescheuert.'}),
+    prop('west-road','Westweg',2,16,'winter-trail','west-depart',{hint:'zum Westpass'}),
     prop('north-gate','Höhlen-Sperre',15,1,'gate','mara-north',{text:'GEFAHR: Der Höhlenweg zum Nordwald ist gesperrt. Die Gilde muss den Durchgang erst freigeben. Hilf zunächst den Leuten im Dorf.'}),
     prop('east-hatch','Wartungsluke am Mühlenhaus',22,8,'east-hatch','east-pump-entry',{renderDepth:9.1,hint:'öffnen'}),
     prop('waystone-village','Wegmacherstein',31,14,'waystone','waystone',{hint:'Reise prüfen'}),

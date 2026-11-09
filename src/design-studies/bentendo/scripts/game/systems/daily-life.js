@@ -13,6 +13,7 @@ export function animalsRest(game) { const minute=minuteOfDay(game); return minut
 export function residentLocation(game,id) {
   const plan=DAILY_RESIDENTS.find(/** Vergleicht die Personenkennung. @param {object} entry Tagesplan. */ entry=>entry.id===id);
   if (!plan) return undefined;
+  if (plan.nightVisit && !isNightRest(game)) return plan.home;
   if (id==='keeper' && game.flags.waterFlowing && !game.flags.guildOpen) return 'village';
   if (id==='forest-traveller' && !game.flags.eastTravellerMet) return 'east-crossroads';
   if (isNightRest(game)) return plan.late?'village-inn':null;
@@ -53,6 +54,7 @@ function addTavernGuests(game,result) {
   for (const plan of DAILY_RESIDENTS) {
     if (residentLocation(game,plan.id)!=='village-inn') continue;
     const source=game.rooms.get(plan.home)?.objects.find(/** Vergleicht die Originalperson. @param {object} object Raumobjekt. */ object=>object.id===plan.id);
+    if (source?.revealedBy && !game.flags[source.revealedBy]) continue;
     if (!source || source.id==='forest-traveller' && !game.flags.eastDoorStudied) continue;
     const [x,y]=game.roomState.dailyGuestPoints[plan.id] ||= guestPoint(game,result,plan.point);
     result.push({...source,x,y,drawX:x,drawY:y,route:null,walking:false,scheduled:true,kind:source.appearance?'resident':'npc'});

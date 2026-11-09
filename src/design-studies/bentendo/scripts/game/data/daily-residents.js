@@ -1,5 +1,6 @@
 /** Ordnet bekannte Figuren ihren Tagesorten und freien Gesprächsplätzen in der Schenke zu. */
 export const DAILY_RESIDENTS=[
+  {id:'iva',home:'west-lodge',point:[12,7],late:true,nightVisit:true},
   {id:'host',home:'village',point:[2,7]},
   {id:'fisher',home:'village',point:[5,7]},
   {id:'weaver',home:'village',point:[7,7]},

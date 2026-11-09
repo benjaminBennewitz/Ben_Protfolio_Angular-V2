@@ -1,3 +1,4 @@
+import { REISWAREN,buyTravelSupply } from './preparation.js';
 import { confirmRest } from './rest-menu.js';
 import { openAudioMenu,navigateAudioMenu } from './audio-menu.js';
 /** Schaltet eine Pause ein, ohne das aktuelle Gespräch oder den Rucksack zu verlieren. @param {object} game Spiel. */
@@ -20,6 +21,7 @@ export function openSaveMenu(game) {
 export function navigateSystemMenu(game,direction,audio) {
   const menu=game.systemMenu;
   if (!menu || menu.status) return;
+  if (menu.kind==='shop') { menu.choice=(menu.choice+(['left','up'].includes(direction)?REISWAREN.length:1))%(REISWAREN.length+1); game.sounds.push('ui-move'); return; }
   if (menu.kind==='rest') { menu.choice=(menu.choice+(['left','up'].includes(direction)?3:1))%4; game.sounds.push('ui-move'); return; }
   if (menu.kind==='audio') return navigateAudioMenu(game,direction,audio);
   if (menu.kind==='pause') { menu.choice=(menu.choice+(['left','up'].includes(direction)?4:1))%5; game.sounds.push('ui-move'); return; }
@@ -32,6 +34,7 @@ export function navigateSystemMenu(game,direction,audio) {
 export function activateSystemMenu(game,saves,audio) {
   const menu=game.systemMenu;
   if (!menu) return;
+  if (menu.kind==='shop') { if (menu.status) { delete menu.status; return; } return buyTravelSupply(game); }
   if (menu.kind==='rest') return confirmRest(game);
   if (menu.kind==='pause') return activatePause(game);
   if (menu.kind==='audio') return menu.choice===3?closeSystemMenu(game):navigateAudioMenu(game,menu.choice===2?'toggle':'right',audio);

@@ -1,3 +1,5 @@
+import { enterWest,winterRest,talkIva,inspectWinterMarker,winterSupplies,inspectFrostGate } from './winter.js';
+import { preparationConversation,openTravelShop,quarryReward } from './preparation.js';
 import { useWaystone } from './waystones.js';
 import { offerSharpening } from './smith.js';
 import { tryRootMark,viewEastMeadow,inspectMeadowStream,inspectMeadowStone,talkMeadowResident,tryLowlandGate } from './east-meadow.js';
@@ -20,6 +22,7 @@ import { hallConsole, hallExit, toggleSwitch, storageConsole, storageExit, steam
 /** Zeigt den Objekttext. @param {object} game Spiel. @param {object} object Gegenstand. */
 function inspect(game, object) {
   if (object.sleeping) return game.say(object.name,object.text);
+  if (preparationConversation(game,object)) return;
   if (object.id==='mara') return talkMara(game);
   if (object.id==='workshop-helper' && game.flags.eastPumpSurveyed && !game.flags.eastSpareTaken) return game.say(object.name,'Die Bögen für die alte Druckleitung? Die habe ich nicht weggeworfen. Alles, was noch dicht war, kam zu den Beschlägen. Die kleinen Kisten lohnen oft den zweiten Blick.');
   if (object.id==='workshop-helper' && offerSharpening(game,object)) return;
@@ -36,6 +39,8 @@ function inspect(game, object) {
 function travel(game, object) { if (object.requiresFlag && !game.flags[object.requiresFlag]) return game.say(object.name,'Der Weg ist von hier aus noch nicht erreichbar.','ui-denied'); if (respectNightRest(game,object)) return; game.travel(object.to, object.spawn); }
 
 export const ACTIONS = {
+  'west-depart':enterWest,'winter-rest':winterRest,'winter-iva':talkIva,'winter-marker':inspectWinterMarker,'winter-supplies':winterSupplies,'winter-gate':inspectFrostGate,
+  'travel-shop':openTravelShop,'quarry-reward':quarryReward,
   'free-root-spring':inspectRootValve,
   waystone:useWaystone,
   'lowland-gate':tryLowlandGate,

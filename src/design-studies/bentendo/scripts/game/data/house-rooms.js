@@ -28,6 +28,8 @@ export function createHouseRoom(id) {
     object.hint='hinsetzen'; object.barService=object.id.startsWith('bar-stool-');
   }
   if (id==='workshop') objects.push(prop('pipe-case','Ersatzteilkiste',12,8,'chest','east-spares',{text:'Rohrbögen und Dichtungen für die alten Leitungen.'}));
+  if (id==='inn') Object.assign(objects.find(/** Erkennt den bestehenden Thekenplatz. @param {object} object Möbel. */ object=>object.id==='bar-d'),{name:'Reisebedarf',action:'travel-shop',hint:'einkaufen'});
+  if (id==='weaver') objects.push(prop('tailor','Näherin',11,6,'resident','talk',{appearance:[156,432],text:'Am Saum sieht man, wie weit jemand gereist ist.'}));
   decorateDiscoveries(id,objects);
   return {id:`village-${id}`,title:info.title,...geometry,music:id.startsWith('guild')?'rune-archive':'town-square',interior:true,furnished:true,style:info.style,rugs:info.rugs || [],assetGaps:info.assetGaps || [],villageEntrance:info.entrance,objects};
 }

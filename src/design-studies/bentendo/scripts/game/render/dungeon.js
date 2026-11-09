@@ -5,7 +5,7 @@ import { drawDungeonGround,drawDungeonWall,drawWeb } from './dungeon-scenery.js'
 import { drawDungeonPassage } from './dungeon-passages.js';
 import { rect } from './primitives.js';
 
-const ENEMY_ART={spider:0,beetle:16,snake:32};
+const ENEMY_ART={spider:0,beetle:16,stonebeetle:16,snake:32};
 
 /** Zeichnet native Steinplatten, echte Wandabschlüsse und sparsame Spinnennetze. @param {object} render Zeicheninformationen. @param {number} x Spalte. @param {number} y Zeile. */
 export function drawDungeonCell(render,x,y) {
@@ -21,17 +21,23 @@ export function drawEnemies(render) {
     const x=Math.round(((actor.fromX ?? actor.x)+(actor.x-(actor.fromX ?? actor.x))*p)*16),y=Math.round(((actor.fromY ?? actor.y)+(actor.y-(actor.fromY ?? actor.y))*p)*16);
     const forest=game.room.dungeon==='wurzelgrund';
     const frame=game.reduced?0:forest?forestStep(p):Math.floor(game.time*6)%2;
-    const markerY=y-(forest?rootEnemyRise(actor.species):0);
+    const markerY=y-(forest?rootEnemyRise(actor.species):actor.species==='stonebeetle'?8:0);
     ctx.save(); ctx.translate(x,y);
     if (actor.facing==='left') { ctx.translate(16,0); ctx.scale(-1,1); }
     if (forest) drawRootEnemy(ctx,actor.species,actor.facing,frame);
-    else ctx.drawImage(assets.dungeonEnemies,ENEMY_ART[actor.species],frame*16,16,16,0,0,16,16);
+    else drawAtlasEnemy(render,actor,frame);
     ctx.restore();
     if (actor.hp<actor.maxHp || actor.windup>0) {
       rect(ctx,3,x+1,markerY-4,14,3); rect(ctx,0,x+2,markerY-3,Math.ceil(12*actor.hp/actor.maxHp),1);
     }
     if (actor.windup>0) { rect(ctx,3,x+7,markerY-10,2,4); rect(ctx,3,x+7,markerY-5,2,1); }
   }
+}
+
+/** Zeichnet den Panzerkäfer mit größerem Körper über demselben Kampffeld. @param {object} render Zeicheninformationen. @param {object} actor Gegner. @param {number} frame Animationsphase. */
+function drawAtlasEnemy(render,actor,frame) {
+  const large=actor.species==='stonebeetle',size=large?24:16;
+  render.ctx.drawImage(render.assets.dungeonEnemies,ENEMY_ART[actor.species],frame*16,16,16,large?-4:0,large?-8:0,size,size);
 }
 
 /** Bindet die Bein- und Schwanzbewegung an den Kachelwechsel. @param {number} progress Fortschritt des Schritts. */

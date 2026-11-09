@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./src/assets/social/og-portfolio-preview.svg" alt="B2FOLIO.DE developer tag featuring a design, code, debug, and deploy workflow" width="100%" />
+  <img src="./src/assets/social/og-portfolio-preview.svg" alt="B2FOLIO.DE developer tag with [B²] branding and a design, code, debug, and deploy workflow" width="100%" />
 </p>
 
 <h1 align="center">B2FOLIO.DE</h1>

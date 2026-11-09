@@ -1,4 +1,4 @@
-folio/
+B2Folio/
 ├── .angular/
 │   └── ...
 ├── dist/
@@ -6,9 +6,6 @@ folio/
 ├── node_modules/
 │   └── ...
 ├── scripts/
-│   ├── tests/
-│   │   └── test_audit_assets.py
-│   ├── audit_assets.py
 │   ├── deploy-portfolio-local.cmd
 │   └── deploy-portfolio-server.sh
 ├── src/
@@ -453,11 +450,6 @@ folio/
 │   │   │   │           ├── projects-inbox.webp
 │   │   │   │           └── projects-welcome.webp
 │   │   │   ├── project-stack/
-│   │   │   │   ├── project_2/
-│   │   │   │   │   ├── pj2_chest.webp
-│   │   │   │   │   ├── pj2_key.webp
-│   │   │   │   │   ├── pj2_lock.webp
-│   │   │   │   │   └── pj2_square.webp
 │   │   │   │   ├── analysis-sticker-success.webp
 │   │   │   │   ├── arm.webp
 │   │   │   │   ├── blood-drop-halftone.webp

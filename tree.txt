@@ -1,4 +1,4 @@
-B2Folio/
+folio/
 ├── .angular/
 │   └── ...
 ├── dist/
@@ -6,6 +6,9 @@ B2Folio/
 ├── node_modules/
 │   └── ...
 ├── scripts/
+│   ├── tests/
+│   │   └── test_audit_assets.py
+│   ├── audit_assets.py
 │   ├── deploy-portfolio-local.cmd
 │   └── deploy-portfolio-server.sh
 ├── src/

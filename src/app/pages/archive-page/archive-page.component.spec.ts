@@ -16,6 +16,11 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
 
   beforeEach(/** Richtet den Archivkontext mit unabhängigen Services ein. */() => {
     language.set('de');
+    vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({
+      matches: false,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    }));
     TestBed.configureTestingModule({
       providers: [
         { provide: LanguageService, useValue: { language } },
@@ -28,15 +33,19 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     fixture.detectChanges();
   });
 
-  afterEach(/** Bereinigt den isolierten Angular-Testkontext. */() => TestBed.resetTestingModule());
+  afterEach(/** Bereinigt den isolierten Angular-Testkontext. */() => {
+    TestBed.resetTestingModule();
+    vi.unstubAllGlobals();
+  });
 
-  it('zeigt sämtliche elf Studien mit stabilen, eindeutigen Archivnummern', /** Prüft die zentrale Quelle. */() => {
+  it('zeigt sämtliche Studien mit stabilen, eindeutigen Archivnummern', /** Prüft die zentrale Quelle. */() => {
     expect(page.studies()).toHaveLength(DESIGN_STUDIES.length);
     expect(page.studyNumber('ctrl-room')).toBe('DS/003');
     expect(page.studyNumber('phase')).toBe('DS/009');
     expect(page.studyNumber('dead-air')).toBe('DS/010');
     expect(page.studyNumber('formic')).toBe('DS/011');
-    expect(page.categoryCount('spatial')).toBe(2);
+    expect(page.studyNumber('chlor-glass')).toBe('DS/012');
+    expect(page.categoryCount('spatial')).toBe(3);
   });
 
   it('kombiniert Kategorien mit mehrteiliger Suche und synchronisiert den Inspector', /** Prüft zusammengesetzte Filter. */() => {
@@ -49,7 +58,7 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     expect(page.filteredStudies()).toEqual([]);
     expect(page.activeStudy()).toBeNull();
     page.clearFilters();
-    expect(page.filteredStudies()).toHaveLength(11);
+    expect(page.filteredStudies()).toHaveLength(DESIGN_STUDIES.length);
   });
 
   it('reagiert auf den globalen Sprachwechsel auch bei Textsuche', /** Prüft lokalisierte Suchindizes. */() => {
@@ -59,7 +68,19 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     fixture.detectChanges();
     expect(page.texts().searchLabel).toBe('Search design studies');
     page.setSearch('photography');
-    expect(page.filteredStudies().map(study => study.id)).toEqual(['whatwesee']);
+    expect(page.filteredStudies().map(study => study.id)).toEqual(['whatwesee', 'dead-air']);
+  });
+
+  it('findet CHLOR / GLASS in beiden Sprachen und erhält das statische Studienziel', /** Prüft die neue Archivintegration. */() => {
+    page.setCategory('spatial');
+    page.setSearch('Mattglas');
+    expect(page.filteredStudies().map(study => study.id)).toEqual(['chlor-glass']);
+    expect(page.activeStudy()?.href).toBe('/design-studies/chlor-glass/');
+    expect(page.activeStudy()?.archive.subject).toBe('Botanisches Glaslabor');
+    language.set('en');
+    page.setSearch('Frosted Glass');
+    expect(page.filteredStudies().map(study => study.id)).toEqual(['chlor-glass']);
+    expect(page.activeStudy()?.archive.subject).toBe('Botanical glass laboratory');
   });
 
   it('bringt ein Fenster nach oben und erlaubt Wiederöffnung nach dem Schließen', /** Prüft Fenster- und Z-Reihenfolge. */() => {
@@ -81,12 +102,12 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     Object.defineProperty(page, 'canvas', { configurable: true, value: new ElementRef(stage) });
     page.resetLayout();
 
-    const placed = page.visibleWindows(); // Die elf anfänglich geöffneten Fenster.
+    const placed = page.visibleWindows(); // Alle anfänglich geöffneten Fenster.
     const centerX = placed.map(({ state }) => state.x + state.width / 2); // Horizontale Mittelpunkte.
     const centerY = placed.map(({ state }) => state.y + state.height / 2); // Vertikale Mittelpunkte.
     const widths = new Set(placed.map(({ state }) => Math.round(state.width))); // Unterschiedliche Fensterformate.
 
-    expect(placed).toHaveLength(11);
+    expect(placed).toHaveLength(DESIGN_STUDIES.length);
     expect(widths.size).toBeGreaterThan(3);
     expect(Math.max(...centerX) - Math.min(...centerX)).toBeGreaterThan(stage.clientWidth * 0.55);
     expect(Math.max(...centerY) - Math.min(...centerY)).toBeGreaterThan(stage.clientHeight * 0.45);
@@ -107,7 +128,7 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     const original = page.windows().find(state => state.id === 'ctrl-room'); // Position vor dem Filterwechsel.
 
     page.setCategory('retro');
-    expect(page.visibleWindows()).toHaveLength(1);
+    expect(page.visibleWindows()).toHaveLength(page.categoryCount('retro'));
     expect(page.windows().find(state => state.id === 'ctrl-room')).toMatchObject({
       x: original?.x, y: original?.y, width: original?.width, height: original?.height,
     });

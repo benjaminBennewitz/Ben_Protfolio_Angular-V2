@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eeeee2">
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="CHLOR / GLASS: Interaktive Three.js-Materialstudie mit strukturiertem Mattglas, prozeduralen Pflanzen und einem animierten Pfeilgiftfrosch. Drei botanische Szenen im Browser.">
+  <link rel="canonical" href="https://b2folio.de/design-studies/chlor-glass/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CHLOR / GLASS — Botanisches Lichtlabor">
+  <meta property="og:description" content="Eine dünne Grenze. Eine lebendige Welt. Drei botanische Versuchsanordnungen hinter strukturiertem Glas.">
+  <meta property="og:url" content="https://b2folio.de/design-studies/chlor-glass/">
+  <meta property="og:image" content="https://b2folio.de/design-studies/chlor-glass/assets/preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>CHLOR / GLASS — Botanisches Lichtlabor</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="scripts/app.js"></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#scene-controls" data-text="skip">Zur Szenenauswahl</a>
+  <canvas id="world" role="img" aria-label="Botanische 3D-Szene hinter strukturiertem Mattglas"></canvas>
+  <div class="loading" id="loading" role="status"><span class="loading__mark" aria-hidden="true">✳</span><span data-text="loading">Licht wird gebrochen …</span></div>
+  <header class="header">
+    <a class="back control-surface" href="/archive"><span aria-hidden="true">↖</span><span data-text="back">Zurück zum Archiv</span></a>
+    <span class="header__lab" data-text="lab">Botanisches Lichtlabor</span>
+    <div class="header__actions control-surface">
+      <button id="theme" type="button" aria-label="Farbschema wechseln">◐</button>
+      <button id="language" type="button" aria-label="Switch to English">EN</button>
+      <button id="wallpaper" type="button" aria-label="Wallpapermodus starten" aria-pressed="false" title="Wallpapermodus – Escape oder Klick beendet" disabled>▧</button>
+      <button id="info" type="button" aria-label="Über die Studie">i</button>
+    </div>
+  </header>
+  <main class="stage">
+    <section class="identity" aria-labelledby="study-title">
+      <p class="eyebrow" data-text="edition">Materialstudie / 012</p>
+      <h1 id="study-title">CHLOR<span class="identity__slash"> / </span><span>GLASS</span><sup>01</sup></h1>
+      <p class="identity__tagline" data-text="subtitle">Eine dünne Grenze. Eine lebendige Welt.</p>
+    </section>
+    <section class="panel control-surface" id="scene-controls" tabindex="-1" aria-labelledby="scene-heading">
+      <div class="panel__heading">
+        <h2 class="panel__title" id="scene-heading" data-text="sceneLabel">Versuchsanordnung</h2>
+        <span id="scene-number" aria-hidden="true">01 / 03</span>
+        <button class="panel__toggle" id="settings-toggle" type="button" aria-expanded="true" aria-controls="panel-body">
+          <span data-text="settings">Einstellungen</span><span id="settings-scene">Normal</span><span class="panel__chevron" aria-hidden="true">⌄</span>
+        </button>
+      </div>
+      <div class="panel__body" id="panel-body">
+        <div class="scenes" role="group" aria-labelledby="scene-heading">
+          <button class="scene-button" type="button" data-scene="0" aria-pressed="true"><span class="scene-button__number">01</span><span data-scene-name="0">Normal</span><span class="scene-button__indicator" aria-hidden="true">↗</span></button>
+          <button class="scene-button" type="button" data-scene="1" aria-pressed="false"><span class="scene-button__number">02</span><span data-scene-name="1">Dicht</span><span class="scene-button__indicator" aria-hidden="true">↗</span></button>
+          <button class="scene-button" type="button" data-scene="2" aria-pressed="false"><span class="scene-button__number">03</span><span data-scene-name="2">Frosch</span><span class="scene-button__indicator" aria-hidden="true">↗</span></button>
+        </div>
+        <p class="panel__description" id="scene-description">Locker wachsendes Blattwerk über dichtem Bodengrün. Feuchte Luft fängt das Licht.</p>
+        <div class="material-control">
+          <label for="frost" data-text="frost">Mattierung</label><output id="frost-value" for="frost">75%</output>
+          <input id="frost" type="range" min="50" max="100" step="1" value="75">
+        </div>
+        <div class="material-control">
+          <label for="moisture" data-text="moisture">Feuchtigkeit</label><output id="moisture-value" for="moisture">40%</output>
+          <input id="moisture" type="range" min="0" max="100" step="1" value="40">
+        </div>
+        <div class="panel__actions">
+          <button id="grid" class="toggle" type="button" aria-pressed="true"><span class="toggle__light" aria-hidden="true"></span><span data-text="grid">Drahtgitter</span></button>
+          <button id="pause" class="pause" type="button" aria-label="Bewegung pausieren" aria-pressed="false"><span aria-hidden="true">Ⅱ</span></button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <p class="scene-status control-surface"><span class="status-dot" aria-hidden="true"></span><span id="motion-status">Lebendige Szene</span></p>
+    <span class="footer__hint" id="hint" data-text="hint">Bewege den Blick. Entdecke die Tiefe.</span>
+    <div class="footer__links"><a href="/impressum" data-text="imprint">Impressum</a><a href="/datenschutz" data-text="privacy">Datenschutz</a><span>B² / 2026</span></div>
+  </footer>
+  <p class="sr-only" id="announcement" role="status" aria-live="polite"></p>
+  <dialog class="about control-surface" id="about" aria-labelledby="about-title">
+    <form method="dialog"><button class="about__close" type="submit" data-text="close">Schließen</button></form>
+    <p class="eyebrow">CHLOR / GLASS</p>
+    <h2 id="about-title" data-text="aboutTitle">Zwischen Nähe und Unschärfe.</h2>
+    <p data-text="aboutText"></p><p data-text="aboutTech"></p>
+  </dialog>
+  <noscript><p class="error">Diese interaktive Materialstudie benötigt JavaScript. / This interactive material study requires JavaScript.</p></noscript>
+</body>
+
+</html>

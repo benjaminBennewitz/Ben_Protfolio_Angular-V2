@@ -1,0 +1,778 @@
+/*###############################
+###
+###     styles.css
+###     CHLOR / GLASS — Botanisches Lichtlabor
+###     BASED ON: HTML5, CSS3, Vanilla JavaScript, Three.js
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Schriften, Tokens und Basis
+   02   Bühne und Ladezustände
+   03   Kopfzeile und Bedienelemente
+   04   Identität und Typografie
+   05   Szenenauswahl und Materialregler
+   06   Status und Footer
+   07   Dialog und Barrierefreiheit
+   08   Wallpaper, Responsive und reduzierte Bewegung
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Schriften, Tokens und Basis
+   ========================================================================== */
+
+@font-face {
+  font-family: 'Chlor Inter';
+  src: url('../../assets/fonts/inter-variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Chlor Mono';
+  src: url('../../assets/fonts/jetbrains-mono-variable.woff2') format('woff2');
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  --cg-surface: #f0f0e4;
+  --cg-ink: #26372a;
+  --cg-muted: #57634f;
+  --cg-line: #bbc2ad;
+  --cg-active: #284a30;
+  --cg-active-ink: #f0f3df;
+  --cg-accent: #b7ce83;
+  --cg-shadow: #12211724;
+  --cg-font: 'Chlor Inter', Arial, sans-serif;
+  --cg-mono: 'Chlor Mono', monospace;
+  font-family: var(--cg-font);
+  color: var(--cg-ink);
+  background: #556b3e;
+  font-synthesis: none;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --cg-surface: #17231c;
+  --cg-ink: #edf0df;
+  --cg-muted: #bcc8b4;
+  --cg-line: #435443;
+  --cg-active: #c4d89e;
+  --cg-active-ink: #17231c;
+  --cg-accent: #c4d89e;
+  --cg-shadow: #03100845;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  margin: 0;
+  padding: clamp(18px, 2.7vw, 44px);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button,
+a,
+input {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+button {
+  color: inherit;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.25em;
+}
+
+button:disabled,
+input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+:focus-visible {
+  outline: 3px solid var(--cg-active);
+  outline-offset: 4px;
+}
+
+.control-surface {
+  color: var(--cg-ink);
+  background: var(--cg-surface);
+  border: 1px solid var(--cg-line);
+  box-shadow: 0 8px 30px var(--cg-shadow);
+}
+
+/* ==========================================================================
+   02   Bühne und Ladezustände
+   ========================================================================== */
+
+#world {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(at 0 0, #e8e6c7, #345536);
+}
+
+.header,
+.stage,
+.footer {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.header > *,
+.panel,
+.footer > * {
+  pointer-events: auto;
+}
+
+.loading {
+  position: fixed;
+  z-index: 4;
+  top: 40%;
+  left: 50%;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  width: min(420px, calc(100% - 40px));
+  padding: 24px;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--cg-line);
+  color: var(--cg-ink);
+  background: var(--cg-surface);
+  font-family: var(--cg-mono);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.loading[hidden] {
+  display: none;
+}
+
+.loading__mark {
+  font-size: 2.2rem;
+}
+
+/* ==========================================================================
+   03   Kopfzeile und Bedienelemente
+   ========================================================================== */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 0 16px;
+  font-family: var(--cg-mono);
+  font-size: 0.67rem;
+  text-decoration: none;
+}
+
+.back > span:first-child {
+  font-size: 1.3rem;
+}
+
+.header__lab {
+  padding: 10px 14px;
+  color: #f1f3e5;
+  background: #17231ce8;
+  font-family: var(--cg-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.header__actions {
+  display: flex;
+}
+
+.header__actions button,
+.pause {
+  display: grid;
+  place-items: center;
+  min-width: 46px;
+  min-height: 46px;
+  padding: 8px;
+  border: 0;
+  border-left: 1px solid var(--cg-line);
+  background: transparent;
+  font-family: var(--cg-mono);
+  font-size: 0.75rem;
+}
+
+.header__actions button:first-child {
+  border-left: 0;
+  font-size: 1.2rem;
+}
+
+button:hover:not(:disabled),
+.back:hover {
+  color: var(--cg-active-ink);
+  background: var(--cg-active);
+}
+
+/* ==========================================================================
+   04   Identität und Typografie
+   ========================================================================== */
+
+.stage {
+  display: grid;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  align-items: end;
+  gap: 28px;
+  min-height: 600px;
+  padding: 80px 0 30px;
+}
+
+.identity {
+  width: fit-content;
+  max-width: 100%;
+  padding: 22px 24px;
+  color: #edf0dd;
+  background: #14291ce8;
+  border: 1px solid #a7bf8c50;
+  transition: padding 380ms ease;
+}
+
+.eyebrow {
+  margin: 0 0 18px;
+  font-family: var(--cg-mono);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.identity h1 {
+  position: relative;
+  margin: 0;
+  font-size: clamp(30px, 4.4vw, 76px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.07em;
+  white-space: nowrap;
+  transition: font-size 380ms ease;
+}
+
+.identity h1 sup {
+  display: inline-block;
+  margin-left: 0.45em;
+  font-family: var(--cg-mono);
+  font-size: 0.2em;
+  font-weight: 400;
+  vertical-align: top;
+}
+
+.identity__slash {
+  color: #b6cc8f;
+  font-weight: 200;
+}
+
+.identity__tagline {
+  margin: 14px 0 0;
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.identity .eyebrow,
+.identity__tagline {
+  max-height: 5em;
+  overflow: hidden;
+  transition: max-height 380ms ease, margin 380ms ease, opacity 240ms ease;
+}
+
+.identity.identity--compact {
+  padding: 12px 15px;
+}
+
+.identity.identity--compact h1 {
+  font-size: clamp(22px, 1.8vw, 30px);
+}
+
+.identity.identity--compact .eyebrow,
+.identity.identity--compact .identity__tagline {
+  max-height: 0;
+  margin: 0;
+  opacity: 0;
+}
+
+/* ==========================================================================
+   05   Szenenauswahl und Materialregler
+   ========================================================================== */
+
+.panel {
+  padding: 20px;
+}
+
+.panel__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 16px;
+  font-family: var(--cg-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.panel__heading h2 {
+  margin: 0;
+  font: inherit;
+}
+
+.panel__heading > span {
+  white-space: nowrap;
+}
+
+.panel__toggle {
+  display: none;
+}
+
+.panel__body[hidden] {
+  display: none;
+}
+
+.scenes {
+  display: grid;
+  gap: 5px;
+}
+
+.scene-button {
+  display: grid;
+  grid-template-columns: 22px 1fr 14px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--cg-line);
+  background: transparent;
+  font-size: 0.8rem;
+  text-align: left;
+}
+
+.scene-button[aria-pressed='true'] {
+  color: var(--cg-active-ink);
+  background: var(--cg-active);
+  border-color: var(--cg-active);
+}
+
+.scene-button__number {
+  font-family: var(--cg-mono);
+  font-size: 0.6rem;
+}
+
+.scene-button__indicator {
+  opacity: 0;
+}
+
+.scene-button[aria-pressed='true'] .scene-button__indicator {
+  opacity: 1;
+}
+
+.panel__description {
+  min-height: 3.2em;
+  margin: 16px 0 20px;
+  color: var(--cg-muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.material-control {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  font-family: var(--cg-mono);
+  font-size: 0.66rem;
+}
+
+.material-control + .material-control {
+  margin-top: 8px;
+}
+
+.material-control input {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-height: 44px;
+  margin: 0;
+  accent-color: var(--cg-active);
+  cursor: ew-resize;
+}
+
+.panel__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  border-top: 1px solid var(--cg-line);
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 46px;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  font-family: var(--cg-mono);
+  font-size: 0.64rem;
+}
+
+.toggle__light,
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+
+.toggle[aria-pressed='true'] .toggle__light,
+.status-dot {
+  background: currentColor;
+}
+
+/* ==========================================================================
+   06   Status und Footer
+   ========================================================================== */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--cg-mono);
+  font-size: 0.58rem;
+}
+
+.scene-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 10px;
+}
+
+.status-dot {
+  color: var(--cg-active);
+}
+
+.footer__hint,
+.footer__links {
+  padding: 8px 10px;
+  color: #edf0df;
+  background: #14291ce8;
+}
+
+.footer__links {
+  display: flex;
+  gap: 15px;
+}
+
+.footer a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ==========================================================================
+   07   Dialog und Barrierefreiheit
+   ========================================================================== */
+
+.about {
+  width: min(560px, calc(100% - 32px));
+  max-height: calc(100svh - 40px);
+  padding: 32px;
+}
+
+.about::backdrop {
+  background: #0a1b12a8;
+  backdrop-filter: blur(8px);
+}
+
+.about form {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 28px;
+}
+
+.about__close {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--cg-line);
+  background: transparent;
+  font-family: var(--cg-mono);
+  font-size: 0.7rem;
+}
+
+.about h2 {
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.about p,
+.about > a {
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.sr-only,
+.skip-link:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link:focus {
+  position: fixed;
+  z-index: 8;
+  top: 15px;
+  left: 15px;
+  padding: 15px;
+  color: var(--cg-ink);
+  background: var(--cg-surface);
+}
+
+.error {
+  position: fixed;
+  z-index: 6;
+  top: 25%;
+  left: 10%;
+  width: 80%;
+  padding: 24px;
+  color: var(--cg-ink);
+  background: var(--cg-surface);
+}
+
+/* ==========================================================================
+   08   Wallpaper, Responsive und reduzierte Bewegung
+   ========================================================================== */
+
+html[data-wallpaper='true'] {
+  overflow: hidden;
+}
+
+[data-wallpaper='true'] .header,
+[data-wallpaper='true'] .stage,
+[data-wallpaper='true'] .footer,
+[data-wallpaper='true'] .skip-link {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+[data-wallpaper='true'] #world {
+  cursor: none;
+  outline: none;
+  touch-action: manipulation;
+}
+
+@media (min-width: 1500px) {
+  .stage {
+    grid-template-columns: minmax(0, 1fr) 340px;
+  }
+}
+
+@media (max-width: 900px) {
+  .header__lab,
+  .footer__hint {
+    display: none;
+  }
+
+  .stage {
+    grid-template-columns: minmax(0, 1fr) 285px;
+    gap: 18px;
+  }
+
+  .identity {
+    padding: 18px;
+  }
+
+  .identity h1 {
+    font-size: 3.5vw;
+  }
+}
+
+@media (max-width: 760px) {
+  body {
+    padding: 16px;
+  }
+
+  .back {
+    gap: 7px;
+    padding: 0 10px;
+    font-size: 0.58rem;
+  }
+
+  .header__actions button {
+    min-width: 44px;
+  }
+
+  .stage {
+    grid-template-columns: 1fr;
+    align-content: end;
+    gap: 14px;
+    min-height: calc(100svh - 160px);
+    padding-top: 180px;
+    padding-bottom: 20px;
+  }
+
+  .identity {
+    padding: 15px 18px;
+  }
+
+  .identity h1 {
+    font-size: clamp(28px, 7vw, 42px);
+  }
+
+  .identity .eyebrow {
+    margin-bottom: 8px;
+    font-size: 0.55rem;
+  }
+
+  .identity__tagline {
+    margin-top: 8px;
+    font-size: 0.7rem;
+  }
+
+  .panel {
+    padding: 0;
+  }
+
+  .panel__heading {
+    margin: 0;
+  }
+
+  .panel__title,
+  #scene-number {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .panel__toggle {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 52px;
+    padding: 12px 16px;
+    border: 0;
+    color: var(--cg-ink);
+    background: transparent;
+    font-family: var(--cg-mono);
+    font-size: 0.65rem;
+    text-align: left;
+  }
+
+  #settings-scene {
+    overflow: hidden;
+    color: var(--cg-muted);
+    font-size: 0.6rem;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .panel__toggle:hover #settings-scene {
+    color: inherit;
+  }
+
+  .panel__chevron {
+    font-size: 1rem;
+    transition: transform 220ms ease;
+  }
+
+  .panel__toggle[aria-expanded='true'] .panel__chevron {
+    transform: rotate(180deg);
+  }
+
+  .panel__body {
+    padding: 0 16px 8px;
+  }
+
+  .panel__description {
+    min-height: 0;
+    margin: 12px 0;
+  }
+
+  .footer {
+    flex-wrap: wrap;
+    font-size: 0.55rem;
+  }
+
+  .footer__links {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .back > span:last-child {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .header {
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

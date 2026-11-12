@@ -115,6 +115,16 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       category: 'generative',
       archive: { concept: 'Generative Behaviour / Creative Coding', subject: 'Ant movement as drawing', idea: 'What happens when autonomous movement becomes the drawing tool and human control is reduced to a few visual parameters?' },
     },
+    {
+      id: 'chlor-glass',
+      name: 'CHLOR / GLASS',
+      subtitle: 'Botanical Light Laboratory — Three Living Scenes',
+      href: '/design-studies/chlor-glass/',
+      preview: '/design-studies/chlor-glass/assets/preview.png',
+      tags: ['Three.js', 'Frosted Glass', 'Procedural Nature', 'WebGL'],
+      category: 'spatial',
+      archive: { concept: 'Material / Light / Depth', subject: 'Botanical glass laboratory', idea: 'Can textured glass become a spatial interface that makes proximity, depth and living botanical forms tangible?' },
+    },
   ]; // Reihenfolge und öffentliche Ziele der Designstudien.
 
 /** Deutsche Karteninhalte; Marken und technische Eigennamen bleiben erhalten. */
@@ -129,5 +139,6 @@ export const DESIGN_STUDY_TRANSLATIONS_DE: Readonly<Record<string, Pick<DesignSt
   phase: { subtitle: 'Ein lebendiger Mikrokosmos – zwölf generative Wesen', tags: ['Generative Kunst', 'p5.js', 'Canvas', 'Kreative Programmierung'], archive: { concept: 'Generative Kunst / Creative Coding', subject: 'Organische digitale Wesen', idea: 'Wie entstehen aus mathematischen Regeln lebendige, ausdrucksstarke visuelle Systeme statt bloßer Animationen?' } },
   bentendo: { subtitle: 'Ein spielbarer Handheld – DUNGEON WANTED', tags: ['Three.js', 'Pixel-Rollenspiel', 'Web Audio', 'Spieldesign'], archive: { concept: 'Retro-Handheld / Pixel-Art', subject: 'Spielbares Browserabenteuer', idea: 'Wie überzeugend verschmelzen ein fiktiver Handheld, seine Geräteoberfläche und ein tatsächlich spielbares Spiel?' } },
   'dead-air': { subtitle: 'North Coast Broadcasting System – Signallabor', tags: ['Analog Broadcast', 'CRT / Signal', 'Fotografie', 'HTML / CSS / JS'], archive: { concept: 'Analog Broadcast / CRT', subject: 'Übernatürlicher Küstenfunk', idea: 'Kann ein glaubwürdiges regionales Broadcast-Interface eine fotografische Landschaft durch subtile Signalstörungen geheimnisvoll lebendig erscheinen lassen?' } },
+  'chlor-glass': { subtitle: 'Botanisches Lichtlabor – drei lebendige Szenen', tags: ['Three.js', 'Mattglas', 'Prozedurale Natur', 'WebGL'], archive: { concept: 'Material / Licht / Tiefe', subject: 'Botanisches Glaslabor', idea: 'Kann strukturiertes Glas zur räumlichen Schnittstelle werden, die Nähe, Tiefe und lebendige Pflanzenformen spürbar macht?' } },
   formic: { subtitle: 'Eine lebendige Leinwand – Atelier für Verhaltenskunst', tags: ['Generative Kunst', 'Canvas', 'Verhaltenssimulation', 'HTML / CSS / JS'], archive: { concept: 'Generatives Verhalten / Creative Coding', subject: 'Ameisenbewegung als Zeichnung', idea: 'Was passiert, wenn autonome Bewegung selbst zum Zeichenwerkzeug wird und die menschliche Kontrolle auf wenige visuelle Parameter reduziert ist?' } },
 };

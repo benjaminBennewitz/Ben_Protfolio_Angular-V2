@@ -170,11 +170,11 @@ An interactive manifesto about pressure, destruction, and creative transformatio
 
 [Study README](src/design-studies/formic/README.md) · [Open study](https://b2folio.de/design-studies/formic/)
 
-### CHLOR / GLASS — Botanical Light Laboratory
+### TERRA — Botanical Light Laboratory
 
-**Material and spatial design study (prototype 11).** A textured glass surface and fine wire grid frame three procedural botanical scenes: normal foliage, dense foliage and one animated blue-violet poison dart frog on the inner face of the pane. Low ground cover anchors each arrangement; adjustable moisture adds soft mist, condensation and sparse inner-glass droplets. Depth-aware refraction and blur, slow foliage movement and a restrained laboratory interface explore the relationship between proximity and legibility. Supports DE/EN, light/dark controls, pause and reduced motion; uses the existing local Three.js distribution without adding a package or CDN.
+**Material and spatial design study (prototype 16).** A textured glass surface and fine wire grid frame three procedural botanical scenes: normal foliage, dense foliage and one animated blue-violet poison dart frog on the inner face of the pane. Low ground cover anchors each arrangement; adjustable moisture adds soft mist, condensation and sparse inner-glass droplets. Depth-aware refraction and blur, slow foliage movement and a restrained laboratory interface explore the relationship between proximity and legibility. Supports DE/EN, light/dark controls, pause and reduced motion; uses the existing local Three.js distribution without adding a package or CDN.
 
-[Study README](src/design-studies/chlor-glass/README.md) · [Open study](https://b2folio.de/design-studies/chlor-glass/)
+[Study README](src/design-studies/terra/README.md) · [Open study](https://b2folio.de/design-studies/terra/)
 
 ### Shared integration
 
@@ -233,7 +233,7 @@ src/
 │  ├─ bentendo/               # BENTENDO / DUNGEON WANTED
 │  ├─ phase/                  # PHASE. / generative microcosm
 │  ├─ dead-air/               # DEAD//AIR / analog coastal broadcast
-│  ├─ chlor-glass/            # CHLOR / GLASS / botanical material laboratory
+│  ├─ terra/                  # TERRA / botanical material laboratory
 │  └─ formic/                 # FORMIC / generative behavioural art
 ├─ environments/              # Public frontend configuration by environment
 ├─ styles/                    # Tokens, base styles, utilities, and case-study styles
@@ -286,7 +286,7 @@ Neither the public visibility of this repository nor any technically available G
 
 All photographs in the SWISS / [WHATWESEE] study are by Benjamin Bennewitz and carry visible author credits. They remain subject to the portfolio license; public display does not grant permission to reuse them.
 
-AI-generated photographic-looking material is identified separately in the relevant studies: RAW/FORM uses visible AI image badges, CTRL//ROOM labels its generated photographic motifs and track, and SCOOP! labels its fictional portrait placeholders. BENTENDO documents AI-assisted project music and third-party game assets in its credits. DEAD//AIR uses an AI-generated photographic concept image alongside a separately credited Pexels video. Procedural Three.js scenes, CSS3D composition, and Canvas rendering are not the same as AI image generation.
+AI-generated photographic-looking material is identified separately in the relevant studies: RAW/FORM uses visible AI image badges, CTRL//ROOM labels its generated photographic motifs and track, and SCOOP! labels its fictional portrait placeholders. BENTENDO documents AI-assisted project music and third-party game assets in its credits. DEAD//AIR uses an AI-generated photographic concept image alongside a separately credited Pexels video. TERRA’s archive preview uses an actual screenshot of the study, cropped without its interface and exported as WebP. Procedural Three.js scenes, CSS3D composition, and Canvas rendering are not the same as AI image generation.
 
 Origin labels do not imply that every generated output has the same copyright status, and they do not replace asset-specific terms. Original photography, authored design and code, AI-generated material, and third-party assets should be evaluated separately.
 

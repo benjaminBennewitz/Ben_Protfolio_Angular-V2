@@ -1,7 +1,7 @@
 /*###############################
 ###
 ###     styles.css
-###     CHLOR / GLASS — Botanisches Lichtlabor
+###     TERRA — Botanisches Lichtlabor
 ###     BASED ON: HTML5, CSS3, Vanilla JavaScript, Three.js
 ###     AUTHOR: Benjamin Bennewitz
 ###
@@ -33,14 +33,14 @@
    ========================================================================== */
 
 @font-face {
-  font-family: 'Chlor Inter';
+  font-family: 'Terra Inter';
   src: url('../../assets/fonts/inter-variable.woff2') format('woff2');
   font-weight: 100 900;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Chlor Mono';
+  font-family: 'Terra Mono';
   src: url('../../assets/fonts/jetbrains-mono-variable.woff2') format('woff2');
   font-weight: 100 800;
   font-display: swap;
@@ -48,32 +48,32 @@
 
 :root {
   color-scheme: light;
-  --cg-surface: #f0f0e4;
-  --cg-ink: #26372a;
-  --cg-muted: #57634f;
-  --cg-line: #bbc2ad;
-  --cg-active: #284a30;
-  --cg-active-ink: #f0f3df;
-  --cg-accent: #b7ce83;
-  --cg-shadow: #12211724;
-  --cg-font: 'Chlor Inter', Arial, sans-serif;
-  --cg-mono: 'Chlor Mono', monospace;
-  font-family: var(--cg-font);
-  color: var(--cg-ink);
+  --terra-surface: #f0f0e4;
+  --terra-ink: #26372a;
+  --terra-muted: #57634f;
+  --terra-line: #bbc2ad;
+  --terra-active: #284a30;
+  --terra-active-ink: #f0f3df;
+  --terra-accent: #b7ce83;
+  --terra-shadow: #12211724;
+  --terra-font: 'Terra Inter', Arial, sans-serif;
+  --terra-mono: 'Terra Mono', monospace;
+  font-family: var(--terra-font);
+  color: var(--terra-ink);
   background: #556b3e;
   font-synthesis: none;
 }
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --cg-surface: #17231c;
-  --cg-ink: #edf0df;
-  --cg-muted: #bcc8b4;
-  --cg-line: #435443;
-  --cg-active: #c4d89e;
-  --cg-active-ink: #17231c;
-  --cg-accent: #c4d89e;
-  --cg-shadow: #03100845;
+  --terra-surface: #17231c;
+  --terra-ink: #edf0df;
+  --terra-muted: #bcc8b4;
+  --terra-line: #435443;
+  --terra-active: #c4d89e;
+  --terra-active-ink: #17231c;
+  --terra-accent: #c4d89e;
+  --terra-shadow: #03100845;
 }
 
 * {
@@ -121,15 +121,15 @@ input:disabled {
 }
 
 :focus-visible {
-  outline: 3px solid var(--cg-active);
+  outline: 3px solid var(--terra-active);
   outline-offset: 4px;
 }
 
 .control-surface {
-  color: var(--cg-ink);
-  background: var(--cg-surface);
-  border: 1px solid var(--cg-line);
-  box-shadow: 0 8px 30px var(--cg-shadow);
+  color: var(--terra-ink);
+  background: var(--terra-surface);
+  border: 1px solid var(--terra-line);
+  box-shadow: 0 8px 30px var(--terra-shadow);
 }
 
 /* ==========================================================================
@@ -170,10 +170,10 @@ input:disabled {
   width: min(420px, calc(100% - 40px));
   padding: 24px;
   transform: translate(-50%, -50%);
-  border: 1px solid var(--cg-line);
-  color: var(--cg-ink);
-  background: var(--cg-surface);
-  font-family: var(--cg-mono);
+  border: 1px solid var(--terra-line);
+  color: var(--terra-ink);
+  background: var(--terra-surface);
+  font-family: var(--terra-mono);
   font-size: 0.8rem;
   line-height: 1.6;
   text-align: center;
@@ -204,7 +204,7 @@ input:disabled {
   gap: 12px;
   min-height: 46px;
   padding: 0 16px;
-  font-family: var(--cg-mono);
+  font-family: var(--terra-mono);
   font-size: 0.67rem;
   text-decoration: none;
 }
@@ -217,7 +217,7 @@ input:disabled {
   padding: 10px 14px;
   color: #f1f3e5;
   background: #17231ce8;
-  font-family: var(--cg-mono);
+  font-family: var(--terra-mono);
   font-size: 0.65rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -235,9 +235,9 @@ input:disabled {
   min-height: 46px;
   padding: 8px;
   border: 0;
-  border-left: 1px solid var(--cg-line);
+  border-left: 1px solid var(--terra-line);
   background: transparent;
-  font-family: var(--cg-mono);
+  font-family: var(--terra-mono);
   font-size: 0.75rem;
 }
 
@@ -248,8 +248,8 @@ input:disabled {
 
 button:hover:not(:disabled),
 .back:hover {
-  color: var(--cg-active-ink);
-  background: var(--cg-active);
+  color: var(--terra-active-ink);
+  background: var(--terra-active);
 }
 
 /* ==========================================================================
@@ -278,7 +278,7 @@ button:hover:not(:disabled),
 
 .eyebrow {
   margin: 0 0 18px;
-  font-family: var(--cg-mono);
+  font-family: var(--terra-mono);
   font-size: 0.64rem;
   font-weight: 500;
   letter-spacing: 0.13em;
@@ -299,15 +299,10 @@ button:hover:not(:disabled),
 .identity h1 sup {
   display: inline-block;
   margin-left: 0.45em;
-  font-family: var(--cg-mono);
+  font-family: var(--terra-mono);
   font-size: 0.2em;
   font-weight: 400;
   vertical-align: top;
-}
-
-.identity__slash {
-  color: #b6cc8f;
-  font-weight: 200;
 }
 
 .identity__tagline {
@@ -352,7 +347,7 @@ button:hover:not(:disabled),
   justify-content: space-between;
   gap: 14px;
   margin-bottom: 16px;
-  font-family: var(--cg-mono);
+  font-family: var(--terra-mono);
   font-size: 0.58rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -388,20 +383,20 @@ button:hover:not(:disabled),
   width: 100%;
   min-height: 46px;
   padding: 10px 12px;
-  border: 1px solid var(--cg-line);
+  border: 1px solid var(--terra-line);
   background: transparent;
   font-size: 0.8rem;
   text-align: left;
 }
 
 .scene-button[aria-pressed='true'] {
-  color: var(--cg-active-ink);
-  background: var(--cg-active);
-  border-color: var(--cg-active);
+  color: var(--terra-active-ink);
+  background: var(--terra-active);
+  border-color: var(--terra-active);
 }
 
 .scene-button__number {
-  font-family: var(--cg-mono);
+  font-family: var(--terra-mono);
   font-size: 0.6rem;
 }
 
@@ -416,7 +411,7 @@ button:hover:not(:disabled),
 .panel__description {
   min-height: 3.2em;
   margin: 16px 0 20px;
-  color: var(--cg-muted);
+  color: var(--terra-muted);
   font-size: 0.75rem;
   line-height: 1.6;
 }
@@ -425,7 +420,7 @@ button:hover:not(:disabled),
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  font-family: var(--cg-mono);
+  font-family: var(--terra-mono);
   font-size: 0.66rem;
 }
 
@@ -438,7 +433,7 @@ button:hover:not(:disabled),
   width: 100%;
   min-height: 44px;
   margin: 0;
-  accent-color: var(--cg-active);
+  accent-color: var(--terra-active);
   cursor: ew-resize;
 }
 
@@ -447,7 +442,7 @@ button:hover:not(:disabled),
   align-items: center;
   justify-content: space-between;
   margin-top: 6px;
-  border-top: 1px solid var(--cg-line);
+  border-top: 1px solid var(--terra-line);
 }
 
 .toggle {
@@ -458,7 +453,7 @@ button:hover:not(:disabled),
   padding: 8px;
   border: 0;
   background: transparent;
-  font-family: var(--cg-mono);
+  font-family: var(--terra-mono);
   font-size: 0.64rem;
 }
 
@@ -484,7 +479,7 @@ button:hover:not(:disabled),
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  font-family: var(--cg-mono);
+  font-family: var(--terra-mono);
   font-size: 0.58rem;
 }
 
@@ -497,7 +492,7 @@ button:hover:not(:disabled),
 }
 
 .status-dot {
-  color: var(--cg-active);
+  color: var(--terra-active);
 }
 
 .footer__hint,
@@ -540,9 +535,9 @@ button:hover:not(:disabled),
 .about__close {
   min-height: 44px;
   padding: 8px 12px;
-  border: 1px solid var(--cg-line);
+  border: 1px solid var(--terra-line);
   background: transparent;
-  font-family: var(--cg-mono);
+  font-family: var(--terra-mono);
   font-size: 0.7rem;
 }
 
@@ -575,8 +570,8 @@ button:hover:not(:disabled),
   top: 15px;
   left: 15px;
   padding: 15px;
-  color: var(--cg-ink);
-  background: var(--cg-surface);
+  color: var(--terra-ink);
+  background: var(--terra-surface);
 }
 
 .error {
@@ -586,8 +581,8 @@ button:hover:not(:disabled),
   left: 10%;
   width: 80%;
   padding: 24px;
-  color: var(--cg-ink);
-  background: var(--cg-surface);
+  color: var(--terra-ink);
+  background: var(--terra-surface);
 }
 
 /* ==========================================================================
@@ -706,16 +701,16 @@ html[data-wallpaper='true'] {
     min-height: 52px;
     padding: 12px 16px;
     border: 0;
-    color: var(--cg-ink);
+    color: var(--terra-ink);
     background: transparent;
-    font-family: var(--cg-mono);
+    font-family: var(--terra-mono);
     font-size: 0.65rem;
     text-align: left;
   }
 
   #settings-scene {
     overflow: hidden;
-    color: var(--cg-muted);
+    color: var(--terra-muted);
     font-size: 0.6rem;
     text-align: right;
     text-overflow: ellipsis;

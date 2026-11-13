@@ -1,4 +1,4 @@
-/* src/design-studies/chlor-glass/scripts/glass.js */
+/* src/design-studies/terra/scripts/glass.js */
 
 /**
  * @file Tiefenabhängige Mattglas-Komposition.

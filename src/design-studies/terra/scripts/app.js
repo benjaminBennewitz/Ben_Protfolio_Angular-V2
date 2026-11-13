@@ -1,7 +1,7 @@
-/* src/design-studies/chlor-glass/scripts/app.js */
+/* src/design-studies/terra/scripts/app.js */
 
 /**
- * @file Bedienoberfläche der eigenständigen Studie CHLOR / GLASS.
+ * @file Bedienoberfläche der eigenständigen Studie TERRA.
  * @description Verbindet Szenen, Sprache, Theme und zugängliche Bewegungssteuerung.
  * @author Benjamin Bennewitz
  */
@@ -243,7 +243,7 @@ async function start() {
     elements.loading.hidden = true;
     elements.wallpaper.disabled = false;
   } catch (error) {
-    console.error('[CHLOR / GLASS] Initialisierung fehlgeschlagen.', error);
+    console.error('[TERRA] Initialisierung fehlgeschlagen.', error);
     showError('error');
   }
 }

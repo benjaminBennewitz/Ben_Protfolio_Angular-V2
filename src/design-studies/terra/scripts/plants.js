@@ -1,4 +1,4 @@
-/* src/design-studies/chlor-glass/scripts/plants.js */
+/* src/design-studies/terra/scripts/plants.js */
 
 /**
  * @file Prozedurales Blattwerk des botanischen Lichtlabors.

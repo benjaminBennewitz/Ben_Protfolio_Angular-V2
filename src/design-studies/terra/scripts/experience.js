@@ -1,4 +1,4 @@
-/* src/design-studies/chlor-glass/scripts/experience.js */
+/* src/design-studies/terra/scripts/experience.js */
 
 /**
  * @file Three.js-Laufzeit und Lebenszyklus der Materialstudie.
@@ -91,6 +91,7 @@ export class GlassExperience {
     this.scenario = scenario;
     this.plants = createPlants(scenario);
     this.frogs = scenario.frogs ? createFrogs() : null;
+    this.frogStartTime = this.elapsed;
     this.scene.add(this.plants.group);
     if (this.frogs) this.scene.add(this.frogs.group);
     this.glass.material.uniforms.uLight.value = scenario.light;
@@ -197,7 +198,7 @@ export class GlassExperience {
       this.view.lerp(this.pointer, 1 - Math.exp(-delta * (this.wallpaper ? 1.2 : 4)));
       this.updateView();
       this.plants.update(this.elapsed);
-      this.frogs?.update(this.elapsed);
+      this.frogs?.update(this.elapsed - this.frogStartTime);
       this.render();
     }
     this.schedule();

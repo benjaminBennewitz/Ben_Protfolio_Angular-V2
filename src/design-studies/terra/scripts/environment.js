@@ -1,4 +1,4 @@
-/* src/design-studies/chlor-glass/scripts/environment.js */
+/* src/design-studies/terra/scripts/environment.js */
 
 /**
  * @file Räumlicher Gewächshaus-Hintergrund und sichtbare Lichtquelle.

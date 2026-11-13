@@ -1,7 +1,7 @@
-/* src/design-studies/chlor-glass/scripts/content.js */
+/* src/design-studies/terra/scripts/content.js */
 
 /**
- * @file Szenenparameter und zweisprachige Inhalte von CHLOR / GLASS.
+ * @file Szenenparameter und zweisprachige Inhalte von TERRA.
  * @description Hält Darstellung, Bedienoberfläche und zugängliche Texte konsistent.
  * @author Benjamin Bennewitz
  */
@@ -16,7 +16,7 @@ export const SCENARIOS = Object.freeze([
 /** Übersetzungen sämtlicher sichtbarer und assistiver Oberflächentexte. */
 export const TEXTS = Object.freeze({
   de: {
-    title: 'CHLOR / GLASS — Botanisches Lichtlabor',
+    title: 'TERRA — Botanisches Lichtlabor',
     back: 'Zurück zum Archiv', lab: 'Botanisches Lichtlabor', edition: 'Materialstudie / 012',
     subtitle: 'Eine dünne Grenze. Eine lebendige Welt.', sceneLabel: 'Versuchsanordnung',
     wallpaper: 'Wallpapermodus starten', wallpaperHint: 'Wallpapermodus – mit Escape oder Klick beenden',
@@ -36,12 +36,12 @@ export const TEXTS = Object.freeze({
     unavailable: '3D-Szene nicht verfügbar', loading: 'Licht wird gebrochen …', error: 'Die 3D-Szene konnte nicht gestartet werden. Bitte nutze einen aktuellen Browser mit aktivierter WebGL-2-Grafikbeschleunigung.',
     lost: 'Die Grafikverbindung wurde unterbrochen. Bitte lade die Seite neu.',
     aboutTitle: 'Zwischen Nähe und Unschärfe.',
-    aboutText: 'CHLOR / GLASS untersucht Glas als räumliche Grenze: Ein feines Raster bleibt greifbar, während Pflanzen in unterschiedlicher Tiefe dahinter verschwimmen. Drei Versuchsanordnungen verbinden botanische Formen mit Licht, Material und langsamer Bewegung.',
-    aboutTech: 'Prototyp 11 · Three.js / WebGL 2 · Prozedurale Pflanzen und ein blau-violett interpretierter Pfeilgiftfrosch · Kurze Kletterabschnitte, Ruhephasen und tiefenabhängiges Mattglas.',
+    aboutText: 'TERRA untersucht Glas als räumliche Grenze: Ein feines Raster bleibt greifbar, während Pflanzen in unterschiedlicher Tiefe dahinter verschwimmen. Drei Versuchsanordnungen verbinden botanische Formen mit Licht, Material und langsamer Bewegung.',
+    aboutTech: 'Prototyp 16 · Three.js / WebGL 2 · Prozedurale Pflanzen und ein blau-violett interpretierter Pfeilgiftfrosch · Kurze Kletterabschnitte, Ruhephasen und tiefenabhängiges Mattglas.',
     imprint: 'Impressum', privacy: 'Datenschutz', skip: 'Zur Szenenauswahl',
   },
   en: {
-    title: 'CHLOR / GLASS — Botanical Light Laboratory',
+    title: 'TERRA — Botanical Light Laboratory',
     back: 'Back to archive', lab: 'Botanical light laboratory', edition: 'Material study / 012',
     subtitle: 'A thin boundary. A living world.', sceneLabel: 'Experimental setting',
     wallpaper: 'Start wallpaper mode', wallpaperHint: 'Wallpaper mode – press Escape or click to exit',
@@ -61,8 +61,8 @@ export const TEXTS = Object.freeze({
     unavailable: '3D scene unavailable', loading: 'Refracting light …', error: 'The 3D scene could not start. Please use a current browser with WebGL 2 hardware acceleration enabled.',
     lost: 'The graphics connection was interrupted. Please reload the page.',
     aboutTitle: 'Between proximity and blur.',
-    aboutText: 'CHLOR / GLASS explores glass as a spatial boundary: a fine grid stays tangible while plants at different depths dissolve behind it. Three experimental settings combine botanical forms with light, material and slow movement.',
-    aboutTech: 'Prototype 11 · Three.js / WebGL 2 · Procedural plants and one blue-violet poison dart frog interpretation · Short climbing bouts, resting phases and depth-aware frosted glass.',
+    aboutText: 'TERRA explores glass as a spatial boundary: a fine grid stays tangible while plants at different depths dissolve behind it. Three experimental settings combine botanical forms with light, material and slow movement.',
+    aboutTech: 'Prototype 16 · Three.js / WebGL 2 · Procedural plants and one blue-violet poison dart frog interpretation · Short climbing bouts, resting phases and depth-aware frosted glass.',
     imprint: 'Legal notice', privacy: 'Privacy', skip: 'Skip to scene selection',
   },
 });

@@ -44,7 +44,7 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     expect(page.studyNumber('phase')).toBe('DS/009');
     expect(page.studyNumber('dead-air')).toBe('DS/010');
     expect(page.studyNumber('formic')).toBe('DS/011');
-    expect(page.studyNumber('chlor-glass')).toBe('DS/012');
+    expect(page.studyNumber('terra')).toBe('DS/012');
     expect(page.categoryCount('spatial')).toBe(3);
   });
 
@@ -71,15 +71,17 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     expect(page.filteredStudies().map(study => study.id)).toEqual(['whatwesee', 'dead-air']);
   });
 
-  it('findet CHLOR / GLASS in beiden Sprachen und erhält das statische Studienziel', /** Prüft die neue Archivintegration. */() => {
+  it('findet TERRA in beiden Sprachen und erhält das statische Studienziel', /** Prüft die neue Archivintegration. */() => {
     page.setCategory('spatial');
+    page.setSearch('TERRA');
+    expect(page.filteredStudies().map(study => study.name)).toEqual(['TERRA']);
     page.setSearch('Mattglas');
-    expect(page.filteredStudies().map(study => study.id)).toEqual(['chlor-glass']);
-    expect(page.activeStudy()?.href).toBe('/design-studies/chlor-glass/');
+    expect(page.filteredStudies().map(study => study.id)).toEqual(['terra']);
+    expect(page.activeStudy()?.href).toBe('/design-studies/terra/');
     expect(page.activeStudy()?.archive.subject).toBe('Botanisches Glaslabor');
     language.set('en');
     page.setSearch('Frosted Glass');
-    expect(page.filteredStudies().map(study => study.id)).toEqual(['chlor-glass']);
+    expect(page.filteredStudies().map(study => study.id)).toEqual(['terra']);
     expect(page.activeStudy()?.archive.subject).toBe('Botanical glass laboratory');
   });
 

@@ -1022,21 +1022,6 @@ folio/
 │   │   │   ├── index.html
 │   │   │   ├── README.md
 │   │   │   └── styles.css
-│   │   ├── chlor-glass/
-│   │   │   ├── assets/
-│   │   │   │   ├── favicon.svg
-│   │   │   │   └── preview.png
-│   │   │   ├── scripts/
-│   │   │   │   ├── app.js
-│   │   │   │   ├── content.js
-│   │   │   │   ├── environment.js
-│   │   │   │   ├── experience.js
-│   │   │   │   ├── frogs.js
-│   │   │   │   ├── glass.js
-│   │   │   │   └── plants.js
-│   │   │   ├── index.html
-│   │   │   ├── README.md
-│   │   │   └── styles.css
 │   │   ├── ctrl-room/
 │   │   │   ├── assets/
 │   │   │   │   ├── album-cover.webp
@@ -1288,6 +1273,22 @@ folio/
 │   │   │   ├── index.html
 │   │   │   ├── README.md
 │   │   │   ├── script.js
+│   │   │   └── styles.css
+│   │   ├── terra/
+│   │   │   ├── assets/
+│   │   │   │   ├── favicon.svg
+│   │   │   │   ├── preview.png
+│   │   │   │   └── preview.webp
+│   │   │   ├── scripts/
+│   │   │   │   ├── app.js
+│   │   │   │   ├── content.js
+│   │   │   │   ├── environment.js
+│   │   │   │   ├── experience.js
+│   │   │   │   ├── frogs.js
+│   │   │   │   ├── glass.js
+│   │   │   │   └── plants.js
+│   │   │   ├── index.html
+│   │   │   ├── README.md
 │   │   │   └── styles.css
 │   │   └── type-break/
 │   │       ├── assets/

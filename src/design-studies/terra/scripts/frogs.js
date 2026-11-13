@@ -1,8 +1,8 @@
-/* src/design-studies/chlor-glass/scripts/frogs.js */
+/* src/design-studies/terra/scripts/frogs.js */
 
 /**
  * @file Prozeduraler Pfeilgiftfrosch auf der Innenseite der Glasscheibe.
- * @description Verbindet blau-violette Hautzeichnung, inverse Kinematik und haftende Kletterschritte und gefaltete Hinterbeine.
+ * @description Verbindet blau-violette Hautzeichnung, inverse Kinematik und haftende Kletterschritte, getrennte Trittspuren und gefaltete Hinterbeine.
  * @author Benjamin Bennewitz
  */
 
@@ -16,17 +16,28 @@ const ROUTE = Object.freeze([
   [0.16, 1.08], [0.13, 1.2], [0.1, 1.32], [0.08, 1.44],
 ]);
 
-/** Drei kurze Kletterabschnitte mit bewusst ungleichen Ruhezeiten. */
+/** Drei Kletterabschnitte je Zeitzyklus; die Route läuft danach kontinuierlich vorwärts weiter. */
 const BOUTS = Object.freeze([
   { start: 4.2, duration: 5.4, firstStep: 0 },
   { start: 16.4, duration: 4.9, firstStep: 4 },
   { start: 31.1, duration: 6.2, firstStep: 8 },
 ]);
+const MOTION_PERIOD = 48;
+const SETTLE_DURATION = 0.65;
+
+/** Ungleiche Finger-/Zehenlängen, vom inneren kurzen Finger zum äußeren Rand. */
+const DIGIT_LENGTHS = Object.freeze({
+  front: Object.freeze([0.11, 0.255, 0.315, 0.215]),
+  rear: Object.freeze([0.12, 0.225, 0.3, 0.35, 0.245]),
+});
 const UP = new THREE.Vector3(0, 1, 0);
 
-/** Liefert nur vorhandene Routenpunkte; das Tier kehrt nicht rückwärts an den Start zurück. */
+/** Verlängert die Anfangsroute aufwärts, ohne sichtbaren Rücksprung oder rückwärts gerichtete Bewegung. */
 function routePoint(step) {
-  return ROUTE[THREE.MathUtils.clamp(step, 0, ROUTE.length - 1)];
+  const index = Math.max(0, Math.floor(step));
+  if (index < ROUTE.length) return ROUTE[index];
+  const offset = index - (ROUTE.length - 1);
+  return [0.08 + Math.sin(offset * 0.18) * 0.1, 1.44 + offset * 0.12];
 }
 
 /** Ermittelt die Körperausrichtung aus der lokalen Vorwärtsrichtung der Route. */
@@ -38,17 +49,34 @@ function routeAngle(step) {
 
 /** Liefert kontinuierlichen Schrittfortschritt mit Anlauf, Abbremsen und echten Ruhephasen. */
 function climbProgress(time) {
-  let progress = 0;
+  const cycleSteps = Math.floor(time / MOTION_PERIOD) * 12;
+  time %= MOTION_PERIOD;
+  let progress = cycleSteps;
   for (const bout of BOUTS) {
     if (time < bout.start) break;
     if (time >= bout.start + bout.duration) {
-      progress = bout.firstStep + 4;
+      progress = cycleSteps + bout.firstStep + 4;
       continue;
     }
     const fraction = (time - bout.start) / bout.duration;
-    return bout.firstStep + ease(fraction) * 4;
+    return cycleSteps + bout.firstStep + ease(fraction) * 4;
   }
   return progress;
+}
+
+/** Löst den Bauchkontakt vor einem Kletterabschnitt und baut ihn danach langsam wieder auf. */
+function bellyContact(time) {
+  time %= MOTION_PERIOD;
+  let contact = 1;
+  for (const bout of BOUTS) {
+    const end = bout.start + bout.duration;
+    if (time >= bout.start - 1 && time <= end + SETTLE_DURATION) {
+      const release = time < bout.start ? ease(bout.start - time) : 0;
+      const settle = time > end ? ease((time - end) / SETTLE_DURATION) : 0;
+      contact = Math.min(contact, Math.max(release, settle));
+    }
+  }
+  return contact;
 }
 
 /** Interpoliert ohne Geschwindigkeitssprünge zwischen Ruhe- und Bewegungsphasen. */
@@ -107,6 +135,8 @@ export function createFrogs() {
   const skin = new THREE.MeshStandardMaterial({ color: '#c7c6ef', map: texture, roughness: 0.52, emissive: '#15102f', emissiveIntensity: 0.04 });
   const underside = new THREE.MeshStandardMaterial({ color: '#a3a2d1', map: texture, roughness: 0.61 });
   const pads = new THREE.MeshStandardMaterial({ color: '#7a83c8', roughness: 0.55 });
+  const webMaterial = new THREE.MeshStandardMaterial({ color: '#7177bc', roughness: 0.7, side: THREE.DoubleSide });
+  const webGeometries = [];
   const eyes = new THREE.MeshStandardMaterial({ color: '#101021', roughness: 0.25 });
   const body = new THREE.Group();
   body.name = 'body';
@@ -122,25 +152,35 @@ export function createFrogs() {
     return mesh;
   }
 
-  ellipsoid(body, skin, [0, -0.07, -0.79], [0.36, 0.54, 0.23]);
-  const abdomen = ellipsoid(body, underside, [0, -0.08, -0.51], [0.29, 0.42, 0.075]);
+  const torso = ellipsoid(body, skin, [0, -0.07, -0.79], [0.36, 0.54, 0.23], 'torso');
+  const abdomen = ellipsoid(body, underside, [0, -0.08, -0.51], [0.29, 0.42, 0.075], 'contact-abdomen');
   const head = new THREE.Group();
   head.position.set(0, 0.34, -0.68);
   body.add(head);
-  ellipsoid(head, skin, [0, 0.08, 0], [0.38, 0.25, 0.19]);
-  ellipsoid(head, underside, [0, -0.02, 0.14], [0.27, 0.17, 0.06]);
-  for (const side of [-1, 1]) ellipsoid(head, eyes, [side * 0.29, 0.18, -0.01], [0.1, 0.105, 0.105]);
+  const headGeometry = sphere.clone();
+  const headPositions = headGeometry.attributes.position;
+  for (let index = 0; index < headPositions.count; index += 1) {
+    const taper = 1 - (headPositions.getY(index) + 1) * 0.14;
+    headPositions.setX(index, headPositions.getX(index) * taper);
+  }
+  headGeometry.computeVertexNormals();
+  const crown = new THREE.Mesh(headGeometry, skin);
+  crown.name = 'tapered-head';
+  crown.position.set(0, 0.08, 0);
+  crown.scale.set(0.35, 0.255, 0.19);
+  head.add(crown);
+  ellipsoid(head, underside, [0, -0.02, 0.14], [0.25, 0.15, 0.06], 'jaw');
+  for (const side of [-1, 1]) ellipsoid(head, eyes, [side * 0.27, 0.18, -0.01], [0.095, 0.1, 0.1]);
 
   const direction = new THREE.Vector3();
   const bend = new THREE.Vector3();
-  const bendSide = new THREE.Vector3();
-  const bendBack = new THREE.Vector3();
+  const lateralBend = new THREE.Vector3();
+  const foldBend = new THREE.Vector3();
   const fingerWidth = new THREE.Vector3();
   const fingerDepth = new THREE.Vector3();
   const fingerFrame = new THREE.Matrix4();
   const joint = new THREE.Vector3();
   const wrist = new THREE.Vector3();
-  const ankle = new THREE.Vector3();
   const hip = new THREE.Vector3();
   const legs = [];
 
@@ -172,96 +212,151 @@ export function createFrogs() {
     segment.mesh.scale.set(segment.radius, length * (segment.rounded ? 0.58 : 1), segment.depth);
   }
 
-  for (const [order, side, rear] of [[0, -1, false], [1, 1, true], [2, 1, false], [3, -1, true]]) {
+  /** Erstellt flache, konkav ausgerundete Schwimmhäute zwischen benachbarten Fingeransätzen. */
+  function createWebbing(foot, digits) {
+    const samples = 8;
+    const verticesPerGap = samples + 2;
+    const positions = new Float32Array((digits.length - 1) * verticesPerGap * 3);
+    const indices = [];
+    for (let gap = 0; gap < digits.length - 1; gap += 1) {
+      const first = gap * verticesPerGap;
+      for (let sample = 0; sample < samples; sample += 1) indices.push(first, first + sample + 1, first + sample + 2);
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3).setUsage(THREE.DynamicDrawUsage));
+    geometry.setAttribute('normal', new THREE.BufferAttribute(new Float32Array(positions.length), 3).setUsage(THREE.DynamicDrawUsage));
+    geometry.setIndex(indices);
+    const mesh = new THREE.Mesh(geometry, webMaterial);
+    mesh.name = 'webbing';
+    mesh.frustumCulled = false;
+    foot.add(mesh);
+    webGeometries.push(geometry);
+    return { geometry, samples, verticesPerGap };
+  }
+
+  /** Verformt nur die vorhandenen Membranpunkte mit den abrollenden Fingern. */
+  function updateWebbing(webbing, digits) {
+    const positions = webbing.geometry.attributes.position;
+    for (let gap = 0; gap < digits.length - 1; gap += 1) {
+      const a = digits[gap].knuckle;
+      const b = digits[gap + 1].knuckle;
+      const first = gap * webbing.verticesPerGap;
+      positions.setXYZ(first, 0, 0.014, -0.006);
+      for (let sample = 0; sample <= webbing.samples; sample += 1) {
+        const t = sample / webbing.samples;
+        const inverse = 1 - t;
+        const x = (inverse * inverse * a.x + 2 * inverse * t * (a.x + b.x) * 0.18 + t * t * b.x) * 1.12;
+        const y = (inverse * inverse * a.y + 2 * inverse * t * (a.y + b.y) * 0.18 + t * t * b.y) * 1.12;
+        positions.setXYZ(first + sample + 1, x, y, THREE.MathUtils.lerp(a.z, b.z, t) + 0.012);
+      }
+    }
+    positions.needsUpdate = true;
+    webbing.geometry.computeVertexNormals();
+  }
+
+  for (const [order, side, rear] of [[0, -1, false], [1, -1, true], [2, 1, false], [3, 1, true]]) {
     const foot = new THREE.Group();
     foot.name = `foot-${rear ? 'rear' : 'front'}-${side < 0 ? 'left' : 'right'}`;
     frog.add(foot);
-    const footX = side * (rear ? 0.38 : 0.5);
-    const footY = rear ? -0.32 : 0.4;
+    const footX = side * (rear ? 0.44 : 0.56);
+    const footY = rear ? -0.32 : 0.52;
     const limbName = `${rear ? 'rear' : 'front'}-${side < 0 ? 'left' : 'right'}`;
-    const upper = bone(frog, skin, rear ? 0.09 : 0.043, `${limbName}-upper`, rear);
-    const lower = bone(frog, skin, rear ? 0.055 : 0.031, `${limbName}-lower`, rear);
-    const knee = ellipsoid(frog, skin, [0, 0, -0.7], rear ? [0.095, 0.11, 0.095] : [0.05, 0.055, 0.045], `${limbName}-joint`);
-    const tarsus = rear ? bone(frog, skin, 0.045, `${limbName}-tarsus`, true) : null;
-    const ankleJoint = rear ? ellipsoid(frog, skin, [0, 0, -0.4], [0.055, 0.065, 0.045], `${limbName}-ankle`) : null;
+    const upper = bone(frog, skin, rear ? 0.12 : 0.067, `${limbName}-upper`, true);
+    const lower = bone(frog, skin, rear ? 0.085 : 0.052, `${limbName}-lower`, true);
+    const knee = ellipsoid(frog, skin, [0, 0, -0.7], rear ? [0.12, 0.13, 0.11] : [0.068, 0.072, 0.055], `${limbName}-joint`);
+    const tarsus = rear ? bone(frog, skin, 0.06, `${limbName}-tarsus`, true) : null;
+    const ankleJoint = rear ? ellipsoid(frog, skin, [0, 0, -0.4], [0.075, 0.085, 0.06], `${limbName}-ankle`) : null;
     const thigh = rear ? ellipsoid(frog, skin, [0, 0, -0.7], [0.13, 0.25, 0.105], `${limbName}-thigh`) : null;
     const palm = ellipsoid(foot, underside, [0, 0, -0.031], [0.075, 0.085, 0.029], 'contact-palm');
     const digits = [];
-    for (let digit = 0; digit < 4; digit += 1) {
-      const spread = (digit - 1.5) * 0.09;
-      const tip = new THREE.Vector3(spread + (rear ? side * 0.045 : 0), 0.19 + Math.sin(digit / 3 * Math.PI) * 0.105, -0.018);
+    const lengths = DIGIT_LENGTHS[rear ? 'rear' : 'front'];
+    for (let digit = 0; digit < lengths.length; digit += 1) {
+      const spread = side * (digit - (lengths.length - 1) * 0.5) * (rear ? 0.075 : 0.083);
+      const tip = new THREE.Vector3(spread + (rear ? side * 0.025 : 0), lengths[digit], -0.018);
       const knuckle = new THREE.Vector3(spread * 0.68, tip.y * 0.52, -0.018);
       const first = bone(foot, skin, 0.025, 'contact-digit-base', false, 0.016);
       const second = bone(foot, pads, 0.023, 'contact-digit-tip', false, 0.016);
       const jointPad = ellipsoid(foot, skin, knuckle.toArray(), [0.025, 0.027, 0.016], 'contact-knuckle');
-      const pad = ellipsoid(foot, pads, tip.toArray(), [0.037, 0.042, 0.016], 'contact-pad');
+      const padSize = 0.026 + lengths[digit] * 0.034;
+      const pad = ellipsoid(foot, pads, tip.toArray(), [padSize, padSize * 1.12, 0.016], 'contact-pad');
       digits.push({ tip, knuckle, first, second, jointPad, pad });
     }
-    legs.push({ order, side, rear, foot, footX, footY, upper, lower, knee, tarsus, ankleJoint, thigh, palm, digits });
+    const webbing = createWebbing(foot, digits);
+    legs.push({ order, side, rear, foot, footX, footY, upper, lower, knee, tarsus, ankleJoint, thigh, palm, digits, webbing });
   }
 
   /**
-   * Löst die Gliedmaßen bei festem Fußkontakt mit unveränderlichen Segmentlängen.
-   * Hinterbeine falten sich vorwiegend in die Tiefe statt seitlich vom Körper weg.
-   * Die Wahl auf dem IK-Lösungskreis hält das Knie im körpernahen Seitenabstand.
-   * Ein körpernaher Knöchel und überlappende Ellipsoide halten die Kontur kompakt und rund.
+   * Führt den Oberschenkel körpernah; Schienbein und Fußwurzel lösen den Weg zum Haftpunkt.
+   * Knie und Sprunggelenk bleiben beide neben der Körperkontur.
+   * Die körpernahen Fußziele verhindern ein seitliches Ausstellen der Fußwurzel.
+   * Vorderbeine behalten ihre bisherige Zwei-Segment-Lösung.
    */
   function poseLeg(leg, bodyX, bodyY, angle) {
     const cosine = Math.cos(angle);
     const sine = Math.sin(angle);
     const localX = leg.side * 0.25;
-    const localY = leg.rear ? -0.36 : 0.24;
-    hip.set(bodyX + localX * cosine - localY * sine, bodyY + localX * sine + localY * cosine, -0.7);
+    const localY = leg.rear ? -0.43 : 0.24;
+    hip.set(bodyX + localX * cosine - localY * sine,
+      bodyY + localX * sine + localY * cosine, -0.7 + body.position.z);
     wrist.set(leg.foot.position.x, leg.foot.position.y, leg.foot.position.z - 0.06);
-    ankle.copy(wrist);
+
     if (leg.rear) {
-      const footAngle = leg.foot.rotation.z;
-      const ankleX = -leg.side * 0.025;
-      const ankleY = -0.3;
-      ankle.x += ankleX * Math.cos(footAngle) - ankleY * Math.sin(footAngle);
-      ankle.y += ankleX * Math.sin(footAngle) + ankleY * Math.cos(footAngle);
-      ankle.z -= 0.49;
+      const thighLength = 0.38;
+      const outward = 0.11 + leg.swing * 0.025;
+      const depth = 0.06 + leg.swing * 0.025;
+      const forward = Math.sqrt(thighLength * thighLength - outward * outward - depth * depth);
+      leg.knee.position.set(hip.x + leg.side * outward * cosine - forward * sine,
+        hip.y + leg.side * outward * sine + forward * cosine, hip.z + depth);
+      poseBone(leg.upper, hip, leg.knee.position);
+      leg.thigh.position.copy(leg.upper.mesh.position);
+      leg.thigh.quaternion.copy(leg.upper.mesh.quaternion);
+      leg.thigh.scale.set(0.15, thighLength * 0.62, 0.14);
     }
-    direction.subVectors(ankle, hip);
+
+    const start = leg.rear ? leg.knee.position : hip;
+    const firstLength = leg.rear ? 0.56 : 0.38;
+    const secondLength = leg.rear ? 0.61 : 0.58;
+    direction.subVectors(wrist, start);
     const distance = Math.max(direction.length(), 0.001);
     direction.multiplyScalar(1 / distance);
-    const upperLength = leg.rear ? 0.4 : 0.38;
-    const lowerLength = leg.rear ? 0.46 : 0.58;
-    const reach = Math.min(distance, (upperLength + lowerLength) * 0.999);
-    const along = (upperLength ** 2 - lowerLength ** 2 + reach ** 2) / (2 * reach);
-    const height = Math.sqrt(Math.max(0, upperLength ** 2 - along ** 2));
+    const reach = Math.min(distance, (firstLength + secondLength) * 0.999);
+    const along = (firstLength ** 2 - secondLength ** 2 + reach ** 2) / (2 * reach);
+    const height = Math.sqrt(Math.max(0, firstLength ** 2 - along ** 2));
     if (leg.rear) {
-      bendSide.set(leg.side * cosine, leg.side * sine, 0);
-      const outward = direction.dot(bendSide);
-      bendSide.addScaledVector(direction, -outward);
-      const lateralReach = bendSide.length();
-      bendSide.normalize();
-      bendBack.crossVectors(direction, bendSide);
-      if (bendBack.z > 0) bendBack.negate();
-      const centerOutward = (hip.x - bodyX) * leg.side * cosine
-        + (hip.y - bodyY) * leg.side * sine + along * outward;
-      const lateral = THREE.MathUtils.clamp((0.4 - centerOutward) / Math.max(height * lateralReach, 0.001), -0.98, 0.98);
-      bend.copy(bendSide).multiplyScalar(lateral).addScaledVector(bendBack, Math.sqrt(1 - lateral * lateral));
+      lateralBend.set(leg.side * cosine, leg.side * sine, 0);
+      const outward = direction.dot(lateralBend);
+      lateralBend.addScaledVector(direction, -outward);
+      const lateralReach = lateralBend.length();
+      lateralBend.normalize();
+      foldBend.crossVectors(direction, lateralBend);
+      if (-sine * foldBend.x + cosine * foldBend.y > 0) foldBend.negate();
+      const centerOutward = (start.x - bodyX) * leg.side * cosine
+        + (start.y - bodyY) * leg.side * sine + along * outward;
+      const lateral = THREE.MathUtils.clamp((0.42 - centerOutward) / Math.max(height * lateralReach, 0.001), -0.98, 0.98);
+      bend.copy(lateralBend).multiplyScalar(lateral).addScaledVector(foldBend, Math.sqrt(1 - lateral * lateral));
     } else {
       bend.set(leg.side * cosine + 0.5 * sine, leg.side * sine - 0.5 * cosine, -0.16);
       bend.addScaledVector(direction, -bend.dot(direction)).normalize();
     }
-    joint.copy(hip).addScaledVector(direction, along).addScaledVector(bend, height);
-    leg.knee.position.copy(joint);
-    poseBone(leg.upper, hip, joint);
-    poseBone(leg.lower, joint, ankle);
+    joint.copy(start).addScaledVector(direction, along).addScaledVector(bend, height);
     if (leg.rear) {
-      leg.ankleJoint.position.copy(ankle);
-      poseBone(leg.tarsus, ankle, wrist);
-      leg.thigh.position.copy(leg.upper.mesh.position);
-      leg.thigh.quaternion.copy(leg.upper.mesh.quaternion);
-      leg.thigh.scale.set(0.125, upperLength * 0.6, 0.115);
+      leg.ankleJoint.position.copy(joint);
+      poseBone(leg.lower, start, joint);
+      poseBone(leg.tarsus, joint, wrist);
+    } else {
+      leg.knee.position.copy(joint);
+      poseBone(leg.upper, hip, joint);
+      poseBone(leg.lower, joint, wrist);
     }
   }
 
   const digitBase = new THREE.Vector3(0, 0, -0.018);
 
-  /** Setzt den Fuß voraus; Innenfläche und Zehen liegen in der Haftphase flach am Glas an. */
+  /**
+   * Setzt den Fuß auf getrennten Vorder-/Hinterbein-Trittspuren voraus.
+   * Der Abstand berücksichtigt die vollständigen Fingerfächer, nicht nur die Ballenmitten.
+   * Jeder Hinterfuß folgt erst nach dem Vorderfuß derselben Seite; Haftanker bleiben unverändert.
+   */
   function poseFoot(leg, progress) {
     const step = Math.floor(progress);
     const fraction = progress - step;
@@ -285,10 +380,11 @@ export function createFrogs() {
       lift = Math.sin(swing * Math.PI) * 0.1;
     }
     leg.foot.position.set(x + leg.footX * Math.cos(angle) - leg.footY * Math.sin(angle), y + leg.footX * Math.sin(angle) + leg.footY * Math.cos(angle), -lift);
-    leg.foot.rotation.z = angle;
+    leg.foot.rotation.z = angle - (leg.rear ? leg.side * 0.22 : 0);
+    leg.swing = active ? Math.sin(swing * Math.PI) : 0;
     leg.foot.userData.planted = lift < 0.001;
     leg.digits.forEach((digit, index) => {
-      const digitSwing = active ? THREE.MathUtils.clamp((swing - index * 0.025) / 0.925, 0, 1) : 1;
+      const digitSwing = active ? THREE.MathUtils.clamp((swing - index * 0.025) / (1 - (leg.digits.length - 1) * 0.025), 0, 1) : 1;
       const peel = Math.max(0, Math.sin(digitSwing * Math.PI));
       const toeLift = active ? peel * 0.1 : 0;
       const curl = active ? peel * (0.018 + index * 0.004) : 0;
@@ -299,6 +395,7 @@ export function createFrogs() {
       poseBone(digit.first, digitBase, digit.knuckle);
       poseBone(digit.second, digit.knuckle, digit.tip);
     });
+    updateWebbing(leg.webbing, leg.digits);
   }
 
   /** Lässt den Körper während der gestützten Schritte vorwärts gleiten und dazwischen ruhen. */
@@ -311,16 +408,24 @@ export function createFrogs() {
     const bodyX = THREE.MathUtils.lerp(from[0], to[0], fraction);
     const bodyY = THREE.MathUtils.lerp(from[1], to[1], fraction);
     const angle = THREE.MathUtils.lerp(routeAngle(step), routeAngle(step + 1), fraction);
-    body.position.set(bodyX, bodyY, 0);
+    const contact = bellyContact(time);
+    body.position.set(bodyX, bodyY, contact * 0.4);
     body.rotation.z = angle;
     body.scale.x = 1 + Math.sin(time * 1.7) * 0.008;
-    abdomen.scale.z = 0.075 * (1 + Math.sin(time * 1.7) * 0.04);
-    head.rotation.y = Math.sin(time * 0.23) * 0.035;
+    abdomen.position.z = THREE.MathUtils.lerp(-0.51, -0.463, contact);
+    torso.scale.z = THREE.MathUtils.lerp(0.23, 0.275, contact);
+    abdomen.scale.x = THREE.MathUtils.lerp(0.29, 0.31, contact);
+    abdomen.scale.y = THREE.MathUtils.lerp(0.42, 0.435, contact);
+    abdomen.scale.z = THREE.MathUtils.lerp(0.075 * (1 + Math.sin(time * 1.7) * 0.04), 0.06, contact);
+    head.position.y = 0.34 + (1 - contact) * 0.025;
+    head.rotation.x = -0.055 + (1 - contact) * 0.015;
+    head.rotation.y = Math.sin(time * 0.23) * 0.018;
     for (const leg of legs) {
       poseFoot(leg, progress);
       poseLeg(leg, bodyX, bodyY, angle);
     }
-    frog.userData.motion = BOUTS.some(bout => time > bout.start && time < bout.start + bout.duration) ? 'climbing' : 'resting';
+    const phase = time % MOTION_PERIOD;
+    frog.userData.motion = BOUTS.some(bout => phase > bout.start && phase < bout.start + bout.duration) ? 'climbing' : 'resting';
   }
 
   update(0);
@@ -330,9 +435,11 @@ export function createFrogs() {
     /** Gibt die gemeinsam genutzten Ressourcen ohne laufzeitabhängige Geometrieallokationen frei. */
     dispose() {
       sphere.dispose();
+      headGeometry.dispose();
       cylinder.dispose();
       texture.dispose();
-      for (const material of [skin, underside, pads, eyes]) material.dispose();
+      for (const geometry of webGeometries) geometry.dispose();
+      for (const material of [skin, underside, pads, eyes, webMaterial]) material.dispose();
       group.clear();
     },
   };

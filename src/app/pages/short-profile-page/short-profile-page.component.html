@@ -1,13 +1,33 @@
 <main class="short-profile bp-section">
   <div class="short-profile__layout bp-container">
     <header class="short-profile__hero">
-      <a class="short-profile__back" routerLink="/" fragment="hero">
-        <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-        {{ profile().backLabel }}
-      </a>
+      <div class="short-profile__toolbar">
+        <a class="short-profile__back" routerLink="/" fragment="hero">
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+          {{ profile().backLabel }}
+        </a>
+
+        <button class="short-profile__print" type="button" (click)="openPrintView()">
+          <span class="material-symbols-outlined" aria-hidden="true">print</span>
+          {{ profile().printLabel }}
+        </button>
+      </div>
+      @if (isPrintBlocked()) {
+      <p class="short-profile__print-error" role="alert">{{ profile().printBlockedLabel }}</p>
+      }
+
       <p class="bp-eyebrow">{{ profile().eyebrow }}</p>
       <h1>{{ profile().title }}</h1>
       <p class="short-profile__lead">{{ profile().intro }}</p>
+
+      <div class="short-profile__facts">
+        @for (fact of quickFacts(); track fact.label) {
+        <article class="short-profile__fact">
+          <span>{{ fact.label }}</span>
+          <strong>{{ fact.value }}</strong>
+        </article>
+        }
+      </div>
     </header>
 
     <section class="short-profile__experience" [attr.aria-label]="profile().experienceTitle">
@@ -15,8 +35,10 @@
       <div class="short-profile__metrics">
         @for (item of content().experience.items; track item.label) {
         <article class="short-profile__metric">
-          <span class="short-profile__value">{{ item.value }}<span>+</span></span>
-          <span class="short-profile__unit">{{ item.suffix }}</span>
+          <div class="short-profile__metric-head">
+            <span class="short-profile__value">{{ item.value }}<span>+</span></span>
+            <span class="short-profile__unit">{{ item.suffix }}</span>
+          </div>
           <h3>{{ item.label }}</h3>
           <p>{{ item.text }}</p>
         </article>
@@ -37,11 +59,12 @@
     </section>
 
     <section class="short-profile__approach">
-      <div>
+      <div class="short-profile__approach-copy">
         <p class="bp-eyebrow">WORKFLOW / VALUES</p>
         <h2>{{ profile().workingStyleTitle }}</h2>
         <p>{{ profile().workingStyleText }}</p>
       </div>
+
       <nav class="short-profile__actions" [attr.aria-label]="profile().title">
         <a class="bp-button bp-button--accent" routerLink="/portfolio">
           {{ profile().projectsLabel }}

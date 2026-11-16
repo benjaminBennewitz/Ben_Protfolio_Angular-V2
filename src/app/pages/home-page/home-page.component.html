@@ -286,28 +286,42 @@
         }
       </div>
 
-      <div class="clients__grid bp-stagger-list bp-stagger-list--right" bpReveal>
-        @for (client of content().clients.items; track client.url; let index = $index) {
-        <a class="clients__card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 80 + 100"
-          [href]="client.url" [attr.target]="client.url.startsWith('http') ? '_blank' : null"
-          [attr.rel]="client.url.startsWith('http') ? 'noopener noreferrer' : null"
-          [attr.aria-label]="content().clients.visitLabel + ': ' + client.name">
-          <span class="clients__index" aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
-          <span class="clients__body">
-            <span class="clients__label">{{ client.label }}</span>
-            <strong>{{ client.name }}</strong>
-            <span class="clients__tags">
-              <span class="clients__stack-label">{{ content().clients.stackLabel }}:</span>
-              @for (tech of client.stack; track tech) {
-              <span class="clients__tag">{{ tech }}</span>
-              }
+      <div class="clients__archive" bpReveal>
+        <div class="clients__archive-head" aria-hidden="true">
+          <span class="clients__archive-name"><span class="clients__archive-led"></span>PUBLIC_ARCHIVE.EXE</span>
+          <span>{{ content().clients.items.length.toString().padStart(2, '0') }} / {{ content().clients.archiveFilesLabel }}</span>
+        </div>
+        <div class="clients__archive-path" aria-hidden="true">
+          <span>DIR: /WORK/PUBLISHED</span>
+          <span>{{ content().clients.archiveStatus }}</span>
+        </div>
+        <div class="clients__grid bp-stagger-list bp-stagger-list--right">
+          @for (client of content().clients.items; track client.url; let index = $index) {
+          <a class="clients__card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 80 + 100"
+            [href]="client.url" [attr.target]="client.url.startsWith('http') ? '_blank' : null"
+            [attr.rel]="client.url.startsWith('http') ? 'noopener noreferrer' : null"
+            [attr.aria-label]="content().clients.visitLabel + ': ' + client.name">
+            <span class="clients__index" aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
+            <span class="clients__body">
+              <span class="clients__label">{{ client.label }}</span>
+              <strong>{{ client.name }}</strong>
+              <span class="clients__tags">
+                <span class="clients__stack-label">{{ content().clients.stackLabel }}:</span>
+                @for (tech of client.stack; track tech) {
+                <span class="clients__tag">{{ tech }}</span>
+                }
+              </span>
             </span>
-          </span>
-          <span class="clients__link" aria-hidden="true">
-            <span class="material-symbols-outlined">arrow_outward</span>
-          </span>
-        </a>
-        }
+            <span class="clients__link" aria-hidden="true">
+              <span class="material-symbols-outlined">arrow_outward</span>
+            </span>
+          </a>
+          }
+        </div>
+        <div class="clients__archive-foot" aria-hidden="true">
+          <span>DESIGN.CODE.REPEAT.</span>
+          <span>{{ content().clients.archiveEndLabel }}</span>
+        </div>
       </div>
     </div>
   </section>
@@ -331,20 +345,25 @@
       <header class="faq__intro bp-motion-copy" bpReveal>
         <bp-reveal-text class="faq__title-reveal" eyebrow="FAQ / INTERVIEW.LOG"
           [text]="content().faqTitle" headingClass="faq__title" />
-        <p class="bp-subtitle">{{ content().faqSubtitle }}</p>
+        <p class="faq__subtitle bp-subtitle">{{ content().faqSubtitle }}</p>
         <span class="faq__index" aria-hidden="true">Q / {{ content().faqs.length }}</span>
       </header>
 
       <div class="faq__list" bpReveal>
         @for (faq of content().faqs; track faq.question; let index = $index) {
-        <details class="faq__item" name="portfolio-faq">
-          <summary>
+        <article class="faq__item" [class.is-open]="isFaqOpen(index)">
+          <button class="faq__trigger" type="button" [attr.aria-expanded]="isFaqOpen(index)"
+            [attr.aria-controls]="'faq-panel-' + index" (click)="toggleFaq(index)">
             <span class="faq__number" aria-hidden="true">Q{{ (index + 1).toString().padStart(2, '0') }}</span>
             <span class="faq__question">{{ faq.question }}</span>
             <span class="faq__toggle" aria-hidden="true"></span>
-          </summary>
-          <div class="faq__answer"><p>{{ faq.answer }}</p></div>
-        </details>
+          </button>
+          <div class="faq__answer" [id]="'faq-panel-' + index" [attr.aria-hidden]="!isFaqOpen(index)">
+            <div class="faq__answer-inner">
+              <p>{{ faq.answer }}</p>
+            </div>
+          </div>
+        </article>
         }
       </div>
     </div>

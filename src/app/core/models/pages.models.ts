@@ -196,5 +196,8 @@ export interface ShortProfileContent {
   readonly projectsLabel: string;
   readonly faqLabel: string;
   readonly contactLabel: string;
+  readonly printLabel: string;
+  readonly printActionLabel: string;
+  readonly printBlockedLabel: string;
   readonly backLabel: string;
 }

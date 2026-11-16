@@ -21,9 +21,7 @@ folio/
 │   │   │   │   ├── portfolio-content.spec.ts
 │   │   │   │   ├── portfolio-content.ts
 │   │   │   │   ├── portfolio-projects.ts
-│   │   │   │   ├── privacy-data.ts
-│   │   │   │   ├── snippets-data.ts
-│   │   │   │   └── snippets-labs-data.ts
+│   │   │   │   └── privacy-data.ts
 │   │   │   ├── models/
 │   │   │   │   ├── achievement.models.ts
 │   │   │   │   ├── blood.models.ts
@@ -164,11 +162,10 @@ folio/
 │   │   │   │   ├── project-detail-page.component.scss
 │   │   │   │   ├── project-detail-page.component.spec.ts
 │   │   │   │   └── project-detail-page.component.ts
-│   │   │   ├── snippets-page/
-│   │   │   │   ├── snippets-page.component.html
-│   │   │   │   ├── snippets-page.component.scss
-│   │   │   │   ├── snippets-page.component.spec.ts
-│   │   │   │   └── snippets-page.component.ts
+│   │   │   ├── short-profile-page/
+│   │   │   │   ├── short-profile-page.component.html
+│   │   │   │   ├── short-profile-page.component.scss
+│   │   │   │   └── short-profile-page.component.ts
 │   │   │   └── thank-you-page/
 │   │   │       ├── thank-you-page.component.html
 │   │   │       ├── thank-you-page.component.scss
@@ -248,11 +245,6 @@ folio/
 │   │   │   │   ├── reveal-text.component.scss
 │   │   │   │   ├── reveal-text.component.spec.ts
 │   │   │   │   └── reveal-text.component.ts
-│   │   │   ├── snippet-lab/
-│   │   │   │   ├── snippet-lab.component.html
-│   │   │   │   ├── snippet-lab.component.scss
-│   │   │   │   ├── snippet-lab.component.spec.ts
-│   │   │   │   └── snippet-lab.component.ts
 │   │   │   ├── system-dialog/
 │   │   │   │   ├── system-dialog.component.html
 │   │   │   │   ├── system-dialog.component.scss
@@ -490,19 +482,6 @@ folio/
 │   │   │   ├── me-and-coffee-error-480.webp
 │   │   │   ├── me-with-chocolate.webp
 │   │   │   └── nice-head-loader.webp
-│   │   ├── snippet-demos/
-│   │   │   ├── angular-signals-workflow.ts
-│   │   │   ├── container-queries.en.html
-│   │   │   ├── container-queries.html
-│   │   │   ├── css-can-count-elements.html
-│   │   │   ├── devmode-console-style.html
-│   │   │   ├── flex-vs-grid.html
-│   │   │   ├── native-select.html
-│   │   │   ├── simple-css-spinner.html
-│   │   │   ├── svg-paths.en.html
-│   │   │   ├── svg-paths.html
-│   │   │   ├── theme-tokens.en.html
-│   │   │   └── theme-tokens.html
 │   │   ├── social/
 │   │   │   └── og-portfolio-preview.svg
 │   │   └── favicon.svg

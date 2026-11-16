@@ -192,6 +192,9 @@ export interface ClientsContent {
   readonly items: readonly ClientItem[]; // Kunden und Referenzlinks.
   readonly stackLabel: string;          // Beschriftung der sichtbaren Techstack-Tags.
   readonly visitLabel: string;          // Beschriftung der Referenzlinks.
+  readonly archiveStatus: string;       // Statuszeile des veröffentlichten Referenzarchivs.
+  readonly archiveFilesLabel: string;   // Übersetzte Bezeichnung der Archivdateien.
+  readonly archiveEndLabel: string;     // Abschlusskennzeichnung des Archivfensters.
 }
 
 /** Einzelner Kunde oder Referenzlink. */
@@ -219,11 +222,4 @@ export interface BuiltWithoutContent {
   readonly capabilityLabel: string;            // Label für ergänzende gefragte Fähigkeiten.
   readonly withoutItems: readonly string[];    // Bewusst nicht verwendete generische Hilfsmittel.
   readonly capabilityItems: readonly string[]; // Ergänzende, nachgefragte Arbeitsweisen und Qualitätsmerkmale.
-  readonly telemetryEyebrow: string;           // Eyebrow der automatisch aus den Case Studies abgeleiteten Telemetrie.
-  readonly telemetryTitle: string;             // Titel der globalen Portfolio-Telemetrie.
-  readonly telemetryText: string;              // Erklärung zur Datenquelle der Portfolio-Telemetrie.
-  readonly recurrenceTitle: string;            // Titel des Technologie-Wiederholungs-Charts.
-  readonly recurrenceText: string;             // Erklärung des Technologie-Wiederholungs-Charts.
-  readonly breadthTitle: string;               // Titel des Stack-Breiten-Charts.
-  readonly breadthText: string;                // Erklärung des Stack-Breiten-Charts.
 }

@@ -55,6 +55,7 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   readonly isAboutDialogVisible = signal<boolean>(true);                               // Sichtbarkeit des interaktiven About-Dialogfensters.
   readonly isSkillsDialogVisible = signal<boolean>(true);                              // Sichtbarkeit des Skill-Level-Dialogfensters.
   readonly areSkillLevelsLoaded = signal<boolean>(false);                              // Aktiviert die Wachstumsanimation der Skill-Level-Balken.
+  readonly openFaqIndex = signal<number | null>(0);                                    // Aktuell geöffneter FAQ-Eintrag für das gesteuerte Accordion.
   private readonly heroHeadAssetMap: Record<HeroHeadKey, string> = {                   // Asset-Zuordnung für die Hero-Köpfe.
     default: 'assets/images/default-hero-head.webp',
     lol: 'assets/images/hero-head-lol.webp',
@@ -201,6 +202,16 @@ export class HomePageComponent implements AfterViewInit, OnDestroy {
   closeSkillsDialog(): void {
     this.achievementService.unlock('nostalgia-hater');
     this.isSkillsDialogVisible.set(false);
+  }
+
+  /** Öffnet oder schließt einen FAQ-Eintrag mit sanfter Accordion-Transition. */
+  toggleFaq(index: number): void {
+    this.openFaqIndex.update((current) => (current === index ? null : index));
+  }
+
+  /** Prüft, ob ein FAQ-Eintrag aktuell geöffnet ist. */
+  isFaqOpen(index: number): boolean {
+    return this.openFaqIndex() === index;
   }
 
   /** Schaltet die Metrics-Trophäe frei, sobald der absurde Rechner genutzt wird. */

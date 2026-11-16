@@ -242,19 +242,22 @@
       <div class="capabilities__copy bp-motion-copy" bpReveal>
         <bp-reveal-text class="capabilities__title-reveal" [eyebrow]="content().capabilities.eyebrow"
           [text]="content().capabilities.title" headingClass="capabilities__title" />
-        <p class="bp-subtitle">{{ content().capabilities.subtitle }}</p>
-        <a class="bp-button capabilities__cta" routerLink="/portfolio">
-          <span>{{ content().capabilities.ctaLabel }}</span>
-          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
-        </a>
+        <div class="capabilities__intro">
+          <p class="bp-subtitle">{{ content().capabilities.subtitle }}</p>
+          <a class="bp-button capabilities__cta" routerLink="/portfolio">
+            <span>{{ content().capabilities.ctaLabel }}</span>
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+          </a>
+        </div>
       </div>
 
       <div class="capabilities__signals bp-stagger-list bp-stagger-list--soft"
         [attr.aria-label]="content().capabilities.ariaLabel" bpReveal>
         @for (item of content().capabilities.items; track item.label; let index = $index) {
         <article class="capabilities__signal bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 110 + 120">
-          <strong>{{ item.label }}</strong>
-          <span>{{ item.text }}</span>
+          <span class="capabilities__number" aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
+          <h3>{{ item.label }}</h3>
+          <p>{{ item.text }}</p>
         </article>
         }
       </div>
@@ -378,13 +381,12 @@
         @if (content().contact.subtitle) {
         <p class="bp-subtitle">{{ content().contact.subtitle }}</p>
         }
+        <button class="bp-button contact__open" type="button" (click)="globalOverlays.requestContactWindow()"
+          aria-controls="contact-window" aria-haspopup="dialog">
+          <span>{{ content().contact.openFormLabel }}</span>
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+        </button>
       </div>
-
-      @defer (on viewport) {
-      <bp-contact-form />
-      } @placeholder {
-      <div class="home__defer-placeholder home__defer-placeholder--contact" aria-hidden="true"></div>
-      }
     </div>
   </section>
 

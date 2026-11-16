@@ -14,6 +14,7 @@ import { ExperienceGateService } from './core/services/experience-gate.service';
 import { AppRuntimeComponent } from './layout/app-runtime/app-runtime.component';
 import { AccessibilityPanelComponent } from './layout/accessibility-panel/accessibility-panel.component';
 import { AchievementToastComponent } from './layout/achievement-toast/achievement-toast.component';
+import { ContactWindowComponent } from './layout/contact-window/contact-window.component';
 import { CookieBannerComponent } from './layout/cookie-banner/cookie-banner.component';
 import { CriticalStylesComponent } from './layout/critical-styles/critical-styles.component';
 import { CustomCursorComponent } from './layout/custom-cursor/custom-cursor.component';
@@ -41,6 +42,7 @@ import { SystemToastComponent } from './layout/system-toast/system-toast.compone
     AchievementToastComponent,
     PlatinumCompletionModalComponent,
     CookieBannerComponent,
+    ContactWindowComponent,
     SystemToastComponent,
   ],
   templateUrl: './app.component.html',

@@ -5,13 +5,12 @@
  * @description Validiert Eingaben clientseitig und sendet freigegebene Kontaktdaten über die zentrale Infrastructure API.
  */
 
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import type { ContactTopic } from '../../core/models/pages.models';
 import { CONTACT_LIMITS, serializeContactRequest, ContactApiError, ContactApiService, ContactRequest } from '../../core/services/contact-api.service';
 import { LanguageService } from '../../core/services/language.service';
-import { RevealOnScrollDirective } from '../reveal-on-scroll.directive';
 
 /** Formularfelder mit eigener Validierung und Fehlerausgabe. */
 type ContactField = 'name' | 'email' | 'message';
@@ -20,11 +19,14 @@ type ContactField = 'name' | 'email' | 'message';
 @Component({
   selector: 'bp-contact-form',
   standalone: true,
-  imports: [FormsModule, RouterLink, RevealOnScrollDirective],
+  imports: [FormsModule, RouterLink],
   templateUrl: './contact-form.component.html',
   styleUrl: './contact-form.component.scss',
 })
 export class ContactFormComponent {
+  @Input() embedded = false; // Entfernt den eigenen Rahmen innerhalb des globalen Kontaktfensters.
+  @Output() readonly submitted = new EventEmitter<void>(); // Informiert den Fenster-Host nach erfolgreichem Versand.
+
   private readonly destroyRef = inject(DestroyRef);
   private retryTimer: ReturnType<typeof setInterval> | undefined;
   readonly limits = CONTACT_LIMITS;
@@ -167,6 +169,7 @@ export class ContactFormComponent {
     try {
       await this.contactApiService.sendContactMessage(payload);
       this.resetForm();
+      this.submitted.emit();
       await this.router.navigate(['/danke']);
     } catch (error: unknown) {
       if (error instanceof ContactApiError && error.kind === 'rate-limit' && error.retryAfterSeconds) {

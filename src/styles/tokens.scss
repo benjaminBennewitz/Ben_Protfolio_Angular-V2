@@ -177,6 +177,10 @@
    --bp-color-accent-pink: #ff3ea5;
    --bp-color-on-accent-pink: #101010;
    --bp-color-accent-violet: #8d5cff;
+   --bp-color-poster-highlight: var(--bp-color-accent-3);
+   --bp-color-on-poster-highlight: var(--bp-color-on-accent-3);
+   --bp-color-contact-highlight: var(--bp-color-poster-highlight);
+   --bp-color-on-contact-highlight: var(--bp-color-on-poster-highlight);
    --bp-color-on-accent-violet: #ffffff;
    --bp-color-warning: #ff8c1a;
    --bp-color-warning-text: #ff9b32;
@@ -220,6 +224,10 @@
    --bp-color-accent-pink: #ff2e88;
    --bp-color-on-accent-pink: #101010;
    --bp-color-accent-violet: #9d2eff;
+   --bp-color-poster-highlight: var(--bp-color-accent-lime);
+   --bp-color-on-poster-highlight: var(--bp-color-on-accent-lime);
+   --bp-color-contact-highlight: var(--bp-color-accent);
+   --bp-color-on-contact-highlight: var(--bp-color-on-accent);
    --bp-color-on-accent-violet: #ffffff;
    --bp-color-warning: #9b5200;
    --bp-color-warning-text: #8b4900;

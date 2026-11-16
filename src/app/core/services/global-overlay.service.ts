@@ -11,6 +11,14 @@ import { Subject } from 'rxjs';
 /** Verwaltet reine Öffnen-Events für globale UI-Overlays. */
 @Injectable({ providedIn: 'root' })
 export class GlobalOverlayService {
+  private readonly contactWindowRequests = new Subject<void>(); // Öffnen-Events für das globale Kontaktfenster.
+  readonly contactWindowRequested$ = this.contactWindowRequests.asObservable();
+
+  /** Stellt das minimierte Kontaktfenster wieder her. */
+  requestContactWindow(): void {
+    this.contactWindowRequests.next();
+  }
+
   private readonly accessibilityPanelRequests = new Subject<void>();                      // Interner Event-Stream für das Accessibility-Panel.
   private readonly privacyPanelRequests = new Subject<void>();                            // Interner Event-Stream für das Cookie-/Privacy-Panel.
   readonly accessibilityPanelRequested$ = this.accessibilityPanelRequests.asObservable(); // Öffnen-Events für das Accessibility-Panel.

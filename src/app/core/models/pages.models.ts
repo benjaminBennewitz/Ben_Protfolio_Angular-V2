@@ -41,6 +41,12 @@ export interface ContactTopic {
 
 /** Inhalt des Kontaktformulars. */
 export interface ContactContent {
+  readonly openFormLabel: string;        // Öffnet das globale Kontaktformular.
+  readonly windowTitle: string;          // Titel des Kontaktfensters und der minimierten Leiste.
+  readonly windowMinimizeLabel: string;  // Minimiert das Kontaktfenster.
+  readonly windowMaximizeLabel: string;  // Vergrößert das Kontaktfenster auf den verfügbaren Viewport.
+  readonly windowRestoreLabel: string;   // Stellt die normale Fenstergröße wieder her.
+  readonly windowMoveLabel: string;      // Tastaturhinweis für die verschiebbare Titelleiste.
   readonly eyebrow: string;                     // Kleine Beschriftung oberhalb der Überschrift.
   readonly title: string;                       // Sichtbare Überschrift.
   readonly subtitle: string;                    // Einleitung unter der Überschrift.

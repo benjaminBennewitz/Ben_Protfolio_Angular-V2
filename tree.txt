@@ -75,6 +75,11 @@ folio/
 │   │   │   │   ├── app-runtime.component.scss
 │   │   │   │   ├── app-runtime.component.spec.ts
 │   │   │   │   └── app-runtime.component.ts
+│   │   │   ├── contact-window/
+│   │   │   │   ├── contact-window.component.html
+│   │   │   │   ├── contact-window.component.scss
+│   │   │   │   ├── contact-window.component.spec.ts
+│   │   │   │   └── contact-window.component.ts
 │   │   │   ├── cookie-banner/
 │   │   │   │   ├── cookie-banner.component.html
 │   │   │   │   ├── cookie-banner.component.scss

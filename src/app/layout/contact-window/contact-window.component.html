@@ -1,0 +1,35 @@
+<button #dockButton class="contact-dock" type="button" [hidden]="visible()" (click)="restore()"
+  aria-controls="contact-window" [attr.aria-label]="content().openFormLabel" aria-expanded="false" aria-haspopup="dialog">
+  <span class="material-symbols-outlined" aria-hidden="true">forum</span>
+  <span>{{ content().windowTitle }}</span>
+  <span class="contact-dock__restore" aria-hidden="true"></span>
+</button>
+
+<section #windowElement class="contact-window" id="contact-window" role="dialog" aria-labelledby="contact-window-title"
+  [hidden]="!visible()" [class.has-position]="position() !== null" [class.is-maximized]="maximized()"
+  [style.left.px]="maximized() ? null : position()?.x" [style.top.px]="maximized() ? null : position()?.y"
+  (keydown.escape)="onEscape($event)">
+  <div #titleBar class="contact-window__bar" tabindex="0" role="group" [attr.aria-label]="content().windowMoveLabel"
+    [title]="content().windowMoveLabel" (pointerdown)="startDrag($event)" (pointermove)="moveDrag($event)"
+    (pointerup)="endDrag($event)" (pointercancel)="endDrag($event)" (lostpointercapture)="endDrag($event)"
+    (keydown)="moveWithKeyboard($event)">
+    <span class="material-symbols-outlined" aria-hidden="true">forum</span>
+    <h2 id="contact-window-title">{{ content().windowTitle }}</h2>
+    <div class="contact-window__controls">
+      <button type="button" [attr.aria-label]="content().windowMinimizeLabel" [title]="content().windowMinimizeLabel"
+        (click)="minimize()"><span class="contact-window__minimize" aria-hidden="true"></span></button>
+      <button type="button" [attr.aria-label]="maximized() ? content().windowRestoreLabel : content().windowMaximizeLabel"
+        [title]="maximized() ? content().windowRestoreLabel : content().windowMaximizeLabel"
+        [attr.aria-pressed]="maximized()" (click)="toggleMaximized()">
+        <span class="contact-window__size" [class.is-restoring]="maximized()" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+  <div class="contact-window__body">
+    @defer (when visible()) {
+      <bp-contact-form [embedded]="true" (submitted)="minimize(false)" />
+    } @placeholder {
+      <div class="contact-window__placeholder" aria-hidden="true"></div>
+    }
+  </div>
+</section>

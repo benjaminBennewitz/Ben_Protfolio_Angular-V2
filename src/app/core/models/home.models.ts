@@ -213,13 +213,21 @@ export interface CtaContent {
   readonly words: readonly string[]; // Einzelne physikähnliche Wortbausteine.
 }
 
-/** Schmale Qualitäts- und Arbeitsweise-Section. */
-export interface BuiltWithoutContent {
-  readonly eyebrow: string;                    // Kleine technische Beschriftung über der Section.
-  readonly title: string;                      // Kurzer Titel der Section.
-  readonly text: string;                       // Kurzer erklärender Text.
-  readonly withoutLabel: string;               // Label für bewusst ausgeschlossene Lösungen.
-  readonly capabilityLabel: string;            // Label für ergänzende gefragte Fähigkeiten.
-  readonly withoutItems: readonly string[];    // Bewusst nicht verwendete generische Hilfsmittel.
-  readonly capabilityItems: readonly string[]; // Ergänzende, nachgefragte Arbeitsweisen und Qualitätsmerkmale.
+/** Qualitätsgrundsatz mit einer aufklappbaren Erläuterung. */
+export interface QualityPrinciple {
+  readonly title: string;                               // Sichtbarer Titel des Grundsatzes.
+  readonly text: string;                                // Praktische Bedeutung des Grundsatzes.
 }
+
+/** Inhalte der interaktiven Qualitäts-Section. */
+export interface BuiltWithoutContent {
+  readonly eyebrow: string;                             // Technische Beschriftung der Section.
+  readonly title: string;                               // Titel des Qualitätsbereichs.
+  readonly text: string;                                // Einordnung der Qualitätsgrundsätze.
+  readonly interactionHint: string;                     // Hinweis zum Aufklappen der Einträge.
+  readonly withoutLabel: string;                        // Überschrift der grundlegenden Qualitätsziele.
+  readonly capabilityLabel: string;                     // Überschrift der bewussten Entscheidungen.
+  readonly withoutItems: readonly QualityPrinciple[];   // Grundlegende Qualitätsziele.
+  readonly capabilityItems: readonly QualityPrinciple[];// Bewusste technische Entscheidungen.
+}
+

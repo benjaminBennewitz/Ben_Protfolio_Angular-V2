@@ -2,17 +2,30 @@
   <div class="built-strip__layout bp-container">
     <header class="built-strip__copy bp-motion-copy" bpReveal>
       <bp-reveal-text class="built-strip__title-reveal" [eyebrow]="content().eyebrow" [text]="content().title" />
-      <p>{{ content().text }}</p>
+      <div class="built-strip__intro">
+        <p>{{ content().text }}</p>
+        <p class="built-strip__hint">{{ content().interactionHint }}</p>
+      </div>
     </header>
 
     <div class="built-strip__groups" bpReveal>
       <section class="built-strip__group built-strip__group--principles">
         <h3><span aria-hidden="true">01 /</span> {{ content().withoutLabel }}</h3>
         <ul>
-          @for (item of content().withoutItems; track item; let index = $index) {
+          @for (item of content().withoutItems; track item.title; let index = $index) {
           <li>
-            <span class="built-strip__item-index" aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
-            <span>{{ item }}</span>
+            <div class="built-strip__entry" [class.is-open]="openEntry() === 'principle-' + index">
+              <button class="built-strip__trigger" type="button" [attr.aria-expanded]="openEntry() === 'principle-' + index"
+                [attr.aria-controls]="'quality-principle-' + index" (click)="toggleEntry('principle-' + index)">
+                <span class="built-strip__item-index" aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
+                <span>{{ item.title }}</span>
+                <span class="built-strip__toggle" aria-hidden="true"></span>
+              </button>
+              <div class="built-strip__answer" [id]="'quality-principle-' + index"
+                [attr.aria-hidden]="openEntry() !== 'principle-' + index">
+                <div class="built-strip__answer-inner"><p>{{ item.text }}</p></div>
+              </div>
+            </div>
           </li>
           }
         </ul>
@@ -21,10 +34,20 @@
       <section class="built-strip__group built-strip__group--decisions">
         <h3><span aria-hidden="true">02 /</span> {{ content().capabilityLabel }}</h3>
         <ul>
-          @for (item of content().capabilityItems; track item; let index = $index) {
+          @for (item of content().capabilityItems; track item.title; let index = $index) {
           <li>
-            <span class="built-strip__item-index" aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
-            <span>{{ item }}</span>
+            <div class="built-strip__entry" [class.is-open]="openEntry() === 'decision-' + index">
+              <button class="built-strip__trigger" type="button" [attr.aria-expanded]="openEntry() === 'decision-' + index"
+                [attr.aria-controls]="'quality-decision-' + index" (click)="toggleEntry('decision-' + index)">
+                <span class="built-strip__item-index" aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
+                <span>{{ item.title }}</span>
+                <span class="built-strip__toggle" aria-hidden="true"></span>
+              </button>
+              <div class="built-strip__answer" [id]="'quality-decision-' + index"
+                [attr.aria-hidden]="openEntry() !== 'decision-' + index">
+                <div class="built-strip__answer-inner"><p>{{ item.text }}</p></div>
+              </div>
+            </div>
           </li>
           }
         </ul>

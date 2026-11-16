@@ -1,6 +1,13 @@
 <!-- src/app/shared/contact-form/contact-form.component.html -->
-<form class="contact-form bp-card" bpReveal (ngSubmit)="submit()" novalidate>
-  <p class="contact-form__required-hint">{{ content().requiredHint }}</p>
+<form class="contact-form bp-card" [class.contact-form--embedded]="embedded" (ngSubmit)="submit()" novalidate>
+  @if (!embedded) {
+  <div class="contact-form__header">
+    <span class="contact-form__window-title" aria-hidden="true"><span></span>send_message.exe</span>
+    <p class="contact-form__required-hint">{{ content().requiredHint }}</p>
+  </div>
+  } @else {
+  <p class="contact-form__embedded-hint">{{ content().requiredHint }}</p>
+  }
 
   <div class="contact-form__honeypot" aria-hidden="true">
     <label>
@@ -10,6 +17,21 @@
   </div>
 
   <div class="contact-form__layout">
+    <fieldset class="contact-form__topics">
+      <legend>{{ content().topicLabel }}</legend>
+      <p>{{ content().topicHint }}</p>
+
+      <div class="contact-form__topic-grid" role="group" [attr.aria-label]="content().topicLabel">
+        @for (topic of content().topics; track topic.value) {
+        <button class="contact-form__topic" type="button" [class.is-active]="topicIsSelected(topic)"
+          [attr.aria-pressed]="topicIsSelected(topic)" (click)="toggleTopic(topic)">
+          <span class="material-symbols-outlined" aria-hidden="true">{{ topic.icon }}</span>
+          <span>{{ topic.label }}</span>
+        </button>
+        }
+      </div>
+    </fieldset>
+
     <div class="contact-form__fields">
       <div class="contact-form__field-row">
         <label [attr.for]="nameId" [class.has-error]="fieldHasError('name')">
@@ -38,48 +60,33 @@
       <label [attr.for]="messageId" [class.has-error]="fieldHasError('message')">
         <span>{{ content().messageLabel }} <b aria-hidden="true">*</b><span class="bp-sr-only">{{
             content().requiredMarkLabel }}</span></span>
-        <textarea [id]="messageId" rows="5" [value]="message()" (input)="updateField('message', $event)"
+        <textarea [id]="messageId" rows="4" [value]="message()" (input)="updateField('message', $event)"
           [attr.aria-invalid]="fieldHasError('message')" [attr.aria-describedby]="fieldDescribedBy('message')"
           aria-required="true" required minlength="10" [attr.maxlength]="limits.message"></textarea>
         @if (fieldHasError('message')) {
         <small [id]="messageErrorId" class="contact-form__error">{{ fieldError('message') }}</small>
         }
       </label>
-
-      <div class="contact-form__privacy" [class.has-error]="privacyHasError()">
-        <label class="contact-form__consent" [attr.for]="privacyId">
-          <input [id]="privacyId" type="checkbox" [checked]="privacyAccepted()" (change)="updatePrivacyConsent($event)"
-            [attr.aria-invalid]="privacyHasError()" [attr.aria-describedby]="privacyHasError() ? privacyErrorId : null"
-            aria-required="true" required>
-          <span class="contact-form__checkbox" aria-hidden="true"></span>
-          <span class="contact-form__consent-copy">{{ content().privacy }}</span>
-        </label>
-
-        <a class="contact-form__privacy-link" routerLink="/datenschutz">
-          <span>{{ content().privacyLinkLabel }}</span>
-          <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
-        </a>
-
-        @if (privacyHasError()) {
-        <small [id]="privacyErrorId" class="contact-form__error">{{ content().privacyRequiredError }}</small>
-        }
-      </div>
     </div>
 
-    <fieldset class="contact-form__topics">
-      <legend>{{ content().topicLabel }}</legend>
-      <p>{{ content().topicHint }}</p>
+    <div class="contact-form__privacy" [class.has-error]="privacyHasError()">
+      <label class="contact-form__consent" [attr.for]="privacyId">
+        <input [id]="privacyId" type="checkbox" [checked]="privacyAccepted()" (change)="updatePrivacyConsent($event)"
+          [attr.aria-invalid]="privacyHasError()" [attr.aria-describedby]="privacyHasError() ? privacyErrorId : null"
+          aria-required="true" required>
+        <span class="contact-form__checkbox" aria-hidden="true"></span>
+        <span class="contact-form__consent-copy">{{ content().privacy }}</span>
+      </label>
 
-      <div class="contact-form__topic-grid" role="group" [attr.aria-label]="content().topicLabel">
-        @for (topic of content().topics; track topic.value) {
-        <button class="contact-form__topic" type="button" [class.is-active]="topicIsSelected(topic)"
-          [attr.aria-pressed]="topicIsSelected(topic)" (click)="toggleTopic(topic)">
-          <span class="material-symbols-outlined" aria-hidden="true">{{ topic.icon }}</span>
-          <span>{{ topic.label }}</span>
-        </button>
-        }
-      </div>
-    </fieldset>
+      <a class="contact-form__privacy-link" routerLink="/datenschutz">
+        <span>{{ content().privacyLinkLabel }}</span>
+        <span class="material-symbols-outlined" aria-hidden="true">arrow_outward</span>
+      </a>
+
+      @if (privacyHasError()) {
+      <small [id]="privacyErrorId" class="contact-form__error">{{ content().privacyRequiredError }}</small>
+      }
+    </div>
 
     <div class="contact-form__actions">
       <button class="bp-button bp-button--accent" type="submit" [disabled]="isSubmitting() || retryAfterSeconds() > 0">

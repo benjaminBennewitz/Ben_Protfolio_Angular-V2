@@ -42,6 +42,10 @@
 }
 
 .privacy-page {
+  --privacy-controls-size: 2.65rem;
+  --privacy-controls-bottom: clamp(0.7rem, 1.6vh, 1.25rem);
+  --privacy-controls-gap: clamp(1rem, 2vh, 1.5rem);
+  --privacy-controls-reserve: calc(var(--privacy-controls-size) + var(--privacy-controls-bottom) + var(--privacy-controls-gap) + 3px);
   position: relative;
   width: 100%;
   height: 100svh;
@@ -184,7 +188,7 @@
   display: grid;
   min-width: 0;
   height: 100%;
-  padding: calc(var(--bp-header-height) + clamp(4rem, 8vh, 5.75rem)) clamp(1rem, 4vw, 4rem) clamp(2.8rem, 5vh, 4.5rem);
+  padding: calc(var(--bp-header-height) + clamp(4rem, 8vh, 5.75rem)) clamp(1rem, 4vw, 4rem) var(--privacy-controls-reserve);
   scroll-snap-align: start;
   scroll-snap-stop: always;
 }
@@ -525,6 +529,10 @@
   font-size: clamp(3rem, 7vw, 6rem);
 }
 
+:host-context(:root[data-theme='dark']) .privacy-deck__end-window .bp-dos-window__body > .material-symbols-outlined {
+  color: var(--bp-color-contrast-dark);
+}
+
 .privacy-deck__end-window p {
   margin: 0;
   font-family: var(--bp-font-system);
@@ -540,7 +548,7 @@
 .privacy-page__controls {
   position: absolute;
   z-index: 6;
-  bottom: clamp(0.7rem, 1.6vh, 1.25rem);
+  bottom: var(--privacy-controls-bottom);
   left: clamp(1rem, 3vw, 3rem);
   display: flex;
   gap: 0.45rem;
@@ -548,8 +556,8 @@
 
 .privacy-page__controls button {
   display: grid;
-  width: 2.65rem;
-  height: 2.65rem;
+  width: var(--privacy-controls-size);
+  height: var(--privacy-controls-size);
   place-items: center;
   border: 2px solid var(--bp-color-border-strong);
   background: var(--bp-color-surface-solid);
@@ -650,7 +658,7 @@
   .privacy-deck__panel {
     flex-basis: 96vw;
     padding-top: calc(var(--bp-header-height) + 4.2rem);
-    padding-bottom: 3.4rem;
+    padding-bottom: var(--privacy-controls-reserve);
   }
 
   .privacy-deck__hero-body h1 {
@@ -737,7 +745,6 @@
   }
 
   .privacy-page__controls {
-    bottom: 0.7rem;
     left: 0.8rem;
   }
 

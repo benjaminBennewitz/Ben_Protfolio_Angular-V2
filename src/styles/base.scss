@@ -184,8 +184,8 @@ button {
 }
 
 ::selection {
-  background: var(--bp-color-accent);
-  color: var(--bp-color-on-accent);
+  background: var(--bp-selection-bg);
+  color: var(--bp-selection-fg);
 }
 
 /* ==========================================================================

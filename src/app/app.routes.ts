@@ -36,9 +36,9 @@ export const routes: Routes = [
     title: 'Achievements | Benjamin Bennewitz Portfolio',
   },
   {
-    path: 'snippets',
-    loadComponent: () => import('./pages/snippets-page/snippets-page.component').then((component) => component.SnippetsPageComponent),
-    title: 'Snippets | Benjamin Bennewitz Portfolio',
+    path: 'kurzprofil',
+    loadComponent: () => import('./pages/short-profile-page/short-profile-page.component').then((component) => component.ShortProfilePageComponent),
+    title: 'Kurzprofil | Benjamin Bennewitz Portfolio',
   },
   {
     path: 'danke',

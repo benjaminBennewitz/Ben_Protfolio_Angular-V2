@@ -114,13 +114,13 @@ describe('RouteScrollService', () => {
     events.next(end);
     events.next(new Scroll(end, null, null));
     flush();
-    events.next(new NavigationStart(2, '/snippets'));
+    events.next(new NavigationStart(2, '/archive'));
     flush();
     expect(locked()).toBe(true);
     events.next(new Scroll(end, null, null));
     flush();
     expect(locked()).toBe(true);
-    events.next(new NavigationCancel(2, '/snippets', 'Abbruch', NavigationCancellationCode.GuardRejected));
+    events.next(new NavigationCancel(2, '/archive', 'Abbruch', NavigationCancellationCode.GuardRejected));
     expect(locked()).toBe(false);
     expect(frames.size).toBe(0);
   });

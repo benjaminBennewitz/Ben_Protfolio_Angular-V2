@@ -19,7 +19,7 @@ export interface NavigationContent {
   readonly projects: string;           // Navigations- oder Bedienlabel für „Projekte“.
   readonly portfolio: string;          // Navigationslabel für die ausgelagerte Portfolio-Route.
   readonly archive: string;           // Navigationslabel des Designarchivs.
-  readonly snippets: string;           // Navigations- oder Bedienlabel für „Code-Snippets“.
+  readonly shortProfile: string;       // Navigationslabel für das kompakte Kompetenzprofil.
   readonly process: string;            // Navigations- oder Bedienlabel für „Arbeitsprozess“.
   readonly faq: string;                // Navigations- oder Bedienlabel für „FAQ“.
   readonly contact: string;            // Navigations- oder Bedienlabel für „Kontakt“.
@@ -180,4 +180,21 @@ export interface FooterColumn {
 export interface FooterLink {
   readonly label: string; // Sichtbare Beschriftung.
   readonly href: string;  // Zieladresse des Links.
+}
+
+/** Texte des eigenständigen, neutral formulierten Kurzprofils. */
+export interface ShortProfileContent {
+  readonly metaTitle: string;
+  readonly metaDescription: string;
+  readonly eyebrow: string;
+  readonly title: string;
+  readonly intro: string;
+  readonly experienceTitle: string;
+  readonly focusTitle: string;
+  readonly workingStyleTitle: string;
+  readonly workingStyleText: string;
+  readonly projectsLabel: string;
+  readonly faqLabel: string;
+  readonly contactLabel: string;
+  readonly backLabel: string;
 }

@@ -25,7 +25,10 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(content.about.metrics.facts.length).toBeGreaterThan(0);
     expect(content.capabilities.items).toHaveLength(5);
     expect(PORTFOLIO_PROJECTS[language].length).toBeGreaterThan(0);
-    expect(content.faqs.length).toBeGreaterThan(0);
+    expect(content.faqs).toHaveLength(7);
+    expect(content.shortProfile.title.trim()).not.toBe('');
+    expect(content.nav.shortProfile.trim()).not.toBe('');
+    expect(content.clients.items.length).toBeGreaterThan(0);
     expect(content.contact.title.trim()).not.toBe('');
     expect(content.notFoundPage.title.trim()).not.toBe('');
     expect(content.notFoundPage.sitemapGroups.length).toBeGreaterThan(0);
@@ -41,6 +44,7 @@ describe('PORTFOLIO_TRANSLATIONS', () => {
     expect(english.capabilities.items).toHaveLength(german.capabilities.items.length);
     expect(PORTFOLIO_PROJECTS.en).toHaveLength(PORTFOLIO_PROJECTS.de.length);
     expect(english.faqs).toHaveLength(german.faqs.length);
+    expect(english.clients.items).toHaveLength(german.clients.items.length);
     expect(english.notFoundPage.sitemapGroups).toHaveLength(german.notFoundPage.sitemapGroups.length);
   });
 

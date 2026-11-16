@@ -287,27 +287,25 @@
       </div>
 
       <div class="clients__grid bp-stagger-list bp-stagger-list--right" bpReveal>
-        @for (client of content().clients.items; track client.name; let index = $index) {
-        <a class="clients__card bp-card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 120 + 120"
-          [href]="client.url" target="_blank" rel="noopener noreferrer">
-          <span class="clients__label">{{ client.label }}</span>
-          <strong>{{ client.name }}</strong>
-          <div class="bp-dos-window clients__stack" aria-hidden="true">
-            <div class="bp-dos-window__bar">
-              <span>stack_info.exe</span>
-              <span class="clients__fake-close material-symbols-outlined" aria-hidden="true">close</span>
-            </div>
-            <div class="bp-dos-window__body">
-              <p>Techstack:</p>
-              <ul>
-                @for (tech of client.stack; track $index) {
-                <li>{{ tech }}</li>
-                }
-              </ul>
-            </div>
-          </div>
-          <em class="clients__touch-hint material-symbols-outlined" aria-hidden="true">touch_app</em>
-          <i class="material-symbols-outlined" aria-hidden="true">arrow_outward</i>
+        @for (client of content().clients.items; track client.url; let index = $index) {
+        <a class="clients__card bp-stagger-item" [style.--bp-stagger-delay.ms]="index * 80 + 100"
+          [href]="client.url" [attr.target]="client.url.startsWith('http') ? '_blank' : null"
+          [attr.rel]="client.url.startsWith('http') ? 'noopener noreferrer' : null"
+          [attr.aria-label]="content().clients.visitLabel + ': ' + client.name">
+          <span class="clients__index" aria-hidden="true">{{ (index + 1).toString().padStart(2, '0') }}</span>
+          <span class="clients__body">
+            <span class="clients__label">{{ client.label }}</span>
+            <strong>{{ client.name }}</strong>
+            <span class="clients__tags">
+              <span class="clients__stack-label">{{ content().clients.stackLabel }}:</span>
+              @for (tech of client.stack; track tech) {
+              <span class="clients__tag">{{ tech }}</span>
+              }
+            </span>
+          </span>
+          <span class="clients__link" aria-hidden="true">
+            <span class="material-symbols-outlined">arrow_outward</span>
+          </span>
         </a>
         }
       </div>
@@ -329,25 +327,23 @@
 
 
   <section class="faq bp-section" id="faq" bpViewportActivity>
-    @defer (on viewport) {
-    <bp-dithering-shader class="faq__background" colorBack="transparent" colorFront="var(--bp-color-accent)" type="4x4"
-      [pxSize]="4" [speed]="0.75" [intensity]="1.12" [zoom]="0.58">
-    </bp-dithering-shader>
-    } @placeholder {
-    <div class="faq__background" aria-hidden="true"></div>
-    }
+    <div class="faq__layout bp-container">
+      <header class="faq__intro bp-motion-copy" bpReveal>
+        <bp-reveal-text class="faq__title-reveal" eyebrow="FAQ / INTERVIEW.LOG"
+          [text]="content().faqTitle" headingClass="faq__title" />
+        <p class="bp-subtitle">{{ content().faqSubtitle }}</p>
+        <span class="faq__index" aria-hidden="true">Q / {{ content().faqs.length }}</span>
+      </header>
 
-    <div class="bp-container bp-grid-two">
-      <div class="bp-motion-copy" bpReveal>
-        <bp-reveal-text class="faq__title-reveal" eyebrow="FAQ" [text]="content().faqTitle" headingClass="faq__title" />
-      </div>
-
-      <div class="faq__list bp-stagger-list bp-stagger-list--soft" bpReveal>
-        @for (faq of content().faqs; track $index; let index = $index) {
-        <details class="faq__item bp-card bp-stagger-item" name="portfolio-faq"
-          [style.--bp-stagger-delay.ms]="index * 90 + 110">
-          <summary>{{ faq.question }}</summary>
-          <p>{{ faq.answer }}</p>
+      <div class="faq__list" bpReveal>
+        @for (faq of content().faqs; track faq.question; let index = $index) {
+        <details class="faq__item" name="portfolio-faq">
+          <summary>
+            <span class="faq__number" aria-hidden="true">Q{{ (index + 1).toString().padStart(2, '0') }}</span>
+            <span class="faq__question">{{ faq.question }}</span>
+            <span class="faq__toggle" aria-hidden="true"></span>
+          </summary>
+          <div class="faq__answer"><p>{{ faq.answer }}</p></div>
         </details>
         }
       </div>

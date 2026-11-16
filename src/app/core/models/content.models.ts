@@ -3,7 +3,7 @@
 /** @file Zusammengesetzte, sprachabhängige Portfolio-Inhalte. */
 
 import type { AboutContent, BuiltWithoutContent, CapabilityShowcaseContent, ClientsContent, CtaContent, ExperienceContent, FaqItem, HeroContent, ProcessContent, SkillsContent } from './home.models';
-import type { ContactContent, FooterContent, ImprintContent, NavigationContent, NotFoundPageContent, SeoContent, ThankYouContent } from './pages.models';
+import type { ContactContent, FooterContent, ImprintContent, NavigationContent, NotFoundPageContent, SeoContent, ShortProfileContent, ThankYouContent } from './pages.models';
 import type { PortfolioProject, ProjectsContent } from './projects.models';
 
 /** Vollständiger übersetzter Inhalt einer Sprache. */
@@ -22,7 +22,8 @@ export interface PortfolioContent {
   readonly faqTitle: string;                        // Überschrift des FAQ-Bereichs.
   readonly faqSubtitle: string;                     // Einleitung des FAQ-Bereichs.
   readonly faqs: readonly FaqItem[];                // Fragen und Antworten.
-  readonly clients: ClientsContent;                 // Kunden und Referenzen.
+  readonly clients: ClientsContent;                 // Veröffentlichtes Arbeiten- und Referenzarchiv.
+  readonly shortProfile: ShortProfileContent;       // Kompakte, neutral formulierte Profilroute.
   readonly builtWithout: BuiltWithoutContent;       // Schmale Qualitäts-Section mit bewussten technischen Entscheidungen.
   readonly contact: ContactContent;                 // Texte und Rückmeldungen des Kontaktformulars.
   readonly thankYou: ThankYouContent;               // Inhalte der Dankeseite.

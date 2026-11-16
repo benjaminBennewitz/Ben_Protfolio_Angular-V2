@@ -190,6 +190,8 @@ export interface ClientsContent {
   readonly title: string;                // Sichtbare Überschrift.
   readonly subtitle: string;             // Einleitung unter der Überschrift.
   readonly items: readonly ClientItem[]; // Kunden und Referenzlinks.
+  readonly stackLabel: string;          // Beschriftung der sichtbaren Techstack-Tags.
+  readonly visitLabel: string;          // Beschriftung der Referenzlinks.
 }
 
 /** Einzelner Kunde oder Referenzlink. */

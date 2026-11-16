@@ -78,7 +78,7 @@ The goal is a website that remains technically controlled while making a strong 
 | **`/archive`** | Interactive design archive: filterable study catalogue, inspector, and movable/resizable desktop windows |
 | **`/projects/:slug`** | Dynamic project detail pages with individual visual direction |
 | **`/design-studies/:study/`** | Twelve independent interactive studies, served as static pages alongside Angular |
-| **`/snippets`** | Short technical examples with isolated demo assets |
+| **`/kurzprofil`** | Compact, bilingual professional profile based on shared portfolio content |
 | **`/achievements`** | Unlockable interactions and portfolio achievements |
 | **`/danke`** | Confirmation page after a successful contact request |
 | **`/impressum`** | Legal notice and provider information |
@@ -220,7 +220,6 @@ src/
 ├─ assets/
 │  ├─ fonts/                   # Local fonts and reduced icon font
 │  ├─ images/                  # Hero, loader, and project assets
-│  ├─ snippet-demos/           # Isolated examples for the snippets page
 │  └─ social/                  # Social and repository preview
 ├─ design-studies/            # Independent experiences; each folder has its own README
 │  ├─ brutalism/              # RAW/FORM

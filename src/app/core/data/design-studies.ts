@@ -125,10 +125,21 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       category: 'spatial',
       archive: { concept: 'Material / Light / Depth', subject: 'Botanical glass laboratory', idea: 'Can textured glass become a spatial interface that makes proximity, depth and living botanical forms tangible?' },
     },
+    {
+      id: 'teleshop',
+      name: 'TELESHOP',
+      subtitle: 'Same Goods. New Rules. — A Live Shop Redesign',
+      href: '/design-studies/teleshop/',
+      preview: '/design-studies/teleshop/assets/preview.svg',
+      tags: ['Mail-order Design', 'Live Redesign', 'UI / UX', 'HTML / CSS / JS'],
+      category: 'retro',
+      archive: { concept: 'Mail-order / Contemporary Commerce', subject: 'Fictional teleshopping catalogue', idea: 'What changes when the same products move from a dense 1990s mail-order layout into a contemporary shop, one design decision at a time?' },
+    },
   ]; // Reihenfolge und öffentliche Ziele der Designstudien.
 
 /** Deutsche Karteninhalte; Marken und technische Eigennamen bleiben erhalten. */
 export const DESIGN_STUDY_TRANSLATIONS_DE: Readonly<Record<string, Pick<DesignStudy, 'subtitle' | 'tags' | 'archive'>>> = {
+  teleshop: { subtitle: 'Gleiche Ware. Neue Regeln. – ein Live-Shop-Redesign', tags: ['Versandhausgestaltung', 'Live-Redesign', 'UI / UX', 'HTML / CSS / JS'], archive: { concept: 'Versandhaus / Moderner Onlineshop', subject: 'Fiktiver Teleshopping-Katalog', idea: 'Was verändert sich, wenn dieselben Produkte vom dichten Versandhauslayout der 90er in einen modernen Shop wandern – eine Gestaltungsentscheidung nach der anderen?' } },
   'raw-form': { subtitle: 'Brutalistische Festival-Landingpage', tags: ['Brutalismus', 'Editorial', 'Animation', 'HTML / CSS / JS'], archive: { concept: 'Brutalismus / Editorial', subject: 'Festivalkultur', idea: 'Wie weit darf eine Festivalwebsite visuelle Hierarchie, rohe Typografie und bewusst kompromisslose Komposition ausreizen?' } },
   whatwesee: { subtitle: 'Fotografie-Journal im Schweizer Stil', tags: ['Schweizer Typografie', 'Fotografie', 'Editorial', 'HTML / CSS / JS'], archive: { concept: 'Schweizer Stil / Editorial', subject: 'Fotografie-Journal', idea: 'Kann ein strenges typografisches Raster Fotografie stärker inszenieren, statt sie einzuengen?' } },
   'ctrl-room': { subtitle: 'Audiovisuelle Kulturplattform im Y2K-Stil', tags: ['Y2K', 'Chrom / Kunststoff', 'Web Audio', 'HTML / CSS / JS'], archive: { concept: 'Y2K / Chrom / Kunststoff', subject: 'Audiovisuelle Underground-Kultur', idea: 'Was passiert, wenn die überladene Chrom- und Kunststoffästhetik des frühen Webs zur nutzbaren Kulturplattform wird?' } },

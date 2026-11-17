@@ -77,7 +77,7 @@ The goal is a website that remains technically controlled while making a strong 
 | **`/portfolio`** | Selected case studies and a short curated preview of the design archive |
 | **`/archive`** | Interactive design archive: filterable study catalogue, inspector, and movable/resizable desktop windows |
 | **`/projects/:slug`** | Dynamic project detail pages with individual visual direction |
-| **`/design-studies/:study/`** | Twelve independent interactive studies, served as static pages alongside Angular |
+| **`/design-studies/:study/`** | Thirteen independent interactive studies, served as static pages alongside Angular |
 | **`/kurzprofil`** | Compact, bilingual professional profile based on shared portfolio content |
 | **`/achievements`** | Unlockable interactions and portfolio achievements |
 | **`/danke`** | Confirmation page after a successful contact request |
@@ -102,7 +102,7 @@ The goal is a website that remains technically controlled while making a strong 
 > [!NOTE]
 > The standalone design studies are non-commercial experiments in graphic design and web development. Some begin with a visual language or illustrated identity; others begin with a theme or a technical interaction. Their READMEs explain that intent before the implementation details. They are not production products or commercial services. Accessibility and production readiness are not their primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed for these studies.
 
-Twelve independent experiences explore distinct visual directions and interaction models. The complete catalogue lives on `/archive`; `/portfolio#design-studies` shows three curated previews in a compact masonry composition and links to it. The archive combines keyword search, visual categories, a bilingual concept/subject/idea inspector and a freely arranged window canvas. On desktop, its sidebar and canvas share one viewport-bounded workspace, with independent sidebar scrolling; study windows have varied sizes and collision-aware random positions instead of forming a rigid grid or clustering in one corner. The search and catalogue sections can be collapsed, and the viewport-height workspace snaps into view when scrolling. Windows can be dragged and resized (including keyboard arrow controls), focused, closed/reopened, shuffled or tiled; on smaller devices the same catalogue becomes a responsive card gallery. Study assets and independent study source code remain isolated inside their respective study folders. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
+Thirteen independent experiences explore distinct visual directions and interaction models. The complete catalogue lives on `/archive`; `/portfolio#design-studies` shows three curated previews in a compact masonry composition and links to it. The archive combines keyword search, visual categories, a bilingual concept/subject/idea inspector and a freely arranged window canvas. On desktop, its sidebar and canvas share one viewport-bounded workspace, with independent sidebar scrolling; study windows have varied sizes and collision-aware random positions instead of forming a rigid grid or clustering in one corner. The search and catalogue sections can be collapsed, and the viewport-height workspace snaps into view when scrolling. Windows can be dragged and resized (including keyboard arrow controls), focused, closed/reopened, shuffled or tiled; on smaller devices the same catalogue becomes a responsive card gallery. Study assets and independent study source code remain isolated inside their respective study folders. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
 
 ### RAW/FORM
 
@@ -176,6 +176,12 @@ An interactive manifesto about pressure, destruction, and creative transformatio
 
 [Study README](src/design-studies/terra/README.md) · [Open study](https://b2folio.de/design-studies/terra/)
 
+### TELESHOP — Same Goods. New Rules.
+
+**Graphic design and interaction study.** A complete fictional teleshopping homepage transforms from an overloaded late-1990s mail-order interpretation into a contemporary store. Three manually selectable campaigns, product recommendations, new arrivals and an expanded service footer share one DOM. Six AI-generated product photographs contrast cheap retro catalogue staging with modern studio lighting. One title-level button assembles the redesign in staggered stages; a six-topic anchored UX inspector dims the surrounding page and exposes the design decisions. Search, a demo basket and local-only newsletter feedback provide working interactions. No framework, CDN or new dependency is added.
+
+[Study README](src/design-studies/teleshop/README.md) · [Open study](https://b2folio.de/design-studies/teleshop/)
+
 ### Shared integration
 
 Each study owns its HTML, styles, scripts, and assets. Angular copies these experiences as static pages; portfolio theme, language, and accessibility services do not automatically apply to them. Dependencies and supported interactions are documented in each study's README. Framework-free interaction code is written in VanillaJS; individual studies also explore Canvas, SVG, WebGL, Web Audio, or CSS3D.
@@ -232,6 +238,7 @@ src/
 │  ├─ bentendo/               # BENTENDO / DUNGEON WANTED
 │  ├─ phase/                  # PHASE. / generative microcosm
 │  ├─ dead-air/               # DEAD//AIR / analog coastal broadcast
+│  ├─ teleshop/               # TELESHOP / live mail-order shop redesign
 │  ├─ terra/                  # TERRA / botanical material laboratory
 │  └─ formic/                 # FORMIC / generative behavioural art
 ├─ environments/              # Public frontend configuration by environment

@@ -45,12 +45,13 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     expect(page.studyNumber('dead-air')).toBe('DS/010');
     expect(page.studyNumber('formic')).toBe('DS/011');
     expect(page.studyNumber('terra')).toBe('DS/012');
+    expect(page.studyNumber('teleshop')).toBe('DS/013');
     expect(page.categoryCount('spatial')).toBe(3);
   });
 
   it('kombiniert Kategorien mit mehrteiliger Suche und synchronisiert den Inspector', /** Prüft zusammengesetzte Filter. */() => {
     page.setCategory('retro');
-    expect(page.filteredStudies().map(study => study.id)).toEqual(['ctrl-room', 'dead-air']);
+    expect(page.filteredStudies().map(study => study.id)).toEqual(['ctrl-room', 'dead-air', 'teleshop']);
     expect(page.activeStudy()?.id).toBe('ctrl-room');
     page.setSearch('Chrom Kultur');
     expect(page.filteredStudies().map(study => study.id)).toEqual(['ctrl-room']);
@@ -83,6 +84,16 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     page.setSearch('Frosted Glass');
     expect(page.filteredStudies().map(study => study.id)).toEqual(['terra']);
     expect(page.activeStudy()?.archive.subject).toBe('Botanical glass laboratory');
+  });
+
+  it('findet TELESHOP über die lokalisierten Gestaltungsthemen', /** Prüft DE/EN-Suche und Studienziel. */() => {
+    page.setCategory('retro');
+    page.setSearch('Versandhausgestaltung');
+    expect(page.filteredStudies().map(study => study.id)).toEqual(['teleshop']);
+    expect(page.activeStudy()?.href).toBe('/design-studies/teleshop/');
+    language.set('en');
+    page.setSearch('Live Redesign');
+    expect(page.filteredStudies().map(study => study.id)).toEqual(['teleshop']);
   });
 
   it('bringt ein Fenster nach oben und erlaubt Wiederöffnung nach dem Schließen', /** Prüft Fenster- und Z-Reihenfolge. */() => {

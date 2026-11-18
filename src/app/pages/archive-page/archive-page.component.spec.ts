@@ -46,6 +46,7 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     expect(page.studyNumber('formic')).toBe('DS/011');
     expect(page.studyNumber('terra')).toBe('DS/012');
     expect(page.studyNumber('teleshop')).toBe('DS/013');
+    expect(page.studyNumber('pon-pulse')).toBe('DS/014');
     expect(page.categoryCount('spatial')).toBe(3);
   });
 
@@ -156,7 +157,7 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     page.shuffleLayout();
     expect(page.windows().find(state => state.id === 'phase')?.closed).toBe(true);
     page.setCategory('editorial');
-    expect(page.visibleWindows()).toHaveLength(2);
+    expect(page.visibleWindows()).toHaveLength(3);
     page.resetLayout();
     expect(page.windows().find(state => state.id === 'phase')?.closed).toBe(false);
   });

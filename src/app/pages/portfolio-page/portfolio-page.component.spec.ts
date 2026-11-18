@@ -37,7 +37,7 @@ describe('PortfolioPageComponent', /** Gruppiert die Verhaltensprüfungen der La
     expect(page.designStudyNumber('ctrl-room')).toBe('DS/003');
     expect(page.designStudyNumber('phase')).toBe('DS/009');
     expect(page.designStudyNumber('teleshop')).toBe('DS/013');
-    expect(DESIGN_STUDIES).toHaveLength(13);
+    expect(DESIGN_STUDIES).toHaveLength(14);
   });
 
   it('setzt den Schoko-Zustand nur einmal und schließt das dekorative Terminal', /** Setzt den Schoko-Zustand nur einmal und schließt das dekorative Terminal. */() => {

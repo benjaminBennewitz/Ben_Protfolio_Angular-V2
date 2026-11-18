@@ -135,10 +135,21 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       category: 'retro',
       archive: { concept: 'Mail-order Retro / Contemporary Commerce', subject: 'Fictional teleshop: 1998 → 2026', idea: 'How do layout, imagery and visual hierarchy change our perception of the same products? A fictional 1990s teleshop transforms live into a contemporary store, with staged motion and an anchored UX analysis.' },
     },
+    {
+      id: 'pon-pulse',
+      name: 'PON! PULSE',
+      subtitle: 'Artist Spotlight — Graffiti by PP',
+      href: '/design-studies/pon-pulse/',
+      preview: '/design-studies/pon-pulse/assets/preview.webp',
+      tags: ['Graffiti', 'Brutalism', 'Kawaii', 'Artist Portrait', 'HTML / CSS / JS'],
+      category: 'editorial',
+      archive: { concept: 'Brutalism / Kawaii', subject: 'Fictional graffiti writer Pon Pulse', idea: 'A street-art shop editorial follows PP’s bubble lettering from a concrete piece to a painted railway carriage and her go-to equipment.' },
+    },
   ]; // Reihenfolge und öffentliche Ziele der Designstudien.
 
 /** Deutsche Karteninhalte; Marken und technische Eigennamen bleiben erhalten. */
 export const DESIGN_STUDY_TRANSLATIONS_DE: Readonly<Record<string, Pick<DesignStudy, 'subtitle' | 'tags' | 'archive'>>> = {
+  'pon-pulse': { subtitle: 'Artist Spotlight — Graffiti von PP', tags: ['Graffiti', 'Brutalismus', 'Kawaii', 'Künstlerporträt', 'HTML / CSS / JS'], archive: { concept: 'Brutalismus / Kawaii', subject: 'Fiktive Graffiti-Writerin Pon Pulse', idea: 'Ein Street-Art-Shop porträtiert PP und zeigt ihr Bubble-Letter-Piece auf Beton, einen bemalten Waggon und ihr Lieblings-Equipment.' } },
   teleshop: { subtitle: '1998 → 2026 — Gleiche Ware. Neue Regeln.', tags: ['Versandhausgestaltung', 'Live-Redesign', 'UI / UX', 'KI-Produktfotografie', 'HTML / CSS / JS'], archive: { concept: 'Versandhaus-Retro / Modernes Shopdesign', subject: 'Fiktiver Teleshop: 1998 → 2026', idea: 'Wie verändern Raster, Bildsprache und visuelle Hierarchie die Wahrnehmung derselben Produkte? Ein fiktiver 90er-Teleshop verwandelt sich live in einen modernen Shop – mit gestaffelter Bewegung und einer verankerten UX-Analyse.' } },
   'raw-form': { subtitle: 'Brutalistische Festival-Landingpage', tags: ['Brutalismus', 'Editorial', 'Animation', 'HTML / CSS / JS'], archive: { concept: 'Brutalismus / Editorial', subject: 'Festivalkultur', idea: 'Wie weit darf eine Festivalwebsite visuelle Hierarchie, rohe Typografie und bewusst kompromisslose Komposition ausreizen?' } },
   whatwesee: { subtitle: 'Fotografie-Journal im Schweizer Stil', tags: ['Schweizer Typografie', 'Fotografie', 'Editorial', 'HTML / CSS / JS'], archive: { concept: 'Schweizer Stil / Editorial', subject: 'Fotografie-Journal', idea: 'Kann ein strenges typografisches Raster Fotografie stärker inszenieren, statt sie einzuengen?' } },

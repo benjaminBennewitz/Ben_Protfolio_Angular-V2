@@ -182,6 +182,12 @@ An interactive manifesto about pressure, destruction, and creative transformatio
 
 [Study README](src/design-studies/teleshop/README.md) · [Open study](https://b2folio.de/design-studies/teleshop/)
 
+### PON! PULSE — ポン！パルス
+
+**Graphic design and artist editorial.** A fictional street-art shop profiles graffiti writer Pon Pulse, alias PP. Brutalist lettering meets Japanese typography, bubblegum pink and cyan in a profile with a featured concrete piece, an ultra-wide train photograph and PP’s favorite equipment. German and English controls and light and dark modes are available without runtime dependencies.
+
+[Study README](src/design-studies/pon-pulse/README.md) · [Open study](https://b2folio.de/design-studies/pon-pulse/)
+
 ### Shared integration
 
 Each study owns its HTML, styles, scripts, and assets. Angular copies these experiences as static pages; portfolio theme, language, and accessibility services do not automatically apply to them. Dependencies and supported interactions are documented in each study's README. Framework-free interaction code is written in VanillaJS; individual studies also explore Canvas, SVG, WebGL, Web Audio, or CSS3D.
@@ -238,6 +244,7 @@ src/
 │  ├─ bentendo/               # BENTENDO / DUNGEON WANTED
 │  ├─ phase/                  # PHASE. / generative microcosm
 │  ├─ dead-air/               # DEAD//AIR / analog coastal broadcast
+│  ├─ pon-pulse/              # PON! PULSE / graffiti artist spotlight
 │  ├─ teleshop/               # TELESHOP / live mail-order shop redesign
 │  ├─ terra/                  # TERRA / botanical material laboratory
 │  └─ formic/                 # FORMIC / generative behavioural art

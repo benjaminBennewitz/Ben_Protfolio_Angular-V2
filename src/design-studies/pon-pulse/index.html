@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description"
+    content="PON! PULSE alias PP. Ein fiktives Graffiti-Artist-Porträt mit Vita, Work in Focus, Train Bomb und persönlichem Equipment.">
+  <title>PON! PULSE — Artist Spotlight</title>
+  <link rel="canonical" href="https://b2folio.de/design-studies/pon-pulse/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PON! PULSE — Artist Spotlight">
+  <meta property="og:description"
+    content="Ein fiktives Graffiti-Artist-Porträt über Bubble Letters, bemalten Stahl und das Equipment von PP.">
+  <meta property="og:url" content="https://b2folio.de/design-studies/pon-pulse/">
+  <meta property="og:image" content="https://b2folio.de/design-studies/pon-pulse/assets/preview.webp">
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+
+<body>
+  <a class="skip-link" data-copy="skip" href="#main">Zum Inhalt</a>
+  <header class="masthead" id="top">
+    <a class="brand" href="/archive"><b>B²</b><span data-copy="archive">← Archiv</span></a>
+    <span class="masthead-name" lang="ja">ポン！パルス <span aria-hidden="true">✦</span></span>
+    <div class="toolbar">
+      <button id="theme" type="button" aria-pressed="false" data-copy="dark">Dunkel</button>
+      <button id="language" type="button" lang="en" aria-label="Switch to English">EN</button>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <nav class="edition" aria-label="Porträt" data-label="nav">
+      <span lang="en">ARTIST SPOTLIGHT <span lang="ja">作家紹介</span></span>
+      <div>
+        <a href="#vita" data-copy="bio">Vita</a>
+        <a href="#work" data-copy="work">Arbeiten</a>
+        <a href="#kit" lang="en">Kit</a>
+      </div>
+    </nav>
+
+    <section class="poster" aria-labelledby="poster-title">
+      <div class="poster-copy">
+        <p class="eyebrow"><span lang="ja">落書き</span> <span lang="en">GRAFFITI / ARTIST PORTRAIT</span></p>
+        <h1 id="poster-title" lang="en" aria-label="PON! PULSE">
+          <span class="title-line" aria-hidden="true"><span>P</span><span>O</span><span>N</span><span
+              class="title-bang">!</span></span>
+          <span class="title-line"
+            aria-hidden="true"><span>P</span><span>U</span><span>L</span><span>S</span><span>E</span></span>
+        </h1>
+        <p class="poster-jp" aria-hidden="true" lang="ja">ポン！パルス</p>
+        <div class="poster-caption">
+          <span><b lang="en">AKA PP</b><small lang="en">WRITER / MURAL ARTIST</small></span>
+          <span class="poster-star" aria-hidden="true"></span>
+        </div>
+      </div>
+      <figure class="cover">
+        <img src="assets/cover.webp" width="1200" height="1200" fetchpriority="high" data-label="portraitAlt"
+          alt="PP mit schwarzem Bob, pinker Kaugummiblase und einer Farbdose vor pinkem Raster.">
+        <span class="cover-type" aria-hidden="true" lang="ja">落<br>書<br>き</span>
+        <img class="cover-tag" src="assets/pp-tag.webp" width="650" height="350" alt="" aria-hidden="true">
+        <span class="sticker" aria-hidden="true">
+          <span class="sticker-heart">♥</span><span lang="ja">きゅん！</span>
+        </span>
+      </figure>
+    </section>
+
+    <section id="vita" class="bio" aria-labelledby="bio-title">
+      <div class="section-heading" data-reveal>
+        <p lang="ja">プロフィール</p>
+        <h2 id="bio-title"><span lang="en">PP</span> <span data-copy="bio">Vita</span></h2>
+      </div>
+      <div class="bio-copy" data-reveal>
+        <p class="bio-lead" data-copy="bioLead">„Ich bin unsterblich. Montag kann mich mal.“</p>
+        <p data-copy="bioText">PP kommt aus Yokohama. Erst hat sie ihre Buchstaben in selbstgedruckte Zines gekritzelt,
+          dann wurden daraus Arbeiten auf Beton und Stahl. Ihre Frage ist immer dieselbe: Wem gehört die Stadt? Ihre
+          Antwort: denen, die hier leben. Auch denen, die zu jung aussehen, zu laut sind und nie gefragt wurden.</p>
+      </div>
+    </section>
+
+    <section id="work" class="work" aria-labelledby="work-title">
+      <header class="feature-header section-heading" data-reveal>
+        <p lang="ja">注目作品</p>
+        <h2 id="work-title" lang="en">WORK IN FOCUS</h2>
+      </header>
+      <div class="feature">
+        <figure class="feature-image" data-scene>
+          <a class="image-link" href="assets/sugar-static.webp" data-gallery="SUGAR STATIC" data-label="openWall"
+            aria-label="Sugar Static als großes Bild öffnen">
+            <img src="assets/sugar-static.webp" width="1200" height="900" loading="lazy" decoding="async"
+              data-label="wallAlt"
+              alt="Zwei cyanfarbene, verschachtelte P mit schwarzer Kontur und pinken Details auf Beton.">
+            <svg class="spray-layer" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"
+              focusable="false">
+              <defs>
+                <filter id="spray-soft-edge" filterUnits="userSpaceOnUse" x="-200" y="-30" width="1600" height="960">
+                  <feGaussianBlur stdDeviation="5" />
+                </filter>
+                <mask id="spray-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="900">
+                  <g filter="url(#spray-soft-edge)">
+                    <path class="spray-stroke" d="M-170 151 H1370" pathLength="1" />
+                    <path class="spray-stroke" d="M1370 450 H-170" pathLength="1" />
+                    <path class="spray-stroke" d="M-170 749 H1370" pathLength="1" />
+                  </g>
+                </mask>
+                <linearGradient id="spray-mist">
+                  <stop offset="0" stop-color="#fff" stop-opacity=".8" />
+                  <stop offset=".4" stop-color="#ff008c" stop-opacity=".6" />
+                  <stop offset="1" stop-color="#ff008c" stop-opacity="0" />
+                </linearGradient>
+                <g id="fat-cap">
+                  <path d="M30 0 Q119 -104 178 -104 V104 Q119 104 30 0" fill="url(#spray-mist)" />
+                  <path d="M39 0 120-49 M39 0 159 0 M39 0 120 49" fill="none" stroke="#fff" stroke-opacity=".72"
+                    stroke-width="3" stroke-dasharray="4 8" />
+                  <path d="M-49-29 H15 Q34-29 34-10 V27 H-49Z" fill="#67e8f9" stroke="#000" stroke-width="6" />
+                  <ellipse cx="10" cy="-6" rx="16" ry="13" fill="#fff" stroke="#000" stroke-width="4" />
+                  <circle cx="14" cy="-6" r="5" fill="#ff008c" />
+                  <path d="M-54 25 H39 V39 H-54Z" fill="#000" />
+                </g>
+              </defs>
+              <image class="spray-wall" data-src="assets/sugar-wall.webp" width="1200" height="900" />
+              <image class="spray-art" width="1200" height="900" mask="url(#spray-mask)" />
+              <g class="spray-pass">
+                <use href="#fat-cap" />
+              </g>
+              <g class="spray-pass">
+                <use href="#fat-cap" transform="scale(-1 1)" />
+              </g>
+              <g class="spray-pass">
+                <use href="#fat-cap" />
+              </g>
+            </svg>
+            <span class="expand" aria-hidden="true">⤢</span>
+          </a>
+        </figure>
+        <div class="feature-copy" data-reveal>
+          <p lang="ja">シュガー・スタティック</p>
+          <h3 lang="en">SUGAR<br>STATIC</h3>
+          <p data-copy="pieceText">Auf weißem Beton verkeilen sich zwei cyanfarbene P. Eine schwarze Kontur fasst beide
+            zusammen. Pinke Herzen und ein Stück Schachbrett brechen die symmetrische Form auf.</p>
+          <p class="medium" data-copy="medium">Sprühfarbe auf Beton</p>
+          <button class="spray-replay" type="button" data-copy="sprayReplay" hidden>Noch mal sprühen ↻</button>
+        </div>
+      </div>
+
+      <figure class="train" data-scene>
+        <a class="image-link train-media" href="assets/train-bomb.webp" data-gallery="TRAIN BOMB" data-label="openTrain"
+          aria-label="Train Bomb als großes Bild öffnen">
+          <img src="assets/train-bomb.webp" width="1800" height="600" loading="lazy" decoding="async"
+            data-label="trainAlt"
+            alt="Seitenansicht eines ausgemusterten orangefarbenen Waggons mit einem pink-cyanfarbenen Mural und einem grinsenden Hasen.">
+          <span class="train-horn" data-copy="trainHorn" aria-hidden="true">TÜT TÜT!</span>
+          <span class="expand" aria-hidden="true">⤢</span>
+        </a>
+        <figcaption>
+          <span><b lang="en">TRAIN BOMB</b><small lang="ja">車両ペイント</small></span>
+          <span data-copy="trainCaption">„NO GODS, NO BEDTIME“ · Mural auf einem ausgemusterten Waggon.</span>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section id="kit" class="kit" aria-labelledby="kit-title">
+      <header class="kit-header section-heading" data-reveal>
+        <p lang="ja">愛用の道具</p>
+        <h2 id="kit-title" lang="en">PP’S GO-TO KIT</h2>
+      </header>
+      <img class="kit-image" src="assets/kit.webp" width="1440" height="480" loading="lazy" decoding="async"
+        data-label="kitAlt"
+        alt="Zwei Sprühdosen, eine Halbmaske, Sprühköpfe und ein schwarzes Skizzenbuch mit pinkem Marker.">
+      <ul class="kit-list" data-reveal>
+        <li>
+          <h3>Montana GOLD</h3>
+          <p data-copy="cans">PPs Dosen für Flächen, Outlines und pinke Akzente.</p>
+        </li>
+        <li>
+          <h3 data-copy="maskTitle">Atemschutzmaske</h3>
+          <p data-copy="mask">Die Halbmaske gehört für PP fest zur Ausstattung.</p>
+        </li>
+        <li>
+          <h3 lang="en">Fat &amp; Skinny Caps</h3>
+          <p data-copy="caps">Breite Füllung, schmale Linien und kleine Details.</p>
+        </li>
+        <li>
+          <h3 lang="en">Blackbook</h3>
+          <p data-copy="book">Hier zieht PP den PポP-Tag durch, bis jede Linie sitzt.</p>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-main">
+      <div class="footer-signoff" data-reveal>
+        <p lang="ja">不死身</p>
+        <strong lang="en">STAY<br>LOUD<span>.</span></strong>
+      </div>
+      <nav class="footer-nav" data-label="footerNav" aria-label="Footer-Navigation">
+        <h2 lang="en">PON! PULSE</h2>
+        <a href="#vita" data-copy="bio">Vita</a>
+        <a href="#work" data-copy="work">Arbeiten</a>
+        <a href="#kit" lang="en">Kit</a>
+        <a href="#top" data-copy="top">Nach oben ↑</a>
+        <a href="/archive" data-copy="back">Zurück ins Archiv ↗︎</a>
+      </nav>
+    </div>
+    <div class="footer-meta">
+      <div class="footer-disclaimer">
+        <strong lang="en">DISCLAIMER</strong>
+        <p data-copy="credits">PP und ihre Geschichte sind fiktiv. Die Bildmotive sind KI-generiert. Die Studie ist
+          unabhängig von den genannten Marken.</p>
+      </div>
+      <nav class="footer-legal" data-label="legalNav" aria-label="Rechtliche Informationen">
+        <a href="/datenschutz" data-copy="privacy">Datenschutz</a>
+        <a href="/impressum" data-copy="imprint">Impressum</a>
+      </nav>
+      <span>B² / DS/014</span>
+    </div>
+  </footer>
+
+  <dialog id="image-viewer" aria-labelledby="image-title">
+    <header>
+      <b id="image-title" lang="en"></b>
+      <form method="dialog"><button type="submit" data-copy="close">Schließen</button></form>
+    </header>
+    <img alt="">
+  </dialog>
+</body>
+
+</html>

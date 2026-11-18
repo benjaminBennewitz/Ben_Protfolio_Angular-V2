@@ -188,13 +188,26 @@ export interface FooterLink {
   readonly href: string;  // Zieladresse des Links.
 }
 
-/** Texte des eigenständigen, neutral formulierten Kurzprofils. */
+/** Eine berufliche Station oder Qualifikation im Kurzprofil. */
+export interface ShortProfileEntry {
+  readonly period: string;       // Lokalisierter Zeitraum der Station.
+  readonly title: string;        // Berufsbezeichnung, Abschluss oder Weiterbildung.
+  readonly organization: string; // Arbeitgeber oder Bildungseinrichtung.
+  readonly description: string;  // Kurzbeschreibung des fachlichen Schwerpunkts.
+}
+
+/** Inhalte des zweisprachigen Kurzprofils und seiner Druckansicht. */
 export interface ShortProfileContent {
   readonly metaTitle: string;
   readonly metaDescription: string;
   readonly eyebrow: string;
   readonly title: string;
+  readonly professionalTitles: readonly string[]; // Berufsbezeichnungen in der Reihenfolge des Profilkopfs.
   readonly intro: string;
+  readonly background: readonly {                // Abschnitte für Werdegang, Ausbildung und Weiterbildung.
+    readonly title: string;                      // Lokalisierte Abschnittsüberschrift.
+    readonly entries: readonly ShortProfileEntry[]; // Stationen des jeweiligen Abschnitts.
+  }[];
   readonly experienceTitle: string;
   readonly focusTitle: string;
   readonly workingStyleTitle: string;

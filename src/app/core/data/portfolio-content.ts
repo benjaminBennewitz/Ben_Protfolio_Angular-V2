@@ -290,11 +290,64 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
       archiveEndLabel: 'Ende Verzeichnis_',
     },
     shortProfile: {
-      metaTitle: 'Kurzprofil | Benjamin Bennewitz – Design & Entwicklung',
-      metaDescription: 'Benjamin Bennewitz im Überblick: Erfahrung in Webentwicklung, Grafikdesign und Automatisierung, Schwerpunkte, Arbeitsweise und ausgewählte Projekte.',
-      eyebrow: 'PROFILE_SUMMARY.EXE / 60 SEC',
-      title: 'Das Wesentliche auf einen Blick.',
-      intro: 'Ich verbinde Webentwicklung, UI/UX und Grafikdesign. Mein Schwerpunkt liegt auf verständlichen Interfaces, klaren Systemen und Lösungen, die im Alltag funktionieren – fachlich, gestalterisch und technisch.',
+      metaTitle: 'Kurzprofil | Benjamin Bennewitz – Full-Stack-Webentwickler',
+      metaDescription: 'Benjamin Bennewitz: zertifizierter Full-Stack-Webentwickler und staatlich geprüfter Medieninformatiker. Beruflicher Werdegang, Ausbildung und Schwerpunkte.',
+      eyebrow: 'KURZPROFIL',
+      title: 'Benjamin Bennewitz',
+      professionalTitles: [
+        'Webentwickler (Full Stack) | Zertifiziert',
+        'Staatl. gepr. Medieninformatiker/Multimedia',
+        'Mediengestalter Digital, Print & Technik (Berufspraxis)',
+      ],
+      intro: 'Ich entwickle Webanwendungen mit Angular, TypeScript, Django und Python, von der Benutzeroberfläche bis zu API und Datenbank. Mein Schwerpunkt sind interne Anwendungen, rollenbasierte Intranet-Module und automatisierte Abläufe. Meine Erfahrung in Grafikdesign und Medienproduktion fließt in UI/UX und Designsysteme ein.',
+      background: [
+        {
+          title: 'Beruflicher Werdegang',
+          entries: [
+            {
+              period: 'Seit 06/2022',
+              title: 'Webentwickler (Full Stack)',
+              organization: 'SK UV Gele GmbH',
+              description: 'Individuelle Web- und SaaS-Anwendungen, Prozessautomatisierung und KI-Integration.',
+            },
+            {
+              period: '12/2015 – 05/2022',
+              title: 'Mediengestalter Digital, Print & Technik',
+              organization: 'AV-Print Express Bonn',
+              description: 'Gestaltung und Aufbereitung von Druckdaten, Druckvorstufe und Druckproduktion.',
+            },
+            {
+              period: '04/2012 – 12/2015',
+              title: 'Art Director / Game Designer',
+              organization: 'Team Hellfall UG',
+              description: 'Visuelle Ausrichtung und Spielgestaltung.',
+            },
+          ],
+        },
+        {
+          title: 'Ausbildung & Weiterbildung',
+          entries: [
+            {
+              period: '04/2023 – 08/2024',
+              title: 'Full-Stack-Webentwicklung mit Zertifikat',
+              organization: 'Developer Akademie München',
+              description: 'Weiterbildung in Frontend- und Backend-Entwicklung.',
+            },
+            {
+              period: '10/2012 – 10/2014',
+              title: 'Staatl. gepr. Medieninformatiker/Multimedia',
+              organization: 'B.I.B. International College',
+              description: 'Fachrichtung Medieninformatik / Game Development.',
+            },
+            {
+              period: '04/2013 – 09/2013',
+              title: 'Photoshop-Profi-Workshop',
+              organization: 'B.I.B. International College',
+              description: 'Vertiefung in digitaler Bildbearbeitung.',
+            },
+          ],
+        },
+      ],
       experienceTitle: 'Erfahrung aus der Praxis',
       focusTitle: 'Was ich zusammenbringe',
       workingStyleTitle: 'Wie ich arbeite',
@@ -809,11 +862,64 @@ export const PORTFOLIO_TRANSLATIONS: Record<PortfolioLanguage, PortfolioBaseCont
       archiveEndLabel: 'End of directory_',
     },
     shortProfile: {
-      metaTitle: 'Quick Profile | Benjamin Bennewitz – Design & Development',
-      metaDescription: 'Benjamin Bennewitz at a glance: experience in web development, graphic design and automation, strengths, working style and selected work.',
-      eyebrow: 'PROFILE_SUMMARY.EXE / 60 SEC',
-      title: 'The essentials at a glance.',
-      intro: 'I combine web development, UI/UX and graphic design. My focus is on understandable interfaces, clear systems and solutions that work in everyday use – technically, visually and structurally.',
+      metaTitle: 'Quick Profile | Benjamin Bennewitz – Full-Stack Web Developer',
+      metaDescription: 'Benjamin Bennewitz: certified full-stack web developer and state-certified media informatics specialist. Career, education and areas of expertise.',
+      eyebrow: 'QUICK PROFILE',
+      title: 'Benjamin Bennewitz',
+      professionalTitles: [
+        'Web Developer (Full Stack) | Certified',
+        'State-Certified Media Informatics / Multimedia Specialist',
+        'Media Designer for Digital, Print & Production (Professional Experience)',
+      ],
+      intro: 'I build web applications with Angular, TypeScript, Django and Python, from the interface to the API and database. I focus on internal tools, role-based intranet modules and workflow automation. My background in graphic design and media production informs my UI/UX work and design systems.',
+      background: [
+        {
+          title: 'Career',
+          entries: [
+            {
+              period: 'Since 06/2022',
+              title: 'Web Developer (Full Stack)',
+              organization: 'SK UV Gele GmbH',
+              description: 'Custom web and SaaS applications, process automation and AI integration.',
+            },
+            {
+              period: '12/2015 – 05/2022',
+              title: 'Media Designer for Digital, Print & Production',
+              organization: 'AV-Print Express Bonn',
+              description: 'Design and print file preparation, prepress and print production.',
+            },
+            {
+              period: '04/2012 – 12/2015',
+              title: 'Art Director / Game Designer',
+              organization: 'Team Hellfall UG',
+              description: 'Art direction and game design.',
+            },
+          ],
+        },
+        {
+          title: 'Education & Training',
+          entries: [
+            {
+              period: '04/2023 – 08/2024',
+              title: 'Certified Full-Stack Web Development Training',
+              organization: 'Developer Akademie München',
+              description: 'Training in frontend and backend development.',
+            },
+            {
+              period: '10/2012 – 10/2014',
+              title: 'State-Certified Media Informatics / Multimedia Specialist',
+              organization: 'B.I.B. International College',
+              description: 'Specialization in media informatics and game development.',
+            },
+            {
+              period: '04/2013 – 09/2013',
+              title: 'Advanced Photoshop Workshop',
+              organization: 'B.I.B. International College',
+              description: 'Advanced digital image editing.',
+            },
+          ],
+        },
+      ],
       experienceTitle: 'Experience in practice',
       focusTitle: 'What I bring together',
       workingStyleTitle: 'How I work',

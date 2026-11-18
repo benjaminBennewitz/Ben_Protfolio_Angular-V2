@@ -164,6 +164,7 @@ export class ArchivePageComponent {
   private scatterSequence = 0;                    // Verändert die reproduzierbaren Ausgangspositionen.
   private wasDesktop = false;                   // Merkt den Modus für ein sauberes Layout beim Breakpoint-Wechsel.
   private canvasSize: { width: number; height: number } | null = null; // Letzte Canvas-Größe für proportionale Viewport-Anpassungen.
+  private nextPreviewReveal = 0; // Frühester Start der nächsten Einblendung in Millisekunden seit Seitenstart.
 
   readonly searchQuery = signal<string>('');                        // Textsuche über sämtliche lokalisierten Felder.
   readonly selectedCategory = signal<ArchiveCategory>('all');      // Aktiver Kategorienfilter.
@@ -235,6 +236,24 @@ export class ArchivePageComponent {
       this.wasDesktop = window.matchMedia('(min-width: 1001px)').matches;
       this.resetLayout();
     });
+  }
+
+  /**
+   * Blendet Vorschaubilder nach dem Dekodieren zeitlich versetzt ein.
+   * @param image Das Vorschaubild des Archivfensters, das gerade geladen wurde.
+   */
+  async revealPreview(image: HTMLImageElement): Promise<void> {
+    await image.decode().catch(() => undefined);
+
+    if (!image.isConnected || image.naturalWidth === 0) {
+      return;
+    }
+
+    const now = performance.now(); // Zeitpunkt der Bildfreigabe.
+    const revealAt = Math.max(now, this.nextPreviewReveal); // Nächster verfügbarer Startzeitpunkt der Einblendung.
+    this.nextPreviewReveal = revealAt + 55;
+    image.style.setProperty('--archive-preview-delay', `${revealAt - now}ms`);
+    image.classList.add('is-ready');
   }
 
   /** Liefert die lokalisierte Bezeichnung einer Gestaltungsrichtung. */

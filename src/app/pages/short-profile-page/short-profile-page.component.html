@@ -1,3 +1,4 @@
+<!-- src/app/pages/short-profile-page/short-profile-page.component.html -->
 <main class="short-profile bp-section">
   <div class="short-profile__layout bp-container">
     <header class="short-profile__hero">
@@ -18,17 +19,31 @@
 
       <p class="bp-eyebrow">{{ profile().eyebrow }}</p>
       <h1>{{ profile().title }}</h1>
-      <p class="short-profile__lead">{{ profile().intro }}</p>
-
-      <div class="short-profile__facts">
-        @for (fact of quickFacts(); track fact.label) {
-        <article class="short-profile__fact">
-          <span>{{ fact.label }}</span>
-          <strong>{{ fact.value }}</strong>
-        </article>
+      <ul class="short-profile__titles" role="list">
+        @for (title of profile().professionalTitles; track title) {
+        <li>{{ title }}</li>
         }
-      </div>
+      </ul>
+      <p class="short-profile__lead">{{ profile().intro }}</p>
     </header>
+
+    <div class="short-profile__background">
+      @for (section of profile().background; track section.title) {
+      <section>
+        <h2>{{ section.title }}</h2>
+        <ul class="short-profile__entries" role="list">
+          @for (entry of section.entries; track entry.title) {
+          <li class="short-profile__entry">
+            <p class="short-profile__period">{{ entry.period }}</p>
+            <h3>{{ entry.title }}</h3>
+            <p class="short-profile__organization">{{ entry.organization }}</p>
+            <p>{{ entry.description }}</p>
+          </li>
+          }
+        </ul>
+      </section>
+      }
+    </div>
 
     <section class="short-profile__experience" [attr.aria-label]="profile().experienceTitle">
       <h2>{{ profile().experienceTitle }}</h2>
@@ -60,7 +75,6 @@
 
     <section class="short-profile__approach">
       <div class="short-profile__approach-copy">
-        <p class="bp-eyebrow">WORKFLOW / VALUES</p>
         <h2>{{ profile().workingStyleTitle }}</h2>
         <p>{{ profile().workingStyleText }}</p>
       </div>

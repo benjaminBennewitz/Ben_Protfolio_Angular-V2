@@ -188,8 +188,9 @@
             </div>
             <button class="archive-window__preview" type="button" (click)="focusStudy(item.study.id)"
               [attr.aria-label]="texts().active + ': ' + item.study.name">
-              <img [src]="item.study.preview" [alt]="item.study.name + ' — ' + item.study.subtitle"
-                width="800" height="600" loading="lazy" decoding="async" draggable="false" />
+              <img #previewImage [src]="item.study.preview" [alt]="item.study.name + ' — ' + item.study.subtitle"
+                width="800" height="600" loading="lazy" decoding="async" draggable="false"
+                (load)="revealPreview(previewImage)" />
               <span class="archive-window__preview-overlay" aria-hidden="true">
                 <span>{{ item.study.archive.concept }}</span><span class="material-symbols-outlined">arrow_outward</span>
               </span>

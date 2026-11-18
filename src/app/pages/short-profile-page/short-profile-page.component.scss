@@ -1,3 +1,36 @@
+/*###############################
+###
+###     short-profile-page.component.scss
+###     SHORT PROFILE — Portfolio Page
+###     BASED ON: Angular, TypeScript, SCSS
+###     AUTHOR: Benjamin Bennewitz
+###
+###
+###       ██████╗  ▀█
+###       ██╔══██╗ █▄
+###       ██████╦╝
+###       ██╔══██╗
+###       ██████╦╝
+###       ╚═════╝
+###
+#################################*/
+
+/* ==========================================================================
+   INHALTSVERZEICHNIS
+
+   01   Seitenlayout
+   02   Profilkopf und Druckaktion
+   03   Werdegang und Ausbildung
+   04   Erfahrung und Kompetenzen
+   05   Arbeitsweise und Links
+   06   Responsive
+   07   Browser-Druck
+   ========================================================================== */
+
+/* ==========================================================================
+   01   Seitenlayout
+   ========================================================================== */
+
 :host {
   display: block;
 }
@@ -6,13 +39,51 @@
   min-height: 100svh;
   background: var(--bp-color-bg);
   color: var(--bp-color-text);
-  padding-block: calc(var(--bp-header-height) + clamp(2rem, 5vw, 4.5rem)) clamp(3rem, 8vw, 7rem);
+  padding-block: calc(var(--bp-header-height) + clamp(2rem, 5vw, 4.5rem))
+    clamp(3rem, 8vw, 7rem);
 }
 
 .short-profile__layout {
   display: grid;
   gap: clamp(2.2rem, 5vw, 4.5rem);
 }
+
+.short-profile h2 {
+  margin: 0 0 1.5rem;
+  font-family: var(--bp-font-display);
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.short-profile__metric,
+.short-profile__approach {
+  border: 1px solid var(--bp-color-border-strong);
+  background: var(--bp-color-surface);
+}
+
+.short-profile__period,
+.short-profile__area-label {
+  color: var(--bp-color-accent-text);
+  font-family: var(--bp-font-mono);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.short-profile__metric p,
+.short-profile__area p,
+.short-profile__entry p:last-child,
+.short-profile__approach p {
+  margin: 0;
+  color: var(--bp-color-text-muted);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   02   Profilkopf und Druckaktion
+   ========================================================================== */
 
 .short-profile__hero {
   display: grid;
@@ -44,7 +115,10 @@
   letter-spacing: 0.06em;
   text-decoration: none;
   text-transform: uppercase;
-  transition: background-color 160ms ease, transform 160ms var(--bp-ease-out), color 160ms ease;
+  transition:
+    background-color 160ms ease,
+    transform 160ms var(--bp-ease-out),
+    color 160ms ease;
 }
 
 .short-profile__print {
@@ -56,7 +130,11 @@
 .short-profile__print:hover,
 .short-profile__print:focus-visible {
   color: var(--bp-color-accent-text);
-  background: color-mix(in srgb, var(--bp-color-accent) 7%, var(--bp-color-surface));
+  background: color-mix(
+    in srgb,
+    var(--bp-color-accent) 7%,
+    var(--bp-color-surface)
+  );
   transform: translateY(-1px);
 }
 
@@ -93,48 +171,66 @@
   line-height: 1.65;
 }
 
-.short-profile__facts {
+.short-profile__titles,
+.short-profile__entries {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.short-profile__fact,
-.short-profile__metric,
-.short-profile__approach {
-  border: 1px solid var(--bp-color-border-strong);
-  background: var(--bp-color-surface);
+.short-profile__titles {
+  gap: 0.35rem;
+  padding-inline-start: 1rem;
+  border-inline-start: 3px solid var(--bp-color-accent);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 700;
+  line-height: 1.5;
 }
 
-.short-profile__fact {
-  display: grid;
-  gap: 0.55rem;
-  min-width: 0;
-  padding: 1rem 1.05rem;
-}
-
-.short-profile__fact span,
-.short-profile__area-label {
+.short-profile__titles li:first-child {
   color: var(--bp-color-accent-text);
-  font-family: var(--bp-font-mono);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 
-.short-profile__fact strong {
-  font-size: 1rem;
-  line-height: 1.45;
+/* ==========================================================================
+   03   Werdegang und Ausbildung
+   ========================================================================== */
+
+.short-profile__background {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 4vw, 4rem);
 }
 
-.short-profile h2 {
-  margin: 0 0 1.5rem;
-  font-family: var(--bp-font-display);
-  font-size: clamp(1.8rem, 3vw, 2.7rem);
-  line-height: 1.05;
-  text-transform: uppercase;
+.short-profile__entries {
+  border-top: 1px solid var(--bp-color-border-strong);
 }
+
+.short-profile__entry {
+  display: grid;
+  gap: 0.28rem;
+  padding-block: 1rem;
+  border-bottom: 1px solid var(--bp-color-border);
+}
+
+.short-profile__entry h3,
+.short-profile__entry p {
+  margin: 0;
+}
+
+.short-profile__entry h3 {
+  font-size: 1.15rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.short-profile__organization {
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   04   Erfahrung und Kompetenzen
+   ========================================================================== */
 
 .short-profile__metrics {
   display: grid;
@@ -145,13 +241,19 @@
 .short-profile__metric {
   min-width: 0;
   padding: clamp(1.15rem, 2.2vw, 1.8rem);
-  transition: transform 170ms var(--bp-ease-out), background-color 170ms ease;
+  transition:
+    transform 170ms var(--bp-ease-out),
+    background-color 170ms ease;
 }
 
 .short-profile__metric:hover,
 .short-profile__metric:focus-within {
   transform: translateY(-2px);
-  background: color-mix(in srgb, var(--bp-color-accent) 6%, var(--bp-color-surface));
+  background: color-mix(
+    in srgb,
+    var(--bp-color-accent) 6%,
+    var(--bp-color-surface)
+  );
 }
 
 .short-profile__metric-head {
@@ -185,14 +287,6 @@
   text-transform: uppercase;
 }
 
-.short-profile__metric p,
-.short-profile__area p,
-.short-profile__approach p:not(.bp-eyebrow) {
-  margin: 0;
-  color: var(--bp-color-text-muted);
-  line-height: 1.6;
-}
-
 .short-profile__areas {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -207,6 +301,10 @@
   padding: 1rem 0.4rem;
   border-bottom: 1px solid var(--bp-color-border);
 }
+
+/* ==========================================================================
+   05   Arbeitsweise und Links
+   ========================================================================== */
 
 .short-profile__approach {
   display: grid;
@@ -232,8 +330,12 @@
   gap: 1rem;
 }
 
+/* ==========================================================================
+   06   Responsive
+   ========================================================================== */
+
 @media (max-width: 920px) {
-  .short-profile__facts,
+  .short-profile__background,
   .short-profile__metrics,
   .short-profile__areas,
   .short-profile__approach {
@@ -263,6 +365,10 @@
   }
 }
 
+/* ==========================================================================
+   07   Browser-Druck
+   ========================================================================== */
+
 @media print {
   :host {
     color: #0b0b10;
@@ -288,17 +394,18 @@
     font-size: 2.5rem;
   }
 
-  .short-profile__facts,
+  .short-profile__background,
   .short-profile__metrics,
   .short-profile__areas,
   .short-profile__approach {
     grid-template-columns: 1fr;
   }
 
-  .short-profile__fact,
+  .short-profile__entry,
   .short-profile__metric,
   .short-profile__approach {
     break-inside: avoid;
     box-shadow: none;
   }
 }
+

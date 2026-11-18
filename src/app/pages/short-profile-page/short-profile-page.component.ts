@@ -1,6 +1,8 @@
+/* src/app/pages/short-profile-page/short-profile-page.component.ts */
+
 /**
  * @file Kompaktes, sprachabhängiges Kompetenzprofil.
- * @description Verwendet dieselben Erfahrungs- und Kompetenzdaten wie die Startseite.
+ * @description Stellt Berufsbezeichnungen, Werdegang und Kompetenzen auf der Profilseite und in einer A4-Druckansicht dar.
  */
 
 import { Component, computed, effect, inject, signal } from '@angular/core';
@@ -8,7 +10,7 @@ import { RouterLink } from '@angular/router';
 import { LanguageService } from '../../core/services/language.service';
 import { SeoService } from '../../core/services/seo.service';
 
-/** Eigenständige, bewusst neutrale Kurzprofilseite. */
+/** Zweisprachiges Kurzprofil mit eigenständiger A4-Druckansicht. */
 @Component({
   selector: 'bp-short-profile-page',
   standalone: true,
@@ -17,40 +19,33 @@ import { SeoService } from '../../core/services/seo.service';
   styleUrl: './short-profile-page.component.scss',
 })
 export class ShortProfilePageComponent {
-  private readonly languageService = inject(LanguageService);
-  private readonly seoService = inject(SeoService);
-  readonly content = computed(() => this.languageService.content());
-  readonly profile = computed(() => this.content().shortProfile);
-  readonly isPrintBlocked = signal(false);
-  readonly quickFacts = computed(() => (
-    this.languageService.language() === 'de'
-      ? [
-          { label: 'Rolle', value: 'Webentwicklung, UI/UX & Grafikdesign' },
-          { label: 'Fokus', value: 'Verständliche Interfaces, saubere Systeme, gute Wartbarkeit' },
-          { label: 'Schnittstelle', value: 'Design, Entwicklung und Fachseite verbinden' },
-        ]
-      : [
-          { label: 'Role', value: 'Web development, UI/UX & graphic design' },
-          { label: 'Focus', value: 'Understandable interfaces, clean systems, maintainability' },
-          { label: 'Bridge', value: 'Connecting design, development and business needs' },
-        ]
-  ));
+  private readonly languageService = inject(LanguageService);        // Liefert die aktive Sprache und die zentralen Portfolioinhalte.
+  private readonly seoService = inject(SeoService);                  // Aktualisiert Seitentitel, Beschreibung und Canonical-URL.
+
+  readonly content = computed(() => this.languageService.content()); // Portfolioinhalte in der aktuell gewählten Sprache.
+  readonly profile = computed(() => this.content().shortProfile);    // Profilinhalte für die Bildschirm- und Druckansicht.
+  readonly isPrintBlocked = signal(false);                           // Steuert den Hinweis auf ein blockiertes Druckfenster.
 
   /** Synchronisiert Meta-Daten mit dem Sprachwechsel. */
   constructor() {
-    effect(() => this.seoService.setPageSeo(
-      this.profile().metaTitle, this.profile().metaDescription, '/kurzprofil'
-    ));
+    effect(() => {
+      const { metaTitle, metaDescription } = this.profile(); // Lokalisierte Metadaten des Kurzprofils.
+
+      this.seoService.setPageSeo(metaTitle, metaDescription, '/kurzprofil');
+    });
   }
 
-  /** Öffnet eine eigenständige, auf A4 reduzierte Druckansicht des Kurzprofils. */
+  /**
+   * Öffnet eine eigenständige A4-Druckansicht in der aktiven Sprache.
+   * Meldet ein blockiertes Pop-up über den Hinweis in der Profilseite.
+   */
   openPrintView(): void {
     if (typeof window === 'undefined') {
       return;
     }
 
     this.isPrintBlocked.set(false);
-    const printWindow = window.open('', '_blank', 'width=980,height=1280');
+    const printWindow = window.open('', '_blank', 'width=980,height=1280'); // Separates Fenster für Druckvorschau und PDF-Export.
 
     if (!printWindow) {
       this.isPrintBlocked.set(true);
@@ -59,12 +54,32 @@ export class ShortProfilePageComponent {
 
     printWindow.opener = null;
 
-    const profile = this.profile();
-    const content = this.content();
-    const factsHtml = this.quickFacts().map((item) => `
-      <li><span>${this.escapeHtml(item.label)}</span><strong>${this.escapeHtml(item.value)}</strong></li>
+    const profile = this.profile(); // Profiltexte, Berufsbezeichnungen und Stationen der aktiven Sprache.
+    const content = this.content(); // Gemeinsame Erfahrungs- und Kompetenzdaten des Portfolios.
+
+    // Berufsbezeichnungen für den Kopf der Druckansicht.
+    const titlesHtml = profile.professionalTitles.map((title) => `
+      <li>${this.escapeHtml(title)}</li>
     `).join('');
 
+    // Abschnitte für Werdegang, Ausbildung und Weiterbildung.
+    const backgroundHtml = profile.background.map((section) => `
+      <section>
+        <h2>${this.escapeHtml(section.title)}</h2>
+        <ul class="entries" role="list">
+          ${section.entries.map((entry) => `
+            <li>
+              <p class="period">${this.escapeHtml(entry.period)}</p>
+              <h3>${this.escapeHtml(entry.title)}</h3>
+              <p class="organization">${this.escapeHtml(entry.organization)}</p>
+              <p>${this.escapeHtml(entry.description)}</p>
+            </li>
+          `).join('')}
+        </ul>
+      </section>
+    `).join('');
+
+    // Karten mit Erfahrungswerten und Kurzbeschreibungen.
     const experienceHtml = content.experience.items.map((item) => `
       <article>
         <div><strong>${this.escapeHtml(item.value)}+</strong><span>${this.escapeHtml(item.suffix)}</span></div>
@@ -73,6 +88,7 @@ export class ShortProfilePageComponent {
       </article>
     `).join('');
 
+    // Kompetenzfelder als kompakte Liste.
     const focusHtml = content.capabilities.items.map((item) => `
       <li><span>${this.escapeHtml(item.label)}</span><strong>${this.escapeHtml(item.text)}</strong></li>
     `).join('');
@@ -143,7 +159,7 @@ export class ShortProfilePageComponent {
       letter-spacing: -0.05em;
     }
     h2 {
-      margin: 18px 0 8px;
+      margin: 13px 0 7px;
       font-size: 18px;
       line-height: 1;
       text-transform: uppercase;
@@ -151,27 +167,45 @@ export class ShortProfilePageComponent {
     }
     h3 { margin: 7px 0 5px; font-size: 13px; text-transform: uppercase; }
     p { margin: 0; }
-    .lead { max-width: 156mm; margin-bottom: 12px; font-size: 13px; }
-    .facts, .focus { list-style: none; padding: 0; margin: 0; }
-    .facts {
+    .lead { max-width: 165mm; font-size: 12px; }
+    .titles, .entries, .focus { list-style: none; padding: 0; margin: 0; }
+    .titles {
+      margin: 0 0 8px;
+      padding-left: 8px;
+      border-left: 2px solid #0f5eff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .background {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-      margin-bottom: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
     }
-    .facts li, .experience article, .approach {
+    .entries { border-top: 1px solid #7c8597; }
+    .entries li {
+      padding: 5px 0;
+      border-bottom: 1px solid #d5d9e1;
+      break-inside: avoid;
+    }
+    .entries h3 {
+      margin: 1px 0;
+      font-size: 12px;
+      line-height: 1.25;
+      text-transform: none;
+    }
+    .organization { font-weight: 700; }
+    .experience article, .approach {
       border: 1px solid #bfc4cf;
-      padding: 9px;
+      padding: 7px;
+      break-inside: avoid;
     }
-    .facts span, .focus span {
-      display: block;
-      margin-bottom: 6px;
-      color: #0f5eff;
-      font: 700 11px/1.2 "Courier New", monospace;
+    .period, .focus span {
+      color: #004fd6;
+      font: 700 10px/1.2 "Courier New", monospace;
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-    .facts strong, .focus strong { display: block; font-size: 11px; }
+    .focus strong { font-weight: 400; }
     .experience {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -188,11 +222,12 @@ export class ShortProfilePageComponent {
       display: grid;
       grid-template-columns: 34mm 1fr;
       gap: 12px;
-      padding: 7px 0;
+      padding: 4px 0;
       border-bottom: 1px solid #d5d9e1;
     }
     .focus li:last-child { border-bottom: 0; }
-    .approach { margin-top: 14px; }
+    .approach { margin-top: 12px; }
+    .approach h2 { margin-top: 0; }
     .print-contact {
       display: flex;
       align-items: end;
@@ -226,7 +261,7 @@ export class ShortProfilePageComponent {
     .print-contact__links a:focus-visible { color: #0f5eff; text-decoration: underline; }
     @media screen and (max-width: 720px) {
       main { min-height: auto; padding: 20px; }
-      .facts, .experience { grid-template-columns: 1fr; }
+      .background, .experience { grid-template-columns: 1fr; }
       .focus li { grid-template-columns: 1fr; gap: 3px; }
       .print-contact { align-items: start; flex-direction: column; }
       .print-contact__links { justify-content: flex-start; }
@@ -241,9 +276,10 @@ export class ShortProfilePageComponent {
   <main>
     <p class="eyebrow">${this.escapeHtml(profile.eyebrow)}</p>
     <h1>${this.escapeHtml(profile.title)}</h1>
+    <ul class="titles" role="list">${titlesHtml}</ul>
     <p class="lead">${this.escapeHtml(profile.intro)}</p>
 
-    <ul class="facts">${factsHtml}</ul>
+    <div class="background">${backgroundHtml}</div>
 
     <section>
       <h2>${this.escapeHtml(profile.experienceTitle)}</h2>
@@ -256,7 +292,6 @@ export class ShortProfilePageComponent {
     </section>
 
     <section class="approach">
-      <p class="eyebrow">WORKFLOW / VALUES</p>
       <h2>${this.escapeHtml(profile.workingStyleTitle)}</h2>
       <p>${this.escapeHtml(profile.workingStyleText)}</p>
     </section>
@@ -264,7 +299,7 @@ export class ShortProfilePageComponent {
     <footer class="print-contact">
       <div class="print-contact__identity">
         <span class="print-contact__label">${this.languageService.language() === 'de' ? 'KONTAKT' : 'CONTACT'}</span>
-        <strong>Benjamin Bennewitz</strong>
+        <strong>${this.escapeHtml(profile.title)}</strong>
       </div>
       <div class="print-contact__links">
         <a href="mailto:kontakt@b2folio.de">kontakt@b2folio.de</a>
@@ -276,14 +311,18 @@ export class ShortProfilePageComponent {
 </body>
 </html>`);
     printWindow.document.close();
-    printWindow.document.getElementById('print-action')?.addEventListener('click', () => {
+    printWindow.document.getElementById('print-action')?.addEventListener('click', /** Öffnet den Druckdialog für das A4-Dokument. */() => {
       printWindow.focus();
       printWindow.print();
     });
     printWindow.focus();
   }
 
-  /** Maskiert Sonderzeichen für die Druckansicht. */
+  /**
+   * Maskiert HTML-Sonderzeichen vor dem Einfügen in das Druckdokument.
+   * @param value Text aus den lokalisierten Profilinhalten.
+   * @returns Als HTML-Text einsetzbarer Inhalt.
+   */
   private escapeHtml(value: string): string {
     return value
       .replaceAll('&', '&amp;')

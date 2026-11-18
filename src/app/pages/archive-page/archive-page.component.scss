@@ -464,6 +464,7 @@
 
 .archive-page__inspector {
   flex: 0 0 auto;
+  container-type: inline-size;
 }
 
 .archive-page__live {
@@ -495,10 +496,11 @@
 .archive-page__inspector h2 {
   margin: 0;
   font-family: var(--bp-font-display);
-  font-size: clamp(2.3rem, 3.15vw, 3.8rem);
-  letter-spacing: -0.055em;
-  line-height: 0.96;
-  overflow-wrap: anywhere;
+  font-size: clamp(1rem, 7.5cqi, 1.75rem);
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  overflow-wrap: normal;
+  white-space: nowrap;
 }
 
 .archive-page__subtitle {

@@ -3467,13 +3467,14 @@ button[aria-busy='true']:disabled {
   min-width: 55px;
   max-height: none;
   overflow: visible;
+  white-space: nowrap;
   padding: 12px 14px;
   font: 650 22px/.95 Inter, sans-serif;
   letter-spacing: -.035em;
 }
 
 .shop[data-focus='new'] .new-sticker br {
-  display: initial;
+  display: none;
 }
 
 .shop[data-focus='new'] .quick-promos>a {

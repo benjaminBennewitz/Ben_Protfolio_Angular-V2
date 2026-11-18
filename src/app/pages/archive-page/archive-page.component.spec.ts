@@ -69,7 +69,7 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     fixture.detectChanges();
     expect(page.texts().searchLabel).toBe('Search design studies');
     page.setSearch('photography');
-    expect(page.filteredStudies().map(study => study.id)).toEqual(['whatwesee', 'dead-air']);
+    expect(page.filteredStudies().map(study => study.id)).toEqual(['whatwesee', 'dead-air', 'teleshop']);
   });
 
   it('findet TERRA in beiden Sprachen und erhält das statische Studienziel', /** Prüft die neue Archivintegration. */() => {

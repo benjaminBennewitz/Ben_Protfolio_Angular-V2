@@ -128,18 +128,18 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
     {
       id: 'teleshop',
       name: 'TELESHOP',
-      subtitle: 'Same Goods. New Rules. — A Live Shop Redesign',
+      subtitle: '1998 → 2026 — Same Goods. New Rules.',
       href: '/design-studies/teleshop/',
       preview: '/design-studies/teleshop/assets/preview.svg',
-      tags: ['Mail-order Design', 'Live Redesign', 'UI / UX', 'HTML / CSS / JS'],
+      tags: ['Mail-order Design', 'Live Redesign', 'UI / UX', 'AI Product Photography', 'HTML / CSS / JS'],
       category: 'retro',
-      archive: { concept: 'Mail-order / Contemporary Commerce', subject: 'Fictional teleshopping catalogue', idea: 'What changes when the same products move from a dense 1990s mail-order layout into a contemporary shop, one design decision at a time?' },
+      archive: { concept: 'Mail-order Retro / Contemporary Commerce', subject: 'Fictional teleshop: 1998 → 2026', idea: 'How do layout, imagery and visual hierarchy change our perception of the same products? A fictional 1990s teleshop transforms live into a contemporary store, with staged motion and an anchored UX analysis.' },
     },
   ]; // Reihenfolge und öffentliche Ziele der Designstudien.
 
 /** Deutsche Karteninhalte; Marken und technische Eigennamen bleiben erhalten. */
 export const DESIGN_STUDY_TRANSLATIONS_DE: Readonly<Record<string, Pick<DesignStudy, 'subtitle' | 'tags' | 'archive'>>> = {
-  teleshop: { subtitle: 'Gleiche Ware. Neue Regeln. – ein Live-Shop-Redesign', tags: ['Versandhausgestaltung', 'Live-Redesign', 'UI / UX', 'HTML / CSS / JS'], archive: { concept: 'Versandhaus / Moderner Onlineshop', subject: 'Fiktiver Teleshopping-Katalog', idea: 'Was verändert sich, wenn dieselben Produkte vom dichten Versandhauslayout der 90er in einen modernen Shop wandern – eine Gestaltungsentscheidung nach der anderen?' } },
+  teleshop: { subtitle: '1998 → 2026 — Gleiche Ware. Neue Regeln.', tags: ['Versandhausgestaltung', 'Live-Redesign', 'UI / UX', 'KI-Produktfotografie', 'HTML / CSS / JS'], archive: { concept: 'Versandhaus-Retro / Modernes Shopdesign', subject: 'Fiktiver Teleshop: 1998 → 2026', idea: 'Wie verändern Raster, Bildsprache und visuelle Hierarchie die Wahrnehmung derselben Produkte? Ein fiktiver 90er-Teleshop verwandelt sich live in einen modernen Shop – mit gestaffelter Bewegung und einer verankerten UX-Analyse.' } },
   'raw-form': { subtitle: 'Brutalistische Festival-Landingpage', tags: ['Brutalismus', 'Editorial', 'Animation', 'HTML / CSS / JS'], archive: { concept: 'Brutalismus / Editorial', subject: 'Festivalkultur', idea: 'Wie weit darf eine Festivalwebsite visuelle Hierarchie, rohe Typografie und bewusst kompromisslose Komposition ausreizen?' } },
   whatwesee: { subtitle: 'Fotografie-Journal im Schweizer Stil', tags: ['Schweizer Typografie', 'Fotografie', 'Editorial', 'HTML / CSS / JS'], archive: { concept: 'Schweizer Stil / Editorial', subject: 'Fotografie-Journal', idea: 'Kann ein strenges typografisches Raster Fotografie stärker inszenieren, statt sie einzuengen?' } },
   'ctrl-room': { subtitle: 'Audiovisuelle Kulturplattform im Y2K-Stil', tags: ['Y2K', 'Chrom / Kunststoff', 'Web Audio', 'HTML / CSS / JS'], archive: { concept: 'Y2K / Chrom / Kunststoff', subject: 'Audiovisuelle Underground-Kultur', idea: 'Was passiert, wenn die überladene Chrom- und Kunststoffästhetik des frühen Webs zur nutzbaren Kulturplattform wird?' } },

@@ -77,7 +77,7 @@ The six WebP assets join the existing favicon and archive preview. Inter and Jet
 
 One `DesignState` drives `data-layout`, `data-type` and `data-focus`. Product and campaign nodes survive transformation; changing a campaign updates its controlled content. The native same-document View Transition API animates uniquely named element snapshots. One delay table generates their CSS timings and supplies the same delays to the FLIP fallback, preventing drift between the two paths. A FLIP fallback records bounding boxes and uses Web Animations for position/scale interpolation. It cannot interpolate individual glyph outlines. If animation APIs are absent, the destination still applies. The shop is temporarily inert during the transformation to prevent clicks on visually moving targets. Controls unlock on completion, cancellation and failure.
 
-The existing Angular asset glob copies this static study. The central archive entry remains `DS/013`. Deployment checks require all six photographs as well as HTML, CSS, JavaScript, favicon and preview.
+The existing Angular asset glob copies this static study. The public central archive entry remains `DS/013`, with a dedicated 4:3 before/after preview for both desktop windows and mobile cards. Bilingual catalogue metadata covers the two eras, live transformation, product imagery and UX analysis. The card links directly to `/design-studies/teleshop/` through the existing open-study actions; it has no locked or coming-soon state. Deployment checks require all six photographs as well as HTML, CSS, JavaScript, favicon and preview.
 
 ## Anchors and interaction states
 

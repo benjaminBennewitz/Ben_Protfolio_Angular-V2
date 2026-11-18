@@ -105,15 +105,21 @@ german.searchPlaceholder = 'Was fehlt Ihnen noch zum Glück?';
 
 /** Drei manuell bedienbare Kampagnen; keine automatische Bewegung oder Zeitknappheit. */
 const campaigns = [
-  { product: 'egg', target: '#new-arrivals',
+  {
+    product: 'egg', target: '#new-arrivals',
     de: ['JETZT NEU IM SORTIMENT!', 'Schluss mit<br>der Eierkrise.', 'Tut Ihnen vom Eierklopfen schon der Zeigefinger weh?', 'Die Schale splittert. Der Löffel rutscht. Muss das sein? Entdecken Sie den Eierschalensollbruchstellenverursacher. Ein Zug. Ein Klack. Frühstück!', 'Jetzt unkompliziert genießen ↗', 'DAS EI<br>DES KOLUMBUS!'],
-    en: ['JUST ADDED TO OUR RANGE!', 'End the<br>egg crisis.', 'Is tapping breakfast eggs giving your finger a workout?', 'The shell splinters. The spoon slips. Must it be this way? Discover the precision eggshell cracker. One pull. One click. Breakfast!', 'Enjoy the easy way ↗', 'AN EGG-<br>CELLENT IDEA!'] },
-  { product: 'trainer', target: '#hero-product',
+    en: ['JUST ADDED TO OUR RANGE!', 'End the<br>egg crisis.', 'Is tapping breakfast eggs giving your finger a workout?', 'The shell splinters. The spoon slips. Must it be this way? Discover the precision eggshell cracker. One pull. One click. Breakfast!', 'Enjoy the easy way ↗', 'AN EGG-<br>CELLENT IDEA!']
+  },
+  {
+    product: 'trainer', target: '#hero-product',
     de: ['UNSER FITNESS-KLASSIKER!', 'Ihr Sofa ruft.<br>Ihr Bauch auch.', 'Sie möchten etwas bewegen – aber bitte nicht die Möbel?', 'Bauchwunder 3000 ist da! Gepolsterte Griffe, große Versprechen und ein Ehrenplatz im Wohnzimmer. Trainieren Sie Ihren Ehrgeiz. Oder legen Sie erst mal Ihre Jacke ab.', 'Das Bauchgefühl entdecken ↗', 'GROSSE<br>VORSÄTZE!'],
-    en: ['OUR FITNESS CLASSIC!', 'Your sofa calls.<br>So do your abs.', 'Want to get something moving – preferably not the furniture?', 'Meet Ab Wonder 3000! Padded grips, big promises and pride of place in your living room. Exercise your ambition. Or put your jacket on it first.', 'Discover that gut feeling ↗', 'BIG<br>INTENTIONS!'] },
-  { product: 'candle', target: '#candle-product',
+    en: ['OUR FITNESS CLASSIC!', 'Your sofa calls.<br>So do your abs.', 'Want to get something moving – preferably not the furniture?', 'Meet Ab Wonder 3000! Padded grips, big promises and pride of place in your living room. Exercise your ambition. Or put your jacket on it first.', 'Discover that gut feeling ↗', 'BIG<br>INTENTIONS!']
+  },
+  {
+    product: 'candle', target: '#candle-product',
     de: ['WOHLFÜHLEN IM 3ER-SET!', 'Riechen Sie<br>schon nichts?', 'Zu viel Vanille? Zu viel Lavendel? Zu viel von allem?', 'Gönnen Sie Ihrer Nase eine Pause. Unsere Duftkerzen »Leitungswasser« bringen warmes Licht und die aufregende Duftnote: nichts. Jetzt dreifach unaufdringlich.', 'Atmosphäre einpacken ↗', 'DUFTNOTE:<br>NICHTS!'],
-    en: ['COMFORT IN A SET OF THREE!', 'Smell<br>nothing yet?', 'Too much vanilla? Too much lavender? Too much everything?', 'Give your nose a break. Our “Tap Water” candles bring warm light and the exciting fragrance of nothing. Now three times as unobtrusive.', 'Pack some atmosphere ↗', 'SCENT:<br>NOTHING!'] },
+    en: ['COMFORT IN A SET OF THREE!', 'Smell<br>nothing yet?', 'Too much vanilla? Too much lavender? Too much everything?', 'Give your nose a break. Our “Tap Water” candles bring warm light and the exciting fragrance of nothing. Now three times as unobtrusive.', 'Pack some atmosphere ↗', 'SCENT:<br>NOTHING!']
+  },
 ];
 
 /** Zusätzliche Analyseziele vergleichen konkrete Muster der Shop-Startseite. */
@@ -136,7 +142,7 @@ Object.assign(notes, {
 const photosReady = Promise.all(Object.keys(products).flatMap((product) => ['retro', 'modern'].map((era) => {
   const image = new Image();
   image.src = `assets/${product}-${era}.webp`;
-  return typeof image.decode === 'function' ? image.decode().catch(() => {}) : Promise.resolve();
+  return typeof image.decode === 'function' ? image.decode().catch(() => { }) : Promise.resolve();
 })));
 
 /**

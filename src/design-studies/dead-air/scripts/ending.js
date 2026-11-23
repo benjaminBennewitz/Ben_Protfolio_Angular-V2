@@ -4,6 +4,9 @@
  * übernimmt Fokus und Hintergrundsperre; begrenzte Tiefenebenen ersetzen eine 3D-Engine.
  * @author Benjamin Bennewitz
  */
+import { FINISHER, prepareFinisher, getFinisherFrame, getDimensionBlink, drawFinisher } from './dimension-finisher.js';
+import { getHeadCamera, applyHeadCamera } from './head-camera.js';
+import { ENCOUNTER } from './encounter-sequence.js';
 import { prepareDimension, drawDimension } from './dimension-world.js';
 
 const COPY = Object.freeze({
@@ -11,11 +14,16 @@ const COPY = Object.freeze({
     restart: 'Erneut empfangen', archive: 'Zurück zum Archiv', skip: 'Zum Status', forward: 'Weitergehen',
     look: 'Umsehen: Maus oder Ziehen · Weitergehen: W / ↑ oder Button',
     swing: 'Die Schaukel ist leer.', ronnie: 'An der Jacke hängt derselbe Name wie an deinem Empfänger.',
+    finisher: 'Du bleibst stehen. Etwas bewegt sich hinter dir.',
+    impact: 'Ein nasses, dumpfes Geräusch. Etwas zieht an deinem Bauch.',
+    contact: 'Ein Schlauch windet sich hinter deiner Hüfte hervor. Er ist mit deinem Bauch verbunden.',
+    lift: 'Dein Blick hebt sich. Vor dir spannt sich ein schwarzer Rüssel in die Höhe. Deine Füße verlieren den Boden.',
     dimension: 'Vor dir liegt die andere Seite.', close: 'Ein trockenes Klicken. Direkt neben dir.',
     region: 'Die andere Dimension mit unabhängig schwebenden Frauen und Männern an pulsierenden Schläuchen. Mit Maus oder Ziehen umsehen; W, Pfeil nach oben oder Weitergehen bewegt dich vorwärts.',
-    swingRegion: 'Der Stationshof jenseits des Monitors. Eine leere Schaukel; im Nebel erscheint darauf Ronnie mit unkenntlichem Gesicht.',
+    swingRegion: 'Der Stationshof jenseits des Monitors. Nach Signalabbrüchen sitzt Ronnie mit unkenntlichem Gesicht auf der Schaukel.',
     pause: 'Pause', resume: 'Fortsetzen', mute: 'Ton aus', unmute: 'Ton an',
     flash: 'Ein Licht dringt aus dem Bildschirm. Die Geräte verschwinden im Nebel.',
+    intrusion: 'Das Bild reißt ab. Die Kamera ist nicht mehr dazwischen.',
 });
 const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
 const ease = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
@@ -79,6 +87,8 @@ export class Ending {
     this.mode = null;
     this.startedAt = 0;
     this.closedAt = null;
+    this.finisherAt = null;
+    this.finisherCue = 0;
     this.frame = 0;
     this.lastDraw = 0;
     this.depth = 0;
@@ -154,7 +164,7 @@ export class Ending {
 
   /** Lädt die nächste Schlusskulisse bereits während des vorhandenen Finales. */
   prepare(mode) {
-    if (mode === 'breach') prepareDimension();
+    if (mode === 'breach') { void prepareDimension(); void prepareFinisher(); void this.soundscape.load('impact'); void this.soundscape.load('drain'); }
     const ids = mode === 'breach' ? [] : ['ending-yard', 'ending-empty', 'ending-ronnie'];
     for (const id of ids) {
       const image = document.querySelector(`#${id}`);
@@ -170,24 +180,26 @@ export class Ending {
       if (finale.mode === 'breach' && finale.phase === 'open'
         && this.scene.anomaly.activeMs - finale.startedAtMs >= 38_000) this.start('dimension');
       if (finale.mode === 'isolate' && this.investigation.localOpenedAt !== null
-        && this.scene.anomaly.activeMs - this.investigation.localOpenedAt >= 10_000) this.start('swing');
+        && this.scene.anomaly.activeMs >= this.investigation.localEncounterEndsAt) this.start('swing');
       return;
     }
     this.updateDimensionAudio();
+    this.updateFinisher();
     if (this.phase === 'flash' && this.elapsed >= 1800) {
       this.phase = 'view';
       this.dialog.dataset.phase = 'view';
       this.announce(this.mode === 'dimension' ? 'dimension' : 'swing');
     }
-    if (this.mode === 'swing' && this.elapsed >= 6500 && !this.ronnieVisible) {
+    if (this.mode === 'swing' && this.elapsed >= ENCOUNTER.ronnieAt && !this.ronnieVisible) {
       this.ronnieVisible = true;
       this.dialog.dataset.ronnie = 'true';
       this.announce('ronnie');
-      void this.soundscape.play('sourceClicks', .2);
+      void this.soundscape.play('sourceClicks', .35);
+      void this.soundscape.play('glitch', .55);
     }
     if (this.phase === 'closing' && this.closedAt !== null
       && this.scene.anomaly.activeMs - this.closedAt >= 1000) this.showStatus();
-    if (this.phase === 'view' && this.mode === 'swing' && this.elapsed >= 19_000) this.showStatus();
+    if (this.phase === 'view' && this.mode === 'swing' && this.elapsed >= ENCOUNTER.statusAt) this.showStatus();
     if (this.phase === 'view' && this.mode === 'dimension' && this.elapsed >= 42_000) this.beginClose();
     this.render();
   }
@@ -203,6 +215,8 @@ export class Ending {
     document.documentElement.dataset.epilogue = mode;
     this.onTakeover();
     this.soundscape.stop('localLaugh');
+    delete document.documentElement.dataset.signalOmen;
+    document.documentElement.style.setProperty('--signal-omen', '0');
     this.soundscape.voiceAudio?.pause();
     this.soundscape.bedLevel = mode === 'dimension' ? .16 : .13;
     void this.soundscape.unlock().then(() => {
@@ -214,7 +228,7 @@ export class Ending {
     this.fogTexture = createFogTexture();
     this.dialog.showModal();
     this.resize();
-    this.announce('flash');
+    this.announce(mode === 'swing' ? 'intrusion' : 'flash');
     this.render();
     if (mode === 'dimension') void prepareDimension().then(() => this.requestFrame());
     this.requestFrame();
@@ -225,12 +239,12 @@ export class Ending {
    */
   updateDimensionAudio() {
     if (this.mode !== 'dimension' || this.phase === 'status' || this.scene.paused || document.hidden) return;
-    if (!this.soundscape.active.has('dimension') && this.elapsed < 44_000) {
+    if (!this.soundscape.active.has('dimension') && this.elapsed < 58_000) {
       void this.soundscape.play('dimension', .85, this.elapsed/1000);
     }
   }
 
-  /** Begrenzte Vorwärtsbewegung verändert Tiefe und Nebel; am Ende kommt das Klicken näher. */
+  /** Begrenzte Vorwärtsbewegung verändert Tiefe und Nebel; am Ende beginnt der Ego-Finisher. */
   advance(amount) {
     if (!this.active || this.mode !== 'dimension' || this.phase !== 'view' || this.scene.paused || document.hidden) return;
     this.depth = clamp(this.depth + amount);
@@ -238,9 +252,20 @@ export class Ending {
     this.requestFrame();
   }
 
-  /** Nahes Klicken und Schwarzblende schließen auch eine unbewegte Erkundung ab. */
+  /** Startet den Dimensionsfinisher oder die kurze Schwarzblende des anderen Abschlusses. */
   beginClose() {
     if (this.phase !== 'view') return;
+    if (this.mode === 'dimension') {
+      this.phase = 'finisher';
+      this.finisherAt = this.scene.anomaly.activeMs;
+      this.dialog.dataset.phase = 'finisher';
+      this.walking = false;
+      this.backing = false;
+      this.drag = null;
+      this.announce('finisher');
+      this.render();
+      return;
+    }
     this.phase = 'closing';
     this.closedAt = this.scene.anomaly.activeMs;
     this.dialog.dataset.phase = 'closing';
@@ -249,6 +274,24 @@ export class Ending {
     this.announce('close');
     void this.soundscape.play('sourceClicks', .6, 0, -.85);
     this.requestFrame();
+  }
+
+  /** Eindeutige Geräusch-/Textmarken, auch nach Pause ohne doppelte Einschläge. */
+  updateFinisher() {
+    if (this.phase !== 'finisher' || this.finisherAt === null || this.scene.paused || document.hidden) return;
+    const elapsed = this.scene.anomaly.activeMs - this.finisherAt;
+    const frame = getFinisherFrame(elapsed, this.reducedMotion.matches);
+    if (frame.done) { this.showStatus(); return; }
+    const cue = elapsed >= FINISHER.liftAt ? 3 : frame.attached ? 2 : frame.impact ? 1 : 0;
+    if (cue === this.finisherCue) return;
+    this.finisherCue = cue;
+    this.announce(['finisher', 'impact', 'contact', 'lift'][cue]);
+    if (cue === 1) void this.soundscape.play('impact', .8, 0, .35);
+    if (cue === 2) void this.soundscape.play('sourceClicks', .25, 0, .65);
+    if (cue === 3) {
+      void this.soundscape.play('swingCreak', .4, 0, -.25);
+      void this.soundscape.play('drain', .65, 0, .1);
+    }
   }
 
   announce(key) {
@@ -269,6 +312,10 @@ export class Ending {
       this.dialog.dataset.ronnie = 'true';
     }
     this.soundscape.stop('dimension');
+    this.soundscape.stop('impact');
+    this.soundscape.stop('drain');
+    this.soundscape.stop('swingCreak');
+    this.dialog.style.setProperty('--blink', '0');
     this.soundscape.bedLevel = .045;
     this.soundscape.updateBed();
     this.render();
@@ -315,6 +362,10 @@ export class Ending {
     dimension.width = this.canvas.width;
     dimension.height = this.canvas.height;
     dimension.getContext('2d')?.setTransform(ratio, 0, 0, ratio, 0, 0);
+    const body = document.querySelector('#ending-body');
+    body.width = this.canvas.width;
+    body.height = this.canvas.height;
+    body.getContext('2d')?.setTransform(ratio, 0, 0, ratio, 0, 0);
   }
 
   /** Nebel verdeckt den Austausch; drei gegenläufige Ebenen geben den Blick danach frei. */
@@ -333,9 +384,8 @@ export class Ending {
     ctx.fillStyle = warm;
     ctx.fillRect(0, 0, w, h);
     const initial = 1 - ease((time - 1.8) / 5);
-    const exchange = this.mode === 'swing' ? Math.exp(-((time - 6.4) ** 2) / 1.5) : 0;
     const weather = this.mode === 'dimension' ? .3 + .11 * Math.sin(time * .34) : .12;
-    const density = clamp(Math.max(initial * .97, exchange, weather), .08, 1);
+    const density = clamp(Math.max(initial * .97, weather), .08, 1);
     const motionTime = this.reducedMotion.matches ? 0 : time;
     ctx.fillStyle = `rgba(27, 17, 14, ${density * .68})`;
     ctx.fillRect(0, 0, w, h);
@@ -368,25 +418,59 @@ export class Ending {
     const interpolation = this.scene.paused ? 0 : Math.min(200, Math.max(0, performance.now() - this.scene.story.lastTick));
     const time = (this.elapsed + interpolation) / 1000;
     const flash = this.phase === 'flash' ? ease(time / .65) * (1 - ease((time - .65) / 1.1)) : 0;
-    this.dialog.style.setProperty('--ending-flash', String(flash * (this.reducedMotion.matches ? .23 : .92)));
-    this.dialog.style.setProperty('--ending-world', String(ease((time - .6) / 1.1)));
+    this.dialog.style.setProperty('--ending-flash', String(flash * (this.mode === 'swing' ? 0 : (this.reducedMotion.matches ? .23 : .92))));
+    this.dialog.style.setProperty('--ending-world', String(this.mode === 'swing' ? 1 : ease((time - .6) / 1.1)));
+    const finisherMs = this.finisherAt === null ? 0 : this.scene.anomaly.activeMs - this.finisherAt + interpolation;
+    const finish = getFinisherFrame(finisherMs, this.reducedMotion.matches);
+    const camera = getHeadCamera(finish,this.width,this.height,this.reducedMotion.matches);
+    const blink = this.mode !== 'dimension' || this.phase === 'status' ? 0
+      : this.phase === 'finisher' ? finish.blink
+        : getDimensionBlink(this.elapsed + interpolation, this.reducedMotion.matches);
+    this.dialog.style.setProperty('--blink', String(blink));
     if (this.mode === 'dimension') {
       const ctx = document.querySelector('#ending-dimension').getContext('2d');
-      if (ctx) drawDimension(ctx, this.width, this.height, this.reducedMotion.matches ? 0 : time,
-        { depth: this.depth, lookX: this.lookX, lookY: this.lookY });
+      if (ctx) {
+        ctx.clearRect(0, 0, this.width, this.height);
+        ctx.fillStyle = '#090c0b';
+        ctx.fillRect(0, 0, this.width, this.height);
+        ctx.save();
+        if (this.finisherAt !== null && !this.reducedMotion.matches) {
+          const reduced = this.reducedMotion.matches;
+          const jolt = !reduced && finisherMs >= FINISHER.impactAt && finisherMs < FINISHER.impactAt+450
+            ? Math.sin(finisherMs*.05)*5*(1-(finisherMs-FINISHER.impactAt)/450) : 0;
+          ctx.translate(0,jolt);
+          applyHeadCamera(ctx,camera);
+        }
+        drawDimension(ctx, this.width, this.height, this.reducedMotion.matches ? 0 : time,
+          { depth: this.depth, lookX: this.lookX*(1-finish.focus), lookY: this.lookY*(1-finish.focus) });
+        ctx.restore();
+      }
     }
     const swingTime = this.reducedMotion.matches ? 0 : time;
-    document.querySelector('#ending-rig').style.transform = `perspective(1100px) rotateX(${Math.sin(swingTime * 1.05) * 5}deg) scale(${1 + Math.sin(swingTime * 1.05) * .025})`;
+    const cut = this.mode === 'swing' && this.phase !== 'status'
+      && (time < .55 || (time >= 2.9 && time < 3.65) || (time >= 7.2 && time < 7.65));
+    const shake = this.mode === 'swing' && !this.reducedMotion.matches && !this.scene.paused
+      ? Math.sin(time*19)* (cut ? 3 : .6) : 0;
+    this.dialog.style.setProperty('--encounter-shake', `${shake.toFixed(2)}px`);
+    this.dialog.dataset.signalCut = String(Boolean(cut));
+    document.querySelector('#ending-rig').style.transform = `translateX(${shake.toFixed(2)}px) perspective(1100px) rotateX(${Math.sin(swingTime)*2}deg)`;
     const blackout = this.phase === 'closing' && this.closedAt !== null
       ? ease((this.scene.anomaly.activeMs - this.closedAt + interpolation) / 900) : this.phase === 'status' ? .72 : 0;
-    this.dialog.style.setProperty('--ending-black', String(blackout));
+    this.dialog.style.setProperty('--ending-black', String(cut ? 1 : Math.max(blackout, this.phase === 'finisher' ? finish.black : 0)));
     this.paintFog(time);
-    if (!this.scene.paused && (!this.reducedMotion.matches || this.phase === 'flash' || this.phase === 'closing' || this.walking || this.backing)) this.requestFrame();
+    const bodyContext = document.querySelector('#ending-body').getContext('2d');
+    if (bodyContext) {
+      if (this.mode === 'dimension' && this.finisherAt !== null) drawFinisher(bodyContext, this.width, this.height, finisherMs, this.reducedMotion.matches,camera);
+      else bodyContext.clearRect(0, 0, this.width, this.height);
+    }
+    if (!this.scene.paused && (!this.reducedMotion.matches || this.phase === 'flash' || this.phase === 'closing' || this.phase === 'finisher' || this.walking || this.backing)) this.requestFrame();
   }
 
   dispose() {
     cancelAnimationFrame(this.frame);
     this.soundscape.stop('dimension');
+    this.soundscape.stop('impact');
+    this.soundscape.stop('drain');
     this.resizeObserver?.disconnect();
   }
 }

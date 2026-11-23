@@ -32,6 +32,8 @@
    12   Ronnies Übergang und Abschluss
    13   Ungelesene Notizen und Display-Toast
    14   Gemeinsame Audioeinstellungen
+   15   Gestörte persönliche Übertragung und Begegnung auf CAM 03
+   16   Kompakte Empfangskonsole und Ego-Finisher
    ========================================================================== */
 
 /* 01   Fonts und Design Tokens */
@@ -3345,11 +3347,11 @@ body::after {
   border-color: var(--signal);
 }
 
-[data-finale='local-ready'] .receiver-actions,
-[data-finale='local-view'] .receiver-actions { flex-wrap: wrap; }
+[data-finale='local-ready'] .source-switch,
+[data-finale='local-view'] .source-switch { display: none; }
 
 [data-finale='local-ready'] #local-camera,
-[data-finale='local-view'] #local-camera { flex: 1 0 100%; }
+[data-finale='local-view'] #local-camera { flex: 1 1 auto; margin: 0; }
 
 [data-paused='true'] .scene__local-swing,
 html:has(dialog[open]) .scene__local-swing { animation-play-state: paused; }
@@ -3725,4 +3727,93 @@ html[data-epilogue] body { overflow: hidden; }
 .audio-controls--ending { grid-template-columns: auto minmax(65px, 1fr) 40px; width: min(260px, 100%); margin: 0; padding: 0 10px; }
 @media (max-width: 359px) {
   .audio-controls { gap: 5px; margin-inline: 8px; padding-inline: 6px; }
+}
+
+/* 15   Gestörte persönliche Übertragung und Begegnung auf CAM 03 */
+html[data-signal-omen='pending'] .broadcast-shell {
+  filter: brightness(calc(1 - var(--signal-omen, 0) * .72)) contrast(calc(1 + var(--signal-omen, 0) * .4));
+  transform: translateX(calc(var(--signal-omen, 0) * -2px));
+}
+html[data-signal-omen='pending'] .scene {
+  filter: contrast(calc(1 + var(--signal-omen, 0) * .5));
+}
+.scene__local { transform: translateX(var(--encounter-shake, 0px)); }
+.scene__local-empty,
+.scene__local-standing,
+.scene__local-closeup { visibility: hidden; }
+.scene__local[data-encounter='standing'] .scene__local-swing,
+.scene__local[data-encounter='closeup'] .scene__local-swing { visibility: hidden; }
+.scene__local[data-encounter='standing'] .scene__local-empty,
+.scene__local[data-encounter='standing'] .scene__local-standing,
+.scene__local[data-encounter='closeup'] .scene__local-closeup { visibility: visible; }
+.scene__local-standing { filter: saturate(.35) contrast(1.2) brightness(.7); }
+.scene__local-closeup { filter: saturate(.3) contrast(1.2) brightness(.68); }
+.scene__local::after {
+  content: '';
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  pointer-events: none;
+  opacity: .12;
+  background: repeating-linear-gradient(0deg, #9cae9638 0 1px, #0000 1px 5px);
+  background-position: 0 var(--encounter-scan, 0px);
+  mix-blend-mode: screen;
+}
+.scene__local[data-encounter='blackout'] { background: #010203; }
+.scene__local[data-encounter='blackout'] img { visibility: hidden; }
+.scene__local[data-encounter='blackout']::after { opacity: .5; }
+.scene__local[data-encounter='closeup']::after { opacity: .28; }
+.ending[data-mode='swing'] .ending__world { transform: translateX(var(--encounter-shake, 0px)); }
+.ending[data-mode='swing'][data-signal-cut='true'] .ending__black { opacity: 1; }
+.ending[data-mode='swing'] .ending__rig img { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  html[data-signal-omen='pending'] .broadcast-shell { filter: brightness(.88); transform: none; }
+  .scene__local,
+  .ending[data-mode='swing'] .ending__world { transform: none; }
+}
+
+html[data-signal-omen='pending']:has(dialog[open]) .broadcast-shell { filter: none; transform: none; }
+
+/* 16   Kompakte Empfangskonsole und Ego-Finisher */
+.effect-definitions { position: absolute; pointer-events: none; }
+.scene__local-swing { filter: url(#face-swing) saturate(.35) contrast(1.2) brightness(.7); }
+.scene__local-standing { filter: url(#face-standing) saturate(.35) contrast(1.2) brightness(.7); }
+.scene__local-closeup { filter: url(#face-closeup) saturate(.3) contrast(1.2) brightness(.68); }
+
+@media (min-width: 751px) and (min-height: 681px) {
+  [data-finale='local-ready'] .control-panel__heading .lead,
+  [data-finale='local-view'] .control-panel__heading .lead { display: none; }
+  .control-panel { overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--edge) transparent; }
+}
+
+@media (min-width: 751px) and (min-height: 681px) and (max-height: 1000px) {
+  .control-panel__heading { padding-bottom: 8px; }
+  .control-panel__heading .lead { font-size: 12px; line-height: 1.45; }
+  .receiver .panel-bar { min-height: 32px; }
+  .receiver__display { margin: 10px 12px; padding: 10px 13px 8px; }
+  .receiver__freq { font-size: clamp(39px, 4vw, 59px); }
+  .receiver__scale { margin-top: 9px; padding-top: 7px; }
+  .tuning-control { margin: 0 12px 10px; padding-top: 8px; }
+  .tuning-control input { margin: 12px 0 10px; }
+  .receiver-actions { margin: 0 12px 8px; }
+  .receiver > .audio-controls { padding: 3px 8px; margin-bottom: 8px; }
+  .receiver__archive { margin-inline: 12px; gap: 5px; }
+  .receiver__decision-result { margin-top: 3px; padding: 6px 8px; font-size: 10px; line-height: 1.4; }
+}
+
+.ending__body {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.ending__blink {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  pointer-events: none;
+  background: #010202;
+  opacity: var(--blink, 0);
 }

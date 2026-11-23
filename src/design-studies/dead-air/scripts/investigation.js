@@ -4,6 +4,7 @@
  * gemeinsamen Licht-/Tonuhr. Besitzt keine zweite Story-Zustandsmaschine.
  * @author Benjamin Bennewitz
  */
+import { ENCOUNTER, getEncounterFrame } from './encounter-sequence.js';
 import { MORSE_DIGITS, RELAY_PATTERNS, createMorseTimeline, isMorseOn } from './signal-patterns.js';
 
 const COPY = Object.freeze({
@@ -28,7 +29,10 @@ const COPY = Object.freeze({
     signaturePlaying: 'Dreierkennung {id}: {pattern}. Pausen: {intervals}.',
     local: 'CAM 03 / LOCAL', localReady: 'UNREGISTRIERTER EINGANG / CAM 03', localFeed: 'LOKALER FEED · KEINE SENDERKENNUNG',
     offline: 'CAM 01 / 02 · OFFLINE', creak: 'Ein langsames Quietschen. Die Schaukel bewegt sich.', laugh: 'Die Frau lacht. Trockenes Klicken zwischen den Atemzügen.',
-    localAria: 'Lokale Überwachungskamera: eine erwachsene Frau lächelt auf einer langsam schaukelnden Schaukel im leeren Stationshof.',
+    localAria: 'Lokale Überwachungskamera: eine Frau mit unkenntlich verzerrtem Gesicht auf einer Schaukel im leeren Stationshof.',
+    standing: 'Die Schaukel ist leer. Die Frau steht jetzt davor.',
+    near: 'Das verzerrte Gesicht ist direkt vor der Kamera.',
+    pictureLost: 'Das Kamerabild ist abgebrochen. Dunkle Signalstörungen.',
     match: 'GLEICHER RHYTHMUS', different: 'ANDERE FOLGE', comparePrompt: 'Vergleiche beide gespeicherten Klickspuren. Stammt der Rhythmus aus derselben Quelle?', compareRetry: 'Höre besonders auf die kurze und die längere Pause zwischen den Klicks.', compareDone: 'Übereinstimmung im Protokoll gesichert. Die Identität des Senders bleibt ungeklärt.',
     compare: 'FUNKSPUREN VERGLEICHEN', compareHint: 'Gesicherte Beobachtungen bleiben hier lesbar. Ein Hinweis ist noch kein Beweis.',
 });
@@ -60,7 +64,9 @@ export class Investigation {
     this.relayFlashAt = null;
     this.localOpenedAt = null;
     this.localLaughed = false;
+    this.localCue = -1;
     this.morseFrame = 0;
+    this.faceFrame = 0;
     this.timelines = { first: createMorseTimeline('1037'), warning: createMorseTimeline('1024') };
     this.notesDialog = document.querySelector('#notes-dialog');
     this.referenceDialog = document.querySelector('#morse-dialog');
@@ -293,12 +299,68 @@ export class Investigation {
       delete this.root.dataset.relayFlash;
       if (this.strangerStartedAt !== null) this.finishStranger(true);
     }
-    if (this.localOpenedAt !== null && !this.localLaughed && now - this.localOpenedAt >= 4200) {
+    if (this.localOpenedAt !== null && !this.localLaughed && now - this.localOpenedAt >= ENCOUNTER.laughAt) {
       this.localLaughed = true;
       this.showCaption('laugh');
       void this.soundscape.play('localLaugh', .7);
     }
+    this.updateLocalEncounter(now);
     this.refreshMorse();
+  }
+
+  /** Harte Bildwechsel liegen vollständig in Schwarz- und Störphasen. */
+  updateLocalEncounter(now) {
+    if (this.localOpenedAt === null || this.root.dataset.epilogue) return;
+    const frame = getEncounterFrame(now - this.localOpenedAt);
+    const local = document.querySelector('#local-scene');
+    local.dataset.encounter = frame.stage;
+    this.refreshFace();
+    local.setAttribute('aria-label', frame.stage === 'standing' ? this.copy.standing
+      : frame.stage === 'closeup' ? this.copy.near
+        : frame.stage === 'blackout' ? this.copy.pictureLost : this.copy.localAria);
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const shake = frame.shaken && !reduced && !this.scene.paused ? Math.sin(Math.floor(now/80)*12.9898)*3 : 0;
+    local.style.setProperty('--encounter-shake', `${shake.toFixed(2)}px`);
+    local.style.setProperty('--encounter-scan', `${Math.floor(now/160)%11*9}px`);
+    if (frame.cue === this.localCue) return;
+    this.localCue = frame.cue;
+    if (frame.cue) void this.soundscape.play('glitch', frame.stage === 'closeup' ? .65 : .45);
+    if (frame.stage === 'standing') this.showCaption('standing');
+    if (frame.stage === 'closeup') this.showCaption('near');
+    if (frame.stage === 'blackout') this.showCaption(null);
+  }
+
+  /** Verschiebt ausschließlich die weich maskierte Gesichtsregion mit maximal 30 FPS.
+   * Die Storyuhr hält Verformung und Ton bei Pause, Dialogen und Tabwechsel zusammen an.
+   */
+  refreshFace() {
+    if (this.faceFrame) return;
+    const draw = timestamp => {
+      this.faceFrame = 0;
+      const stage = document.querySelector('#local-scene').dataset.encounter;
+      if (!this.isRunning() || this.root.dataset.epilogue || stage === 'blackout') return;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const elapsed = this.scene.anomaly.activeMs - this.localOpenedAt
+        + Math.min(200, Math.max(0, performance.now() - this.scene.story.lastTick));
+      const time = reduced ? 0 : elapsed / 1000;
+      const flow = document.querySelector(`[data-face-flow="${stage}"]`);
+      const scale = document.querySelector(`[data-face-scale="${stage}"]`);
+      flow?.setAttribute('dx', String(Math.sin(time*.43)*24));
+      flow?.setAttribute('dy', String(time%100*2));
+      scale?.setAttribute('scale', String(reduced ? 0 : (stage === 'closeup' ? 25 : 8)*(1+Math.sin(time*1.1)*.35)));
+      if (!reduced) this.faceFrame = requestAnimationFrame(next => {
+        if (next - timestamp < 32) this.faceFrame = requestAnimationFrame(draw);
+        else draw(next);
+      });
+    };
+    this.faceFrame = requestAnimationFrame(draw);
+  }
+
+  /** Die gesamte Begegnung wartet mindestens bis zum Ende der Lachaufnahme. */
+  get localEncounterEndsAt() {
+    if (this.localOpenedAt === null) return 0;
+    const duration = this.soundscape.buffers.get('localLaugh')?.duration ?? 0;
+    return this.localOpenedAt + Math.max(ENCOUNTER.takeoverAt, ENCOUNTER.laughAt + duration*1000 + 700);
   }
 
   /** Für beide Codes wird dieselbe Uhr und dieselbe Impulsliste verwendet. */
@@ -347,6 +409,7 @@ export class Investigation {
   openLocal() {
     if (this.localOpenedAt !== null) return;
     this.localOpenedAt = this.scene.anomaly.activeMs;
+    this.updateLocalEncounter(this.localOpenedAt);
     this.showCaption('creak');
     this.soundscape.bedLevel = .25;
     void this.soundscape.startBed('swingCreak');
@@ -374,7 +437,7 @@ export class Investigation {
     for (const id of ['notes-close', 'morse-close']) {
       document.querySelector(`#${id}`).setAttribute('aria-label', 'Schließen');
     }
-    document.querySelector('#local-scene').setAttribute('aria-label', texts.localAria);
+    if (this.localOpenedAt === null) document.querySelector('#local-scene').setAttribute('aria-label', texts.localAria);
     const list = document.querySelector('#notes-list');
     list.replaceChildren();
     for (const key of this.observations) {
@@ -415,6 +478,7 @@ export class Investigation {
   dispose() {
     this.hideNotesNotice();
     cancelAnimationFrame(this.morseFrame);
+    cancelAnimationFrame(this.faceFrame);
     this.audioObserver?.disconnect();
     this.soundscape.setMorseGate(false);
   }

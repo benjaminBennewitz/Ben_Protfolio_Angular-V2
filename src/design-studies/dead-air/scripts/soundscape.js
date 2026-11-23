@@ -27,6 +27,8 @@ const SOUND_FILES = Object.freeze({
   opening: 'sfx-portal-opening.mp3',
   hum: 'sfx-portal-hum.mp3',
   dimension: 'sfx-dimension-presence.mp3',
+  impact: 'sfx-umbilical-impact.mp3',
+  drain: 'sfx-dimension-drain.mp3',
   isolated: 'sfx-signal-isolated.mp3',
 });
 

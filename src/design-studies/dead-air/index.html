@@ -25,6 +25,36 @@
 </head>
 
 <body>
+  <svg class="effect-definitions" aria-hidden="true" focusable="false" width="0" height="0"><defs>
+      <filter id="face-swing" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency=".012 .025" numOctaves="2" seed="7" result="noise"/>
+        <feOffset in="noise" dx="0" dy="0" result="flow" data-face-flow="swing"/>
+        <feDisplacementMap in="SourceGraphic" in2="flow" scale="0" xChannelSelector="R" yChannelSelector="G" result="warped" data-face-scale="swing"/>
+        <feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221672%22%20height%3D%22941%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22m%22%3E%3Cstop%20offset%3D%220.65%22%20stop-color%3D%22white%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22white%22%20stop-opacity%3D%220%22%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3Cellipse%20cx%3D%22836.0%22%20cy%3D%22442.27%22%20rx%3D%2265.208%22%20ry%3D%2279.985%22%20fill%3D%22url%28%23m%29%22%2F%3E%3C%2Fsvg%3E" result="mask"/>
+        <feComposite in="SourceGraphic" in2="mask" operator="out" result="outside"/>
+        <feComposite in="warped" in2="mask" operator="in" result="inside"/>
+        <feMerge><feMergeNode in="outside"/><feMergeNode in="inside"/></feMerge>
+      </filter>
+      <filter id="face-standing" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency=".012 .025" numOctaves="2" seed="7" result="noise"/>
+        <feOffset in="noise" dx="0" dy="0" result="flow" data-face-flow="standing"/>
+        <feDisplacementMap in="SourceGraphic" in2="flow" scale="0" xChannelSelector="R" yChannelSelector="G" result="warped" data-face-scale="standing"/>
+        <feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221672%22%20height%3D%22941%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22m%22%3E%3Cstop%20offset%3D%220.65%22%20stop-color%3D%22white%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22white%22%20stop-opacity%3D%220%22%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3Cellipse%20cx%3D%22836.0%22%20cy%3D%22254.07000000000002%22%20rx%3D%2268.552%22%20ry%3D%2298.80499999999999%22%20fill%3D%22url%28%23m%29%22%2F%3E%3C%2Fsvg%3E" result="mask"/>
+        <feComposite in="SourceGraphic" in2="mask" operator="out" result="outside"/>
+        <feComposite in="warped" in2="mask" operator="in" result="inside"/>
+        <feMerge><feMergeNode in="outside"/><feMergeNode in="inside"/></feMerge>
+      </filter>
+      <filter id="face-closeup" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency=".012 .025" numOctaves="2" seed="7" result="noise"/>
+        <feOffset in="noise" dx="0" dy="0" result="flow" data-face-flow="closeup"/>
+        <feDisplacementMap in="SourceGraphic" in2="flow" scale="0" xChannelSelector="R" yChannelSelector="G" result="warped" data-face-scale="closeup"/>
+        <feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221672%22%20height%3D%22941%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22m%22%3E%3Cstop%20offset%3D%220.65%22%20stop-color%3D%22white%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22white%22%20stop-opacity%3D%220%22%2F%3E%3C%2FradialGradient%3E%3C%2Fdefs%3E%3Cellipse%20cx%3D%22969.7599999999999%22%20cy%3D%22414.04%22%20rx%3D%22451.44000000000005%22%20ry%3D%22442.27%22%20fill%3D%22url%28%23m%29%22%2F%3E%3C%2Fsvg%3E" result="mask"/>
+        <feComposite in="SourceGraphic" in2="mask" operator="out" result="outside"/>
+        <feComposite in="warped" in2="mask" operator="in" result="inside"/>
+        <feMerge><feMergeNode in="outside"/><feMergeNode in="inside"/></feMerge>
+      </filter>
+  </defs></svg>
+
   <a class="skip-link" href="#main" data-copy="skip">Zum Empfangsbereich springen</a>
   <!-- Entwicklerkonsole: ausschließlich mit ?debug=1 verfügbar. -->
   <aside id="dev-console" class="dev-console" aria-label="DEAD AIR Entwicklungswerkzeuge" hidden>
@@ -65,7 +95,10 @@
               </video>
               <div class="scene__local" id="local-scene" role="img" hidden>
                 <img class="scene__local-yard" id="local-yard" width="1672" height="941" alt="">
+                <img class="scene__local-empty" id="local-empty" width="1672" height="941" alt="">
                 <img class="scene__local-swing" id="local-swing" width="1672" height="941" alt="">
+                <img class="scene__local-standing" id="local-standing" width="1672" height="941" alt="">
+                <img class="scene__local-closeup" id="local-closeup" width="1672" height="941" alt="">
               </div>
               <div class="scene__offline" id="local-offline" hidden>CAM 01 / 02 · OFFLINE</div>
               <div class="scene__fog" aria-hidden="true"></div>
@@ -208,10 +241,10 @@
       <audio class="transmission-dialog__audio" id="transmission-audio" controls preload="none" aria-label="Empfangene Funkaufnahme 001 abspielen und pausieren"></audio>
       <div class="transmission-dialog__content">
         <span class="eyebrow" id="transmission-transcript-label">MITSCHRIFT / NOTFUNK 001</span>
-        <h2 id="transmission-title">WIR SIND NOCH HIER.</h2>
-        <p id="transmission-line-1">Hallo? Ist da jemand? Hört mich jemand? Alex, Küstenstation. Bitte kommen. Wir sind hier … irgendwo. Ich kann es nicht erklären.</p>
-        <p id="transmission-line-2">Ist da draußen jemand? Das Peilsystem ist ausgefallen. Wir können uns nicht orientieren.</p>
-        <p id="transmission-line-3">Vor der Küste waren noch drei Relaisbojen im Meer. Wenn es irgendjemand schaffen könnte, die Signale zu verbinden … könntet ihr uns finden? Schaltet den Kanal frei.</p>
+        <h2 id="transmission-title">WIR SIND HIER.</h2>
+        <p id="transmission-line-1">Hallo? Hört mich jemand? Hier ist Alex, Nachtschicht der Küstenstation. Wir sind hier. Ich wiederhole: Wir sind hier.</p>
+        <p id="transmission-line-2">Ist da draußen jemand? Hört mich irgendwer? Das Peilsystem ist ausgefallen. Alles. Die Anzeigen sind komplett tot. Okay. Ruhig bleiben. Ganz ruhig.</p>
+        <p id="transmission-line-3">Vor der Küste liegen drei Relaisbojen im Meer. Wenn ihre Signale verbunden werden, kann uns die Küstenwache finden. Ich halte den Kanal frei.</p>
         <p id="transmission-footer" class="transmission-dialog__footer">SENDERKENNUNG: NCBS · NICHT VERIFIZIERT</p>
       </div>
     </dialog>
@@ -307,7 +340,9 @@
         <div class="ending__rig" id="ending-rig"><img id="ending-empty" data-asset="assets/ending-empty-swing.webp" alt=""><img id="ending-ronnie" data-asset="assets/ending-ronnie.webp" alt=""></div>
       </div>
       <canvas class="ending__fog" id="ending-fog" aria-hidden="true"></canvas>
+      <canvas class="ending__body" id="ending-body" aria-hidden="true"></canvas>
     </div>
+    <div class="ending__blink" aria-hidden="true"></div>
     <div class="ending__flash" aria-hidden="true"></div><div class="ending__black" aria-hidden="true"></div>
     <nav class="ending__tools" id="ending-tools" aria-label="Abschlusssteuerung" hidden><button id="ending-pause" type="button" aria-pressed="false">Pause</button><button id="ending-sound" type="button" aria-pressed="true">Ton aus</button><div class="audio-controls audio-controls--ending"><label for="ending-volume">LAUTSTÄRKE</label><input id="ending-volume" data-master-volume type="range" min="0" max="100" step="1" value="70" aria-valuetext="70 Prozent"><output for="ending-volume" data-volume-output>70 %</output></div><button id="ending-skip" type="button">Zum Status</button></nav>
     <p class="ending__description" id="ending-description" role="status" aria-live="polite"></p>

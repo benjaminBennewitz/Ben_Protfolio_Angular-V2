@@ -295,7 +295,7 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Wer die Warnfrequenz nicht findet, kann später nur dem voreingestellten Weg zum schlechten Finale folgen; der alternative Weg wird ausschließlich durch vollständig gehörtes Signal + Entscheidung freigeschaltet.
 - Die Verzweigung zum tatsächlichen Finale ist weiterhin Phase 06 und nicht Bestandteil dieses Patches. Ein Neuladen beginnt eine neue Spielsitzung (wie bisher ohne Persistenz).
 
-- Die fragmentierte Mitschrift ist für barrierearmen Zugriff nur auf der eingestellten Live-Frequenz abrufbar; das allein löst die Entscheidung nicht aus.
+- Die Mitschrift ist für barrierearmen Zugriff nur auf der eingestellten Live-Frequenz abrufbar; das allein löst die Entscheidung nicht aus.
 
 
 ## Patch 37 – Phase 06 / The Triangle
@@ -551,3 +551,13 @@ Der bestehende Hof und das freigegebene Portalbild werden wiederverwendet. `gate
 ## Audio und Sprache – aktueller Stand
 
 DEAD//AIR verwendet ausschließlich deutsche Texte und Funkaufnahmen. Sprachschalter und englische Texttabellen sind entfernt. Der gemeinsame Lautstärkeregler (0–100 %) und die separate Stummschaltung gelten für alle Funkaufnahmen, Effekte und Atmosphären und bleiben beim Wechsel in die Endsequenzen synchron. Stummschalten behält den eingestellten Pegel.
+
+## Neue Sprachaufnahmen – 23.11.2026
+
+- Die vier deutschen Funkaufnahmen wurden durch die neuen Alex-/Warnstimmen ersetzt; die Mitschriften entsprechen deren neuem Wortlaut.
+- Nachricht 002 enthält jetzt Alex’ Ungeduld und „Dann können wir endlich raus“. Die Warnung sagt ausdrücklich „Sie versuchen nicht herauszukommen“.
+- Der bisher absichtlich fragmentierte Warntext wurde durch die vollständige Mitschrift der neuen Aufnahme ersetzt.
+- Der bestehende Funkcharakter und das für den Spurenvergleich wichtige Klickmotiv unter Alex bleiben erhalten.
+- Das neue Frauenlachen wurde von 31,40 auf 16,98 Sekunden gekürzt: Die weitgehend leere Mitte entfällt; beide Lachabschnitte bleiben mit einer kurzen Überblendung erhalten.
+- Der Vollbildwechsel wartet jetzt bis 500 ms nach dem Ende der tatsächlich geladenen Lachaufnahme. Bei der neuen Datei erfolgt er etwa 21,68 Sekunden nach Aufruf von CAM 03. Die vorhandene Mindestzeit von zehn Sekunden bleibt als Untergrenze bestehen.
+- Stummschaltung, Lautstärke, Pause und Hintergrund-Tab-Verhalten werden weiterhin zentral über die Soundscape gesteuert.

@@ -170,7 +170,8 @@ export class Ending {
       if (finale.mode === 'breach' && finale.phase === 'open'
         && this.scene.anomaly.activeMs - finale.startedAtMs >= 38_000) this.start('dimension');
       if (finale.mode === 'isolate' && this.investigation.localOpenedAt !== null
-        && this.scene.anomaly.activeMs - this.investigation.localOpenedAt >= 10_000) this.start('swing');
+        && this.scene.anomaly.activeMs >= Math.max(
+          this.investigation.localOpenedAt + 10_000, this.investigation.localLaughEndsAt + 500)) this.start('swing');
       return;
     }
     this.updateDimensionAudio();

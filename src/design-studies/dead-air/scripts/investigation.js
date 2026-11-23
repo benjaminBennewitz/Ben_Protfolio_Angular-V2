@@ -6,6 +6,9 @@
  */
 import { MORSE_DIGITS, RELAY_PATTERNS, createMorseTimeline, isMorseOn } from './signal-patterns.js';
 
+/** Beginn des Lachens relativ zum ersten Aufruf des lokalen Kamerafeeds. */
+const LOCAL_LAUGH_START_MS = 4200;
+
 const COPY = Object.freeze({
     nameNote: 'Nach dem Abgleich sagt die Stimme: „Danke, Ronnie.“ Alex wurde der Name des Ermittlers nie genannt.',
     newLabel: 'NEU', unreadNotes: '{count} neue Notizen', unreadNote: '1 neue Notiz', notesTotal: 'Notizen: {total}.', notesOpen: 'Empfangsprotokoll öffnen',
@@ -293,12 +296,19 @@ export class Investigation {
       delete this.root.dataset.relayFlash;
       if (this.strangerStartedAt !== null) this.finishStranger(true);
     }
-    if (this.localOpenedAt !== null && !this.localLaughed && now - this.localOpenedAt >= 4200) {
+    if (this.localOpenedAt !== null && !this.localLaughed && now - this.localOpenedAt >= LOCAL_LAUGH_START_MS) {
       this.localLaughed = true;
       this.showCaption('laugh');
       void this.soundscape.play('localLaugh', .7);
     }
     this.refreshMorse();
+  }
+
+  /** Ende der tatsächlich geladenen Lachaufnahme auf der pausierbaren Storyuhr. */
+  get localLaughEndsAt() {
+    if (this.localOpenedAt === null) return 0;
+    const duration = this.soundscape.buffers.get('localLaugh')?.duration ?? 0;
+    return this.localOpenedAt + LOCAL_LAUGH_START_MS + duration * 1000;
   }
 
   /** Für beide Codes wird dieselbe Uhr und dieselbe Impulsliste verwendet. */

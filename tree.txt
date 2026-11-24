@@ -1040,6 +1040,32 @@ folio/
 │   │   │   ├── index.html
 │   │   │   ├── README.md
 │   │   │   └── styles.css
+│   │   ├── casa-al-detewitz/
+│   │   │   ├── assets/
+│   │   │   │   ├── fonts/
+│   │   │   │   │   ├── manrope-latin.woff2
+│   │   │   │   │   └── OFL-Manrope.txt
+│   │   │   │   ├── bar.webp
+│   │   │   │   ├── chefs.webp
+│   │   │   │   ├── dessert.webp
+│   │   │   │   ├── detail.webp
+│   │   │   │   ├── drink.webp
+│   │   │   │   ├── drink-small.webp
+│   │   │   │   ├── evening.webp
+│   │   │   │   ├── exterior.webp
+│   │   │   │   ├── favicon.svg
+│   │   │   │   ├── food.webp
+│   │   │   │   ├── food-small.webp
+│   │   │   │   ├── hero.webp
+│   │   │   │   ├── hero-small.webp
+│   │   │   │   ├── kitchen.webp
+│   │   │   │   ├── pasta.webp
+│   │   │   │   ├── preview.webp
+│   │   │   │   └── wine.webp
+│   │   │   ├── app.js
+│   │   │   ├── index.html
+│   │   │   ├── README.md
+│   │   │   └── style.css
 │   │   ├── ctrl-room/
 │   │   │   ├── assets/
 │   │   │   │   ├── album-cover.webp

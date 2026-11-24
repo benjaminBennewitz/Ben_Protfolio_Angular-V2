@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Casa al Detewitz. Eine fiktive Restaurantstudie über italienisch-deutsche Sterneküche und Bauhaus.">
+  <meta name="theme-color" content="#f3ede1">
+  <title>Casa al Detewitz | Italienisch-deutsche Sterneküche</title>
+  <link rel="canonical" href="https://b2folio.de/design-studies/casa-al-detewitz/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Casa al Detewitz">
+  <meta property="og:description" content="Italienisch-deutsche Sterneküche. Zwei Köche unter einem Dach.">
+  <meta property="og:url" content="https://b2folio.de/design-studies/casa-al-detewitz/">
+  <meta property="og:image" content="https://b2folio.de/design-studies/casa-al-detewitz/assets/preview.webp">
+  <link rel="preload" as="image" href="assets/hero.webp"
+    imagesrcset="assets/hero-small.webp 768w, assets/hero.webp 1440w"
+    imagesizes="(max-width: 624px) 100vw, (min-width: 1920px) 1037px, 54vw">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+
+<body id="start">
+  <a class="skip-link" href="#inhalt" data-copy="skip">Zum Inhalt</a>
+
+  <header class="site-header" tabindex="-1">
+    <a class="wordmark" href="#start" aria-label="Casa al Detewitz">
+      <span class="monogram" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span>Casa al<br>Detewitz<span class="wordmark-dot">.</span></span>
+    </a>
+    <nav class="site-nav" aria-label="Hauptnavigation" data-label="navLabel">
+      <a href="#haus" data-copy="nav.house">Das Haus</a>
+      <a href="#eindruecke" data-copy="nav.impressions">Eindrücke</a>
+      <a href="#menue" data-copy="nav.menu">Menü</a>
+    </nav>
+    <div class="header-actions">
+      <button class="language" type="button" id="language" lang="en" aria-label="Switch to English" hidden>
+        EN
+      </button>
+      <a class="visit-link" href="#besuch"><span data-copy="nav.visit">Besuch</span> <span class="direction direction-up-right" aria-hidden="true"></span></a>
+    </div>
+  </header>
+
+  <main id="inhalt" tabindex="-1">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-copy="hero.category">Italienisch-deutsche Sterneküche</span></p>
+        <h1 id="hero-title">Casa al<br><span>Detewitz.</span></h1>
+        <p class="hero-intro" data-copy="hero.intro">Zwei Küchen, eine Handschrift. Ein Abend zwischen italienischer Leichtigkeit und deutscher Saisonküche.</p>
+        <a class="action-link" href="#menue"><span data-copy="hero.cta">Menü entdecken</span> <span class="direction direction-down-right" aria-hidden="true"></span></a>
+      </div>
+
+      <div class="hero-media" role="group" aria-label="Ansichten des Restaurants" data-label="galleryLabel">
+        <figure class="hero-figure">
+          <img src="assets/hero.webp" alt="Gedeckte Tische und Stahlrohrstühle vor einem kreisrunden, roten Durchgang" data-alt="hero.slides.0.alt" width="1440" height="960" data-slide data-caption="Der Gastraum" srcset="assets/hero-small.webp 768w, assets/hero.webp 1440w" sizes="(max-width: 624px) 100vw, (min-width: 1920px) 1037px, 54vw" fetchpriority="high">
+          <img src="assets/food.webp" srcset="assets/food-small.webp 768w, assets/food.webp 1440w" sizes="(max-width: 624px) 100vw, (min-width: 1920px) 1037px, 54vw" alt="Handgemachter Tortello mit Kräutern auf einem hellen Teller" data-alt="hero.slides.1.alt" width="1440" height="960" data-slide data-caption="Auf dem Teller" loading="lazy" decoding="async" hidden>
+          <img src="assets/drink.webp" srcset="assets/drink-small.webp 768w, assets/drink.webp 1440w" sizes="(max-width: 624px) 100vw, (min-width: 1920px) 1037px, 54vw" alt="Negroni mit Orangenzeste auf einem kobaltblauen Tresen bei Abendlicht" data-alt="hero.slides.2.alt" width="1440" height="960" data-slide data-caption="Vor dem ersten Gang" loading="lazy" decoding="async" hidden>
+          <div class="hero-transition" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
+          </div>
+        </figure>
+        <div class="hero-controls" hidden>
+          <p aria-live="polite" aria-atomic="true">
+            <span class="hero-count">01 / 03</span>
+            <span class="hero-title">Der Gastraum</span>
+          </p>
+          <button class="arrow" type="button" aria-label="Vorheriges Bild" data-label="previousImage" data-slide-step="-1">
+            <span class="direction direction-left" aria-hidden="true"></span>
+          </button>
+          <button class="arrow" type="button" aria-label="Nächstes Bild" data-label="nextImage" data-slide-step="1">
+            <span class="direction" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+      <div class="hero-geometry" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+    </section>
+
+    <section class="about section-wrap" id="haus" aria-labelledby="about-title">
+      <div class="about-copy">
+        <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-copy="about.kicker">Das Haus</span></p>
+        <h2 id="about-title" data-copy="about.heading">Zwei Köche.
+  Eine Casa.</h2>
+        <p class="section-text" data-copy="about.text">Julius Benenwitz und Paula Detering stehen gemeinsam am Herd. Aus ihren Nachnamen wurde Detewitz. Ihre Küche verbindet italienisches Handwerk mit Zutaten vom Niederrhein.</p>
+        <div class="about-shapes" aria-hidden="true"><span></span><span></span><span></span></div>
+      </div>
+      <figure class="chefs">
+        <img src="assets/chefs.webp" alt="Julius Benenwitz und Paula Detering stehen Rücken an Rücken, verschränken die Arme und schauen in die Kamera." data-alt="about.alt" width="1200" height="900" loading="lazy" decoding="async">
+        <figcaption><span>Julius Benenwitz &amp; Paula Detering</span><small class="image-credit" data-copy="imageCredit">KI-Porträt</small></figcaption>
+      </figure>
+      <div class="chef-profiles">
+        <article class="chef-profile">
+          <h3>Julius Benenwitz</h3>
+          <p class="eyebrow" data-copy="about.julius.role">Küchenchef · Pasta und Saucen</p>
+          <p data-copy="about.julius.bio">Nach seiner Ausbildung am Niederrhein arbeitete Julius mehrere Jahre in Bologna. Dort lernte er, unterschiedliche Pastateige von Hand zu ziehen, und entdeckte seine Vorliebe für langsam gekochte Saucen. In der Casa verbindet er diese Techniken mit Zutaten aus der Region.</p>
+        </article>
+        <article class="chef-profile">
+          <h3>Paula Detering</h3>
+          <p class="eyebrow" data-copy="about.paula.role">Küchenchefin · Gemüse und Saison</p>
+          <p data-copy="about.paula.bio">Paula begann ihre Ausbildung in Düsseldorf. Stationen in Südtirol und im Rheinland prägten ihren Blick auf Gemüse und Vorratshaltung. Sie plant das Menü nach dem Angebot der Höfe und sorgt mit Eingemachtem, Fermenten und frischen Kräutern für Kontraste auf dem Teller.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="impressions section-wrap" id="eindruecke" aria-labelledby="impressions-title">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-copy="impressions.kicker">Eindrücke</span></p>
+        <h2 id="impressions-title" data-copy="impressions.heading">Ein Abend im Haus.</h2>
+      </div>
+      <div class="impressions-grid">
+        <figure class="impression impression--portrait">
+          <div class="impression-photo">
+            <img src="assets/food.webp" srcset="assets/food-small.webp 768w, assets/food.webp 1440w" sizes="(max-width: 464px) 91vw, (max-width: 832px) 44vw, (min-width: 1408px) 412px, 29vw" alt="Handgemachter Tortello in brauner Butter mit Salbei" data-alt="gallery.food.alt" width="1440" height="960" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span data-copy="gallery.food.title">Tortello al burro</span></figcaption>
+        </figure>
+        <figure class="impression">
+          <div class="impression-photo">
+            <img src="assets/bar.webp" alt="Bar mit blauem Tresen, runden Pendelleuchten und beleuchteten Flaschen" data-alt="gallery.bar.alt" width="768" height="512" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span data-copy="gallery.bar.title">Die Bar</span></figcaption>
+        </figure>
+        <figure class="impression impression--square">
+          <div class="impression-photo">
+            <img src="assets/dessert.webp" alt="In Marsala pochierte Birne mit Fior di latte und knusprigem Buchweizen" data-alt="gallery.dessert.alt" width="1440" height="960" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span data-copy="gallery.dessert.title">Birne al Marsala</span></figcaption>
+        </figure>
+        <figure class="impression">
+          <div class="impression-photo">
+            <img src="assets/evening.webp" alt="Gedeckte Tische im Kerzenlicht und Gäste mit leichter Bewegungsunschärfe" data-alt="gallery.evening.alt" width="768" height="512" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span data-copy="gallery.evening.title">Abend im Gastraum</span></figcaption>
+        </figure>
+        <figure class="impression impression--portrait">
+          <div class="impression-photo">
+            <img src="assets/kitchen.webp" alt="Köche und Service in Bewegung am beleuchteten Pass" data-alt="gallery.kitchen.alt" width="768" height="512" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span data-copy="gallery.kitchen.title">Die offene Küche</span></figcaption>
+        </figure>
+        <figure class="impression">
+          <div class="impression-photo">
+            <img src="assets/wine.webp" alt="Ein Glas Weißwein wird bei warmem Licht eingeschenkt" data-alt="gallery.wine.alt" width="768" height="512" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span data-copy="gallery.wine.title">Am Tisch eingeschenkt</span></figcaption>
+        </figure>
+        <figure class="impression impression--square">
+          <div class="impression-photo">
+            <img src="assets/drink.webp" srcset="assets/drink-small.webp 768w, assets/drink.webp 1440w" sizes="(max-width: 464px) 91vw, (max-width: 832px) 44vw, (min-width: 1408px) 412px, 29vw" alt="Negroni mit Orangenzeste auf dem Tresen" data-alt="gallery.drink.alt" width="1440" height="960" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span data-copy="gallery.drink.title">Negroni della Casa</span></figcaption>
+        </figure>
+        <figure class="impression">
+          <div class="impression-photo">
+            <img src="assets/pasta.webp" alt="Eine Hand stäubt Mehl über frische Pasta" data-alt="gallery.pasta.alt" width="768" height="512" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span data-copy="gallery.pasta.title">Pasta von Hand</span></figcaption>
+        </figure>
+        <figure class="impression impression--portrait">
+          <div class="impression-photo">
+            <img src="assets/hero.webp" srcset="assets/hero-small.webp 768w, assets/hero.webp 1440w" sizes="(max-width: 464px) 91vw, (max-width: 832px) 44vw, (min-width: 1408px) 412px, 29vw" alt="Gedeckter Tisch und Stahlrohrstühle im Sonnenlicht" data-alt="gallery.hero.alt" width="1440" height="960" loading="lazy" decoding="async">
+          </div>
+          <figcaption><span data-copy="gallery.hero.title">Vor dem Service</span></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="tasting" id="menue" aria-labelledby="menu-title">
+      <div class="section-wrap">
+        <div class="section-heading">
+          <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-copy="menu.kicker">Speisekarte</span></p>
+          <h2 id="menu-title" data-copy="menu.heading">Das Menü.</h2>
+          <p class="section-text" data-copy="menu.intro">Vom ersten Bissen bis zum letzten Glas. Unser saisonales Menü zum Durchblättern.</p>
+        </div>
+        <div class="menu-book">
+          <div class="menu-front">
+            <p class="eyebrow" data-copy="menu.cover">Wintermenü</p>
+            <div class="menu-art" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+            <p class="menu-price" data-copy="menu.price">135 € pro Person</p>
+          </div>
+          <div class="menu-sheet" id="menuseite" role="region" aria-label="Menügänge" data-label="menu.sheet">
+            <article class="menu-page" data-menu-page aria-labelledby="chapter-1">
+              <p class="eyebrow" data-copy="menu.pages.0.note">Zum Ankommen</p>
+              <h3 id="chapter-1" data-copy="menu.pages.0.title">Auftakt</h3>
+              <ul class="dishes">
+                <li><strong>Focaccia</strong><span data-copy="menu.pages.0.dishes.0.notes">Rosmarin · aufgeschlagene Steinpilzbutter</span></li>
+                <li><strong data-copy="menu.pages.0.dishes.1.name">Rote Bete</strong><span data-copy="menu.pages.0.dishes.1.notes">Stracciatella · Blutorange · Haselnuss</span></li>
+                <li><strong>Tortello al burro</strong><span data-copy="menu.pages.0.dishes.2.notes">Kürbis · braune Butter · Salbei</span></li>
+              </ul>
+            </article>
+            <article class="menu-page" data-menu-page aria-labelledby="chapter-2">
+              <p class="eyebrow" data-copy="menu.pages.1.note">Zwischen Rhein und Po</p>
+              <h3 id="chapter-2" data-copy="menu.pages.1.title">Hauptgänge</h3>
+              <ul class="dishes">
+                <li><strong data-copy="menu.pages.1.dishes.0.name">Zander</strong><span data-copy="menu.pages.1.dishes.0.notes">Sellerie · Verjus · Kapern</span></li>
+                <li><strong data-copy="menu.pages.1.dishes.1.name">Kalb</strong><span data-copy="menu.pages.1.dishes.1.notes">Schwarzwurzel · Polenta · Marsala</span></li>
+                <li><strong data-copy="menu.pages.1.dishes.2.name">Käse vom Niederrhein</strong><span data-copy="menu.pages.1.dishes.2.notes">Quitte · Walnussbrot</span></li>
+              </ul>
+            </article>
+            <article class="menu-page" data-menu-page aria-labelledby="chapter-3">
+              <p class="eyebrow" data-copy="menu.pages.2.note">Etwas Süßes</p>
+              <h3 id="chapter-3" data-copy="menu.pages.2.title">Ausklang</h3>
+              <ul class="dishes">
+                <li><strong data-copy="menu.pages.2.dishes.0.name">Birne al Marsala</strong><span data-copy="menu.pages.2.dishes.0.notes">Vanille · Buchweizen · Fior di latte</span></li>
+                <li><strong>Piccola pasticceria</strong><span data-copy="menu.pages.2.dishes.1.notes">Amaretti · dunkle Schokolade</span></li>
+                <li><strong data-copy="menu.pages.2.dishes.2.name">Espresso oder Amaro</strong><span data-copy="menu.pages.2.dishes.2.notes">Auf Wunsch auch alkoholfrei</span></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+        <div class="menu-controls" role="group" hidden aria-label="Menükapitel" data-label="menu.label">
+          <button class="arrow" type="button" aria-label="Vorheriges Kapitel" data-label="previousChapter" data-menu-step="-1" aria-controls="menuseite">
+            <span class="direction direction-left" aria-hidden="true"></span>
+          </button>
+          <div class="menu-tabs">
+            <button type="button" data-menu-index="0" aria-controls="menuseite" aria-label="Auftakt" data-label="menu.pages.0.title">01</button>
+            <button type="button" data-menu-index="1" aria-controls="menuseite" aria-label="Hauptgänge" data-label="menu.pages.1.title">02</button>
+            <button type="button" data-menu-index="2" aria-controls="menuseite" aria-label="Ausklang" data-label="menu.pages.2.title">03</button>
+          </div>
+          <button class="arrow" type="button" aria-label="Nächstes Kapitel" data-label="nextChapter" data-menu-step="1" aria-controls="menuseite">
+            <span class="direction" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="menu-information">
+          <button class="menu-note-toggle" type="button" popovertarget="menue-hinweise" hidden>
+            <span data-copy="menu.info">Reservierungen &amp; Allergene</span>
+            <span aria-hidden="true">+</span>
+          </button>
+          <dl class="menu-notes" id="menue-hinweise">
+            <div>
+              <dt data-copy="menu.booking.title">Reservierungen</dt>
+              <dd data-copy="menu.booking.text">Fiktives Restaurant. Verbindliche Buchungen sind hier nicht möglich.</dd>
+            </div>
+            <div>
+              <dt data-copy="menu.allergens.title">Allergene &amp; Unverträglichkeiten</dt>
+              <dd data-copy="menu.allergens.text">Die Beispielkarte enthält keine vollständige Allergenliste oder Angaben zu möglichen Spuren.</dd>
+            </div>
+          </dl>
+        </div>
+        <p class="sr-only menu-status" role="status"></p>
+      </div>
+    </section>
+
+    <section class="architecture section-wrap" aria-labelledby="space-title">
+      <div class="section-heading">
+        <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-copy="space.kicker">Architektur</span></p>
+        <h2 id="space-title" data-copy="space.heading">Form und Raum.</h2>
+      </div>
+      <div class="space-grid">
+        <figure class="space-outside">
+          <img src="assets/exterior.webp" alt="Weißer Baukörper mit beleuchtetem Rundfenster und ziegelrotem Eingang im Abendlicht" data-alt="space.outside.alt" width="768" height="512" loading="lazy" decoding="async">
+        </figure>
+        <div class="space-copy space-copy-outside">
+          <span class="space-shape shape-window" aria-hidden="true"></span>
+          <h3 data-copy="space.outside.title">Ein rotes Portal.</h3>
+          <p data-copy="space.outside.text">Der Eingang zeichnet ein rotes Rechteck in den weißen Baukörper. Daneben sitzt das runde Fenster wie ein zweiter Rahmen. In der Dämmerung gibt es den Blick auf die gedeckten Tische frei.</p>
+        </div>
+        <figure class="space-inside">
+          <img src="assets/detail.webp" alt="Blick durch ein ziegelrotes Rundportal auf gedeckte Tische im warmen Abendlicht" data-alt="space.inside.alt" width="1440" height="960" loading="lazy" decoding="async">
+        </figure>
+        <div class="space-copy space-copy-inside">
+          <span class="space-shape shape-seat" aria-hidden="true"></span>
+          <h3 data-copy="space.inside.title">Ein Kreis führt weiter.</h3>
+          <p data-copy="space.inside.text">Hinter dem Rundportal öffnet sich der Gastraum. Schlanke Stahlrohrstühle halten die Sichtachsen frei. Abends zeichnen die Leuchten kleine Lichtinseln auf die Tische.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="besuch">
+    <div class="footer-main section-wrap">
+      <div class="footer-copy">
+        <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true"></span><span data-copy="nav.visit">Besuch</span></p>
+        <h2 lang="it">Ci vediamo.</h2>
+        <div class="footer-details">
+          <div class="footer-hours">
+            <h3 class="eyebrow" data-copy="footer.hours">Küche</h3>
+            <p><span data-copy="footer.days">Donnerstag bis Sonntag</span><br><span data-copy="footer.time">18.00–22.00 Uhr</span></p>
+            <p data-copy="footer.place">Am Niederrhein</p>
+          </div>
+          <a class="footer-up" href="#start" aria-label="Nach oben" data-label="footer.top"><span class="direction direction-up" aria-hidden="true"></span></a>
+        </div>
+      </div>
+      <div class="footer-poster" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="footer-bottom section-wrap">
+      <p data-copy="footer.fiction">Fiktives Restaurant · Designstudie</p>
+      <a class="archive-link" href="/archive"><span class="direction direction-left" aria-hidden="true"></span><span data-copy="archive">Zum Archiv</span></a>
+      <button type="button" id="theme" aria-pressed="false" hidden>
+        <span class="theme-mark" aria-hidden="true"></span><span data-copy="darkTheme">Dunkles Design</span>
+      </button>
+    </div>
+  </footer>
+</body>
+
+</html>

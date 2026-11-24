@@ -155,10 +155,21 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       category: 'editorial',
       archive: { concept: 'Memphis / Fashion Editorial', subject: 'Fictional kidswear label', idea: 'A colorful autumn/winter collection combines fashion photography, playful Memphis graphics and interactive motion without obscuring the products.' },
     },
+    {
+      id: 'casa-al-detewitz',
+      name: 'Casa al Detewitz',
+      subtitle: 'Bauhaus Fine Dining — Italian–German Cuisine',
+      href: '/design-studies/casa-al-detewitz/',
+      preview: '/design-studies/casa-al-detewitz/assets/preview.webp',
+      tags: ['Bauhaus', 'Restaurant Editorial', 'Brand Design', 'HTML / CSS / JS'],
+      category: 'editorial',
+      archive: { concept: 'Bauhaus / Restaurant Editorial', subject: 'Fictional Italian–German fine-dining restaurant', idea: 'How can the same geometric design language bring coherence to a restaurant, its interiors, its tasting menu and its website?' },
+    },
   ]; // Reihenfolge und öffentliche Ziele der Designstudien.
 
 /** Deutsche Karteninhalte; Marken und technische Eigennamen bleiben erhalten. */
 export const DESIGN_STUDY_TRANSLATIONS_DE: Readonly<Record<string, Pick<DesignStudy, 'subtitle' | 'tags' | 'archive'>>> = {
+  'casa-al-detewitz': { subtitle: 'Bauhaus und italienisch-deutsche Sterneküche', tags: ['Bauhaus', 'Restaurant-Editorial', 'Markendesign', 'HTML / CSS / JS'], archive: { concept: 'Bauhaus / Restaurant-Editorial', subject: 'Fiktives italienisch-deutsches Sternerestaurant', idea: 'Wie kann dieselbe geometrische Formensprache einen Gastraum, eine Speisekarte und eine Website als Teile desselben Restaurants erkennbar machen?' } },
   'boring-not': { subtitle: 'Bunte Kindermode — Herbst / Winter 2026', tags: ['Memphis', 'Fashion-Editorial', 'Markendesign', 'Interaktives SVG', 'HTML / CSS / JS'], archive: { concept: 'Memphis / Fashion-Editorial', subject: 'Fiktives Kindermoden-Label', idea: 'Eine farbenfrohe Herbst-/Winter-Kollektion verbindet Modefotografie, verspielte Memphis-Grafik und interaktive Bewegung, ohne die Produkte aus dem Fokus zu verlieren.' } },
   'pon-pulse': { subtitle: 'Artist Spotlight — Graffiti von PP', tags: ['Graffiti', 'Brutalismus', 'Kawaii', 'Künstlerporträt', 'HTML / CSS / JS'], archive: { concept: 'Brutalismus / Kawaii', subject: 'Fiktive Graffiti-Writerin Pon Pulse', idea: 'Ein Street-Art-Shop porträtiert PP und zeigt ihr Bubble-Letter-Piece auf Beton, einen bemalten Waggon und ihr Lieblings-Equipment.' } },
   teleshop: { subtitle: '1998 → 2026 — Gleiche Ware. Neue Regeln.', tags: ['Versandhausgestaltung', 'Live-Redesign', 'UI / UX', 'KI-Produktfotografie', 'HTML / CSS / JS'], archive: { concept: 'Versandhaus-Retro / Modernes Shopdesign', subject: 'Fiktiver Teleshop: 1998 → 2026', idea: 'Wie verändern Raster, Bildsprache und visuelle Hierarchie die Wahrnehmung derselben Produkte? Ein fiktiver 90er-Teleshop verwandelt sich live in einen modernen Shop – mit gestaffelter Bewegung und einer verankerten UX-Analyse.' } },

@@ -55,16 +55,22 @@
         <h1 id="hero-title" aria-label="BORING:NOT"><span class="hero-word" aria-hidden="true">BORING</span><span class="hero-colon" aria-hidden="true">:</span><span class="hero-word" aria-hidden="true">NOT</span></h1>
         <p class="claim" data-copy="heroClaim">Grau war gestern.</p>
         <p data-copy="intro">Bunte Jacken und Outdoorhosen für Herbst und Winter.</p>
-        <a class="round-link" href="#arrivals" data-copy="start">Kollektion entdecken ↓</a>
+        <a class="action-link" href="#arrivals" data-copy="start">Kollektion entdecken ↓</a>
       </div>
       <figure class="hero-photo campaign-photo" data-reveal>
-        <img src="assets/campaign.webp" srcset="assets/campaign-sm.webp 768w, assets/campaign.webp 1536w" sizes="(max-width: 800px) 100vw, (max-width: 1920px) 54vw, 1037px" width="1536" height="1024" alt="Drei lachende Kinder in bunten Herbstjacken auf einem Spielplatz" data-alt="heroAlt" fetchpriority="high">
+        <img src="assets/campaign.webp" srcset="assets/campaign-sm.webp 768w, assets/campaign.webp 1536w" sizes="(max-width: 800px) 100vw, (max-width: 1920px) 68vw, 1306px" width="1536" height="1024" alt="Drei lachende Kinder in bunten Herbstjacken auf einem Spielplatz" data-alt="heroAlt" fetchpriority="high" data-slide>
+        <img src="assets/lookbook.webp" srcset="assets/lookbook-sm.webp 768w, assets/lookbook.webp 1536w" sizes="(max-width: 800px) 100vw, (max-width: 1920px) 68vw, 1306px" width="1536" height="1024" alt="Zwei Kinder in bunten Herbstoutfits auf einem Weg voller Laub" data-alt="lookbookAlt" decoding="async" data-slide hidden>
         <span class="image-credit" data-copy="aiImage">KI-Bild</span>
         <div class="photo-floats" aria-hidden="true">
           <span class="photo-float photo-float--triangle"></span>
           <span class="photo-float photo-float--zigzag pattern-zigzag"></span>
         </div>
         <figcaption lang="en">KIDS WEAR COLOR. <span aria-hidden="true">✳</span></figcaption>
+        <div class="hero-slider-controls" role="group" aria-label="Kampagnenbilder" data-label="sliderLabel" hidden>
+          <button type="button" data-slide-step="-1" aria-label="Vorheriges Bild" data-label="previousSlide">←</button>
+          <span class="hero-slide-count" aria-live="polite" aria-atomic="true">01 / 02</span>
+          <button type="button" data-slide-step="1" aria-label="Nächstes Bild" data-label="nextSlide">→</button>
+        </div>
       </figure>
     </section>
     <section class="arrivals" id="arrivals" tabindex="-1" aria-labelledby="arrivals-title">
@@ -209,6 +215,66 @@
       </div>
       <p class="collection-note" data-copy="fictional">Fiktive Kollektion · Keine Verkaufsangebote</p>
     </section>
+    <section id="manifesto" class="scene scene--manifesto" tabindex="-1" aria-labelledby="manifesto-title">
+      <div class="manifesto-layout">
+        <div class="copy manifesto-copy" data-reveal>
+          <p class="eyebrow" data-copy="manifestoLabel">Über BORING:NOT</p>
+          <h2 id="manifesto-title" data-copy="manifestoTitle">Kindheit ist nicht beige.</h2>
+          <div class="manifesto-text">
+            <p data-copy="manifestoText">Pfützen, Laubhaufen, Kreide auf dem Asphalt. Für uns beginnt Kindermode bei dem, was Kinder draußen machen. Dazu passen kräftige Farben, die auch an grauen Tagen Lust aufs Rausgehen machen.</p>
+            <p data-copy="manifestoDetail">Die Idee kommt aus dem Memphis-Design der 80er. Wir setzen seine Wellen, Raster und Farbflächen direkt auf Jacken und Hosen. So wird aus der Steppjacke oder der Cargohose das Teil, um das sich der ganze Look dreht.</p>
+          </div>
+          <a class="action-link" href="#composition" data-copy="seeLooks">Looks entdecken ↓</a>
+        </div>
+        <div class="manifesto-art" aria-hidden="true" data-reveal>
+          <div class="manifesto-plane manifesto-layer"></div>
+          <div class="manifesto-arch manifesto-layer"></div>
+          <div class="manifesto-zigzag manifesto-layer pattern-zigzag"></div>
+          <div class="manifesto-ring memphis-flight"></div>
+          <div class="manifesto-triangle memphis-flight"></div>
+          <span class="manifesto-colon memphis-flight">:</span>
+          <svg class="manifesto-wave manifesto-layer" viewBox="0 0 100 100"><path d="M5 60Q17 5 34 50T65 50T95 40" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/></svg>
+          <svg class="manifesto-star manifesto-layer" viewBox="0 0 100 100"><path d="M50 4V96M4 50H96M17 17L83 83M83 17L17 83" stroke="currentColor" stroke-width="12"/></svg>
+          <div class="manifesto-disc manifesto-layer"></div>
+          <div class="manifesto-half manifesto-layer"></div>
+          <div class="manifesto-dash manifesto-layer"></div>
+        </div>
+      </div>
+    </section>
+    <section id="color" class="scene scene--color" data-palette="pink" aria-labelledby="color-title">
+        <div class="art" aria-hidden="true">
+          <svg class="shape" viewBox="0 0 100 100" style="--x:6%;--y:45%;--size:32%;--turn:20deg;--paint:var(--blue);--i:0"><circle cx="50" cy="50" r="33" fill="none" stroke="currentColor" stroke-width="19"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:20%;--y:22%;--size:24%;--turn:-25deg;--paint:var(--pink);--i:1"><path d="M50 5 96 90H4Z" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:12%;--y:77%;--size:30%;--turn:-15deg;--paint:var(--orange);--i:2"><path d="M10 20Q40 -10 62 12T90 52Q105 83 68 91T22 80Q-5 65 10 20" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:34%;--y:61%;--size:18%;--turn:30deg;--paint:var(--ink);--i:3"><path d="M5 20H95M5 40H95M5 60H95M5 80H95" stroke="currentColor" stroke-width="7"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:22%;--y:50%;--size:10%;--turn:0deg;--paint:var(--ink);--i:4"><circle cx="10" cy="10" r="3.5" fill="currentColor"/><circle cx="10" cy="30" r="3.5" fill="currentColor"/><circle cx="10" cy="50" r="3.5" fill="currentColor"/><circle cx="10" cy="70" r="3.5" fill="currentColor"/><circle cx="10" cy="90" r="3.5" fill="currentColor"/><circle cx="30" cy="10" r="3.5" fill="currentColor"/><circle cx="30" cy="30" r="3.5" fill="currentColor"/><circle cx="30" cy="50" r="3.5" fill="currentColor"/><circle cx="30" cy="70" r="3.5" fill="currentColor"/><circle cx="30" cy="90" r="3.5" fill="currentColor"/><circle cx="50" cy="10" r="3.5" fill="currentColor"/><circle cx="50" cy="30" r="3.5" fill="currentColor"/><circle cx="50" cy="50" r="3.5" fill="currentColor"/><circle cx="50" cy="70" r="3.5" fill="currentColor"/><circle cx="50" cy="90" r="3.5" fill="currentColor"/><circle cx="70" cy="10" r="3.5" fill="currentColor"/><circle cx="70" cy="30" r="3.5" fill="currentColor"/><circle cx="70" cy="50" r="3.5" fill="currentColor"/><circle cx="70" cy="70" r="3.5" fill="currentColor"/><circle cx="70" cy="90" r="3.5" fill="currentColor"/><circle cx="90" cy="10" r="3.5" fill="currentColor"/><circle cx="90" cy="30" r="3.5" fill="currentColor"/><circle cx="90" cy="50" r="3.5" fill="currentColor"/><circle cx="90" cy="70" r="3.5" fill="currentColor"/><circle cx="90" cy="90" r="3.5" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:4%;--y:12%;--size:10%;--turn:0deg;--paint:var(--ink);--i:5"><path d="m4 75 18-50 18 50 18-50 18 50 19-50" fill="none" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:47%;--y:8%;--size:12%;--turn:20deg;--paint:var(--yellow);--i:6"><path d="M7 70a43 43 0 0 1 86 0" fill="none" stroke="currentColor" stroke-width="22"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:91%;--y:92%;--size:17%;--turn:30deg;--paint:var(--ink);--i:7"><rect x="0" y="0" width="20" height="20" fill="currentColor"/><rect x="0" y="40" width="20" height="20" fill="currentColor"/><rect x="0" y="80" width="20" height="20" fill="currentColor"/><rect x="20" y="20" width="20" height="20" fill="currentColor"/><rect x="20" y="60" width="20" height="20" fill="currentColor"/><rect x="40" y="0" width="20" height="20" fill="currentColor"/><rect x="40" y="40" width="20" height="20" fill="currentColor"/><rect x="40" y="80" width="20" height="20" fill="currentColor"/><rect x="60" y="20" width="20" height="20" fill="currentColor"/><rect x="60" y="60" width="20" height="20" fill="currentColor"/><rect x="80" y="0" width="20" height="20" fill="currentColor"/><rect x="80" y="40" width="20" height="20" fill="currentColor"/><rect x="80" y="80" width="20" height="20" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:42%;--y:88%;--size:8%;--turn:15deg;--paint:var(--violet);--i:8"><circle cx="50" cy="50" r="47" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:95%;--y:8%;--size:7%;--turn:20deg;--paint:var(--ink);--i:9"><path d="M5 60Q17 5 34 50T65 50T95 40" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:15%;--y:42%;--size:29%;--turn:45deg;--paint:var(--yellow);--i:10"><path d="M5 20H95M5 40H95M5 60H95M5 80H95" stroke="currentColor" stroke-width="7"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:29%;--y:78%;--size:23%;--turn:-15deg;--paint:var(--violet);--i:11"><circle cx="50" cy="50" r="33" fill="none" stroke="currentColor" stroke-width="19"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:42%;--y:25%;--size:17%;--turn:25deg;--paint:var(--orange);--i:12"><path d="M6 55Q20 5 36 50T66 50T94 40" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:6%;--y:90%;--size:15%;--turn:0deg;--paint:var(--pink);--i:13"><circle cx="10" cy="10" r="4" fill="currentColor"/><circle cx="10" cy="30" r="4" fill="currentColor"/><circle cx="10" cy="50" r="4" fill="currentColor"/><circle cx="10" cy="70" r="4" fill="currentColor"/><circle cx="10" cy="90" r="4" fill="currentColor"/><circle cx="30" cy="10" r="4" fill="currentColor"/><circle cx="30" cy="30" r="4" fill="currentColor"/><circle cx="30" cy="50" r="4" fill="currentColor"/><circle cx="30" cy="70" r="4" fill="currentColor"/><circle cx="30" cy="90" r="4" fill="currentColor"/><circle cx="50" cy="10" r="4" fill="currentColor"/><circle cx="50" cy="30" r="4" fill="currentColor"/><circle cx="50" cy="50" r="4" fill="currentColor"/><circle cx="50" cy="70" r="4" fill="currentColor"/><circle cx="50" cy="90" r="4" fill="currentColor"/><circle cx="70" cy="10" r="4" fill="currentColor"/><circle cx="70" cy="30" r="4" fill="currentColor"/><circle cx="70" cy="50" r="4" fill="currentColor"/><circle cx="70" cy="70" r="4" fill="currentColor"/><circle cx="70" cy="90" r="4" fill="currentColor"/><circle cx="90" cy="10" r="4" fill="currentColor"/><circle cx="90" cy="30" r="4" fill="currentColor"/><circle cx="90" cy="50" r="4" fill="currentColor"/><circle cx="90" cy="70" r="4" fill="currentColor"/><circle cx="90" cy="90" r="4" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:35%;--y:12%;--size:9%;--turn:0deg;--paint:var(--blue);--i:14"><path d="M50 5 96 90H4Z" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:48%;--y:68%;--size:8%;--turn:0deg;--paint:var(--ink);--i:15"><circle cx="50" cy="50" r="33" fill="none" stroke="currentColor" stroke-width="19"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:8%;--y:60%;--size:8%;--turn:0deg;--paint:var(--mint);--i:16"><circle cx="50" cy="50" r="47" fill="currentColor"/></svg>
+        </div>
+      <div class="copy" data-reveal>
+        <p class="eyebrow" data-copy="colorLabel">03 / Farbspiel</p>
+        <h2 id="color-title" data-copy="colorTitle">Mehr Farbe. Mehr Draußen.</h2>
+        <p data-copy="colorText">Wenn die Tage kürzer und der Himmel grauer wird, setzen wir auf leuchtende Farben und auffällige Kontraste. Sie bringen Farbe in den Alltag. Bei Dunkelheit ersetzen sie keine Reflektoren oder Beleuchtung.</p>
+        <div class="palette" role="group" aria-label="Farbkomposition wechseln" data-label="palette">
+          <button class="palette-dot" type="button" data-palette-choice="pink" aria-label="Pink" aria-pressed="true" data-label="pink"></button>
+          <button class="palette-dot" type="button" data-palette-choice="mint" aria-label="Türkis" aria-pressed="false" data-label="mint"></button>
+          <button class="palette-dot" type="button" data-palette-choice="yellow" aria-label="Gelb" aria-pressed="false" data-label="yellow"></button>
+        </div>
+      </div>
+    </section>
+    <div class="rhythm-strip" aria-hidden="true">
+      <div class="rhythm-track" lang="en">MORE COLOR <span>✳</span> MORE PLAY <span>●</span> MORE COLOR <span>✳</span> MORE PLAY <span>●</span> MORE COLOR <span>✳</span> MORE PLAY</div>
+    </div>
     <section id="composition" class="scene scene--composition" tabindex="-1" aria-labelledby="composition-title">
       <figure class="campaign-photo lookbook-photo" data-reveal>
         <img src="assets/lookbook.webp" srcset="assets/lookbook-sm.webp 768w, assets/lookbook.webp 1536w" sizes="(max-width: 800px) 100vw, (max-width: 1920px) 64vw, 1229px" width="1536" height="1024" alt="Zwei Kinder in bunten Herbstoutfits auf einem Weg voller Laub" data-alt="lookbookAlt" loading="lazy" decoding="async">
@@ -240,30 +306,72 @@
         </div>
       </div>
     </section>
-    <section id="manifesto" class="scene scene--manifesto" tabindex="-1" aria-labelledby="manifesto-title">
-      <div class="manifesto-layout">
-        <div class="copy" data-reveal>
-          <p class="eyebrow" data-copy="manifestoLabel">Über BORING:NOT</p>
-          <h2 id="manifesto-title" data-copy="manifestoTitle">Kindheit ist nicht beige.</h2>
-          <p data-copy="manifestoText">Pfützen, Laubhaufen, Kreide auf dem Asphalt. Für uns beginnt Kindermode bei dem, was Kinder draußen machen. Dazu passen kräftige Farben, die auch an grauen Tagen Lust aufs Rausgehen machen.</p>
-          <p data-copy="manifestoDetail">Die Idee kommt aus dem Memphis-Design der 80er. Wir setzen seine Wellen, Raster und Farbflächen direkt auf Jacken und Hosen. So wird aus der Steppjacke oder der Cargohose das Teil, um das sich der ganze Look dreht.</p>
-          <a class="round-link" href="#composition" data-copy="seeLooks">Looks entdecken ↑</a>
+    <section class="clarity" id="clarity" aria-labelledby="clarity-title">
+      <div class="scene clarity-stage">
+        <div class="art clarity-art" aria-hidden="true">
+          <svg class="shape" viewBox="0 0 100 100" style="--x:1%;--y:8%;--size:19%;--turn:-25deg;--paint:var(--pink);--i:0"><path d="M10 20Q40 -10 62 12T90 52Q105 83 68 91T22 80Q-5 65 10 20" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:92%;--y:12%;--size:24%;--turn:24deg;--paint:var(--mint);--i:1"><path d="M5 20H95M5 40H95M5 60H95M5 80H95" stroke="currentColor" stroke-width="7"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:88%;--y:82%;--size:28%;--turn:-18deg;--paint:var(--violet);--i:2"><path d="M7 70a43 43 0 0 1 86 0" fill="none" stroke="currentColor" stroke-width="22"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:8%;--y:91%;--size:23%;--turn:25deg;--paint:var(--yellow);--i:3"><path d="M50 5 96 90H4Z" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:22%;--y:12%;--size:8%;--turn:-15deg;--paint:var(--ink);--i:4"><path d="m4 75 18-50 18 50 18-50 18 50 19-50" fill="none" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:74%;--y:15%;--size:8%;--turn:20deg;--paint:var(--ink);--i:5"><circle cx="10" cy="10" r="3.5" fill="currentColor"/><circle cx="10" cy="30" r="3.5" fill="currentColor"/><circle cx="10" cy="50" r="3.5" fill="currentColor"/><circle cx="10" cy="70" r="3.5" fill="currentColor"/><circle cx="10" cy="90" r="3.5" fill="currentColor"/><circle cx="30" cy="10" r="3.5" fill="currentColor"/><circle cx="30" cy="30" r="3.5" fill="currentColor"/><circle cx="30" cy="50" r="3.5" fill="currentColor"/><circle cx="30" cy="70" r="3.5" fill="currentColor"/><circle cx="30" cy="90" r="3.5" fill="currentColor"/><circle cx="50" cy="10" r="3.5" fill="currentColor"/><circle cx="50" cy="30" r="3.5" fill="currentColor"/><circle cx="50" cy="50" r="3.5" fill="currentColor"/><circle cx="50" cy="70" r="3.5" fill="currentColor"/><circle cx="50" cy="90" r="3.5" fill="currentColor"/><circle cx="70" cy="10" r="3.5" fill="currentColor"/><circle cx="70" cy="30" r="3.5" fill="currentColor"/><circle cx="70" cy="50" r="3.5" fill="currentColor"/><circle cx="70" cy="70" r="3.5" fill="currentColor"/><circle cx="70" cy="90" r="3.5" fill="currentColor"/><circle cx="90" cy="10" r="3.5" fill="currentColor"/><circle cx="90" cy="30" r="3.5" fill="currentColor"/><circle cx="90" cy="50" r="3.5" fill="currentColor"/><circle cx="90" cy="70" r="3.5" fill="currentColor"/><circle cx="90" cy="90" r="3.5" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:12%;--y:46%;--size:9%;--turn:18deg;--paint:var(--blue);--i:6"><circle cx="50" cy="50" r="33" fill="none" stroke="currentColor" stroke-width="19"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:94%;--y:51%;--size:7%;--turn:40deg;--paint:var(--ink);--i:7"><path d="M5 60Q17 5 34 50T65 50T95 40" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:38%;--y:88%;--size:9%;--turn:-22deg;--paint:var(--ink);--i:8"><rect x="0" y="0" width="20" height="20" fill="currentColor"/><rect x="0" y="40" width="20" height="20" fill="currentColor"/><rect x="0" y="80" width="20" height="20" fill="currentColor"/><rect x="20" y="20" width="20" height="20" fill="currentColor"/><rect x="20" y="60" width="20" height="20" fill="currentColor"/><rect x="40" y="0" width="20" height="20" fill="currentColor"/><rect x="40" y="40" width="20" height="20" fill="currentColor"/><rect x="40" y="80" width="20" height="20" fill="currentColor"/><rect x="60" y="20" width="20" height="20" fill="currentColor"/><rect x="60" y="60" width="20" height="20" fill="currentColor"/><rect x="80" y="0" width="20" height="20" fill="currentColor"/><rect x="80" y="40" width="20" height="20" fill="currentColor"/><rect x="80" y="80" width="20" height="20" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:65%;--y:87%;--size:5%;--turn:15deg;--paint:var(--orange);--i:9"><circle cx="50" cy="50" r="47" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:43%;--y:5%;--size:5%;--turn:0deg;--paint:var(--mint);--i:10"><circle cx="50" cy="50" r="47" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:3%;--y:68%;--size:5%;--turn:20deg;--paint:var(--ink);--i:11"><circle cx="10" cy="10" r="3.5" fill="currentColor"/><circle cx="10" cy="30" r="3.5" fill="currentColor"/><circle cx="10" cy="50" r="3.5" fill="currentColor"/><circle cx="10" cy="70" r="3.5" fill="currentColor"/><circle cx="10" cy="90" r="3.5" fill="currentColor"/><circle cx="30" cy="10" r="3.5" fill="currentColor"/><circle cx="30" cy="30" r="3.5" fill="currentColor"/><circle cx="30" cy="50" r="3.5" fill="currentColor"/><circle cx="30" cy="70" r="3.5" fill="currentColor"/><circle cx="30" cy="90" r="3.5" fill="currentColor"/><circle cx="50" cy="10" r="3.5" fill="currentColor"/><circle cx="50" cy="30" r="3.5" fill="currentColor"/><circle cx="50" cy="50" r="3.5" fill="currentColor"/><circle cx="50" cy="70" r="3.5" fill="currentColor"/><circle cx="50" cy="90" r="3.5" fill="currentColor"/><circle cx="70" cy="10" r="3.5" fill="currentColor"/><circle cx="70" cy="30" r="3.5" fill="currentColor"/><circle cx="70" cy="50" r="3.5" fill="currentColor"/><circle cx="70" cy="70" r="3.5" fill="currentColor"/><circle cx="70" cy="90" r="3.5" fill="currentColor"/><circle cx="90" cy="10" r="3.5" fill="currentColor"/><circle cx="90" cy="30" r="3.5" fill="currentColor"/><circle cx="90" cy="50" r="3.5" fill="currentColor"/><circle cx="90" cy="70" r="3.5" fill="currentColor"/><circle cx="90" cy="90" r="3.5" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:97%;--y:67%;--size:11%;--turn:20deg;--paint:var(--pink);--i:12"><path d="M50 5 96 90H4Z" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:30%;--y:92%;--size:4%;--turn:30deg;--paint:var(--blue);--i:13"><circle cx="50" cy="50" r="47" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:60%;--y:8%;--size:5%;--turn:30deg;--paint:var(--ink);--i:14"><path d="M5 60Q17 5 34 50T65 50T95 40" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/></svg>
         </div>
-        <div class="manifesto-art" aria-hidden="true" data-reveal>
-          <div class="manifesto-plane manifesto-layer"></div>
-          <div class="manifesto-arch manifesto-layer"></div>
-          <div class="manifesto-zigzag manifesto-layer pattern-zigzag"></div>
-          <div class="manifesto-ring memphis-flight"></div>
-          <div class="manifesto-triangle memphis-flight"></div>
-          <span class="manifesto-colon memphis-flight">:</span>
+        <div class="copy clarity-copy">
+          <p class="eyebrow" data-copy="clarityLabel">05 / Mix & Match</p>
+          <h2 id="clarity-title" data-copy="clarityTitle">Bunt passt zusammen.</h2>
+          <p data-copy="clarityText">Kreise, Wellen, Streifen und Farbfelder – unsere Muster spielen zusammen. Unterschiedlich sein ist Teil des Looks.</p>
+          <p class="micro" data-copy="scrollHint">Scrolle weiter und beobachte, wie sich die Muster anordnen.</p>
         </div>
+        <div class="progress" aria-hidden="true"><span></span></div>
+      </div>
+    </section>
+    <section class="scene finale" aria-labelledby="final-title">
+      <div class="art" aria-hidden="true">
+          <svg class="shape" viewBox="0 0 100 100" style="--x:1%;--y:8%;--size:19%;--turn:-25deg;--paint:var(--pink);--i:0"><path d="M10 20Q40 -10 62 12T90 52Q105 83 68 91T22 80Q-5 65 10 20" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:92%;--y:12%;--size:24%;--turn:24deg;--paint:var(--mint);--i:1"><path d="M5 20H95M5 40H95M5 60H95M5 80H95" stroke="currentColor" stroke-width="7"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:88%;--y:82%;--size:28%;--turn:-18deg;--paint:var(--violet);--i:2"><path d="M7 70a43 43 0 0 1 86 0" fill="none" stroke="currentColor" stroke-width="22"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:8%;--y:91%;--size:23%;--turn:25deg;--paint:var(--yellow);--i:3"><path d="M50 5 96 90H4Z" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:22%;--y:12%;--size:8%;--turn:-15deg;--paint:var(--ink);--i:4"><path d="m4 75 18-50 18 50 18-50 18 50 19-50" fill="none" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:74%;--y:15%;--size:8%;--turn:20deg;--paint:var(--ink);--i:5"><circle cx="10" cy="10" r="3.5" fill="currentColor"/><circle cx="10" cy="30" r="3.5" fill="currentColor"/><circle cx="10" cy="50" r="3.5" fill="currentColor"/><circle cx="10" cy="70" r="3.5" fill="currentColor"/><circle cx="10" cy="90" r="3.5" fill="currentColor"/><circle cx="30" cy="10" r="3.5" fill="currentColor"/><circle cx="30" cy="30" r="3.5" fill="currentColor"/><circle cx="30" cy="50" r="3.5" fill="currentColor"/><circle cx="30" cy="70" r="3.5" fill="currentColor"/><circle cx="30" cy="90" r="3.5" fill="currentColor"/><circle cx="50" cy="10" r="3.5" fill="currentColor"/><circle cx="50" cy="30" r="3.5" fill="currentColor"/><circle cx="50" cy="50" r="3.5" fill="currentColor"/><circle cx="50" cy="70" r="3.5" fill="currentColor"/><circle cx="50" cy="90" r="3.5" fill="currentColor"/><circle cx="70" cy="10" r="3.5" fill="currentColor"/><circle cx="70" cy="30" r="3.5" fill="currentColor"/><circle cx="70" cy="50" r="3.5" fill="currentColor"/><circle cx="70" cy="70" r="3.5" fill="currentColor"/><circle cx="70" cy="90" r="3.5" fill="currentColor"/><circle cx="90" cy="10" r="3.5" fill="currentColor"/><circle cx="90" cy="30" r="3.5" fill="currentColor"/><circle cx="90" cy="50" r="3.5" fill="currentColor"/><circle cx="90" cy="70" r="3.5" fill="currentColor"/><circle cx="90" cy="90" r="3.5" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:12%;--y:46%;--size:9%;--turn:18deg;--paint:var(--blue);--i:6"><circle cx="50" cy="50" r="33" fill="none" stroke="currentColor" stroke-width="19"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:94%;--y:51%;--size:7%;--turn:40deg;--paint:var(--ink);--i:7"><path d="M5 60Q17 5 34 50T65 50T95 40" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:38%;--y:88%;--size:9%;--turn:-22deg;--paint:var(--ink);--i:8"><rect x="0" y="0" width="20" height="20" fill="currentColor"/><rect x="0" y="40" width="20" height="20" fill="currentColor"/><rect x="0" y="80" width="20" height="20" fill="currentColor"/><rect x="20" y="20" width="20" height="20" fill="currentColor"/><rect x="20" y="60" width="20" height="20" fill="currentColor"/><rect x="40" y="0" width="20" height="20" fill="currentColor"/><rect x="40" y="40" width="20" height="20" fill="currentColor"/><rect x="40" y="80" width="20" height="20" fill="currentColor"/><rect x="60" y="20" width="20" height="20" fill="currentColor"/><rect x="60" y="60" width="20" height="20" fill="currentColor"/><rect x="80" y="0" width="20" height="20" fill="currentColor"/><rect x="80" y="40" width="20" height="20" fill="currentColor"/><rect x="80" y="80" width="20" height="20" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:65%;--y:87%;--size:5%;--turn:15deg;--paint:var(--orange);--i:9"><circle cx="50" cy="50" r="47" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:43%;--y:5%;--size:5%;--turn:0deg;--paint:var(--mint);--i:10"><circle cx="50" cy="50" r="47" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:3%;--y:68%;--size:5%;--turn:20deg;--paint:var(--ink);--i:11"><circle cx="10" cy="10" r="3.5" fill="currentColor"/><circle cx="10" cy="30" r="3.5" fill="currentColor"/><circle cx="10" cy="50" r="3.5" fill="currentColor"/><circle cx="10" cy="70" r="3.5" fill="currentColor"/><circle cx="10" cy="90" r="3.5" fill="currentColor"/><circle cx="30" cy="10" r="3.5" fill="currentColor"/><circle cx="30" cy="30" r="3.5" fill="currentColor"/><circle cx="30" cy="50" r="3.5" fill="currentColor"/><circle cx="30" cy="70" r="3.5" fill="currentColor"/><circle cx="30" cy="90" r="3.5" fill="currentColor"/><circle cx="50" cy="10" r="3.5" fill="currentColor"/><circle cx="50" cy="30" r="3.5" fill="currentColor"/><circle cx="50" cy="50" r="3.5" fill="currentColor"/><circle cx="50" cy="70" r="3.5" fill="currentColor"/><circle cx="50" cy="90" r="3.5" fill="currentColor"/><circle cx="70" cy="10" r="3.5" fill="currentColor"/><circle cx="70" cy="30" r="3.5" fill="currentColor"/><circle cx="70" cy="50" r="3.5" fill="currentColor"/><circle cx="70" cy="70" r="3.5" fill="currentColor"/><circle cx="70" cy="90" r="3.5" fill="currentColor"/><circle cx="90" cy="10" r="3.5" fill="currentColor"/><circle cx="90" cy="30" r="3.5" fill="currentColor"/><circle cx="90" cy="50" r="3.5" fill="currentColor"/><circle cx="90" cy="70" r="3.5" fill="currentColor"/><circle cx="90" cy="90" r="3.5" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:97%;--y:67%;--size:11%;--turn:20deg;--paint:var(--pink);--i:12"><path d="M50 5 96 90H4Z" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:30%;--y:92%;--size:4%;--turn:30deg;--paint:var(--blue);--i:13"><circle cx="50" cy="50" r="47" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:60%;--y:8%;--size:5%;--turn:30deg;--paint:var(--ink);--i:14"><path d="M5 60Q17 5 34 50T65 50T95 40" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:21%;--y:20%;--size:19%;--turn:20deg;--paint:var(--mint);--i:15"><path d="M5 20H95M5 40H95M5 60H95M5 80H95" stroke="currentColor" stroke-width="7"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:79%;--y:16%;--size:16%;--turn:-15deg;--paint:var(--pink);--i:16"><path d="M6 55Q20 5 36 50T66 50T94 40" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:5%;--y:54%;--size:23%;--turn:30deg;--paint:var(--blue);--i:17"><circle cx="50" cy="50" r="33" fill="none" stroke="currentColor" stroke-width="19"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:94%;--y:45%;--size:21%;--turn:-35deg;--paint:var(--pink);--i:18"><path d="M50 5 96 90H4Z" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:22%;--y:82%;--size:12%;--turn:10deg;--paint:var(--orange);--i:19"><circle cx="50" cy="50" r="33" fill="none" stroke="currentColor" stroke-width="19"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:77%;--y:87%;--size:13%;--turn:0deg;--paint:var(--blue);--i:20"><circle cx="10" cy="10" r="4" fill="currentColor"/><circle cx="10" cy="30" r="4" fill="currentColor"/><circle cx="10" cy="50" r="4" fill="currentColor"/><circle cx="10" cy="70" r="4" fill="currentColor"/><circle cx="10" cy="90" r="4" fill="currentColor"/><circle cx="30" cy="10" r="4" fill="currentColor"/><circle cx="30" cy="30" r="4" fill="currentColor"/><circle cx="30" cy="50" r="4" fill="currentColor"/><circle cx="30" cy="70" r="4" fill="currentColor"/><circle cx="30" cy="90" r="4" fill="currentColor"/><circle cx="50" cy="10" r="4" fill="currentColor"/><circle cx="50" cy="30" r="4" fill="currentColor"/><circle cx="50" cy="50" r="4" fill="currentColor"/><circle cx="50" cy="70" r="4" fill="currentColor"/><circle cx="50" cy="90" r="4" fill="currentColor"/><circle cx="70" cy="10" r="4" fill="currentColor"/><circle cx="70" cy="30" r="4" fill="currentColor"/><circle cx="70" cy="50" r="4" fill="currentColor"/><circle cx="70" cy="70" r="4" fill="currentColor"/><circle cx="70" cy="90" r="4" fill="currentColor"/><circle cx="90" cy="10" r="4" fill="currentColor"/><circle cx="90" cy="30" r="4" fill="currentColor"/><circle cx="90" cy="50" r="4" fill="currentColor"/><circle cx="90" cy="70" r="4" fill="currentColor"/><circle cx="90" cy="90" r="4" fill="currentColor"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:42%;--y:4%;--size:6%;--turn:0deg;--paint:var(--ink);--i:21"><path d="M6 55Q20 5 36 50T66 50T94 40" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/></svg>
+          <svg class="shape" viewBox="0 0 100 100" style="--x:58%;--y:95%;--size:6%;--turn:0deg;--paint:var(--ink);--i:22"><path d="M6 55Q20 5 36 50T66 50T94 40" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round"/></svg>
+        </div>
+      <div class="copy" data-reveal>
+        <p class="eyebrow" lang="en">07 / Colorful childhood</p>
+        <h2 id="final-title" data-copy="finalTitle">Kleine Menschen. Große Farben.</h2>
+        <p data-copy="finalText">Für alle, die Pfützen, bunte Blätter und das Ungewöhnliche lieben.</p>
+        <a class="action-link" href="#arrivals" data-copy="again">Zur Kollektion ↑</a>
       </div>
     </section>
     <section class="scene satisfaction" aria-labelledby="satisfaction-title">
       <div class="copy" data-reveal>
         <h2 id="satisfaction-title" data-copy="satisfactionTitle">Deine Zufriedenheit zählt.</h2>
         <p data-copy="satisfactionText">Ein Lieblingsteil macht beim Anziehen genauso viel Spaß wie draußen. Wir zeigen deshalb jedes Teil einzeln und kombinieren es im Lookbook. So siehst du, welche Farben und Lagen für euch zusammenpassen.</p>
-        <a class="round-link" href="#reviews" data-copy="satisfactionLink">Stimmen zur Kollektion ↓</a>
+        <a class="action-link" href="#reviews" data-copy="satisfactionLink">Stimmen zur Kollektion ↓</a>
       </div>
       <div class="satisfaction-art" aria-hidden="true" data-reveal>
         <span class="satisfaction-squiggle pattern-zigzag"></span>
@@ -377,13 +485,14 @@
         <h2 id="winter-title" data-copy="winterTitle">15 % Winterrabatt</h2>
         <p id="winter-description" data-copy="winterDescription">Die Winteraktion zur Herbst- und Winterkollektion. Der Code gehört zur fiktiven Kampagne.</p>
         <p class="winter-code"><span data-copy="winterCode">Aktionscode</span> <strong>WINTER15</strong></p>
-        <a class="round-link" href="#arrivals" data-copy="winterCta">Kollektion ansehen ↓</a>
+        <a class="action-link" href="#arrivals" data-copy="winterCta">Kollektion ansehen ↓</a>
       </div>
       <form method="dialog">
         <button class="dialog-close" type="submit" aria-label="Winteraktion schließen" data-label="closeWinter" autofocus>×</button>
       </form>
     </div>
   </dialog>
+  <button class="motion-toggle" id="ambient-motion" type="button" aria-pressed="false" data-copy="pauseAmbient" hidden>Bewegung pausieren</button>
   <a class="back-to-top" id="back-to-top" href="#top" aria-label="Zum Seitenanfang" data-label="backToTop" hidden>
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V4M5 11l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </a>

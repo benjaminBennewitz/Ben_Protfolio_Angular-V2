@@ -6,7 +6,8 @@ BORING:NOT is a fictional kidswear label presenting an autumn/winter collection.
 
 - New Arrivals presents ten pieces in a responsive masonry layout. The collection can be filtered by jackets, vests, pants and accessories. Each card and its corresponding lookbook link opens a native product dialog.
 - The campaign, lookbook and product photography are AI-generated concepts. The images are stored locally as responsive WebP variants and individually labeled.
-- The about section introduces the Memphis inspiration with an animated collage. Floating Memphis shapes frame the campaign images, and grid patterns are used as section backgrounds. The lookbook presents two outfits using the existing collection.
+- The hero combines a compact wordmark with a manually controlled two-image campaign slider. The about section introduces the Memphis inspiration with an animated collage and a two-column text layout. Floating Memphis shapes frame the campaign images, and grid patterns are used as section backgrounds. The lookbook presents two outfits using the existing collection.
+- Color Play, the scroll-driven typographic strip and Mix & Match complement the collection; the final brand statement leads into the satisfaction section. Selected decorative shapes float while visible and can be paused. The playground is omitted.
 - The satisfaction section leads to four clearly labeled fictional sample reviews.
 - The mobile menu uses a native modal with background scroll locking. The fictional WINTER15 promotion appears once per tab session after half the available scroll distance.
 - The footer dots roll in from the right and settle at the two positions of the colon. Reduced motion keeps them in place from the start.

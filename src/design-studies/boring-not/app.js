@@ -9,6 +9,16 @@ const themeButton = document.querySelector('#theme');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const hero = document.querySelector('.hero');
 const heroShapes = [...hero.querySelectorAll('.shape')];
+const heroSlides = [...hero.querySelectorAll('[data-slide]')];
+const sliderControls = hero.querySelector('.hero-slider-controls');
+const slideCount = sliderControls.querySelector('.hero-slide-count');
+const colorScene = document.querySelector('#color');
+const paletteButtons = [...colorScene.querySelectorAll('[data-palette-choice]')];
+const rhythmStrip = document.querySelector('.rhythm-strip');
+const rhythmTrack = rhythmStrip.querySelector('.rhythm-track');
+const clarity = document.querySelector('.clarity');
+const clarityStage = clarity.querySelector('.clarity-stage');
+const motionToggle = document.querySelector('#ambient-motion');
 const backToTop = document.querySelector('#back-to-top');
 const footerWordmark = document.querySelector('.footer-wordmark');
 const pageTop = document.querySelector('#top');
@@ -36,6 +46,25 @@ const productDescription = productDialog.querySelector('#product-description');
 
 /** Englische Entsprechungen der statischen deutschen HTML-Texte. */
 const english = {
+  sliderLabel: "Campaign images",
+  previousSlide: "Previous image",
+  nextSlide: "Next image",
+  pauseAmbient: "Pause motion",
+  resumeAmbient: "Resume motion",
+  scrollHint: "Keep scrolling to watch the patterns rearrange.",
+  colorLabel: "03 / Color play",
+  colorTitle: "More color. More outdoors.",
+  colorText: "As days get shorter and skies turn gray, we embrace bright colors and bold contrasts. They bring color into everyday life. In darkness they are no substitute for reflectors or lighting.",
+  palette: "Change color composition",
+  pink: "Pink",
+  mint: "Mint",
+  yellow: "Yellow",
+  clarityLabel: "05 / Mix & Match",
+  clarityTitle: "Color goes together.",
+  clarityText: "Circles, waves, stripes and color blocks – our patterns play together. Being different is part of the look.",
+  finalTitle: "Little people. Big colors.",
+  finalText: "For everyone who loves puddles, colorful leaves and the unexpected.",
+  again: "Back to the collection ↑",
   skip: "Skip to content",
   archive: "← Archive",
   brandNav: "Collection and brand",
@@ -114,7 +143,7 @@ const english = {
   manifestoTitle: "Childhood isn’t beige.",
   manifestoText: "Puddles, piles of leaves, chalk on the pavement. Our kidswear starts with what kids do outdoors. Bold colors make getting outside feel a little brighter, even on gray days.",
   manifestoDetail: "The idea comes from 1980s Memphis design. We bring its squiggles, grids and color blocks straight onto jackets and pants. The puffer or the cargos become the piece you build the whole look around.",
-  seeLooks: "Explore the looks ↑",
+  seeLooks: "Explore the looks ↓",
   closeProduct: "Close product details",
   footerClaim: "Stay colorful.",
   footerText: "Kidswear with personality. A fictional label and design study by [B²].",
@@ -188,6 +217,9 @@ let dark = readPreference('boring-not-theme', 'bp-theme') === 'dark';
 
 // Bewegungszustand der Kampagne.
 let frame = 0;
+let activeSlide = 0;
+let paletteAnimation = null;
+let ambientPaused = false;
 let pointerX = 0;
 let pointerY = 0;
 let checkWinterOnFrame = false;
@@ -271,6 +303,7 @@ function applyLanguage() {
   languageButton.setAttribute('aria-label', language === 'en' ? 'Auf Deutsch wechseln' : 'Switch to English');
   applyTheme();
   updateCollectionCount();
+  updateAmbientControl();
 }
 
 /** Aktualisiert Farbschema und Schalterbeschriftung. */
@@ -331,6 +364,120 @@ function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }
 
+/**
+ * Liest eine numerische CSS-Eigenschaft aus dem statischen Formlayout.
+ * @param {HTMLElement|SVGElement} element Formelement.
+ * @param {string} property CSS-Variable.
+ * @returns {number} Numerischer Anteil.
+ */
+function readNumber(element, property) {
+  return Number.parseFloat(element.style.getPropertyValue(property));
+}
+
+/** Formpositionen für die ungeordnete und die fokussierte Komposition. */
+const clarityShapes = Array.from(document.querySelectorAll('.clarity-art .shape'), (element, index) => {
+  const x = readNumber(element, '--x');
+  const y = readNumber(element, '--y');
+  const turn = readNumber(element, '--turn');
+  return { element, x, y, turn, startX: 23 + ((index * 37) % 55), startY: 12 + ((index * 23) % 76), startTurn: turn + 120 - index * 17 };
+});
+
+/**
+ * Glättet einen normierten Fortschritt ohne zusätzliche Animationsbibliothek.
+ * @param {number} value Linearer Fortschritt.
+ * @returns {number} Geglätteter Fortschritt.
+ */
+function smoothstep(value) {
+  const progress = clamp(value, 0, 1);
+  return progress * progress * (3 - 2 * progress);
+}
+
+/**
+ * Interpoliert dieselben Formen in gestaffelten Bögen von Chaos zu Ordnung.
+ * @param {number} progress Fortschritt zwischen null und eins.
+ * @param {DOMRect} bounds Abmessungen der Sticky-Bühne.
+ */
+function renderClarity(progress, bounds = clarityStage.getBoundingClientRect()) {
+  for (const [index, shape] of clarityShapes.entries()) {
+    const delay = (index % 5) * .055;
+    const phase = smoothstep((progress - delay) / .74);
+    const arc = Math.sin(Math.PI * phase);
+    const direction = index % 2 === 0 ? 1 : -1;
+    const x = (shape.startX - shape.x) * (1 - phase) * bounds.width / 100 + arc * direction * bounds.width * .09;
+    const y = (shape.startY - shape.y) * (1 - phase) * bounds.height / 100 - arc * direction * bounds.height * .12;
+    const turn = shape.startTurn + (shape.turn - shape.startTurn) * phase + arc * direction * 45;
+    shape.element.style.setProperty('--clarity-x', `${x.toFixed(1)}px`);
+    shape.element.style.setProperty('--clarity-y', `${y.toFixed(1)}px`);
+    shape.element.style.setProperty('--current-turn', `${turn.toFixed(1)}deg`);
+    shape.element.style.setProperty('--clarity-scale', String(1 + arc * .35 + (1 - phase) * .23));
+  }
+  clarityStage.style.setProperty('--progress', String(progress));
+}
+
+/**
+ * Wechselt die Farbstimmung und akzentuiert die neue Komposition einmalig.
+ * @param {MouseEvent} event Aktivierter Farbschalter.
+ */
+function changePalette(event) {
+  const choice = event.currentTarget.dataset.paletteChoice;
+  if (colorScene.dataset.palette === choice) {
+    return;
+  }
+  colorScene.dataset.palette = choice;
+  for (const button of paletteButtons) {
+    button.setAttribute('aria-pressed', String(button.dataset.paletteChoice === choice));
+  }
+  if (!reducedMotion.matches) {
+    paletteAnimation?.cancel();
+    paletteAnimation = colorScene.querySelector('.art').animate([
+      { transform: 'scale(1) rotate(0deg)' },
+      { transform: 'scale(.84) rotate(-7deg)', offset: .35 },
+      { transform: 'scale(1.06) rotate(2deg)', offset: .78 },
+      { transform: 'scale(1) rotate(0deg)' },
+    ], { duration: 740, easing: 'ease-out' });
+  }
+}
+
+/**
+ * Wechselt zwischen den vorhandenen Kampagnenmotiven ohne automatische Wiedergabe.
+ * @param {number} step Richtung des Bildwechsels.
+ */
+function changeSlide(step) {
+  heroSlides[activeSlide].hidden = true;
+  heroSlides[activeSlide].classList.remove('is-current');
+  activeSlide = (activeSlide + step + heroSlides.length) % heroSlides.length;
+  heroSlides[activeSlide].hidden = false;
+  heroSlides[activeSlide].classList.add('is-current');
+  slideCount.textContent = `${String(activeSlide + 1).padStart(2, '0')} / ${String(heroSlides.length).padStart(2, '0')}`;
+}
+
+/** Aktualisiert die Beschriftung und den Zustand der Bewegungspause. */
+function updateAmbientControl() {
+  motionToggle.hidden = reducedMotion.matches;
+  motionToggle.setAttribute('aria-pressed', String(ambientPaused));
+  motionToggle.textContent = language === 'en'
+    ? english[ambientPaused ? 'resumeAmbient' : 'pauseAmbient']
+    : (ambientPaused ? 'Bewegung fortsetzen' : 'Bewegung pausieren');
+  root.classList.toggle('ambient-paused', ambientPaused);
+}
+
+/** Aktualisiert die scrollabhängige Komposition und den typografischen Laufstreifen. */
+function updateEditorialMotion(viewportHeight) {
+  const bounds = clarity.getBoundingClientRect();
+  const stageBounds = clarityStage.getBoundingClientRect();
+  const distance = bounds.height - stageBounds.height;
+  const progress = reducedMotion.matches || distance <= 0 ? 1 : clamp(-bounds.top / distance, 0, 1);
+  if ((bounds.bottom >= 0 && bounds.top <= viewportHeight) || reducedMotion.matches) {
+    renderClarity(progress, stageBounds);
+  }
+  const stripBounds = rhythmStrip.getBoundingClientRect();
+  if (!reducedMotion.matches && stripBounds.bottom >= 0 && stripBounds.top <= viewportHeight) {
+    const stripDistance = Math.max(0, rhythmTrack.scrollWidth - stripBounds.width);
+    const stripProgress = clamp((viewportHeight - stripBounds.top) / (viewportHeight + stripBounds.height), 0, 1);
+    rhythmTrack.style.setProperty('--strip-x', `${-stripDistance * stripProgress}px`);
+  }
+}
+
 /** Bewegt die Memphis-Formen innerhalb der sichtbaren Kampagne. */
 function updateMotion() {
   frame = 0;
@@ -341,6 +488,7 @@ function updateMotion() {
     checkWinterOnFrame = false;
     checkWinterPromo();
   }
+  updateEditorialMotion(viewportHeight);
   if (reducedMotion.matches || offset > hero.offsetHeight + pageTop.offsetHeight) {
     return;
   }
@@ -517,6 +665,16 @@ function initialize() {
   enableBackdropDismiss(winterDialog);
   enableDialogNavigation(winterDialog);
   root.classList.add('motion-ready');
+  sliderControls.hidden = false;
+  sliderControls.querySelectorAll('[data-slide-step]').forEach((button) => {
+    button.addEventListener('click', () => changeSlide(Number(button.dataset.slideStep)));
+  });
+  paletteButtons.forEach((button) => button.addEventListener('click', changePalette));
+  motionToggle.addEventListener('click', () => {
+    ambientPaused = !ambientPaused;
+    updateAmbientControl();
+  });
+  updateAmbientControl();
   backToTop.hidden = false;
 
   backToTop.addEventListener('click', (event) => {
@@ -540,7 +698,10 @@ function initialize() {
     scheduleMotion();
   }, { passive: true });
   window.addEventListener('resize', scheduleMotion);
-  reducedMotion.addEventListener('change', resetHeroPointer);
+  reducedMotion.addEventListener('change', () => {
+    updateAmbientControl();
+    resetHeroPointer();
+  });
   hero.addEventListener('pointermove', updateHeroPointer, { passive: true });
   hero.addEventListener('pointerleave', resetHeroPointer);
   scheduleMotion();
@@ -555,6 +716,13 @@ function initialize() {
       }
     }, { threshold: .2 });
     document.querySelectorAll('[data-reveal]').forEach((element) => observer.observe(element));
+
+    const ambientObserver = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        entry.target.classList.toggle('is-floating', entry.isIntersecting);
+      }
+    });
+    document.querySelectorAll('.hero, .scene--composition, .scene--manifesto, .scene--color, .finale').forEach((scene) => ambientObserver.observe(scene));
 
     const footerObserver = new IntersectionObserver(([entry]) => {
       footerWordmark.classList.toggle('is-rolling', entry.isIntersecting);

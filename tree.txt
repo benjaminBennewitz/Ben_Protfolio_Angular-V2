@@ -945,6 +945,40 @@ folio/
 │   │   │   ├── package.json
 │   │   │   ├── package-lock.json
 │   │   │   └── README.md
+│   │   ├── boring-not/
+│   │   │   ├── assets/
+│   │   │   │   ├── campaign.webp
+│   │   │   │   ├── campaign-sm.webp
+│   │   │   │   ├── depth-prism.webp
+│   │   │   │   ├── depth-ring.webp
+│   │   │   │   ├── favicon.svg
+│   │   │   │   ├── kick-beanie.webp
+│   │   │   │   ├── kick-beanie-sm.webp
+│   │   │   │   ├── lookbook.webp
+│   │   │   │   ├── lookbook-sm.webp
+│   │   │   │   ├── pop-mittens.webp
+│   │   │   │   ├── pop-mittens-sm.webp
+│   │   │   │   ├── pop-puffer.webp
+│   │   │   │   ├── pop-puffer-sm.webp
+│   │   │   │   ├── preview.webp
+│   │   │   │   ├── sherpa-vest.webp
+│   │   │   │   ├── sherpa-vest-sm.webp
+│   │   │   │   ├── splash-shell.webp
+│   │   │   │   ├── splash-shell-sm.webp
+│   │   │   │   ├── sunburst-vest.webp
+│   │   │   │   ├── sunburst-vest-sm.webp
+│   │   │   │   ├── sunset-pants.webp
+│   │   │   │   ├── sunset-pants-sm.webp
+│   │   │   │   ├── tilt-beanie.webp
+│   │   │   │   ├── tilt-beanie-sm.webp
+│   │   │   │   ├── wave-cargo.webp
+│   │   │   │   ├── wave-cargo-sm.webp
+│   │   │   │   ├── wiggle-fleece.webp
+│   │   │   │   └── wiggle-fleece-sm.webp
+│   │   │   ├── app.js
+│   │   │   ├── index.html
+│   │   │   ├── README.md
+│   │   │   └── style.css
 │   │   ├── brutalism/
 │   │   │   ├── assets/
 │   │   │   │   ├── branding/
@@ -1040,13 +1074,18 @@ folio/
 │   │   │   │   ├── coastal-fog.webp
 │   │   │   │   ├── coast-loop.mp4
 │   │   │   │   ├── coast-poster.webp
+│   │   │   │   ├── dimension-ground.webp
 │   │   │   │   ├── dimension-landscape.webp
 │   │   │   │   ├── dimension-people.webp
+│   │   │   │   ├── ending-cord-skin.webp
 │   │   │   │   ├── ending-empty-swing.webp
+│   │   │   │   ├── ending-first-person.webp
 │   │   │   │   ├── ending-ronnie.webp
 │   │   │   │   ├── favicon.svg
 │   │   │   │   ├── lighthouse-beam.webp
+│   │   │   │   ├── local-closeup.webp
 │   │   │   │   ├── local-courtyard.webp
+│   │   │   │   ├── local-standing.webp
 │   │   │   │   ├── local-swing.webp
 │   │   │   │   ├── message-bottle.webp
 │   │   │   │   ├── message-bottle-glitch.webp
@@ -1055,6 +1094,7 @@ folio/
 │   │   │   │   ├── scene-poster-no-lighthouse.webp
 │   │   │   │   ├── sfx-anomaly.mp3
 │   │   │   │   ├── sfx-auto-scan.mp3
+│   │   │   │   ├── sfx-dimension-drain.mp3
 │   │   │   │   ├── sfx-dimension-presence.mp3
 │   │   │   │   ├── sfx-local-laugh.mp3
 │   │   │   │   ├── sfx-ping-echo.mp3
@@ -1075,6 +1115,7 @@ folio/
 │   │   │   │   ├── sfx-stranger.mp3
 │   │   │   │   ├── sfx-swing-creak.mp3
 │   │   │   │   ├── sfx-tune-click.mp3
+│   │   │   │   ├── sfx-umbilical-impact.mp3
 │   │   │   │   ├── station-mark.svg
 │   │   │   │   ├── transmission-001-de.mp3
 │   │   │   │   ├── transmission-002-de.mp3
@@ -1085,9 +1126,13 @@ folio/
 │   │   │   │   └── window-off-c.webp
 │   │   │   ├── scripts/
 │   │   │   │   ├── app.js
+│   │   │   │   ├── dimension-finisher.js
+│   │   │   │   ├── dimension-ground.js
 │   │   │   │   ├── dimension-world.js
+│   │   │   │   ├── encounter-sequence.js
 │   │   │   │   ├── ending.js
 │   │   │   │   ├── gate-visual.js
+│   │   │   │   ├── head-camera.js
 │   │   │   │   ├── investigation.js
 │   │   │   │   ├── signal-patterns.js
 │   │   │   │   └── soundscape.js

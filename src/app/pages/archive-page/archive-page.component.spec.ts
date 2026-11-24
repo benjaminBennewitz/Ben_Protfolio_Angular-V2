@@ -47,6 +47,7 @@ describe('ArchivePageComponent', /** Isolierte Interaktionen des neuen Designarc
     expect(page.studyNumber('terra')).toBe('DS/012');
     expect(page.studyNumber('teleshop')).toBe('DS/013');
     expect(page.studyNumber('pon-pulse')).toBe('DS/014');
+    expect(page.studyNumber('boring-not')).toBe('DS/015');
     expect(page.categoryCount('spatial')).toBe(3);
   });
 

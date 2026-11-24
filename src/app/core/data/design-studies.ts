@@ -145,10 +145,21 @@ export const DESIGN_STUDIES: readonly DesignStudy[] = [ // Reihenfolge und öffe
       category: 'editorial',
       archive: { concept: 'Brutalism / Kawaii', subject: 'Fictional graffiti writer Pon Pulse', idea: 'A street-art shop editorial follows PP’s bubble lettering from a concrete piece to a painted railway carriage and her go-to equipment.' },
     },
+    {
+      id: 'boring-not',
+      name: 'BORING:NOT',
+      subtitle: 'Colorful Kidswear — Autumn / Winter 2026',
+      href: '/design-studies/boring-not/',
+      preview: '/design-studies/boring-not/assets/preview.webp',
+      tags: ['Memphis', 'Fashion Editorial', 'Brand Design', 'Interactive SVG', 'HTML / CSS / JS'],
+      category: 'editorial',
+      archive: { concept: 'Memphis / Fashion Editorial', subject: 'Fictional kidswear label', idea: 'A colorful autumn/winter collection combines fashion photography, playful Memphis graphics and interactive motion without obscuring the products.' },
+    },
   ]; // Reihenfolge und öffentliche Ziele der Designstudien.
 
 /** Deutsche Karteninhalte; Marken und technische Eigennamen bleiben erhalten. */
 export const DESIGN_STUDY_TRANSLATIONS_DE: Readonly<Record<string, Pick<DesignStudy, 'subtitle' | 'tags' | 'archive'>>> = {
+  'boring-not': { subtitle: 'Bunte Kindermode — Herbst / Winter 2026', tags: ['Memphis', 'Fashion-Editorial', 'Markendesign', 'Interaktives SVG', 'HTML / CSS / JS'], archive: { concept: 'Memphis / Fashion-Editorial', subject: 'Fiktives Kindermoden-Label', idea: 'Eine farbenfrohe Herbst-/Winter-Kollektion verbindet Modefotografie, verspielte Memphis-Grafik und interaktive Bewegung, ohne die Produkte aus dem Fokus zu verlieren.' } },
   'pon-pulse': { subtitle: 'Artist Spotlight — Graffiti von PP', tags: ['Graffiti', 'Brutalismus', 'Kawaii', 'Künstlerporträt', 'HTML / CSS / JS'], archive: { concept: 'Brutalismus / Kawaii', subject: 'Fiktive Graffiti-Writerin Pon Pulse', idea: 'Ein Street-Art-Shop porträtiert PP und zeigt ihr Bubble-Letter-Piece auf Beton, einen bemalten Waggon und ihr Lieblings-Equipment.' } },
   teleshop: { subtitle: '1998 → 2026 — Gleiche Ware. Neue Regeln.', tags: ['Versandhausgestaltung', 'Live-Redesign', 'UI / UX', 'KI-Produktfotografie', 'HTML / CSS / JS'], archive: { concept: 'Versandhaus-Retro / Modernes Shopdesign', subject: 'Fiktiver Teleshop: 1998 → 2026', idea: 'Wie verändern Raster, Bildsprache und visuelle Hierarchie die Wahrnehmung derselben Produkte? Ein fiktiver 90er-Teleshop verwandelt sich live in einen modernen Shop – mit gestaffelter Bewegung und einer verankerten UX-Analyse.' } },
   'raw-form': { subtitle: 'Brutalistische Festival-Landingpage', tags: ['Brutalismus', 'Editorial', 'Animation', 'HTML / CSS / JS'], archive: { concept: 'Brutalismus / Editorial', subject: 'Festivalkultur', idea: 'Wie weit darf eine Festivalwebsite visuelle Hierarchie, rohe Typografie und bewusst kompromisslose Komposition ausreizen?' } },

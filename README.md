@@ -102,7 +102,7 @@ The goal is a website that remains technically controlled while making a strong 
 > [!NOTE]
 > The standalone design studies are non-commercial experiments in graphic design and web development. Some begin with a visual language or illustrated identity; others begin with a theme or a technical interaction. Their READMEs explain that intent before the implementation details. They are not production products or commercial services. Accessibility and production readiness are not their primary evaluation goals; support varies, and no comprehensive accessibility audit or WCAG conformance is claimed for these studies.
 
-Thirteen independent experiences explore distinct visual directions and interaction models. The complete catalogue lives on `/archive`; `/portfolio#design-studies` shows three curated previews in a compact masonry composition and links to it. The archive combines keyword search, visual categories, a bilingual concept/subject/idea inspector and a freely arranged window canvas. On desktop, its sidebar and canvas share one viewport-bounded workspace, with independent sidebar scrolling; study windows have varied sizes and collision-aware random positions instead of forming a rigid grid or clustering in one corner. The search and catalogue sections can be collapsed, and the viewport-height workspace snaps into view when scrolling. Windows can be dragged and resized (including keyboard arrow controls), focused, closed/reopened, shuffled or tiled; on smaller devices the same catalogue becomes a responsive card gallery. Study assets and independent study source code remain isolated inside their respective study folders. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
+Fifteen independent experiences explore distinct visual directions and interaction models. The complete catalogue lives on `/archive`; `/portfolio#design-studies` shows three curated previews in a compact masonry composition and links to it. The archive combines keyword search, visual categories, a bilingual concept/subject/idea inspector and a freely arranged window canvas. On desktop, its sidebar and canvas share one viewport-bounded workspace, with independent sidebar scrolling; study windows have varied sizes and collision-aware random positions instead of forming a rigid grid or clustering in one corner. The search and catalogue sections can be collapsed, and the viewport-height workspace snaps into view when scrolling. Windows can be dragged and resized (including keyboard arrow controls), focused, closed/reopened, shuffled or tiled; on smaller devices the same catalogue becomes a responsive card gallery. Study assets and independent study source code remain isolated inside their respective study folders. Each study has its own detailed README covering concept, interaction, learning objectives, architecture, and source notes.
 
 ### RAW/FORM
 
@@ -188,6 +188,12 @@ An interactive manifesto about pressure, destruction, and creative transformatio
 
 [Study README](src/design-studies/pon-pulse/README.md) · [Open study](https://b2folio.de/design-studies/pon-pulse/)
 
+### BORING:NOT
+
+**Graphic-design-led.** A fictional kidswear label presents a colorful autumn/winter collection through fashion photography and animated Memphis graphics. A scroll-driven pattern scene and a keyboard- and pointer-operated playground invite experimentation; the collection is editorial only, with no checkout.
+
+[Study README](src/design-studies/boring-not/README.md) · [Open study](https://b2folio.de/design-studies/boring-not/)
+
 ### Shared integration
 
 Each study owns its HTML, styles, scripts, and assets. Angular copies these experiences as static pages; portfolio theme, language, and accessibility services do not automatically apply to them. Dependencies and supported interactions are documented in each study's README. Framework-free interaction code is written in VanillaJS; individual studies also explore Canvas, SVG, WebGL, Web Audio, or CSS3D.
@@ -245,6 +251,7 @@ src/
 │  ├─ phase/                  # PHASE. / generative microcosm
 │  ├─ dead-air/               # DEAD//AIR / analog coastal broadcast
 │  ├─ pon-pulse/              # PON! PULSE / graffiti artist spotlight
+│  ├─ boring-not/             # BORING:NOT / Memphis kidswear editorial
 │  ├─ teleshop/               # TELESHOP / live mail-order shop redesign
 │  ├─ terra/                  # TERRA / botanical material laboratory
 │  └─ formic/                 # FORMIC / generative behavioural art

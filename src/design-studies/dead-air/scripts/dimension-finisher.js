@@ -5,7 +5,7 @@
  */
 
 /* Lokale Vordergrundebenen werden einmalig beim Beginn des Portalfinales dekodiert. */
-import { BODY_PITCH, getHeadCamera, projectHeadPoint, drawHeadLayer } from './head-camera.js';
+import { BODY_PITCH, STANDING_HEIGHT, getHeadCamera, projectHeadPoint, drawHeadLayer } from './head-camera.js';
 
 const body = new Image();
 const cord = new Image();
@@ -63,17 +63,18 @@ export function prepareFinisher() {
  * @returns {{blink:number, look:number, up:number, focus:number, reach:number, lift:number, black:number, impact:boolean, attached:boolean, done:boolean}}
  */
 export function getFinisherFrame(elapsedMs, reduced = false) {
-  const up = ease((elapsedMs-FINISHER.lookUpAt)/2500);
+  const attached=elapsedMs>=FINISHER.contactAt;
+  const up = attached ? ease((elapsedMs-FINISHER.lookUpAt)/2500) : 0;
   return {
     blink: reduced ? 0 : blinkOpacity(elapsedMs, [[1230,260], [13400,420]]),
     look: ease((elapsedMs-1400)/1800)*(1-up),
     up,
     focus: ease((elapsedMs-1400)/1800),
     reach: ease((elapsedMs-1500)/1900),
-    lift: ease((elapsedMs-FINISHER.liftAt)/6600),
+    lift: attached ? ease((elapsedMs-FINISHER.liftAt)/6600) : 0,
     black: ease((elapsedMs-FINISHER.closeAt)/1800),
     impact: elapsedMs >= FINISHER.impactAt,
-    attached: elapsedMs >= FINISHER.contactAt,
+    attached,
     done: elapsedMs >= FINISHER.duration,
   };
 }
@@ -140,6 +141,22 @@ function getBodyLayout(width,height) {
   const h=Math.min(height,width*.94/ratio);
   const w=h*ratio;
   return { left: (width-w)/2, top: height-h, width: w, height: h };
+}
+
+/** Feste Kontaktpunkte unter den Stiefeln, bevor Ronnie angehoben wird.
+ * @param {object} camera Kamera mit Viewport und zurückgelegtem Weg.
+ * @returns {Array<{x:number,z:number}>} Zwei ortsfeste Bodenpunkte.
+ */
+export function getBodyGroundContacts(camera) {
+  if(!body.naturalWidth) return [];
+  const rect=getBodyLayout(camera.width,camera.height);
+  return [[.385,.15],[.61,.15]].map(([u,v])=>{
+    const rayX=(rect.left+rect.width*u-camera.width/2)/camera.focal;
+    const rayY=(rect.top+rect.height*v-camera.height/2)/camera.focal;
+    const vertical=Math.sin(BODY_PITCH)+rayY*Math.cos(BODY_PITCH);
+    const distance=STANDING_HEIGHT/vertical;
+    return { x:rayX*distance,z:camera.forward+distance*(Math.cos(BODY_PITCH)-rayY*Math.sin(BODY_PITCH)) };
+  });
 }
 
 /** Blick aus den eigenen Augen: Oberkörper nah im Vordergrund, Beine verkürzt dahinter.

@@ -4,10 +4,11 @@
  * übernimmt Fokus und Hintergrundsperre; begrenzte Tiefenebenen ersetzen eine 3D-Engine.
  * @author Benjamin Bennewitz
  */
-import { FINISHER, prepareFinisher, getFinisherFrame, getDimensionBlink, drawFinisher } from './dimension-finisher.js';
-import { getHeadCamera, applyHeadCamera } from './head-camera.js';
+import { FINISHER, prepareFinisher, getFinisherFrame, getDimensionBlink, drawFinisher, getBodyGroundContacts } from './dimension-finisher.js';
+import { getHeadCamera, drawHeadLayer, FORWARD_PITCH, STANDING_HEIGHT } from './head-camera.js';
 import { ENCOUNTER } from './encounter-sequence.js';
 import { prepareDimension, drawDimension } from './dimension-world.js';
+import { prepareGround, drawGround, drawGroundContacts } from './dimension-ground.js';
 
 const COPY = Object.freeze({
     title: 'KEIN RÜCKSIGNAL', ending: 'NCBS / VERBINDUNG BEENDET', who: 'Ermittler', status: 'Status', missing: 'NICHT ERREICHBAR',
@@ -100,6 +101,7 @@ export class Ending {
     this.backing = false;
     this.drag = null;
     this.fogTexture = null;
+    this.headWorld = document.createElement('canvas');
     this.ronnieVisible = false;
     this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   }
@@ -164,7 +166,7 @@ export class Ending {
 
   /** Lädt die nächste Schlusskulisse bereits während des vorhandenen Finales. */
   prepare(mode) {
-    if (mode === 'breach') { void prepareDimension(); void prepareFinisher(); void this.soundscape.load('impact'); void this.soundscape.load('drain'); }
+    if (mode === 'breach') { void prepareGround(); void prepareDimension(); void prepareFinisher(); void this.soundscape.load('impact'); void this.soundscape.load('drain'); }
     const ids = mode === 'breach' ? [] : ['ending-yard', 'ending-empty', 'ending-ronnie'];
     for (const id of ids) {
       const image = document.querySelector(`#${id}`);
@@ -230,7 +232,7 @@ export class Ending {
     this.resize();
     this.announce(mode === 'swing' ? 'intrusion' : 'flash');
     this.render();
-    if (mode === 'dimension') void prepareDimension().then(() => this.requestFrame());
+    if (mode === 'dimension') void Promise.all([prepareDimension(),prepareGround()]).then(() => this.requestFrame());
     this.requestFrame();
   }
 
@@ -423,6 +425,7 @@ export class Ending {
     const finisherMs = this.finisherAt === null ? 0 : this.scene.anomaly.activeMs - this.finisherAt + interpolation;
     const finish = getFinisherFrame(finisherMs, this.reducedMotion.matches);
     const camera = getHeadCamera(finish,this.width,this.height,this.reducedMotion.matches);
+    camera.forward=this.depth*2.2;
     const blink = this.mode !== 'dimension' || this.phase === 'status' ? 0
       : this.phase === 'finisher' ? finish.blink
         : getDimensionBlink(this.elapsed + interpolation, this.reducedMotion.matches);
@@ -434,15 +437,10 @@ export class Ending {
         ctx.fillStyle = '#090c0b';
         ctx.fillRect(0, 0, this.width, this.height);
         ctx.save();
-        if (this.finisherAt !== null && !this.reducedMotion.matches) {
-          const reduced = this.reducedMotion.matches;
-          const jolt = !reduced && finisherMs >= FINISHER.impactAt && finisherMs < FINISHER.impactAt+450
-            ? Math.sin(finisherMs*.05)*5*(1-(finisherMs-FINISHER.impactAt)/450) : 0;
-          ctx.translate(0,jolt);
-          applyHeadCamera(ctx,camera);
-        }
-        drawDimension(ctx, this.width, this.height, this.reducedMotion.matches ? 0 : time,
-          { depth: this.depth, lookX: this.lookX*(1-finish.focus), lookY: this.lookY*(1-finish.focus) });
+        const jolt=this.finisherAt!==null && !this.reducedMotion.matches && finisherMs>=FINISHER.impactAt && finisherMs<FINISHER.impactAt+450
+          ? Math.sin(finisherMs*.05)*5*(1-(finisherMs-FINISHER.impactAt)/450) : 0;
+        ctx.translate(0,jolt);
+        this.paintDimensionView(ctx,time,finish,camera);
         ctx.restore();
       }
     }
@@ -464,6 +462,32 @@ export class Ending {
       else bodyContext.clearRect(0, 0, this.width, this.height);
     }
     if (!this.scene.paused && (!this.reducedMotion.matches || this.phase === 'flash' || this.phase === 'closing' || this.phase === 'finisher' || this.walking || this.backing)) this.requestFrame();
+  }
+
+  /** Echte Kopfneigung: ferne Kulisse oberhalb, waagerechte Bodenebene unterhalb des Horizonts. */
+  paintDimensionView(ctx,time,frame,camera) {
+    const scale=Math.min(1,1280/this.width,720/this.height);
+    const w=Math.max(1,Math.round(this.width*scale)),h=Math.max(1,Math.round(this.height*scale));
+    if(this.headWorld.width!==w || this.headWorld.height!==h) { this.headWorld.width=w;this.headWorld.height=h; }
+    const source=this.headWorld.getContext('2d');
+    if(!source) return;
+    source.setTransform(w/this.width,0,0,h/this.height,0,0);
+    source.clearRect(0,0,this.width,this.height);
+    source.fillStyle='#151b17';source.fillRect(0,0,this.width,this.height);
+    drawDimension(source,this.width,this.height,this.reducedMotion.matches ? 0 : time,
+      {depth:this.depth,lookX:this.lookX*(1-frame.focus),lookY:this.lookY*(1-frame.focus),vignette:false,elevation:camera.eyeHeight-STANDING_HEIGHT});
+    ctx.fillStyle='#1c221c';ctx.fillRect(0,0,this.width,this.height);
+    const horizon=this.height/2-camera.focal*Math.tan(camera.pitch);
+    if(horizon>0) {
+      ctx.save();ctx.beginPath();ctx.rect(0,0,this.width,Math.min(this.height,horizon+this.height*.08));ctx.clip();
+      drawHeadLayer(ctx,this.headWorld,{left:0,top:0,width:this.width,height:this.height},camera,FORWARD_PITCH,true);
+      ctx.restore();
+    }
+    drawGround(ctx,camera);
+    if(this.finisherAt!==null) drawGroundContacts(ctx,camera,getBodyGroundContacts(camera));
+    const shade=ctx.createRadialGradient(this.width*.51,this.height*.42,this.height*.16,this.width*.5,this.height*.5,Math.max(this.width,this.height)*.65);
+    shade.addColorStop(0,'#02050700');shade.addColorStop(.48,'#02050714');shade.addColorStop(.78,'#02050780');shade.addColorStop(1,'#020507ed');
+    ctx.fillStyle=shade;ctx.fillRect(0,0,this.width,this.height);
   }
 
   dispose() {

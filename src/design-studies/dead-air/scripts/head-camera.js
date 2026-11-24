@@ -6,20 +6,25 @@
 
 /** Referenzwinkel, aus dem die vorhandene Ego-Körpergrafik aufgenommen wurde. */
 export const BODY_PITCH = 65*Math.PI/180;
+/** Die bestehende Kulisse zeigt in der Ausgangsansicht überwiegend Himmel. */
+export const FORWARD_PITCH = -Math.atan(.3/.9);
+/** Unveränderte Augenhöhe während Stand, Kopfneigung und Andocken. */
+export const STANDING_HEIGHT = 1.68;
 
 /** Ein gemeinsamer Blickwinkel ersetzt unabhängiges Verschieben und Zoomen der Ebenen.
  * @param {object} frame Zustand der pausierbaren Finishersequenz.
  * @param {number} width Viewportbreite in CSS-Pixeln.
  * @param {number} height Viewporthöhe in CSS-Pixeln.
  * @param {boolean} reduced Wechselt bei reduzierter Bewegung zwischen festen Blicklagen.
- * @returns {{pitch:number, focal:number, width:number, height:number, worldY:number, worldScale:number}} Projektionskamera.
+ * @returns {{pitch:number, focal:number, width:number, height:number, forward:number, eyeHeight:number}} Kamera in Metern über dem Boden.
  */
 export function getHeadCamera(frame,width,height,reduced=false) {
-  const pitch=reduced ? (frame.look >= .5 ? BODY_PITCH : frame.up >= .5 ? -.2 : 0)
-    : BODY_PITCH*frame.look-.2*frame.up;
-  return { pitch, focal: height*.9, width, height,
-    worldY: reduced ? 0 : height*(-frame.look*.45+frame.up*.24+frame.lift*.26),
-    worldScale: reduced ? 1 : 1+frame.look*1.2+frame.up*.75+frame.lift*.35,
+  const look=reduced ? (frame.look >= .5 ? 1 : 0) : frame.look;
+  const attached=Boolean(frame.attached);
+  return {
+    pitch: FORWARD_PITCH+(BODY_PITCH-FORWARD_PITCH)*look,
+    focal: height*.9, width, height, forward: 0,
+    eyeHeight: STANDING_HEIGHT+(attached ? frame.lift*4.8 : 0),
   };
 }
 
@@ -47,8 +52,9 @@ export function projectHeadPoint(x,y,camera,referencePitch=0) {
  * @param {{left:number,top:number,width:number,height:number}} rect Referenzlage der Textur.
  * @param {object} camera Gemeinsame Kopfkamera.
  * @param {number} referencePitch Aufnahmewinkel dieser Textur.
+ * @param {boolean} panorama Die ferne Umgebung umschließt die Kamera horizontal.
  */
-export function drawHeadLayer(ctx,image,rect,camera,referencePitch=0) {
+export function drawHeadLayer(ctx,image,rect,camera,referencePitch=0,panorama=false) {
   const delta=camera.pitch-referencePitch;
   if (Math.abs(delta)<.0001) { ctx.drawImage(image,rect.left,rect.top,rect.width,rect.height); return; }
   const sourceWidth=image.naturalWidth || image.width;
@@ -71,19 +77,22 @@ export function drawHeadLayer(ctx,image,rect,camera,referencePitch=0) {
     const top=projectHeadPoint(camera.width/2,start,camera,referencePitch)?.y;
     const last=projectHeadPoint(camera.width/2,end,camera,referencePitch)?.y;
     if (top===undefined || last===undefined || last<=top) continue;
-    const left=camera.width/2+(rect.left-camera.width/2)*middle.depth;
-    const width=rect.width*middle.depth;
+    const left=panorama ? 0 : camera.width/2+(rect.left-camera.width/2)*middle.depth;
+    const width=panorama ? camera.width : rect.width*middle.depth;
     ctx.drawImage(image,0,sourceY,sourceWidth,sourceH,left,top,width,last-top+.25);
   }
 }
 
-/** Führt die bestehende Tiefenkulisse mit demselben Kopfzustand weiter.
- * @param {CanvasRenderingContext2D} ctx Umgebungskontext.
- * @param {object} camera Gemeinsame Kamera mit Kopfneigung und Aufwärtsbewegung.
+/** Projiziert einen Punkt der Bodenebene aus der tatsächlichen Augenhöhe.
+ * @param {number} x Weltposition seitlich in Metern.
+ * @param {number} z Weltposition vor Ronnie in Metern.
+ * @param {object} camera Blickwinkel, Brennweite, Position und Höhe.
+ * @returns {{x:number,y:number}|null} Bildschirmposition oder null hinter der Kamera.
  */
-export function applyHeadCamera(ctx,camera) {
-  ctx.translate(0,camera.worldY);
-  ctx.translate(camera.width/2,camera.height/2);
-  ctx.scale(camera.worldScale,camera.worldScale);
-  ctx.translate(-camera.width/2,-camera.height/2);
+export function projectGroundPoint(x,z,camera) {
+  const forward=z-camera.forward;
+  const depth=camera.eyeHeight*Math.sin(camera.pitch)+forward*Math.cos(camera.pitch);
+  if(depth<=.04) return null;
+  return { x:camera.width/2+camera.focal*x/depth,
+    y:camera.height/2+camera.focal*(camera.eyeHeight*Math.cos(camera.pitch)-forward*Math.sin(camera.pitch))/depth };
 }

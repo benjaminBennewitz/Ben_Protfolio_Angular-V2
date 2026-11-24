@@ -218,7 +218,7 @@ function drawTube(ctx, anchor, attachment, time, figure) {
  * @param {number} width Breite in logischen Pixeln.
  * @param {number} height Höhe in logischen Pixeln.
  * @param {number} time Aktive Spielzeit in Sekunden; bei Reduced Motion konstant.
- * @param {{depth?: number, lookX?: number, lookY?: number}} view Begrenzte Kamerabewegung.
+ * @param {{depth?: number, lookX?: number, lookY?: number, vignette?: boolean, elevation?: number}} view Begrenzte Kamerabewegung.
  */
 export function drawDimension(ctx, width, height, time, view = {}) {
   prepareDimension();
@@ -240,8 +240,9 @@ export function drawDimension(ctx, width, height, time, view = {}) {
     for (const f of FIGURES) {
       const near = f.h/.165;
       const x = f.x*1672+Math.sin(time*f.speed+f.phase)*5*near-lookX*near*12;
-      const y = f.y*941+Math.sin(time*f.speed*.79+f.phase*1.6)*7*near;
       const h = f.h*941*(1+depth*near*.18);
+      // Ein 1,7 m großer Körper verschiebt sich mit der wirklichen Kamerahöhe; nahe Figuren stärker.
+      const y = f.y*941+Math.sin(time*f.speed*.79+f.phase*1.6)*7*near+h/1.7*(view.elevation ?? 0);
       const w = h*cellWidth/people.naturalHeight;
       const facing = f.facing ?? 1;
       const tilt = -.04+Math.sin(f.phase)*.04+Math.sin(time*f.speed*.6+f.phase)*.045;
@@ -263,12 +264,14 @@ export function drawDimension(ctx, width, height, time, view = {}) {
       ctx.restore();
     }
   }
-  const vignette=ctx.createRadialGradient(850,385,160,836,470,950);
-  vignette.addColorStop(0,'#02050700');
-  vignette.addColorStop(.48,'#02050714');
-  vignette.addColorStop(.78,'#02050780');
-  vignette.addColorStop(1,'#020507ed');
-  ctx.fillStyle=vignette;
-  ctx.fillRect(0,0,1672,941);
+  if (view.vignette !== false) {
+    const vignette=ctx.createRadialGradient(850,385,160,836,470,950);
+    vignette.addColorStop(0,'#02050700');
+    vignette.addColorStop(.48,'#02050714');
+    vignette.addColorStop(.78,'#02050780');
+    vignette.addColorStop(1,'#020507ed');
+    ctx.fillStyle=vignette;
+    ctx.fillRect(0,0,1672,941);
+  }
   ctx.restore();
 }

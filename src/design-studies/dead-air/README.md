@@ -295,7 +295,7 @@ Diese folgenden Schritte sind **geplant, nicht implementiert**. Sie geben jeder 
 - Wer die Warnfrequenz nicht findet, kann später nur dem voreingestellten Weg zum schlechten Finale folgen; der alternative Weg wird ausschließlich durch vollständig gehörtes Signal + Entscheidung freigeschaltet.
 - Die Verzweigung zum tatsächlichen Finale ist weiterhin Phase 06 und nicht Bestandteil dieses Patches. Ein Neuladen beginnt eine neue Spielsitzung (wie bisher ohne Persistenz).
 
-- Die Mitschrift ist für barrierearmen Zugriff nur auf der eingestellten Live-Frequenz abrufbar; das allein löst die Entscheidung nicht aus.
+- Die fragmentierte Mitschrift ist für barrierearmen Zugriff nur auf der eingestellten Live-Frequenz abrufbar; das allein löst die Entscheidung nicht aus.
 
 
 ## Patch 37 – Phase 06 / The Triangle
@@ -552,12 +552,114 @@ Der bestehende Hof und das freigegebene Portalbild werden wiederverwendet. `gate
 
 DEAD//AIR verwendet ausschließlich deutsche Texte und Funkaufnahmen. Sprachschalter und englische Texttabellen sind entfernt. Der gemeinsame Lautstärkeregler (0–100 %) und die separate Stummschaltung gelten für alle Funkaufnahmen, Effekte und Atmosphären und bleiben beim Wechsel in die Endsequenzen synchron. Stummschalten behält den eingestellten Pegel.
 
-## Neue Sprachaufnahmen – 23.11.2026
+## Funkstörungen und gestörte Begegnung – Patch 71
 
-- Die vier deutschen Funkaufnahmen wurden durch die neuen Alex-/Warnstimmen ersetzt; die Mitschriften entsprechen deren neuem Wortlaut.
-- Nachricht 002 enthält jetzt Alex’ Ungeduld und „Dann können wir endlich raus“. Die Warnung sagt ausdrücklich „Sie versuchen nicht herauszukommen“.
-- Der bisher absichtlich fragmentierte Warntext wurde durch die vollständige Mitschrift der neuen Aufnahme ersetzt.
-- Der bestehende Funkcharakter und das für den Spurenvergleich wichtige Klickmotiv unter Alex bleiben erhalten.
-- Das neue Frauenlachen wurde von 31,40 auf 16,98 Sekunden gekürzt: Die weitgehend leere Mitte entfällt; beide Lachabschnitte bleiben mit einer kurzen Überblendung erhalten.
-- Der Vollbildwechsel wartet jetzt bis 500 ms nach dem Ende der tatsächlich geladenen Lachaufnahme. Bei der neuen Datei erfolgt er etwa 21,68 Sekunden nach Aufruf von CAM 03. Die vorhandene Mindestzeit von zehn Sekunden bleibt als Untergrenze bestehen.
-- Stummschaltung, Lautstärke, Pause und Hintergrund-Tab-Verhalten werden weiterhin zentral über die Soundscape gesteuert.
+Die zuletzt freigegebenen neuen Sprachaufnahmen werden mit deutlichem Funkrauschen, Knistern, Trägerimpulsen und dem bestehenden Klickmotiv gemischt. In Aufnahme 003 überdecken fünf gezielte Störfenster einzelne Wörter vollständig. Die Warnmitschrift zeigt ausschließlich hörbare Bruchstücke; „Nicht aktivieren. Den Rückkanal nicht aktivieren!“ bleibt hörbar.
+
+Nach erfolgreicher Synchronisierung folgt der persönliche Funkspruch erst nach 3,8 Sekunden aktiver Storyzeit. Drei einzelne dunkle Bildaussetzer und kurze Knackgeräusche kündigen ihn an. Der Archivzugang und die Namensnotiz werden erst mit dem Empfang freigeschaltet. Pause, Hinweisdialoge und Hintergrund-Tabs halten die Storyuhr an. Eine inzwischen entdeckte Warnung wird nicht von einem verspäteten Dankesfunkspruch unterbrochen.
+
+CAM 03 folgt den zentralen Zeitmarken in `scripts/encounter-sequence.js`:
+
+- 0,0 s: Frau mit verzerrtem Gesicht auf der bewegten Schaukel.
+- 4,2 s: Die freigegebene, gekürzte Lachaufnahme beginnt.
+- 9,4 s: Dunkler Signalabriss.
+- 10,5 s: Die Schaukel ist leer; die Frau steht davor.
+- 15,8 s: Zweiter Signalabriss.
+- 16,9 s: Verzerrtes Gesicht direkt vor der Kamera, unregelmäßiges Bildzittern.
+- 22,0 s: Letzter dunkler Aussetzer.
+- Frühestens 23,0 s: Harter Wechsel in den Vollbildabschluss. Eine gegebenenfalls längere Lachaufnahme wird vollständig abgewartet.
+- Im Vollbild: weiterer Bildabriss bei 2,9 s; währenddessen erscheint Ronnie bei 3,5 s auf der Schaukel. Ein weiterer Aussetzer folgt bei 7,2 s, der Status bei 13,0 s.
+
+Alle Bildwechsel liegen unter kurzen Schwarzbildern. Keine neuen Zeitgeber steuern die Dramaturgie; sämtliche Zeitmarken verwenden die vorhandene pausierbare Spieluhr. Reduzierte Bewegung unterbindet Zittern und wiederholtes Vorzeichenflackern. Tonschalter und Gesamtlautstärke wirken weiter zentral auf sämtliche Aufnahmen und Effekte.
+
+
+## CAM-03-Erfassung, kompakter Empfänger und Ego-Finisher – Patch 72
+
+- Beim ersten Erfassen von CAM 03 liegen drei dunkle Aussetzer bei 0,0 / 0,7 / 1,6 Sekunden. Kurze Störtöne und begrenztes Zittern kündigen den unbekannten Eingang an. Die späteren Bildwechsel und das freigegebene Lachen bleiben erhalten.
+- Drei lokale SVG-Filter verformen ausschließlich die weich maskierten Gesichtsbereiche der sitzenden, stehenden und nahen Frau. Der Filterfluss wird mit maximal 30 FPS aus derselben Storyzeit berechnet. Dialoge, Pause, Hintergrund-Tabs und das Ende der Begegnung stoppen die Animationsschleife. Reduzierte Bewegung schaltet die zusätzliche Verformung aus.
+- Sobald CAM 03 verfügbar ist, entfallen die nicht mehr bedienbaren CAM-01-/CAM-02-Tasten. CAM 03 und Pause teilen sich eine Zeile. Bei Desktophöhen bis 1000 px werden Anzeige, Abstände und Audiobox kompakter; die bereits bekannte Einleitung entfällt während des lokalen Finales. Falls Fensterhöhe, Zoom oder Textvergrößerung trotzdem mehr Platz benötigen, bleibt der Empfänger scrollbar und vollständig erreichbar. Mobile behält das vorhandene gestapelte Layout mit normalem Seitenscroll.
+
+### Ego-Finisher
+
+Am Ende der Vorwärtsbewegung beziehungsweise beim bisherigen 42-Sekunden-Abschluss beginnt jetzt eine zusätzliche Sequenz von 13,4 Sekunden. Alle Zeiten beziehen sich auf deren Beginn:
+
+| Zeit | Ereignis |
+| --- | --- |
+| 0,3 / 1,43 / 2,76 s | Unregelmäßige kurze Lidschläge mit schnellerem Schließen und langsamerem Öffnen |
+| 3,5 s | Nasser, dumpfer Einschlag mit leichter rechter Stereoposition |
+| 3,65 s | Reflexartiger weiterer Lidschlag |
+| 3,9–6,0 s | Automatischer Blick nach unten auf eigene Jacke, Hände, Beine und Schuhe |
+| 4,05–6,5 s | Geschwungener Schlauch kommt hinter der rechten Hüfte hervor und erreicht den gefalteten Ansatz am Bauch |
+| 7,6–11,0 s | Welt sinkt im Blickfeld ab: Ronnie wird angehoben; Körper und Schnur bleiben im Vordergrund |
+| 12,0–13,4 s | Schwarzblende und anschließender Status |
+
+Der Schlauch besitzt unregelmäßige Kontur, umlaufende Falten, seitliches Licht und wandernde Verdickungen. Der Nabelansatz überlappt das Ende der Schnur. Die neu synthetisierte lokale Datei `assets/sfx-umbilical-impact.mp3` ergänzt das Klicken und die Spannung des vorhandenen Quietschens. Die bestehende Dimensionsatmosphäre läuft nun 59 Sekunden und reicht damit bis zum Abschluss. Pause, Gesamtlautstärke, Stummschaltung, Escape und „Zum Status“ gelten weiterhin zentral. Überspringen verhindert spätere Ereignistöne. Reduzierte Bewegung unterbindet Blinzeln, Kamerastoß, automatische Weltverschiebung und Schwanken.
+
+### Asset und Prüfung
+
+`assets/ending-first-person.webp` ist ein neues transparentes Körperbild, mit der integrierten Bildgenerierung erzeugt und lokal eingebunden. Verwendeter Prompt: „Transparent game sprite, viewer’s own eyes looking straight down at their own fully clothed body, worn olive field jacket, charcoal trousers and boots, one pair of bare hands by the waist, no head or face, no external portrait, dark photographic textures with warm orange rim light, intact clothing, no background, no text.“ Der organische Anschluss und die Schnur werden separat in Canvas gezeichnet.
+
+Geprüft wurden beide Enden mit dem tatsächlichen Anwendungscode in einer DOM-Testumgebung, einschließlich Storypause, Gesichtsfluss, verzögertem Dankesfunkspruch, Ton/Lautstärke, frühem Überspringen, Zeitüberschreitungs- und Bewegungsabschluss. Reine Zeitmarken prüfen zusätzlich vollständige Lidschlüsse und reduzierte Bewegung. Die Vordergrundkomposition wurde mit dem tatsächlichen Canvas-Modul und den finalen Bildern gerendert und geprüft. Eine echte Browserprüfung von Layout, SVG-Filtern und Lidschlägen war in dieser Umgebung nicht möglich.
+
+
+## Überarbeiteter Ego-Abschluss – Patch 73
+
+Diese Fassung ersetzt die Körperperspektive, das geformte Augenlid und die flache Schlauchdarstellung aus Patch 72.
+
+- Brust/Hemd befinden sich oben im Körperbild, Beine und Füße darunter. Das Hemd ist um den Bauch aufgerissen; breite, unterschiedlich gefaltete Hautwülste und der kurze dunkle Ansatz gehören unmittelbar zum Bild. Die früher darübergelegte gezeichnete Ringform entfällt.
+- Eine kurze vollständige Dunkelblende ersetzt die sichtbaren Augenformen. Die ersten Lidschläge liegen bereits bei 1,9 und 6,3 Sekunden nach dem Dimensionseintritt; weitere unregelmäßige Blinzler begleiten die Erkundung. Der Finisher besitzt zusätzlich einen kurzen Reflex beim Einschlag. Reduzierte Bewegung unterbindet diese Dunkelimpulse.
+- Der Blick senkt sich nach dem Einschlag, verweilt am Anschluss und richtet sich nach dem Andocken wieder auf. Der Körper verschwindet weich unter dem Bildrand. Gleichzeitig wird die Sicht nach vorn/oben frei und der Boden sinkt aus dem Blickfeld.
+- Der Rüssel besitzt jetzt eine lokale fotografisch strukturierte schwarze Oberfläche. Texturbänder folgen der Kurve und bleiben bei der Änderung des Blickwinkels mit dem Bauch verbunden. Wandernde Verdickungen laufen vom Bauch nach oben. Die Schnur bleibt im Vordergrund sichtbar, nachdem Ronnie wieder aufblickt.
+- Ein neuer lokaler Saug-/Strömungseffekt begleitet das Hochziehen. Er läuft über denselben Audiobus wie Lautstärke, Stummschaltung und Pause und wird beim Überspringen beendet.
+
+### Zeiten ab Ende der Gehsequenz
+
+| Zeitpunkt | Zustand |
+| --- | --- |
+| 1,2 s | Nasser, dumpfer Einschlag |
+| 1,4–3,2 s | Blick senkt sich zum eigenen Bauch |
+| 3,4 s | Dunkler Rüssel erreicht den organischen Ansatz |
+| 3,4–5,6 s | Kurzer Blick auf zerrissenen Stoff und Hautfalten |
+| 5,6–8,1 s | Ronnie hebt den Blick wieder nach vorn/oben |
+| 6,5–13,1 s | Hochziehen, anschwellender Saugton und aufwärts wandernde Pulse |
+| 14,2–16,0 s | Schwarzblende und abschließender Status |
+
+Die bestehenden Debugzugänge bleiben erhalten: `?debug=1`, **ENDE / DIMENSION** für Eintritt und Erkundung sowie **ENDE / RONNIE** für das andere Ende. Der Finisher beginnt weiterhin am Ende der Vorwärtsbewegung oder nach dem bisherigen 42-Sekunden-Abschluss der Erkundung. Es gibt keinen neuen parallelen Storytimer.
+
+### Assets und Validierung
+
+Ersetzte Datei: `assets/ending-first-person.webp`. Neue Dateien: `assets/ending-cord-skin.webp` und `assets/sfx-dimension-drain.mp3`. Die beiden Bilder wurden mit der integrierten Bildgenerierung erzeugt, der Saugton lokal synthetisiert. Die bisherigen Funkaufnahmen, das Schaukelende und die Umgebungsgrafik werden nicht ersetzt.
+
+Die tatsächlichen Canvas-Module und finalen Bilder wurden für mehrere Sequenzstadien gerendert und visuell geprüft. Tests mit dem Anwendungscode prüfen Blinzeln bereits beim Eintritt, die Blickfolge nach unten und wieder nach oben, Pause, einmalige Einschlag-/Saugtöne, Stummschaltung, frühes Überspringen sowie den Status. Das andere Ende wurde zusätzlich bis zum Status durchlaufen. Eine echte Browserprüfung der Darstellung war in dieser Umgebung nicht möglich.
+
+Bildprompt für den abschließend verwendeten Körper (Edit der neuen Körperperspektive; Referenz: vorhandener Figurenatlas):
+
+> Edit target is image 1, the transparent first-person body. Image 2 is ONLY a costume material/reference for its folded organic connector. Keep image 1 camera orientation and proportions exactly: chest at TOP, waist upper middle, boots at BOTTOM, same sleeves, hands, torn shirt, lighting and transparent alpha. Change only the beige cloth patch in the torn front shirt: add an elaborate cinematic practical-effects costume prosthetic, a wide asymmetric collar made of layered rounded wrinkled rubber folds in muted skin-like taupe, matching the texture in image 2. It looks grown into the ragged shirt, with frayed olive cloth petals partly overlapping its broad perimeter. At the center of the folded collar a short charcoal-black flexible root curves smoothly out toward UPPER RIGHT for about 12cm and ends, ready for animated continuation. A continuous physical costume object, no separate floating ring or fitting, no circular metallic washer. Collar sits at the abdomen above trouser waist, centered around x50% y35%. Do not copy any people from image 2. Fully clothed non-graphic horror costume effect: no actual wounds, no blood, no internal organs, no exposed injuries. All anatomy and body silhouette unchanged. Natural fine texture, fold shadows consistent with dim warm side light. Preserve genuine transparent background.
+
+Bildprompt für die Rüsseloberfläche:
+
+> A production game material sprite, realistic cinematic photographic texture: one straight continuous near-black organic tendril cable, vertically aligned perfectly from TOP edge to BOTTOM edge, centered horizontally, on genuine transparent background. Portrait 512x1536. Same roughly cylindrical width along length, cable occupies center 70% of image width. Both ends cropped by top and bottom edges; no visible end caps, tips or bases. Dark charcoal/brown-black wrinkled hide, irregular fine longitudinal sinewy strands, slight puckered folds, tiny damp specular flecks, natural asymmetric coarse grain. Deep shadows on left and right, very subtle amber grazing light from upper right, almost black rather than tan or gold. Texture of a monstrous flexible root in a supernatural storm, non-graphic. Not a metal pipe, no manufactured segments, no rings, no hose fittings, no blood, no body parts. High realism with rich nuanced black surface. Absolutely no background shadow plane or environment, no text, no borders, straight vertical axis so strips can be mapped along a curve in game code.
+
+
+## Ego-Körperperspektive und vollständige Arme – Patch 74
+
+Das Körperbild ist wieder aus Ronnies eigenen Augen aufgebaut: Der eigene Oberkörper liegt nah im unteren Vordergrund, Bauch und Gürtel liegen dahinter, Beine und Füße sind nach hinten/oben verkürzt. Die von außen wirkende Körperanordnung aus Patch 73 wird ersetzt. Zerrissener Stoff, breite Hautfalten und der kurze dunkle Ansatz bleiben Bestandteil des Bildes.
+
+Die neue Grafik besitzt ausgearbeitete äußere Armkonturen und freien Raum an beiden Seiten. Der Renderer passt sie anhand von Breite UND Höhe proportional ein. Dadurch werden Arme und Schultern auch bei schmalen Viewports nicht seitlich abgeschnitten. Der Anschluss der bestehenden Schnur folgt dem Nabelpunkt der neuen Bildebene beim Senken und Aufrichten des Blicks. Schnuroberfläche, Pulsrichtung, Geräusche, Blinzeln und Sequenzzeiten bleiben erhalten; die Schnurstärke wird unabhängig vom neuen Bildformat im bisherigen Maß gehalten.
+
+Geänderte Dateien: `assets/ending-first-person.webp`, `scripts/dimension-finisher.js`, `README.md`. Die neue Körpergrafik wurde mit der integrierten Bildgenerierung bearbeitet und lokal als WebP eingebunden. Die tatsächlichen Canvas-Module wurden in mehreren Sequenzphasen gerendert und visuell geprüft. Zusätzlich wurden die seitlichen Körpergrenzen bei 320×700, 390×844, 1920×911 und 2560×1080 geprüft. Die Quelle besitzt an beiden Seiten transparente Ränder. Die Zeitmarkentests für Eintrittsblinzeln, Andocken, Aufrichten und reduziertes Bewegen bestehen weiter. Keine echte Browserprüfung in dieser Umgebung.
+
+Finaler Bildprompt (Edit der Ego-Grafik mit bereits korrigiertem Material):
+
+> Edit this transparent first-person body sprite. Preserve the current FIRST PERSON view, the worn olive shirt, torn abdomen with layered taupe costume folds and short black root, foreshortened legs, boots at upper middle, torso in bottom foreground, lighting and all textures. Fix ONLY the framing of the arms: they are presently cut off by the LEFT and RIGHT canvas edges near the bottom. Expand the field of view horizontally / zoom the existing figure out about 20 percent while keeping central torso continuing off the BOTTOM. Show the full rounded OUTER silhouette of both upper arms, elbows and sleeves inside canvas. Both arms connect toward bottom-central torso and may continue off the BOTTOM edge but NEVER touch or get cropped by LEFT or RIGHT edges. Leave a clearly visible 10 percent wide strip of genuine TRANSPARENT ALPHA along the ENTIRE LEFT and ENTIRE RIGHT edges from top to bottom. Any continuation of arms must exit BOTTOM, inward from these side margins. No vertical straight edges on sleeves. Natural rounded shoulder/upper arm contours on both sides. Preserve first-person camera and costume exactly, no external portrait, no head, no background, no text. Landscape 2048x1152, authentic transparency.
+
+
+## Kopfneigung statt Körpereinblendung – Patch 75
+
+Der eigene Körper liegt jetzt ortsfest in einer Referenzansicht unter der Kamera. Seine Position hängt ausschließlich von der Viewportgröße ab. Die Sequenz verändert den Winkel des Kopfes; eine perspektivische Projektion bringt dadurch zuerst die Füße und anschließend Bauch und Arme ins Blickfeld. Beim Aufrichten verschwinden sie durch dieselbe Projektion wieder unter dem Bildrand.
+
+Die bisherige Deckkraftanimation und das separate Hochschieben des gesamten Körperbildes entfallen vollständig. Auch die zusätzliche weiche Anschnittmaske wird nicht mehr benötigt. Die Grafik wird immer mit voller Deckkraft gezeichnet und nur durch das Kamerablickfeld beschnitten. Der Nabelpunkt wird mit derselben Projektion berechnet, sodass der bestehende Schlauch am Körper verankert bleibt.
+
+`scripts/head-camera.js` bündelt den Kopfzustand, die Projektion von Körperpunkten und die zeilenweise perspektivische Abtastung der Grafik. Die etablierte Bewegung der Tiefenkulisse verwendet denselben Kamerazustand; deren bisherige Inszenierung wird fortgeführt. Die detaillierten Bildflächen sind weiterhin die vorhandenen 2D-/Canvas-Ebenen, keine neue 3D-Engine. Bilder, Schlauchoberfläche, Tondateien und Sequenzzeiten bleiben bytegleich zu Patch 74. Reduzierte Bewegung nutzt feste Blicklagen.
+
+Geprüft wurden die Bildfolge mit dem tatsächlichen Canvas-Code, unveränderte Deckkraft sämtlicher Körper-Zeichenaufrufe, die Lage des Körpers außerhalb der nach vorn gerichteten Kamera und die Rückkehr zum unverzerrten Referenzbild bei gesenktem Kopf. Zusätzlich bestehen die Funktionsprüfungen für Pause, einmalige Tonereignisse, Stummschaltung, Überspringen und abschließenden Status; auch das andere Ende läuft weiter durch. Eine echte Browserprüfung war in dieser Umgebung nicht möglich.

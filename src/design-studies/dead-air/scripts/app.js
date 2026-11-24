@@ -9,6 +9,7 @@ import { drawGate, PORTAL_REVEAL_END_MS } from './gate-visual.js';
 import { soundscape } from './soundscape.js';
 import { Investigation } from './investigation.js';
 import { Ending } from './ending.js';
+import { NAME_SIGNAL, getNameOmen } from './encounter-sequence.js';
 import { sampleRelayWave, isSignalAligned } from './signal-patterns.js';
 
 /** @typedef {'normal' | 'interference' | 'unknown' | 'voice' | 'relayA' | 'relayB' | 'relayC' | 'warning' | 'stranger'} SignalState */
@@ -186,23 +187,23 @@ const TEXTS = Object.freeze({
     warningRecordingButton: 'AUDIO / 003 · STARTEN',
     warningRecordingAria: 'Gestörte Tonübertragung auf 102.4 MHz auf CAM 01 starten',
     warningTranscriptButton: 'MITSCHRIFT / 003',
-    warningTranscriptAria: 'Mitschrift der empfangenen Warnung öffnen',
+    warningTranscriptAria: 'Unvollständige Mitschrift des empfangenen Signals öffnen',
     warningMeta: 'NCBS / EMPFANG UNBEKANNT',
-    warningTitle: 'DAS IST EINE FALLE.',
-    warningFrequency: '102.4 MHz / AUFZEICHNUNG 003',
-    warningTranscriptLabel: 'MITSCHRIFT / WARNUNG 003',
-    warningLine1: 'Hört ihr mich? Bitte. Bitte hört mir zu. Das ist eine Falle.',
-    warningLine2: 'Was immer dort sendet, ist nicht die Nachtschicht. Sie versuchen nicht herauszukommen.',
+    warningTitle: 'UNVOLLSTÄNDIGE ÜBERTRAGUNG',
+    warningFrequency: '102.4 MHz / SIGNALFRAGMENT 003',
+    warningTranscriptLabel: 'MITSCHRIFT / NUR BRUCHSTÜCKE LESBAR',
+    warningLine1: 'Hört ihr … [STÖRUNG] … Bitte. Bitte hört mir zu. Das … [ÜBERLAGERT] … Falle.',
+    warningLine2: 'Was immer … [SIGNALABBRUCH] … nicht die … [RAUSCHEN] … Sie versuchen … herauszukommen.',
     warningLine3: 'Nicht aktivieren. Den Rückkanal nicht aktivieren! Bitte.',
-    warningFooter: 'QUELLE UNBEKANNT · NICHT VERIFIZIERT',
+    warningFooter: 'QUELLE UNBEKANNT · MITSCHRIFT UNVOLLSTÄNDIG',
     warningReceived: 'Schwaches Sprachsignal auf 102.4 MHz empfangen.',
-    warningPlaying: 'Warnung auf 102.4 MHz wird empfangen.',
-    warningFinished: 'Warnung vollständig empfangen.',
+    warningPlaying: 'Fragmentierte Übertragung auf 102.4 MHz wird empfangen.',
+    warningFinished: 'Signalfragment vollständig empfangen.',
     warningBlocked: 'Wiedergabe blockiert. Signal erneut auf 102.4 MHz starten.',
     decisionMeta: 'NCBS / VERBINDUNGSPROTOKOLL',
     decisionEyebrow: 'RÜCKKANAL / MANUELLE FREIGABE',
     decisionTitle: 'WAS SOLL ICH TUN?',
-    decisionDescription: 'Die Warnung ist zu Ende. Alex wartet weiterhin auf das Rücksignal.',
+    decisionDescription: 'Die gestörte Übertragung ist abgebrochen. Alex wartet weiterhin auf das Rücksignal.',
     decisionRescueTitle: 'DEM SIGNAL WEITER FOLGEN',
     decisionRescueDescription: 'Den Rückkanal für Alex und die vermisste Schicht öffnen.',
     decisionIsolateTitle: 'RÜCKKANAL ISOLIEREN',
@@ -343,8 +344,9 @@ const scene = {
     currentRecording: '001',
     secondReceived: false,
     thirdReceived: false,
+    fourthReceived: false,
   },
-  sync: { completed: false },
+  sync: { completed: false, namePending: false, nameStartedAtMs: 0, nameOmenCue: 0 },
   // choice === null ist der unentdeckte Standardweg (Phase 06: schlechtes Ende).
   // Eine getroffene Entscheidung kann innerhalb der Spielsitzung nicht geändert werden.
   warning: { found: false, choice: null, playbackCompleted: false },
@@ -578,7 +580,7 @@ function refreshRelayUI() {
   relayToggle.textContent = texts.relayButton.replace('{count}', String(count));
   syncToggle.hidden = count !== RELAYS.length;
   transmission2Toggle.hidden = !scene.audio.secondReceived;
-  transmission4Toggle.hidden = !scene.sync.completed;
+  transmission4Toggle.hidden = !scene.audio.fourthReceived;
   const ping = scene.relays.ping;
   const tuned = getTunedRelay();
   relayProbe.hidden = !scene.relays.unlocked || count === RELAYS.length || Boolean(scene.finale.mode);
@@ -718,9 +720,13 @@ function commitSignalAlignment() {
   if (!isSignalAligned('B', syncOffsetB.value) || !isSignalAligned('C', syncOffsetC.value)) return;
   scene.sync.completed = true;
   scene.story.stage = 'synchronized';
-  investigation.record('nameNote');
   investigation.showCaption(null);
-  void playTransmission({ restart: true, recording: '004' });
+  ++scene.audio.requestId;
+  transmissionAudio.pause();
+  scene.audio.resumeAfterPause = false;
+  scene.audio.resumeAfterVisibility = false;
+  scene.sync.namePending = true;
+  scene.sync.nameStartedAtMs = scene.anomaly.activeMs;
   investigation.record('warningNote');
   scene.anomaly.syncStartedAtMs = scene.anomaly.activeMs;
   syncSignalVisuals();
@@ -732,6 +738,36 @@ function commitSignalAlignment() {
   receiverEventStatus.textContent = TEXTS.syncAnnouncement;
   window.dispatchEvent(new CustomEvent('deadair:storychanged', { detail: { stage: scene.story.stage } }));
   window.dispatchEvent(new CustomEvent('deadair:relayaligned', { detail: { relays: ['A', 'B', 'C'] } }));
+}
+
+/** Kündigt den persönlichen Funkspruch an; benutzt ausschließlich die aktive Storyuhr. */
+function updateNameTransmission() {
+  if (!scene.sync.namePending) return;
+  if (scene.finale.mode || scene.warning.found) {
+    scene.sync.namePending = false;
+    delete root.dataset.signalOmen;
+    root.style.setProperty('--signal-omen', '0');
+    return;
+  }
+  const elapsed = scene.anomaly.activeMs - scene.sync.nameStartedAtMs;
+  const intensity = getNameOmen(elapsed);
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  root.dataset.signalOmen = 'pending';
+  root.style.setProperty('--signal-omen', String(reduced ? .16 : intensity));
+  const cue = elapsed >= NAME_SIGNAL.thirdAt ? 3 : elapsed >= NAME_SIGNAL.secondAt ? 2
+    : elapsed >= NAME_SIGNAL.firstAt ? 1 : 0;
+  if (cue > scene.sync.nameOmenCue) {
+    scene.sync.nameOmenCue = cue;
+    void soundscape.play('glitch', .24 + cue * .07);
+  }
+  if (elapsed < NAME_SIGNAL.delayMs) return;
+  scene.sync.namePending = false;
+  delete root.dataset.signalOmen;
+  root.style.setProperty('--signal-omen', '0');
+  scene.audio.fourthReceived = true;
+  investigation.record('nameNote');
+  refreshRelayUI();
+  void playTransmission({ restart: true, recording: '004' });
 }
 
 /** Der Warnträger wird nur auf CAM 01 bei exakt eingestellter Frequenz empfangen. */
@@ -811,7 +847,7 @@ function updateWarningUI() {
   decisionIsolate.setAttribute('aria-pressed', String(scene.warning.choice === 'isolate'));
 }
 
-/** Stellt nur am aktiven CAM-01-Träger die Mitschrift der Warnaufnahme bereit.
+/** Stellt nur am aktiven CAM-01-Träger den unvollständigen Funktext bereit.
  * Die Mitschrift allein trifft keine Entscheidung und startet keine Wiedergabe. */
 function openWarningTranscript() {
   if (!canReceiveWarning() || !scene.warning.found) return;
@@ -945,6 +981,9 @@ function startFinale(mode) {
   if (mode === 'isolate') {
     document.querySelector('#local-yard').src = 'assets/local-courtyard.webp';
     document.querySelector('#local-swing').src = 'assets/local-swing.webp';
+    document.querySelector('#local-empty').src = 'assets/ending-empty-swing.webp';
+    document.querySelector('#local-standing').src = 'assets/local-standing.webp';
+    document.querySelector('#local-closeup').src = 'assets/local-closeup.webp';
     document.querySelector('#local-offline').hidden = false;
   }
   frequencyInput.disabled = true;
@@ -1058,6 +1097,7 @@ function updateFinale() {
   }
 
   scene.finale.phase = phase;
+  if (phase === 'local-ready') void soundscape.play('glitch', .4);
   window.dispatchEvent(new CustomEvent('deadair:finalephase', { detail: { phase } }));
   syncSignalVisuals();
   updateFinaleUI();
@@ -1445,7 +1485,7 @@ function updateAutoScan() {
  * Auf erneuten Archivaufruf wird die vorhandene Aufnahme verwendet. */
 async function playTransmission({ restart = false, recording = scene.audio.currentRecording } = {}) {
   if (!scene.relays.unlocked || (recording === '002' && !scene.audio.secondReceived)
-    || (recording === '004' && !scene.sync.completed)
+    || (recording === '004' && !scene.audio.fourthReceived)
     || (recording === '003' && (!scene.audio.thirdReceived || !canReceiveWarning()))) return;
 
   scene.audio.currentRecording = recording;
@@ -1496,7 +1536,7 @@ async function playTransmission({ restart = false, recording = scene.audio.curre
 function openTransmission(recording = '001') {
   if (scene.finale.mode) return;
   if (recording === '002' && !scene.audio.secondReceived) return;
-  if (recording === '004' && !scene.sync.completed) return;
+  if (recording === '004' && !scene.audio.fourthReceived) return;
   if (recording === '003') return; // AUDIO / 003 ist nur als Live-Empfang auf CAM 01 hörbar.
 
   const changed = scene.audio.currentRecording !== recording;
@@ -1786,6 +1826,7 @@ function runStoryClock() {
       startAutoScan();
     }
     updateAutoScan();
+    updateNameTransmission();
     updateFinale();
   }
 
